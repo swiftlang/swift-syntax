@@ -358,14 +358,15 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 ### Traits
 
-- <doc:SwiftSyntax/Attributed>
 - <doc:SwiftSyntax/Braced>
 - <doc:SwiftSyntax/DeclGroup>
 - <doc:SwiftSyntax/EffectSpecifiers>
 - <doc:SwiftSyntax/FreestandingMacroExpansion>
 - <doc:SwiftSyntax/IdentifiedDecl>
 - <doc:SwiftSyntax/Parenthesized>
+- <doc:SwiftSyntax/WithAttributes>
 - <doc:SwiftSyntax/WithCodeBlock>
+- <doc:SwiftSyntax/WithModifiers>
 - <doc:SwiftSyntax/WithStatements>
 - <doc:SwiftSyntax/WithTrailingComma>
 

@@ -39,7 +39,7 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: "type",
     kind: "Type",
     traits: [
-      "Attributed"
+      "WithAttributes"
     ],
     children: [
       Child(

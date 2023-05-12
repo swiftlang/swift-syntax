@@ -19,3 +19,6 @@ public extension DeclGroupSyntax {
     return self.memberBlock
   }
 }
+
+@available(*, deprecated, renamed: "WithAttributesSyntax")
+public typealias AttributedSyntax = WithAttributesSyntax

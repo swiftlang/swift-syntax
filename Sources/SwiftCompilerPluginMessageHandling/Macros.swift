@@ -12,6 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftDiagnostics
+import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxMacros
 
@@ -28,7 +29,7 @@ extension CompilerPluginMessageHandler {
     expandingSyntax: PluginMessage.Syntax
   ) throws {
     let sourceManager = SourceManager()
-    let syntax = sourceManager.add(expandingSyntax)
+    let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
     let context = PluginMacroExpansionContext(
       sourceManager: sourceManager,
@@ -97,7 +98,10 @@ extension CompilerPluginMessageHandler {
       expansionDiscriminator: discriminator
     )
 
-    let attributeNode = sourceManager.add(attributeSyntax).cast(AttributeSyntax.self)
+    let attributeNode = sourceManager.add(
+      attributeSyntax,
+      foldingWith: .standardOperators
+    ).cast(AttributeSyntax.self)
     let declarationNode = sourceManager.add(declSyntax).cast(DeclSyntax.self)
 
     let expandedSources: [String]

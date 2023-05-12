@@ -64,7 +64,10 @@ class SourceManager {
 
   /// Convert syntax information to a `Syntax` node. The location informations
   /// are cached in the source manager to provide `location(of:)` et al.
-  func add(_ syntaxInfo: PluginMessage.Syntax) -> Syntax {
+  func add(
+    _ syntaxInfo: PluginMessage.Syntax,
+    foldingWith operatorTable: OperatorTable? = nil
+  ) -> Syntax {
 
     var node: Syntax
     var parser = Parser(syntaxInfo.source)
@@ -82,7 +85,9 @@ class SourceManager {
     case .attribute:
       node = Syntax(AttributeSyntax.parse(from: &parser))
     }
-    node = OperatorTable.standardOperators.foldAll(node, errorHandler: { _ in /*ignore*/ })
+    if let operatorTable = operatorTable {
+      node = operatorTable.foldAll(node, errorHandler: { _ in /*ignore*/ })
+    }
 
     // Copy the location info from the plugin message.
     let location = KnownSourceSyntax.Location(

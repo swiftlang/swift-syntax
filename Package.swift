@@ -57,6 +57,7 @@ let package = Package(
     .library(name: "SwiftSyntax", targets: ["SwiftSyntax"]),
     .library(name: "SwiftSyntaxBuilder", targets: ["SwiftSyntaxBuilder"]),
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
+    .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
   ],
   targets: [
@@ -113,7 +114,7 @@ let package = Package(
 
     .target(
       name: "SwiftCompilerPluginMessageHandling",
-      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntax", "SwiftSyntaxMacros"],
+      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -175,6 +176,12 @@ let package = Package(
     .target(
       name: "SwiftSyntaxMacros",
       dependencies: ["SwiftDiagnostics", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .target(
+      name: "SwiftSyntaxMacroExpansion",
+      dependencies: ["SwiftSyntax", "SwiftSyntaxMacros"],
       exclude: ["CMakeLists.txt"]
     ),
 

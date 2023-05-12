@@ -89,12 +89,12 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     if let declSyntax = node.as(DeclSyntax.self),
-      let attributedNode = node.asProtocol(AttributedSyntax.self),
+      let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       let attributes = attributedNode.attributes
     {
       // Visit the node.
       skipNodes.insert(node)
-      let visitedNode = self.visit(declSyntax).asProtocol(AttributedSyntax.self)!
+      let visitedNode = self.visit(declSyntax).asProtocol(WithAttributesSyntax.self)!
       skipNodes.remove(node)
 
       // Remove any attached attributes.
@@ -340,7 +340,7 @@ extension MacroApplication {
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type
   ) -> [(AttributeSyntax, MacroType)] {
-    guard let attributedNode = decl.asProtocol(AttributedSyntax.self),
+    guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self),
       let attributes = attributedNode.attributes
     else {
       return []
@@ -433,7 +433,7 @@ extension MacroApplication {
     attachedTo decl: DeclSyntax,
     annotating member: MemberDeclListSyntax.Element
   ) -> MemberDeclListSyntax.Element {
-    guard let attributedDecl = member.decl.asProtocol(AttributedSyntax.self) else {
+    guard let attributedDecl = member.decl.asProtocol(WithAttributesSyntax.self) else {
       return member
     }
 

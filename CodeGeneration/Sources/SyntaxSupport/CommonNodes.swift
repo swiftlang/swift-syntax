@@ -147,7 +147,8 @@ public let COMMON_NODES: [Node] = [
     description: "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(

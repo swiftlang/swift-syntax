@@ -25,3 +25,6 @@ public typealias AccessPathSyntax = ImportPathSyntax
 
 @available(*, deprecated, renamed: "ImportPathComponentSyntax")
 public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
+
+@available(*, deprecated, renamed: "WithAttributesSyntax")
+public typealias AttributedSyntax = WithAttributesSyntax

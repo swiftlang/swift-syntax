@@ -1,5 +1,5 @@
 import SwiftSyntax
-import SwiftSyntaxMacros
+@_spi(MacroExpansion) import SwiftSyntaxMacros
 
 public enum MacroRole {
   case expression
@@ -31,7 +31,13 @@ public func expandFreestandingMacro(
         expandedSyntax = try Syntax(exprMacroDef.expansion(of: node, in: context))
 
       case let declMacroDef as DeclarationMacro.Type:
-        let rewritten = try declMacroDef.expansion(of: node, in: context)
+        var rewritten = try declMacroDef.expansion(of: node, in: context)
+        // Copy attributes and modifiers to the generated decls.
+        if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
+          rewritten = rewritten.map {
+            $0.applying(attributes: expansionDecl.attributes, modifiers: expansionDecl.modifiers)
+          }
+        }
         expandedSyntax = Syntax(
           CodeBlockItemListSyntax(
             rewritten.map {

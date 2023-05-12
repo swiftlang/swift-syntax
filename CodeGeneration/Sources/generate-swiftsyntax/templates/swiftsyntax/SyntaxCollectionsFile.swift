@@ -19,6 +19,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
     public protocol SyntaxCollection: SyntaxProtocol, Sequence where Element: SyntaxProtocol {
+      /// Creates a new collection with the elements.
+      init(_ children: [Element])
       /// The number of elements, `present` or `missing`, in this collection.
       var count: Int { get }
     }

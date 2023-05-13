@@ -15,12 +15,40 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 final class TernaryExprTests: XCTestCase {
-  func testTernaryExpr() {
+  func testStringLiteralTernaryExpr() {
     let buildable = ExprSyntax("true ? a : b")
     assertBuildResult(
       buildable,
       """
       true ? a : b
+      """
+    )
+  }
+
+  func testTernarySequenceExpr() {
+    let buildable = SequenceExprSyntax {
+      BooleanLiteralExprSyntax(true)
+      UnresolvedTernaryExprSyntax(firstChoice: IntegerLiteralExprSyntax(1))
+      IntegerLiteralExprSyntax(0)
+    }
+    assertBuildResult(
+      buildable,
+      """
+      true ? 1 : 0
+      """
+    )
+  }
+
+  func testTernaryExpr() {
+    let buildable = TernaryExprSyntax(
+      conditionExpression: BooleanLiteralExprSyntax(true),
+      firstChoice: IntegerLiteralExprSyntax(1),
+      secondChoice: IntegerLiteralExprSyntax(0)
+    )
+    assertBuildResult(
+      buildable,
+      """
+      true ? 1 : 0
       """
     )
   }

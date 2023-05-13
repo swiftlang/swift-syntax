@@ -256,7 +256,7 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
       ],
       fixedSource: """
-        _ = foo/* */?.description: <#expression#>
+        _ = foo/* */?.description : <#expression#>
         """
     )
 

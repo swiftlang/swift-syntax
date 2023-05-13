@@ -23,7 +23,7 @@ final class InvalidIfExprTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
       ],
-      fixedSource: "(a ? b: <#expression#>)"
+      fixedSource: "(a ? b : <#expression#>)"
     )
   }
 
@@ -35,7 +35,7 @@ final class InvalidIfExprTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
       ],
-      fixedSource: "(a ? b : c ? d: <#expression#>)"
+      fixedSource: "(a ? b : c ? d : <#expression#>)"
     )
   }
 
@@ -52,7 +52,7 @@ final class InvalidIfExprTests: XCTestCase {
           fixIts: ["insert ')'"]
         ),
       ],
-      fixedSource: "(a ? b ? c : d: <#expression#>)"
+      fixedSource: "(a ? b ? c : d : <#expression#>)"
     )
   }
 
@@ -65,7 +65,7 @@ final class InvalidIfExprTests: XCTestCase {
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
         DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
       ],
-      fixedSource: "(a ? b ? c: <#expression#>: <#expression#>)"
+      fixedSource: "(a ? b ? c : <#expression#> : <#expression#>)"
     )
   }
 

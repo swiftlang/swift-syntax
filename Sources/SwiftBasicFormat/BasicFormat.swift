@@ -223,7 +223,6 @@ open class BasicFormat: SyntaxRewriter {
       (.singleQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringSegment, _),
-      (_, .colon),
       (_, .comma),
       (_, .ellipsis),
       (_, .eof),
@@ -237,6 +236,12 @@ open class BasicFormat: SyntaxRewriter {
       (_, nil),
       (nil, _):
       return false
+    case (_, .colon):
+      if second?.keyPathInParent != \TernaryExprSyntax.colonMark
+        && second?.keyPathInParent != \UnresolvedTernaryExprSyntax.colonMark
+      {
+        return false
+      }
     case (.leftAngle, _) where second?.tokenKind != .rightAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
     case (_, .rightAngle) where first?.tokenKind != .leftAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator

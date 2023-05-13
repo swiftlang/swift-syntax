@@ -40,3 +40,19 @@ let package = Package(
     ),
   ]
 )
+
+// This is a fake target that depends on all targets in the package.
+// We need to define it manually because the `Examples-Package` target doesn't exist for `swift build`.
+
+package.targets.append(
+  .target(
+    name: "Examples-all",
+    dependencies: package.targets.compactMap {
+      if $0.type == .test {
+        return nil
+      } else {
+        return .byName(name: $0.name)
+      }
+    }
+  )
+)

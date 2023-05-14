@@ -218,9 +218,9 @@ class Builder(object):
         print("** Building product " + product_name + " **")
         self.__build(PACKAGE_DIR, product_name, is_product=True)
 
-    def buildTarget(self, target_name: str) -> None:
+    def buildTarget(self, package_dir: str, target_name: str) -> None:
         print("** Building target " + target_name + " **")
-        self.__build(PACKAGE_DIR, target_name, is_product=False)
+        self.__build(package_dir, target_name, is_product=False)
 
     def buildExample(self, example_name: str) -> None:
         print("** Building example " + example_name + " **")
@@ -504,11 +504,8 @@ def build_command(args: argparse.Namespace) -> None:
             verbose=args.verbose,
             disable_sandbox=args.disable_sandbox,
         )
-        builder.buildTarget("SwiftSyntax-all")
-
-        # Build examples
-        builder.buildExample("AddOneToIntegerLiterals")
-        builder.buildExample("CodeGenerationUsingSwiftSyntaxBuilder")
+        builder.buildTarget(PACKAGE_DIR, "SwiftSyntax-all")
+        builder.buildTarget(EXAMPLES_DIR, "Examples-all")
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error("Building SwiftSyntax failed", e)
 

@@ -13,7 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-@frozen // FIXME: Not actually stable, works around a miscompile
 public enum TokenKind: Hashable {
   case eof
   case arrow

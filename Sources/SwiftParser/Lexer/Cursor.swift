@@ -150,6 +150,20 @@ extension Lexer.Cursor {
       case .inRegexLiteral: return false
       }
     }
+    
+    /// Returns whether the lexer is currently parsing the multiline string.
+    var isParsingMultilineString: Bool {
+      switch self {
+      case .normal, .preferRegexOverBinaryOperator: return false
+      case .afterRawStringDelimiter: return false
+      case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: _): return stringLiteralKind == .multiLine
+      case .afterStringLiteral: return false
+      case .afterClosingStringQuote: return false
+      case .inStringInterpolationStart: return false
+      case .inStringInterpolation: return false
+      case .inRegexLiteral: return false
+      }
+    }
   }
 
   /// A data structure that holds the state stack entries in the lexer. It is
@@ -242,6 +256,9 @@ extension Lexer {
 
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
+    
+    /// If we have already lexed a token, the `NewlinePresence` of the previously lexed token
+    var previousTokenNewlinePresence: NewlinePresence?
 
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
@@ -433,21 +450,28 @@ extension Lexer.Cursor {
     if let stateTransition = result.stateTransition {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
-
+    
+    var flags = result.flags
+    if newlineInLeadingTrivia == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+    if let previousTokenNewlinePresence, previousTokenNewlinePresence == .present,
+       !currentState.isParsingMultilineString {
+      flags.insert(.isAtStartOfLine)
+    }
+    
     // Trailing trivia.
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
+      self.previousTokenNewlinePresence = triviaResult.newlinePresence
       diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
+    } else {
+      self.previousTokenNewlinePresence = nil
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
       self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
-    }
-
-    var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
     }
 
     diagnostic = TokenDiagnostic(combining: diagnostic, result.error?.tokenDiagnostic(tokenStart: cursor))

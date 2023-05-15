@@ -24,7 +24,6 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTr
 let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
-    @frozen  // FIXME: Not actually stable, works around a miscompile
     public enum Keyword: UInt8, Hashable
     """
   ) {

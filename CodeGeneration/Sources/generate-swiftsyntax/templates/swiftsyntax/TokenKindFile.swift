@@ -19,7 +19,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// Enumerates the kinds of tokens in the Swift language.
-    @frozen // FIXME: Not actually stable, works around a miscompile
     public enum TokenKind: Hashable
     """
   ) {

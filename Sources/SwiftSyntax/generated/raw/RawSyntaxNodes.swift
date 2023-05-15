@@ -1209,7 +1209,6 @@ public struct RawAssociatedtypeDeclSyntax: RawDeclSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `attribute`(RawAttributeSyntax)
     case `ifConfigDecl`(RawIfConfigDeclSyntax)
@@ -1290,7 +1289,6 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Argument: RawSyntaxNodeProtocol {
     case `argumentList`(RawTupleExprElementListSyntax)
     case `token`(RawTokenSyntax)
@@ -1635,7 +1633,6 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Entry: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
     case `availabilityVersionRestriction`(RawAvailabilityVersionRestrictionSyntax)
@@ -1931,7 +1928,6 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Value: RawSyntaxNodeProtocol {
     case `string`(RawStringLiteralExprSyntax)
     case `version`(RawVersionTupleSyntax)
@@ -4308,7 +4304,6 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Input: RawSyntaxNodeProtocol {
     case `simpleInput`(RawClosureParamListSyntax)
     case `input`(RawClosureParameterClauseSyntax)
@@ -4507,7 +4502,6 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Item: RawSyntaxNodeProtocol {
     case `decl`(RawDeclSyntax)
     case `stmt`(RawStmtSyntax)
@@ -4925,7 +4919,6 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Condition: RawSyntaxNodeProtocol {
     case `expression`(RawExprSyntax)
     case `availability`(RawAvailabilityConditionSyntax)
@@ -6471,7 +6464,6 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Content: RawSyntaxNodeProtocol {
     case `colon`(RawTokenSyntax)
     case `elements`(RawDictionaryElementListSyntax)
@@ -6810,7 +6802,6 @@ public struct RawDifferentiabilityParamSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawDifferentiabilityParamsClauseSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Parameters: RawSyntaxNodeProtocol {
     case `parameter`(RawDifferentiabilityParamSyntax)
     case `parameterList`(RawDifferentiabilityParamsSyntax)
@@ -7321,7 +7312,6 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Value: RawSyntaxNodeProtocol {
     case `token`(RawTokenSyntax)
     case `string`(RawStringLiteralExprSyntax)
@@ -10497,7 +10487,6 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Body: RawSyntaxNodeProtocol {
     case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
     case `conformanceRequirement`(RawConformanceRequirementSyntax)
@@ -10947,7 +10936,6 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Elements: RawSyntaxNodeProtocol {
     case `statements`(RawCodeBlockItemListSyntax)
     case `switchCases`(RawSwitchCaseListSyntax)
@@ -11151,7 +11139,6 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum ElseBody: RawSyntaxNodeProtocol {
     case `ifExpr`(RawIfExprSyntax)
     case `codeBlock`(RawCodeBlockSyntax)
@@ -12422,7 +12409,6 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Component: RawSyntaxNodeProtocol {
     case `property`(RawKeyPathPropertyComponentSyntax)
     case `subscript`(RawKeyPathSubscriptComponentSyntax)
@@ -16038,7 +16024,6 @@ public struct RawPatternBindingListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawPatternBindingSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
     case `getter`(RawCodeBlockSyntax)
@@ -16742,7 +16727,6 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `precedenceGroupRelation`(RawPrecedenceGroupRelationSyntax)
     case `precedenceGroupAssignment`(RawPrecedenceGroupAssignmentSyntax)
@@ -18290,7 +18274,6 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawSpecializeAttributeSpecListSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `labeledSpecializeEntry`(RawLabeledSpecializeEntrySyntax)
     case `availabilityEntry`(RawAvailabilityEntrySyntax)
@@ -18600,7 +18583,6 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentsSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `stringSegment`(RawStringSegmentSyntax)
     case `expressionSegment`(RawExpressionSegmentSyntax)
@@ -18881,7 +18863,6 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Accessor: RawSyntaxNodeProtocol {
     case `accessors`(RawAccessorBlockSyntax)
     case `getter`(RawCodeBlockSyntax)
@@ -19382,7 +19363,6 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Element: RawSyntaxNodeProtocol {
     case `switchCase`(RawSwitchCaseSyntax)
     case `ifConfigDecl`(RawIfConfigDeclSyntax)
@@ -19463,7 +19443,6 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Label: RawSyntaxNodeProtocol {
     case `default`(RawSwitchDefaultLabelSyntax)
     case `case`(RawSwitchCaseLabelSyntax)
@@ -22597,7 +22576,6 @@ public struct RawYieldListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
-  @frozen // FIXME: Not actually stable, works around a miscompile
   public enum Yields: RawSyntaxNodeProtocol {
     case `yieldList`(RawYieldListSyntax)
     case `simpleYield`(RawExprSyntax)

@@ -243,6 +243,9 @@ extension Lexer {
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
 
+    /// If we have already lexed a token, stores whether the previous lexeme‘s ending contains a newline.
+    var previousLexemeTrailingNewlinePresence: NewlinePresence?
+
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
     var previousKeyword: Keyword?
@@ -317,6 +320,8 @@ extension Lexer {
     /// If `tokenKind` is `.keyword`, the kind of keyword produced, otherwise
     /// `nil`.
     let keywordKind: Keyword?
+    /// Indicates whether the end of the lexed token text contains a newline.
+    let trailingNewlinePresence: Lexer.Cursor.NewlinePresence
 
     private init(
       _ tokenKind: RawTokenKind,
@@ -324,7 +329,8 @@ extension Lexer {
       error: Cursor.LexingDiagnostic?,
       stateTransition: StateTransition?,
       trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?,
-      keywordKind: Keyword?
+      keywordKind: Keyword?,
+      trailingNewlinePresence: Lexer.Cursor.NewlinePresence
     ) {
       self.tokenKind = tokenKind
       self.flags = flags
@@ -332,6 +338,7 @@ extension Lexer {
       self.stateTransition = stateTransition
       self.trailingTriviaLexingMode = trailingTriviaLexingMode
       self.keywordKind = keywordKind
+      self.trailingNewlinePresence = trailingNewlinePresence
     }
 
     /// Create a lexer result. Note that keywords should use `Result.keyword`
@@ -341,7 +348,8 @@ extension Lexer {
       flags: Lexer.Lexeme.Flags = [],
       error: Cursor.LexingDiagnostic? = nil,
       stateTransition: StateTransition? = nil,
-      trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil
+      trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil,
+      trailingNewlinePresence: Lexer.Cursor.NewlinePresence = .absent
     ) {
       precondition(tokenKind != .keyword, "Use Result.keyword instead")
       self.init(
@@ -350,7 +358,8 @@ extension Lexer {
         error: error,
         stateTransition: stateTransition,
         trailingTriviaLexingMode: trailingTriviaLexingMode,
-        keywordKind: nil
+        keywordKind: nil,
+        trailingNewlinePresence: trailingNewlinePresence
       )
     }
 
@@ -362,7 +371,8 @@ extension Lexer {
         error: nil,
         stateTransition: nil,
         trailingTriviaLexingMode: nil,
-        keywordKind: kind
+        keywordKind: kind,
+        trailingNewlinePresence: .absent
       )
     }
   }
@@ -430,6 +440,16 @@ extension Lexer.Cursor {
       result = lexInRegexLiteral(lexemes.pointee[index...], existingPtr: lexemes)
     }
 
+    var flags = result.flags
+    if newlineInLeadingTrivia == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+    if let previousLexemeTrailingNewlinePresence, previousLexemeTrailingNewlinePresence == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+
+    self.previousLexemeTrailingNewlinePresence = result.trailingNewlinePresence
+
     if let stateTransition = result.stateTransition {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
@@ -438,16 +458,12 @@ extension Lexer.Cursor {
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
+      self.previousLexemeTrailingNewlinePresence = triviaResult.newlinePresence
       diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
       self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
-    }
-
-    var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
     }
 
     diagnostic = TokenDiagnostic(combining: diagnostic, result.error?.tokenDiagnostic(tokenStart: cursor))
@@ -1889,7 +1905,7 @@ extension Lexer.Cursor {
           if character == UInt8(ascii: "\r") {
             _ = self.advance(matching: "\n")
           }
-          return Lexer.Result(.stringSegment, error: error)
+          return Lexer.Result(.stringSegment, error: error, trailingNewlinePresence: .present)
         } else {
           // Single line literals cannot span multiple lines.
           // Terminate the string here and go back to normal lexing (instead of `afterStringLiteral`)

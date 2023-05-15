@@ -1394,8 +1394,21 @@ extension Parser {
     pattern: PatternContext,
     flavor: ExprFlavor
   ) -> RawMacroExpansionExprSyntax {
+    if !atStartOfFreestandingMacroExpansion() {
+      return RawMacroExpansionExprSyntax(
+        poundToken: self.consumeAnyToken(),
+        macro: self.missingToken(.identifier),
+        genericArguments: nil,
+        leftParen: nil,
+        argumentList: .init(elements: [], arena: self.arena),
+        rightParen: nil,
+        trailingClosure: nil,
+        additionalTrailingClosures: nil,
+        arena: self.arena
+      )
+    }
     let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?

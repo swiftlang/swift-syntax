@@ -236,6 +236,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "macro definition"
   case \MacroDeclSyntax.genericWhereClause:
     return "generic where clause"
+  case \MacroExpansionDeclSyntax.attributes:
+    return "attributes"
+  case \MacroExpansionDeclSyntax.modifiers:
+    return "modifiers"
   case \MemberAccessExprSyntax.base:
     return "base"
   case \MemberAccessExprSyntax.name:

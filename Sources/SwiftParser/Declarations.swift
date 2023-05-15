@@ -29,18 +29,25 @@ extension DeclarationModifier {
 }
 
 extension TokenConsumer {
+  mutating func atStartOfFreestandingMacroExpansion() -> Bool {
+    if !self.at(.pound) {
+      return false
+    }
+    if self.peek().rawTokenKind != .identifier && !self.peek().isLexerClassifiedKeyword {
+      return false
+    }
+    if self.currentToken.trailingTriviaByteLength != 0 || self.peek().leadingTriviaByteLength != 0 {
+      return false
+    }
+    return true
+  }
+
   mutating func atStartOfDeclaration(
     isAtTopLevel: Bool = false,
     allowInitDecl: Bool = true,
     allowRecovery: Bool = false
   ) -> Bool {
     if self.at(anyIn: PoundDeclarationStart.self) != nil {
-      // Don't treat freestanding macro expansions as declarations. They'll be
-      // parsed as expressions.
-      if self.at(.pound) {
-        return false
-      }
-
       return true
     }
 
@@ -53,12 +60,14 @@ extension TokenConsumer {
       _ = subparser.consumeAttributeList()
     }
 
+    var hasModifier = false
     if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
         modifierKind != .class,
         modifierProgress.evaluate(subparser.currentToken)
       {
+        hasModifier = true
         subparser.eat(handle)
         if modifierKind != .open && subparser.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
           // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
@@ -113,6 +122,16 @@ extension TokenConsumer {
     case .macroKeyword:
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
+    case .pound:
+      // Force parsing '#<identifier>' after attributes as a macro expansion decl.
+      if hasAttribute || hasModifier {
+        return true
+      }
+
+      // Otherwise, parse it as a expression.
+      // FIXME: C++ parser returns true if this is a top-level non-"script" files.
+      // But we don't have "is library" flag.
+      return false
     case .some(_):
       // All other decl start keywords unconditonally start a decl.
       return true
@@ -203,10 +222,6 @@ extension Parser {
         return .decls(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       }
       return RawDeclSyntax(directive)
-    case (.pound, _)?:
-      // FIXME: If we can have attributes for macro expansions, handle this
-      // via DeclarationStart.
-      return RawDeclSyntax(self.parseMacroExpansionDeclaration())
     case nil:
       break
     }
@@ -258,6 +273,8 @@ extension Parser {
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
     case (.macroKeyword, let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
+    case (.pound, let handle)?:
+      return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case nil:
       if inMemberDeclList {
         let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek().rawTokenKind.is(.colon, .equal, .comma)
@@ -2023,9 +2040,30 @@ extension Parser {
   /// =======
   ///
   /// macro-expansion-declaration → '#' identifier expr-call-suffix?
-  mutating func parseMacroExpansionDeclaration() -> RawMacroExpansionDeclSyntax {
-    let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier()
+  mutating func parseMacroExpansionDeclaration(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> RawMacroExpansionDeclSyntax {
+
+    let (unexpectedBeforePound, poundKeyword) = self.eat(handle)
+    // Don't allow space between '#' and the macro name.
+    if poundKeyword.trailingTriviaByteLength != 0 || self.currentToken.leadingTriviaByteLength != 0 {
+      return RawMacroExpansionDeclSyntax(
+        attributes: attrs.attributes,
+        modifiers: attrs.modifiers,
+        unexpectedBeforePound,
+        poundToken: poundKeyword,
+        macro: self.missingToken(.identifier),
+        genericArguments: nil,
+        leftParen: nil,
+        argumentList: .init(elements: [], arena: self.arena),
+        rightParen: nil,
+        trailingClosure: nil,
+        additionalTrailingClosures: nil,
+        arena: self.arena
+      )
+    }
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?
@@ -2063,6 +2101,9 @@ extension Parser {
     }
 
     return RawMacroExpansionDeclSyntax(
+      attributes: attrs.attributes,
+      modifiers: attrs.modifiers,
+      unexpectedBeforePound,
       poundToken: poundKeyword,
       unexpectedBeforeMacro,
       macro: macro,

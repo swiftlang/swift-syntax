@@ -1427,6 +1427,208 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testAttributedMacroExpansionDeclaration() {
+    assertParse(
+      """
+      @attribute #topLevelWithAttr
+      public #topLevelWithModifier
+      #topLevelBare
+      """,
+      substructure: Syntax(
+        CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                MacroExpansionDeclSyntax(
+                  attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+                  macro: "topLevelWithAttr",
+                  argumentList: []
+                )
+              )
+            )
+          ),
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                MacroExpansionDeclSyntax(
+                  modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+                  macro: "topLevelWithModifier",
+                  argumentList: []
+                )
+              )
+            )
+          ),
+          CodeBlockItemSyntax(
+            item: .expr(
+              ExprSyntax(
+                MacroExpansionExprSyntax(
+                  macro: "topLevelBare",
+                  argumentList: []
+                )
+              )
+            )
+          ),
+        ])
+      )
+    )
+
+    assertParse(
+      """
+      struct S {
+        @attribute #memberWithAttr
+        public #memberWithModifier
+        #memberBare
+      }
+      """,
+      substructure: Syntax(
+        MemberDeclListSyntax([
+          MemberDeclListItemSyntax(
+            decl: MacroExpansionDeclSyntax(
+              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+              macro: "memberWithAttr",
+              argumentList: []
+            )
+          ),
+          MemberDeclListItemSyntax(
+            decl: MacroExpansionDeclSyntax(
+              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+              macro: "memberWithModifier",
+              argumentList: []
+            )
+          ),
+          MemberDeclListItemSyntax(
+            decl: MacroExpansionDeclSyntax(
+              macro: "memberBare",
+              argumentList: []
+            )
+          ),
+        ])
+      )
+    )
+
+    assertParse(
+      """
+      func test() {
+        @attribute #bodyWithAttr
+        public #bodyWithModifier
+        #bodyBare
+      }
+      """,
+      substructure: Syntax(
+        FunctionDeclSyntax(
+          identifier: .identifier("test"),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(parameterList: [])
+          )
+        ) {
+          DeclSyntax(
+            MacroExpansionDeclSyntax(
+              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+              macro: "bodyWithAttr",
+              argumentList: []
+            )
+          )
+          DeclSyntax(
+            MacroExpansionDeclSyntax(
+              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+              macro: "bodyWithModifier",
+              argumentList: []
+            )
+          )
+          ExprSyntax(
+            MacroExpansionExprSyntax(
+              macro: "bodyBare",
+              argumentList: []
+            )
+          )
+        }
+      )
+    )
+
+    assertParse(
+      """
+      func test() {
+        @attrib1
+        @attrib2
+        public
+        #declMacro
+      }
+      """,
+      substructure: Syntax(
+        FunctionDeclSyntax(
+          identifier: .identifier("test"),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(parameterList: [])
+          )
+        ) {
+          DeclSyntax(
+            MacroExpansionDeclSyntax(
+              attributes: [
+                .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib1"))),
+                .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
+              ],
+              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+              macro: "declMacro",
+              argumentList: []
+            )
+          )
+        }
+      )
+    )
+
+    assertParse(
+      """
+      struct S {
+        @attrib #1️⃣class
+        #2️⃣struct
+      }
+      """,
+      substructure: Syntax(
+        MemberDeclListSyntax([
+          MemberDeclListItemSyntax(
+            decl: MacroExpansionDeclSyntax(
+              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
+              poundToken: .poundToken(),
+              /*unexpectedBetweenPoundTokenAndMacro:*/ [
+                TokenSyntax.keyword(.class)
+              ],
+              macro: .identifier("", presence: .missing),
+              argumentList: []
+            )
+          ),
+          MemberDeclListItemSyntax(
+            decl: MacroExpansionDeclSyntax(
+              poundToken: .poundToken(),
+              /*unexpectedBetweenPoundTokenAndMacro:*/ [
+                TokenSyntax.keyword(.struct)
+              ],
+              macro: .identifier("", presence: .missing),
+              argumentList: []
+            )
+          ),
+        ])
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'class' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "keyword 'struct' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
+      ],
+      fixedSource: """
+        struct S {
+          @attrib #`class`
+          #`struct`
+        }
+        """
+    )
+  }
+
   func testVariableDeclWithGetSetButNoBrace() {
     assertParse(
       """

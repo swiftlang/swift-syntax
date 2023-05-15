@@ -272,6 +272,7 @@ enum DeclarationStart: TokenSpecSet {
   case typealiasKeyword
   case varKeyword
   case inoutKeyword
+  case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -295,6 +296,7 @@ enum DeclarationStart: TokenSpecSet {
     case TokenSpec(.typealias): self = .typealiasKeyword
     case TokenSpec(.var): self = .varKeyword
     case TokenSpec(.inout): self = .inoutKeyword
+    case TokenSpec(.pound): self = .pound
     default: return nil
     }
   }
@@ -321,6 +323,7 @@ enum DeclarationStart: TokenSpecSet {
     case .typealiasKeyword: return .keyword(.typealias)
     case .varKeyword: return .keyword(.var)
     case .inoutKeyword: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
+    case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
     }
   }
 }
@@ -396,12 +399,10 @@ enum OperatorLike: TokenSpecSet {
 
 enum PoundDeclarationStart: TokenSpecSet {
   case poundIfKeyword
-  case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch lexeme.rawTokenKind {
     case .poundIfKeyword: self = .poundIfKeyword
-    case .pound: self = .pound
     default: return nil
     }
   }
@@ -409,7 +410,6 @@ enum PoundDeclarationStart: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .poundIfKeyword: return .poundIfKeyword
-    case .pound: return .pound
     }
   }
 }

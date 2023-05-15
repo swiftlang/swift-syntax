@@ -1995,8 +1995,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "genericWhereClause"
   case \MacroDeclSyntax.unexpectedAfterGenericWhereClause:
     return "unexpectedAfterGenericWhereClause"
-  case \MacroExpansionDeclSyntax.unexpectedBeforePoundToken:
-    return "unexpectedBeforePoundToken"
+  case \MacroExpansionDeclSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \MacroExpansionDeclSyntax.attributes:
+    return "attributes"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \MacroExpansionDeclSyntax.modifiers:
+    return "modifiers"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenModifiersAndPoundToken:
+    return "unexpectedBetweenModifiersAndPoundToken"
   case \MacroExpansionDeclSyntax.poundToken:
     return "poundToken"
   case \MacroExpansionDeclSyntax.unexpectedBetweenPoundTokenAndMacro:

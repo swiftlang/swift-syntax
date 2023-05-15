@@ -763,23 +763,23 @@ final class StatementTests: XCTestCase {
         """
     )
   }
-  
+
   func testTrailingTriviaIncludesNewline() {
     assertParse(
-        """
-        let a = 2/*
-        */let b = 3
-        """
+      """
+      let a = 2/*
+      */let b = 3
+      """
     )
-    
+
     assertParse(
-        """
-        let a = 2/*
-        
-        
-        
-        */let b = 3
-        """
+      """
+      let a = 2/*
+
+
+
+      */let b = 3
+      """
     )
   }
 }

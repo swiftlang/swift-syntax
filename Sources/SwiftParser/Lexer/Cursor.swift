@@ -150,20 +150,6 @@ extension Lexer.Cursor {
       case .inRegexLiteral: return false
       }
     }
-    
-    /// Returns whether the lexer is currently parsing the multiline string.
-    var isParsingMultilineString: Bool {
-      switch self {
-      case .normal, .preferRegexOverBinaryOperator: return false
-      case .afterRawStringDelimiter: return false
-      case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: _): return stringLiteralKind == .multiLine
-      case .afterStringLiteral: return false
-      case .afterClosingStringQuote: return false
-      case .inStringInterpolationStart: return false
-      case .inStringInterpolation: return false
-      case .inRegexLiteral: return false
-      }
-    }
   }
 
   /// A data structure that holds the state stack entries in the lexer. It is
@@ -419,6 +405,15 @@ extension Lexer.Cursor {
     } else {
       newlineInLeadingTrivia = .absent
     }
+    
+    var flags: Lexer.Lexeme.Flags = []
+    if newlineInLeadingTrivia == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+    if let previousTokenNewlinePresence, previousTokenNewlinePresence == .present {
+      flags.insert(.isAtStartOfLine)
+    }
+    self.previousTokenNewlinePresence = nil
 
     // Token text.
     let textStart = self
@@ -451,23 +446,12 @@ extension Lexer.Cursor {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
     
-    var flags = result.flags
-    if newlineInLeadingTrivia == .present {
-      flags.insert(.isAtStartOfLine)
-    }
-    if let previousTokenNewlinePresence, previousTokenNewlinePresence == .present,
-       !currentState.isParsingMultilineString {
-      flags.insert(.isAtStartOfLine)
-    }
-    
     // Trailing trivia.
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
       self.previousTokenNewlinePresence = triviaResult.newlinePresence
       diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
-    } else {
-      self.previousTokenNewlinePresence = nil
     }
 
     if self.currentState.shouldPopStateWhenReachingNewlineInTrailingTrivia && self.is(at: "\r", "\n") {
@@ -478,7 +462,7 @@ extension Lexer.Cursor {
 
     let lexeme = Lexer.Lexeme(
       tokenKind: result.tokenKind,
-      flags: flags,
+      flags: result.flags.union(flags),
       diagnostic: diagnostic,
       start: leadingTriviaStart.pointer,
       leadingTriviaLength: leadingTriviaStart.distance(to: textStart),
@@ -1913,6 +1897,7 @@ extension Lexer.Cursor {
           if character == UInt8(ascii: "\r") {
             _ = self.advance(matching: "\n")
           }
+          self.previousTokenNewlinePresence = .present
           return Lexer.Result(.stringSegment, error: error)
         } else {
           // Single line literals cannot span multiple lines.

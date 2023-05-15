@@ -129,7 +129,7 @@ reason, tools like compilers often discard trivia during source code processing.
 However, maintaining trivia is important for tools like editors, IDEs, 
 formatters, and refactoring engines. SwiftSyntax represents trivia explicitly
 with the ``Trivia`` type. Trivia associated with token syntax can be inspected 
-with  the ``TokenSyntax/leadingTrivia-7p6tp`` and 
+with  the ``TokenSyntax/leadingTrivia-9512z`` and 
 ``TokenSyntax/trailingTrivia-5jclz`` accessors.
 
 ## Navigating the Syntax Tree

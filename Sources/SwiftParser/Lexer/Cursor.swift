@@ -320,8 +320,8 @@ extension Lexer {
     /// If `tokenKind` is `.keyword`, the kind of keyword produced, otherwise
     /// `nil`.
     let keywordKind: Keyword?
-    /// Indicates whether the lexed token text contains a newline.
-    let newlinePresence: Lexer.Cursor.NewlinePresence
+    /// Indicates whether the end of the lexed token text contains a newline.
+    let trailingNewlinePresence: Lexer.Cursor.NewlinePresence
 
     private init(
       _ tokenKind: RawTokenKind,
@@ -330,7 +330,7 @@ extension Lexer {
       stateTransition: StateTransition?,
       trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?,
       keywordKind: Keyword?,
-      newlinePresence: Lexer.Cursor.NewlinePresence
+      trailingNewlinePresence: Lexer.Cursor.NewlinePresence
     ) {
       self.tokenKind = tokenKind
       self.flags = flags
@@ -338,7 +338,7 @@ extension Lexer {
       self.stateTransition = stateTransition
       self.trailingTriviaLexingMode = trailingTriviaLexingMode
       self.keywordKind = keywordKind
-      self.newlinePresence = newlinePresence
+      self.trailingNewlinePresence = trailingNewlinePresence
     }
 
     /// Create a lexer result. Note that keywords should use `Result.keyword`
@@ -349,7 +349,7 @@ extension Lexer {
       error: Cursor.LexingDiagnostic? = nil,
       stateTransition: StateTransition? = nil,
       trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode? = nil,
-      newlinePresence: Lexer.Cursor.NewlinePresence = .absent
+      trailingNewlinePresence: Lexer.Cursor.NewlinePresence = .absent
     ) {
       precondition(tokenKind != .keyword, "Use Result.keyword instead")
       self.init(
@@ -359,7 +359,7 @@ extension Lexer {
         stateTransition: stateTransition,
         trailingTriviaLexingMode: trailingTriviaLexingMode,
         keywordKind: nil,
-        newlinePresence: newlinePresence
+        trailingNewlinePresence: trailingNewlinePresence
       )
     }
 
@@ -372,7 +372,7 @@ extension Lexer {
         stateTransition: nil,
         trailingTriviaLexingMode: nil,
         keywordKind: kind,
-        newlinePresence: .absent
+        trailingNewlinePresence: .absent
       )
     }
   }
@@ -448,7 +448,7 @@ extension Lexer.Cursor {
       flags.insert(.isAtStartOfLine)
     }
 
-    self.previousLexemeTrailingNewlinePresence = result.newlinePresence
+    self.previousLexemeTrailingNewlinePresence = result.trailingNewlinePresence
 
     if let stateTransition = result.stateTransition {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
@@ -1905,7 +1905,7 @@ extension Lexer.Cursor {
           if character == UInt8(ascii: "\r") {
             _ = self.advance(matching: "\n")
           }
-          return Lexer.Result(.stringSegment, error: error, newlinePresence: .present)
+          return Lexer.Result(.stringSegment, error: error, trailingNewlinePresence: .present)
         } else {
           // Single line literals cannot span multiple lines.
           // Terminate the string here and go back to normal lexing (instead of `afterStringLiteral`)

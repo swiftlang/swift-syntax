@@ -168,9 +168,6 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var invalidPrecedenceGroupAssociativity: Self {
     .init("Expected 'none', 'left', or 'right' after 'associativity'")
   }
-  public static var invalidWhitespaceAfterPeriod: Self {
-    .init("extraneous whitespace after '.' is not permitted")
-  }
   public static var joinConditionsUsingComma: Self {
     .init("expected ',' joining parts of a multi-clause condition")
   }
@@ -313,6 +310,14 @@ public struct ExtaneousCodeAtTopLevel: ParserError {
 
   public var message: String {
     return "extraneous \(extraneousCode.shortSingleLineContentDescription) at top level"
+  }
+}
+
+public struct ExtraneousWhitespace: ParserError {
+  public let tokenWithWhitespace: TokenSyntax
+
+  public var message: String {
+    return "extraneous whitespace after '\(tokenWithWhitespace.text)' is not permitted"
   }
 }
 

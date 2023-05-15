@@ -59,7 +59,7 @@ extension FixIt.MultiNodeChange {
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ tokens: [TokenSyntax], transferTrivia: Bool = true) -> Self {
     precondition(!tokens.isEmpty)
-    precondition(tokens.allSatisfy({ $0.presence == .present }))
+    precondition(tokens.allSatisfy({ $0.isPresent }))
     var changes = tokens.map {
       FixIt.Change.replace(
         oldNode: Syntax($0),
@@ -111,7 +111,7 @@ extension FixIt.MultiNodeChange {
 class MissingNodesBasicFormatter: BasicFormat {
   override func isMutable(_ token: TokenSyntax) -> Bool {
     // Assume that all missing nodes will be made present by the Fix-It.
-    return token.presence == .missing
+    return token.isMissing
   }
 }
 
@@ -153,7 +153,7 @@ extension FixIt.MultiNodeChange {
     }
 
     if let previousToken = node.previousToken(viewMode: .fixedUp),
-      previousToken.presence == .present,
+      previousToken.isPresent,
       let firstToken = node.firstToken(viewMode: .all),
       previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
       !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken),

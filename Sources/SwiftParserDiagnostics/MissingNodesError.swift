@@ -76,7 +76,7 @@ fileprivate enum NodesDescriptionPart {
     for missingNode in nodes {
       if let token = missingNode.as(TokenSyntax.self) {
         let newPart: NodesDescriptionPart
-        if token.presence == .present {
+        if token.isPresent {
           newPart = .tokensWithDefaultText([token])
         } else {
           let (rawKind, text) = token.tokenKind.decomposeToRaw()
@@ -371,7 +371,7 @@ extension ParseDiagnosticsGenerator {
       let siblings = parentWithTokens.children(viewMode: .all)
       let siblingsAfter = siblings[siblings.index(after: index)...]
       for sibling in siblingsAfter {
-        if sibling.as(TokenSyntax.self)?.presence == .missing {
+        if sibling.as(TokenSyntax.self)?.isMissing ?? false {
           // Handle missing sibling tokens
           missingNodes += [sibling]
         } else if sibling.raw.kind.isMissing {

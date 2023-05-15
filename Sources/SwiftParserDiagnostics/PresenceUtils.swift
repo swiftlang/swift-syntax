@@ -27,7 +27,7 @@ class PresentNodeChecker: SyntaxAnyVisitor {
   }
 
   override func visit(_ node: TokenSyntax) -> SyntaxVisitorContinueKind {
-    if node.presence == .present {
+    if node.isPresent {
       hasPresentToken = true
     }
     return .visitChildren
@@ -46,7 +46,7 @@ extension SyntaxProtocol {
 /// Transforms a syntax tree by making all missing tokens present.
 class PresentMaker: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> TokenSyntax {
-    if token.presence == .missing {
+    if token.isMissing {
       let presentToken: TokenSyntax
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
       if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
@@ -64,7 +64,7 @@ class PresentMaker: SyntaxRewriter {
 
 class MissingMaker: SyntaxRewriter {
   override func visit(_ node: TokenSyntax) -> TokenSyntax {
-    guard node.presence == .present else {
+    guard node.isPresent else {
       return node
     }
     return TokenSyntax(node.tokenKind, presence: .missing)

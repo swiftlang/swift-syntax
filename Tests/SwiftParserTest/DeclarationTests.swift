@@ -1464,44 +1464,38 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       """
       @attribute #topLevelWithAttr
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+          macro: "topLevelWithAttr",
+          argumentList: []
+        )
+      )
+    )
+
+    assertParse(
+      """
       public #topLevelWithModifier
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+          macro: "topLevelWithModifier",
+          argumentList: []
+        )
+      )
+    )
+
+    assertParse(
+      """
       #topLevelBare
       """,
       substructure: Syntax(
-        CodeBlockItemListSyntax([
-          CodeBlockItemSyntax(
-            item: .decl(
-              DeclSyntax(
-                MacroExpansionDeclSyntax(
-                  attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-                  macro: "topLevelWithAttr",
-                  argumentList: []
-                )
-              )
-            )
-          ),
-          CodeBlockItemSyntax(
-            item: .decl(
-              DeclSyntax(
-                MacroExpansionDeclSyntax(
-                  modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-                  macro: "topLevelWithModifier",
-                  argumentList: []
-                )
-              )
-            )
-          ),
-          CodeBlockItemSyntax(
-            item: .expr(
-              ExprSyntax(
-                MacroExpansionExprSyntax(
-                  macro: "topLevelBare",
-                  argumentList: []
-                )
-              )
-            )
-          ),
-        ])
+        MacroExpansionExprSyntax(
+          macro: "topLevelBare",
+          argumentList: []
+        )
       )
     )
 
@@ -1509,33 +1503,43 @@ final class DeclarationTests: XCTestCase {
       """
       struct S {
         @attribute #memberWithAttr
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+          macro: "memberWithAttr",
+          argumentList: []
+        )
+      )
+    )
+
+    assertParse(
+      """
+      struct S {
         public #memberWithModifier
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+          macro: "memberWithModifier",
+          argumentList: []
+        )
+      )
+    )
+
+    assertParse(
+      """
+      struct S {
         #memberBare
       }
       """,
       substructure: Syntax(
-        MemberDeclListSyntax([
-          MemberDeclListItemSyntax(
-            decl: MacroExpansionDeclSyntax(
-              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-              macro: "memberWithAttr",
-              argumentList: []
-            )
-          ),
-          MemberDeclListItemSyntax(
-            decl: MacroExpansionDeclSyntax(
-              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-              macro: "memberWithModifier",
-              argumentList: []
-            )
-          ),
-          MemberDeclListItemSyntax(
-            decl: MacroExpansionDeclSyntax(
-              macro: "memberBare",
-              argumentList: []
-            )
-          ),
-        ])
+        MacroExpansionDeclSyntax(
+          macro: "memberBare",
+          argumentList: []
+        )
       )
     )
 
@@ -1543,38 +1547,44 @@ final class DeclarationTests: XCTestCase {
       """
       func test() {
         @attribute #bodyWithAttr
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+          macro: "bodyWithAttr",
+          argumentList: []
+        )
+      )
+    )
+
+    assertParse(
+      """
+      func test() {
         public #bodyWithModifier
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+          macro: "bodyWithModifier",
+          argumentList: []
+        )
+
+      )
+    )
+
+    assertParse(
+      """
+      func test() {
         #bodyBare
       }
       """,
       substructure: Syntax(
-        FunctionDeclSyntax(
-          identifier: .identifier("test"),
-          signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(parameterList: [])
-          )
-        ) {
-          DeclSyntax(
-            MacroExpansionDeclSyntax(
-              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-              macro: "bodyWithAttr",
-              argumentList: []
-            )
-          )
-          DeclSyntax(
-            MacroExpansionDeclSyntax(
-              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-              macro: "bodyWithModifier",
-              argumentList: []
-            )
-          )
-          ExprSyntax(
-            MacroExpansionExprSyntax(
-              macro: "bodyBare",
-              argumentList: []
-            )
-          )
-        }
+        MacroExpansionExprSyntax(
+          macro: "bodyBare",
+          argumentList: []
+        )
       )
     )
 
@@ -1588,24 +1598,15 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       substructure: Syntax(
-        FunctionDeclSyntax(
-          identifier: .identifier("test"),
-          signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(parameterList: [])
-          )
-        ) {
-          DeclSyntax(
-            MacroExpansionDeclSyntax(
-              attributes: [
-                .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib1"))),
-                .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
-              ],
-              modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-              macro: "declMacro",
-              argumentList: []
-            )
-          )
-        }
+        MacroExpansionDeclSyntax(
+          attributes: [
+            .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib1"))),
+            .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
+          ],
+          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+          macro: "declMacro",
+          argumentList: []
+        )
       )
     )
 
@@ -1613,50 +1614,134 @@ final class DeclarationTests: XCTestCase {
       """
       struct S {
         @attrib #1️⃣class
-        #2️⃣struct
       }
       """,
       substructure: Syntax(
-        MemberDeclListSyntax([
-          MemberDeclListItemSyntax(
-            decl: MacroExpansionDeclSyntax(
-              attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
-              poundToken: .poundToken(),
-              /*unexpectedBetweenPoundTokenAndMacro:*/ [
-                TokenSyntax.keyword(.class)
-              ],
-              macro: .identifier("", presence: .missing),
-              argumentList: []
-            )
-          ),
-          MemberDeclListItemSyntax(
-            decl: MacroExpansionDeclSyntax(
-              poundToken: .poundToken(),
-              /*unexpectedBetweenPoundTokenAndMacro:*/ [
-                TokenSyntax.keyword(.struct)
-              ],
-              macro: .identifier("", presence: .missing),
-              argumentList: []
-            )
-          ),
-        ])
+        MacroExpansionDeclSyntax(
+          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
+          poundToken: .poundToken(),
+          /*unexpectedBetweenPoundTokenAndMacro:*/ [
+            TokenSyntax.keyword(.class)
+          ],
+          macro: .identifier("", presence: .missing),
+          argumentList: []
+        )
       ),
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "1️⃣",
           message: "keyword 'class' cannot be used as an identifier here",
           fixIts: ["if this name is unavoidable, use backticks to escape it"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "keyword 'struct' cannot be used as an identifier here",
-          fixIts: ["if this name is unavoidable, use backticks to escape it"]
-        ),
+        )
       ],
       fixedSource: """
         struct S {
           @attrib #`class`
+        }
+        """
+    )
+
+    assertParse(
+      """
+      struct S {
+        #1️⃣struct
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          poundToken: .poundToken(),
+          /*unexpectedBetweenPoundTokenAndMacro:*/ [
+            TokenSyntax.keyword(.struct)
+          ],
+          macro: .identifier("", presence: .missing),
+          argumentList: []
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(
+          message: "keyword 'struct' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
+      ],
+      fixedSource: """
+        struct S {
           #`struct`
+        }
+        """
+    )
+  }
+
+  func testWhitespaceBetweenPoundAndMacroName() {
+    assertParse(
+      """
+      #1️⃣ myMacroName
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace after '#' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: """
+        #myMacroName
+        """
+    )
+
+    assertParse(
+      """
+      #1️⃣ /*comment*/ myMacroName
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace after '#' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: """
+        #myMacroName
+        """
+    )
+
+    assertParse(
+      """
+      #1️⃣
+      myMacroName
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        #<#identifier#>
+        myMacroName
+        """
+    )
+
+    assertParse(
+      """
+      struct Foo {
+        #1️⃣ myMacroName
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace after '#' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: """
+        struct Foo {
+          #myMacroName
+        }
+        """
+    )
+
+    assertParse(
+      """
+      struct Foo {
+        #1️⃣
+        2️⃣myMacroName3️⃣
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+      ],
+      fixedSource: """
+        struct Foo {
+          #<#identifier#>
+          func
+          myMacroName()
         }
         """
     )

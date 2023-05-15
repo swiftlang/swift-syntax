@@ -242,7 +242,7 @@ extension Lexer {
 
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
-    
+
     /// If we have already lexed a token, stores whether the previous lexeme‘s ending contains a newline.
     var previousLexemeTrailingNewlinePresence: NewlinePresence?
 
@@ -440,7 +440,7 @@ extension Lexer.Cursor {
     case .inRegexLiteral(let index, let lexemes):
       result = lexInRegexLiteral(lexemes.pointee[index...], existingPtr: lexemes)
     }
-    
+
     var flags = result.flags
     if newlineInLeadingTrivia == .present {
       flags.insert(.isAtStartOfLine)
@@ -448,13 +448,13 @@ extension Lexer.Cursor {
     if let previousLexemeTrailingNewlinePresence, previousLexemeTrailingNewlinePresence == .present {
       flags.insert(.isAtStartOfLine)
     }
-    
+
     self.previousLexemeTrailingNewlinePresence = result.newlinePresence
 
     if let stateTransition = result.stateTransition {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
-    
+
     // Trailing trivia.
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {

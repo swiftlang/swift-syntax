@@ -243,8 +243,8 @@ extension Lexer {
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
     
-    /// If we have already lexed a token, the `NewlinePresence` of the previously lexed token
-    var previousTokenNewlinePresence: NewlinePresence?
+    /// If we have already lexed a token, stores whether the previous lexeme‘s ending contains a newline.
+    var previousLexemeTrailingNewlinePresence: NewlinePresence?
 
     /// If the `previousTokenKind` is `.keyword`, the keyword kind. Otherwise
     /// `nil`.
@@ -410,10 +410,10 @@ extension Lexer.Cursor {
     if newlineInLeadingTrivia == .present {
       flags.insert(.isAtStartOfLine)
     }
-    if let previousTokenNewlinePresence, previousTokenNewlinePresence == .present {
+    if let previousLexemeTrailingNewlinePresence, previousLexemeTrailingNewlinePresence == .present {
       flags.insert(.isAtStartOfLine)
     }
-    self.previousTokenNewlinePresence = nil
+    self.previousLexemeTrailingNewlinePresence = nil
 
     // Token text.
     let textStart = self
@@ -450,7 +450,7 @@ extension Lexer.Cursor {
     let trailingTriviaStart = self
     if let trailingTriviaMode = result.trailingTriviaLexingMode ?? currentState.trailingTriviaLexingMode(cursor: self) {
       let triviaResult = self.lexTrivia(mode: trailingTriviaMode)
-      self.previousTokenNewlinePresence = triviaResult.newlinePresence
+      self.previousLexemeTrailingNewlinePresence = triviaResult.newlinePresence
       diagnostic = TokenDiagnostic(combining: diagnostic, triviaResult.error?.tokenDiagnostic(tokenStart: cursor))
     }
 
@@ -1897,7 +1897,7 @@ extension Lexer.Cursor {
           if character == UInt8(ascii: "\r") {
             _ = self.advance(matching: "\n")
           }
-          self.previousTokenNewlinePresence = .present
+          self.previousLexemeTrailingNewlinePresence = .present
           return Lexer.Result(.stringSegment, error: error)
         } else {
           // Single line literals cannot span multiple lines.

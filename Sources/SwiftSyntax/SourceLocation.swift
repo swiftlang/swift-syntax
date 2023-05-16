@@ -67,6 +67,8 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
     return compLoc?.file
   }
 
+  /// Returns the location as `<line>:<column>` for debugging purposes.
+  /// Do not rely on this output being stable.
   public var debugDescription: String {
     guard let compLoc = compLoc else {
       return "\(offset)"
@@ -74,6 +76,20 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
     return compLoc.debugDescription
   }
 
+  /// Create a new source location at the specified `line` and `column` in `file`.
+  ///
+  /// - Parameters:
+  ///   - line: 1-based, i.e. the first line in the file has line number 1
+  ///   - column: The UTF-8 byte offset of the location with its line, i.e. the
+  ///             number of bytes all characters in the line before the location
+  ///             occupy when encoded as UTF-8. 1-based, i.e. the leftmost
+  ///             column in the file has column 1.
+  ///   - offset: The UTF-8 offset of the location within the entire file, i.e.
+  ///             the number of bytes all source code before the location
+  ///             occupies when encoded as UTF-8. 0-based, i.e. the first
+  ///             location in the source file has `offset` 0.
+  ///   - file: A string describing the name of the file in which this location
+  ///           is contained.
   public init(line: Int, column: Int, offset: Int, file: String) {
     self.offset = offset
     self.compLoc = ComputedLocation(line: line, column: column, file: file)
@@ -94,15 +110,22 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
 public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
 
   /// The beginning location in the source range.
+  ///
+  /// This location is included in the range
   public let start: SourceLocation
 
   /// The beginning location in the source range.
+  ///
+  /// This location is no longer part of the range
   public let end: SourceLocation
 
+  /// A description describing this range for debugging purposes, don't rely on it.
   public var debugDescription: String {
     return "(\(start.debugDescription),\(end.debugDescription))"
   }
 
+  /// Construct a new source range, starting at `start` (inclusive) and ending
+  /// at `end` (exclusive).
   public init(start: SourceLocation, end: SourceLocation) {
     self.start = start
     self.end = end

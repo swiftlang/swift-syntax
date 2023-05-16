@@ -10,7 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Bump-pointer allocation.
+/// A `BumpPtrAllocator` that allocates `slabSize` at a time.
+/// Once all memory in a slab has been used, it allocates a new slab and no
+/// memory allocations are necessary until that slab is completely filled up.
 @_spi(RawSyntax) @_spi(Testing)
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
@@ -35,6 +37,9 @@ public class BumpPtrAllocator {
   private var customSizeSlabs: [Slab]
   private var _totalBytesAllocated: Int
 
+  /// Construct a new ``BumpPtrAllocator`` that allocates `slabSize` at a time.
+  /// Once all memory in a slab has been used, it allocates a new slab and no
+  /// memory allocations are necessary until that slab is completely filled up.
   public init(slabSize: Int) {
     self.slabSize = slabSize
     slabs = []

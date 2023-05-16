@@ -89,7 +89,8 @@ public class AbsolutePositionTests: XCTestCase {
     XCTAssertEqual(2, state.trailingTrivia.count)
     XCTAssertEqual(
       state.byteSize,
-      state.leadingTrivia.byteSize + state.trailingTrivia.byteSize
+      state.leadingTrivia.sourceLength.utf8Length
+        + state.trailingTrivia.sourceLength.utf8Length
         + state.byteSizeAfterTrimmingTrivia
     )
     XCTAssertFalse(root.statements.isImplicit)

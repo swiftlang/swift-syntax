@@ -87,12 +87,23 @@ public struct SyntaxIndexInTree: Comparable, Hashable {
     self.indexInTree = indexInTree
   }
 
+  /// Returns `true` if `lhs` occurs before `rhs` in the tree.
   public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
     return lhs.indexInTree < rhs.indexInTree
   }
 }
 
 /// Provides a stable and unique identity for `Syntax` nodes.
+///
+/// Note that two nodes might have the same contents even if their IDs are
+/// different. For example two different `FunctionDeclSyntax` nodes in the
+/// might have the exact same contents but if they occur at a different
+/// location in the source file, they have different IDs.
+///
+/// Also note that the ID of a syntax node changes when it is anchored in a
+/// different syntax tree. Modifying any node in the syntax tree a node is
+/// contained in generates a copy of that tree and thus changes the IDs of all
+/// nodes in the tree, not just the modified node's children.
 public struct SyntaxIdentifier: Hashable {
   /// Unique value for the root node.
   ///

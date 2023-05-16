@@ -6,12 +6,12 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftIDEUtils
+add_swift_syntax_library(SwiftIDEUtils
   SwiftIDEUtilsCompatibility.swift
   Syntax+Classifications.swift
   SyntaxClassification.swift
   SyntaxClassifier.swift
 )
 
-target_link_libraries(SwiftIDEUtils PUBLIC
+target_link_swift_syntax_libraries(SwiftIDEUtils PUBLIC
   SwiftSyntax)

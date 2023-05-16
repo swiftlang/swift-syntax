@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftOperators
+add_swift_syntax_library(SwiftOperators
   Operator.swift
   OperatorError+Diagnostics.swift
   OperatorError.swift
@@ -19,7 +19,7 @@ add_swift_host_library(SwiftOperators
   SyntaxSynthesis.swift
 )
 
-target_link_libraries(SwiftOperators PUBLIC
+target_link_swift_syntax_libraries(SwiftOperators PUBLIC
   SwiftSyntax
   SwiftDiagnostics
   SwiftParser)

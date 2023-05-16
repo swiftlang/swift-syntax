@@ -26,6 +26,7 @@ public enum SyntaxNodeStructure {
   /// The node can contain a single node with one of the listed types.
   case choices([SyntaxChoice])
 
+  /// Convenience property that’s `true` if `self` is the `layout` case.
   public var isLayout: Bool {
     switch self {
     case .layout: return true
@@ -33,6 +34,7 @@ public enum SyntaxNodeStructure {
     }
   }
 
+  /// Convenience property that’s `true` if `self` is the `collection` case.
   public var isCollection: Bool {
     switch self {
     case .collection: return true
@@ -40,6 +42,7 @@ public enum SyntaxNodeStructure {
     }
   }
 
+  /// Convenience property that’s `true` if `self` is the `choices` case.
   public var isChoices: Bool {
     switch self {
     case .choices: return true
@@ -54,6 +57,9 @@ public enum SyntaxNodeStructure {
 public struct Syntax: SyntaxProtocol, SyntaxHashable {
   let data: SyntaxData
 
+  /// Needed for the conformance to ``SyntaxProtocol``.
+  ///
+  /// Kind of non-sensical on `Syntax` since this just returns `self`.
   public var _syntaxNode: Syntax {
     return self
   }
@@ -72,10 +78,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self = syntax._syntaxNode
   }
 
+  /// Creates a new `Syntax` node from any concrete node that conforms to `SyntaxProtocol`.
   public init(fromProtocol syntax: SyntaxProtocol) {
     self = syntax._syntaxNode
   }
 
+  /// Same as ``init(fromProtocol:)`` but returns `nil` if `syntax` is `nil`.
   public init?(fromProtocol syntax: SyntaxProtocol?) {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
@@ -95,16 +103,29 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     return self.raw.kind.syntaxNodeType.init(self)!
   }
 
+  /// Add the hash value of this node’s ID to `hasher`.
   public func hash(into hasher: inout Hasher) {
     return data.nodeId.hash(into: &hasher)
   }
 
+  /// Returns `true` if `rhs` and `lhs` have the same ID.
+  ///
+  /// Note `lhs` and `rhs` might have the same contents even if their IDs are
+  /// different. For example two different `FunctionDeclSyntax` nodes in the
+  /// might have the exact same contents but if they occur at a different
+  /// location in the source file, they have different IDs.
+  ///
+  /// Also note that the ID of a syntax node changes when it is anchored in a
+  /// different syntax tree. Modifying any node in the syntax tree a node is
+  /// contained in generates a copy of that tree and thus changes the IDs of all
+  /// nodes in the tree, not just the modified node's children.
   public static func == (lhs: Syntax, rhs: Syntax) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
   }
 }
 
 extension Syntax: Identifiable {
+  /// `SyntaxIdentifier` uniquely identifies a node.
   public typealias ID = SyntaxIdentifier
 }
 
@@ -215,10 +236,19 @@ extension SyntaxProtocol {
     return Syntax(raw: self.raw).cast(Self.self)
   }
 
+  /// The kind of the syntax node, e.g. if it is a `functionDecl`.
+  ///
+  /// If you want to check for a node's kind and cast the node to that type, see
+  /// `self.as(FunctionDeclSyntax.self)` or `self.as(SyntaxEnum.self)`.
   public var kind: SyntaxKind {
     return raw.kind
   }
 
+  /// The dynamic metatype of this node. You almost always want to prefer this
+  /// over `type(of: self)` because if `self` is a `DeclSyntax` representing a
+  /// `FunctionDeclSyntax`, `type(of: self)` will return `DeclSyntax`, while
+  /// `syntaxNodeType` looks at the dynamic kind of this node and returns
+  /// `FunctionDeclSyntax`.
   public var syntaxNodeType: SyntaxProtocol.Type {
     return self.raw.kind.syntaxNodeType
   }
@@ -680,6 +710,7 @@ public protocol SyntaxChildChoices: SyntaxProtocol {}
 
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence {
+  /// Iterates over a ``TokenSequence``.
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
     /// The last token to iterate (inclusive).
@@ -692,6 +723,7 @@ public struct TokenSequence: Sequence {
       self.viewMode = viewMode
     }
 
+    /// Return the next element in a ``TokenSequence``.
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
       if nextToken == endToken {
@@ -706,21 +738,28 @@ public struct TokenSequence: Sequence {
   let node: Syntax
   let viewMode: SyntaxTreeViewMode
 
+  /// Construct a `TokenSequence` that walks all tokens in `node` in source order,
+  /// recursively walking into child nodes.
+  ///
+  /// All nodes that are not visible in the given `viewMode` are skipped.
   public init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
     self.node = node
     self.viewMode = viewMode
   }
 
+  /// Create an iterator that iterates over all the tokens in the sequence.
   public func makeIterator() -> Iterator {
     return Iterator(node.firstToken(viewMode: viewMode), endToken: node.lastToken(viewMode: viewMode), viewMode: viewMode)
   }
 
+  /// Iterate the tokens in reverse order.
   public func reversed() -> ReversedTokenSequence {
     return ReversedTokenSequence(node, viewMode: viewMode)
   }
 }
 
 extension TokenSequence: CustomReflectable {
+  /// A custom mirror for ``TokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
   }
@@ -728,6 +767,7 @@ extension TokenSequence: CustomReflectable {
 
 /// Reverse sequence of tokens that are part of the provided Syntax node.
 public struct ReversedTokenSequence: Sequence {
+  /// Iterates over a ``ReversedTokenSequence``.
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
     let startPosition: AbsolutePosition
@@ -739,6 +779,8 @@ public struct ReversedTokenSequence: Sequence {
       self.viewMode = viewMode
     }
 
+    /// Returns the next element in a ``ReversedTokenSequence``, i.e. the one
+    /// that occured before the current token in source order.
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
       self.nextToken = token.previousToken(viewMode: viewMode)
@@ -753,25 +795,34 @@ public struct ReversedTokenSequence: Sequence {
   let node: Syntax
   let viewMode: SyntaxTreeViewMode
 
+  /// Construct a ``TokenSequence`` that walks all tokens in `node` in reverse
+  /// source order, recursively walking into child nodes.
+  ///
+  /// All nodes that are not visible in the given `viewMode` are skipped.
   public init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
     self.node = node
     self.viewMode = viewMode
   }
 
+  /// Create an iterator that iterates over all the tokens in the sequence.
   public func makeIterator() -> Iterator {
     return Iterator(node.lastToken(viewMode: viewMode), startPosition: node.position, viewMode: viewMode)
   }
 
+  /// Iterate over the tokens in source order.
   public func reversed() -> TokenSequence {
     return TokenSequence(node, viewMode: viewMode)
   }
 }
 
 extension ReversedTokenSequence: CustomReflectable {
+  /// A custom mirror for ``ReversedTokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
     return Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
 
+/// `SyntaxNode` used to be a pervasive type name in SwiftSyntax that has been
+/// replaced by the ``Syntax`` type.
 @available(*, unavailable, message: "use 'Syntax' instead")
 public struct SyntaxNode {}

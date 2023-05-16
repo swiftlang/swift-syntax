@@ -37,10 +37,15 @@
 public struct SyntaxText {
   var buffer: UnsafeBufferPointer<UInt8>
 
+  /// Construct a ``SyntaxText`` whose text is represented by the given `buffer`.
   public init(buffer: UnsafeBufferPointer<UInt8>) {
     self.buffer = buffer
   }
 
+  /// Construct a ``SyntaxText`` whose text is represented by the memory starting
+  /// at `baseAddress` and ranging `count` bytes.
+  ///
+  /// If count is not zero, `baseAddress` must not be `nil`.
   public init(baseAddress: UnsafePointer<UInt8>?, count: Int) {
     precondition(
       count == 0 || baseAddress != nil,
@@ -142,19 +147,29 @@ public struct SyntaxText {
 
 /// `SyntaxText` is a collection of `UInt8`.
 extension SyntaxText: RandomAccessCollection {
+  /// SyntaxText operates on bytes and each byte is represented by a `UInt8`.
   public typealias Element = UInt8
+
+  /// `SyntaxText` is a continuous memory region that can be accessed by an integer.
   public typealias Index = Int
+
+  /// `Slice<SyntaxText>` represents a part of a ``SyntaxText``.
   public typealias SubSequence = Slice<SyntaxText>
 
+  /// The index of the first byte in ``SyntaxText``
   public var startIndex: Index { buffer.startIndex }
+
+  /// The index one after the last byte in ``SyntaxText``.
   public var endIndex: Index { buffer.endIndex }
 
-  public subscript(position: Index) -> Element {
-    get { return buffer[position] }
+  /// Access the byte at `index`.
+  public subscript(index: Index) -> Element {
+    get { return buffer[index] }
   }
 }
 
 extension SyntaxText: Hashable {
+  /// Returns `true` if `lhs` and `rhs` contain the same bytes.
   public static func == (lhs: SyntaxText, rhs: SyntaxText) -> Bool {
     if lhs.buffer.count != rhs.buffer.count {
       return false
@@ -174,22 +189,40 @@ extension SyntaxText: Hashable {
     return compareMemory(lBase, rBase, lhs.count)
   }
 
+  /// Hash the contents of this ``SyntaxText`` into `hasher`.
   public func hash(into hasher: inout Hasher) {
     hasher.combine(bytes: .init(buffer))
   }
 }
 
 extension SyntaxText: ExpressibleByStringLiteral {
+  /// We can always safely create ``SyntaxText`` from a ``StaticString`` because
+  /// ``StaticString`` is guaranteed to be alive for the entire execution
+  /// duration of the process.
   public init(stringLiteral value: StaticString) { self.init(value) }
+
+  /// We can always safely create ``SyntaxText`` from a ``StaticString`` because
+  /// ``StaticString`` is guaranteed to be alive for the entire execution
+  /// duration of the process.
   public init(unicodeScalarLiteral value: StaticString) { self.init(value) }
+
+  /// We can always safely create ``SyntaxText`` from a ``StaticString`` because
+  /// ``StaticString`` is guaranteed to be alive for the entire execution
+  /// duration of the process.
   public init(extendedGraphemeClusterLiteral value: StaticString) { self.init(value) }
 }
 
 extension SyntaxText: CustomStringConvertible {
+  /// The contents of this ``SyntaxText`` as a ``String``.
+  ///
+  /// Note that ``SyntaxText`` can represent invalid Unicode, while ``String``
+  /// cannot, so if this text contains invalid UTF-8, the conversion is lossy.
   public var description: String { String(syntaxText: self) }
 }
 
 extension SyntaxText: CustomDebugStringConvertible {
+  /// The string value of this text, which may be lossy if the text contains
+  /// invalid Unicode.
   public var debugDescription: String { description.debugDescription }
 }
 

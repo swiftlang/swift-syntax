@@ -206,6 +206,8 @@ public struct IncrementalParseLookup {
   fileprivate let transition: IncrementalParseTransition
   fileprivate var cursor: SyntaxCursor
 
+  /// Create a new `IncrementalParseLookup` that can look nodes up based on the
+  /// given ``IncrementalParseTransition``.
   public init(transition: IncrementalParseTransition) {
     self.transition = transition
     self.cursor = .init(root: transition.previousTree.data)

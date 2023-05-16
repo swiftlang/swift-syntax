@@ -61,7 +61,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
     let indentationStartIndex = tokenLeadingTrivia.pieces.lastIndex(where: { $0.isNewline })?.advanced(by: 1) ?? tokenLeadingTrivia.startIndex
     let preIndentationTrivia = Trivia(pieces: tokenLeadingTrivia[0..<indentationStartIndex])
     let indentationTrivia = Trivia(pieces: tokenLeadingTrivia[indentationStartIndex...])
-    var positionOffset = preIndentationTrivia.byteSize
+    var positionOffset = preIndentationTrivia.sourceLength.utf8Length
 
     for (invalidTriviaPiece, missingTriviaPiece) in zip(indentationTrivia.decomposed, closeQuote.leadingTrivia.decomposed) {
       if invalidTriviaPiece == missingTriviaPiece {

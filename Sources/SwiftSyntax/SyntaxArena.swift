@@ -10,6 +10,31 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// A syntax arena owns the memory for all syntax nodes within it.
+///
+/// The following is only relevant if you are accessing the raw syntax tree using
+/// ``RawSyntax`` nodes. When working with syntax trees using SwiftSyntax’s API,
+/// the usage of a ``SyntaxArena`` is transparent.
+///
+/// Contrary to Swift’s usual memory model, syntax node's are not individually
+/// reference-counted. Instead, they live in an arena. That arena allocates a
+/// chunk of memory at a time, which it can then use to store syntax nodes in.
+/// This way, only a single memory allocation needs to be performed for multiple
+/// syntax nodes and since memory allocations have a non-trivial cost, this
+/// signficiantly speeds up parsing.
+///
+/// As a consequence, syntax nodes cannot be freed individually but the memory
+/// will get freed once the owning ``SyntaxArena`` gets freed. Thus, it needs to
+/// be manually ensured that the ``SyntaxArena`` is not deallocated before any
+/// of its nodes are being accessed. The ``SyntaxData`` type ensures this as
+/// follows: Each node retains its parent ``SyntaxData``, thus keeping it alive.
+/// The tree’s root keeps the ``SyntaxArena`` it is contained in alive. And if
+/// any children of this tree are allocated within a different ``SyntaxArena``,
+/// the root arena keeps those arenas alive via the `childRefs` property.
+///
+/// As an added benefit of the ``SyntaxArena``, `RawSyntax` nodes don’t need to
+/// be reference-counted, further improving the performance of ``SwiftSyntax``
+/// when worked with at that level.
 public class SyntaxArena {
   /// Bump-pointer allocator for all "intern" methods.
   fileprivate let allocator: BumpPtrAllocator
@@ -25,6 +50,7 @@ public class SyntaxArena {
   private var hasParent: Bool
   #endif
 
+  /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
   public convenience init() {
     self.init(slabSize: 128)
   }

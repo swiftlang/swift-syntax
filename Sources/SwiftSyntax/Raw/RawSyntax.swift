@@ -342,10 +342,12 @@ extension RawSyntax {
 }
 
 extension RawSyntax {
+  @_spi(RawSyntax)
   public func toOpaque() -> UnsafeRawPointer {
     UnsafeRawPointer(pointer)
   }
 
+  @_spi(RawSyntax)
   public static func fromOpaque(_ pointer: UnsafeRawPointer) -> RawSyntax {
     Self(pointer: pointer.assumingMemoryBound(to: RawSyntaxData.self))
   }
@@ -866,6 +868,7 @@ extension RawSyntax: CustomDebugStringConvertible {
     target.write(")")
   }
 
+  @_spi(RawSyntax)
   public var debugDescription: String {
     var string = ""
     debugWrite(to: &string, indent: 0, withChildren: false)
@@ -874,6 +877,7 @@ extension RawSyntax: CustomDebugStringConvertible {
 }
 
 extension RawSyntax: CustomReflectable {
+  @_spi(RawSyntax)
   public var customMirror: Mirror {
 
     let mirrorChildren: [Any]

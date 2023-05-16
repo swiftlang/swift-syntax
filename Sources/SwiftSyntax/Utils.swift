@@ -84,6 +84,11 @@ public struct SourceEdit: Equatable {
 }
 
 extension RawUnexpectedNodesSyntax {
+  /// Construct a ``RawUnexpectedNodesSyntax``with the given `elements`.
+  ///
+  /// If `isMaximumNestingLevelOverflow` is `true`, the node has the
+  /// `isMaximumNestingLevelOverflow` error bit set, indicating that the parser
+  /// overflowed its maximum nesting level and thus aborted parsing.
   public init(elements: [RawSyntax], isMaximumNestingLevelOverflow: Bool, arena: __shared SyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .unexpectedNodes,

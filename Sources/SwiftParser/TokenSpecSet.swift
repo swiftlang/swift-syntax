@@ -458,6 +458,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case _borrowKeyword
   case tryKeyword
   case consumeKeyword
+  case copyKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -466,6 +467,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(._borrow): self = ._borrowKeyword
     case TokenSpec(.try): self = .tryKeyword
     case TokenSpec(.consume): self = .consumeKeyword
+    case TokenSpec(.copy): self = .copyKeyword
     default: return nil
     }
   }
@@ -476,6 +478,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case ._moveKeyword: return .keyword(._move)
     case ._borrowKeyword: return .keyword(._borrow)
     case .consumeKeyword: return .keyword(.consume)
+    case .copyKeyword: return .keyword(.copy)
     case .tryKeyword: return .keyword(.try)
     }
   }

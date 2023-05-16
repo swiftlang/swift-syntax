@@ -24,12 +24,6 @@ public class Trait {
 
 public let TRAITS: [Trait] = [
   Trait(
-    traitName: "Attributed",
-    children: [
-      Child(name: "Attributes", kind: .node(kind: "AttributeList"), isOptional: true)
-    ]
-  ),
-  Trait(
     traitName: "Braced",
     children: [
       Child(name: "LeftBrace", kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
@@ -81,9 +75,21 @@ public let TRAITS: [Trait] = [
     ]
   ),
   Trait(
+    traitName: "WithAttributes",
+    children: [
+      Child(name: "Attributes", kind: .node(kind: "AttributeList"), isOptional: true)
+    ]
+  ),
+  Trait(
     traitName: "WithCodeBlock",
     children: [
       Child(name: "Body", kind: .node(kind: "CodeBlock"))
+    ]
+  ),
+  Trait(
+    traitName: "WithModifiers",
+    children: [
+      Child(name: "Modifiers", kind: .node(kind: "ModifierList"), isOptional: true)
     ]
   ),
   Trait(

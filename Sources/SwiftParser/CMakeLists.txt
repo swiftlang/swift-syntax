@@ -27,6 +27,7 @@ add_swift_host_library(SwiftParser
   Specifiers.swift
   Statements.swift
   StringLiterals.swift
+  StringLiteralRepresentedLiteralValue.swift
   SyntaxUtils.swift
   TokenConsumer.swift
   TokenPrecedence.swift

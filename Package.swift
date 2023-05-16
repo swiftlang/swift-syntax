@@ -179,15 +179,17 @@ let package = Package(
       exclude: ["CMakeLists.txt"]
     ),
 
+    .testTarget(
+      name: "SwiftSyntaxMacrosTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]
+    ),
+
+    // MARK: SwiftSyntaxMacroExpansion
+
     .target(
       name: "SwiftSyntaxMacroExpansion",
       dependencies: ["SwiftSyntax", "SwiftSyntaxMacros"],
       exclude: ["CMakeLists.txt"]
-    ),
-
-    .testTarget(
-      name: "SwiftSyntaxMacrosTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]
     ),
 
     // MARK: SwiftSyntaxMacrosTestSupport

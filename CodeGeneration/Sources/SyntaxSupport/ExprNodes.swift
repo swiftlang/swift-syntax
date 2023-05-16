@@ -360,7 +360,9 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "parameter",
     kind: "Syntax",
     traits: [
-      "WithTrailingComma"
+      "WithTrailingComma",
+      "WithAttributes",
+      "WithModifiers",
     ],
     parserFunction: "parseClosureParameter",
     children: [
@@ -515,7 +517,7 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "closure signature",
     kind: "Syntax",
     traits: [
-      "Attributed"
+      "WithAttributes"
     ],
     children: [
       Child(

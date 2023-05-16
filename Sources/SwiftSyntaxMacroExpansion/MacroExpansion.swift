@@ -1,5 +1,5 @@
 import SwiftSyntax
-import SwiftSyntaxMacros
+@_spi(MacroExpansion) import SwiftSyntaxMacros
 
 public enum MacroRole {
   case expression
@@ -13,11 +13,23 @@ public enum MacroRole {
 }
 
 /// Simple diagnostic message
-private struct MacroExpansionError: Error, CustomStringConvertible {
-  let description: String
+private enum MacroExpansionError: String, Error, CustomStringConvertible {
+  case unmathedMacroRole = "macro doesn't conform to required macro role"
+  case parentDeclGroupNil = "parent decl group is nil"
+  case declarationNotDeclGroup = "declaration is not a decl group syntax"
+  case declarationNotIdentified = "declaration is not a 'Identified' syntax"
+  var description: String { self.rawValue }
 }
 
 /// Expand `@freestanding(XXX)` macros.
+///
+/// - Parameters:
+///   - definition: a type conforms to one of freestanding `Macro` protocol.
+///   - node: macro expansion syntax node (e.g. `#macroName(argument)`).
+///   - in: context of the expansion.
+/// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
+///   throws) returns `nil`, and the diagnostics representing the `Error` are
+///   guaranteed to be added to context.
 public func expandFreestandingMacro(
   definition: Macro.Type,
   node: FreestandingMacroExpansionSyntax,
@@ -31,7 +43,13 @@ public func expandFreestandingMacro(
         expandedSyntax = try Syntax(exprMacroDef.expansion(of: node, in: context))
 
       case let declMacroDef as DeclarationMacro.Type:
-        let rewritten = try declMacroDef.expansion(of: node, in: context)
+        var rewritten = try declMacroDef.expansion(of: node, in: context)
+        // Copy attributes and modifiers to the generated decls.
+        if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
+          rewritten = rewritten.map {
+            $0.applying(attributes: expansionDecl.attributes, modifiers: expansionDecl.modifiers)
+          }
+        }
         expandedSyntax = Syntax(
           CodeBlockItemListSyntax(
             rewritten.map {
@@ -45,7 +63,7 @@ public func expandFreestandingMacro(
         expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
       default:
-        throw MacroExpansionError(description: "macro doesn't conform to required macro role")
+        throw MacroExpansionError.unmathedMacroRole
       }
       return expandedSyntax.formattedExpansion(definition.formatMode)
     }
@@ -57,6 +75,18 @@ public func expandFreestandingMacro(
 }
 
 /// Expand `@attached(XXX)` macros.
+///
+/// - Parameters:
+///   - definition: a type that conforms to one or more attached `Macro` protocols.
+///   - macroRole: indicates which `Macro` protocol expansion should be performed
+///   - attributeNode: attribute syntax node (e.g. `@macroName(argument)`).
+///   - declarationNode: target declaration syntax node to apply the expansion.
+///   - parentDeclNode: Only used for `MacroRole.memberAttribute`. The parent
+///     context node of `declarationNode`.
+///   - in: context of the expansion.
+/// - Returns: A list of expanded source text. Upon failure (i.e.
+///   `defintion.expansion()` throws) returns `nil`, and the diagnostics
+///   representing the `Error` are guaranteed to be added to context.
 public func expandAttachedMacro<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
@@ -82,7 +112,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
         let parentDeclGroup = parentDeclNode?.asProtocol(DeclGroupSyntax.self)
       else {
         // Compiler error: 'parentDecl' is mandatory for MemberAttributeMacro.
-        throw MacroExpansionError(description: "parent decl group is nil")
+        throw MacroExpansionError.parentDeclGroupNil
       }
 
       // Local function to expand a member attribute macro once we've opened up
@@ -112,7 +142,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
       guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self)
       else {
         // Compiler error: declNode for member macro must be DeclGroupSyntax.
-        throw MacroExpansionError(description: "declaration is not a decl group syntax")
+        throw MacroExpansionError.declarationNotDeclGroup
       }
 
       // Local function to expand a member macro once we've opened up
@@ -145,12 +175,14 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
       }
 
     case (let attachedMacro as ConformanceMacro.Type, .conformance):
-      guard
-        let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self),
-        let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
+      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
+        // Compiler error: type mismatch.
+        throw MacroExpansionError.declarationNotDeclGroup
+      }
+      guard let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
       else {
         // Compiler error: type mismatch.
-        throw MacroExpansionError(description: "declaration is not a identified decl group")
+        throw MacroExpansionError.declarationNotIdentified
       }
 
       // Local function to expand a conformance macro once we've opened up
@@ -179,7 +211,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
       }
 
     default:
-      throw MacroExpansionError(description: "macro doesn't conform to required macro role")
+      throw MacroExpansionError.unmathedMacroRole
     }
   } catch {
     context.addDiagnostics(from: error, node: attributeNode)

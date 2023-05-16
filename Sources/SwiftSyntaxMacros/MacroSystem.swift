@@ -89,12 +89,12 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     if let declSyntax = node.as(DeclSyntax.self),
-      let attributedNode = node.asProtocol(AttributedSyntax.self),
+      let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       let attributes = attributedNode.attributes
     {
       // Visit the node.
       skipNodes.insert(node)
-      let visitedNode = self.visit(declSyntax).asProtocol(AttributedSyntax.self)!
+      let visitedNode = self.visit(declSyntax).asProtocol(WithAttributesSyntax.self)!
       skipNodes.remove(node)
 
       // Remove any attached attributes.
@@ -125,24 +125,26 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     var newItems: [CodeBlockItemSyntax] = []
     for item in node {
-      // Expand declaration macros that were parsed as macro expansion
-      // expressions in this context.
-      if case let .expr(exprItem) = item.item,
-        let exprExpansion = exprItem.as(MacroExpansionExprSyntax.self),
-        let macro = macroSystem.macros[exprExpansion.macro.text]
+      if let expansion = item.item.asProtocol(FreestandingMacroExpansionSyntax.self),
+        let macro = macroSystem.macros[expansion.macro.text]
       {
-        do {
+        func _expand(expansion: some FreestandingMacroExpansionSyntax) throws {
           if let macro = macro as? CodeItemMacro.Type {
             let expandedItemList = try macro.expansion(
-              of: exprExpansion,
+              of: expansion,
               in: context
             )
             newItems.append(contentsOf: expandedItemList)
           } else if let macro = macro as? DeclarationMacro.Type {
-            let expandedItemList = try macro.expansion(
-              of: exprExpansion,
+            var expandedItemList = try macro.expansion(
+              of: expansion,
               in: context
             )
+            if let declExpansion = expansion.as(MacroExpansionDeclSyntax.self) {
+              expandedItemList = expandedItemList.map {
+                $0.applying(attributes: declExpansion.attributes, modifiers: declExpansion.modifiers)
+              }
+            }
             newItems.append(
               contentsOf: expandedItemList.map {
                 CodeBlockItemSyntax(item: .decl($0))
@@ -150,11 +152,14 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             )
           } else if let macro = macro as? ExpressionMacro.Type {
             let expandedExpr = try macro.expansion(
-              of: exprExpansion,
+              of: expansion,
               in: context
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
+        }
+        do {
+          try _openExistential(expansion, do: _expand)
         } catch {
           context.addDiagnostics(from: error, node: node)
         }
@@ -189,10 +194,13 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
-          let expandedList = try freestandingMacro.expansion(
+          var expandedList = try freestandingMacro.expansion(
             of: declExpansion,
             in: context
           )
+          expandedList = expandedList.map {
+            $0.applying(attributes: declExpansion.attributes, modifiers: declExpansion.modifiers)
+          }
 
           newItems.append(
             contentsOf: expandedList.map { decl in
@@ -340,7 +348,7 @@ extension MacroApplication {
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type
   ) -> [(AttributeSyntax, MacroType)] {
-    guard let attributedNode = decl.asProtocol(AttributedSyntax.self),
+    guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self),
       let attributes = attributedNode.attributes
     else {
       return []
@@ -433,7 +441,7 @@ extension MacroApplication {
     attachedTo decl: DeclSyntax,
     annotating member: MemberDeclListSyntax.Element
   ) -> MemberDeclListSyntax.Element {
-    guard let attributedDecl = member.decl.asProtocol(AttributedSyntax.self) else {
+    guard let attributedDecl = member.decl.asProtocol(WithAttributesSyntax.self) else {
       return member
     }
 
@@ -465,6 +473,44 @@ extension MacroApplication {
 
     let newDecl = attributedDecl.with(\.attributes, newAttributes).as(DeclSyntax.self)!
     return member.with(\.decl, newDecl)
+  }
+}
+
+extension DeclSyntax {
+  /// Returns this node with `attributes` and `modifiers` prepended to the
+  /// node’s attributes and modifiers, respectively. If the node doesn’t contain
+  /// attributes or modifiers, `attributes` or `modifiers` are ignored and not
+  /// applied.
+  @_spi(MacroExpansion)
+  public func applying(
+    attributes: AttributeListSyntax?,
+    modifiers: ModifierListSyntax?
+  ) -> DeclSyntax {
+    func _combine<C: SyntaxCollection>(_ left: C, _ right: C?) -> C? {
+      guard let right = right else { return left }
+      var elems: [C.Element] = []
+      elems.append(contentsOf: left)
+      elems.append(contentsOf: right)
+      return C(elems)
+    }
+    var node = self
+    if let attributes = attributes,
+      let withAttrs = node.asProtocol(WithAttributesSyntax.self)
+    {
+      node = withAttrs.with(
+        \.attributes,
+        _combine(attributes, withAttrs.attributes)
+      ).cast(DeclSyntax.self)
+    }
+    if let modifiers = modifiers,
+      let withModifiers = node.asProtocol(WithModifiersSyntax.self)
+    {
+      node = withModifiers.with(
+        \.modifiers,
+        _combine(modifiers, withModifiers.modifiers)
+      ).cast(DeclSyntax.self)
+    }
+    return node
   }
 }
 

@@ -651,6 +651,27 @@ public struct UnwrapMacro: CodeItemMacro {
   }
 }
 
+public struct DeclsFromStringsMacro: DeclarationMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    var strings: [String] = []
+    for arg in node.argumentList {
+      guard
+        let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue
+      else {
+        continue
+      }
+      strings.append(value)
+    }
+
+    return strings.map {
+      "\(raw: $0)"
+    }
+  }
+}
+
 // MARK: Tests
 
 /// The set of test macros we use here.
@@ -1034,6 +1055,63 @@ final class MacroSystemTests: XCTestCase {
         }
         """#,
       macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testDeclsFromStringLiterals() {
+    assertMacroExpansion(
+      #"""
+      struct S {
+        public #decls(
+          """
+          static func foo() {
+          print("value") }
+          """,
+          "struct Inner {\n\n}"
+        )
+      }
+      """#,
+      expandedSource: #"""
+        struct S {
+          public static func foo() {
+            print("value")
+          }
+          public struct Inner {
+
+          }
+        }
+        """#,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      #"""
+      struct S {
+        @attr static #decls("var value1 = 1", "typealias A = B")
+      }
+      """#,
+      expandedSource: #"""
+        struct S {
+          @attr static var value1 = 1
+          @attr typealias A = B
+        }
+        """#,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      #"""
+      @attribute
+      @otherAttribute(x: 1) #decls("@moreAttibute var global = 42")
+      """#,
+      expandedSource: #"""
+        @attribute
+        @otherAttribute(x: 1) @moreAttibute var global = 42
+        """#,
+      macros: ["decls": DeclsFromStringsMacro.self],
       indentationWidth: indentationWidth
     )
   }

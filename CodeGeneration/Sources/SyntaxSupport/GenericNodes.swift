@@ -75,7 +75,7 @@ public let GENERIC_NODES: [Node] = [
     kind: "Syntax",
     traits: [
       "WithTrailingComma",
-      "Attributed",
+      "WithAttributes",
     ],
     children: [
       Child(

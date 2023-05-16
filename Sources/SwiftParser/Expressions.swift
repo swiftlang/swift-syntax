@@ -59,12 +59,12 @@ extension TokenConsumer {
 }
 
 extension Parser {
-  public enum ExprFlavor {
+  enum ExprFlavor {
     case basic
     case trailingClosure
   }
 
-  public enum PatternContext {
+  enum PatternContext {
     /// There is no ambient pattern context.
     case none
     /// We're parsing a matching pattern that is not introduced via `let` or `var`.
@@ -99,8 +99,7 @@ extension Parser {
   ///
   ///     expression → try-operator? await-operator? prefix-expression infix-expressions?
   ///     expression-list → expression | expression ',' expression-list
-  @_spi(RawSyntax)
-  public mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, pattern: PatternContext = .none) -> RawExprSyntax {
+  mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, pattern: PatternContext = .none) -> RawExprSyntax {
     // If we are parsing a refutable pattern, check to see if this is the start
     // of a let/var/is pattern.  If so, parse it as an UnresolvedPatternExpr and
     // let pattern type checking determine its final form.
@@ -126,8 +125,7 @@ extension Parser {
   ///     infix-expression → conditional-operator try-operator? prefix-expression
   ///     infix-expression → type-casting-operator
   ///     infix-expressions → infix-expression infix-expressions?
-  @_spi(RawSyntax)
-  public mutating func parseSequenceExpression(
+  mutating func parseSequenceExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
     pattern: PatternContext = .none
@@ -391,8 +389,7 @@ extension Parser {
   ///
   ///     expression → try-operator? await-operator? prefix-expression infix-expressions?
   ///     expression-list → expression | expression ',' expression-list
-  @_spi(RawSyntax)
-  public mutating func parseSequenceExpressionElement(
+  mutating func parseSequenceExpressionElement(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
     pattern: PatternContext = .none
@@ -513,8 +510,7 @@ extension Parser {
   ///     prefix-expression → in-out-expression
   ///
   ///     in-out-expression → '&' identifier
-  @_spi(RawSyntax)
-  public mutating func parseUnaryExpression(
+  mutating func parseUnaryExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
     pattern: PatternContext = .none
@@ -593,8 +589,7 @@ extension Parser {
   ///     postfix-expression → subscript-expression
   ///     postfix-expression → forced-value-expression
   ///     postfix-expression → optional-chaining-expression
-  @_spi(RawSyntax)
-  public mutating func parsePostfixExpression(
+  mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool,
     pattern: PatternContext
@@ -611,8 +606,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseDottedExpressionSuffix<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (
+  mutating func parseDottedExpressionSuffix<R: RawSyntaxNodeProtocol>(previousNode: R?) -> (
     unexpectedPeriod: RawUnexpectedNodesSyntax?,
     period: RawTokenSyntax,
     name: RawTokenSyntax,
@@ -653,8 +647,7 @@ extension Parser {
     return (unexpectedPeriod, period, name, declNameArgs, generics)
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
+  mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
     let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(previousNode: start)
 
     let memberAccess = RawMemberAccessExprSyntax(
@@ -679,8 +672,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseIfConfigExpressionSuffix(
+  mutating func parseIfConfigExpressionSuffix(
     _ start: RawExprSyntax?,
     _ flavor: ExprFlavor,
     forDirective: Bool
@@ -739,8 +731,7 @@ extension Parser {
   ///     postfix-expression → subscript-expression
   ///     postfix-expression → forced-value-expression
   ///     postfix-expression → optional-chaining-expression
-  @_spi(RawSyntax)
-  public mutating func parsePostfixExpressionSuffix(
+  mutating func parsePostfixExpressionSuffix(
     _ start: RawExprSyntax,
     _ flavor: ExprFlavor,
     forDirective: Bool,
@@ -1011,8 +1002,7 @@ extension Parser {
   ///
   ///     key-path-postfixes → key-path-postfix key-path-postfixes?
   ///     key-path-postfix → '?' | '!' | 'self' | '[' function-call-argument-list ']'
-  @_spi(RawSyntax)
-  public mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
+  mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
     // Consume '\'.
     let (unexpectedBeforeBackslash, backslash) = self.expect(.backslash)
 
@@ -1146,8 +1136,7 @@ extension Parser {
   ///     primary-expression → wildcard-expression
   ///     primary-expression → key-path-expression
   ///     primary-expression → macro-expansion-expression
-  @_spi(RawSyntax)
-  public mutating func parsePrimaryExpression(
+  mutating func parsePrimaryExpression(
     pattern: PatternContext,
     flavor: ExprFlavor
   ) -> RawExprSyntax {
@@ -1296,8 +1285,7 @@ extension Parser {
   /// =======
   ///
   ///     primary-expression → identifier
-  @_spi(RawSyntax)
-  public mutating func parseIdentifierExpression() -> RawExprSyntax {
+  mutating func parseIdentifierExpression() -> RawExprSyntax {
     let (name, args) = self.parseDeclNameRef(.compoundNames)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
       if name.tokenText.isEditorPlaceholder && args == nil {
@@ -1341,8 +1329,7 @@ extension Parser {
   /// =======
   ///
   /// macro-expansion-expression → '#' identifier expr-call-suffix?
-  @_spi(RawSyntax)
-  public mutating func parseMacroExpansionExpr(
+  mutating func parseMacroExpansionExpr(
     pattern: PatternContext,
     flavor: ExprFlavor
   ) -> RawMacroExpansionExprSyntax {
@@ -1409,8 +1396,7 @@ extension Parser {
   ///
   /// pack-expansion-expression → 'repeat' pattern-expression
   /// pattern-expression → expression
-  @_spi(RawSyntax)
-  public mutating func parsePackExpansionExpr(
+  mutating func parsePackExpansionExpr(
     _ flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
@@ -1434,8 +1420,7 @@ extension Parser {
   /// =======
   ///
   ///     regular-expression-literal → '#'* '/' `Any valid regular expression characters` '/' '#'*
-  @_spi(RawSyntax)
-  public mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
+  mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
     // See if we have an opening set of pounds.
     let openPounds = self.consume(if: .extendedRegexDelimiter)
 
@@ -1476,8 +1461,7 @@ extension Parser {
   /// =======
   ///
   ///     primary-expression → 'super'
-  @_spi(RawSyntax)
-  public mutating func parseSuperExpression() -> RawSuperRefExprSyntax {
+  mutating func parseSuperExpression() -> RawSuperRefExprSyntax {
     // Parse the 'super' reference.
     let (unexpectedBeforeSuperKeyword, superKeyword) = self.expect(.keyword(.super))
     return RawSuperRefExprSyntax(
@@ -1496,8 +1480,7 @@ extension Parser {
   ///
   ///     tuple-expression → '(' ')' | '(' tuple-element ',' tuple-element-list ')'
   ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
-  @_spi(RawSyntax)
-  public mutating func parseTupleExpression(pattern: PatternContext) -> RawTupleExprSyntax {
+  mutating func parseTupleExpression(pattern: PatternContext) -> RawTupleExprSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let elements = self.parseArgumentListElements(pattern: pattern)
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
@@ -1553,8 +1536,7 @@ extension Parser {
   ///
   ///     dictionary-literal → '[' dictionary-literal-items ']' | '[' ':' ']'
   ///     dictionary-literal-items → dictionary-literal-item ','? | dictionary-literal-item ',' dictionary-literal-items
-  @_spi(RawSyntax)
-  public mutating func parseCollectionLiteral() -> RawExprSyntax {
+  mutating func parseCollectionLiteral() -> RawExprSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawExprSyntax(
         RawArrayExprSyntax(
@@ -1693,8 +1675,7 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
+  mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
     let unexpectedBeforeEq: RawUnexpectedNodesSyntax?
     let eq: RawTokenSyntax
     if let comparison = self.consumeIfContextualPunctuator("==") {
@@ -1718,8 +1699,7 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseAnonymousClosureArgument() -> RawIdentifierExprSyntax {
+  mutating func parseAnonymousClosureArgument() -> RawIdentifierExprSyntax {
     let (unexpectedBeforeIdent, ident) = self.expect(.dollarIdentifier)
     return RawIdentifierExprSyntax(
       unexpectedBeforeIdent,
@@ -1737,8 +1717,7 @@ extension Parser {
   /// =======
   ///
   ///     closure-expression → '{' attributes? closure-signature? statements? '}'
-  @_spi(RawSyntax)
-  public mutating func parseClosureExpression() -> RawClosureExprSyntax {
+  mutating func parseClosureExpression() -> RawClosureExprSyntax {
     // Parse the opening left brace.
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     // Parse the closure-signature, if present.
@@ -1784,8 +1763,7 @@ extension Parser {
   ///     capture-list-item → capture-specifier? self-expression
   ///
   ///     capture-specifier → 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'
-  @_spi(RawSyntax)
-  public mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
+  mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
     guard self.at(.atSign, .leftParen, .leftSquareBracket) || self.at(.wildcard, .identifier) else {
@@ -1928,8 +1906,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseClosureCaptureSpecifiers() -> RawClosureCaptureItemSpecifierSyntax? {
+  mutating func parseClosureCaptureSpecifiers() -> RawClosureCaptureItemSpecifierSyntax? {
     // Check for the strength specifier: "weak", "unowned", or
     // "unowned(safe/unsafe)".
     if let weakContextualKeyword = self.consume(if: .keyword(.weak)) {
@@ -1978,8 +1955,7 @@ extension Parser {
   /// =======
   ///
   ///     tuple-element → expression | identifier ':' expression
-  @_spi(RawSyntax)
-  public mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
+  mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return [
         RawTupleExprElementSyntax(
@@ -2056,8 +2032,7 @@ extension Parser {
   ///     trailing-closures → closure-expression labeled-trailing-closures?
   ///     labeled-trailing-closures → labeled-trailing-closure labeled-trailing-closures?
   ///     labeled-trailing-closure → identifier ':' closure-expression
-  @_spi(RawSyntax)
-  public mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax?) {
+  mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax?) {
     // Parse the closure.
     let closure = self.parseClosureExpression()
 
@@ -2201,8 +2176,7 @@ extension Parser {
   ///
   ///     if-expression → 'if' condition-list code-block else-clause?
   ///     else-clause  → 'else' code-block | else if-statement
-  @_spi(RawSyntax)
-  public mutating func parseIfExpression(
+  mutating func parseIfExpression(
     ifHandle: RecoveryConsumptionHandle
   ) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
@@ -2263,8 +2237,7 @@ extension Parser {
   ///
   ///     switch-expression → 'switch' expression '{' switch-cases? '}'
   ///     switch-cases → switch-case switch-cases?
-  @_spi(RawSyntax)
-  public mutating func parseSwitchExpression(
+  mutating func parseSwitchExpression(
     switchHandle: RecoveryConsumptionHandle
   ) -> RawSwitchExprSyntax {
     let (unexpectedBeforeSwitchKeyword, switchKeyword) = self.eat(switchHandle)
@@ -2308,8 +2281,7 @@ extension Parser {
   /// isn't covered by a case, we assume that the developer forgot to wrote the
   /// `case` and synthesize it. If `allowStandaloneStmtOrDeclRecovery` is `false`,
   /// this recovery is disabled.
-  @_spi(RawSyntax)
-  public mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
+  mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(.eof, .rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
@@ -2395,8 +2367,7 @@ extension Parser {
   ///     switch-case → case-label statements
   ///     switch-case → default-label statements
   ///     switch-case → conditional-switch-case
-  @_spi(RawSyntax)
-  public mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
+  mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if let at = self.consume(if: .atSign) {
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
@@ -2459,8 +2430,7 @@ extension Parser {
   ///
   ///     case-label → attributes? case case-item-list ':'
   ///     case-item-list → pattern where-clause? | pattern where-clause? ',' case-item-list
-  @_spi(RawSyntax)
-  public mutating func parseSwitchCaseLabel(
+  mutating func parseSwitchCaseLabel(
     _ handle: RecoveryConsumptionHandle
   ) -> RawSwitchCaseLabelSyntax {
     let (unexpectedBeforeCaseKeyword, caseKeyword) = self.eat(handle)
@@ -2498,8 +2468,7 @@ extension Parser {
   /// =======
   ///
   ///     default-label → attributes? 'default' ':'
-  @_spi(RawSyntax)
-  public mutating func parseSwitchDefaultLabel(
+  mutating func parseSwitchDefaultLabel(
     _ handle: RecoveryConsumptionHandle
   ) -> RawSwitchDefaultLabelSyntax {
     let (unexpectedBeforeDefaultKeyword, defaultKeyword) = self.eat(handle)

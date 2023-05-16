@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
+@_spi(Diagnostics) import SwiftParser
 
 extension UnexpectedNodesSyntax {
   func tokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {

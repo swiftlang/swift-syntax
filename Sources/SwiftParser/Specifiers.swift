@@ -14,6 +14,7 @@
 
 // MARK: - TokenSpecSet
 
+@_spi(Diagnostics)
 public enum AsyncEffectSpecifier: TokenSpecSet {
   case async
   case await
@@ -30,6 +31,7 @@ public enum AsyncEffectSpecifier: TokenSpecSet {
     }
   }
 
+  @_spi(Diagnostics)
   public init?(token: TokenSyntax) {
     switch token.tokenKind {
     case .keyword(.async): self = .async
@@ -48,6 +50,7 @@ public enum AsyncEffectSpecifier: TokenSpecSet {
   }
 }
 
+@_spi(Diagnostics)
 public enum ThrowsEffectSpecifier: TokenSpecSet {
   case `rethrows`
   case `throw`
@@ -66,6 +69,7 @@ public enum ThrowsEffectSpecifier: TokenSpecSet {
     }
   }
 
+  @_spi(Diagnostics)
   public init?(token: TokenSyntax) {
     switch token.tokenKind {
     case .keyword(.rethrows): self = .rethrows
@@ -86,6 +90,7 @@ public enum ThrowsEffectSpecifier: TokenSpecSet {
   }
 }
 
+@_spi(Diagnostics)
 public enum EffectSpecifier: TokenSpecSet {
   case asyncSpecifier(AsyncEffectSpecifier)
   case throwsSpecifier(ThrowsEffectSpecifier)
@@ -100,6 +105,7 @@ public enum EffectSpecifier: TokenSpecSet {
     }
   }
 
+  @_spi(Diagnostics)
   public init?(token: TokenSyntax) {
     if let subset = AsyncEffectSpecifier(token: token) {
       self = .asyncSpecifier(subset)
@@ -110,6 +116,7 @@ public enum EffectSpecifier: TokenSpecSet {
     }
   }
 
+  @_spi(Diagnostics)
   public static var allCases: [EffectSpecifier] {
     return AsyncEffectSpecifier.allCases.map(Self.asyncSpecifier)
       + ThrowsEffectSpecifier.allCases.map(Self.throwsSpecifier)

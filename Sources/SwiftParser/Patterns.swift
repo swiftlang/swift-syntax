@@ -44,8 +44,7 @@ extension Parser {
   ///     as-pattern → pattern 'as' type
   ///
   ///     expression-pattern → expression
-  @_spi(RawSyntax)
-  public mutating func parsePattern() -> RawPatternSyntax {
+  mutating func parsePattern() -> RawPatternSyntax {
     enum ExpectedTokens: TokenSpecSet {
       case leftParen
       case wildcard

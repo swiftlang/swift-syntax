@@ -131,12 +131,11 @@ extension TokenConsumer {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public struct DeclAttributes {
-    public var attributes: RawAttributeListSyntax?
-    public var modifiers: RawModifierListSyntax?
+  struct DeclAttributes {
+    var attributes: RawAttributeListSyntax?
+    var modifiers: RawModifierListSyntax?
 
-    public init(attributes: RawAttributeListSyntax?, modifiers: RawModifierListSyntax?) {
+    init(attributes: RawAttributeListSyntax?, modifiers: RawModifierListSyntax?) {
       self.attributes = attributes
       self.modifiers = modifiers
     }
@@ -169,8 +168,7 @@ extension Parser {
   ///
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows futher recovery.
-  @_spi(RawSyntax)
-  public mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
+  mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     switch self.at(anyIn: PoundDeclarationStart.self) {
     case (.poundIfKeyword, _)?:
       if self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -303,8 +301,7 @@ extension Parser {
   ///     import-declaration → attributes? 'import' import-kind? import-path
   ///     import-kind → 'typealias' | 'struct' | 'class' | 'enum' | 'protocol' | 'let' | 'var' | 'func'
   ///     import-path → identifier | identifier '.' import-path
-  @_spi(RawSyntax)
-  public mutating func parseImportDeclaration(
+  mutating func parseImportDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawImportDeclSyntax {
@@ -322,8 +319,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseImportKind() -> RawTokenSyntax? {
+  mutating func parseImportKind() -> RawTokenSyntax? {
     enum ImportKind: TokenSpecSet {
       case `typealias`
       case `struct`
@@ -368,8 +364,7 @@ extension Parser {
     return self.consume(ifAnyIn: ImportKind.self)
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseImportAccessPath() -> RawAccessPathSyntax {
+  mutating func parseImportAccessPath() -> RawAccessPathSyntax {
     var elements = [RawAccessPathComponentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
@@ -398,8 +393,7 @@ extension Parser {
   ///     extension-body → '{' extension-members? '}'
   ///     extension-members → extension-member extension-members?
   ///     extension-member → declaration | compiler-control-statement
-  @_spi(RawSyntax)
-  public mutating func parseExtensionDeclaration(
+  mutating func parseExtensionDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawExtensionDeclSyntax {
@@ -451,8 +445,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
+  mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawGenericParameterClauseSyntax(
         remainingTokens,
@@ -614,8 +607,7 @@ extension Parser {
     }
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
+  mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
     let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
     var elements = [RawGenericRequirementSyntax]()
@@ -779,8 +771,7 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
+  mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberDeclListItemSyntax(
         remainingTokens,
@@ -819,8 +810,7 @@ extension Parser {
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  @_spi(RawSyntax)
-  public mutating func parseMemberDeclList(introducer: RawTokenSyntax? = nil) -> RawMemberDeclBlockSyntax {
+  mutating func parseMemberDeclList(introducer: RawTokenSyntax? = nil) -> RawMemberDeclBlockSyntax {
     var elements = [RawMemberDeclListItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
@@ -878,8 +868,7 @@ extension Parser {
   ///     raw-value-style-enum-case → enum-case-name raw-value-assignment?
   ///     raw-value-assignment → = raw-value-literal
   ///     raw-value-literal → numeric-literal | static-string-literal | boolean-literal
-  @_spi(RawSyntax)
-  public mutating func parseEnumCaseDeclaration(
+  mutating func parseEnumCaseDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawEnumCaseDeclSyntax {
@@ -945,8 +934,7 @@ extension Parser {
   /// =======
   ///
   ///     protocol-associated-type-declaration → attributes? access-level-modifier? 'associatedtype' typealias-name type-inheritance-clause? typealias-assignment? generic-where-clause?
-  @_spi(RawSyntax)
-  public mutating func parseAssociatedTypeDeclaration(
+  mutating func parseAssociatedTypeDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawAssociatedtypeDeclSyntax {
@@ -1036,8 +1024,7 @@ extension Parser {
   ///     initializer-head → attributes? declaration-modifiers? 'init' '?'
   ///     initializer-head → attributes? declaration-modifiers? 'init' '!'
   ///     initializer-body → code-block
-  @_spi(RawSyntax)
-  public mutating func parseInitializerDeclaration(
+  mutating func parseInitializerDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawInitializerDeclSyntax {
@@ -1092,8 +1079,7 @@ extension Parser {
   /// =======
   ///
   /// deinitializer-declaration → attributes? 'deinit' code-block
-  @_spi(RawSyntax)
-  public mutating func parseDeinitializerDeclaration(
+  mutating func parseDeinitializerDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawDeinitializerDeclSyntax {
@@ -1141,8 +1127,7 @@ extension Parser {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseFuncDeclaration(
+  mutating func parseFuncDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawFunctionDeclSyntax {
@@ -1192,8 +1177,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
+  mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
     let input = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
@@ -1239,8 +1223,7 @@ extension Parser {
   ///     subscript-declaration → subscript-head subscript-result generic-where-clause? getter-setter-keyword-block
   ///     subscript-head → attributes? declaration-modifiers? 'subscript' generic-parameter-clause? parameter-clause
   ///     subscript-result → '->' attributes? type
-  @_spi(RawSyntax)
-  public mutating func parseSubscriptDeclaration(
+  mutating func parseSubscriptDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawSubscriptDeclSyntax {
@@ -1320,8 +1303,7 @@ extension Parser {
   ///   }
   /// }
   /// ```
-  @_spi(RawSyntax)
-  public mutating func parseBindingDeclaration(
+  mutating func parseBindingDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle,
     inMemberDeclList: Bool = false
@@ -1543,8 +1525,7 @@ extension Parser {
   ///     getter-setter-block → code-block
   ///     getter-setter-block → { getter-clause setter-clause opt }
   ///     getter-setter-block → { setter-clause getter-clause }
-  @_spi(RawSyntax)
-  public mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessor {
+  mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessor {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
@@ -1618,8 +1599,7 @@ extension Parser {
   ///     typealias-declaration → attributes? access-level-modifier? 'typealias' typealias-name generic-parameter-clause? typealias-assignment
   ///     typealias-name → identifier
   ///     typealias-assignment → '=' type
-  @_spi(RawSyntax)
-  public mutating func parseTypealiasDeclaration(
+  mutating func parseTypealiasDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawTypealiasDeclSyntax {
@@ -1685,8 +1665,7 @@ extension Parser {
   ///     postfix-operator-declaration → 'postfix' 'operator' operator
   ///     infix-operator-declaration → 'infix' 'operator' operator infix-operator-group?
   ///     infix-operator-group → ':' precedence-group-name
-  @_spi(RawSyntax)
-  public mutating func parseOperatorDeclaration(
+  mutating func parseOperatorDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawOperatorDeclSyntax {
@@ -1803,8 +1782,7 @@ extension Parser {
   ///
   ///     precedence-group-names → precedence-group-name | precedence-group-name ',' precedence-group-names
   ///     precedence-group-name → identifier
-  @_spi(RawSyntax)
-  public mutating func parsePrecedenceGroupDeclaration(
+  mutating func parsePrecedenceGroupDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawPrecedenceGroupDeclSyntax {
@@ -1831,8 +1809,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parsePrecedenceGroupAttributeListSyntax() -> RawPrecedenceGroupAttributeListSyntax {
+  mutating func parsePrecedenceGroupAttributeListSyntax() -> RawPrecedenceGroupAttributeListSyntax {
     enum LabelText: TokenSpecSet {
       case associativity
       case assignment

@@ -44,8 +44,7 @@ extension Parser {
   /// =======
   ///
   ///     source-file → top-level-declaration?
-  @_spi(RawSyntax)
-  public mutating func parseSourceFile() -> RawSourceFileSyntax {
+  mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
     let unexpectedBeforeEof = consumeRemainingTokens()
     let eof = self.consume(if: .eof)!
@@ -147,8 +146,7 @@ extension Parser {
   ///     statement → do-statement ';'?
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
-  @_spi(RawSyntax)
-  public mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
+  mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,

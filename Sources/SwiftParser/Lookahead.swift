@@ -20,10 +20,9 @@ extension Parser {
   /// arbitrary number of tokens ahead in the input stream. Instances of
   /// ``Lookahead`` are distinct from their parent ``Parser`` instances, so
   /// any tokens they consume will not be reflected in the parent parser.
-  public struct Lookahead {
+  struct Lookahead {
     var lexemes: Lexer.LexemeSequence
-    @_spi(RawSyntax)
-    public var currentToken: Lexer.Lexeme
+    var currentToken: Lexer.Lexeme
     /// Number of tokens this ``Lookahead`` has consumed from where it was started,
     /// i.e. how far it looked ahead.
     var tokensConsumed: Int = 0
@@ -42,23 +41,22 @@ extension Parser {
 
     /// Initiates a lookahead session from the current point in this
     /// lookahead session.
-    public func lookahead() -> Lookahead {
+    func lookahead() -> Lookahead {
       return Lookahead(lexemes: self.lexemes, currentToken: self.currentToken)
     }
   }
 
   /// Initiates a lookahead session from the current point in this parse.
-  public func lookahead() -> Lookahead {
+  func lookahead() -> Lookahead {
     return Lookahead(cloning: self)
   }
 
-  public func withLookahead<T>(_ body: (_: inout Lookahead) -> T) -> T {
+  func withLookahead<T>(_ body: (_: inout Lookahead) -> T) -> T {
     var lookahead = lookahead()
     return body(&lookahead)
   }
 }
 
-@_spi(RawSyntax)
 extension Parser.Lookahead: TokenConsumer {
   /// Consumes the current token, and asserts that it matches `spec`.
   ///
@@ -74,30 +72,27 @@ extension Parser.Lookahead: TokenConsumer {
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
   var shouldRecordAlternativeTokenChoices: Bool { false }
 
-  mutating public func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {}
+  mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {}
   #endif
 }
 
 extension Parser.Lookahead {
-  @_spi(RawSyntax)
-  public func peek() -> Lexer.Lexeme {
+  func peek() -> Lexer.Lexeme {
     return self.lexemes.peek()
   }
 }
 
 extension Parser.Lookahead {
-  @_spi(RawSyntax)
-  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) {
+  mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) {
     // do nothing
   }
 
-  public mutating func consumeAnyToken() {
+  mutating func consumeAnyToken() {
     tokensConsumed += 1
     self.currentToken = self.lexemes.advance()
   }
 
-  @_spi(RawSyntax)
-  public mutating func consumeAnyToken(remapping: RawTokenKind) {
+  mutating func consumeAnyToken(remapping: RawTokenKind) {
     self.consumeAnyToken()
   }
 

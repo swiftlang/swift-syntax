@@ -92,15 +92,17 @@ mutually-recursive functions.
 
 ```swift
 extension Parser {
-  // optional-type → type '?'
-  public mutating func parseOptionalType() -> OptionalTypeSyntax {
+  mutating func parseOptionalType() -> OptionalTypeSyntax {
     // First, recursively parse a type
     let base = self.parseType()
     // Then, parse a postfix question mark token
     let mark = self.eat(.postfixQuestionMark)
     // Finally, yield the optional type syntax node.
     return RawOptionalTypeSyntax(
-      wrappedType: base, questionMark: mark, arena: self.arena)
+      wrappedType: base, 
+      questionMark: mark, 
+      arena: self.arena
+    )
   }
 }
 ```
@@ -156,9 +158,7 @@ a comma-delimited sequence of type syntax elements:
 
 ```swift
 extension Parser {
-  /// type-inheritance-clause → ':' type-inheritance-list
-  /// type-inheritance-list → attributes? type-identifier | attributes? type-identifier ',' type-inheritance-list
-  public mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
+  mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
     // Eat the colon character.
     let colon = self.eat(.colon)
     // Start parsing a list of inherited types.

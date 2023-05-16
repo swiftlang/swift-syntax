@@ -23,8 +23,7 @@ extension Parser {
   ///     type → protocol-composition-type
   ///     type → constrained-sugar-type
   ///     type → opaque-type
-  @_spi(RawSyntax)
-  public mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+  mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
       let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
@@ -138,8 +137,7 @@ extension Parser {
   ///     constrained-sugar-type-specifier → 'any' | 'some'
   ///     constrained-sugar-type-constraint → protocol-composition-type
   ///     constrained-sugar-type-constraint → type-simple
-  @_spi(RawSyntax)
-  public mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
+  mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
     if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
@@ -234,8 +232,7 @@ extension Parser {
   ///
   ///     member-type-identifier → member-type-identifier-base '.' type-identifier
   ///     member-type-identifier-base → simple-type | member-type-identifier
-  @_spi(RawSyntax)
-  public mutating func parseSimpleType(
+  mutating func parseSimpleType(
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
     var base: RawTypeSyntax
@@ -321,8 +318,7 @@ extension Parser {
   /// =======
   ///
   ///     optional-type → type '?'
-  @_spi(RawSyntax)
-  public mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
+  mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.postfixQuestionMark)
     return RawOptionalTypeSyntax(
       wrappedType: base,
@@ -338,8 +334,7 @@ extension Parser {
   /// =======
   ///
   ///     implicitly-unwrapped-optional-type → type '!'
-  @_spi(RawSyntax)
-  public mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
+  mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.exclamationMark)
     return RawImplicitlyUnwrappedOptionalTypeSyntax(
       wrappedType: base,
@@ -391,8 +386,7 @@ extension Parser {
   /// =======
   ///
   ///     any-type → 'Any'
-  @_spi(RawSyntax)
-  public mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
+  mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
     let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawSimpleTypeIdentifierSyntax(
       unexpectedBeforeName,
@@ -408,8 +402,7 @@ extension Parser {
   /// =======
   ///
   ///     placeholder-type → wildcard
-  @_spi(RawSyntax)
-  public mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
+  mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
     // FIXME: Need a better syntax node than this
     return RawSimpleTypeIdentifierSyntax(
@@ -430,8 +423,7 @@ extension Parser {
   ///     generic-argument-clause → '<' generic-argument-list '>'
   ///     generic-argument-list → generic-argument | generic-argument ',' generic-argument-list
   ///     generic-argument → type
-  @_spi(RawSyntax)
-  public mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
+  mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
     precondition(self.currentToken.starts(with: "<"))
     let langle = self.consumePrefix("<", as: .leftAngle)
     var arguments = [RawGenericArgumentSyntax]()
@@ -488,8 +480,7 @@ extension Parser {
   ///     tuple-type-element-list → tuple-type-element | tuple-type-element ',' tuple-type-element-list
   ///     tuple-type-element → element-name type-annotation | type
   ///     element-name → identifier
-  @_spi(RawSyntax)
-  public mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
+  mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTupleTypeSyntax(
         remainingTokens,
@@ -615,8 +606,7 @@ extension Parser {
   ///     array-type → '[' type ']'
   ///
   ///     dictionary-type → '[' type ':' type ']'
-  @_spi(RawSyntax)
-  public mutating func parseCollectionType() -> RawTypeSyntax {
+  mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTypeSyntax(
         RawArrayTypeSyntax(
@@ -945,8 +935,7 @@ extension Parser.Lookahead {
 }
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (
+  mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (
     specifier: RawTokenSyntax?, unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, attributes: RawAttributeListSyntax?
   ) {
     var specifier: RawTokenSyntax? = nil
@@ -1012,8 +1001,7 @@ extension Parser {
     return (specifier, unexpectedBeforeAttributeList, nil)
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
+  mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawAttributeListSyntax.Element]()
     var attributeProgress = LoopProgressCondition()
     while self.at(.atSign) && attributeProgress.evaluate(currentToken) {
@@ -1022,8 +1010,7 @@ extension Parser {
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
+  mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
     let typeAttr = Parser.TypeAttribute(lexeme: self.peek())
 
     switch typeAttr {

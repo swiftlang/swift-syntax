@@ -137,6 +137,7 @@ extension TokenKind {
   /// Keywords are reserved unconditionally for use by Swift and may not
   /// appear as identifiers in any position without being escaped. For example,
   /// `class`, `func`, or `import`.
+  @_spi(Diagnostics) @_spi(Testing)
   public var isLexerClassifiedKeyword: Bool {
     switch self {
     case .eof:

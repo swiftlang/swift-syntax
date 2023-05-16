@@ -1,4 +1,4 @@
-add_swift_host_library(SwiftSyntaxMacroExpansion
+add_swift_syntax_library(SwiftSyntaxMacroExpansion
   BasicMacroExpansionContext.swift
   FunctionParameterUtils.swift
   IndentationUtils.swift
@@ -8,7 +8,7 @@ add_swift_host_library(SwiftSyntaxMacroExpansion
   MacroSystem.swift
 )
 
-target_link_libraries(SwiftSyntaxMacroExpansion PUBLIC
+target_link_swift_syntax_libraries(SwiftSyntaxMacroExpansion PUBLIC
   SwiftSyntax
   SwiftSyntaxMacros
 )

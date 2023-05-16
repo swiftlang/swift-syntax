@@ -15,11 +15,22 @@ project(SwiftSyntax LANGUAGES C Swift)
 set(SWIFT_VERSION 5)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
 
+if(CMAKE_VERSION VERSION_LESS 3.21)
+  get_property(parent_dir DIRECTORY PROPERTY PARENT_DIRECTORY)
+  if(NOT parent_dir)
+    set(PROJECT_IS_TOP_LEVEL TRUE)
+  endif()
+endif()
+
 # The subdirectory into which host libraries will be installed.
 set(SWIFT_HOST_LIBRARIES_SUBDIRECTORY "swift/host")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}")
+if(SWIFT_HOST_LIBRARIES_DEST_DIR)
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${SWIFT_HOST_LIBRARIES_DEST_DIR}")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${SWIFT_HOST_LIBRARIES_DEST_DIR}")
+else()
+  set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}")
+  set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}")
+endif()
 
 set(CMAKE_MACOSX_RPATH YES)
 
@@ -48,22 +59,25 @@ if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
 endif()
 
 # Determine the module triple.
-# FIXME: This is a hack. It's all a hack. Windows isn't setting
-# CMAKE_Swift_COMPILER_TARGET.
-if(CMAKE_Swift_COMPILER_TARGET)
-  string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" SWIFT_MODULE_TRIPLE
-    ${CMAKE_Swift_COMPILER_TARGET})
-elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-  if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
-    set(SWIFT_MODULE_TRIPLE "x86_64-unknown-windows-msvc")
-  elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64|arm64")
-    set(SWIFT_MODULE_TRIPLE "aarch64-unknown-windows-msvc")
+if("${SWIFT_HOST_MODULE_TRIPLE}" STREQUAL "")
+  # FIXME: This is a hack. It's all a hack. Windows isn't setting
+  # CMAKE_Swift_COMPILER_TARGET.
+  if(CMAKE_Swift_COMPILER_TARGET)
+    string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" SWIFT_HOST_MODULE_TRIPLE
+      ${CMAKE_Swift_COMPILER_TARGET})
+  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+      set(SWIFT_HOST_MODULE_TRIPLE "x86_64-unknown-windows-msvc")
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64|arm64")
+      set(SWIFT_HOST_MODULE_TRIPLE "aarch64-unknown-windows-msvc")
+    else()
+      message(FATAL_ERROR "Unrecognized architecture for Windows host")
+    endif()
   else()
-    message(FATAL_ERROR "Unrecognized architecture for Windows host")
+    message(FATAL_ERROR "Host module triple required")
   endif()
 endif()
-
-message(STATUS "Module triple: ${SWIFT_MODULE_TRIPLE}")
+message(STATUS "Module triple: ${SWIFT_HOST_MODULE_TRIPLE}")
 
 # Force single-threaded-only syntax trees to eliminate the Darwin
 # dependency in the compiler.
@@ -78,9 +92,9 @@ endif()
 
 add_subdirectory(Sources)
 
-export(EXPORT SwiftSyntaxTargets
-       FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/SwiftSyntaxTargets.cmake"
-       NAMESPACE SwiftSyntax::
-)
-
-add_subdirectory(cmake/modules)
+if(PROJECT_IS_TOP_LEVEL)
+  export(EXPORT SwiftSyntaxTargets
+         FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/SwiftSyntaxTargets.cmake"
+         NAMESPACE SwiftSyntax::
+  )
+endif()

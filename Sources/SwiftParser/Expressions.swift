@@ -259,22 +259,22 @@ extension Parser {
       case binaryOperator
       case infixQuestionMark
       case equal
-      case isKeyword
-      case asKeyword
+      case `is`
+      case `as`
       case async
       case arrow
-      case throwsKeyword
+      case `throws`
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.binaryOperator): self = .binaryOperator
         case TokenSpec(.infixQuestionMark): self = .infixQuestionMark
         case TokenSpec(.equal): self = .equal
-        case TokenSpec(.is): self = .isKeyword
-        case TokenSpec(.as): self = .asKeyword
+        case TokenSpec(.is): self = .is
+        case TokenSpec(.as): self = .as
         case TokenSpec(.async): self = .async
         case TokenSpec(.arrow): self = .arrow
-        case TokenSpec(.throws): self = .throwsKeyword
+        case TokenSpec(.throws): self = .throws
         default: return nil
         }
       }
@@ -284,11 +284,11 @@ extension Parser {
         case .binaryOperator: return .binaryOperator
         case .infixQuestionMark: return .infixQuestionMark
         case .equal: return .equal
-        case .isKeyword: return .keyword(.is)
-        case .asKeyword: return .keyword(.as)
+        case .is: return .keyword(.is)
+        case .as: return .keyword(.as)
         case .async: return .keyword(.async)
         case .arrow: return .arrow
-        case .throwsKeyword: return .keyword(.throws)
+        case .throws: return .keyword(.throws)
         }
       }
     }
@@ -336,7 +336,7 @@ extension Parser {
         return (RawExprSyntax(op), nil)
       }
 
-    case (.isKeyword, let handle)?:
+    case (.is, let handle)?:
       let isKeyword = self.eat(handle)
       let op = RawUnresolvedIsExprSyntax(
         isTok: isKeyword,
@@ -349,7 +349,7 @@ extension Parser {
 
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
-    case (.asKeyword, let handle)?:
+    case (.as, let handle)?:
       return parseUnresolvedAsExpr(handle: handle)
 
     case (.async, _)?:
@@ -358,7 +358,7 @@ extension Parser {
       } else {
         return nil
       }
-    case (.arrow, _)?, (.throwsKeyword, _)?:
+    case (.arrow, _)?, (.throws, _)?:
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
 
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
@@ -408,7 +408,7 @@ extension Parser {
     }
 
     EXPR_PREFIX: switch self.at(anyIn: ExpressionModifierKeyword.self) {
-    case (.awaitKeyword, let handle)?:
+    case (.await, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -422,7 +422,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.tryKeyword, let handle)?:
+    case (.try, let handle)?:
       let tryKeyword = self.eat(handle)
       let mark = self.consume(if: .exclamationMark, .postfixQuestionMark)
 
@@ -439,7 +439,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._moveKeyword, let handle)?:
+    case (._move, let handle)?:
       let moveTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -453,7 +453,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._borrowKeyword, let handle)?:
+    case (._borrow, let handle)?:
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -468,7 +468,7 @@ extension Parser {
         )
       )
 
-    case (.copyKeyword, let handle)?:
+    case (.copy, let handle)?:
       // `copy` is only contextually a keyword, if it's followed by an
       // identifier or keyword on the same line. We do this to ensure that we do
       // not break any copy functions defined by users. This is following with
@@ -497,7 +497,7 @@ extension Parser {
         )
       )
 
-    case (.consumeKeyword, let handle)?:
+    case (.consume, let handle)?:
       // `consume` is only contextually a keyword, if it's followed by an
       // identifier or keyword on the same line. We do this to ensure that we do
       // not break any copy functions defined by users. This is following with
@@ -1200,7 +1200,7 @@ extension Parser {
       return RawExprSyntax(self.parseStringLiteral())
     case (.extendedRegexDelimiter, _)?, (.regexSlash, _)?:
       return RawExprSyntax(self.parseRegexLiteral())
-    case (.nilKeyword, let handle)?:
+    case (.nil, let handle)?:
       let nilKeyword = self.eat(handle)
       return RawExprSyntax(
         RawNilLiteralExprSyntax(
@@ -1208,8 +1208,8 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.trueKeyword, let handle)?,
-      (.falseKeyword, let handle)?:
+    case (.true, let handle)?,
+      (.false, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(
         RawBooleanLiteralExprSyntax(
@@ -1217,7 +1217,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
+    case (.identifier, let handle)?, (.self, let handle)?, (.`init`, let handle)?:
       // If we have "case let x." or "case let x(", we parse x as a normal
       // name, not a binding, because it is the start of an enum pattern or
       // call pattern.
@@ -1254,9 +1254,9 @@ extension Parser {
       }
 
       return RawExprSyntax(self.parseIdentifierExpression())
-    case (.capitalSelfKeyword, _)?:  // Self
+    case (.Self, _)?:  // Self
       return RawExprSyntax(self.parseIdentifierExpression())
-    case (.anyKeyword, _)?:  // Any
+    case (.Any, _)?:  // Any
       let anyType = RawTypeSyntax(self.parseAnyType())
       return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
     case (.dollarIdentifier, _)?:
@@ -1322,7 +1322,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.superKeyword, _)?:  // 'super'
+    case (.super, _)?:  // 'super'
       return RawExprSyntax(self.parseSuperExpression())
 
     case (.leftParen, _)?:
@@ -1344,7 +1344,7 @@ extension Parser {
   // try to parse a primary expression for a directive
   mutating func parsePrimaryExprForDirective() -> RawExprSyntax? {
     switch self.at(anyIn: CompilationCondition.self) {
-    case (.canImportKeyword, let handle)?:
+    case (.canImport, let handle)?:
       return RawExprSyntax(self.parseCanImportExpression(handle))
 
     // TODO: add case `swift` and `compiler` here
@@ -2476,9 +2476,9 @@ extension Parser {
 
     let label: RawSwitchCaseSyntax.Label
     switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
-    case (.caseKeyword, let handle)?:
+    case (.case, let handle)?:
       label = .case(self.parseSwitchCaseLabel(handle))
-    case (.defaultKeyword, let handle)?:
+    case (.default, let handle)?:
       label = .default(self.parseSwitchDefaultLabel(handle))
     case nil:
       label = .case(

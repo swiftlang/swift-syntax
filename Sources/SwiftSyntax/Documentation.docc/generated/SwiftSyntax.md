@@ -96,6 +96,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/CanImportExprSyntax>
 - <doc:SwiftSyntax/CanImportVersionInfoSyntax>
 - <doc:SwiftSyntax/ClosureExprSyntax>
+- <doc:SwiftSyntax/CopyExprSyntax>
 - <doc:SwiftSyntax/DictionaryExprSyntax>
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>

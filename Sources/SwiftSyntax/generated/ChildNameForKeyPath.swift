@@ -787,6 +787,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "protocolName"
   case \ConventionWitnessMethodAttributeArgumentsSyntax.unexpectedAfterProtocolName:
     return "unexpectedAfterProtocolName"
+  case \CopyExprSyntax.unexpectedBeforeCopyKeyword:
+    return "unexpectedBeforeCopyKeyword"
+  case \CopyExprSyntax.copyKeyword:
+    return "copyKeyword"
+  case \CopyExprSyntax.unexpectedBetweenCopyKeywordAndExpression:
+    return "unexpectedBetweenCopyKeywordAndExpression"
+  case \CopyExprSyntax.expression:
+    return "expression"
+  case \CopyExprSyntax.unexpectedAfterExpression:
+    return "unexpectedAfterExpression"
   case \DeclModifierDetailSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \DeclModifierDetailSyntax.leftParen:

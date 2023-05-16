@@ -16,15 +16,15 @@ import SyntaxSupport
 import Utils
 
 let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  for node in SYNTAX_NODES where node.isBase {
+  for node in SYNTAX_NODES where node.kind.isBase {
     DeclSyntax(
       """
-      // MARK: - \(raw: node.name)
+      // MARK: - \(node.kind.syntaxType)
 
-      /// Protocol to which all `\(raw: node.name)` nodes conform. Extension point to add
-      /// common methods to all `\(raw: node.name)` nodes.
+      /// Protocol to which all `\(node.kind.syntaxType)` nodes conform. Extension point to add
+      /// common methods to all `\(node.kind.syntaxType)` nodes.
       /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
-      public protocol \(raw: node.name)Protocol: \(raw: node.baseType.baseName)Protocol {}
+      public protocol \(node.kind.protocolType): \(raw: node.base.protocolType) {}
       """
     )
 
@@ -32,10 +32,10 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Check whether the non-type erased version of this syntax node conforms to
-        /// \(raw: node.name)Protocol.
+        /// \(node.kind.protocolType).
         /// Note that this will incur an existential conversion.
-        func isProtocol(_: \(raw: node.name)Protocol.Protocol) -> Bool {
-          return self.asProtocol(\(raw: node.name)Protocol.self) != nil
+        func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
+          return self.asProtocol(\(node.kind.protocolType).self) != nil
         }
         """
       )
@@ -43,10 +43,10 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Return the non-type erased version of this syntax node if it conforms to
-        /// \(raw: node.name)Protocol. Otherwise return nil.
+        /// \(node.kind.protocolType). Otherwise return nil.
         /// Note that this will incur an existential conversion.
-        func asProtocol(_: \(raw: node.name)Protocol.Protocol) -> \(raw: node.name)Protocol? {
-          return self.asProtocol(SyntaxProtocol.self) as? \(raw: node.name)Protocol
+        func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType)? {
+          return self.asProtocol(SyntaxProtocol.self) as? \(node.kind.protocolType)
         }
         """
       )
@@ -54,16 +54,16 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! StructDeclSyntax(
       """
-      \(raw: node.description ?? "")
-      public struct \(raw: node.name): \(raw: node.name)Protocol, SyntaxHashable
+      \(raw: node.documentation)
+      public struct \(node.kind.syntaxType): \(node.kind.protocolType), SyntaxHashable
       """
     ) {
       DeclSyntax("public let _syntaxNode: Syntax")
 
       DeclSyntax(
         """
-        /// Create a `\(raw: node.name)` node from a specialized syntax node.
-        public init(_ syntax: some \(raw: node.name)Protocol) {
+        /// Create a `\(node.kind.syntaxType)` node from a specialized syntax node.
+        public init(_ syntax: some \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
@@ -74,8 +74,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a `\(raw: node.name)` node from a specialized optional syntax node.
-        public init?(_ syntax: (some \(raw: node.name)Protocol)?) {
+        /// Create a `\(node.kind.syntaxType)` node from a specialized optional syntax node.
+        public init?(_ syntax: (some \(node.kind.protocolType))?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
         }
@@ -84,7 +84,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public init(fromProtocol syntax: \(raw: node.name)Protocol) {
+        public init(fromProtocol syntax: \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
@@ -95,8 +95,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a `\(raw: node.name)` node from a specialized optional syntax node.
-        public init?(fromProtocol syntax: \(raw: node.name)Protocol?) {
+        /// Create a `\(node.kind.syntaxType)` node from a specialized optional syntax node.
+        public init?(fromProtocol syntax: \(node.kind.protocolType)?) {
           guard let syntax = syntax else { return nil }
           self.init(fromProtocol: syntax)
         }
@@ -109,10 +109,10 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             SwitchCaseSyntax(
               label: .case(
                 SwitchCaseLabelSyntax {
-                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                  for childNode in SYNTAX_NODES where childNode.base == node.kind {
                     CaseItemSyntax(
                       pattern: ExpressionPatternSyntax(
-                        expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
+                        expression: ExprSyntax(".\(childNode.varOrCaseName)")
                       )
                     )
                   }
@@ -131,7 +131,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       try InitializerDeclSyntax(
         """
-        /// Creates a `\(raw: node.name)` node from the given `SyntaxData`. This assumes
+        /// Creates a `\(node.kind.syntaxType)` node from the given `SyntaxData`. This assumes
         /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
         /// is undefined.
         internal init(_ data: SyntaxData)
@@ -142,10 +142,10 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             SwitchCaseSyntax(
               label: .case(
                 SwitchCaseLabelSyntax {
-                  for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+                  for childNode in SYNTAX_NODES where childNode.base == node.kind {
                     CaseItemSyntax(
                       pattern: ExpressionPatternSyntax(
-                        expression: ExprSyntax(".\(raw: childNode.swiftSyntaxKind)")
+                        expression: ExprSyntax(".\(childNode.varOrCaseName)")
                       )
                     )
                   }
@@ -156,7 +156,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
 
             SwitchCaseSyntax("default:") {
-              ExprSyntax("preconditionFailure(\"Unable to create \(raw: node.name) from \\(data.raw.kind)\")")
+              ExprSyntax("preconditionFailure(\"Unable to create \(node.kind.syntaxType) from \\(data.raw.kind)\")")
             }
           }
         }
@@ -166,7 +166,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public func `is`<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> Bool {
+        public func `is`<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> Bool {
           return self.as(syntaxType) != nil
         }
         """
@@ -174,7 +174,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public func `as`<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> S? {
+        public func `as`<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> S? {
           return S.init(self)
         }
         """
@@ -182,7 +182,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public func cast<S: \(raw: node.name)Protocol>(_ syntaxType: S.Type) -> S {
+        public func cast<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> S {
           return self.as(S.self)!
         }
         """
@@ -190,11 +190,11 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Syntax nodes always conform to `\(raw: node.name)Protocol`. This API is just
+        /// Syntax nodes always conform to `\(node.kind.protocolType)`. This API is just
         /// added for consistency.
         /// Note that this will incur an existential conversion.
         @available(*, deprecated, message: "Expression always evaluates to true")
-        public func isProtocol(_: \(raw: node.name)Protocol.Protocol) -> Bool {
+        public func isProtocol(_: \(raw: node.kind.protocolType).Protocol) -> Bool {
           return true
         }
         """
@@ -204,18 +204,18 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Return the non-type erased version of this syntax node.
         /// Note that this will incur an existential conversion.
-        public func asProtocol(_: \(raw: node.name)Protocol.Protocol) -> \(raw: node.name)Protocol {
-          return Syntax(self).asProtocol(\(raw: node.name)Protocol.self)!
+        public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType) {
+          return Syntax(self).asProtocol(\(node.kind.protocolType).self)!
         }
         """
       )
 
       try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
         let choices = ArrayExprSyntax {
-          for childNode in SYNTAX_NODES where childNode.baseKind == node.syntaxKind {
+          for childNode in SYNTAX_NODES where childNode.base == node.kind {
             ArrayElementSyntax(
               leadingTrivia: .newline,
-              expression: ExprSyntax(".node(\(raw: childNode.name).self)")
+              expression: ExprSyntax(".node(\(childNode.kind.syntaxType).self)")
             )
           }
         }
@@ -236,7 +236,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for node in NON_BASE_SYNTAX_NODES {
           ArrayElementSyntax(
             leadingTrivia: .newline,
-            expression: ExprSyntax(".node(\(raw: node.name).self)")
+            expression: ExprSyntax(".node(\(node.kind.syntaxType).self)")
           )
         }
       }

@@ -18,10 +18,10 @@ import Utils
 // Collects the list of classifications to use for contextual classification.
 fileprivate var node_child_classifications: [ChildClassification] {
   var result = [ChildClassification]()
-  for node in SYNTAX_NODES {
+  for node in SYNTAX_NODES.compactMap(\.layoutNode) {
     for (index, child) in node.children.enumerated() where child.classification?.name != nil {
       result.append(
-        ChildClassification(node: node, childIndex: index, child: child)
+        ChildClassification(node: node.node, childIndex: index, child: child)
       )
     }
   }
@@ -58,7 +58,7 @@ let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
     ) {
       try SwitchExprSyntax("switch keyPath") {
         for childClassification in node_child_classifications {
-          SwitchCaseSyntax("case \\\(raw: childClassification.parent.type.syntaxBaseName).\(raw: childClassification.child.swiftName):") {
+          SwitchCaseSyntax("case \\\(raw: childClassification.parent.type.syntaxBaseName).\(raw: childClassification.child.varName):") {
             StmtSyntax("return (.\(raw: childClassification.classification!.swiftName), \(raw: childClassification.force))")
           }
         }

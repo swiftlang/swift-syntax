@@ -35,7 +35,7 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
   }
 
   for node in SYNTAX_NODES where node.parserFunction != nil {
-    DeclSyntax("extension \(raw: node.name): SyntaxExpressibleByStringInterpolation {}")
+    DeclSyntax("extension \(node.kind.syntaxType): SyntaxExpressibleByStringInterpolation {}")
   }
 
   DeclSyntax(

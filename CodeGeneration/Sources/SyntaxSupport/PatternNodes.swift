@@ -13,21 +13,21 @@
 public let PATTERN_NODES: [Node] = [
   // expr-pattern -> expr
   Node(
-    name: "ExpressionPattern",
+    kind: .expressionPattern,
+    base: .pattern,
     nameForDiagnostics: "pattern",
-    kind: "Pattern",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       )
     ]
   ),
   // identifier-pattern -> identifier
   Node(
-    name: "IdentifierPattern",
+    kind: .identifierPattern,
+    base: .pattern,
     nameForDiagnostics: "pattern",
-    kind: "Pattern",
     children: [
       Child(
         name: "Identifier",
@@ -38,9 +38,9 @@ public let PATTERN_NODES: [Node] = [
 
   // is-type-pattern -> 'is' type
   Node(
-    name: "IsTypePattern",
+    kind: .isTypePattern,
+    base: .pattern,
     nameForDiagnostics: "'is' pattern",
-    kind: "Pattern",
     children: [
       Child(
         name: "IsKeyword",
@@ -48,7 +48,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "Type",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
@@ -56,17 +56,17 @@ public let PATTERN_NODES: [Node] = [
   // tuple-pattern-element-list -> tuple-pattern-element
   //  tuple-pattern-element-list?
   Node(
-    name: "TuplePatternElementList",
+    kind: .tuplePatternElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "TuplePatternElement"
+    elementChoices: [.tuplePatternElement]
   ),
 
   // tuple-pattern-element -> identifier? ':' pattern ','?
   Node(
-    name: "TuplePatternElement",
+    kind: .tuplePatternElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -84,7 +84,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
       Child(
         name: "TrailingComma",
@@ -96,9 +96,9 @@ public let PATTERN_NODES: [Node] = [
 
   // tuple-pattern -> '(' tuple-pattern-element-list ')'
   Node(
-    name: "TuplePattern",
+    kind: .tuplePattern,
+    base: .pattern,
     nameForDiagnostics: "tuple pattern",
-    kind: "Pattern",
     traits: [
       "Parenthesized"
     ],
@@ -109,7 +109,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
-        kind: .collection(kind: "TuplePatternElementList", collectionElementName: "Element")
+        kind: .collection(kind: .tuplePatternElementList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",
@@ -120,9 +120,9 @@ public let PATTERN_NODES: [Node] = [
 
   // type-annotation -> ':' type
   Node(
-    name: "TypeAnnotation",
+    kind: .typeAnnotation,
+    base: .syntax,
     nameForDiagnostics: "type annotation",
-    kind: "Syntax",
     children: [
       Child(
         name: "Colon",
@@ -130,7 +130,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "Type",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
@@ -139,9 +139,9 @@ public let PATTERN_NODES: [Node] = [
   //                        | 'var' pattern
   //                        | 'inout' pattern
   Node(
-    name: "ValueBindingPattern",
+    kind: .valueBindingPattern,
+    base: .pattern,
     nameForDiagnostics: "value binding pattern",
-    kind: "Pattern",
     children: [
       Child(
         name: "BindingKeyword",
@@ -149,16 +149,16 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "ValuePattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
     ]
   ),
 
   // wildcard-pattern -> '_' type-annotation?
   Node(
-    name: "WildcardPattern",
+    kind: .wildcardPattern,
+    base: .pattern,
     nameForDiagnostics: "wildcard pattern",
-    kind: "Pattern",
     children: [
       Child(
         name: "Wildcard",
@@ -166,7 +166,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "TypeAnnotation",
-        kind: .node(kind: "TypeAnnotation"),
+        kind: .node(kind: .typeAnnotation),
         isOptional: true
       ),
     ]

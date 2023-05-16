@@ -13,9 +13,9 @@
 public let STMT_NODES: [Node] = [
   // availability-condition -> '#available' '(' availability-spec ')'
   Node(
-    name: "AvailabilityCondition",
+    kind: .availabilityCondition,
+    base: .syntax,
     nameForDiagnostics: "availability condition",
-    kind: "Syntax",
     children: [
       Child(
         name: "AvailabilityKeyword",
@@ -27,7 +27,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "AvailabilitySpec",
-        kind: .collection(kind: "AvailabilitySpecList", collectionElementName: "AvailabilityArgument")
+        kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument")
       ),
       Child(
         name: "RightParen",
@@ -38,9 +38,9 @@ public let STMT_NODES: [Node] = [
 
   // break-stmt -> 'break' identifier? ';'?
   Node(
-    name: "BreakStmt",
+    kind: .breakStmt,
+    base: .stmt,
     nameForDiagnostics: "'break' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "BreakKeyword",
@@ -57,29 +57,27 @@ public let STMT_NODES: [Node] = [
 
   // case-item-list -> case-item case-item-list?
   Node(
-    name: "CaseItemList",
+    kind: .caseItemList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "CaseItem"
+    elementChoices: [.caseItem]
   ),
 
   // catch-clause-list -> catch-clause catch-clause-list?
   Node(
-    name: "CatchClauseList",
+    kind: .catchClauseList,
+    base: .syntaxCollection,
     nameForDiagnostics: "'catch' clause",
-    kind: "SyntaxCollection",
-    element: "CatchClause"
+    elementChoices: [.catchClause]
   ),
 
   // catch-clause 'catch' case-item-list? code-block
   Node(
-    name: "CatchClause",
+    kind: .catchClause,
+    base: .syntax,
     nameForDiagnostics: "'catch' clause",
-    kind: "Syntax",
-    traits: [
-      "WithCodeBlock"
-    ],
     parserFunction: "parseCatchClause",
+    traits: ["WithCodeBlock"],
     children: [
       Child(
         name: "CatchKeyword",
@@ -87,41 +85,41 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "CatchItems",
-        kind: .collection(kind: "CatchItemList", collectionElementName: "CatchItem"),
+        kind: .collection(kind: .catchItemList, collectionElementName: "CatchItem"),
         isOptional: true
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock")
+        kind: .node(kind: .codeBlock)
       ),
     ]
   ),
 
   // catch-item-list -> catch-item catch-item-list?
   Node(
-    name: "CatchItemList",
+    kind: .catchItemList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "CatchItem"
+    elementChoices: [.catchItem]
   ),
 
   // catch-item -> pattern? where-clause? ','?
   Node(
-    name: "CatchItem",
+    kind: .catchItem,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern"),
+        kind: .node(kind: .pattern),
         isOptional: true
       ),
       Child(
         name: "WhereClause",
-        kind: .node(kind: "WhereClause"),
+        kind: .node(kind: .whereClause),
         isOptional: true
       ),
       Child(
@@ -135,10 +133,10 @@ public let STMT_NODES: [Node] = [
   // condition-list -> condition
   //                 | condition ','? condition-list
   Node(
-    name: "ConditionElementList",
+    kind: .conditionElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "ConditionElement"
+    elementChoices: [.conditionElement]
   ),
 
   // condition -> expression
@@ -146,9 +144,9 @@ public let STMT_NODES: [Node] = [
   //            | case-condition
   //            | optional-binding-condition
   Node(
-    name: "ConditionElement",
+    kind: .conditionElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -158,19 +156,19 @@ public let STMT_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Expression",
-            kind: .node(kind: "Expr")
+            kind: .node(kind: .expr)
           ),
           Child(
             name: "Availability",
-            kind: .node(kind: "AvailabilityCondition")
+            kind: .node(kind: .availabilityCondition)
           ),
           Child(
             name: "MatchingPattern",
-            kind: .node(kind: "MatchingPatternCondition")
+            kind: .node(kind: .matchingPatternCondition)
           ),
           Child(
             name: "OptionalBinding",
-            kind: .node(kind: "OptionalBindingCondition")
+            kind: .node(kind: .optionalBindingCondition)
           ),
         ])
       ),
@@ -184,9 +182,9 @@ public let STMT_NODES: [Node] = [
 
   // continue-stmt -> 'continue' label? ';'?
   Node(
-    name: "ContinueStmt",
+    kind: .continueStmt,
+    base: .stmt,
     nameForDiagnostics: "'continue' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "ContinueKeyword",
@@ -203,9 +201,9 @@ public let STMT_NODES: [Node] = [
 
   // defer-stmt -> 'defer' code-block ';'?
   Node(
-    name: "DeferStmt",
+    kind: .deferStmt,
+    base: .stmt,
     nameForDiagnostics: "'defer' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -216,16 +214,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock")
+        kind: .node(kind: .codeBlock)
       ),
     ]
   ),
 
   // do-stmt -> identifier? ':'? 'do' code-block catch-clause-list ';'?
   Node(
-    name: "DoStmt",
+    kind: .doStmt,
+    base: .stmt,
     nameForDiagnostics: "'do' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -236,12 +234,12 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock"),
+        kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"
       ),
       Child(
         name: "CatchClauses",
-        kind: .collection(kind: "CatchClauseList", collectionElementName: "CatchClause"),
+        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause"),
         isOptional: true
       ),
     ]
@@ -249,22 +247,22 @@ public let STMT_NODES: [Node] = [
 
   // expr-stmt -> expression ';'?
   Node(
-    name: "ExpressionStmt",
+    kind: .expressionStmt,
+    base: .stmt,
     nameForDiagnostics: "expression",
-    kind: "Stmt",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       )
     ]
   ),
 
   // fallthrough-stmt -> 'fallthrough' ';'?
   Node(
-    name: "FallthroughStmt",
+    kind: .fallthroughStmt,
+    base: .stmt,
     nameForDiagnostics: "'fallthrough' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "FallthroughKeyword",
@@ -277,9 +275,9 @@ public let STMT_NODES: [Node] = [
   //   'for' 'try'? 'await'? 'case'? pattern 'in' expr 'where'?
   //   expr code-block ';'?
   Node(
-    name: "ForInStmt",
+    kind: .forInStmt,
+    base: .stmt,
     nameForDiagnostics: "'for' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -305,11 +303,11 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
       Child(
         name: "TypeAnnotation",
-        kind: .node(kind: "TypeAnnotation"),
+        kind: .node(kind: .typeAnnotation),
         isOptional: true
       ),
       Child(
@@ -318,16 +316,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "SequenceExpr",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "WhereClause",
-        kind: .node(kind: "WhereClause"),
+        kind: .node(kind: .whereClause),
         isOptional: true
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock"),
+        kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"
       ),
     ]
@@ -335,9 +333,9 @@ public let STMT_NODES: [Node] = [
 
   // discard-stmt -> 'discard' expr ';'?
   Node(
-    name: "DiscardStmt",
+    kind: .discardStmt,
+    base: .stmt,
     nameForDiagnostics: "'discard' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "DiscardKeyword",
@@ -348,16 +346,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   // guard-stmt -> 'guard' condition-list 'else' code-block ';'?
   Node(
-    name: "GuardStmt",
+    kind: .guardStmt,
+    base: .stmt,
     nameForDiagnostics: "'guard' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -368,7 +366,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Conditions",
-        kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition"),
+        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition"),
         nameForDiagnostics: "condition"
       ),
       Child(
@@ -377,7 +375,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock"),
+        kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"
       ),
     ]
@@ -385,9 +383,9 @@ public let STMT_NODES: [Node] = [
 
   // labeled-stmt -> label ':' stmt
   Node(
-    name: "LabeledStmt",
+    kind: .labeledStmt,
+    base: .stmt,
     nameForDiagnostics: "labeled statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "LabelName",
@@ -400,15 +398,15 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Statement",
-        kind: .node(kind: "Stmt")
+        kind: .node(kind: .stmt)
       ),
     ]
   ),
 
   Node(
-    name: "MatchingPatternCondition",
+    kind: .matchingPatternCondition,
+    base: .syntax,
     nameForDiagnostics: "pattern matching",
-    kind: "Syntax",
     children: [
       Child(
         name: "CaseKeyword",
@@ -416,24 +414,24 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
       Child(
         name: "TypeAnnotation",
-        kind: .node(kind: "TypeAnnotation"),
+        kind: .node(kind: .typeAnnotation),
         isOptional: true
       ),
       Child(
         name: "Initializer",
-        kind: .node(kind: "InitializerClause")
+        kind: .node(kind: .initializerClause)
       ),
     ]
   ),
 
   Node(
-    name: "OptionalBindingCondition",
+    kind: .optionalBindingCondition,
+    base: .syntax,
     nameForDiagnostics: "optional binding",
-    kind: "Syntax",
     children: [
       Child(
         name: "BindingKeyword",
@@ -441,16 +439,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
       Child(
         name: "TypeAnnotation",
-        kind: .node(kind: "TypeAnnotation"),
+        kind: .node(kind: .typeAnnotation),
         isOptional: true
       ),
       Child(
         name: "Initializer",
-        kind: .node(kind: "InitializerClause"),
+        kind: .node(kind: .initializerClause),
         isOptional: true
       ),
     ]
@@ -458,9 +456,9 @@ public let STMT_NODES: [Node] = [
 
   // repeat-while-stmt -> label? ':'? 'repeat' code-block 'while' expr ';'?
   Node(
-    name: "RepeatWhileStmt",
+    kind: .repeatWhileStmt,
+    base: .stmt,
     nameForDiagnostics: "'repeat' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -471,7 +469,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock"),
+        kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"
       ),
       Child(
@@ -480,7 +478,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Condition",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "condition"
       ),
     ]
@@ -488,9 +486,9 @@ public let STMT_NODES: [Node] = [
 
   // return-stmt -> 'return' expr? ';'?
   Node(
-    name: "ReturnStmt",
+    kind: .returnStmt,
+    base: .stmt,
     nameForDiagnostics: "'return' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "ReturnKeyword",
@@ -498,7 +496,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         isOptional: true
       ),
     ]
@@ -506,9 +504,9 @@ public let STMT_NODES: [Node] = [
 
   // throw-stmt -> 'throw' expr ';'?
   Node(
-    name: "ThrowStmt",
+    kind: .throwStmt,
+    base: .stmt,
     nameForDiagnostics: "'throw' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "ThrowKeyword",
@@ -516,15 +514,15 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   Node(
-    name: "WhereClause",
+    kind: .whereClause,
+    base: .syntax,
     nameForDiagnostics: "'where' clause",
-    kind: "Syntax",
     children: [
       Child(
         name: "WhereKeyword",
@@ -532,16 +530,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "GuardResult",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   // while-stmt -> label? ':'? 'while' condition-list code-block ';'?
   Node(
-    name: "WhileStmt",
+    kind: .whileStmt,
+    base: .stmt,
     nameForDiagnostics: "'while' statement",
-    kind: "Stmt",
     traits: [
       "WithCodeBlock"
     ],
@@ -552,19 +550,19 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Conditions",
-        kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition")
+        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition")
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock")
+        kind: .node(kind: .codeBlock)
       ),
     ]
   ),
 
   Node(
-    name: "YieldList",
+    kind: .yieldList,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftParen",
@@ -572,7 +570,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "ElementList",
-        kind: .collection(kind: "YieldExprList", collectionElementName: "Element")
+        kind: .collection(kind: .yieldExprList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",
@@ -583,9 +581,9 @@ public let STMT_NODES: [Node] = [
 
   // yield-stmt -> 'yield' '('? expr-list? ')'?
   Node(
-    name: "YieldStmt",
+    kind: .yieldStmt,
+    base: .stmt,
     nameForDiagnostics: "'yield' statement",
-    kind: "Stmt",
     children: [
       Child(
         name: "YieldKeyword",
@@ -596,11 +594,11 @@ public let STMT_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "YieldList",
-            kind: .node(kind: "YieldList")
+            kind: .node(kind: .yieldList)
           ),
           Child(
             name: "SimpleYield",
-            kind: .node(kind: "Expr")
+            kind: .node(kind: .expr)
           ),
         ])
       ),

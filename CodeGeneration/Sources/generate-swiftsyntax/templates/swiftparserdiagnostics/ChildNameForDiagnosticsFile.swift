@@ -22,10 +22,10 @@ let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
     "private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String?"
   ) {
     try! SwitchExprSyntax("switch keyPath") {
-      for node in NON_BASE_SYNTAX_NODES where !node.isSyntaxCollection {
+      for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
         for child in node.children {
           if let nameForDiagnostics = child.nameForDiagnostics {
-            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
               StmtSyntax(#"return "\#(raw: nameForDiagnostics)""#)
             }
           }

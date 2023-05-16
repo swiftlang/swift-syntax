@@ -195,8 +195,8 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 )
 
                 for node in NON_BASE_SYNTAX_NODES {
-                  try SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-                    if node.isBuildable || node.isMissing {
+                  try SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                    if let node = node.layoutNode {
                       ExprSyntax("assert(layout.count == \(raw: node.children.count))")
                       for (index, child) in node.children.enumerated() {
                         switch child.kind {
@@ -226,21 +226,21 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                           ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self))")
                         }
                       }
-                    } else if node.isSyntaxCollection {
+                    } else if let node = node.collectionNode {
                       try ForInStmtSyntax("for (index, element) in layout.enumerated()") {
-                        if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
+                        if let onlyElement = node.elementChoices.only {
+                          ExprSyntax("assertNoError(kind, index, verify(element, as: \(onlyElement.rawType).self))")
+                        } else {
                           let verifiedChoices = ArrayExprSyntax {
-                            for choiceName in node.collectionElementChoices! {
+                            for choiceName in node.elementChoices {
                               let choice = SYNTAX_NODE_MAP[choiceName]!
                               ArrayElementSyntax(
                                 leadingTrivia: .newline,
-                                expression: ExprSyntax("verify(element, as: Raw\(raw: choice.name).self)")
+                                expression: ExprSyntax("verify(element, as: \(raw: choice.kind.rawType).self)")
                               )
                             }
                           }
                           ExprSyntax("assertAnyHasNoError(kind, index, \(verifiedChoices))")
-                        } else {
-                          ExprSyntax("assertNoError(kind, index, verify(element, as: Raw\(node.collectionElementType.buildable).self))")
                         }
                       }
                     }

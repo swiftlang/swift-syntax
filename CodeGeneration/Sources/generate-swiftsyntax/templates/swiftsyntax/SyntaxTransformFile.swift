@@ -23,13 +23,13 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax("func visit(_ token: TokenSyntax) -> ResultType")
 
-    for node in SYNTAX_NODES where node.isVisitable {
+    for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(raw: node.name)` specifically.
+        /// Visiting `\(node.kind.syntaxType)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: the sum of whatever the child visitors return.
-        func visit(_ node: \(raw: node.name)) -> ResultType
+        func visit(_ node: \(node.kind.syntaxType)) -> ResultType
         """
       )
     }
@@ -44,13 +44,13 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in SYNTAX_NODES where node.isVisitable {
+    for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(raw: node.name)` specifically.
+        /// Visiting `\(node.kind.syntaxType)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: nil by default.
-        public func visit(_ node: \(raw: node.name)) -> ResultType {
+        public func visit(_ node: \(node.kind.syntaxType)) -> ResultType {
           visitAny(Syntax(node))
         }
         """
@@ -63,7 +63,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           StmtSyntax("return visit(node)")
         }
         for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind)(let derived):") {
+          SwitchCaseSyntax("case .\(node.varOrCaseName)(let derived):") {
             StmtSyntax("return visit(derived)")
           }
         }

@@ -50,13 +50,13 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in SYNTAX_NODES where node.isVisitable {
+    for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(raw: node.name)` specifically.
+        /// Visiting `\(node.kind.syntaxType)` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
-        open func visit(_ node: \(raw: node.name)) -> SyntaxVisitorContinueKind {
+        open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
           return .visitChildren
         }
         """
@@ -64,9 +64,9 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// The function called after visiting `\(raw: node.name)` and its descendents.
+        /// The function called after visiting `\(node.kind.syntaxType)` and its descendents.
         ///   - node: the node we just finished visiting.
-        open func visitPost(_ node: \(raw: node.name)) {}
+        open func visitPost(_ node: \(node.kind.syntaxType)) {}
         """
       )
     }
@@ -94,8 +94,8 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Implementation detail of doVisit(_:_:). Do not call directly.
-        private func visitImpl\(raw: node.name)(_ data: SyntaxData) {
-          let node = \(raw: node.name)(data)
+        private func visitImpl\(node.kind.syntaxType)(_ data: SyntaxData) {
+          let node = \(node.kind.syntaxType)(data)
           let needsChildren = (visit(node) == .visitChildren)
           // Avoid calling into visitChildren if possible.
           if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -126,8 +126,8 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            ExprSyntax("visitImpl\(raw: node.name)(data)")
+          SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+            ExprSyntax("visitImpl\(node.kind.syntaxType)(data)")
           }
         }
       }

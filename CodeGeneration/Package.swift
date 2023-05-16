@@ -20,6 +20,7 @@ let package = Package(
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+        .product(name: "SwiftBasicFormat", package: "swift-syntax"),
         .product(name: "ArgumentParser", package: "swift-argument-parser"),
         "SyntaxSupport",
         "Utils",
@@ -29,11 +30,16 @@ let package = Package(
       ]
     ),
     .target(
-      name: "SyntaxSupport"
+      name: "SyntaxSupport",
+      dependencies: [
+        .product(name: "SwiftSyntax", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+      ]
     ),
     .target(
       name: "Utils",
       dependencies: [
+        .product(name: "SwiftBasicFormat", package: "swift-syntax"),
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
         "SyntaxSupport",

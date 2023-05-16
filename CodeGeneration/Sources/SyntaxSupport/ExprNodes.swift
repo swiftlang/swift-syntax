@@ -12,24 +12,24 @@
 
 public let EXPR_NODES: [Node] = [
   Node(
-    name: "ArrayElementList",
+    kind: .arrayElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "ArrayElement"
+    elementChoices: [.arrayElement]
   ),
 
   // element inside an array expression: expression ','?
   Node(
-    name: "ArrayElement",
+    kind: .arrayElement,
+    base: .syntax,
     nameForDiagnostics: "array element",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "value"
       ),
       Child(
@@ -42,9 +42,9 @@ public let EXPR_NODES: [Node] = [
 
   // Array literal, e.g. [1, 2, 3]
   Node(
-    name: "ArrayExpr",
+    kind: .arrayExpr,
+    base: .expr,
     nameForDiagnostics: "array",
-    kind: "Expr",
     children: [
       Child(
         name: "LeftSquare",
@@ -52,7 +52,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
-        kind: .collection(kind: "ArrayElementList", collectionElementName: "Element"),
+        kind: .collection(kind: .arrayElementList, collectionElementName: "Element"),
         isIndented: true
       ),
       Child(
@@ -65,13 +65,13 @@ public let EXPR_NODES: [Node] = [
   // arrow-expr -> 'async'? 'throws'? '->'
   // NOTE: This appears only in SequenceExpr.
   Node(
-    name: "ArrowExpr",
+    kind: .arrowExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "EffectSpecifiers",
-        kind: .node(kind: "TypeEffectSpecifiers"),
+        kind: .node(kind: .typeEffectSpecifiers),
         isOptional: true
       ),
       Child(
@@ -86,13 +86,13 @@ public let EXPR_NODES: [Node] = [
   // result of "folding" a SequenceExpr based on knowing the precedence
   // relationships amongst the different infix operators.
   Node(
-    name: "AsExpr",
+    kind: .asExpr,
+    base: .expr,
     nameForDiagnostics: "'as'",
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "AsTok",
@@ -105,16 +105,16 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TypeName",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // An = expression.
   Node(
-    name: "AssignmentExpr",
+    kind: .assignmentExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "AssignToken",
@@ -126,9 +126,9 @@ public let EXPR_NODES: [Node] = [
   // The await operator.
   // await foo()
   Node(
-    name: "AwaitExpr",
+    kind: .awaitExpr,
+    base: .expr,
     nameForDiagnostics: "'await' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "AwaitKeyword",
@@ -136,7 +136,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
@@ -144,9 +144,9 @@ public let EXPR_NODES: [Node] = [
   // An operator like + or -.
   // NOTE: This appears only in SequenceExpr.
   Node(
-    name: "BinaryOperatorExpr",
+    kind: .binaryOperatorExpr,
+    base: .expr,
     nameForDiagnostics: "operator",
-    kind: "Expr",
     children: [
       Child(
         name: "OperatorToken",
@@ -157,9 +157,9 @@ public let EXPR_NODES: [Node] = [
 
   // true or false
   Node(
-    name: "BooleanLiteralExpr",
+    kind: .booleanLiteralExpr,
+    base: .expr,
     nameForDiagnostics: "bool literal",
-    kind: "Expr",
     children: [
       Child(
         name: "BooleanLiteral",
@@ -170,9 +170,9 @@ public let EXPR_NODES: [Node] = [
 
   // The borrow expr
   Node(
-    name: "BorrowExpr",
+    kind: .borrowExpr,
+    base: .expr,
     nameForDiagnostics: "'_borrow' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "BorrowKeyword",
@@ -180,16 +180,16 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   // the canImport expr in if config expression
   Node(
-    name: "CanImportExpr",
+    kind: .canImportExpr,
+    base: .expr,
     nameForDiagnostics: "'canImport' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "CanImportKeyword",
@@ -205,7 +205,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "VersionInfo",
-        kind: .node(kind: "CanImportVersionInfo"),
+        kind: .node(kind: .canImportVersionInfo),
         isOptional: true
       ),
       Child(
@@ -216,9 +216,9 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "CanImportVersionInfo",
+    kind: .canImportVersionInfo,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Comma",
@@ -234,27 +234,27 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "VersionTuple",
-        kind: .node(kind: "VersionTuple")
+        kind: .node(kind: .versionTuple)
       ),
     ]
   ),
 
   // case-item -> pattern where-clause? ','?
   Node(
-    name: "CaseItem",
+    kind: .caseItem,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       ),
       Child(
         name: "WhereClause",
-        kind: .node(kind: "WhereClause"),
+        kind: .node(kind: .whereClause),
         isOptional: true
       ),
       Child(
@@ -266,16 +266,16 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureCaptureItemList",
+    kind: .closureCaptureItemList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "ClosureCaptureItem"
+    elementChoices: [.closureCaptureItem]
   ),
 
   Node(
-    name: "ClosureCaptureItemSpecifier",
+    kind: .closureCaptureItemSpecifier,
+    base: .syntax,
     nameForDiagnostics: "closure capture specifier",
-    kind: "Syntax",
     children: [
       Child(
         name: "Specifier",
@@ -300,16 +300,16 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureCaptureItem",
+    kind: .closureCaptureItem,
+    base: .syntax,
     nameForDiagnostics: "closure capture item",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Specifier",
-        kind: .node(kind: "ClosureCaptureItemSpecifier"),
+        kind: .node(kind: .closureCaptureItemSpecifier),
         isOptional: true
       ),
       Child(
@@ -324,7 +324,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "TrailingComma",
@@ -335,9 +335,9 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureCaptureSignature",
+    kind: .closureCaptureSignature,
+    base: .syntax,
     nameForDiagnostics: "closure capture signature",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftSquare",
@@ -345,7 +345,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Items",
-        kind: .collection(kind: "ClosureCaptureItemList", collectionElementName: "Item"),
+        kind: .collection(kind: .closureCaptureItemList, collectionElementName: "Item"),
         isOptional: true
       ),
       Child(
@@ -356,25 +356,21 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureParameter",
+    kind: .closureParameter,
+    base: .syntax,
     nameForDiagnostics: "parameter",
-    kind: "Syntax",
-    traits: [
-      "WithTrailingComma",
-      "WithAttributes",
-      "WithModifiers",
-    ],
     parserFunction: "parseClosureParameter",
+    traits: ["WithTrailingComma", "WithAttributes", "WithModifiers"],
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
         nameForDiagnostics: "modifiers",
         isOptional: true
       ),
@@ -397,7 +393,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Type",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "type",
         description: "The type of the parameter.",
         isOptional: true
@@ -418,16 +414,16 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureParameterList",
+    kind: .closureParameterList,
+    base: .syntaxCollection,
     nameForDiagnostics: "parameter list",
-    kind: "SyntaxCollection",
-    element: "ClosureParameter"
+    elementChoices: [.closureParameter]
   ),
 
   Node(
-    name: "ClosureParameterClause",
+    kind: .closureParameterClause,
+    base: .syntax,
     nameForDiagnostics: "parameter clause",
-    kind: "Syntax",
     traits: [
       "Parenthesized"
     ],
@@ -439,7 +435,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ParameterList",
-        kind: .collection(kind: "ClosureParameterList", collectionElementName: "Parameter"),
+        kind: .collection(kind: .closureParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
         description: "The actual parameters.",
         isIndented: true
@@ -453,9 +449,9 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureExpr",
+    kind: .closureExpr,
+    base: .expr,
     nameForDiagnostics: "closure",
-    kind: "Expr",
     traits: [
       "Braced",
       "WithStatements",
@@ -467,12 +463,12 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Signature",
-        kind: .node(kind: "ClosureSignature"),
+        kind: .node(kind: .closureSignature),
         isOptional: true
       ),
       Child(
         name: "Statements",
-        kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
         isIndented: true
       ),
       Child(
@@ -485,16 +481,16 @@ public let EXPR_NODES: [Node] = [
 
   // a, b, c
   Node(
-    name: "ClosureParamList",
+    kind: .closureParamList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "ClosureParam"
+    elementChoices: [.closureParam]
   ),
 
   Node(
-    name: "ClosureParam",
+    kind: .closureParam,
+    base: .syntax,
     nameForDiagnostics: "closure parameter",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -513,22 +509,22 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ClosureSignature",
+    kind: .closureSignature,
+    base: .syntax,
     nameForDiagnostics: "closure signature",
-    kind: "Syntax",
     traits: [
       "WithAttributes"
     ],
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
         nameForDiagnostics: "attributes",
         isOptional: true
       ),
       Child(
         name: "Capture",
-        kind: .node(kind: "ClosureCaptureSignature"),
+        kind: .node(kind: .closureCaptureSignature),
         isOptional: true
       ),
       Child(
@@ -536,23 +532,23 @@ public let EXPR_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "SimpleInput",
-            kind: .node(kind: "ClosureParamList")
+            kind: .node(kind: .closureParamList)
           ),
           Child(
             name: "Input",
-            kind: .node(kind: "ClosureParameterClause")
+            kind: .node(kind: .closureParameterClause)
           ),
         ]),
         isOptional: true
       ),
       Child(
         name: "EffectSpecifiers",
-        kind: .node(kind: "TypeEffectSpecifiers"),
+        kind: .node(kind: .typeEffectSpecifiers),
         isOptional: true
       ),
       Child(
         name: "Output",
-        kind: .node(kind: "ReturnClause"),
+        kind: .node(kind: .returnClause),
         isOptional: true
       ),
       Child(
@@ -563,23 +559,23 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "DeclNameArgumentList",
+    kind: .declNameArgumentList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "DeclNameArgument"
+    elementChoices: [.declNameArgument]
   ),
 
   // declname-arguments -> '(' declname-argument-list ')'
   // declname-argument-list -> declname-argument*
   // declname-argument -> identifier ':'
   Node(
-    name: "DeclNameArgument",
+    kind: .declNameArgument,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "Name",
-        kind: .node(kind: "Token")
+        kind: .node(kind: .token)
       ),
       Child(
         name: "Colon",
@@ -589,9 +585,9 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "DeclNameArguments",
+    kind: .declNameArguments,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "Parenthesized"
     ],
@@ -602,7 +598,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Arguments",
-        kind: .collection(kind: "DeclNameArgumentList", collectionElementName: "Argument")
+        kind: .collection(kind: .declNameArgumentList, collectionElementName: "Argument")
       ),
       Child(
         name: "RightParen",
@@ -612,24 +608,24 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "DictionaryElementList",
+    kind: .dictionaryElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "DictionaryElement"
+    elementChoices: [.dictionaryElement]
   ),
 
   // element inside an array expression: expression ','?
   Node(
-    name: "DictionaryElement",
+    kind: .dictionaryElement,
+    base: .syntax,
     nameForDiagnostics: "dictionary element",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "KeyExpression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "key"
       ),
       Child(
@@ -638,7 +634,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ValueExpression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "value",
         isIndented: true
       ),
@@ -652,9 +648,9 @@ public let EXPR_NODES: [Node] = [
 
   // Dictionary literal, e.g. [1:1, 2:2, 3:3]
   Node(
-    name: "DictionaryExpr",
+    kind: .dictionaryExpr,
+    base: .expr,
     nameForDiagnostics: "dictionary",
-    kind: "Expr",
     children: [
       Child(
         name: "LeftSquare",
@@ -669,7 +665,7 @@ public let EXPR_NODES: [Node] = [
           ),
           Child(
             name: "Elements",
-            kind: .node(kind: "DictionaryElementList")
+            kind: .node(kind: .dictionaryElementList)
           ),
         ]),
         isIndented: true
@@ -683,9 +679,9 @@ public let EXPR_NODES: [Node] = [
 
   // A _ expression.
   Node(
-    name: "DiscardAssignmentExpr",
+    kind: .discardAssignmentExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Wildcard",
@@ -696,9 +692,9 @@ public let EXPR_NODES: [Node] = [
 
   // <#content#>
   Node(
-    name: "EditorPlaceholderExpr",
+    kind: .editorPlaceholderExpr,
+    base: .expr,
     nameForDiagnostics: "editor placeholder",
-    kind: "Expr",
     children: [
       Child(
         name: "Identifier",
@@ -708,19 +704,18 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "ExprList",
+    kind: .exprList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    description: "A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.",
-    kind: "SyntaxCollection",
-    element: "Expr",
-    elementName: "Expression"
+    documentation: "A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.",
+    elementChoices: [.expr]
   ),
 
   // expression segment in a string interpolation expression.
   Node(
-    name: "ExpressionSegment",
+    kind: .expressionSegment,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "Parenthesized"
     ],
@@ -742,7 +737,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expressions",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Expression")
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Expression")
       ),
       Child(
         name: "RightParen",
@@ -758,9 +753,9 @@ public let EXPR_NODES: [Node] = [
   // -3.9
   // +4e20
   Node(
-    name: "FloatLiteralExpr",
+    kind: .floatLiteralExpr,
+    base: .expr,
     nameForDiagnostics: "floating literal",
-    kind: "Expr",
     children: [
       Child(
         name: "FloatingDigits",
@@ -771,13 +766,13 @@ public let EXPR_NODES: [Node] = [
 
   // forced-value-expr -> expr '!'
   Node(
-    name: "ForcedValueExpr",
+    kind: .forcedValueExpr,
+    base: .expr,
     nameForDiagnostics: "force unwrap",
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "ExclamationMark",
@@ -789,13 +784,13 @@ public let EXPR_NODES: [Node] = [
   // call-expr -> expr '(' call-argument-list ')' closure-expr?
   //            | expr closure-expr
   Node(
-    name: "FunctionCallExpr",
+    kind: .functionCallExpr,
+    base: .expr,
     nameForDiagnostics: "function call",
-    kind: "Expr",
     children: [
       Child(
         name: "CalledExpression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "called expression"
       ),
       Child(
@@ -805,7 +800,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ArgumentList",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument"),
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments",
         isIndented: true
       ),
@@ -816,13 +811,13 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingClosure",
-        kind: .node(kind: "ClosureExpr"),
+        kind: .node(kind: .closureExpr),
         nameForDiagnostics: "trailing closure",
         isOptional: true
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
         nameForDiagnostics: "trailing closures",
         isOptional: true
       ),
@@ -831,9 +826,9 @@ public let EXPR_NODES: [Node] = [
 
   // An identifier expression.
   Node(
-    name: "IdentifierExpr",
+    kind: .identifierExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Identifier",
@@ -841,7 +836,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "DeclNameArguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         isOptional: true
       ),
     ]
@@ -853,9 +848,9 @@ public let EXPR_NODES: [Node] = [
   // This node represents both an 'if' expression, as well as an 'if' statement
   // when wrapped in a ExpressionStmt node.
   Node(
-    name: "IfExpr",
+    kind: .ifExpr,
+    base: .expr,
     nameForDiagnostics: "'if' statement",
-    kind: "Expr",
     traits: [
       "WithCodeBlock"
     ],
@@ -866,16 +861,16 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Conditions",
-        kind: .collection(kind: "ConditionElementList", collectionElementName: "Condition")
+        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition")
       ),
       Child(
         name: "Body",
-        kind: .node(kind: "CodeBlock"),
+        kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"
       ),
       Child(
         name: "ElseKeyword",
-        kind: .node(kind: "ElseToken"),
+        kind: .token(choices: [.keyword(text: "else")]),
         isOptional: true
       ),
       Child(
@@ -883,11 +878,11 @@ public let EXPR_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "IfExpr",
-            kind: .node(kind: "IfExpr")
+            kind: .node(kind: .ifExpr)
           ),
           Child(
             name: "CodeBlock",
-            kind: .node(kind: "CodeBlock")
+            kind: .node(kind: .codeBlock)
           ),
         ]),
         nameForDiagnostics: "else body",
@@ -899,9 +894,9 @@ public let EXPR_NODES: [Node] = [
   // An inout expression.
   // &x
   Node(
-    name: "InOutExpr",
+    kind: .inOutExpr,
+    base: .expr,
     nameForDiagnostics: "inout expression",
-    kind: "Expr",
     children: [
       Child(
         name: "Ampersand",
@@ -909,7 +904,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
@@ -919,21 +914,21 @@ public let EXPR_NODES: [Node] = [
   // result of "folding" a SequenceExpr based on knowing the precedence
   // relationships amongst the different infix operators.
   Node(
-    name: "InfixOperatorExpr",
+    kind: .infixOperatorExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "LeftOperand",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "OperatorOperand",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "RightOperand",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
@@ -943,9 +938,9 @@ public let EXPR_NODES: [Node] = [
   // +3_400
   // +0x4f
   Node(
-    name: "IntegerLiteralExpr",
+    kind: .integerLiteralExpr,
+    base: .expr,
     nameForDiagnostics: "integer literal",
-    kind: "Expr",
     children: [
       Child(
         name: "Digits",
@@ -959,9 +954,10 @@ public let EXPR_NODES: [Node] = [
   // result of "folding" a SequenceExpr based on knowing the precedence
   // relationships amongst the different infix operators.
   Node(
-    name: "IsExpr",
+    kind: .isExpr,
+    base: .expr,
     nameForDiagnostics: "'is'",
-    description: """
+    documentation: """
       An `is` expression like the following.
 
       ```swift
@@ -970,11 +966,10 @@ public let EXPR_NODES: [Node] = [
 
       This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
       """,
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         description: "The expression which will be checked to determine whether it can be cast to a specific type."
       ),
       Child(
@@ -984,7 +979,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TypeName",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         description: "The type against which the expression will be checked to see if the expression can be cast to it."
       ),
     ]
@@ -992,17 +987,17 @@ public let EXPR_NODES: [Node] = [
 
   // The components of a key path
   Node(
-    name: "KeyPathComponentList",
+    kind: .keyPathComponentList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "KeyPathComponent"
+    elementChoices: [.keyPathComponent]
   ),
 
   // A single key path component.
   Node(
-    name: "KeyPathComponent",
+    kind: .keyPathComponent,
+    base: .syntax,
     nameForDiagnostics: "key path component",
-    kind: "Syntax",
     children: [
       Child(
         name: "Period",
@@ -1014,15 +1009,15 @@ public let EXPR_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Property",
-            kind: .node(kind: "KeyPathPropertyComponent")
+            kind: .node(kind: .keyPathPropertyComponent)
           ),
           Child(
             name: "Subscript",
-            kind: .node(kind: "KeyPathSubscriptComponent")
+            kind: .node(kind: .keyPathSubscriptComponent)
           ),
           Child(
             name: "Optional",
-            kind: .node(kind: "KeyPathOptionalComponent")
+            kind: .node(kind: .keyPathOptionalComponent)
           ),
         ])
       ),
@@ -1031,9 +1026,9 @@ public let EXPR_NODES: [Node] = [
 
   // e.g. "\a.b[2].a"
   Node(
-    name: "KeyPathExpr",
+    kind: .keyPathExpr,
+    base: .expr,
     nameForDiagnostics: "key path",
-    kind: "Expr",
     children: [
       Child(
         name: "Backslash",
@@ -1041,22 +1036,22 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Root",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "root",
         isOptional: true
       ),
       Child(
         name: "Components",
-        kind: .collection(kind: "KeyPathComponentList", collectionElementName: "KeyPathComponent")
+        kind: .collection(kind: .keyPathComponentList, collectionElementName: "KeyPathComponent")
       ),
     ]
   ),
 
   // A key path component like '?' or '!'.
   Node(
-    name: "KeyPathOptionalComponent",
+    kind: .keyPathOptionalComponent,
+    base: .syntax,
     nameForDiagnostics: "key path optional component",
-    kind: "Syntax",
     children: [
       Child(
         name: "QuestionOrExclamationMark",
@@ -1067,9 +1062,9 @@ public let EXPR_NODES: [Node] = [
 
   // A key path component like .property or .1.
   Node(
-    name: "KeyPathPropertyComponent",
+    kind: .keyPathPropertyComponent,
+    base: .syntax,
     nameForDiagnostics: "key path property component",
-    kind: "Syntax",
     children: [
       Child(
         name: "Identifier",
@@ -1077,12 +1072,12 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "DeclNameArguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         isOptional: true
       ),
       Child(
         name: "GenericArgumentClause",
-        kind: .node(kind: "GenericArgumentClause"),
+        kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
     ]
@@ -1090,9 +1085,9 @@ public let EXPR_NODES: [Node] = [
 
   // A key path component like .[17]
   Node(
-    name: "KeyPathSubscriptComponent",
+    kind: .keyPathSubscriptComponent,
+    base: .syntax,
     nameForDiagnostics: "key path subscript component",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftBracket",
@@ -1100,7 +1095,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ArgumentList",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument"),
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1112,9 +1107,9 @@ public let EXPR_NODES: [Node] = [
 
   // e.g., "#embed("filename.txt")"
   Node(
-    name: "MacroExpansionExpr",
+    kind: .macroExpansionExpr,
+    base: .expr,
     nameForDiagnostics: "macro expansion",
-    kind: "Expr",
     traits: [
       "FreestandingMacroExpansion"
     ],
@@ -1130,7 +1125,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "GenericArguments",
-        kind: .node(kind: "GenericArgumentClause"),
+        kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
       Child(
@@ -1140,7 +1135,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ArgumentList",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument")
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument")
       ),
       Child(
         name: "RightParen",
@@ -1149,12 +1144,12 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingClosure",
-        kind: .node(kind: "ClosureExpr"),
+        kind: .node(kind: .closureExpr),
         isOptional: true
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
         isOptional: true
       ),
     ]
@@ -1162,13 +1157,13 @@ public let EXPR_NODES: [Node] = [
 
   // expr?.name
   Node(
-    name: "MemberAccessExpr",
+    kind: .memberAccessExpr,
+    base: .expr,
     nameForDiagnostics: "member access",
-    kind: "Expr",
     children: [
       Child(
         name: "Base",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "base",
         isOptional: true
       ),
@@ -1178,12 +1173,12 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "DeclNameArguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         isOptional: true
       ),
     ]
@@ -1191,9 +1186,9 @@ public let EXPR_NODES: [Node] = [
 
   // The move expr
   Node(
-    name: "MoveExpr",
+    kind: .moveExpr,
+    base: .expr,
     nameForDiagnostics: "'consume' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "MoveKeyword",
@@ -1201,15 +1196,15 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   Node(
-    name: "CopyExpr",
+    kind: .copyExpr,
+    base: .expr,
     nameForDiagnostics: "'copy' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "CopyKeyword",
@@ -1217,23 +1212,23 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   Node(
-    name: "MultipleTrailingClosureElementList",
+    kind: .multipleTrailingClosureElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "MultipleTrailingClosureElement"
+    elementChoices: [.multipleTrailingClosureElement]
   ),
 
   // trailing-closure-element -> identifier ':' closure-expression
   Node(
-    name: "MultipleTrailingClosureElement",
+    kind: .multipleTrailingClosureElement,
+    base: .syntax,
     nameForDiagnostics: "trailing closure",
-    kind: "Syntax",
     children: [
       Child(
         name: "Label",
@@ -1246,16 +1241,16 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Closure",
-        kind: .node(kind: "ClosureExpr")
+        kind: .node(kind: .closureExpr)
       ),
     ]
   ),
 
   // A nil expression.
   Node(
-    name: "NilLiteralExpr",
+    kind: .nilLiteralExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "NilKeyword",
@@ -1266,13 +1261,13 @@ public let EXPR_NODES: [Node] = [
 
   // optional-chaining-expr -> expr '?'
   Node(
-    name: "OptionalChainingExpr",
+    kind: .optionalChainingExpr,
+    base: .expr,
     nameForDiagnostics: "optional chaining",
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "QuestionMark",
@@ -1283,9 +1278,9 @@ public let EXPR_NODES: [Node] = [
 
   // A pack element expr spelled with 'each'.
   Node(
-    name: "PackElementExpr",
+    kind: .packElementExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "EachKeyword",
@@ -1293,16 +1288,16 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "PackRefExpr",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   // A pack expansion expr spelled with 'repeat'.
   Node(
-    name: "PackExpansionExpr",
+    kind: .packExpansionExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "RepeatKeyword",
@@ -1310,38 +1305,38 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "PatternExpr",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   // postfix '#if' expression
   Node(
-    name: "PostfixIfConfigExpr",
+    kind: .postfixIfConfigExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Base",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         isOptional: true
       ),
       Child(
         name: "Config",
-        kind: .node(kind: "IfConfigDecl")
+        kind: .node(kind: .ifConfigDecl)
       ),
     ]
   ),
 
   // postfix-unary-expr -> expr postfix-operator
   Node(
-    name: "PostfixUnaryExpr",
+    kind: .postfixUnaryExpr,
+    base: .expr,
     nameForDiagnostics: "postfix expression",
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "OperatorToken",
@@ -1354,9 +1349,9 @@ public let EXPR_NODES: [Node] = [
   // -x
   // !true
   Node(
-    name: "PrefixOperatorExpr",
+    kind: .prefixOperatorExpr,
+    base: .expr,
     nameForDiagnostics: "operator",
-    kind: "Expr",
     children: [
       Child(
         name: "OperatorToken",
@@ -1365,7 +1360,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "PostfixExpression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
@@ -1373,9 +1368,9 @@ public let EXPR_NODES: [Node] = [
   // e.g '(a|c)*', the contents of the literal is opaque to the C++ Swift
   // parser though.
   Node(
-    name: "RegexLiteralExpr",
+    kind: .regexLiteralExpr,
+    base: .expr,
     nameForDiagnostics: "regex literal",
-    kind: "Expr",
     children: [
       Child(
         name: "OpeningPounds",
@@ -1404,39 +1399,39 @@ public let EXPR_NODES: [Node] = [
 
   // A flat list of expressions before sequence folding, e.g. 1 + 2 + 3.
   Node(
-    name: "SequenceExpr",
+    kind: .sequenceExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Elements",
-        kind: .collection(kind: "ExprList", collectionElementName: "Element")
+        kind: .collection(kind: .exprList, collectionElementName: "Element")
       )
     ]
   ),
 
   // specialize-expr -> expr generic-argument-clause?
   Node(
-    name: "SpecializeExpr",
+    kind: .specializeExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "GenericArgumentClause",
-        kind: .node(kind: "GenericArgumentClause")
+        kind: .node(kind: .genericArgumentClause)
       ),
     ]
   ),
 
   // e.g. "abc \(foo()) def"
   Node(
-    name: "StringLiteralExpr",
+    kind: .stringLiteralExpr,
+    base: .expr,
     nameForDiagnostics: "string literal",
-    kind: "Expr",
     children: [
       Child(
         name: "OpenDelimiter",
@@ -1449,7 +1444,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Segments",
-        kind: .collection(kind: "StringLiteralSegments", collectionElementName: "Segment")
+        kind: .collection(kind: .stringLiteralSegments, collectionElementName: "Segment")
       ),
       Child(
         name: "CloseQuote",
@@ -1464,19 +1459,17 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "StringLiteralSegments",
+    kind: .stringLiteralSegments,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "Syntax",
-    elementName: "Segment",
-    elementChoices: ["StringSegment", "ExpressionSegment"]
+    elementChoices: [.stringSegment, .expressionSegment]
   ),
 
   // string literal segment in a string interpolation expression.
   Node(
-    name: "StringSegment",
+    kind: .stringSegment,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "Content",
@@ -1487,13 +1480,13 @@ public let EXPR_NODES: [Node] = [
 
   // subscript-expr -> expr '[' call-argument-list ']' closure-expr?
   Node(
-    name: "SubscriptExpr",
+    kind: .subscriptExpr,
+    base: .expr,
     nameForDiagnostics: "subscript",
-    kind: "Expr",
     children: [
       Child(
         name: "CalledExpression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "called expression"
       ),
       Child(
@@ -1502,7 +1495,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ArgumentList",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Argument"),
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1511,13 +1504,13 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingClosure",
-        kind: .node(kind: "ClosureExpr"),
+        kind: .node(kind: .closureExpr),
         nameForDiagnostics: "trailing closure",
         isOptional: true
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: "MultipleTrailingClosureElementList", collectionElementName: "AdditionalTrailingClosure"),
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
         nameForDiagnostics: "trailing closures",
         isOptional: true
       ),
@@ -1526,9 +1519,9 @@ public let EXPR_NODES: [Node] = [
 
   // An 'super' expression.
   Node(
-    name: "SuperRefExpr",
+    kind: .superRefExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "SuperKeyword",
@@ -1539,9 +1532,9 @@ public let EXPR_NODES: [Node] = [
 
   // switch-case-label -> 'case' case-item-list ':'
   Node(
-    name: "SwitchCaseLabel",
+    kind: .switchCaseLabel,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "CaseKeyword",
@@ -1549,7 +1542,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "CaseItems",
-        kind: .collection(kind: "CaseItemList", collectionElementName: "CaseItem")
+        kind: .collection(kind: .caseItemList, collectionElementName: "CaseItem")
       ),
       Child(
         name: "Colon",
@@ -1560,28 +1553,24 @@ public let EXPR_NODES: [Node] = [
 
   // switch-case-list -> switch-case switch-case-list?
   Node(
-    name: "SwitchCaseList",
+    kind: .switchCaseList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "Syntax",
-    elementName: "SwitchCase",
-    elementChoices: ["SwitchCase", "IfConfigDecl"]
+    elementChoices: [.switchCase, .ifConfigDecl]
   ),
 
   // switch-case -> unknown-attr? switch-case-label stmt-list
   //              | unknown-attr? switch-default-label stmt-list
   Node(
-    name: "SwitchCase",
+    kind: .switchCase,
+    base: .syntax,
     nameForDiagnostics: "switch case",
-    kind: "Syntax",
-    traits: [
-      "WithStatements"
-    ],
     parserFunction: "parseSwitchCase",
+    traits: ["WithStatements"],
     children: [
       Child(
         name: "UnknownAttr",
-        kind: .node(kind: "Attribute"),
+        kind: .node(kind: .attribute),
         isOptional: true
       ),
       Child(
@@ -1589,18 +1578,18 @@ public let EXPR_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Default",
-            kind: .node(kind: "SwitchDefaultLabel")
+            kind: .node(kind: .switchDefaultLabel)
           ),
           Child(
             name: "Case",
-            kind: .node(kind: "SwitchCaseLabel")
+            kind: .node(kind: .switchCaseLabel)
           ),
         ]),
         nameForDiagnostics: "label"
       ),
       Child(
         name: "Statements",
-        kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
         isIndented: true
       ),
     ]
@@ -1608,9 +1597,9 @@ public let EXPR_NODES: [Node] = [
 
   // switch-default-label -> 'default' ':'
   Node(
-    name: "SwitchDefaultLabel",
+    kind: .switchDefaultLabel,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "DefaultKeyword",
@@ -1629,9 +1618,9 @@ public let EXPR_NODES: [Node] = [
   // This node represents both a 'switch' expression, as well as a 'switch'
   // statement when wrapped in a ExpressionStmt node.
   Node(
-    name: "SwitchExpr",
+    kind: .switchExpr,
+    base: .expr,
     nameForDiagnostics: "'switch' statement",
-    kind: "Expr",
     traits: [
       "Braced"
     ],
@@ -1642,7 +1631,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "LeftBrace",
@@ -1650,7 +1639,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Cases",
-        kind: .collection(kind: "SwitchCaseList", collectionElementName: "Case")
+        kind: .collection(kind: .switchCaseList, collectionElementName: "Case")
       ),
       Child(
         name: "RightBrace",
@@ -1665,13 +1654,13 @@ public let EXPR_NODES: [Node] = [
   // result of "folding" a SequenceExpr based on knowing the precedence
   // relationships amongst the different infix operators.
   Node(
-    name: "TernaryExpr",
+    kind: .ternaryExpr,
+    base: .expr,
     nameForDiagnostics: "ternay expression",
-    kind: "Expr",
     children: [
       Child(
         name: "ConditionExpression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "condition"
       ),
       Child(
@@ -1680,7 +1669,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "FirstChoice",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "first choice"
       ),
       Child(
@@ -1689,7 +1678,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "SecondChoice",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "second choice"
       ),
     ]
@@ -1700,9 +1689,9 @@ public let EXPR_NODES: [Node] = [
   // try? foo()
   // try! foo()
   Node(
-    name: "TryExpr",
+    kind: .tryExpr,
+    base: .expr,
     nameForDiagnostics: "'try' expression",
-    kind: "Expr",
     children: [
       Child(
         name: "TryKeyword",
@@ -1715,23 +1704,23 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
     ]
   ),
 
   Node(
-    name: "TupleExprElementList",
+    kind: .tupleExprElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "TupleExprElement"
+    elementChoices: [.tupleExprElement]
   ),
 
   // An element inside a tuple element list
   Node(
-    name: "TupleExprElement",
+    kind: .tupleExprElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -1749,7 +1738,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr"),
+        kind: .node(kind: .expr),
         nameForDiagnostics: "value"
       ),
       Child(
@@ -1761,9 +1750,9 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "TupleExpr",
+    kind: .tupleExpr,
+    base: .expr,
     nameForDiagnostics: "tuple",
-    kind: "Expr",
     traits: [
       "Parenthesized"
     ],
@@ -1774,7 +1763,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ElementList",
-        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Element"),
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element"),
         isIndented: true
       ),
       Child(
@@ -1786,13 +1775,13 @@ public let EXPR_NODES: [Node] = [
 
   // Type
   Node(
-    name: "TypeExpr",
+    kind: .typeExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Type",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       )
     ]
   ),
@@ -1801,9 +1790,9 @@ public let EXPR_NODES: [Node] = [
   // "as" type casting operator without operands.
   // NOTE: This appears only in SequenceExpr.
   Node(
-    name: "UnresolvedAsExpr",
+    kind: .unresolvedAsExpr,
+    base: .expr,
     nameForDiagnostics: "'as'",
-    kind: "Expr",
     children: [
       Child(
         name: "AsTok",
@@ -1821,9 +1810,9 @@ public let EXPR_NODES: [Node] = [
   // "is" type casting operator without operands.
   // NOTE: This appears only in SequenceExpr.
   Node(
-    name: "UnresolvedIsExpr",
+    kind: .unresolvedIsExpr,
+    base: .expr,
     nameForDiagnostics: "'is'",
-    kind: "Expr",
     children: [
       Child(
         name: "IsTok",
@@ -1833,13 +1822,13 @@ public let EXPR_NODES: [Node] = [
   ),
   // unresolved-pattern-expr -> pattern
   Node(
-    name: "UnresolvedPatternExpr",
+    kind: .unresolvedPatternExpr,
+    base: .expr,
     nameForDiagnostics: nil,
-    kind: "Expr",
     children: [
       Child(
         name: "Pattern",
-        kind: .node(kind: "Pattern")
+        kind: .node(kind: .pattern)
       )
     ]
   ),
@@ -1848,9 +1837,9 @@ public let EXPR_NODES: [Node] = [
   // Ternary expression without the condition and the second choice.
   // NOTE: This appears only in SequenceExpr.
   Node(
-    name: "UnresolvedTernaryExpr",
+    kind: .unresolvedTernaryExpr,
+    base: .expr,
     nameForDiagnostics: "ternary operator",
-    kind: "Expr",
     children: [
       Child(
         name: "QuestionMark",
@@ -1858,7 +1847,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "FirstChoice",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "ColonMark",
@@ -1868,13 +1857,13 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "YieldExprListElement",
+    kind: .yieldExprListElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "Expression",
-        kind: .node(kind: "Expr")
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "Comma",
@@ -1885,11 +1874,10 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    name: "YieldExprList",
+    kind: .yieldExprList,
+    base: .syntaxCollection,
     nameForDiagnostics: "yield list",
-    kind: "SyntaxCollection",
-    element: "YieldExprListElement",
-    elementName: "Yields"
+    elementChoices: [.yieldExprListElement]
   ),
 
 ]

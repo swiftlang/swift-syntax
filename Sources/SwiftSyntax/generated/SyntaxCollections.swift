@@ -29,7 +29,7 @@ public extension SyntaxCollection {
 }
 
 /// `AccessorListSyntax` represents a collection of one or more
-/// `AccessorDecl` nodes. AccessorListSyntax behaves
+/// `AccessorDeclSyntax` nodes. AccessorListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
@@ -238,7 +238,7 @@ extension AccessorListSyntax: BidirectionalCollection {
 }
 
 /// `ArrayElementListSyntax` represents a collection of one or more
-/// `ArrayElement` nodes. ArrayElementListSyntax behaves
+/// `ArrayElementSyntax` nodes. ArrayElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -698,7 +698,7 @@ extension AttributeListSyntax: BidirectionalCollection {
 }
 
 /// `AvailabilitySpecListSyntax` represents a collection of one or more
-/// `AvailabilityArgument` nodes. AvailabilitySpecListSyntax behaves
+/// `AvailabilityArgumentSyntax` nodes. AvailabilitySpecListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
@@ -907,7 +907,7 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
 }
 
 /// `AvailabilityVersionRestrictionListSyntax` represents a collection of one or more
-/// `AvailabilityVersionRestrictionListEntry` nodes. AvailabilityVersionRestrictionListSyntax behaves
+/// `AvailabilityVersionRestrictionListEntrySyntax` nodes. AvailabilityVersionRestrictionListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1116,7 +1116,7 @@ extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
 }
 
 /// `CaseItemListSyntax` represents a collection of one or more
-/// `CaseItem` nodes. CaseItemListSyntax behaves
+/// `CaseItemSyntax` nodes. CaseItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1325,7 +1325,7 @@ extension CaseItemListSyntax: BidirectionalCollection {
 }
 
 /// `CatchClauseListSyntax` represents a collection of one or more
-/// `CatchClause` nodes. CatchClauseListSyntax behaves
+/// `CatchClauseSyntax` nodes. CatchClauseListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1534,7 +1534,7 @@ extension CatchClauseListSyntax: BidirectionalCollection {
 }
 
 /// `CatchItemListSyntax` represents a collection of one or more
-/// `CatchItem` nodes. CatchItemListSyntax behaves
+/// `CatchItemSyntax` nodes. CatchItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1743,7 +1743,7 @@ extension CatchItemListSyntax: BidirectionalCollection {
 }
 
 /// `ClosureCaptureItemListSyntax` represents a collection of one or more
-/// `ClosureCaptureItem` nodes. ClosureCaptureItemListSyntax behaves
+/// `ClosureCaptureItemSyntax` nodes. ClosureCaptureItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1952,7 +1952,7 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
 }
 
 /// `ClosureParamListSyntax` represents a collection of one or more
-/// `ClosureParam` nodes. ClosureParamListSyntax behaves
+/// `ClosureParamSyntax` nodes. ClosureParamListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2161,7 +2161,7 @@ extension ClosureParamListSyntax: BidirectionalCollection {
 }
 
 /// `ClosureParameterListSyntax` represents a collection of one or more
-/// `ClosureParameter` nodes. ClosureParameterListSyntax behaves
+/// `ClosureParameterSyntax` nodes. ClosureParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2370,7 +2370,7 @@ extension ClosureParameterListSyntax: BidirectionalCollection {
 }
 
 /// `CodeBlockItemListSyntax` represents a collection of one or more
-/// `CodeBlockItem` nodes. CodeBlockItemListSyntax behaves
+/// `CodeBlockItemSyntax` nodes. CodeBlockItemListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2579,7 +2579,7 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
 }
 
 /// `CompositionTypeElementListSyntax` represents a collection of one or more
-/// `CompositionTypeElement` nodes. CompositionTypeElementListSyntax behaves
+/// `CompositionTypeElementSyntax` nodes. CompositionTypeElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2788,7 +2788,7 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
 }
 
 /// `ConditionElementListSyntax` represents a collection of one or more
-/// `ConditionElement` nodes. ConditionElementListSyntax behaves
+/// `ConditionElementSyntax` nodes. ConditionElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2997,7 +2997,7 @@ extension ConditionElementListSyntax: BidirectionalCollection {
 }
 
 /// `DeclNameArgumentListSyntax` represents a collection of one or more
-/// `DeclNameArgument` nodes. DeclNameArgumentListSyntax behaves
+/// `DeclNameArgumentSyntax` nodes. DeclNameArgumentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3206,7 +3206,7 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
 }
 
 /// `DesignatedTypeListSyntax` represents a collection of one or more
-/// `DesignatedTypeElement` nodes. DesignatedTypeListSyntax behaves
+/// `DesignatedTypeElementSyntax` nodes. DesignatedTypeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3415,7 +3415,7 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
 }
 
 /// `DictionaryElementListSyntax` represents a collection of one or more
-/// `DictionaryElement` nodes. DictionaryElementListSyntax behaves
+/// `DictionaryElementSyntax` nodes. DictionaryElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3624,7 +3624,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
 }
 
 /// `DifferentiabilityParamListSyntax` represents a collection of one or more
-/// `DifferentiabilityParam` nodes. DifferentiabilityParamListSyntax behaves
+/// `DifferentiabilityParamSyntax` nodes. DifferentiabilityParamListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable {
@@ -4451,7 +4451,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
 }
 
 /// `EnumCaseParameterListSyntax` represents a collection of one or more
-/// `EnumCaseParameter` nodes. EnumCaseParameterListSyntax behaves
+/// `EnumCaseParameterSyntax` nodes. EnumCaseParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -4866,7 +4866,7 @@ extension ExprListSyntax: BidirectionalCollection {
 }
 
 /// `FunctionParameterListSyntax` represents a collection of one or more
-/// `FunctionParameter` nodes. FunctionParameterListSyntax behaves
+/// `FunctionParameterSyntax` nodes. FunctionParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5075,7 +5075,7 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
 }
 
 /// `GenericArgumentListSyntax` represents a collection of one or more
-/// `GenericArgument` nodes. GenericArgumentListSyntax behaves
+/// `GenericArgumentSyntax` nodes. GenericArgumentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5284,7 +5284,7 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
 }
 
 /// `GenericParameterListSyntax` represents a collection of one or more
-/// `GenericParameter` nodes. GenericParameterListSyntax behaves
+/// `GenericParameterSyntax` nodes. GenericParameterListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5493,7 +5493,7 @@ extension GenericParameterListSyntax: BidirectionalCollection {
 }
 
 /// `GenericRequirementListSyntax` represents a collection of one or more
-/// `GenericRequirement` nodes. GenericRequirementListSyntax behaves
+/// `GenericRequirementSyntax` nodes. GenericRequirementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5702,7 +5702,7 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
 }
 
 /// `IfConfigClauseListSyntax` represents a collection of one or more
-/// `IfConfigClause` nodes. IfConfigClauseListSyntax behaves
+/// `IfConfigClauseSyntax` nodes. IfConfigClauseListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5911,7 +5911,7 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
 }
 
 /// `ImportPathSyntax` represents a collection of one or more
-/// `ImportPathComponent` nodes. ImportPathSyntax behaves
+/// `ImportPathComponentSyntax` nodes. ImportPathSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
@@ -6120,7 +6120,7 @@ extension ImportPathSyntax: BidirectionalCollection {
 }
 
 /// `InheritedTypeListSyntax` represents a collection of one or more
-/// `InheritedType` nodes. InheritedTypeListSyntax behaves
+/// `InheritedTypeSyntax` nodes. InheritedTypeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6329,7 +6329,7 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
 }
 
 /// `KeyPathComponentListSyntax` represents a collection of one or more
-/// `KeyPathComponent` nodes. KeyPathComponentListSyntax behaves
+/// `KeyPathComponentSyntax` nodes. KeyPathComponentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6538,7 +6538,7 @@ extension KeyPathComponentListSyntax: BidirectionalCollection {
 }
 
 /// `MemberDeclListSyntax` represents a collection of one or more
-/// `MemberDeclListItem` nodes. MemberDeclListSyntax behaves
+/// `MemberDeclListItemSyntax` nodes. MemberDeclListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6747,7 +6747,7 @@ extension MemberDeclListSyntax: BidirectionalCollection {
 }
 
 /// `ModifierListSyntax` represents a collection of one or more
-/// `DeclModifier` nodes. ModifierListSyntax behaves
+/// `DeclModifierSyntax` nodes. ModifierListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6956,7 +6956,7 @@ extension ModifierListSyntax: BidirectionalCollection {
 }
 
 /// `MultipleTrailingClosureElementListSyntax` represents a collection of one or more
-/// `MultipleTrailingClosureElement` nodes. MultipleTrailingClosureElementListSyntax behaves
+/// `MultipleTrailingClosureElementSyntax` nodes. MultipleTrailingClosureElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -7165,7 +7165,7 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
 }
 
 /// `ObjCSelectorSyntax` represents a collection of one or more
-/// `ObjCSelectorPiece` nodes. ObjCSelectorSyntax behaves
+/// `ObjCSelectorPieceSyntax` nodes. ObjCSelectorSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
@@ -7374,7 +7374,7 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
 }
 
 /// `PatternBindingListSyntax` represents a collection of one or more
-/// `PatternBinding` nodes. PatternBindingListSyntax behaves
+/// `PatternBindingSyntax` nodes. PatternBindingListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
@@ -7846,7 +7846,7 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
 }
 
 /// `PrecedenceGroupNameListSyntax` represents a collection of one or more
-/// `PrecedenceGroupNameElement` nodes. PrecedenceGroupNameListSyntax behaves
+/// `PrecedenceGroupNameElementSyntax` nodes. PrecedenceGroupNameListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
@@ -8055,7 +8055,7 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
 }
 
 /// `PrimaryAssociatedTypeListSyntax` represents a collection of one or more
-/// `PrimaryAssociatedType` nodes. PrimaryAssociatedTypeListSyntax behaves
+/// `PrimaryAssociatedTypeSyntax` nodes. PrimaryAssociatedTypeListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9039,7 +9039,7 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
 }
 
 /// `TupleExprElementListSyntax` represents a collection of one or more
-/// `TupleExprElement` nodes. TupleExprElementListSyntax behaves
+/// `TupleExprElementSyntax` nodes. TupleExprElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9248,7 +9248,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
 }
 
 /// `TuplePatternElementListSyntax` represents a collection of one or more
-/// `TuplePatternElement` nodes. TuplePatternElementListSyntax behaves
+/// `TuplePatternElementSyntax` nodes. TuplePatternElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9457,7 +9457,7 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
 }
 
 /// `TupleTypeElementListSyntax` represents a collection of one or more
-/// `TupleTypeElement` nodes. TupleTypeElementListSyntax behaves
+/// `TupleTypeElementSyntax` nodes. TupleTypeElementListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9872,7 +9872,7 @@ extension UnexpectedNodesSyntax: BidirectionalCollection {
 }
 
 /// `VersionComponentListSyntax` represents a collection of one or more
-/// `VersionComponent` nodes. VersionComponentListSyntax behaves
+/// `VersionComponentSyntax` nodes. VersionComponentListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -10081,7 +10081,7 @@ extension VersionComponentListSyntax: BidirectionalCollection {
 }
 
 /// `YieldExprListSyntax` represents a collection of one or more
-/// `YieldExprListElement` nodes. YieldExprListSyntax behaves
+/// `YieldExprListElementSyntax` nodes. YieldExprListSyntax behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {

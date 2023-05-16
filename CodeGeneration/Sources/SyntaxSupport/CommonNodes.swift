@@ -13,18 +13,18 @@
 public let COMMON_NODES: [Node] = [
   // code-block-item-list -> code-block-item code-block-item-list?
   Node(
-    name: "CodeBlockItemList",
+    kind: .codeBlockItemList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "CodeBlockItem"
+    elementChoices: [.codeBlockItem]
   ),
 
   // code-block-item = (decl | stmt | expr) ';'?
   Node(
-    name: "CodeBlockItem",
+    kind: .codeBlockItem,
+    base: .syntax,
     nameForDiagnostics: nil,
-    description: "A CodeBlockItem is any Syntax node that appears on its own line inside a CodeBlock.",
-    kind: "Syntax",
+    documentation: "A CodeBlockItem is any Syntax node that appears on its own line inside a CodeBlock.",
     parserFunction: "parseNonOptionalCodeBlockItem",
     children: [
       Child(
@@ -32,15 +32,15 @@ public let COMMON_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Decl",
-            kind: .node(kind: "Decl")
+            kind: .node(kind: .decl)
           ),
           Child(
             name: "Stmt",
-            kind: .node(kind: "Stmt")
+            kind: .node(kind: .stmt)
           ),
           Child(
             name: "Expr",
-            kind: .node(kind: "Expr")
+            kind: .node(kind: .expr)
           ),
         ]),
         description: "The underlying node inside the code block."
@@ -51,15 +51,14 @@ public let COMMON_NODES: [Node] = [
         description: "If present, the trailing semicolon at the end of the item.",
         isOptional: true
       ),
-    ],
-    omitWhenEmpty: true
+    ]
   ),
 
   // code-block -> '{' stmt-list '}'
   Node(
-    name: "CodeBlock",
+    kind: .codeBlock,
+    base: .syntax,
     nameForDiagnostics: "code block",
-    kind: "Syntax",
     traits: [
       "Braced",
       "WithStatements",
@@ -71,7 +70,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "Statements",
-        kind: .collection(kind: "CodeBlockItemList", collectionElementName: "Statement"),
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
         nameForDiagnostics: "statements",
         isIndented: true
       ),
@@ -85,9 +84,9 @@ public let COMMON_NODES: [Node] = [
 
   // accessor-effect-specifiers -> (async)? (throws)?
   Node(
-    name: "AccessorEffectSpecifiers",
+    kind: .accessorEffectSpecifiers,
+    base: .syntax,
     nameForDiagnostics: "accessor specifiers",
-    kind: "Syntax",
     traits: [
       "EffectSpecifiers"
     ],
@@ -107,9 +106,9 @@ public let COMMON_NODES: [Node] = [
 
   // funtion-effect-specifiers -> (async | reasync)? (throws | rethrows)?
   Node(
-    name: "FunctionEffectSpecifiers",
+    kind: .functionEffectSpecifiers,
+    base: .syntax,
     nameForDiagnostics: "effect specifiers",
-    kind: "Syntax",
     traits: [
       "EffectSpecifiers"
     ],
@@ -128,24 +127,24 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "Decl",
+    kind: .decl,
+    base: .syntax,
     nameForDiagnostics: "declaration",
-    kind: "Syntax",
     parserFunction: "parseDeclaration"
   ),
 
   Node(
-    name: "Expr",
+    kind: .expr,
+    base: .syntax,
     nameForDiagnostics: "expression",
-    kind: "Syntax",
     parserFunction: "parseExpression"
   ),
 
   Node(
-    name: "MissingDecl",
+    kind: .missingDecl,
+    base: .decl,
     nameForDiagnostics: "declaration",
-    description: "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
-    kind: "Decl",
+    documentation: "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
     traits: [
       "WithAttributes",
       "WithModifiers",
@@ -153,13 +152,13 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
         description: "If there were standalone attributes without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
         description: "If there were standalone modifiers without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
         isOptional: true
       ),
@@ -175,10 +174,10 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "MissingExpr",
+    kind: .missingExpr,
+    base: .expr,
     nameForDiagnostics: "expression",
-    description: "In case the source code is missing a expression, this node stands in place of the missing expression.",
-    kind: "Expr",
+    documentation: "In case the source code is missing a expression, this node stands in place of the missing expression.",
     children: [
       Child(
         name: "Placeholder",
@@ -192,10 +191,10 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "MissingPattern",
+    kind: .missingPattern,
+    base: .pattern,
     nameForDiagnostics: "pattern",
-    description: "In case the source code is missing a pattern, this node stands in place of the missing pattern.",
-    kind: "Pattern",
+    documentation: "In case the source code is missing a pattern, this node stands in place of the missing pattern.",
     children: [
       Child(
         name: "Placeholder",
@@ -209,10 +208,10 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "MissingStmt",
+    kind: .missingStmt,
+    base: .stmt,
     nameForDiagnostics: "statement",
-    description: "In case the source code is missing a statement, this node stands in place of the missing statement.",
-    kind: "Stmt",
+    documentation: "In case the source code is missing a statement, this node stands in place of the missing statement.",
     children: [
       Child(
         name: "Placeholder",
@@ -226,10 +225,10 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "Missing",
+    kind: .missing,
+    base: .syntax,
     nameForDiagnostics: nil,
-    description: "In case the source code is missing a syntax node, this node stands in place of the missing node.",
-    kind: "Syntax",
+    documentation: "In case the source code is missing a syntax node, this node stands in place of the missing node.",
     children: [
       Child(
         name: "Placeholder",
@@ -243,10 +242,10 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "MissingType",
+    kind: .missingType,
+    base: .type,
     nameForDiagnostics: "type",
-    description: "In case the source code is missing a type, this node stands in place of the missing type.",
-    kind: "Type",
+    documentation: "In case the source code is missing a type, this node stands in place of the missing type.",
     children: [
       Child(
         name: "Placeholder",
@@ -259,24 +258,24 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "Pattern",
+    kind: .pattern,
+    base: .syntax,
     nameForDiagnostics: "pattern",
-    kind: "Syntax",
     parserFunction: "parsePattern"
   ),
 
   Node(
-    name: "Stmt",
+    kind: .stmt,
+    base: .syntax,
     nameForDiagnostics: "statement",
-    kind: "Syntax",
     parserFunction: "parseStatement"
   ),
 
   // type-effect-specifiers -> async? throws?
   Node(
-    name: "TypeEffectSpecifiers",
+    kind: .typeEffectSpecifiers,
+    base: .syntax,
     nameForDiagnostics: "effect specifiers",
-    kind: "Syntax",
     traits: [
       "EffectSpecifiers"
     ],
@@ -295,18 +294,18 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    name: "Type",
+    kind: .type,
+    base: .syntax,
     nameForDiagnostics: "type",
-    kind: "Syntax",
     parserFunction: "parseType"
   ),
 
   Node(
-    name: "UnexpectedNodes",
+    kind: .unexpectedNodes,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    description: "A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.",
-    kind: "SyntaxCollection",
-    element: "Syntax"
+    documentation: "A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.",
+    elementChoices: [.syntax]
   ),
 
 ]

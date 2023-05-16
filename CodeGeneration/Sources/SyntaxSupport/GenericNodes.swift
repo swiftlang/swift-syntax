@@ -13,13 +13,13 @@
 public let GENERIC_NODES: [Node] = [
   // conformance-requirement -> type-identifier : type-identifier
   Node(
-    name: "ConformanceRequirement",
+    kind: .conformanceRequirement,
+    base: .syntax,
     nameForDiagnostics: "conformance requirement",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftTypeIdentifier",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "Colon",
@@ -27,16 +27,16 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "RightTypeIdentifier",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // generic-parameter-clause -> '<' generic-parameter-list generic-where-clause? '>'
   Node(
-    name: "GenericParameterClause",
+    kind: .genericParameterClause,
+    base: .syntax,
     nameForDiagnostics: "generic parameter clause",
-    kind: "Syntax",
     parserFunction: "parseGenericParameters",
     children: [
       Child(
@@ -45,11 +45,11 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "GenericParameterList",
-        kind: .collection(kind: "GenericParameterList", collectionElementName: "GenericParameter")
+        kind: .collection(kind: .genericParameterList, collectionElementName: "GenericParameter")
       ),
       Child(
         name: "GenericWhereClause",
-        kind: .node(kind: "GenericWhereClause"),
+        kind: .node(kind: .genericWhereClause),
         isOptional: true
       ),
       Child(
@@ -60,19 +60,19 @@ public let GENERIC_NODES: [Node] = [
   ),
 
   Node(
-    name: "GenericParameterList",
+    kind: .genericParameterList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "GenericParameter"
+    elementChoices: [.genericParameter]
   ),
 
   // generic-parameter -> type-name
   //                    | type-name : type-identifier
   //                    | type-name : protocol-composition-type
   Node(
-    name: "GenericParameter",
+    kind: .genericParameter,
+    base: .syntax,
     nameForDiagnostics: "generic parameter",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma",
       "WithAttributes",
@@ -80,7 +80,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
         isOptional: true
       ),
       Child(
@@ -101,7 +101,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "InheritedType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "inherited type",
         isOptional: true
       ),
@@ -114,19 +114,18 @@ public let GENERIC_NODES: [Node] = [
   ),
 
   Node(
-    name: "GenericRequirementList",
+    kind: .genericRequirementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "GenericRequirement",
-    elementName: "GenericRequirement"
+    elementChoices: [.genericRequirement]
   ),
 
   // generic-requirement ->
   //     (same-type-requirement|conformance-requirement|layout-requirement) ','?
   Node(
-    name: "GenericRequirement",
+    kind: .genericRequirement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -136,15 +135,15 @@ public let GENERIC_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "SameTypeRequirement",
-            kind: .node(kind: "SameTypeRequirement")
+            kind: .node(kind: .sameTypeRequirement)
           ),
           Child(
             name: "ConformanceRequirement",
-            kind: .node(kind: "ConformanceRequirement")
+            kind: .node(kind: .conformanceRequirement)
           ),
           Child(
             name: "LayoutRequirement",
-            kind: .node(kind: "LayoutRequirement")
+            kind: .node(kind: .layoutRequirement)
           ),
         ])
       ),
@@ -158,9 +157,9 @@ public let GENERIC_NODES: [Node] = [
 
   // generic-where-clause -> 'where' requirement-list
   Node(
-    name: "GenericWhereClause",
+    kind: .genericWhereClause,
+    base: .syntax,
     nameForDiagnostics: "'where' clause",
-    kind: "Syntax",
     children: [
       Child(
         name: "WhereKeyword",
@@ -168,7 +167,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "RequirementList",
-        kind: .collection(kind: "GenericRequirementList", collectionElementName: "Requirement")
+        kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement")
       ),
     ]
   ),
@@ -176,13 +175,13 @@ public let GENERIC_NODES: [Node] = [
   // layout-requirement -> type-name : layout-constraint
   // layout-constraint -> identifier '('? integer-literal? ','? integer-literal? ')'?
   Node(
-    name: "LayoutRequirement",
+    kind: .layoutRequirement,
+    base: .syntax,
     nameForDiagnostics: "layout requirement",
-    kind: "Syntax",
     children: [
       Child(
         name: "TypeIdentifier",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "constrained type"
       ),
       Child(
@@ -225,9 +224,9 @@ public let GENERIC_NODES: [Node] = [
 
   // primary-associated-type-clause -> '<' primary-associated-type-list '>'
   Node(
-    name: "PrimaryAssociatedTypeClause",
+    kind: .primaryAssociatedTypeClause,
+    base: .syntax,
     nameForDiagnostics: "primary associated type clause",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftAngleBracket",
@@ -235,7 +234,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "PrimaryAssociatedTypeList",
-        kind: .collection(kind: "PrimaryAssociatedTypeList", collectionElementName: "PrimaryAssociatedType")
+        kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(
         name: "RightAngleBracket",
@@ -245,17 +244,17 @@ public let GENERIC_NODES: [Node] = [
   ),
 
   Node(
-    name: "PrimaryAssociatedTypeList",
+    kind: .primaryAssociatedTypeList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "PrimaryAssociatedType"
+    elementChoices: [.primaryAssociatedType]
   ),
 
   // primary-associated-type -> type-name ','?
   Node(
-    name: "PrimaryAssociatedType",
+    kind: .primaryAssociatedType,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -275,13 +274,13 @@ public let GENERIC_NODES: [Node] = [
 
   // same-type-requirement -> type-identifier == type
   Node(
-    name: "SameTypeRequirement",
+    kind: .sameTypeRequirement,
+    base: .syntax,
     nameForDiagnostics: "same type requirement",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftTypeIdentifier",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "left-hand type"
       ),
       Child(
@@ -290,7 +289,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "RightTypeIdentifier",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "right-hand type"
       ),
     ]

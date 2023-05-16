@@ -61,7 +61,7 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     if let parserFunction = node.parserFunction {
       DeclSyntax(
         """
-        extension \(raw: node.name): SyntaxParseable {
+        extension \(node.kind.syntaxType): SyntaxParseable {
           public static func parse(from parser: inout Parser) -> Self {
             let node = parser.\(raw: parserFunction)()
             let raw = RawSyntax(parser.parseRemainder(into: node))

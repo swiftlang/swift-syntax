@@ -11,109 +11,108 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftSyntax
 
-/// A Syntax node, possibly with children.
-/// If the kind is "SyntaxCollection", then this node is considered a Syntax
-/// Collection that will expose itself as a typedef rather than a concrete
-/// subclass.
+/// The definition of a syntax node that, when generated, conforms to
+/// `SyntaxProtocol`.
+///
+/// There are two fundemantally different kinds of nodes:
+///  - Layout nodes contain a fixed number of children of possibly different,
+///    but fixed types.
+///  - Collection nodes contains an arbitrary number of children but all those
+///    children are of the same type.
 public class Node {
-  public let syntaxKind: String
-  public let swiftSyntaxKind: String
-  public let name: String
+  fileprivate enum Data {
+    case layout(children: [Child], traits: [String])
+    case collection(choices: [SyntaxNodeKind])
+  }
+
+  /// Contains the layout or collection specific data of this syntax node.
+  ///
+  /// To access this, use the `layoutNode` or `collectionNode` properties, which
+  /// offer the members.
+  fileprivate let data: Data
+
+  /// The kind of the node. There must be exactly one `Node` for every case in
+  /// `SyntaxNodeKind`.
+  public let kind: SyntaxNodeKind
+
+  /// The kind of node’s supertype. This kind must have `isBase == true`
+  public let base: SyntaxNodeKind
+
+  /// When the node name is printed for diagnostics, this name is used.
+  /// If `nil`, `nameForDiagnostics` will print the parent node’s name.
   public let nameForDiagnostics: String?
-  public let description: String?
-  public let baseKind: String
+
+  /// A doc comment describing the node.
+  ///
+  /// The comment does not end with a newline.
+  public let documentation: SwiftSyntax.Trivia
+
+  /// If the syntax node can be constructed by parsing a string, the parser
+  /// function that should be invoked to create this node.
   public let parserFunction: String?
-  public let traits: [String]
-  public let children: [Child]
-  public let nonUnexpectedChildren: [Child]
-  public let collectionElementName: String?
-  public let collectionElementChoices: [String]?
-  public let omitWhenEmpty: Bool
-  public let collectionElement: String
 
-  /// Returns `true` if this node declares one of the base syntax kinds.
-  public var isBase: Bool {
-    return SYNTAX_BASE_KINDS.contains(syntaxKind)
+  /// A name for this node that is suitable to be used as a variables or enum
+  /// case's name.
+  public var varOrCaseName: TokenSyntax {
+    return kind.varOrCaseName
   }
 
-  /// Returns `true` if this node is a subclass of SyntaxCollection.
-  public var isSyntaxCollection: Bool {
-    return baseKind == "SyntaxCollection"
-  }
-
-  /// Returns `true` if this node should have a `validate` method associated.
-  public var requiresValidation: Bool {
-    return isBuildable
-  }
-
-  /// Returns `true` if this node is an `Unknown` syntax subclass.
-  public var isUnknown: Bool {
-    return syntaxKind.contains("Unknown")
-  }
-
-  /// Returns `true` if this node is an `Unknown` syntax subclass.
-  public var isMissing: Bool {
-    return syntaxKind.contains("Missing")
-  }
-
-  /// Returns `true` if this node should have a builder associated.
-  public var isBuildable: Bool {
-    return !isBase && !isUnknown && !isMissing && !isSyntaxCollection
-  }
-
-  /// Returns 'True' if this node shall not be created while parsing if it has no children.
-  public var shallBeOmittedWhenEmpty: Bool {
-    return omitWhenEmpty
-  }
-
-  /// Returns true if this child has a token kind.
-  public var isToken: Bool {
-    return syntaxKind.contains("Token") || collectionElement.contains("Token")
-  }
-
-  public var isVisitable: Bool {
-    return !isBase
-  }
-
-  public var hasOptionalBaseTypeChild: Bool {
-    return children.contains { child in
-      if child.hasOptionalBaseType {
-        return true
+  /// If this is a layout node, return a view of the node that provides access
+  /// to the layout-node specific properties.
+  public var layoutNode: LayoutNode? {
+    switch data {
+    case .layout:
+      if kind.isBase {
+        return nil
       } else {
-        return false
+        return LayoutNode(node: self)
       }
+    default:
+      return nil
     }
   }
 
-  init(
-    name: String,
-    nameForDiagnostics: String?,
-    description: String? = nil,
-    kind: String,
-    traits: [String] = [],
-    parserFunction: String? = nil,
-    children: [Child] = [],
-    element: String = "",
-    elementName: String? = nil,
-    elementChoices: [String]? = nil,
-    omitWhenEmpty: Bool = false
-  ) {
-    self.syntaxKind = name
-    self.swiftSyntaxKind = lowercaseFirstWord(name: name)
-    self.name = kindToType(kind: self.syntaxKind)
-    self.nameForDiagnostics = nameForDiagnostics
-    self.description = description
-    self.parserFunction = parserFunction
-    self.traits = traits
-    self.baseKind = kind
+  /// If this is a collection node, return a view of the node that provides access
+  /// to the collection node specific properties.
+  public var collectionNode: CollectionNode? {
+    switch data {
+    case .layout:
+      return nil
+    default:
+      return CollectionNode(node: self)
+    }
+  }
 
-    if kind == "SyntaxCollection" {
-      self.children = children
-    } else if children.count > 0 {
+  /// Construct the specification for a layout syntax node.
+  init(
+    kind: SyntaxNodeKind,
+    base: SyntaxNodeKind,
+    nameForDiagnostics: String?,
+    documentation: String? = nil,
+    parserFunction: String? = nil,
+    traits: [String] = [],
+    children: [Child] = []
+  ) {
+    precondition(base != .syntaxCollection)
+    precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
+
+    self.kind = kind
+    self.base = base
+    self.nameForDiagnostics = nameForDiagnostics
+    self.documentation = docCommentTrivia(from: documentation)
+    self.parserFunction = parserFunction
+
+    let childrenWithUnexpected: [Child]
+    if children.isEmpty {
+      childrenWithUnexpected = [
+        Child(name: "Unexpected", kind: .collection(kind: .unexpectedNodes, collectionElementName: "Unexpected"), isOptional: true)
+      ]
+    } else {
       // Add implicitly generated UnexpectedNodes children between
       // any two defined children
-      self.children =
+      childrenWithUnexpected =
         children.enumerated().flatMap { (i, child) -> [Child] in
           let unexpectedName: String
           if i == 0 {
@@ -121,44 +120,128 @@ public class Node {
           } else {
             unexpectedName = "UnexpectedBetween\(children[i - 1].name)And\(child.name)"
           }
-          return [
-            Child(
-              name: unexpectedName,
-              kind: .collection(kind: "UnexpectedNodes", collectionElementName: unexpectedName),
-              isOptional: true
-            ),
-            child,
-          ]
-        }
-        + (!children.isEmpty
-          ? [
-            Child(
-              name: "UnexpectedAfter\(children.last!.name)",
-              kind: .collection(kind: "UnexpectedNodes", collectionElementName: "UnexpectedAfter\(children.last!.name)"),
-              isOptional: true
-            )
-          ] : [])
-    } else {
-      self.children = [
-        Child(name: "Unexpected", kind: .collection(kind: "UnexpectedNodes", collectionElementName: "Unexpected"), isOptional: true)
-      ]
+          let unexpectedBefore = Child(
+            name: unexpectedName,
+            kind: .collection(kind: .unexpectedNodes, collectionElementName: unexpectedName),
+            isOptional: true
+          )
+          return [unexpectedBefore, child]
+        } + [
+          Child(
+            name: "UnexpectedAfter\(children.last!.name)",
+            kind: .collection(kind: .unexpectedNodes, collectionElementName: "UnexpectedAfter\(children.last!.name)"),
+            isOptional: true
+          )
+        ]
     }
+    self.data = .layout(children: childrenWithUnexpected, traits: traits)
+  }
 
-    self.nonUnexpectedChildren = children.filter { !$0.isUnexpectedNodes }
+  /// Construct the specification for a collection syntax node.
+  ///
+  /// `base` must be `.syntaxCollection`.
+  init(
+    kind: SyntaxNodeKind,
+    base: SyntaxNodeKind,
+    nameForDiagnostics: String?,
+    documentation: String? = nil,
+    parserFunction: String? = nil,
+    elementChoices: [SyntaxNodeKind]
+  ) {
+    self.kind = kind
+    precondition(base == .syntaxCollection)
+    self.base = base
+    self.nameForDiagnostics = nameForDiagnostics
+    self.documentation = docCommentTrivia(from: documentation)
+    self.parserFunction = parserFunction
 
-    if !SYNTAX_BASE_KINDS.contains(baseKind) {
-      fatalError("unknown base kind '\(baseKind)' for node '\(syntaxKind)'")
+    assert(!elementChoices.isEmpty)
+    self.data = .collection(choices: elementChoices)
+  }
+}
+
+/// Provides a view into a layout node that offers access to the layout-specific
+/// properties.
+@dynamicMemberLookup
+public struct LayoutNode {
+  /// The underlying node
+  public let node: Node
+
+  fileprivate init(node: Node) {
+    switch node.data {
+    case .layout:
+      break
+    default:
+      preconditionFailure("NodeLayoutView must wrap a `Node` with data `.layout`")
     }
+    self.node = node
+  }
 
-    self.omitWhenEmpty = omitWhenEmpty
-    self.collectionElement = element
+  /// Allow transparent accesss to the properties of the underlying `Node`.
+  public subscript<T>(dynamicMember keyPath: KeyPath<Node, T>) -> T {
+    return node[keyPath: keyPath]
+  }
 
-    // If there's a preferred name for the collection element that differs
-    // from its supertype, use that.
-    self.collectionElementName = elementName ?? self.collectionElement
-    self.collectionElementChoices = elementChoices ?? []
+  /// The children of the layout node.
+  ///
+  /// This includes unexpected children
+  public var children: [Child] {
+    switch node.data {
+    case .layout(children: let children, traits: _):
+      return children
+    case .collection:
+      preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
+    }
+  }
 
-    // For SyntaxCollections make sure that the elementName is set.
-    precondition(!isSyntaxCollection || elementName != nil || element != "")
+  /// All children in the node that are not unexpected.
+  public var nonUnexpectedChildren: [Child] {
+    return children.filter { !$0.isUnexpectedNodes }
+  }
+
+  /// Traits that the node conforms to.
+  public var traits: [String] {
+    switch node.data {
+    case .layout(children: _, traits: let traits):
+      return traits
+    case .collection:
+      preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
+    }
+  }
+}
+
+/// Provides a view into a collection node that offers access to the
+/// collection-specific properties.
+@dynamicMemberLookup
+public struct CollectionNode {
+  /// The underlying node
+  public let node: Node
+
+  fileprivate init(node: Node) {
+    switch node.data {
+    case .collection:
+      break
+    default:
+      preconditionFailure("NodeLayoutView must wrap a `Node` with data `.layout`")
+    }
+    self.node = node
+  }
+
+  /// Allow transparent accesss to the properties of the underlying `Node`.
+  public subscript<T>(dynamicMember keyPath: KeyPath<Node, T>) -> T {
+    return node[keyPath: keyPath]
+  }
+
+  /// The kinds the elements can have.
+  ///
+  /// This can be more than one in which case each element an have either of
+  /// these kinds.
+  public var elementChoices: [SyntaxNodeKind] {
+    switch node.data {
+    case .layout:
+      preconditionFailure("NodeLayoutView must wrap a Node with data `.collection`")
+    case .collection(choices: let choices):
+      return choices
+    }
   }
 }

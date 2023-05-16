@@ -24,13 +24,13 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     DeclSyntax("case token")
     for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax("case \(raw: node.swiftSyntaxKind)")
+      DeclSyntax("case \(node.varOrCaseName)")
     }
 
     try VariableDeclSyntax("public var isSyntaxCollection: Bool") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where node.baseKind == "SyntaxCollection" {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
+        for node in SYNTAX_NODES where node.base == .syntaxCollection {
+          SwitchCaseSyntax("case .\(node.varOrCaseName):") {
             StmtSyntax("return true")
           }
         }
@@ -43,8 +43,8 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try VariableDeclSyntax("public var isMissing: Bool") {
       try SwitchExprSyntax("switch self") {
-        for name in SYNTAX_BASE_KINDS where !["Syntax", "SyntaxCollection"].contains(name) {
-          SwitchCaseSyntax("case .missing\(raw: name):") {
+        for name in SyntaxNodeKind.allCases where name.isMissing {
+          SwitchCaseSyntax("case .\(name.varOrCaseName):") {
             StmtSyntax("return true")
           }
         }
@@ -62,8 +62,8 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            StmtSyntax("return \(raw: node.name).self")
+          SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+            StmtSyntax("return \(node.kind.syntaxType).self")
           }
         }
       }

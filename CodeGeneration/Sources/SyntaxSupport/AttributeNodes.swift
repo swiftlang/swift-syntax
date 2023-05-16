@@ -13,13 +13,10 @@
 public let ATTRIBUTE_NODES: [Node] = [
   // attribute-list -> attribute attribute-list?
   Node(
-    name: "AttributeList",
+    kind: .attributeList,
+    base: .syntaxCollection,
     nameForDiagnostics: "attributes",
-    kind: "SyntaxCollection",
-    element: "Syntax",
-    elementName: "Attribute",
-    elementChoices: ["Attribute", "IfConfigDecl"],
-    omitWhenEmpty: true
+    elementChoices: [.attribute, .ifConfigDecl]
   ),
 
   // attribute -> '@' identifier '('?
@@ -33,10 +30,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   //                | back-deploy-attr-spec-list
   //              )? ')'?
   Node(
-    name: "Attribute",
+    kind: .attribute,
+    base: .syntax,
     nameForDiagnostics: "attribute",
-    description: "An `@` attribute.",
-    kind: "Syntax",
+    documentation: "An `@` attribute.",
     parserFunction: "parseAttribute",
     children: [
       Child(
@@ -46,7 +43,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "AttributeName",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "name",
         description: "The name of the attribute.",
         classification: "Attribute"
@@ -62,83 +59,83 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "ArgumentList",
-            kind: .node(kind: "TupleExprElementList")
+            kind: .node(kind: .tupleExprElementList)
           ),
           Child(
             name: "Token",
-            kind: .node(kind: "Token")
+            kind: .node(kind: .token)
           ),
           Child(
             name: "String",
-            kind: .node(kind: "StringLiteralExpr")
+            kind: .node(kind: .stringLiteralExpr)
           ),
           Child(
             name: "Availability",
-            kind: .node(kind: "AvailabilitySpecList")
+            kind: .node(kind: .availabilitySpecList)
           ),
           Child(
             name: "SpecializeArguments",
-            kind: .node(kind: "SpecializeAttributeSpecList")
+            kind: .node(kind: .specializeAttributeSpecList)
           ),
           Child(
             name: "ObjCName",
-            kind: .node(kind: "ObjCSelector")
+            kind: .node(kind: .objCSelector)
           ),
           Child(
             name: "ImplementsArguments",
-            kind: .node(kind: "ImplementsAttributeArguments")
+            kind: .node(kind: .implementsAttributeArguments)
           ),
           Child(
             name: "DifferentiableArguments",
-            kind: .node(kind: "DifferentiableAttributeArguments")
+            kind: .node(kind: .differentiableAttributeArguments)
           ),
           Child(
             name: "DerivativeRegistrationArguments",
-            kind: .node(kind: "DerivativeRegistrationAttributeArguments")
+            kind: .node(kind: .derivativeRegistrationAttributeArguments)
           ),
           Child(
             name: "BackDeployedArguments",
-            kind: .node(kind: "BackDeployedAttributeSpecList")
+            kind: .node(kind: .backDeployedAttributeSpecList)
           ),
           Child(
             name: "ConventionArguments",
-            kind: .node(kind: "ConventionAttributeArguments")
+            kind: .node(kind: .conventionAttributeArguments)
           ),
           Child(
             name: "ConventionWitnessMethodArguments",
-            kind: .node(kind: "ConventionWitnessMethodAttributeArguments")
+            kind: .node(kind: .conventionWitnessMethodAttributeArguments)
           ),
           Child(
             name: "OpaqueReturnTypeOfAttributeArguments",
-            kind: .node(kind: "OpaqueReturnTypeOfAttributeArguments")
+            kind: .node(kind: .opaqueReturnTypeOfAttributeArguments)
           ),
           Child(
             name: "ExposeAttributeArguments",
-            kind: .node(kind: "ExposeAttributeArguments")
+            kind: .node(kind: .exposeAttributeArguments)
           ),
           Child(
             name: "OriginallyDefinedInArguments",
-            kind: .node(kind: "OriginallyDefinedInArguments")
+            kind: .node(kind: .originallyDefinedInArguments)
           ),
           Child(
             name: "UnderscorePrivateAttributeArguments",
-            kind: .node(kind: "UnderscorePrivateAttributeArguments")
+            kind: .node(kind: .underscorePrivateAttributeArguments)
           ),
           Child(
             name: "DynamicReplacementArguments",
-            kind: .node(kind: "DynamicReplacementArguments")
+            kind: .node(kind: .dynamicReplacementArguments)
           ),
           Child(
             name: "UnavailableFromAsyncArguments",
-            kind: .node(kind: "UnavailableFromAsyncArguments")
+            kind: .node(kind: .unavailableFromAsyncArguments)
           ),
           Child(
             name: "EffectsArguments",
-            kind: .node(kind: "EffectsArguments")
+            kind: .node(kind: .effectsArguments)
           ),
           Child(
             name: "DocumentationArguments",
-            kind: .node(kind: "DocumentationAttributeArguments")
+            kind: .node(kind: .documentationAttributeArguments)
           ),
         ]),
         description: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
@@ -154,10 +151,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    name: "AvailabilityEntry",
+    kind: .availabilityEntry,
+    base: .syntax,
     nameForDiagnostics: "availability entry",
-    description: "The availability argument for the _specialize attribute",
-    kind: "Syntax",
+    documentation: "The availability argument for the _specialize attribute",
     children: [
       Child(
         name: "Label",
@@ -172,7 +169,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "AvailabilityList",
-        kind: .collection(kind: "AvailabilitySpecList", collectionElementName: "Availability")
+        kind: .collection(kind: .availabilitySpecList, collectionElementName: "Availability")
       ),
       Child(
         name: "Semicolon",
@@ -183,14 +180,14 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // back-deploy-version-entry -> availability-version-restriction ','?
   Node(
-    name: "AvailabilityVersionRestrictionListEntry",
+    kind: .availabilityVersionRestrictionListEntry,
+    base: .syntax,
     nameForDiagnostics: "version",
-    description: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
-    kind: "Syntax",
+    documentation: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
     children: [
       Child(
         name: "AvailabilityVersionRestriction",
-        kind: .node(kind: "AvailabilityVersionRestriction"),
+        kind: .node(kind: .availabilityVersionRestriction),
         classification: "Keyword"
       ),
       Child(
@@ -205,19 +202,19 @@ public let ATTRIBUTE_NODES: [Node] = [
   // back-deploy-version-list ->
   //   back-deploy-version-entry back-deploy-version-list?
   Node(
-    name: "AvailabilityVersionRestrictionList",
+    kind: .availabilityVersionRestrictionList,
+    base: .syntaxCollection,
     nameForDiagnostics: "version list",
-    kind: "SyntaxCollection",
-    element: "AvailabilityVersionRestrictionListEntry"
+    elementChoices: [.availabilityVersionRestrictionListEntry]
   ),
 
   // The arguments of '@backDeployed(...)'
   // back-deployed-attr-spec-list -> 'before' ':' back-deployed-version-list
   Node(
-    name: "BackDeployedAttributeSpecList",
+    kind: .backDeployedAttributeSpecList,
+    base: .syntax,
     nameForDiagnostics: "'@backDeployed' arguments",
-    description: "A collection of arguments for the `@backDeployed` attribute",
-    kind: "Syntax",
+    documentation: "A collection of arguments for the `@backDeployed` attribute",
     children: [
       Child(
         name: "BeforeLabel",
@@ -231,7 +228,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "VersionList",
-        kind: .collection(kind: "AvailabilityVersionRestrictionList", collectionElementName: "Availability"),
+        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Availability"),
         description: "The list of OS versions in which the declaration became ABI stable."
       ),
     ]
@@ -239,10 +236,10 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // convention-attribute-arguments -> token ',' 'cType'? ':' string-literal
   Node(
-    name: "ConventionAttributeArguments",
+    kind: .conventionAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "@convention(...) arguments",
-    description: "The arguments for the '@convention(...)'.",
-    kind: "Syntax",
+    documentation: "The arguments for the '@convention(...)'.",
     children: [
       Child(
         name: "ConventionLabel",
@@ -266,7 +263,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "CTypeString",
-        kind: .node(kind: "StringLiteralExpr"),
+        kind: .node(kind: .stringLiteralExpr),
         isOptional: true
       ),
     ]
@@ -274,10 +271,10 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // convention-attribute-arguments -> 'witness_method' ':' identifier
   Node(
-    name: "ConventionWitnessMethodAttributeArguments",
+    kind: .conventionWitnessMethodAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "@convention(...) arguments for witness methods",
-    description: "The arguments for the '@convention(witness_method: ...)'.",
-    kind: "Syntax",
+    documentation: "The arguments for the '@convention(witness_method: ...)'.",
     children: [
       Child(
         name: "WitnessMethodLabel",
@@ -295,9 +292,9 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    name: "DeclName",
+    kind: .declName,
+    base: .syntax,
     nameForDiagnostics: "declaration name",
-    kind: "Syntax",
     children: [
       Child(
         name: "DeclBaseName",
@@ -307,7 +304,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DeclNameArguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         nameForDiagnostics: "arguments",
         description: "The argument labels of the protocol's requirement if it is a function requirement.",
         isOptional: true
@@ -322,10 +319,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   // derivative-registration-attr-arguments ->
   //     'of' ':' func-decl-name ','? differentiability-params-clause?
   Node(
-    name: "DerivativeRegistrationAttributeArguments",
+    kind: .derivativeRegistrationAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "attribute arguments",
-    description: "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
-    kind: "Syntax",
+    documentation: "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
     children: [
       Child(
         name: "OfLabel",
@@ -339,7 +336,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "OriginalDeclName",
-        kind: .node(kind: "QualifiedDeclName"),
+        kind: .node(kind: .qualifiedDeclName),
         description: "The referenced original declaration name."
       ),
       Child(
@@ -361,7 +358,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DiffParams",
-        kind: .node(kind: "DifferentiabilityParamsClause"),
+        kind: .node(kind: .differentiabilityParamsClause),
         isOptional: true
       ),
     ]
@@ -370,18 +367,18 @@ public let ATTRIBUTE_NODES: [Node] = [
   // differentiability-param-list ->
   //     differentiability-param differentiability-param-list?
   Node(
-    name: "DifferentiabilityParamList",
+    kind: .differentiabilityParamList,
+    base: .syntaxCollection,
     nameForDiagnostics: "differentiability parameters",
-    kind: "SyntaxCollection",
-    element: "DifferentiabilityParam"
+    elementChoices: [.differentiabilityParam]
   ),
 
   // differentiability-param -> ('self' | identifier | integer-literal) ','?
   Node(
-    name: "DifferentiabilityParam",
+    kind: .differentiabilityParam,
+    base: .syntax,
     nameForDiagnostics: "differentiability parameter",
-    description: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
-    kind: "Syntax",
+    documentation: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
     traits: [
       "WithTrailingComma"
     ],
@@ -401,10 +398,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   // differentiability-params-clause ->
   //     'wrt' ':' (differentiability-param | differentiability-params)
   Node(
-    name: "DifferentiabilityParamsClause",
+    kind: .differentiabilityParamsClause,
+    base: .syntax,
     nameForDiagnostics: "'@differentiable' argument",
-    description: "A clause containing differentiability parameters.",
-    kind: "Syntax",
+    documentation: "A clause containing differentiability parameters.",
     children: [
       Child(
         name: "WrtLabel",
@@ -421,11 +418,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Parameter",
-            kind: .node(kind: "DifferentiabilityParam")
+            kind: .node(kind: .differentiabilityParam)
           ),
           Child(
             name: "ParameterList",
-            kind: .node(kind: "DifferentiabilityParams")
+            kind: .node(kind: .differentiabilityParams)
           ),
         ]),
         nameForDiagnostics: "parameters"
@@ -435,10 +432,10 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // differentiability-params -> '(' differentiability-param-list ')'
   Node(
-    name: "DifferentiabilityParams",
+    kind: .differentiabilityParams,
+    base: .syntax,
     nameForDiagnostics: "differentiability parameters",
-    description: "The differentiability parameters.",
-    kind: "Syntax",
+    documentation: "The differentiability parameters.",
     children: [
       Child(
         name: "LeftParen",
@@ -446,7 +443,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DiffParams",
-        kind: .collection(kind: "DifferentiabilityParamList", collectionElementName: "DifferentiabilityParam"),
+        kind: .collection(kind: .differentiabilityParamList, collectionElementName: "DifferentiabilityParam"),
         description: "The parameters for differentiation."
       ),
       Child(
@@ -461,10 +458,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   //     differentiability-kind? '.'? differentiability-params-clause? ','?
   //     generic-where-clause?
   Node(
-    name: "DifferentiableAttributeArguments",
+    kind: .differentiableAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "'@differentiable' arguments",
-    description: "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
-    kind: "Syntax",
+    documentation: "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
     children: [
       Child(
         name: "DiffKind",
@@ -479,7 +476,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DiffParams",
-        kind: .node(kind: "DifferentiabilityParamsClause"),
+        kind: .node(kind: .differentiabilityParamsClause),
         isOptional: true
       ),
       Child(
@@ -490,16 +487,16 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "WhereClause",
-        kind: .node(kind: "GenericWhereClause"),
+        kind: .node(kind: .genericWhereClause),
         isOptional: true
       ),
     ]
   ),
 
   Node(
-    name: "DocumentationAttributeArgument",
+    kind: .documentationAttributeArgument,
+    base: .syntax,
     nameForDiagnostics: "@_documentation argument",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
@@ -522,7 +519,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),  // Keywords can be: public, internal, private, fileprivate, open
           Child(
             name: "String",
-            kind: .node(kind: "StringLiteralExpr")
+            kind: .node(kind: .stringLiteralExpr)
           ),
         ])
       ),
@@ -536,18 +533,18 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    name: "DocumentationAttributeArguments",
+    kind: .documentationAttributeArguments,
+    base: .syntaxCollection,
     nameForDiagnostics: "@_documentation arguments",
-    description: "The arguments of the '@_documentation' attribute",
-    kind: "SyntaxCollection",
-    element: "DocumentationAttributeArgument"
+    documentation: "The arguments of the '@_documentation' attribute",
+    elementChoices: [.documentationAttributeArgument]
   ),
 
   Node(
-    name: "DynamicReplacementArguments",
+    kind: .dynamicReplacementArguments,
+    base: .syntax,
     nameForDiagnostics: "@_dynamicReplacement argument",
-    description: "The arguments for the '@_dynamicReplacement' attribute",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_dynamicReplacement' attribute",
     children: [
       Child(
         name: "ForLabel",
@@ -559,28 +556,28 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Declname",
-        kind: .node(kind: "DeclName")
+        kind: .node(kind: .declName)
       ),
     ]
   ),
 
   Node(
-    name: "EffectsArguments",
+    kind: .effectsArguments,
+    base: .syntaxCollection,
     nameForDiagnostics: "@_effects arguments",
-    description: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
-    kind: "SyntaxCollection",
-    element: "Token"
+    documentation: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
+    elementChoices: [.token]
   ),
 
   Node(
-    name: "ExposeAttributeArguments",
+    kind: .exposeAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "@_expose arguments",
-    description: "The arguments for the '@_expose' attribute",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_expose' attribute",
     children: [
       Child(
         name: "Language",
-        kind: .node(kind: "Token")
+        kind: .node(kind: .token)
       ),
       Child(
         name: "Comma",
@@ -589,7 +586,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "CxxName",
-        kind: .node(kind: "StringLiteralExpr"),
+        kind: .node(kind: .stringLiteralExpr),
         isOptional: true
       ),
     ]
@@ -599,14 +596,14 @@ public let ATTRIBUTE_NODES: [Node] = [
   // implements-attr-arguments -> simple-type-identifier ','
   //                              (identifier | operator) decl-name-arguments
   Node(
-    name: "ImplementsAttributeArguments",
+    kind: .implementsAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "@_implements arguemnts",
-    description: "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
-    kind: "Syntax",
+    documentation: "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
     children: [
       Child(
         name: "Type",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "type",
         description: "The type for which the method with this attribute implements a requirement."
       ),
@@ -617,13 +614,13 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DeclBaseName",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         nameForDiagnostics: "declaration base name",
         description: "The base name of the protocol's requirement."
       ),
       Child(
         name: "DeclNameArguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         nameForDiagnostics: "declaration name arguments",
         description: "The argument labels of the protocol's requirement if it is a function requirement.",
         isOptional: true
@@ -634,17 +631,17 @@ public let ATTRIBUTE_NODES: [Node] = [
   // Representation of e.g. 'exported: true,'
   // labeled-specialize-entry -> identifier ':' token ','?
   Node(
-    name: "LabeledSpecializeEntry",
+    kind: .labeledSpecializeEntry,
+    base: .syntax,
     nameForDiagnostics: "attribute argument",
-    description: "A labeled argument for the `@_specialize` attribute like `exported: true`",
-    kind: "Syntax",
+    documentation: "A labeled argument for the `@_specialize` attribute like `exported: true`",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Label",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         nameForDiagnostics: "label",
         description: "The label of the argument"
       ),
@@ -655,7 +652,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Value",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         nameForDiagnostics: "value",
         description: "The value for this argument"
       ),
@@ -670,14 +667,14 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // objc-selector-piece -> identifier? ':'?
   Node(
-    name: "ObjCSelectorPiece",
+    kind: .objCSelectorPiece,
+    base: .syntax,
     nameForDiagnostics: "Objective-C selector piece",
-    description: "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
-    kind: "Syntax",
+    documentation: "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
     children: [
       Child(
         name: "Name",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         nameForDiagnostics: "name",
         isOptional: true
       ),
@@ -691,22 +688,22 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // objc-selector -> objc-selector-piece objc-selector?
   Node(
-    name: "ObjCSelector",
+    kind: .objCSelector,
+    base: .syntaxCollection,
     nameForDiagnostics: "Objective-C selector",
-    kind: "SyntaxCollection",
-    element: "ObjCSelectorPiece"
+    elementChoices: [.objCSelectorPiece]
   ),
 
   // opaque-return-type-of-arguments -> string-literal ',' integer-literal
   Node(
-    name: "OpaqueReturnTypeOfAttributeArguments",
+    kind: .opaqueReturnTypeOfAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "opaque return type arguments",
-    description: "The arguments for the '@_opaqueReturnTypeOf()'.",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_opaqueReturnTypeOf()'.",
     children: [
       Child(
         name: "MangledName",
-        kind: .node(kind: "StringLiteralExpr"),
+        kind: .node(kind: .stringLiteralExpr),
         description: "The mangled name of a declaration."
       ),
       Child(
@@ -722,10 +719,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    name: "OriginallyDefinedInArguments",
+    kind: .originallyDefinedInArguments,
+    base: .syntax,
     nameForDiagnostics: "@_originallyDefinedIn arguments",
-    description: "The arguments for the '@_originallyDefinedIn' attribute",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_originallyDefinedIn' attribute",
     children: [
       Child(
         name: "ModuleLabel",
@@ -737,7 +734,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "ModuleName",
-        kind: .node(kind: "StringLiteralExpr")
+        kind: .node(kind: .stringLiteralExpr)
       ),
       Child(
         name: "Comma",
@@ -745,7 +742,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Platforms",
-        kind: .collection(kind: "AvailabilityVersionRestrictionList", collectionElementName: "Platform")
+        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Platform")
       ),
     ]
   ),
@@ -760,14 +757,14 @@ public let ATTRIBUTE_NODES: [Node] = [
   // base-type ->
   //     member-type-identifier | base-type-identifier
   Node(
-    name: "QualifiedDeclName",
+    kind: .qualifiedDeclName,
+    base: .syntax,
     nameForDiagnostics: "declaration name",
-    description: "An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).",
-    kind: "Syntax",
+    documentation: "An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).",
     children: [
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "base type",
         description: "The base type of the qualified name, optionally specified.",
         isOptional: true
@@ -785,7 +782,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Arguments",
-        kind: .node(kind: "DeclNameArguments"),
+        kind: .node(kind: .declNameArguments),
         nameForDiagnostics: "arguments",
         description: "The argument labels of the referenced function, optionally specified.",
         isOptional: true
@@ -799,22 +796,20 @@ public let ATTRIBUTE_NODES: [Node] = [
   //                            | generic-where-clause
   //                                  specialize-spec-attr-list?
   Node(
-    name: "SpecializeAttributeSpecList",
+    kind: .specializeAttributeSpecList,
+    base: .syntaxCollection,
     nameForDiagnostics: "argument to '@_specialize",
-    description: "A collection of arguments for the `@_specialize` attribute",
-    kind: "SyntaxCollection",
-    element: "Syntax",
-    elementName: "SpecializeAttribute",
-    elementChoices: ["LabeledSpecializeEntry", "AvailabilityEntry", "TargetFunctionEntry", "GenericWhereClause"]
+    documentation: "A collection of arguments for the `@_specialize` attribute",
+    elementChoices: [.labeledSpecializeEntry, .availabilityEntry, .targetFunctionEntry, .genericWhereClause]
   ),
 
   // Representation of e.g. 'exported: true,'
   // labeled-specialize-entry -> identifier ':' token ','?
   Node(
-    name: "TargetFunctionEntry",
+    kind: .targetFunctionEntry,
+    base: .syntax,
     nameForDiagnostics: "attribute argument",
-    description: "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
-    kind: "Syntax",
+    documentation: "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
     traits: [
       "WithTrailingComma"
     ],
@@ -832,7 +827,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Declname",
-        kind: .node(kind: "DeclName"),
+        kind: .node(kind: .declName),
         nameForDiagnostics: "declaration name",
         description: "The value for this argument"
       ),
@@ -846,10 +841,10 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    name: "UnavailableFromAsyncArguments",
+    kind: .unavailableFromAsyncArguments,
+    base: .syntax,
     nameForDiagnostics: "@_unavailableFromAsync argument",
-    description: "The arguments for the '@_unavailableFromAsync' attribute",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_unavailableFromAsync' attribute",
     children: [
       Child(
         name: "MessageLabel",
@@ -861,16 +856,16 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Message",
-        kind: .node(kind: "StringLiteralExpr")
+        kind: .node(kind: .stringLiteralExpr)
       ),
     ]
   ),
 
   Node(
-    name: "UnderscorePrivateAttributeArguments",
+    kind: .underscorePrivateAttributeArguments,
+    base: .syntax,
     nameForDiagnostics: "@_private argument",
-    description: "The arguments for the '@_private' attribute",
-    kind: "Syntax",
+    documentation: "The arguments for the '@_private' attribute",
     children: [
       Child(
         name: "SourceFileLabel",
@@ -882,7 +877,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Filename",
-        kind: .node(kind: "StringLiteralExpr")
+        kind: .node(kind: .stringLiteralExpr)
       ),
     ]
   ),

@@ -19,14 +19,19 @@ import SwiftBasicFormat
 let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
-  for node in SYNTAX_NODES where node.isSyntaxCollection {
+  for node in SYNTAX_NODES.compactMap(\.collectionNode) {
     let elementType = node.collectionElementType
 
-    let docComment = node.documentation.isEmpty ? "" : "/// \(node.documentation)\n"
+    let docComment = node.documentation.isEmpty ? [.docLineComment("/// `\(node.kind.syntaxType)` represents a collection of `\(elementType.syntaxBaseName)`")] : node.documentation
     // Generate collection node struct
-    try! ExtensionDeclSyntax("\(raw: docComment)extension \(raw: node.type.syntaxBaseName): ExpressibleByArrayLiteral") {
+    try! ExtensionDeclSyntax(
+      """
+      \(raw: docComment)
+      extension \(raw: node.type.syntaxBaseName): ExpressibleByArrayLiteral
+      """
+    ) {
       // Generate initializers
-      if elementType.isBaseType && node.collectionElementChoices?.isEmpty ?? true {
+      if elementType.isBaseType && node.elementChoices.count == 1 {
         DeclSyntax(
           """
           public init(_ elements: \(ArrayTypeSyntax(elementType: elementType.parameterType))) {

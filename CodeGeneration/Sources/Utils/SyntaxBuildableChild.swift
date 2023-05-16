@@ -14,14 +14,32 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
 
+/// Something that can either be a node of the given kind or a token of the
+/// given token kind.
+public enum SyntaxOrTokenNodeKind: Hashable {
+  case node(kind: SyntaxNodeKind)
+  case token(tokenKind: String)
+}
+
 /// Extension to the `Child` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
 public extension Child {
   /// The type of this child, represented by a `SyntaxBuildableType`, which can
   /// be used to create the corresponding `Buildable` and `ExpressibleAs` types.
   var type: SyntaxBuildableType {
-    SyntaxBuildableType(
-      syntaxKind: syntaxKind,
+    let buildableKind: SyntaxOrTokenNodeKind
+    switch kind {
+    case .node(kind: let kind):
+      buildableKind = .node(kind: kind)
+    case .nodeChoices:
+      buildableKind = .node(kind: .syntax)
+    case .collection(kind: let kind, collectionElementName: _):
+      buildableKind = .node(kind: kind)
+    case .token:
+      buildableKind = .token(tokenKind: self.tokenKind!)
+    }
+    return SyntaxBuildableType(
+      kind: buildableKind,
       isOptional: isOptional
     )
   }
@@ -61,6 +79,9 @@ public extension Child {
     }
     if token.isKeyword {
       return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)()"))
+    }
+    if token.name == "EOF" {
+      return InitializerClauseSyntax(value: ExprSyntax(".eof()"))
     }
     if token.text != nil {
       return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)Token()"))

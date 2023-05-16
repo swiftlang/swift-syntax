@@ -24,7 +24,7 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     DeclSyntax("case token(TokenSyntax)")
     for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax("case \(raw: node.swiftSyntaxKind)(\(raw: node.name))")
+      DeclSyntax("case \(node.varOrCaseName)(\(node.kind.syntaxType))")
     }
   }
 
@@ -45,8 +45,8 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-            StmtSyntax("return .\(raw: node.swiftSyntaxKind)(\(raw: node.name)(self)!)")
+          SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+            StmtSyntax("return .\(node.varOrCaseName)(\(node.kind.syntaxType)(self)!)")
           }
         }
       }

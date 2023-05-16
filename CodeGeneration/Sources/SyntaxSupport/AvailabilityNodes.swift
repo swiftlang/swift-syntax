@@ -17,10 +17,10 @@ public let AVAILABILITY_NODES: [Node] = [
   //                     | availability-version-restriction ','?
   //                     | availability-versioned-argument ','?
   Node(
-    name: "AvailabilityArgument",
+    kind: .availabilityArgument,
+    base: .syntax,
     nameForDiagnostics: "availability argument",
-    description: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
-    kind: "Syntax",
+    documentation: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
     children: [
       Child(
         name: "Entry",
@@ -31,11 +31,11 @@ public let AVAILABILITY_NODES: [Node] = [
           ),
           Child(
             name: "AvailabilityVersionRestriction",
-            kind: .node(kind: "AvailabilityVersionRestriction")
+            kind: .node(kind: .availabilityVersionRestriction)
           ),
           Child(
             name: "AvailabilityLabeledArgument",
-            kind: .node(kind: "AvailabilityLabeledArgument")
+            kind: .node(kind: .availabilityLabeledArgument)
           ),
         ]),
         description: "The actual argument"
@@ -52,10 +52,10 @@ public let AVAILABILITY_NODES: [Node] = [
   // Representation of 'deprecated: 2.3', 'message: "Hello world"' etc.
   // availability-versioned-argument -> identifier ':' version-tuple
   Node(
-    name: "AvailabilityLabeledArgument",
+    kind: .availabilityLabeledArgument,
+    base: .syntax,
     nameForDiagnostics: "availability argument",
-    description: "A argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
-    kind: "Syntax",
+    documentation: "A argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
     children: [
       Child(
         name: "Label",
@@ -73,11 +73,11 @@ public let AVAILABILITY_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "String",
-            kind: .node(kind: "StringLiteralExpr")
+            kind: .node(kind: .stringLiteralExpr)
           ),
           Child(
             name: "Version",
-            kind: .node(kind: "VersionTuple")
+            kind: .node(kind: .versionTuple)
           ),
         ]),
         nameForDiagnostics: "value",
@@ -88,19 +88,19 @@ public let AVAILABILITY_NODES: [Node] = [
 
   // availability-spec-list -> availability-entry availability-spec-list?
   Node(
-    name: "AvailabilitySpecList",
+    kind: .availabilitySpecList,
+    base: .syntaxCollection,
     nameForDiagnostics: "'@availability' arguments",
-    kind: "SyntaxCollection",
-    element: "AvailabilityArgument"
+    elementChoices: [.availabilityArgument]
   ),
 
   // Representation for 'iOS 10', 'swift 3.4' etc.
   // availability-version-restriction -> identifier version-tuple
   Node(
-    name: "AvailabilityVersionRestriction",
+    kind: .availabilityVersionRestriction,
+    base: .syntax,
     nameForDiagnostics: "version restriction",
-    description: "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
-    kind: "Syntax",
+    documentation: "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
     children: [
       Child(
         name: "Platform",
@@ -111,7 +111,7 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
       Child(
         name: "Version",
-        kind: .node(kind: "VersionTuple"),
+        kind: .node(kind: .versionTuple),
         nameForDiagnostics: "version",
         isOptional: true
       ),
@@ -120,10 +120,10 @@ public let AVAILABILITY_NODES: [Node] = [
 
   // version-tuple-element -> '.' integer-literal
   Node(
-    name: "VersionComponent",
+    kind: .versionComponent,
+    base: .syntax,
     nameForDiagnostics: nil,
-    description: "An element to represent a single component in a version, like `.1`.",
-    kind: "Syntax",
+    documentation: "An element to represent a single component in a version, like `.1`.",
     children: [
       Child(
         name: "Period",
@@ -140,19 +140,18 @@ public let AVAILABILITY_NODES: [Node] = [
 
   // version-list -> version-tuple-element version-list?
   Node(
-    name: "VersionComponentList",
+    kind: .versionComponentList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "VersionComponent",
-    omitWhenEmpty: true
+    elementChoices: [.versionComponent]
   ),
 
   // version-tuple -> integer-literal version-list?
   Node(
-    name: "VersionTuple",
+    kind: .versionTuple,
+    base: .syntax,
     nameForDiagnostics: "version tuple",
-    description: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
-    kind: "Syntax",
+    documentation: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
     children: [
       Child(
         name: "Major",
@@ -161,7 +160,7 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
       Child(
         name: "Components",
-        kind: .collection(kind: "VersionComponentList", collectionElementName: "VersionComponent"),
+        kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
         description: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`",
         isOptional: true
       ),

@@ -1205,6 +1205,22 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
+    name: "CopyExpr",
+    nameForDiagnostics: "'copy' expression",
+    kind: "Expr",
+    children: [
+      Child(
+        name: "CopyKeyword",
+        kind: .token(choices: [.keyword(text: "copy")])
+      ),
+      Child(
+        name: "Expression",
+        kind: .node(kind: "Expr")
+      ),
+    ]
+  ),
+
+  Node(
     name: "MultipleTrailingClosureElementList",
     nameForDiagnostics: nil,
     kind: "SyntaxCollection",

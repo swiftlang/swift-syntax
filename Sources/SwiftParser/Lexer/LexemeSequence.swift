@@ -15,6 +15,7 @@
 extension Lexer {
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``
   /// that points into an input buffer.
+  @_spi(Testing)
   public struct LexemeSequence: IteratorProtocol, Sequence, CustomDebugStringConvertible {
     fileprivate let sourceBufferStart: Lexer.Cursor
     fileprivate var cursor: Lexer.Cursor
@@ -37,6 +38,7 @@ extension Lexer {
       self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
     }
 
+    @_spi(Testing)
     public mutating func next() -> Lexer.Lexeme? {
       return self.advance()
     }
@@ -73,6 +75,7 @@ extension Lexer {
       currentToken = self.advance()
     }
 
+    @_spi(Testing)
     public var debugDescription: String {
       let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
       if remainingText.count > 100 {
@@ -97,7 +100,7 @@ extension Lexer {
     #endif
   }
 
-  @_spi(RawSyntax)
+  @_spi(Testing)
   public static func tokenize(
     _ input: UnsafeBufferPointer<UInt8>,
     from startIndex: Int = 0

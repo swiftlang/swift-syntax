@@ -57,7 +57,7 @@ enum TokenPrecedence: Comparable {
     }
   }
 
-  public static func < (lhs: TokenPrecedence, rhs: TokenPrecedence) -> Bool {
+  static func < (lhs: TokenPrecedence, rhs: TokenPrecedence) -> Bool {
     func precedence(_ precedence: TokenPrecedence) -> Int {
       /// Should match the order of the cases in the enum.
       switch precedence {
@@ -99,8 +99,7 @@ enum TokenPrecedence: Comparable {
     return self >= .stmtKeyword
   }
 
-  @_spi(RawSyntax)
-  public init(_ lexeme: Lexer.Lexeme) {
+  init(_ lexeme: Lexer.Lexeme) {
     if lexeme.rawTokenKind == .keyword {
       self.init(Keyword(lexeme.tokenText)!)
     } else {
@@ -108,8 +107,7 @@ enum TokenPrecedence: Comparable {
     }
   }
 
-  @_spi(RawSyntax)
-  public init(nonKeyword tokenKind: RawTokenKind) {
+  init(nonKeyword tokenKind: RawTokenKind) {
     switch tokenKind {
     case .unknown:
       self = .unknownToken
@@ -178,8 +176,7 @@ enum TokenPrecedence: Comparable {
     }
   }
 
-  @_spi(RawSyntax)
-  public init(_ keyword: Keyword) {
+  init(_ keyword: Keyword) {
     switch keyword {
     // MARK: Identifier like
     case  // Literals

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
+@_spi(Diagnostics) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
 fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) -> [TokenSyntax] {

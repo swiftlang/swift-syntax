@@ -12,8 +12,9 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
+@_spi(Testing)
 public struct TriviaParser {
-  @_spi(RawSyntax)
+  @_spi(Testing)
   public static func parseTrivia(_ source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
     if source.isEmpty { return [] }
 

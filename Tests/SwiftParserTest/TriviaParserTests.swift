@@ -12,7 +12,7 @@
 
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(Testing) import SwiftParser
 
 final class TriviaParserTests: XCTestCase {
 
@@ -175,32 +175,32 @@ final class TriviaParserTests: XCTestCase {
         }
         """
     ) { parser in
-      let fn = parser.parseDeclaration().as(RawFunctionDeclSyntax.self)!
+      let fn = DeclSyntax.parse(from: &parser).cast(FunctionDeclSyntax.self)
 
       XCTAssertEqual(
-        fn.funcKeyword.leadingTriviaPieces,
+        fn.funcKeyword.leadingTrivia,
         [
           .docLineComment("/// Foo."),
           .newlines(1),
         ]
       )
       XCTAssertEqual(
-        fn.funcKeyword.trailingTriviaPieces,
+        fn.funcKeyword.trailingTrivia,
         [
           .spaces(1)
         ]
       )
 
-      XCTAssertEqual(fn.body!.leftBrace.leadingTriviaPieces, [])
-      XCTAssertEqual(fn.body!.leftBrace.trailingTriviaPieces, [])
+      XCTAssertEqual(fn.body!.leftBrace.leadingTrivia, [])
+      XCTAssertEqual(fn.body!.leftBrace.trailingTrivia, [])
 
       XCTAssertEqual(
-        fn.body!.rightBrace.leadingTriviaPieces,
+        fn.body!.rightBrace.leadingTrivia,
         [
           .newlines(1)
         ]
       )
-      XCTAssertEqual(fn.body!.rightBrace.trailingTriviaPieces, [])
+      XCTAssertEqual(fn.body!.rightBrace.trailingTrivia, [])
     }
 
   }

@@ -145,7 +145,7 @@ extension Unicode.Scalar {
 
   /// Whether this character represents a printable ASCII character,
   /// for the purposes of pattern parsing.
-  public var isPrintableASCII: Bool {
+  var isPrintableASCII: Bool {
     // Exclude non-printables before the space character U+20, and anything
     // including and above the DEL character U+7F.
     return self.value >= 0x20 && self.value < 0x7F
@@ -226,6 +226,7 @@ extension Unicode.Scalar {
   }
 
   /// Returns the first unicode scalar in `byteSequence`, which may span multiple bytes.
+  @_spi(Diagnostics)
   public static func lexing(from byteSequence: some Collection<UInt8>) -> Self? {
     var index = byteSequence.startIndex
     let peek = { () -> UInt8? in

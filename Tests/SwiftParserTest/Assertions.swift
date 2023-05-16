@@ -12,7 +12,7 @@
 
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing) @_spi(RawSyntax) import SwiftParser
+@_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
 import SwiftDiagnostics
 import _SwiftSyntaxTestSupport

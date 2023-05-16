@@ -17,8 +17,7 @@
 /// After calling `consume(ifAnyFrom:)` we know which token we are positioned
 /// at based on that function's return type. This handle allows consuming that
 /// token.
-@_spi(RawSyntax)
-public struct RecoveryConsumptionHandle {
+struct RecoveryConsumptionHandle {
   var unexpectedTokens: Int
   var tokenConsumptionHandle: TokenConsumptionHandle
 

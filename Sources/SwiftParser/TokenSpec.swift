@@ -44,7 +44,7 @@ struct PrepareForKeywordMatch {
 /// marked `@inline(__always)` so the compiler inlines the `RawTokenKind` we are
 /// matching against and is thus able to rule out one of the branches in
 /// `matches(rawTokenKind:text:)` based on the matched kind.
-@_spi(RawSyntax)
+@_spi(AlternateTokenIntrospection)
 public struct TokenSpec {
   /// The kind we expect the token that we want to consume to have.
   /// This can be a keyword, in which case the `TokenSpec` will also match an
@@ -167,6 +167,7 @@ public struct TokenSpec {
   ///
   /// IMPORTANT: Should only be used when generating tokens during the
   /// modification of test cases. This should never be used in the parser itself.
+  @_spi(AlternateTokenIntrospection)
   public var synthesizedTokenKind: TokenKind {
     switch rawTokenKind {
     case .binaryOperator: return .binaryOperator("+")

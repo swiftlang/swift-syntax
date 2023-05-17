@@ -413,7 +413,7 @@ extension Parser {
       }
     }
 
-    switch self.at(anyIn: AwaitTryMove.self) {
+    switch self.at(anyIn: ExpressionModifierKeyword.self) {
     case (.awaitKeyword, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(

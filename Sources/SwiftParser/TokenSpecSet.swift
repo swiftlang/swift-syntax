@@ -476,7 +476,7 @@ public enum TypeSpecifier: TokenSpecSet {
 
 // MARK: Expression start
 
-enum AwaitTryMove: TokenSpecSet {
+enum ExpressionModifierKeyword: TokenSpecSet {
   case awaitKeyword
   case _moveKeyword
   case _borrowKeyword
@@ -695,13 +695,13 @@ enum PrimaryExpressionStart: TokenSpecSet {
 ///  - `MatchingPatternStart`
 ///  - `PrimaryExpressionStart`
 enum ExpressionStart: TokenSpecSet {
-  case awaitTryMove(AwaitTryMove)
+  case awaitTryMove(ExpressionModifierKeyword)
   case expressionPrefixOperator(ExpressionPrefixOperator)
   case primaryExpressionStart(PrimaryExpressionStart)
   case ifOrSwitch(IfOrSwitch)
 
   init?(lexeme: Lexer.Lexeme) {
-    if let subset = AwaitTryMove(lexeme: lexeme) {
+    if let subset = ExpressionModifierKeyword(lexeme: lexeme) {
       self = .awaitTryMove(subset)
     } else if let subset = ExpressionPrefixOperator(lexeme: lexeme) {
       self = .expressionPrefixOperator(subset)
@@ -715,7 +715,7 @@ enum ExpressionStart: TokenSpecSet {
   }
 
   static var allCases: [ExpressionStart] {
-    return AwaitTryMove.allCases.map(Self.awaitTryMove)
+    return ExpressionModifierKeyword.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
       + IfOrSwitch.allCases.map(Self.ifOrSwitch)

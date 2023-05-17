@@ -504,16 +504,16 @@ extension Parser {
 
     case (.consumeKeyword, let handle)?:
       // `consume` is only contextually a keyword, if it's followed by an
-      // identifier or keyword on the same line.
-      let next = peek()
-      if next.isAtStartOfLine {
+      // identifier or keyword on the same line. We do this to ensure that we do
+      // not break any copy functions defined by users. This is following with
+      // what we have done for the consume keyword.
+      switch self.peek() {
+      case TokenSpec(.identifier, allowAtStartOfLine: false),
+           TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+           TokenSpec(.self, allowAtStartOfLine: false):
         break
-      }
-      if next.rawTokenKind != .identifier,
-        next.rawTokenKind != .dollarIdentifier,
-        next.rawTokenKind != .keyword
-      {
-        break
+      default:
+        break EXPR_PREFIX // break out of the outer `switch`
       }
 
       let consumeTok = self.eat(handle)

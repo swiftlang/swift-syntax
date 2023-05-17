@@ -267,7 +267,7 @@ extension Lexer {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
 
-    public func starts(with possiblePrefix: some Sequence<UInt8>) -> Bool {
+    func starts(with possiblePrefix: some Sequence<UInt8>) -> Bool {
       return self.input.starts(with: possiblePrefix)
     }
 

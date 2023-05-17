@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
+@_spi(Diagnostics) import SwiftParser
 
 extension ParseDiagnosticsGenerator {
   func handleMissingToken(_ missingToken: TokenSyntax) {

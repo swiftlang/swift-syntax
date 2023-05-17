@@ -87,8 +87,7 @@ extension Parser {
   ///                   previous element.
   ///   - syntax: A function that aggregates the parsed conditional elements
   ///             into a syntax collection.
-  @_spi(RawSyntax)
-  public mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
+  mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
     addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
     syntax: (inout Parser, [Element]) -> RawIfConfigClauseSyntax.Elements?
@@ -217,8 +216,7 @@ extension Parser {
   ///     line-control-statement → '#sourceLocation' '(' ')'
   ///     line-number → `A decimal integer greater than zero`
   ///     file-path → static-string-literal
-  @_spi(RawSyntax)
-  public mutating func parsePoundSourceLocationDirective() -> RawPoundSourceLocationSyntax {
+  mutating func parsePoundSourceLocationDirective() -> RawPoundSourceLocationSyntax {
     let line = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let args: RawPoundSourceLocationArgsSyntax?

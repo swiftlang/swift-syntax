@@ -462,8 +462,7 @@ extension Parser {
   }
 
   /// Parse a string literal expression.
-  @_spi(RawSyntax)
-  public mutating func parseStringLiteral() -> RawStringLiteralExprSyntax {
+  mutating func parseStringLiteral() -> RawStringLiteralExprSyntax {
     /// Parse opening raw string delimiter if exist.
     let openDelimiter = self.consume(if: .rawStringDelimiter)
 
@@ -594,7 +593,7 @@ fileprivate extension SyntaxText {
   }
 }
 
-public extension RawTriviaPiece {
+fileprivate extension RawTriviaPiece {
   var isBackslash: Bool {
     switch self {
     case .backslashes: return true

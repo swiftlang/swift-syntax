@@ -168,8 +168,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
+  mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
     if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }

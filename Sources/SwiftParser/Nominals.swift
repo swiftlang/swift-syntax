@@ -271,8 +271,7 @@ extension Parser {
   }
 
   /// Parse an inheritance clause.
-  @_spi(RawSyntax)
-  public mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
+  mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
     let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
     let colon: RawTokenSyntax
 
@@ -333,8 +332,7 @@ extension Parser {
     )
   }
 
-  @_spi(RawSyntax)
-  public mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
+  mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
     let langle = self.consumeAnyToken(remapping: .leftAngle)
     var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
     do {

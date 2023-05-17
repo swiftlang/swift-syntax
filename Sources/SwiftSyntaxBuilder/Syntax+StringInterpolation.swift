@@ -13,7 +13,7 @@
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(Testing) import SwiftParser
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {

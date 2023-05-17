@@ -12,7 +12,7 @@
 
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(Testing) import SwiftParser
 
 fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
   try sourceBytes.withUnsafeBufferPointer { (buf) in

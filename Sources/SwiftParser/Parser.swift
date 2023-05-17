@@ -87,29 +87,27 @@
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser {
-  @_spi(RawSyntax)
-  public var arena: ParsingSyntaxArena
+  var arena: ParsingSyntaxArena
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
   /// The current token. If there was no input, this token will have a kind of `.eof`.
-  @_spi(RawSyntax)
-  public var currentToken: Lexer.Lexeme
+  var currentToken: Lexer.Lexeme
 
   /// The current nesting level, i.e. the number of tokens that
   /// `startNestingLevel` minus the number of tokens that `endNestingLevel`
   /// which have been consumed so far.
-  public var nestingLevel: Int = 0
+  var nestingLevel: Int = 0
 
   /// When this nesting level is exceeded, the parser should stop parsing.
-  public let maximumNestingLevel: Int
+  let maximumNestingLevel: Int
 
   /// A default maximum nesting level that is used if the client didn't
   /// explicitly specify one. Debug builds of the parser comume a lot more stack
   /// space and thus have a lower default maximum nesting level.
   #if DEBUG
-  public static let defaultMaximumNestingLevel = 25
+  static let defaultMaximumNestingLevel = 25
   #else
-  public static let defaultMaximumNestingLevel = 256
+  static let defaultMaximumNestingLevel = 256
   #endif
 
   /// Initializes a `Parser` from the given string.
@@ -163,28 +161,24 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
   }
 
-  @_spi(RawSyntax)
-  public mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
+  mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
     adjustNestingLevel(for: kind)
     return RawTokenSyntax(missing: kind, text: text, arena: self.arena)
   }
 
-  @_spi(RawSyntax)
-  public mutating func missingToken(_ keyword: Keyword) -> RawTokenSyntax {
+  mutating func missingToken(_ keyword: Keyword) -> RawTokenSyntax {
     return missingToken(.keyword, text: keyword.defaultText)
   }
 
   /// Consumes the current token and advances the lexer to the next token.
   ///
   /// - Returns: The token that was consumed.
-  @_spi(RawSyntax)
-  public mutating func consumeAnyToken() -> RawTokenSyntax {
+  mutating func consumeAnyToken() -> RawTokenSyntax {
     adjustNestingLevel(for: self.currentToken.rawTokenKind)
     return self.consumeAnyTokenWithoutAdjustingNestingLevel()
   }
 
-  @_spi(RawSyntax)
-  public mutating func consumeAnyTokenWithoutAdjustingNestingLevel() -> RawTokenSyntax {
+  mutating func consumeAnyTokenWithoutAdjustingNestingLevel() -> RawTokenSyntax {
     let tok = self.currentToken
     self.currentToken = self.lexemes.advance()
     return RawTokenSyntax(
@@ -211,6 +205,7 @@ public struct Parser {
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
   var shouldRecordAlternativeTokenChoices: Bool = false
 
+  @_spi(AlternateTokenIntrospection)
   public mutating func enableAlternativeTokenChoices() {
     shouldRecordAlternativeTokenChoices = true
   }
@@ -223,7 +218,7 @@ public struct Parser {
   ///
   /// This information allows testing techniques to replace tokens by these
   /// alternate token choices to generate new, interesting test cases
-  @_spi(RawSyntax)
+  @_spi(AlternateTokenIntrospection)
   public var alternativeTokenChoices: [Int: [TokenSpec]] = [:]
 
   mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {
@@ -241,15 +236,13 @@ public struct Parser {
 
 extension Parser {
   /// Retrieves the token following the current token without consuming it.
-  @_spi(RawSyntax)
-  public func peek() -> Lexer.Lexeme {
+  func peek() -> Lexer.Lexeme {
     return self.lexemes.peek()
   }
 }
 
 // MARK: Consuming Tokens
 
-@_spi(RawSyntax)
 extension Parser: TokenConsumer {}
 
 extension Parser {
@@ -259,8 +252,7 @@ extension Parser {
   /// - Parameter kind: The kind to reset the consumed token to.
   /// - Returns: The token that was consumed with its kind re-mapped to the
   ///            given `TokenKind`.
-  @_spi(RawSyntax)
-  public mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
+  mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
     self.currentToken.rawTokenKind = kind
     return self.consumeAnyToken()
   }

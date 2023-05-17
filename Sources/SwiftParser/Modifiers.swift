@@ -13,8 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  @_spi(RawSyntax)
-  public mutating func parseModifierList() -> RawModifierListSyntax? {
+  mutating func parseModifierList() -> RawModifierListSyntax? {
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {

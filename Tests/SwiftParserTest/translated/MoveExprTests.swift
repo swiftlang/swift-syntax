@@ -82,5 +82,20 @@ final class MoveExprTests: XCTestCase {
       """
     )
   }
-}}
+
+  func testConsumeVariableNameInCast() {
+    assertParse(
+      """
+      class ParentKlass {}
+      class SubKlass : ParentKlass {}
+
+      func test(_ x: SubKlass) {
+        switch x {
+        case let consume as ParentKlass:
+          fallthrough
+        }
+      }
+      """)
+  }
+}
 

@@ -274,7 +274,7 @@ extension SyntaxKind {
     case .missingType:
       return "type"
     case .moveExpr:
-      return "'_move' expression"
+      return "'consume' expression"
     case .multipleTrailingClosureElement:
       return "trailing closure"
     case .namedOpaqueReturnType:

@@ -1126,7 +1126,7 @@ public let EXPR_NODES: [Node] = [
   // The move expr
   Node(
     name: "MoveExpr",
-    nameForDiagnostics: "'_move' expression",
+    nameForDiagnostics: "'consume' expression",
     kind: "Expr",
     children: [
       Child(

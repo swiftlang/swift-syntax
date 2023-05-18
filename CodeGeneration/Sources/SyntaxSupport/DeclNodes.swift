@@ -68,7 +68,7 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "accessor",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes"
     ],
     parserFunction: "parseAccessorDecl",
     children: [
@@ -154,7 +154,8 @@ public let DECL_NODES: [Node] = [
     traits: [
       "DeclGroup",
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -213,7 +214,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -270,7 +272,8 @@ public let DECL_NODES: [Node] = [
     traits: [
       "DeclGroup",
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -401,7 +404,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "deinitializer",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -505,7 +509,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "parameter",
     kind: "Syntax",
     traits: [
-      "WithTrailingComma"
+      "WithTrailingComma",
+      "WithModifiers",
     ],
     parserFunction: "parseEnumCaseParameter",
     children: [
@@ -559,7 +564,8 @@ public let DECL_NODES: [Node] = [
     description: "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -642,7 +648,8 @@ public let DECL_NODES: [Node] = [
     traits: [
       "DeclGroup",
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -710,7 +717,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "DeclGroup",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -758,7 +766,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -822,7 +831,8 @@ public let DECL_NODES: [Node] = [
     kind: "Syntax",
     traits: [
       "WithTrailingComma",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     parserFunction: "parseFunctionParameter",
     children: [
@@ -983,7 +993,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "import",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1073,7 +1084,8 @@ public let DECL_NODES: [Node] = [
       """,
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1136,7 +1148,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1191,9 +1204,23 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "macro expansion",
     kind: "Decl",
     traits: [
-      "FreestandingMacroExpansion"
+      "FreestandingMacroExpansion",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
+      Child(
+        name: "Attributes",
+        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        nameForDiagnostics: "attributes",
+        isOptional: true
+      ),
+      Child(
+        name: "Modifiers",
+        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        nameForDiagnostics: "modifiers",
+        isOptional: true
+      ),
       Child(
         name: "PoundToken",
         kind: .token(choices: [.token(tokenKind: "PoundToken")]),
@@ -1331,7 +1358,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1607,7 +1635,8 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1709,7 +1738,8 @@ public let DECL_NODES: [Node] = [
     traits: [
       "DeclGroup",
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1811,7 +1841,8 @@ public let DECL_NODES: [Node] = [
     traits: [
       "DeclGroup",
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1864,7 +1895,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "subscript",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -1965,7 +1997,7 @@ public let DECL_NODES: [Node] = [
     kind: "Decl",
     traits: [
       "IdentifiedDecl",
-      "Attributed",
+      "WithAttributes",
     ],
     children: [
       Child(
@@ -2012,7 +2044,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "variable",
     kind: "Decl",
     traits: [
-      "Attributed"
+      "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(

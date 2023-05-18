@@ -95,7 +95,7 @@ final class MoveExprTests: XCTestCase {
           fallthrough
         }
       }
-      """)
+      """
+    )
   }
 }
-

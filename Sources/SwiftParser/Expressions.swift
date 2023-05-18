@@ -479,11 +479,12 @@ extension Parser {
       // what we have done for the consume keyword.
       switch self.peek() {
       case TokenSpec(.identifier, allowAtStartOfLine: false),
-           TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-           TokenSpec(.self, allowAtStartOfLine: false):
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
         break
       default:
-        break EXPR_PREFIX // Break out of `outer switch` on failure.
+        // Break out of `outer switch` on failure.
+        break EXPR_PREFIX
       }
 
       let copyTok = self.eat(handle)
@@ -507,11 +508,12 @@ extension Parser {
       // what we have done for the consume keyword.
       switch self.peek() {
       case TokenSpec(.identifier, allowAtStartOfLine: false),
-           TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-           TokenSpec(.self, allowAtStartOfLine: false):
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
         break
       default:
-        break EXPR_PREFIX // break out of the outer `switch`
+        // Break out of the outer `switch`.
+        break EXPR_PREFIX
       }
 
       let consumeTok = self.eat(handle)

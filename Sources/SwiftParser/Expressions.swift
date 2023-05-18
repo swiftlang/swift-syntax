@@ -318,9 +318,13 @@ extension Parser {
       )
 
       let rhs: RawExprSyntax?
-      if colon.isMissing,
-         currentToken.rawTokenKind != currentToken.cursor.previousTokenKind {
-        rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+      if colon.isMissing {
+        if let previousTokenKind = currentToken.cursor.previousTokenKind,
+           self.at(TokenSpec(previousTokenKind)) {
+          rhs = nil
+        } else {
+          rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+        }
       } else {
         rhs = nil
       }

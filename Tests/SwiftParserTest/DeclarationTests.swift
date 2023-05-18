@@ -343,11 +343,10 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set' in modifier", fixIts: ["insert 'set'"]),
-        DiagnosticSpec(message: "unexpected code 'get' in modifier"),
+        DiagnosticSpec(message: "expected 'set' in modifier", fixIts: ["replace 'get' with 'set'"])
       ],
       fixedSource: """
-        private(setget) var a = 0
+        private(set) var a = 0
         """
     )
 
@@ -374,8 +373,14 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get, set) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'get,' in modifier")
-      ]
+        DiagnosticSpec(
+          message: "expected 'set' in modifier",
+          fixIts: ["remove 'get,'"]
+        )
+      ],
+      fixedSource: """
+        private(set) var a = 0
+        """
     )
 
     assertParse(
@@ -383,8 +388,14 @@ final class DeclarationTests: XCTestCase {
       private(1️⃣get: set) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'get:' in modifier")
-      ]
+        DiagnosticSpec(
+          message: "expected 'set' in modifier",
+          fixIts: ["remove 'get:'"]
+        )
+      ],
+      fixedSource: """
+        private(set) var a = 0
+        """
     )
 
     assertParse(
@@ -410,12 +421,17 @@ final class DeclarationTests: XCTestCase {
 
     assertParse(
       """
-      private(1️⃣get, set2️⃣, didSet) var a = 0
+      private(1️⃣get, set, didSet) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'get,' in modifier"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ', didSet' in modifier"),
-      ]
+        DiagnosticSpec(
+          message: "expected 'set' in modifier",
+          fixIts: ["remove 'get, , didSet'"]
+        )
+      ],
+      fixedSource: """
+        private(set) var a = 0
+        """
     )
 
     assertParse(

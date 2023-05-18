@@ -1525,6 +1525,47 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    if let modifiers = node.modifiers, modifiers.hasError {
+      for modifier in modifiers {
+        guard let detail = modifier.detail else {
+          continue
+        }
+
+        let unexpectedTokens: [TokenSyntax] = [detail.unexpectedBetweenLeftParenAndDetail, detail.unexpectedBetweenDetailAndRightParen]
+          .compactMap { $0?.tokens(viewMode: .all) }
+          .flatMap { $0 }
+
+        // If there is no unexpected tokens it means we miss a paren or set keyword.
+        // So we just skip the handling here
+        guard let firstUnexpected = unexpectedTokens.first else {
+          continue
+        }
+
+        let fixItMessage: ParserFixIt
+
+        if detail.detail.presence == .missing {
+          fixItMessage = ReplaceTokensFixIt(replaceTokens: unexpectedTokens, replacements: [detail.detail])
+        } else {
+          fixItMessage = RemoveNodesFixIt(unexpectedTokens)
+        }
+
+        addDiagnostic(
+          firstUnexpected,
+          MissingNodesError(missingNodes: [Syntax(detail.detail)]),
+          fixIts: [
+            FixIt(
+              message: fixItMessage,
+              changes: [
+                FixIt.MultiNodeChange.makePresent(detail.detail)
+              ] + unexpectedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
+            )
+          ],
+          handledNodes: [detail.id] + unexpectedTokens.map(\.id)
+        )
+      }
+    }
+
     let missingTries = node.bindings.compactMap({
       return $0.initializer?.value.as(TryExprSyntax.self)?.tryKeyword
     })

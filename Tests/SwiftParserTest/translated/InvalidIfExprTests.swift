@@ -69,4 +69,15 @@ final class InvalidIfExprTests: XCTestCase {
     )
   }
 
+  func testInvalidIfExpr5() {
+    assertParse(
+      """
+      foo ? 1 1️⃣2
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' after '? ...' in ternary expression", fixIts: ["insert ':'"])
+      ],
+      fixedSource: "foo ? 1 : 2"
+    )
+  }
 }

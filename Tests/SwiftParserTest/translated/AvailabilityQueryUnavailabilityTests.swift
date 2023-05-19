@@ -78,8 +78,15 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' joining parts of a multi-clause condition", fixIts: ["replace '&&' with ','"])
-      ]
+        DiagnosticSpec(
+          message: "expected ',' joining parts of a multi-clause condition",
+          fixIts: ["replace '&&' with ','"]
+        )
+      ],
+      fixedSource: """
+        if #unavailable(OSX 10.51), #unavailable(OSX 10.52) {
+        }
+        """
     )
   }
 
@@ -367,8 +374,15 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' joining platforms in availability condition")
-      ]
+        DiagnosticSpec(
+          message: "expected ',' joining platforms in availability condition",
+          fixIts: ["replace '||' with ','"]
+        )
+      ],
+      fixedSource: """
+        if #unavailable(OSX 10.51, iOS 8.0) {
+        }
+        """
     )
   }
 

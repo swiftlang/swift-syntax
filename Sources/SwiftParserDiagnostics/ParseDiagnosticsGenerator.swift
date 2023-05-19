@@ -1066,12 +1066,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if case .stringSegment(let segment) = node.segments.last {
       if let invalidContent = segment.unexpectedBeforeContent?.onlyToken(where: { $0.trailingTrivia.contains(where: { $0.isBackslash }) }) {
-        let leadingTrivia = segment.content.leadingTrivia
-        let trailingTrivia = segment.content.trailingTrivia
         let fixIt = FixIt(
           message: .removeBackslash,
           changes: [
-            .makePresent(segment.content, leadingTrivia: leadingTrivia, trailingTrivia: trailingTrivia),
+            .makePresent(segment.content),
             .makeMissing(invalidContent, transferTrivia: false),
           ]
         )

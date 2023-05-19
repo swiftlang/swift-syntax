@@ -411,6 +411,82 @@ final class MultilineStringTests: XCTestCase {
     )
   }
 
+  func testMultilineString47() {
+    assertParse(
+      #"""
+      _ = """1️⃣"""
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "multi-line string literal closing delimiter must begin on a new line",
+          fixIts: ["insert newline"]
+        )
+      ],
+      fixedSource: #"""
+        _ = """
+        """
+        """#
+    )
+  }
+
+  func testMultilineString48() {
+    assertParse(
+      #"""
+      _ = """A1️⃣"""
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "multi-line string literal closing delimiter must begin on a new line",
+          fixIts: ["insert newline"]
+        )
+      ],
+      fixedSource: #"""
+        _ = """A
+        """
+        """#
+    )
+  }
+
+  func testMultilineString49() {
+    assertParse(
+      #"""
+      _ = ℹ️"""1️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        )
+      ],
+      fixedSource: #"""
+        _ = """
+        """
+        """#
+    )
+  }
+
+  func testMultilineString50() {
+    assertParse(
+      #"""
+      _ = ℹ️"""
+      A1️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        )
+      ],
+      fixedSource: #"""
+        _ = """
+        A
+        """
+        """#
+    )
+  }
+
   func testEscapeNewlineInRawString() {
     assertParse(
       ##"""

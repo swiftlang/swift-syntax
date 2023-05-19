@@ -22,7 +22,7 @@ fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
 }
 
 class NoNewlinesFormat: BasicFormat {
-  override func requiresLeadingNewline(_ token: TokenSyntax) -> Bool {
+  override func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
     return false
   }
 }

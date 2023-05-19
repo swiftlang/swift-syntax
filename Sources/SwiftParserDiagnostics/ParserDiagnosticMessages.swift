@@ -131,6 +131,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedAssignmentInsteadOfComparisonOperator: Self {
     .init("expected '=' instead of '==' to assign default value for parameter")
   }
+  public static var expectedCommaInWhereClause: Self {
+    .init("expected ',' to separate the requirements of this 'where' clause")
+  }
   public static var expectedLeftBraceOrIfAfterElse: Self {
     .init("expected '{' or 'if' after 'else'")
   }

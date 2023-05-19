@@ -776,9 +776,21 @@ extension Parser {
         }
 
         keepGoing = self.consume(if: .comma)
+        let unexpectedBetweenBodyAndTrailingComma: RawUnexpectedNodesSyntax?
+
+        // If there's a comma, keep parsing the list.
+        // If there's a "&&", diagnose replace with a comma and keep parsing
+        if let token = self.consumeIfContextualPunctuator("&&") {
+          keepGoing = self.missingToken(.comma)
+          unexpectedBetweenBodyAndTrailingComma = RawUnexpectedNodesSyntax([token], arena: self.arena)
+        } else {
+          unexpectedBetweenBodyAndTrailingComma = nil
+        }
+
         elements.append(
           RawGenericRequirementSyntax(
             body: requirement,
+            unexpectedBetweenBodyAndTrailingComma,
             trailingComma: keepGoing,
             arena: self.arena
           )

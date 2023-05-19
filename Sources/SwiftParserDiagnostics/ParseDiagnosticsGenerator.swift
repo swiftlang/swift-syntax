@@ -546,6 +546,38 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleEffectSpecifiers(node)
   }
 
+  public override func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpected = node.unexpectedBetweenBodyAndTrailingComma,
+      let token = unexpected.tokens(satisfying: { $0.tokenKind == .binaryOperator("&&") }).first,
+      let trailingComma = node.trailingComma,
+      trailingComma.presence == .missing,
+      let previous = node.unexpectedBetweenBodyAndTrailingComma?.previousToken(viewMode: .sourceAccurate)
+    {
+
+      addDiagnostic(
+        unexpected,
+        .expectedCommaInWhereClause,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [token], replacement: .commaToken()),
+            changes: [
+              .makeMissing(token),
+              .makePresent(trailingComma),
+              FixIt.MultiNodeChange(.replaceTrailingTrivia(token: previous, newTrivia: [])),
+            ]
+          )
+        ],
+        handledNodes: [unexpected.id, trailingComma.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

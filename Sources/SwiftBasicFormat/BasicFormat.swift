@@ -212,7 +212,7 @@ open class BasicFormat: SyntaxRewriter {
       (.keyword(.set), .leftParen),  // var mYar: Int { set(value) {} }
       (.keyword(.subscript), .leftParen),  // subscript(x: Int)
       (.keyword(.super), .period),  // super.someProperty
-      (.leftBrace, _),
+      (.leftBrace, .rightBrace),  // {}
       (.leftParen, _),
       (.leftSquareBracket, _),
       (.multilineStringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
@@ -245,7 +245,6 @@ open class BasicFormat: SyntaxRewriter {
       (_, .exclamationMark),
       (_, .postfixOperator),
       (_, .postfixQuestionMark),
-      (_, .rightBrace),
       (_, .rightParen),
       (_, .rightSquareBracket),
       (_, .semicolon),

@@ -40,7 +40,7 @@ public class IncrementalParsingTests: XCTestCase {
 
     let newSource =
       """
-      struct A {}
+      struct AA {}
       struct B {}
       """
 

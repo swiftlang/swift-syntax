@@ -15,11 +15,29 @@ import SwiftSyntax
 import _SwiftSyntaxTestSupport
 
 public class SourceEditsUtilTest: XCTestCase {
-  public func testDiffOfTwoStringsSimple() throws {
-    let s1 = "struct A { func f() {"
-    let s2 = "struct AA { func f() {"
+  public func testStringDifferenceReturnSequentialEdits() {
+    let base = "0123"
+    let new = "a0123bc"
 
-    let diffs = getConcurrentEdits(from: s1, to: s2)
+    let diffs = getConcurrentEdits(from: base, to: new)
+    XCTAssertEqual(
+      diffs.edits,
+      [
+        SourceEdit(offset: 0, length: 0, replacementLength: 1),
+        SourceEdit(offset: 4, length: 0, replacementLength: 2),
+      ]
+    )
+
+    let appliedDiffsBase = applyEdits(diffs.edits, concurrent: true, to: base)
+
+    XCTAssertEqual(appliedDiffsBase, "?0123??")
+  }
+
+  public func testDiffOfTwoStringsSimple() throws {
+    let base = "struct A { func f() {"
+    let new = "struct AA { func f() {"
+
+    let diffs = getConcurrentEdits(from: base, to: new)
     XCTAssertEqual(diffs.edits.count, 1)
 
     let firstDiff = try XCTUnwrap(diffs.edits.first)
@@ -27,17 +45,17 @@ public class SourceEditsUtilTest: XCTestCase {
   }
 
   public func testDiffOfTwoSameStrings() {
-    let s1 = "0123456"
+    let base = "0123456"
 
-    let diffs = getConcurrentEdits(from: s1, to: s1)
+    let diffs = getConcurrentEdits(from: base, to: base)
     XCTAssert(diffs.edits.isEmpty)
   }
 
   public func testDiffOfTwoStrings() {
-    let s1 = "0123456"
-    let s2 = "x12456yz"
+    let base = "0123456"
+    let new = "x12456yz"
 
-    let diffs = getConcurrentEdits(from: s1, to: s2)
+    let diffs = getConcurrentEdits(from: base, to: new)
 
     let expectedDiffs: [SourceEdit] = [
       SourceEdit(offset: 0, length: 1, replacementLength: 1),
@@ -47,8 +65,8 @@ public class SourceEditsUtilTest: XCTestCase {
 
     XCTAssertEqual(diffs.edits, expectedDiffs)
 
-    let s3 = applyEdits(expectedDiffs, concurrent: true, to: s1)
+    let appliedDiffsBase = applyEdits(expectedDiffs, concurrent: true, to: base)
 
-    XCTAssertEqual(s3, "?12456??")
+    XCTAssertEqual(appliedDiffsBase, "?12456??")
   }
 }

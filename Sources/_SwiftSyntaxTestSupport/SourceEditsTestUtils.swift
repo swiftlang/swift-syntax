@@ -39,7 +39,11 @@ public func getConcurrentEdits(from base: String, to new: String) -> ConcurrentE
     }
 
   let sourceEdits = diffArray.map({
-    return $0.isInsert ? SourceEdit(offset: $0.offset, length: 0, replacementLength: 1) : SourceEdit(offset: $0.offset, length: 1, replacementLength: 0)
+    if $0.isInsert {
+      return SourceEdit(offset: $0.offset, length: 0, replacementLength: 1)
+    } else {
+      return SourceEdit(offset: $0.offset, length: 1, replacementLength: 0)
+    }
   })
 
   return ConcurrentEdits(fromSequential: sourceEdits)

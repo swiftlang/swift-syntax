@@ -217,9 +217,22 @@ extension Parser {
       while !self.at(.eof, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
         // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
-        let (label, colon) = (labelAndColon?.0, labelAndColon?.1)
+        var (label, colon) = (labelAndColon?.0, labelAndColon?.1)
+
+        /// If we have something like `x SomeType`, use the indication that `SomeType` starts with a capital letter (and is thus probably a type name)
+        /// as an indication that the user forgot to write the colon instead of forgetting to write the comma to separate two elements.
+        if label == nil, colon == nil, peek().rawTokenKind == .identifier, peek().tokenText.isStartingWithUppercase {
+          label = consumeAnyToken()
+          colon = self.missingToken(.colon)
+        }
+
         let pattern = self.parsePattern()
-        let trailingComma = self.consume(if: .comma)
+        var trailingComma = self.consume(if: .comma)
+
+        if trailingComma == nil && self.at(TokenSpec(.identifier, allowAtStartOfLine: false)) {
+          trailingComma = self.missingToken(RawTokenKind.comma)
+        }
+
         keepGoing = trailingComma != nil
         elements.append(
           RawTuplePatternElementSyntax(

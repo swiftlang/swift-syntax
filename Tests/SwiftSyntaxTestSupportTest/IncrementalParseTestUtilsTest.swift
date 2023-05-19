@@ -14,7 +14,7 @@ import XCTest
 import SwiftSyntax
 import _SwiftSyntaxTestSupport
 
-public class SourceEditsUtilTest: XCTestCase {
+public class IncrementalParseUtilTest: XCTestCase {
   public func testGetConcurrentEdits() {
     let source =
       """
@@ -32,9 +32,9 @@ public class SourceEditsUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        SourceEdit(offset: 0, length: 5, replacementLength: 6),
-        SourceEdit(offset: 27, length: 0, replacementLength: 12),
-        SourceEdit(offset: 35, length: 13, replacementLength: 0),
+        IncrementalEdit(offset: 0, length: 5, replacementLength: 6),
+        IncrementalEdit(offset: 27, length: 0, replacementLength: 12),
+        IncrementalEdit(offset: 35, length: 13, replacementLength: 0),
       ]
     )
 
@@ -64,7 +64,7 @@ public class SourceEditsUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        SourceEdit(offset: 0, length: 25, replacementLength: 4)
+        IncrementalEdit(offset: 0, length: 25, replacementLength: 4)
       ]
     )
   }
@@ -79,7 +79,7 @@ public class SourceEditsUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        SourceEdit(offset: 0, length: 1, replacementLength: 25)
+        IncrementalEdit(offset: 0, length: 1, replacementLength: 25)
       ]
     )
   }

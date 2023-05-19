@@ -83,6 +83,7 @@ public enum Keyword: UInt8, Hashable {
   case `catch`
   case `class`
   case consume
+  case copy
   case consuming
   case `continue`
   case convenience
@@ -265,6 +266,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._spi
       case "case":
         self = .`case`
+      case "copy":
+        self = .copy
       case "each":
         self = .each
       case "else":
@@ -806,6 +809,7 @@ public enum Keyword: UInt8, Hashable {
       "catch", 
       "class", 
       "consume", 
+      "copy", 
       "consuming", 
       "continue", 
       "convenience", 

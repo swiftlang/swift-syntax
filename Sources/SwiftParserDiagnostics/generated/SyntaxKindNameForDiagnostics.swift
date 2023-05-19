@@ -109,6 +109,8 @@ extension SyntaxKind {
       return "@convention(...) arguments"
     case .conventionWitnessMethodAttributeArguments:
       return "@convention(...) arguments for witness methods"
+    case .copyExpr:
+      return "'copy' expression"
     case .declModifier:
       return "modifier"
     case .declName:
@@ -272,7 +274,7 @@ extension SyntaxKind {
     case .missingType:
       return "type"
     case .moveExpr:
-      return "'_move' expression"
+      return "'consume' expression"
     case .multipleTrailingClosureElement:
       return "trailing closure"
     case .namedOpaqueReturnType:

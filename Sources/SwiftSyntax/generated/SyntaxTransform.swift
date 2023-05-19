@@ -344,6 +344,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType
   
+  /// Visiting `CopyExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: CopyExprSyntax) -> ResultType
+  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1842,6 +1847,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `CopyExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: CopyExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3434,6 +3446,8 @@ extension SyntaxTransformVisitor {
     case .conventionAttributeArguments(let derived):
       return visit(derived)
     case .conventionWitnessMethodAttributeArguments(let derived):
+      return visit(derived)
+    case .copyExpr(let derived):
       return visit(derived)
     case .declModifierDetail(let derived):
       return visit(derived)

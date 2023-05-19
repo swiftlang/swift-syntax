@@ -480,6 +480,13 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
   }
   
+  /// Visit a `CopyExprSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: CopyExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
   /// Visit a `DeclModifierDetailSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2909,6 +2916,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplCopyExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = CopyExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6004,6 +6025,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax
+    case .copyExpr:
+      return visitImplCopyExprSyntax
     case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax
     case .declModifier:
@@ -6560,6 +6583,8 @@ open class SyntaxRewriter {
       return visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+    case .copyExpr:
+      return visitImplCopyExprSyntax(data)
     case .declModifierDetail:
       return visitImplDeclModifierDetailSyntax(data)
     case .declModifier:

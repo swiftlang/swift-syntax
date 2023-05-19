@@ -814,6 +814,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
   }
   
+  /// Visiting `CopyExprSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: CopyExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting `CopyExprSyntax` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: CopyExprSyntax) {
+  }
+  
   /// Visiting `DeclModifierDetailSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4038,6 +4050,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplCopyExprSyntax(_ data: SyntaxData) {
+    let node = CopyExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) {
     let node = DeclModifierDetailSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6462,6 +6485,8 @@ open class SyntaxVisitor {
       visitImplConventionAttributeArgumentsSyntax(data)
     case .conventionWitnessMethodAttributeArguments:
       visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+    case .copyExpr:
+      visitImplCopyExprSyntax(data)
     case .declModifierDetail:
       visitImplDeclModifierDetailSyntax(data)
     case .declModifier:

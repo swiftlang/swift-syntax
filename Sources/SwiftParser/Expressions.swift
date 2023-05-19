@@ -410,7 +410,7 @@ extension Parser {
       }
     }
 
-    switch self.at(anyIn: AwaitTryMove.self) {
+    EXPR_PREFIX: switch self.at(anyIn: ExpressionModifierKeyword.self) {
     case (.awaitKeyword, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
@@ -471,18 +471,48 @@ extension Parser {
         )
       )
 
+    case (.copyKeyword, let handle)?:
+      // `copy` is only contextually a keyword, if it's followed by an
+      // identifier or keyword on the same line. We do this to ensure that we do
+      // not break any copy functions defined by users. This is following with
+      // what we have done for the consume keyword.
+      switch self.peek() {
+      case TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
+        break
+      default:
+        // Break out of `outer switch` on failure.
+        break EXPR_PREFIX
+      }
+
+      let copyTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor,
+        forDirective: forDirective,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawCopyExprSyntax(
+          copyKeyword: copyTok,
+          expression: sub,
+          arena: self.arena
+        )
+      )
+
     case (.consumeKeyword, let handle)?:
       // `consume` is only contextually a keyword, if it's followed by an
-      // identifier or keyword on the same line.
-      let next = peek()
-      if next.isAtStartOfLine {
-        fallthrough
-      }
-      if next.rawTokenKind != .identifier,
-        next.rawTokenKind != .dollarIdentifier,
-        next.rawTokenKind != .keyword
-      {
-        fallthrough
+      // identifier or keyword on the same line. We do this to ensure that we do
+      // not break any copy functions defined by users. This is following with
+      // what we have done for the consume keyword.
+      switch self.peek() {
+      case TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
+        break
+      default:
+        // Break out of the outer `switch`.
+        break EXPR_PREFIX
       }
 
       let consumeTok = self.eat(handle)
@@ -499,8 +529,9 @@ extension Parser {
         )
       )
     case nil:
-      return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+      break
     }
+    return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
   }
 
   /// Parse an optional prefix operator followed by an expression.

@@ -49,4 +49,53 @@ final class MoveExprTests: XCTestCase {
     )
   }
 
+  func testConsumeExpr1() {
+    assertParse(
+      """
+      var global: Int = 5
+      func testGlobal() {
+          let _ = consume global
+      }
+      """
+    )
+  }
+
+  func testConsumeExpr2() {
+    assertParse(
+      """
+      func testLet() {
+          let t = String()
+          let _ = consume t
+      }
+      """
+    )
+  }
+
+  func testConsumeExpr3() {
+    assertParse(
+      """
+      func testVar() {
+          var t = String()
+          t = String()
+          let _ = consume t
+      }
+      """
+    )
+  }
+
+  func testConsumeVariableNameInCast() {
+    assertParse(
+      """
+      class ParentKlass {}
+      class SubKlass : ParentKlass {}
+
+      func test(_ x: SubKlass) {
+        switch x {
+        case let consume as ParentKlass:
+          fallthrough
+        }
+      }
+      """
+    )
+  }
 }

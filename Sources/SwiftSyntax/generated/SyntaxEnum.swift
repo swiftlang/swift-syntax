@@ -80,6 +80,7 @@ public enum SyntaxEnum {
   case continueStmt(ContinueStmtSyntax)
   case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
+  case copyExpr(CopyExprSyntax)
   case declModifierDetail(DeclModifierDetailSyntax)
   case declModifier(DeclModifierSyntax)
   case declNameArgumentList(DeclNameArgumentListSyntax)
@@ -426,6 +427,8 @@ public extension Syntax {
       return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
     case .conventionWitnessMethodAttributeArguments:
       return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
+    case .copyExpr:
+      return .copyExpr(CopyExprSyntax(self)!)
     case .declModifierDetail:
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
     case .declModifier:

@@ -1472,6 +1472,122 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - CopyExprSyntax
+
+
+public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .copyExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a `CopyExprSyntax` node from the given `SyntaxData`. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .copyExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? = nil,
+      copyKeyword: TokenSyntax = .keyword(.copy),
+      _ unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: some ExprSyntaxProtocol,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeCopyKeyword, 
+            copyKeyword, 
+            unexpectedBetweenCopyKeywordAndExpression, 
+            expression, 
+            unexpectedAfterExpression
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeCopyKeyword?.raw, 
+          copyKeyword.raw, 
+          unexpectedBetweenCopyKeywordAndExpression?.raw, 
+          expression.raw, 
+          unexpectedAfterExpression?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.copyExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CopyExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var copyKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CopyExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CopyExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = CopyExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = CopyExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeCopyKeyword, 
+          \Self.copyKeyword, 
+          \Self.unexpectedBetweenCopyKeywordAndExpression, 
+          \Self.expression, 
+          \Self.unexpectedAfterExpression
+        ])
+  }
+}
+
 // MARK: - DictionaryExprSyntax
 
 

@@ -47,7 +47,7 @@ public struct ByteSourceRange: Equatable {
   }
 }
 
-public struct SourceEdit: Equatable {
+public struct IncrementalEdit: Equatable {
   /// The byte range of the original source buffer that the edit applies to.
   public let range: ByteSourceRange
   /// The length of the edit replacement in UTF8 bytes.

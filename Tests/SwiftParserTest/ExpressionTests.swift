@@ -1898,7 +1898,7 @@ final class StatementExpressionTests: XCTestCase {
       ],
       fixedSource: #"""
         """
-        \({(<#expression#>)})
+        \({(<#expression#>) })
         """
         """#
     )

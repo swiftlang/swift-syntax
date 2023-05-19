@@ -138,7 +138,7 @@ final class ForeachAsyncTests: XCTestCase {
       fixedSource: """
         func for_each(r: AsyncRange<Int>, iir: AsyncIntRange<Int>) async {
           var sum = 0
-          for await i in r {sum = sum + i;
+          for await i in r { sum = sum + i;
         }
         }
         """

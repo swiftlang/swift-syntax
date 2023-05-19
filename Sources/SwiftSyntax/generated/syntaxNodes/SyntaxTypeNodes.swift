@@ -55,7 +55,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementTypeAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -197,7 +197,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAttributesAndBaseType, 
             baseType, 
             unexpectedAfterBaseType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSpecifier?.raw, 
           specifier?.raw, 
@@ -346,7 +346,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeClassKeyword, classKeyword, unexpectedAfterClassKeyword))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeClassKeyword, classKeyword, unexpectedAfterClassKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeClassKeyword?.raw, classKeyword.raw, unexpectedAfterClassKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.classRestrictionType,
@@ -424,7 +424,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeElements, elements, unexpectedAfterElements))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeElements, elements, unexpectedAfterElements))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeElements?.raw, elements.raw, unexpectedAfterElements?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.compositionType,
@@ -529,7 +529,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenSomeOrAnySpecifierAndBaseType, 
             baseType, 
             unexpectedAfterBaseType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSomeOrAnySpecifier?.raw, 
           someOrAnySpecifier.raw, 
@@ -657,7 +657,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenValueTypeAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -851,7 +851,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEffectSpecifiersAndOutput, 
             output, 
             unexpectedAfterOutput
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -1052,7 +1052,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
             unexpectedBetweenWrappedTypeAndExclamationMark, 
             exclamationMark, 
             unexpectedAfterExclamationMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWrappedType?.raw, 
           wrappedType.raw, 
@@ -1176,7 +1176,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType.raw, 
@@ -1340,7 +1340,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPeriodAndTypeOrProtocol, 
             typeOrProtocol, 
             unexpectedAfterTypeOrProtocol
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType.raw, 
@@ -1470,7 +1470,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingType,
@@ -1557,7 +1557,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericParameterClauseAndBaseType, 
             baseType, 
             unexpectedAfterBaseType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeGenericParameterClause?.raw, 
           genericParameterClause.raw, 
@@ -1673,7 +1673,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWrappedTypeAndQuestionMark, 
             questionMark, 
             unexpectedAfterQuestionMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWrappedType?.raw, 
           wrappedType.raw, 
@@ -1789,7 +1789,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenRepeatKeywordAndPatternType, 
             patternType, 
             unexpectedAfterPatternType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeRepeatKeyword?.raw, 
           repeatKeyword.raw, 
@@ -1905,7 +1905,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEachKeywordAndPackType, 
             packType, 
             unexpectedAfterPackType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEachKeyword?.raw, 
           eachKeyword.raw, 
@@ -2021,7 +2021,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -2137,7 +2137,7 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWithoutTildeAndPatternType, 
             patternType, 
             unexpectedAfterPatternType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWithoutTilde?.raw, 
           withoutTilde.raw, 
@@ -2257,7 +2257,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 

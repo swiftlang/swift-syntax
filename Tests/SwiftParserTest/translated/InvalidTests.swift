@@ -312,19 +312,19 @@ final class InvalidTests: XCTestCase {
       do {
         class Starfish {}
         struct Salmon {}
-        func f(s Starfish1️⃣,
+        func f(s 1️⃣Starfish,
                   _ ss: Salmon) -> [Int] {}
         func g() { f(Starfish(), Salmon()) }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"])
+        DiagnosticSpec(message: "expected ':' in parameter", fixIts: ["insert ':'"])
       ],
       fixedSource: """
         do {
           class Starfish {}
           struct Salmon {}
-          func f(s Starfish: <#type#>,
+          func f(s: Starfish,
                     _ ss: Salmon) -> [Int] {}
           func g() { f(Starfish(), Salmon()) }
         }

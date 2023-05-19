@@ -133,7 +133,8 @@ final class StringLiteralEofTests: XCTestCase {
       fixedSource: #"""
         // NOTE: DO NOT add a newline at EOF.
         _ = """
-            foo"""
+            foo
+        """
         """#
     )
   }
@@ -160,7 +161,8 @@ final class StringLiteralEofTests: XCTestCase {
       fixedSource: ##"""
         _ = """
             foo
-            \(<#expression#>)"""
+            \(<#expression#>)
+        """
         """##
       // FIXME: The closing delimiter should be put on the new line
     )
@@ -197,7 +199,8 @@ final class StringLiteralEofTests: XCTestCase {
       fixedSource: ##"""
         _ = """
             foo
-            \("bar")"""
+            \("bar")
+        """
         """##
     )
   }
@@ -236,7 +239,8 @@ final class StringLiteralEofTests: XCTestCase {
       fixedSource: ##"""
         _ = """
             \("bar"
-            baz)"""
+            baz)
+        """
         """##
     )
   }

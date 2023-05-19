@@ -35,7 +35,8 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
         ),
       ],
       fixedSource: ##"""
-        #error("""""")
+        #error("""
+        """)
         """##
     )
   }

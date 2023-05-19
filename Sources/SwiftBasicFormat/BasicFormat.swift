@@ -143,35 +143,50 @@ open class BasicFormat: SyntaxRewriter {
     return node.requiresIndent
   }
 
-  /// Whether a leading newline on `token` should be added.
-  open func requiresLeadingNewline(_ token: TokenSyntax) -> Bool {
-    // We don't want to add newlines inside string interpolation
-    if isInsideStringInterpolation(token) {
+  open func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
+    // We don't want to add newlines inside string interpolation.
+    // When first or second `TokenSyntax` is a multiline quote we want special handling
+    // even if it's inside a string interpolation, because it still requires newline
+    // after open quote and before close quote.
+    if let first,
+      isInsideStringInterpolation(first),
+      first.tokenKind != .multilineStringQuote,
+      second?.tokenKind != .multilineStringQuote
+    {
+      return false
+    } else if let second {
+      if second.requiresLeadingNewline {
+        return true
+      }
+
+      var ancestor: Syntax = Syntax(second)
+      while let parent = ancestor.parent {
+        ancestor = parent
+        if ancestor.position != second.position || ancestor.firstToken(viewMode: viewMode) != second {
+          break
+        }
+        if let ancestorsParent = ancestor.parent, childrenSeparatedByNewline(ancestorsParent) {
+          return true
+        }
+        switch ancestor.keyPathInParent {
+        case \IfConfigClauseSyntax.elements:
+          return true
+        default:
+          break
+        }
+      }
+    }
+
+    switch (first?.tokenKind, second?.tokenKind) {
+    case (.multilineStringQuote, .backslash),  // string interpolation segment inside a multi-line string literal
+      (.multilineStringQuote, .multilineStringQuote),  // empty multi-line string literal
+      (.multilineStringQuote, .stringSegment),  // segment starting a multi-line string literal
+      (.stringSegment, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
+      (.rightParen, .multilineStringQuote):  // ending a multi-line string literal that has a string interpolation segment at its end
+      return true
+    default:
       return false
     }
-
-    if token.requiresLeadingNewline {
-      return true
-    }
-
-    var ancestor: Syntax = Syntax(token)
-    while let parent = ancestor.parent {
-      ancestor = parent
-      if ancestor.position != token.position || ancestor.firstToken(viewMode: viewMode) != token {
-        break
-      }
-      if let ancestorsParent = ancestor.parent, childrenSeparatedByNewline(ancestorsParent) {
-        return true
-      }
-      switch ancestor.keyPathInParent {
-      case \IfConfigClauseSyntax.elements:
-        return true
-      default:
-        break
-      }
-    }
-
-    return false
   }
 
   open func requiresWhitespace(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
@@ -281,6 +296,12 @@ open class BasicFormat: SyntaxRewriter {
     let previousToken = self.previousToken ?? token.previousToken(viewMode: viewMode)
     let nextToken = token.nextToken(viewMode: viewMode)
 
+    /// In addition to existing trivia of `previousToken`, also considers
+    /// `previousToken` as ending with whitespace if it and `token` should be
+    /// separated by whitespace.
+    /// It does not consider whether a newline should be added between
+    /// `previousToken` and the `token` because that newline should be added to
+    /// the next token's trailing trivia.
     lazy var previousTokenWillEndWithWhitespace: Bool = {
       guard let previousToken = previousToken else {
         return false
@@ -289,6 +310,8 @@ open class BasicFormat: SyntaxRewriter {
         || (requiresWhitespace(between: previousToken, and: token) && isMutable(previousToken))
     }()
 
+    /// This method does not consider any posssible mutations to `previousToken`
+    /// because newlines should be added to the next token's leading trivia.
     lazy var previousTokenWillEndWithNewline: Bool = {
       guard let previousToken = previousToken else {
         // Assume that the start of the tree is equivalent to a newline so we
@@ -298,10 +321,7 @@ open class BasicFormat: SyntaxRewriter {
       if previousToken.trailingTrivia.endsWithNewline {
         return true
       }
-      if case .stringSegment(let segment) = previousToken.tokenKind, segment.last?.isNewline ?? false {
-        return true
-      }
-      return false
+      return previousToken.isStringSegmentWithLastCharacterBeingNewline
     }()
 
     lazy var previousTokenIsStringLiteralEndingInNewline: Bool = {
@@ -310,26 +330,29 @@ open class BasicFormat: SyntaxRewriter {
         // don't add a leading newline to the file.
         return true
       }
-      if case .stringSegment(let segment) = previousToken.tokenKind, segment.last?.isNewline ?? false {
-        return true
-      }
-      return false
+      return previousToken.isStringSegmentWithLastCharacterBeingNewline
     }()
 
+    /// Also considers `nextToken` as starting with a whitespace if a newline
+    /// should be added to it. It does not check whether `token` and `nextToken`
+    /// should be separated by whitespace because the whitespace should be added
+    /// to the `token`’s leading trivia.
     lazy var nextTokenWillStartWithWhitespace: Bool = {
       guard let nextToken = nextToken else {
         return false
       }
       return nextToken.leadingTrivia.startsWithWhitespace
-        || (requiresLeadingNewline(nextToken) && isMutable(nextToken))
+        || (requiresNewline(between: token, and: nextToken) && isMutable(nextToken))
     }()
 
+    /// Also considers `nextToken` as starting with a leading newline if `token`
+    /// and `nextToken` should be separated by a newline.
     lazy var nextTokenWillStartWithNewline: Bool = {
       guard let nextToken = nextToken else {
         return false
       }
       return nextToken.leadingTrivia.startsWithNewline
-        || (requiresLeadingNewline(nextToken) && isMutable(nextToken))
+        || (requiresNewline(between: token, and: nextToken) && isMutable(nextToken) && !token.trailingTrivia.endsWithNewline && !token.isStringSegmentWithLastCharacterBeingNewline)
     }()
 
     /// This token's trailing trivia + any spaces or tabs at the start of the
@@ -342,7 +365,7 @@ open class BasicFormat: SyntaxRewriter {
     var leadingTrivia = token.leadingTrivia
     var trailingTrivia = token.trailingTrivia
 
-    if requiresLeadingNewline(token) {
+    if requiresNewline(between: previousToken, and: token) {
       // Add a leading newline if the token requires it unless
       //  - it already starts with a newline or
       //  - the previous token ends with a newline
@@ -405,5 +428,16 @@ open class BasicFormat: SyntaxRewriter {
     }
 
     return token.detach().with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
+  }
+}
+
+fileprivate extension TokenSyntax {
+  var isStringSegmentWithLastCharacterBeingNewline: Bool {
+    switch self.tokenKind {
+    case .stringSegment(let segment):
+      return segment.last?.isNewline ?? false
+    default:
+      return false
+    }
   }
 }

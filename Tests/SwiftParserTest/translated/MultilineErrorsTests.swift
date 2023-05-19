@@ -705,7 +705,8 @@ final class MultilineErrorsTests: XCTestCase {
       ],
       fixedSource: ##"""
         _ = """
-          foo\"""
+          foo\
+        """
         """##
     )
   }
@@ -741,6 +742,7 @@ final class MultilineErrorsTests: XCTestCase {
       fixedSource: #"""
         _ = """
          \#u{20}
+          
           """
         """#
     )

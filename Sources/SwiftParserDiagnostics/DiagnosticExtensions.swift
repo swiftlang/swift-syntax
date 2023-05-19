@@ -152,11 +152,12 @@ extension FixIt.MultiNodeChange {
       }
     }
 
-    if let previousToken = node.previousToken(viewMode: .all),
+    if let previousToken = node.previousToken(viewMode: .fixedUp),
       previousToken.presence == .present,
       let firstToken = node.firstToken(viewMode: .all),
       previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
-      !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken)
+      !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken),
+      !BasicFormat().requiresNewline(between: previousToken, and: firstToken)
     {
       // If the previous token and this node don't need to be separated, remove
       // the separation.

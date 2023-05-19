@@ -103,7 +103,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         )
       ],
       fixedSource: """
-        if #unavailable(OSX 10.51) , #unavailable(OSX 10.52) {
+        if #unavailable(OSX 10.51), #unavailable(OSX 10.52) {
         }
         """
     )
@@ -447,7 +447,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         )
       ],
       fixedSource: """
-        if #unavailable(OSX 10.51 , iOS 8.0) {
+        if #unavailable(OSX 10.51, iOS 8.0) {
         }
         """
     )

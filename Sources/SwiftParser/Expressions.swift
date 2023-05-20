@@ -316,10 +316,7 @@ extension Parser {
       )
 
       let rhs: RawExprSyntax?
-      if colon.isMissing {
-        // If the colon is missing there's not much more structure we can
-        // expect out of this expression sequence. Emit a missing expression
-        // to end the parsing here.
+      if colon.isMissing, currentToken.isAtStartOfLine {
         rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
       } else {
         rhs = nil

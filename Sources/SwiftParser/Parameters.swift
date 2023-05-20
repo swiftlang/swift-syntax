@@ -92,10 +92,30 @@ extension Parser {
     let modifiers = parseParameterModifiers(isClosure: false)
     let misplacedSpecifiers = parseMisplacedSpecifiers()
 
-    let names = self.parseParameterNames()
+    var names = self.parseParameterNames()
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
-    let type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+    let type: RawTypeSyntax
+
+    if colon.presence == .missing, let secondName = names.secondName, secondName.tokenText.isStartingWithUppercase {
+      // Synthesize the secondName parameter as a type node.
+      type = RawTypeSyntax(
+        RawSimpleTypeIdentifierSyntax(
+          name: secondName,
+          genericArgumentClause: nil,
+          arena: self.arena
+        )
+      )
+      names = ParameterNames(
+        unexpectedBeforeFirstName: names.unexpectedBeforeFirstName,
+        firstName: names.firstName,
+        unexpectedBeforeSecondName: nil,
+        secondName: nil
+      )
+    } else {
+      // Parse the type node as we would normally do.
+      type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+    }
 
     let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
 

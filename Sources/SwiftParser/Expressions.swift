@@ -317,19 +317,7 @@ extension Parser {
         arena: self.arena
       )
 
-      let rhs: RawExprSyntax?
-      if colon.isMissing {
-        if let previousTokenKind = currentToken.cursor.previousTokenKind,
-          self.at(TokenSpec(previousTokenKind))
-        {
-          rhs = nil
-        } else {
-          rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
-        }
-      } else {
-        rhs = nil
-      }
-      return (RawExprSyntax(op), rhs)
+      return (RawExprSyntax(op), nil)
 
     case (.equal, let handle)?:
       switch pattern {

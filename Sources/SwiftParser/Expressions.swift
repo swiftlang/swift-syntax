@@ -317,7 +317,13 @@ extension Parser {
         arena: self.arena
       )
 
-      return (RawExprSyntax(op), nil)
+      let rhs: RawExprSyntax?
+      if colon.isMissing, currentToken.isAtStartOfLine {
+        rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+      } else {
+        rhs = nil
+      }
+      return (RawExprSyntax(op), rhs)
 
     case (.equal, let handle)?:
       switch pattern {

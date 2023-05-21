@@ -604,10 +604,10 @@ final class RecoveryTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop", fixIts: ["insert expression"]),
       ],
       fixedSource: """
-        for `for` in {
+        for `for` in <#expression#> {
         }
         """
     )
@@ -620,8 +620,12 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected Sequence expression for for-each loop")
-      ]
+        DiagnosticSpec(message: "expected Sequence expression for for-each loop", fixIts: ["insert expression"])
+      ],
+      fixedSource: """
+        for i in <#expression#> {
+        }
+        """
     )
   }
 

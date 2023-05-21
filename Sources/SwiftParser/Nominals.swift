@@ -189,7 +189,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
       enumKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
       identifier: identifier,
-      genericParameters: primaryOrGenerics,
+      genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
       memberBlock: memberBlock,

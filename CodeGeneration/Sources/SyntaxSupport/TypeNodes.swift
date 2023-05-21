@@ -322,7 +322,7 @@ public let TYPE_NODES: [Node] = [
     kind: "Type",
     children: [
       Child(
-        name: "GenericParameters",
+        name: "GenericParameterClause",
         kind: .node(kind: "GenericParameterClause")
       ),
       Child(

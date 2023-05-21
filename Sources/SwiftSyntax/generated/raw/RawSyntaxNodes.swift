@@ -8340,9 +8340,9 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       enumKeyword: RawTokenSyntax, 
       _ unexpectedBetweenEnumKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil, 
       identifier: RawTokenSyntax, 
-      _ unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax? = nil, 
-      genericParameters: RawGenericParameterClauseSyntax?, 
-      _ unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil, 
+      genericParameterClause: RawGenericParameterClauseSyntax?, 
+      _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? = nil, 
       inheritanceClause: RawTypeInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
@@ -8362,9 +8362,9 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[5] = enumKeyword.raw
       layout[6] = unexpectedBetweenEnumKeywordAndIdentifier?.raw
       layout[7] = identifier.raw
-      layout[8] = unexpectedBetweenIdentifierAndGenericParameters?.raw
-      layout[9] = genericParameters?.raw
-      layout[10] = unexpectedBetweenGenericParametersAndInheritanceClause?.raw
+      layout[8] = unexpectedBetweenIdentifierAndGenericParameterClause?.raw
+      layout[9] = genericParameterClause?.raw
+      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
@@ -8407,15 +8407,15 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var genericParameters: RawGenericParameterClauseSyntax? {
+  public var genericParameterClause: RawGenericParameterClauseSyntax? {
     layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenGenericParametersAndInheritanceClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -14876,9 +14876,9 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax? = nil, 
-      genericParameters: RawGenericParameterClauseSyntax, 
-      _ unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeGenericParameterClause: RawUnexpectedNodesSyntax? = nil, 
+      genericParameterClause: RawGenericParameterClauseSyntax, 
+      _ unexpectedBetweenGenericParameterClauseAndBaseType: RawUnexpectedNodesSyntax? = nil, 
       baseType: RawTypeSyntax, 
       _ unexpectedAfterBaseType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -14886,24 +14886,24 @@ public struct RawNamedOpaqueReturnTypeSyntax: RawTypeSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .namedOpaqueReturnType, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeGenericParameters?.raw
-      layout[1] = genericParameters.raw
-      layout[2] = unexpectedBetweenGenericParametersAndBaseType?.raw
+      layout[0] = unexpectedBeforeGenericParameterClause?.raw
+      layout[1] = genericParameterClause.raw
+      layout[2] = unexpectedBetweenGenericParameterClauseAndBaseType?.raw
       layout[3] = baseType.raw
       layout[4] = unexpectedAfterBaseType?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeGenericParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var genericParameters: RawGenericParameterClauseSyntax {
+  public var genericParameterClause: RawGenericParameterClauseSyntax {
     layoutView.children[1].map(RawGenericParameterClauseSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenGenericParametersAndBaseType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndBaseType: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

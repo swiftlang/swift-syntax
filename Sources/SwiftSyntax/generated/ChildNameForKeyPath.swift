@@ -1207,12 +1207,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenEnumKeywordAndIdentifier"
   case \EnumDeclSyntax.identifier:
     return "identifier"
-  case \EnumDeclSyntax.unexpectedBetweenIdentifierAndGenericParameters:
-    return "unexpectedBetweenIdentifierAndGenericParameters"
-  case \EnumDeclSyntax.genericParameters:
-    return "genericParameters"
-  case \EnumDeclSyntax.unexpectedBetweenGenericParametersAndInheritanceClause:
-    return "unexpectedBetweenGenericParametersAndInheritanceClause"
+  case \EnumDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
+    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \EnumDeclSyntax.genericParameterClause:
+    return "genericParameterClause"
+  case \EnumDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
+    return "unexpectedBetweenGenericParameterClauseAndInheritanceClause"
   case \EnumDeclSyntax.inheritanceClause:
     return "inheritanceClause"
   case \EnumDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
@@ -2241,12 +2241,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "closure"
   case \MultipleTrailingClosureElementSyntax.unexpectedAfterClosure:
     return "unexpectedAfterClosure"
-  case \NamedOpaqueReturnTypeSyntax.unexpectedBeforeGenericParameters:
-    return "unexpectedBeforeGenericParameters"
-  case \NamedOpaqueReturnTypeSyntax.genericParameters:
-    return "genericParameters"
-  case \NamedOpaqueReturnTypeSyntax.unexpectedBetweenGenericParametersAndBaseType:
-    return "unexpectedBetweenGenericParametersAndBaseType"
+  case \NamedOpaqueReturnTypeSyntax.unexpectedBeforeGenericParameterClause:
+    return "unexpectedBeforeGenericParameterClause"
+  case \NamedOpaqueReturnTypeSyntax.genericParameterClause:
+    return "genericParameterClause"
+  case \NamedOpaqueReturnTypeSyntax.unexpectedBetweenGenericParameterClauseAndBaseType:
+    return "unexpectedBetweenGenericParameterClauseAndBaseType"
   case \NamedOpaqueReturnTypeSyntax.baseType:
     return "baseType"
   case \NamedOpaqueReturnTypeSyntax.unexpectedAfterBaseType:

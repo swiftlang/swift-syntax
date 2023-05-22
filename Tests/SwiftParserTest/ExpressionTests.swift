@@ -1318,6 +1318,7 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )

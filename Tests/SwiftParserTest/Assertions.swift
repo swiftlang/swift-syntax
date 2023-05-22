@@ -402,14 +402,15 @@ func assertDiagnostic<T: SyntaxProtocol>(
       line: spec.line
     )
   }
-  if let highlight = spec.highlight {
-    assertStringsEqualWithDiff(
-      diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
-      highlight.trimmingTrailingWhitespace(),
-      file: spec.file,
-      line: spec.line
-    )
-  }
+
+  let highlight = spec.highlight ?? diag.node.description
+  assertStringsEqualWithDiff(
+    diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
+    highlight.trimmingTrailingWhitespace(),
+    file: spec.file,
+    line: spec.line
+  )
+
   if diag.notes.count != spec.notes.count {
     XCTFail(
       """

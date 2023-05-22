@@ -778,7 +778,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     } else {  // If it's not a C-style for loop
       if node.sequenceExpr.is(MissingExprSyntax.self) {
-        addDiagnostic(node.sequenceExpr, .expectedSequenceExpressionInForEachLoop, handledNodes: [node.sequenceExpr.id])
+        addDiagnostic(
+          node.sequenceExpr,
+          .expectedSequenceExpressionInForEachLoop,
+          fixIts: [
+            FixIt(
+              message: InsertTokenFixIt(missingNodes: [Syntax(node.sequenceExpr)]),
+              changes: [.makePresent(node.sequenceExpr)]
+            )
+          ],
+          handledNodes: [node.sequenceExpr.id]
+        )
       }
     }
 

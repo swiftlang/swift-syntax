@@ -96,15 +96,37 @@ final class UnclosedStringInterpolationTests: XCTestCase {
   func testUnclosedStringInterpolation8() {
     assertParse(
       ##"""
-      _ = """
-      \(
-      """1️⃣
+      _ = 1️⃣"""
+      \2️⃣(
+      3️⃣"""4️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
-        DiagnosticSpec(message: "expected ')' in string literal"),
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#),
-      ]
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+      ],
+      fixedSource: ##"""
+        _ = """
+        \(
+        """
+        """)
+        """
+        """##
     )
   }
 

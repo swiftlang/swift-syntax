@@ -582,13 +582,26 @@ final class MultilineErrorsTests: XCTestCase {
   func testMultilineErrors26() {
     assertParseWithAllNewlineEndings(
       ##"""
-      _ = """
+      _ = ℹ️"""
         foo1️⃣\2️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "invalid escape sequence in literal"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"expected '"""' to end string literal"#),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+      ],
+      fixedSource: ##"""
+        _ = """
+          foo\
+        """
+        """##
     )
   }
 
@@ -623,6 +636,7 @@ final class MultilineErrorsTests: XCTestCase {
       fixedSource: #"""
         _ = """
          \#u{20}
+          
           """
         """#
     )

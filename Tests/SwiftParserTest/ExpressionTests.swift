@@ -550,16 +550,28 @@ final class ExpressionTests: XCTestCase {
             NoteSpec(message: #"to match this opening '"""'"#)
           ]
         )
-      ]
+      ],
+      fixedSource: ##"""
+        """"
+        """
+        """##
     )
 
     assertParse(
       ##"""
-      """""1️⃣
+      ℹ️"""""1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: #"expected '"""' to end string literal"#)
-      ]
+        DiagnosticSpec(
+          message: #"expected '"""' to end string literal"#,
+          notes: [NoteSpec(message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        )
+      ],
+      fixedSource: ##"""
+        """""
+        """
+        """##
     )
 
     assertParse(
@@ -589,8 +601,12 @@ final class ExpressionTests: XCTestCase {
       #"""1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##)
-      ]
+        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
+      ],
+      fixedSource: ##"""
+        #"""
+        """#
+        """##
     )
 
     assertParse(
@@ -598,8 +614,12 @@ final class ExpressionTests: XCTestCase {
       #"""a1️⃣
       """##,
       diagnostics: [
-        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##)
-      ]
+        DiagnosticSpec(message: ##"expected '"""#' to end string literal"##, fixIts: [##"insert '"""#'"##])
+      ],
+      fixedSource: ##"""
+        #"""a
+        """#
+        """##
     )
 
     assertParse(

@@ -14,7 +14,7 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-final class StringLiteralTests: XCTestCase {
+final class StringLiteralExprSyntaxTests: XCTestCase {
   func testStringLiteral() {
     let leadingTrivia = Trivia.unexpectedText("␣")
     let testCases: [UInt: (String, String)] = [
@@ -331,6 +331,46 @@ final class StringLiteralTests: XCTestCase {
           """
         )
       }
+      """#
+    )
+  }
+
+  func testMultiStringOpeningQuote() {
+    assertBuildResult(
+      StringLiteralExprSyntax(openQuote: .multilineStringQuoteToken(), content: "a", closeQuote: .multilineStringQuoteToken()),
+      #"""
+      """
+      a
+      """
+      """#
+    )
+
+    assertBuildResult(
+      StringLiteralExprSyntax(
+        openQuote: .multilineStringQuoteToken(),
+        segments: StringLiteralSegmentsSyntax {
+          .expressionSegment(
+            ExpressionSegmentSyntax(
+              expressions: TupleExprElementListSyntax {
+                TupleExprElementSyntax(
+                  expression: StringLiteralExprSyntax(
+                    openQuote: .multilineStringQuoteToken(),
+                    content: "a",
+                    closeQuote: .multilineStringQuoteToken()
+                  )
+                )
+              }
+            )
+          )
+        },
+        closeQuote: .multilineStringQuoteToken()
+      ),
+      #"""
+      """
+      \("""
+      a
+      """)
+      """
       """#
     )
   }

@@ -452,12 +452,13 @@ public enum TypeSpecifier: TokenSpecSet {
 
 // MARK: Expression start
 
-enum AwaitTryMove: TokenSpecSet {
+enum ExpressionModifierKeyword: TokenSpecSet {
   case awaitKeyword
   case _moveKeyword
   case _borrowKeyword
   case tryKeyword
   case consumeKeyword
+  case copyKeyword
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -466,6 +467,7 @@ enum AwaitTryMove: TokenSpecSet {
     case TokenSpec(._borrow): self = ._borrowKeyword
     case TokenSpec(.try): self = .tryKeyword
     case TokenSpec(.consume): self = .consumeKeyword
+    case TokenSpec(.copy): self = .copyKeyword
     default: return nil
     }
   }
@@ -476,6 +478,7 @@ enum AwaitTryMove: TokenSpecSet {
     case ._moveKeyword: return .keyword(._move)
     case ._borrowKeyword: return .keyword(._borrow)
     case .consumeKeyword: return .keyword(.consume)
+    case .copyKeyword: return .keyword(.copy)
     case .tryKeyword: return .keyword(.try)
     }
   }
@@ -668,13 +671,13 @@ enum PrimaryExpressionStart: TokenSpecSet {
 ///  - `MatchingPatternStart`
 ///  - `PrimaryExpressionStart`
 enum ExpressionStart: TokenSpecSet {
-  case awaitTryMove(AwaitTryMove)
+  case awaitTryMove(ExpressionModifierKeyword)
   case expressionPrefixOperator(ExpressionPrefixOperator)
   case primaryExpressionStart(PrimaryExpressionStart)
   case ifOrSwitch(IfOrSwitch)
 
   init?(lexeme: Lexer.Lexeme) {
-    if let subset = AwaitTryMove(lexeme: lexeme) {
+    if let subset = ExpressionModifierKeyword(lexeme: lexeme) {
       self = .awaitTryMove(subset)
     } else if let subset = ExpressionPrefixOperator(lexeme: lexeme) {
       self = .expressionPrefixOperator(subset)
@@ -688,7 +691,7 @@ enum ExpressionStart: TokenSpecSet {
   }
 
   static var allCases: [ExpressionStart] {
-    return AwaitTryMove.allCases.map(Self.awaitTryMove)
+    return ExpressionModifierKeyword.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
       + IfOrSwitch.allCases.map(Self.ifOrSwitch)

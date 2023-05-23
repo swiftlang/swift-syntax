@@ -81,6 +81,7 @@ public enum SyntaxKind {
   case continueStmt
   case conventionAttributeArguments
   case conventionWitnessMethodAttributeArguments
+  case copyExpr
   case declModifierDetail
   case declModifier
   case declNameArgumentList
@@ -538,6 +539,8 @@ public enum SyntaxKind {
       return ConventionAttributeArgumentsSyntax.self
     case .conventionWitnessMethodAttributeArguments:
       return ConventionWitnessMethodAttributeArgumentsSyntax.self
+    case .copyExpr:
+      return CopyExprSyntax.self
     case .declModifierDetail:
       return DeclModifierDetailSyntax.self
     case .declModifier:

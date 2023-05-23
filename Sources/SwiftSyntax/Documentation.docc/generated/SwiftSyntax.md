@@ -94,6 +94,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/BooleanLiteralExprSyntax>
 - <doc:SwiftSyntax/BorrowExprSyntax>
 - <doc:SwiftSyntax/ClosureExprSyntax>
+- <doc:SwiftSyntax/CopyExprSyntax>
 - <doc:SwiftSyntax/DictionaryExprSyntax>
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>

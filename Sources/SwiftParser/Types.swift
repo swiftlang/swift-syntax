@@ -1057,27 +1057,26 @@ extension Parser {
         return result
       }
 
-      if self.at(.rightSquareBracket) {
-        let (unexpectedBeforeRSquareBracket, rightSquareBracket) = self.expect(.rightSquareBracket)
+      // If the right square bracket is at a new line, we should just return the result
+      if let rightSquareBracket = self.consume(if: TokenSpec(.rightSquareBracket, allowAtStartOfLine: false)) {
         result = RawTypeSyntax(
           RawArrayTypeSyntax(
             leftSquareBracket: missingToken(.leftSquareBracket),
             elementType: result,
-            unexpectedBeforeRSquareBracket,
             rightSquareBracket: rightSquareBracket,
             arena: self.arena
           )
         )
       } else if self.at(.colon) {
         var lookahead = self.lookahead()
-
         // We only want to continue with a dictionary if we can parse a colon and a simpletype.
         // Otherwise we can get a wrong diagnostic if we get a Python-style function declaration.
-        guard lookahead.consume(if: .colon) != nil && lookahead.canParseSimpleType() else {
+        guard lookahead.consume(if: .colon) != nil && lookahead.canParseSimpleType(),
+          let colon = self.consume(if: TokenSpec(.colon, allowAtStartOfLine: false))
+        else {
           return result
         }
 
-        let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let secondType = self.parseSimpleType()
         let rightSquareBracket = self.consume(if: .rightSquareBracket) ?? self.missingToken(.rightSquareBracket)
 
@@ -1085,7 +1084,6 @@ extension Parser {
           RawDictionaryTypeSyntax(
             leftSquareBracket: self.missingToken(.leftSquareBracket),
             keyType: result,
-            unexpectedBeforeColon,
             colon: colon,
             valueType: secondType,
             rightSquareBracket: rightSquareBracket,

@@ -1,8 +1,8 @@
 # `@_spi` attribute
 
-swift-syntax extensively makes extensive use of the `@_spi` attribute. 
+Learn when SwiftSyntax exposes declaration annotated as `@_spi`.
 
-Functions marked as `@_spi(RawSyntax)` (where `RawSyntax` can be any name) are considered *SPI* (System Programming Interface) and are only accessible if the module that declares them is imported as `@_spi(RawSyntax)`.
+Functions marked as `@_spi(RawSyntax)` (where ``RawSyntax`` can be any name) are considered *SPI* (System Programming Interface) and are only accessible if the module that declares them is imported as `@_spi(RawSyntax)`.
 
 Since functions marked as SPI are not part of the public API, swift-syntax makes no guarantee to their source stability. swift-syntax makes no effort to keep its SPI stable.
 

@@ -56,6 +56,13 @@ function(add_swift_host_library name)
       -emit-module-interface-path;${module_interface_file}
       >)
 
+  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_compile_options(${name} PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+        -wmo
+        >)
+  endif()
+
   # NOTE: workaround for CMake not setting up include flags yet
   set_target_properties(${name} PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES ${module_dir}

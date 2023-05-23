@@ -13,6 +13,31 @@
 @_spi(RawSyntax) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
+// MARK: - ArrayElementList
+
+extension ArrayElementListSyntax {
+  public init(expressions: [ExprSyntax]) {
+    let lastIndex = expressions.count - 1
+    let elements = expressions.enumerated().map { index, expression in
+      let element = ArrayElementSyntax(expression: expression)
+      if index < lastIndex {
+        return element.ensuringTrailingComma()
+      } else {
+        return element
+      }
+    }
+    self.init(elements)
+  }
+}
+
+// MARK: - ArrayExpr
+
+extension ArrayExprSyntax {
+  public init(expressions: [ExprSyntax]) {
+    self.init(elements: ArrayElementListSyntax(expressions: expressions))
+  }
+}
+
 // MARK: - CustomAttribute
 
 extension AttributeSyntax {

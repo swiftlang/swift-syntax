@@ -26,8 +26,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 These articles are intended for developers wishing to contribute to SwiftSyntax
 
-- <doc:ChangingSwiftSyntax>
-- <doc:Existentials>
+{{ContributingDocs}}
 
 ### Syntax
 

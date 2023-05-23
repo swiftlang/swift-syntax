@@ -28,6 +28,8 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 - <doc:ChangingSwiftSyntax>
 - <doc:Existentials>
+- <doc:SPI>
+- <doc:Swift-Version>
 
 ### Syntax
 

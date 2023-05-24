@@ -1541,9 +1541,9 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil,
-      genericParameters: GenericParameterClauseSyntax,
-      _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      genericParameterClause: GenericParameterClauseSyntax,
+      _ unexpectedBetweenGenericParameterClauseAndBaseType: UnexpectedNodesSyntax? = nil,
       baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -1552,16 +1552,16 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeGenericParameters, 
-            genericParameters, 
-            unexpectedBetweenGenericParametersAndBaseType, 
+            unexpectedBeforeGenericParameterClause, 
+            genericParameterClause, 
+            unexpectedBetweenGenericParameterClauseAndBaseType, 
             baseType, 
             unexpectedAfterBaseType
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeGenericParameters?.raw, 
-          genericParameters.raw, 
-          unexpectedBetweenGenericParametersAndBaseType?.raw, 
+          unexpectedBeforeGenericParameterClause?.raw, 
+          genericParameterClause.raw, 
+          unexpectedBetweenGenericParameterClauseAndBaseType?.raw, 
           baseType.raw, 
           unexpectedAfterBaseType?.raw
         ]
@@ -1578,7 +1578,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1587,7 +1587,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var genericParameters: GenericParameterClauseSyntax {
+  public var genericParameterClause: GenericParameterClauseSyntax {
     get {
       return GenericParameterClauseSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -1596,7 +1596,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndBaseType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1625,9 +1625,9 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeGenericParameters, 
-          \Self.genericParameters, 
-          \Self.unexpectedBetweenGenericParametersAndBaseType, 
+          \Self.unexpectedBeforeGenericParameterClause, 
+          \Self.genericParameterClause, 
+          \Self.unexpectedBetweenGenericParameterClauseAndBaseType, 
           \Self.baseType, 
           \Self.unexpectedAfterBaseType
         ])

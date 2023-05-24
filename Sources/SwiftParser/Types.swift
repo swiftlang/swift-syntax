@@ -1045,7 +1045,7 @@ extension Parser {
       let baseType = self.parseType()
       return RawTypeSyntax(
         RawNamedOpaqueReturnTypeSyntax(
-          genericParameters: generics,
+          genericParameterClause: generics,
           baseType: baseType,
           arena: self.arena
         )

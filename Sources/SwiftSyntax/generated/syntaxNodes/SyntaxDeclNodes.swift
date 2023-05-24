@@ -1765,9 +1765,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       enumKeyword: TokenSyntax = .keyword(.enum),
       _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil,
-      genericParameters: GenericParameterClauseSyntax? = nil,
-      _ unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      genericParameterClause: GenericParameterClauseSyntax? = nil,
+      _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
@@ -1788,9 +1788,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             enumKeyword, 
             unexpectedBetweenEnumKeywordAndIdentifier, 
             identifier, 
-            unexpectedBetweenIdentifierAndGenericParameters, 
-            genericParameters, 
-            unexpectedBetweenGenericParametersAndInheritanceClause, 
+            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            genericParameterClause, 
+            unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
             genericWhereClause, 
@@ -1807,9 +1807,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           enumKeyword.raw, 
           unexpectedBetweenEnumKeywordAndIdentifier?.raw, 
           identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameters?.raw, 
-          genericParameters?.raw, 
-          unexpectedBetweenGenericParametersAndInheritanceClause?.raw, 
+          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          genericParameterClause?.raw, 
+          unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
@@ -1944,7 +1944,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1954,7 +1954,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The generic parameters, if any, for this enum declaration.
-  public var genericParameters: GenericParameterClauseSyntax? {
+  public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
     }
@@ -1963,7 +1963,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2039,9 +2039,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.enumKeyword, 
           \Self.unexpectedBetweenEnumKeywordAndIdentifier, 
           \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameters, 
-          \Self.genericParameters, 
-          \Self.unexpectedBetweenGenericParametersAndInheritanceClause, 
+          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.genericParameterClause, 
+          \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 

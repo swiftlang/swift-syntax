@@ -126,7 +126,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \EnumDeclSyntax.modifiers:
     return "modifiers"
-  case \EnumDeclSyntax.genericParameters:
+  case \EnumDeclSyntax.genericParameterClause:
     return "generic parameter clause"
   case \EnumDeclSyntax.inheritanceClause:
     return "inheritance clause"

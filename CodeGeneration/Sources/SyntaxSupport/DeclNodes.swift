@@ -749,7 +749,7 @@ public let DECL_NODES: [Node] = [
         description: "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
-        name: "GenericParameters",
+        name: "GenericParameterClause",
         kind: .node(kind: "GenericParameterClause"),
         nameForDiagnostics: "generic parameter clause",
         description: "The generic parameters, if any, for this enum declaration.",

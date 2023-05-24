@@ -1498,6 +1498,18 @@ final class RecoveryTests: XCTestCase {
         line: line
       )
     }
+
+    assertParse(
+      """
+      let a8: Int
+      1️⃣]
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous code ']' at top level"
+        )
+      ]
+    )
   }
 
   func testRecovery98b() {
@@ -1527,7 +1539,7 @@ final class RecoveryTests: XCTestCase {
         let a2: 2️⃣String: Int]
         let a3: 3️⃣String: [Int]4️⃣
         let a4: 5️⃣String: Int6️⃣
-        let a4: 7️⃣String: Int]??
+        let a5: 7️⃣String: Int]??
       }
       """,
       diagnostics: [
@@ -1577,9 +1589,21 @@ final class RecoveryTests: XCTestCase {
           let a2: [String: Int]
           let a3: [String: [Int]]
           let a4: [String: Int]
-          let a4: [String: Int]??
+          let a5: [String: Int]??
         }
         """
+    )
+
+    assertParse(
+      """
+      let a6: [Int: String]
+      1️⃣]
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous code ']' at top level"
+        )
+      ]
     )
   }
 

@@ -18,6 +18,8 @@ public enum TriviaPosition {
 /// A collection of leading or trailing trivia. This is the main data structure
 /// for thinking about trivia.
 public struct Trivia {
+  /// The pieces this trivia consists of. Each ``TriviaPiece`` can represent
+  /// multiple characters, such as an entire comment or 4 spaces.
   public let pieces: [TriviaPiece]
 
   /// Creates Trivia with the provided underlying pieces.
@@ -30,11 +32,13 @@ public struct Trivia {
     pieces.isEmpty
   }
 
+  /// The length of all the pieces in this ``Trivia``.
   public var sourceLength: SourceLength {
     return pieces.map({ $0.sourceLength }).reduce(.zero, +)
   }
 
-  /// Get the byteSize of this trivia
+  /// Get the number of bytes this trivia needs to be represented as UTF-8.
+  @available(*, deprecated, renamed: "sourceLength.utf8Length")
   public var byteSize: Int {
     return sourceLength.utf8Length
   }
@@ -87,18 +91,22 @@ public struct Trivia {
 extension Trivia: Equatable {}
 
 extension Trivia: Collection {
+  /// The index of the first ``TriviaPiece`` within this trivia.
   public var startIndex: Int {
     return pieces.startIndex
   }
 
+  /// The index one after the last ``TriviaPiece`` within this trivia.
   public var endIndex: Int {
     return pieces.endIndex
   }
 
-  public func index(after i: Int) -> Int {
-    return pieces.index(after: i)
+  /// The index of the trivia piece after the piece at `index`.
+  public func index(after index: Int) -> Int {
+    return pieces.index(after: index)
   }
 
+  /// The ``TriviaPiece`` at `index`.
   public subscript(_ index: Int) -> TriviaPiece {
     return pieces[index]
   }
@@ -123,6 +131,7 @@ extension Trivia: TextOutputStreamable {
 }
 
 extension Trivia: CustomStringConvertible {
+  /// The trivia’s representation in source code.
   public var description: String {
     var description = ""
     self.write(to: &description)
@@ -131,6 +140,9 @@ extension Trivia: CustomStringConvertible {
 }
 
 extension Trivia: CustomDebugStringConvertible {
+  /// A debug description that shows the individual trivia pieces.
+  ///
+  /// Do not rely on this output being stable.
   public var debugDescription: String {
     if count == 1, let first {
       return first.debugDescription
@@ -172,12 +184,16 @@ extension Trivia {
 }
 
 extension RawTriviaPiece: TextOutputStreamable {
+  /// Write the source representation of this trivia piece to `target`.
   public func write(to target: inout some TextOutputStream) {
     TriviaPiece(raw: self).write(to: &target)
   }
 }
 
 extension RawTriviaPiece: CustomDebugStringConvertible {
+  /// A debug description of this trivia piece.
+  ///
+  /// Do not rely on this output being stable.
   public var debugDescription: String {
     TriviaPiece(raw: self).debugDescription
   }

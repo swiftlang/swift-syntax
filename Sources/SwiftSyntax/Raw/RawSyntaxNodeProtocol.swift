@@ -58,15 +58,19 @@ public extension RawSyntaxNodeProtocol {
 
 /// `RawSyntax` itself conforms to `RawSyntaxNodeProtocol`.
 extension RawSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     return true
   }
+
+  @_spi(RawSyntax)
   public var raw: RawSyntax { self }
 
   init(raw: RawSyntax) {
     self = raw
   }
 
+  @_spi(RawSyntax)
   public init(_ other: some RawSyntaxNodeProtocol) {
     self.init(raw: other.raw)
   }
@@ -75,6 +79,7 @@ extension RawSyntax: RawSyntaxNodeProtocol {
 #if swift(<5.8)
 // Cherry-pick this function from SE-0370
 extension Slice {
+  @_spi(RawSyntax)
   @inlinable
   public func initialize<S>(
     from source: S
@@ -90,6 +95,7 @@ extension Slice {
 
 @_spi(RawSyntax)
 public struct RawTokenSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
   public typealias SyntaxType = TokenSyntax
 
   @_spi(RawSyntax)
@@ -97,10 +103,12 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     return raw.tokenView!
   }
 
+  @_spi(RawSyntax)
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     return raw.kind == .token
   }
 
+  @_spi(RawSyntax)
   public var raw: RawSyntax
 
   init(raw: RawSyntax) {
@@ -112,43 +120,53 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     self.raw = raw
   }
 
+  @_spi(RawSyntax)
   public init?(_ other: some RawSyntaxNodeProtocol) {
     guard Self.isKindOf(other.raw) else { return nil }
     self.init(unchecked: other.raw)
   }
 
+  @_spi(RawSyntax)
   public var tokenKind: RawTokenKind {
     return tokenView.rawKind
   }
 
+  @_spi(RawSyntax)
   public var tokenText: SyntaxText {
     return tokenView.rawText
   }
 
+  @_spi(RawSyntax)
   public var byteLength: Int {
     return raw.byteLength
   }
 
+  @_spi(RawSyntax)
   public var presence: SourcePresence {
     tokenView.presence
   }
 
+  @_spi(RawSyntax)
   public var isMissing: Bool {
     presence == .missing
   }
 
+  @_spi(RawSyntax)
   public var leadingTriviaByteLength: Int {
     return tokenView.leadingTriviaByteLength
   }
 
+  @_spi(RawSyntax)
   public var leadingTriviaPieces: [RawTriviaPiece] {
     tokenView.leadingRawTriviaPieces
   }
 
+  @_spi(RawSyntax)
   public var trailingTriviaByteLength: Int {
     return tokenView.trailingTriviaByteLength
   }
 
+  @_spi(RawSyntax)
   public var trailingTriviaPieces: [RawTriviaPiece] {
     tokenView.trailingRawTriviaPieces
   }

@@ -47,4 +47,10 @@ final class ArrayExprTests: XCTestCase {
       """
     )
   }
+
+  func testInitializerWithExpressions() {
+    let expressions: [ExprSyntax] = ["0", "1", "2"]
+    let arrayExpr = ArrayExprSyntax(expressions: expressions)
+    XCTAssertEqual(arrayExpr.description, "[0,1,2]")
+  }
 }

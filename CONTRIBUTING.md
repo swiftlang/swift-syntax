@@ -63,6 +63,22 @@ Tip: Running SwiftSyntax’s self-parse tests takes the majority of testing time
 2. Select the Arguments tab in the Run section
 3. Add a `SKIP_LONG_TESTS` environment variable with value `1`
 
+### Additional Verification
+
+swift-syntax has two additional verification methods (see the two sections below) that provide more extensive validation. They have significant runtime impact on swift-syntax and are thus not enabled by default when building swift-syntax, but are enabled in CI. If CI fails and you are unable to reproduce the failure locally, make sure that `SKIP_LONG_TESTS` is not set and try enabling these validations.
+
+#### RawSyntax Validation
+
+When the `SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION` environment variable is set while building swift-syntax (or the check for that variable has been changed to always return `true` in Package.swift), SwiftSyntax will perform additional validation that the layout of the syntax tree is correct. It validates that every child of a syntax node has the correct kind (which should be guaranteed by the Swift type system in most cases) and, more importantly, validates that each token only has one of the token kinds that is specified in the syntax tree layout of the `CodeGeneration` package. 
+
+If this validation hits an assertion failure that a token is not accepted at a certain position in the syntax tree, double check if the token kind that is being stored in the syntax tree actually makes sense here. If it does not, check if there is a parser bug or whether you need to remap the token kind. If it does make sense, add the token kind to `.token(choices:)` of the syntax node in CodeGeneration, re-generate that source code and run tests again.
+
+#### Test Case Mutation
+
+When the `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION` environment variable is set while building swift-syntax (or the check for that variable has been changed to always return `true` in Package.swift), SwiftParser records alternative tokens that the parser was looking for at specific offsets in the source file (e.g. whether it also checked for a `struct` keyword when the source code contained a `class` keyword). It will then use that information to mutate the test case by e.g. substituting `class` by `struct`.
+
+When testing finds one of these failures, it will show you the syntax tree that produced the failure. Create a new test case with the source code the failure gives you and fix the failure.
+
 ### `lit`-based Tests
 
 A few tests are based LLVM’s `lit` and `FileCheck` tools.

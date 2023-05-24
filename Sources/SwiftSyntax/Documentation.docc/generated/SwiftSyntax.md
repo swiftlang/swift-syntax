@@ -17,12 +17,19 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 ### Articles
 
 - <doc:Working-with-SwiftSyntax>
-- <doc:ChangingSwiftSyntax>
-- <doc:Create-SwiftSyntax-Release>
 
 ### Tutorials
 
 - <doc:Tutorial-Table-of-Contents>
+
+### Contributing
+
+These articles are intended for developers wishing to contribute to SwiftSyntax
+
+- <doc:ChangingSwiftSyntax>
+- <doc:Existentials>
+- <doc:SPI>
+- <doc:Swift-Version>
 
 ### Syntax
 

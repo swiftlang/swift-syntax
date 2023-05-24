@@ -1410,7 +1410,7 @@ extension Parser {
         }
 
         let accessor: RawPatternBindingSyntax.Accessor?
-        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorKind.self) != nil) {
+        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorKind.self) != nil && !self.at(.keyword(.`init`))) {
           switch self.parseGetSet() {
           case .accessors(let accessors):
             accessor = .accessors(accessors)
@@ -1522,7 +1522,7 @@ extension Parser {
     //
     //     set-name    ::= '(' identifier ')'
     let parameter: RawAccessorParameterSyntax?
-    if [AccessorKind.set, .willSet, .didSet].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
+    if [AccessorKind.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       parameter = RawAccessorParameterSyntax(

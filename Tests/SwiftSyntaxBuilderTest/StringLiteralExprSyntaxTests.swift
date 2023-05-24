@@ -168,9 +168,9 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
     // Tab should not be escaped in single-line string literals
     assertBuildResult(
       StringLiteralExprSyntax(
-        openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
+        openQuote: .multilineStringQuoteToken(),
         content: "a\tb",
-        closeQuote: .multilineStringQuoteToken(leadingTrivia: .newline)
+        closeQuote: .multilineStringQuoteToken()
       ),
       #"""
       """
@@ -225,7 +225,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
   func testMultiLineStringWithResultBuilder() {
     let buildable = StringLiteralExprSyntax(
-      openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
+      openQuote: .multilineStringQuoteToken(),
       segments: StringLiteralSegmentsSyntax {
         StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
@@ -236,7 +236,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
           }
         )
       },
-      closeQuote: .multilineStringQuoteToken(leadingTrivia: .newline)
+      closeQuote: .multilineStringQuoteToken()
     )
 
     assertBuildResult(

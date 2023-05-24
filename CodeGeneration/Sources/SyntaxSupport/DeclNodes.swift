@@ -55,8 +55,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
-        requiresLeadingNewline: true
+        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
       ),
     ]
   ),
@@ -992,8 +991,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "PoundKeyword",
         kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")]),
-        classification: "BuildConfigId",
-        requiresLeadingNewline: true
+        classification: "BuildConfigId"
       ),
       Child(
         name: "Condition",
@@ -1045,8 +1043,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "PoundEndif",
         kind: .token(choices: [.token(tokenKind: "PoundEndifToken")]),
-        classification: "BuildConfigId",
-        requiresLeadingNewline: true
+        classification: "BuildConfigId"
       ),
     ]
   ),
@@ -1355,8 +1352,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
-        requiresLeadingNewline: true
+        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
       ),
     ]
   ),

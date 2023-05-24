@@ -473,8 +473,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
-        requiresLeadingNewline: true
+        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
       ),
     ]
   ),
@@ -1643,8 +1642,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")]),
-        requiresLeadingNewline: true
+        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
       ),
     ]
   ),

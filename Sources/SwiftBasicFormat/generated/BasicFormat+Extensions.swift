@@ -23,15 +23,6 @@ public extension SyntaxProtocol {
   }
 }
 
-public extension TokenSyntax {
-  var requiresLeadingNewline: Bool {
-    if let keyPath = keyPathInParent, keyPath.requiresLeadingNewline {
-      return true
-    }
-    return false
-  }
-}
-
 fileprivate extension AnyKeyPath {
   var requiresIndent: Bool {
     switch self {
@@ -64,27 +55,6 @@ fileprivate extension AnyKeyPath {
     case \TupleExprSyntax.elementList:
       return true
     case \TupleTypeSyntax.elements:
-      return true
-    default:
-      return false
-    }
-  }
-  
-  var requiresLeadingNewline: Bool {
-    switch self {
-    case \AccessorBlockSyntax.rightBrace:
-      return true
-    case \ClosureExprSyntax.rightBrace:
-      return true
-    case \CodeBlockSyntax.rightBrace:
-      return true
-    case \IfConfigClauseSyntax.poundKeyword:
-      return true
-    case \IfConfigDeclSyntax.poundEndif:
-      return true
-    case \MemberDeclBlockSyntax.rightBrace:
-      return true
-    case \SwitchExprSyntax.rightBrace:
       return true
     default:
       return false

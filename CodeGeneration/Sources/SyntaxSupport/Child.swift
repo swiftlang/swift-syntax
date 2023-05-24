@@ -62,7 +62,6 @@ public class Child {
   public let description: String?
   public let forceClassification: Bool
   public let isIndented: Bool
-  public let requiresLeadingNewline: Bool
   public let isOptional: Bool
   public let classification: SyntaxClassification?
 
@@ -160,8 +159,7 @@ public class Child {
     isOptional: Bool = false,
     classification: String? = nil,
     forceClassification: Bool = false,
-    isIndented: Bool = false,
-    requiresLeadingNewline: Bool = false
+    isIndented: Bool = false
   ) {
     if let firstCharInName = name.first {
       precondition(firstCharInName.isUppercase == true, "The first letter of a child’s name should be uppercase")
@@ -173,7 +171,6 @@ public class Child {
     self.classification = classificationByName(classification)
     self.forceClassification = forceClassification
     self.isIndented = isIndented
-    self.requiresLeadingNewline = requiresLeadingNewline
     self.isOptional = isOptional
   }
 }

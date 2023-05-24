@@ -65,39 +65,11 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
     )
   }
 
-  try! ExtensionDeclSyntax("public extension TokenSyntax") {
-    DeclSyntax(
-      """
-      var requiresLeadingNewline: Bool {
-        if let keyPath = keyPathInParent, keyPath.requiresLeadingNewline {
-          return true
-        }
-        return false
-      }
-      """
-    )
-  }
-
   try! ExtensionDeclSyntax("fileprivate extension AnyKeyPath") {
     try VariableDeclSyntax("var requiresIndent: Bool") {
       try SwitchExprSyntax("switch self") {
         for node in SYNTAX_NODES.compactMap(\.layoutNode) {
           for child in node.children where child.isIndented {
-            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
-              StmtSyntax("return true")
-            }
-          }
-        }
-        SwitchCaseSyntax("default:") {
-          StmtSyntax("return false")
-        }
-      }
-    }
-
-    try VariableDeclSyntax("var requiresLeadingNewline: Bool") {
-      try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-          for child in node.children where child.requiresLeadingNewline {
             SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
               StmtSyntax("return true")
             }

@@ -82,8 +82,9 @@ struct GenerateSwiftSyntax: ParsableCommand {
         // SwiftBasicFormat
         GeneratedFileSpec(swiftBasicFormatGeneratedDir + ["BasicFormat+Extensions.swift"], basicFormatExtensionsFile),
 
-        // IDEUtils
+        // SwiftIDEUtils
         GeneratedFileSpec(swiftideUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),
+        GeneratedFileSpec(swiftideUtilsGeneratedDir + ["TokenChoices.swift"], tokenChoicesFile),
 
         // SwiftParser
         GeneratedFileSpec(swiftParserGeneratedDir + ["DeclarationModifier.swift"], declarationModifierFile),

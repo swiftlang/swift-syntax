@@ -753,11 +753,10 @@ final class RegexLiteralTests: XCTestCase {
   func testBinOpDisambiguation26() {
     assertParse(
       """
-      #1️⃣ 2️⃣/^ x/
+      #1️⃣ /^ x/
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "extraneous whitespace after '#' is not permitted", fixIts: ["remove whitespace"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
       ],
       fixedSource: """
         #<#identifier#> /^ x/

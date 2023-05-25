@@ -323,20 +323,35 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       !unexpected.trailingTrivia.isEmpty,
       token.isMissing
     {
-      let fixIt = FixIt(
-        message: .removeExtraneousWhitespace,
-        changes: [
-          .makeMissing(unexpected, transferTrivia: false),  // don't transfer trivia because trivia is the issue here
-          .makePresent(token, leadingTrivia: unexpected.leadingTrivia),
-        ]
-      )
-      addDiagnostic(
-        token,
-        position: unexpected.endPositionBeforeTrailingTrivia,
-        ExtraneousWhitespace(tokenWithWhitespace: unexpected),
-        fixIts: [fixIt],
-        handledNodes: [token.id, unexpected.id]
-      )
+      let changes: [FixIt.MultiNodeChange] = [
+        .makeMissing(unexpected, transferTrivia: false),  // don't transfer trivia because trivia is the issue here
+        .makePresent(token, leadingTrivia: unexpected.leadingTrivia),
+      ]
+      if let nextToken = token.nextToken(viewMode: .all),
+        nextToken.isMissing
+      {
+        // If the next token is missing, the problem here isn’t actually the
+        // space after token but that the missing token should be added after
+        // `token` without a space. Generate a diagnsotic for that.
+        _ = handleMissingSyntax(
+          nextToken,
+          overridePosition: unexpected.endPositionBeforeTrailingTrivia,
+          additionalChanges: changes,
+          additionalHandledNodes: [unexpected.id, token.id]
+        )
+      } else {
+        let fixIt = FixIt(
+          message: .removeExtraneousWhitespace,
+          changes: changes
+        )
+        addDiagnostic(
+          token,
+          position: unexpected.endPositionBeforeTrailingTrivia,
+          ExtraneousWhitespace(tokenWithWhitespace: unexpected),
+          fixIts: [fixIt],
+          handledNodes: [token.id, unexpected.id]
+        )
+      }
     }
   }
 

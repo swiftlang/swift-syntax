@@ -81,9 +81,9 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
   try! ExtensionDeclSyntax("fileprivate extension AnyKeyPath") {
     try VariableDeclSyntax("var requiresIndent: Bool") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where !node.isBase {
+        for node in SYNTAX_NODES.compactMap(\.layoutNode) {
           for child in node.children where child.isIndented {
-            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
               StmtSyntax("return true")
             }
           }
@@ -96,9 +96,9 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
 
     try VariableDeclSyntax("var requiresLeadingNewline: Bool") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where !node.isBase {
+        for node in SYNTAX_NODES.compactMap(\.layoutNode) {
           for child in node.children where child.requiresLeadingNewline {
-            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
               StmtSyntax("return true")
             }
           }
@@ -111,10 +111,10 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
 
     try VariableDeclSyntax("var requiresLeadingSpace: Bool?") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where !node.isBase {
+        for node in SYNTAX_NODES.compactMap(\.layoutNode) {
           for child in node.children {
             if let requiresLeadingSpace = child.requiresLeadingSpace {
-              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
                 StmtSyntax("return \(literal: requiresLeadingSpace)")
               }
             }
@@ -128,10 +128,10 @@ let basicFormatExtensionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader)
 
     try VariableDeclSyntax("var requiresTrailingSpace: Bool?") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where !node.isBase {
+        for node in SYNTAX_NODES.compactMap(\.layoutNode) {
           for child in node.children {
             if let requiresTrailingSpace = child.requiresTrailingSpace {
-              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):") {
+              SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
                 StmtSyntax("return \(literal: requiresTrailingSpace)")
               }
             }

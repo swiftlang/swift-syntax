@@ -10,19 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Converts a SyntaxKind to a type name, checking to see if the kind is
-/// Syntax or SyntaxCollection first.
-/// A type name is the same as the SyntaxKind name with the suffix "Syntax"
-/// added.
-func kindToType(kind: String) -> String {
-  if ["Syntax", "SyntaxCollection"].contains(kind) {
-    return kind
-  } else if kind.hasSuffix("Token") {
-    return "TokenSyntax"
-  }
-
-  return kind + "Syntax"
-}
+import SwiftSyntax
 
 /// Lowercases the first word in the provided camelCase or PascalCase string.
 /// EOF -> eof
@@ -48,4 +36,21 @@ public func lowercaseFirstWord(name: String) -> String {
   }
 
   return name.prefix(wordIndex).lowercased() + name[name.index(name.startIndex, offsetBy: wordIndex)..<name.endIndex]
+}
+
+/// Give a (possibly multi-line) string, prepends `///` to each line and creates
+/// a `.docLineComment` trivia piece for each line.
+func docCommentTrivia(from string: String?) -> SwiftSyntax.Trivia {
+  guard let string else {
+    return []
+  }
+  let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
+  let pieces = lines.enumerated().map { (index, line) in
+    var line = line
+    if index != lines.count - 1 {
+      line = "\(line)\n"
+    }
+    return SwiftSyntax.TriviaPiece.docLineComment("/// \(line)")
+  }
+  return SwiftSyntax.Trivia(pieces: pieces)
 }

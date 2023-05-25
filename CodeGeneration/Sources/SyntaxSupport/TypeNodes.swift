@@ -13,9 +13,9 @@
 public let TYPE_NODES: [Node] = [
   // array-type -> '[' type ']'
   Node(
-    name: "ArrayType",
+    kind: .arrayType,
+    base: .type,
     nameForDiagnostics: "array type",
-    kind: "Type",
     children: [
       Child(
         name: "LeftSquareBracket",
@@ -23,7 +23,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "ElementType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "RightSquareBracket",
@@ -35,9 +35,9 @@ public let TYPE_NODES: [Node] = [
   // attributed-type -> type-specifier? attribute-list? type
   // type-specifier -> 'inout' | 'borrowing' | 'consuming' | '__owned' | '__shared'
   Node(
-    name: "AttributedType",
+    kind: .attributedType,
+    base: .type,
     nameForDiagnostics: "type",
-    kind: "Type",
     traits: [
       "WithAttributes"
     ],
@@ -49,20 +49,20 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Attributes",
-        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
         isOptional: true
       ),
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
   // class-restriction-type -> 'class'
   Node(
-    name: "ClassRestrictionType",
+    kind: .classRestrictionType,
+    base: .type,
     nameForDiagnostics: nil,
-    kind: "Type",
     children: [
       Child(
         name: "ClassKeyword",
@@ -74,25 +74,25 @@ public let TYPE_NODES: [Node] = [
   // composition-typeelement-list -> composition-type-element
   //   composition-type-element-list?
   Node(
-    name: "CompositionTypeElementList",
+    kind: .compositionTypeElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "CompositionTypeElement"
+    elementChoices: [.compositionTypeElement]
   ),
 
   // composition-type-element -> type '&'
   Node(
-    name: "CompositionTypeElement",
+    kind: .compositionTypeElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     children: [
       Child(
         name: "Type",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "Ampersand",
-        kind: .node(kind: "Token"),
+        kind: .node(kind: .token),
         isOptional: true
       ),
     ]
@@ -100,22 +100,22 @@ public let TYPE_NODES: [Node] = [
 
   // composition-type -> composition-type-element-list
   Node(
-    name: "CompositionType",
+    kind: .compositionType,
+    base: .type,
     nameForDiagnostics: "type composition",
-    kind: "Type",
     children: [
       Child(
         name: "Elements",
-        kind: .collection(kind: "CompositionTypeElementList", collectionElementName: "Element")
+        kind: .collection(kind: .compositionTypeElementList, collectionElementName: "Element")
       )
     ]
   ),
 
   // constrained-sugar-type -> ('some'|'any') type
   Node(
-    name: "ConstrainedSugarType",
+    kind: .constrainedSugarType,
+    base: .type,
     nameForDiagnostics: "type",
-    kind: "Type",
     children: [
       Child(
         name: "SomeOrAnySpecifier",
@@ -123,16 +123,16 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // dictionary-type -> '[' type ':' type ']'
   Node(
-    name: "DictionaryType",
+    kind: .dictionaryType,
+    base: .type,
     nameForDiagnostics: "dictionary type",
-    kind: "Type",
     children: [
       Child(
         name: "LeftSquareBracket",
@@ -140,7 +140,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "KeyType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "key type"
       ),
       Child(
@@ -149,7 +149,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "ValueType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "value type"
       ),
       Child(
@@ -163,9 +163,9 @@ public let TYPE_NODES: [Node] = [
   // function-type -> attribute-list '(' function-type-argument-list ')'
   //   type-effect-specifiers? return-clause
   Node(
-    name: "FunctionType",
+    kind: .functionType,
+    base: .type,
     nameForDiagnostics: "function type",
-    kind: "Type",
     traits: [
       "Parenthesized"
     ],
@@ -176,7 +176,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Arguments",
-        kind: .collection(kind: "TupleTypeElementList", collectionElementName: "Argument"),
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Argument"),
         isIndented: true
       ),
       Child(
@@ -185,21 +185,21 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "EffectSpecifiers",
-        kind: .node(kind: "TypeEffectSpecifiers"),
+        kind: .node(kind: .typeEffectSpecifiers),
         isOptional: true
       ),
       Child(
         name: "Output",
-        kind: .node(kind: "ReturnClause")
+        kind: .node(kind: .returnClause)
       ),
     ]
   ),
 
   // generic-argument-clause -> '<' generic-argument-list '>'
   Node(
-    name: "GenericArgumentClause",
+    kind: .genericArgumentClause,
+    base: .syntax,
     nameForDiagnostics: "generic argument clause",
-    kind: "Syntax",
     children: [
       Child(
         name: "LeftAngleBracket",
@@ -207,7 +207,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Arguments",
-        kind: .collection(kind: "GenericArgumentList", collectionElementName: "Argument")
+        kind: .collection(kind: .genericArgumentList, collectionElementName: "Argument")
       ),
       Child(
         name: "RightAngleBracket",
@@ -218,26 +218,26 @@ public let TYPE_NODES: [Node] = [
 
   // generic-argument-list -> generic-argument generic-argument-list?
   Node(
-    name: "GenericArgumentList",
+    kind: .genericArgumentList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "GenericArgument"
+    elementChoices: [.genericArgument]
   ),
 
   // A generic argument.
   // Dictionary<Int, String>
   //            ^~~~ ^~~~~~
   Node(
-    name: "GenericArgument",
+    kind: .genericArgument,
+    base: .syntax,
     nameForDiagnostics: "generic argument",
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "ArgumentType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "TrailingComma",
@@ -249,13 +249,13 @@ public let TYPE_NODES: [Node] = [
 
   // implicitly-unwrapped-optional-type -> type '!'
   Node(
-    name: "ImplicitlyUnwrappedOptionalType",
+    kind: .implicitlyUnwrappedOptionalType,
+    base: .type,
     nameForDiagnostics: "implicitly unwrapped optional type",
-    kind: "Type",
     children: [
       Child(
         name: "WrappedType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "ExclamationMark",
@@ -266,13 +266,13 @@ public let TYPE_NODES: [Node] = [
 
   // member-type-identifier -> type '.' identifier generic-argument-clause?
   Node(
-    name: "MemberTypeIdentifier",
+    kind: .memberTypeIdentifier,
+    base: .type,
     nameForDiagnostics: "member type",
-    kind: "Type",
     children: [
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "base type"
       ),
       Child(
@@ -287,7 +287,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "GenericArgumentClause",
-        kind: .node(kind: "GenericArgumentClause"),
+        kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
     ]
@@ -295,13 +295,13 @@ public let TYPE_NODES: [Node] = [
   // metatype-type -> type '.' 'Type'
   //                | type '.' 'Protocol
   Node(
-    name: "MetatypeType",
+    kind: .metatypeType,
+    base: .type,
     nameForDiagnostics: "metatype",
-    kind: "Type",
     children: [
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type"),
+        kind: .node(kind: .type),
         nameForDiagnostics: "base type"
       ),
       Child(
@@ -317,30 +317,30 @@ public let TYPE_NODES: [Node] = [
 
   // named-opaque-return-type -> generic-argument-clause type
   Node(
-    name: "NamedOpaqueReturnType",
+    kind: .namedOpaqueReturnType,
+    base: .type,
     nameForDiagnostics: "named opaque return type",
-    kind: "Type",
     children: [
       Child(
         name: "GenericParameterClause",
-        kind: .node(kind: "GenericParameterClause")
+        kind: .node(kind: .genericParameterClause)
       ),
       Child(
         name: "BaseType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // optional-type -> type '?'
   Node(
-    name: "OptionalType",
+    kind: .optionalType,
+    base: .type,
     nameForDiagnostics: "optional type",
-    kind: "Type",
     children: [
       Child(
         name: "WrappedType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "QuestionMark",
@@ -351,9 +351,9 @@ public let TYPE_NODES: [Node] = [
 
   // suppressed-type -> '~' type
   Node(
-    name: "SuppressedType",
+    kind: .suppressedType,
+    base: .type,
     nameForDiagnostics: "suppressed type conformance",
-    kind: "Type",
     children: [
       Child(
         name: "WithoutTilde",
@@ -361,16 +361,16 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "PatternType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // pack-expansion-type -> type '...'
   Node(
-    name: "PackExpansionType",
+    kind: .packExpansionType,
+    base: .type,
     nameForDiagnostics: "variadic expansion",
-    kind: "Type",
     children: [
       Child(
         name: "RepeatKeyword",
@@ -378,16 +378,16 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "PatternType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // pack-reference-type -> 'each' type
   Node(
-    name: "PackReferenceType",
+    kind: .packReferenceType,
+    base: .type,
     nameForDiagnostics: "pack reference",
-    kind: "Type",
     children: [
       Child(
         name: "EachKeyword",
@@ -395,16 +395,16 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "PackType",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
     ]
   ),
 
   // simple-type-identifier -> identifier generic-argument-clause?
   Node(
-    name: "SimpleTypeIdentifier",
+    kind: .simpleTypeIdentifier,
+    base: .type,
     nameForDiagnostics: "type",
-    kind: "Type",
     children: [
       Child(
         name: "Name",
@@ -413,7 +413,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "GenericArgumentClause",
-        kind: .node(kind: "GenericArgumentClause"),
+        kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
     ]
@@ -421,24 +421,24 @@ public let TYPE_NODES: [Node] = [
 
   // tuple-type-element-list -> tuple-type-element tuple-type-element-list?
   Node(
-    name: "TupleTypeElementList",
+    kind: .tupleTypeElementList,
+    base: .syntaxCollection,
     nameForDiagnostics: nil,
-    kind: "SyntaxCollection",
-    element: "TupleTypeElement"
+    elementChoices: [.tupleTypeElement]
   ),
 
   // tuple-type-element -> identifier? ':'? type-annotation ','?
   Node(
-    name: "TupleTypeElement",
+    kind: .tupleTypeElement,
+    base: .syntax,
     nameForDiagnostics: nil,
-    kind: "Syntax",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "InOut",
-        kind: .node(kind: "InoutToken"),
+        kind: .token(choices: [.keyword(text: "inout")]),
         isOptional: true
       ),
       Child(
@@ -460,7 +460,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Type",
-        kind: .node(kind: "Type")
+        kind: .node(kind: .type)
       ),
       Child(
         name: "Ellipsis",
@@ -469,7 +469,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Initializer",
-        kind: .node(kind: "InitializerClause"),
+        kind: .node(kind: .initializerClause),
         isOptional: true
       ),
       Child(
@@ -482,9 +482,9 @@ public let TYPE_NODES: [Node] = [
 
   // tuple-type -> '(' tuple-type-element-list ')'
   Node(
-    name: "TupleType",
+    kind: .tupleType,
+    base: .type,
     nameForDiagnostics: "tuple type",
-    kind: "Type",
     traits: [
       "Parenthesized"
     ],
@@ -495,7 +495,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
-        kind: .collection(kind: "TupleTypeElementList", collectionElementName: "Element"),
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Element"),
         isIndented: true
       ),
       Child(

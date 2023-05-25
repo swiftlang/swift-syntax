@@ -76,10 +76,10 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in SYNTAX_NODES where node.isVisitable {
+    for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        override open func visit(_ node: \(raw: node.name)) -> SyntaxVisitorContinueKind {
+        override open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
           return visitAny(node._syntaxNode)
         }
         """
@@ -87,7 +87,7 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        override open func visitPost(_ node: \(raw: node.name)) {
+        override open func visitPost(_ node: \(node.kind.syntaxType)) {
           visitAnyPost(node._syntaxNode)
         }
         """

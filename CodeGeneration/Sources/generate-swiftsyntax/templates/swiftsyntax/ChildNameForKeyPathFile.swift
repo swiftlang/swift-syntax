@@ -25,12 +25,12 @@ let childNameForKeyPathFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     try! SwitchExprSyntax("switch keyPath") {
-      for node in NON_BASE_SYNTAX_NODES where !node.isSyntaxCollection {
+      for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
         for child in node.children {
           SwitchCaseSyntax(
             """
-            case \\\(raw: node.type.syntaxBaseName).\(raw: child.swiftName):
-              return \(literal: child.swiftName)
+            case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):
+              return \(literal: child.varName)
             """
           )
         }

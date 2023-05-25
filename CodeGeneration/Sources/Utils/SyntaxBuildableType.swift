@@ -19,34 +19,41 @@ import SyntaxSupport
 /// the `*Buildable`, `ExpressibleAs*` and `*Syntax` Swift types from the syntax
 /// kind.
 public struct SyntaxBuildableType: Hashable {
-  public let syntaxKind: String
-  public let tokenKind: String?
+  public let kind: SyntaxOrTokenNodeKind
   public let isOptional: Bool
 
-  public init(syntaxKind: String, isOptional: Bool = false) {
+  public init(kind: SyntaxOrTokenNodeKind, isOptional: Bool = false) {
     self.isOptional = isOptional
-    if syntaxKind.hasSuffix("Token") {
-      // There are different token kinds but all of them are represented by `Token` in the Swift source (see `kindToType` in `SyntaxSupport/Utils.swift`).
-      self.syntaxKind = "Token"
-      self.tokenKind = syntaxKind
-    } else {
-      self.syntaxKind = syntaxKind
-      self.tokenKind = nil
-    }
+    self.kind = kind
   }
 
   /// Whether this is a token.
   public var isToken: Bool {
-    syntaxKind == "Token"
+    switch kind {
+    case .token:
+      return true
+    default:
+      return false
+    }
   }
 
   /// The token if this is a token.
   public var token: TokenSpec? {
-    tokenKind.flatMap { SYNTAX_TOKEN_MAP[$0] }
+    switch kind {
+    case .token(let tokenKind):
+      return SYNTAX_TOKEN_MAP[tokenKind]
+    default:
+      return nil
+    }
   }
 
   public var isBaseType: Bool {
-    return SYNTAX_BASE_KINDS.contains(syntaxKind)
+    switch kind {
+    case .node(let kind):
+      return kind.isBase
+    default:
+      return false
+    }
   }
 
   /// If the type has a default value (because it is optional or a token
@@ -61,7 +68,7 @@ public struct SyntaxBuildableType: Hashable {
       } else if token.text != nil {
         return ExprSyntax(".\(raw: lowercaseFirstWord(name: token.name))Token()")
       }
-    } else if tokenKind == "EOFToken" {
+    } else if case .token("EOFToken") = kind {
       return ExprSyntax(".eof()")
     }
     return nil
@@ -69,14 +76,8 @@ public struct SyntaxBuildableType: Hashable {
 
   /// Whether the type is a syntax collection.
   public var isSyntaxCollection: Bool {
-    syntaxKind == "SyntaxCollection"
+    kind == .node(kind: .syntaxCollection)
       || (baseType.map(\.isSyntaxCollection) ?? false)
-  }
-
-  /// The raw base name of this kind. Used for the `build*` methods in the
-  /// defined in the buildable types.
-  public var baseName: String {
-    syntaxKind
   }
 
   /// Return the `Buildable` type that is the main entry point for building
@@ -95,25 +96,40 @@ public struct SyntaxBuildableType: Hashable {
   /// Used for certain syntax collections and block-like structures (e.g. `CodeBlock`,
   /// `MemberDeclList`).
   public var isBuilderInitializable: Bool {
-    BUILDER_INITIALIZABLE_TYPES.keys.contains(syntaxKind)
+    switch kind {
+    case .node(let kind):
+      return BUILDER_INITIALIZABLE_TYPES.keys.contains(kind)
+    case .token:
+      return false
+    }
   }
 
   /// A type suitable for initializing this type through a result builder (e.g.
   /// returns `CodeBlockItemList` for `CodeBlock`) and otherwise itself.
   public var builderInitializableType: Self {
-    Self(
-      syntaxKind: BUILDER_INITIALIZABLE_TYPES[syntaxKind].flatMap { $0 } ?? syntaxKind,
-      isOptional: isOptional
-    )
+    switch kind {
+    case .node(let kind):
+      if case .some(.some(let builderInitializableType)) = BUILDER_INITIALIZABLE_TYPES[kind] {
+        return Self(
+          kind: .node(kind: builderInitializableType),
+          isOptional: isOptional
+        )
+      } else {
+        return self
+      }
+    case .token:
+      return self
+    }
   }
 
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
   /// without any question marks attached.
   public var syntaxBaseName: String {
-    if syntaxKind == "Syntax" {
-      return "Syntax"
-    } else {
-      return "\(syntaxKind)Syntax"
+    switch kind {
+    case .node(kind: let kind):
+      return "\(kind.syntaxType)"
+    case .token:
+      return "TokenSyntax"
     }
   }
 
@@ -140,13 +156,18 @@ public struct SyntaxBuildableType: Hashable {
 
   /// Assuming that this is a collection type, the non-optional type of the result builder
   /// that can be used to build the collection.
-  public var resultBuilderBaseName: String {
-    "\(syntaxKind)Builder"
+  public var resultBuilderType: TypeSyntax {
+    switch kind {
+    case .node(kind: let kind):
+      return TypeSyntax("\(raw: kind.rawValue.withFirstCharacterUppercased)Builder")
+    case .token:
+      preconditionFailure("Tokens cannot be constructed using result builders")
+    }
   }
 
   /// Whether this type has the `WithTrailingComma` trait.
   public var hasWithTrailingCommaTrait: Bool {
-    SYNTAX_NODES.contains { $0.type == self && $0.traits.contains("WithTrailingComma") }
+    SYNTAX_NODES.compactMap(\.layoutNode).contains { $0.type == self && $0.traits.contains("WithTrailingComma") }
   }
 
   /// If this type is not a base kind, its base type (see `SyntaxBuildableNode.base_type()`),

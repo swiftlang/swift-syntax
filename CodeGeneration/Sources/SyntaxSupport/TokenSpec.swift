@@ -217,4 +217,8 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
 ]
 
-public let SYNTAX_TOKEN_MAP = Dictionary(uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) })
+// FIXME: Generate the EOF token as part of the normal SYNTAX_TOKENS and remove the special handling for it.
+public let SYNTAX_TOKEN_MAP = Dictionary(
+  uniqueKeysWithValues: (SYNTAX_TOKENS + [MiscSpec(name: "EOF", kind: "eof", nameForDiagnostics: "end of file", text: "")])
+    .map { ("\($0.name)Token", $0) }
+)

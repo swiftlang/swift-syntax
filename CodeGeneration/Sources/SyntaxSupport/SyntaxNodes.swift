@@ -19,11 +19,11 @@ public let SYNTAX_NODES: [Node] =
   + GENERIC_NODES
   + TYPE_NODES
   + PATTERN_NODES
-  + AVAILABILITY_NODES).sorted { $0.name < $1.name }
+  + AVAILABILITY_NODES).sorted { $0.kind.syntaxType.description < $1.kind.syntaxType.description }
 
 /// A lookup table of nodes indexed by their kind.
-public let SYNTAX_NODE_MAP: [String: Node] = Dictionary(
-  uniqueKeysWithValues: SYNTAX_NODES.map { node in (node.syntaxKind, node) }
+public let SYNTAX_NODE_MAP: [SyntaxNodeKind: Node] = Dictionary(
+  uniqueKeysWithValues: SYNTAX_NODES.map { node in (node.kind, node) }
 )
 
-public let NON_BASE_SYNTAX_NODES = SYNTAX_NODES.filter { !$0.isBase }
+public let NON_BASE_SYNTAX_NODES = SYNTAX_NODES.filter { !$0.kind.isBase }

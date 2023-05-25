@@ -10,23 +10,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let BUILDER_INITIALIZABLE_TYPES: [String: String?] = [
-  "CodeBlock": "CodeBlockItemList",
-  "MemberDeclBlock": "MemberDeclList",
-  "CodeBlockItemList": nil,
-  "MemberDeclList": nil,
-  "PatternBindingList": nil,
-  "SwitchCaseList": nil,
-  "ArrayElementList": nil,
-  "TupleExprElementList": nil,
-  "EnumCaseElementList": nil,
-  "FunctionParameterList": nil,
-  "GenericParameterList": nil,
-  "GenericRequirementList": nil,
-  "InheritedTypeList": nil,
-  "ClosureCaptureItemList": nil,
-  "CaseItemList": nil,
-  "GenericArgumentList": nil,
-  "TuplePatternElementList": nil,
-  "ExprList": nil,
+/// As keys, contains all node kinds that can be initialized using a result
+/// builder. If the value is not nil, the result builder construct the value's
+/// type and synthesize all other members to form the node.
+public let BUILDER_INITIALIZABLE_TYPES: [SyntaxNodeKind: SyntaxNodeKind?] = [
+  .codeBlock: .codeBlockItemList,
+  .memberDeclBlock: .memberDeclList,
+  .codeBlockItemList: nil,
+  .memberDeclList: nil,
+  .patternBindingList: nil,
+  .switchCaseList: nil,
+  .arrayElementList: nil,
+  .tupleExprElementList: nil,
+  .enumCaseElementList: nil,
+  .functionParameterList: nil,
+  .genericParameterList: nil,
+  .genericRequirementList: nil,
+  .inheritedTypeList: nil,
+  .closureCaptureItemList: nil,
+  .caseItemList: nil,
+  .genericArgumentList: nil,
+  .tuplePatternElementList: nil,
+  .exprList: nil,
 ]

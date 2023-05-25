@@ -25,7 +25,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       for child in trait.children {
-        DeclSyntax("var \(raw: child.swiftName): \(raw: child.typeName)\(raw: child.isOptional ? "?" : "") { get set }")
+        DeclSyntax("var \(raw: child.varName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }")
       }
     }
 
@@ -69,7 +69,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
-  for node in SYNTAX_NODES where !node.isBase && !node.traits.isEmpty {
-    DeclSyntax("extension \(raw: node.name): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}")
+  for node in SYNTAX_NODES.compactMap(\.layoutNode) where !node.traits.isEmpty {
+    DeclSyntax("extension \(node.kind.syntaxType): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}")
   }
 }

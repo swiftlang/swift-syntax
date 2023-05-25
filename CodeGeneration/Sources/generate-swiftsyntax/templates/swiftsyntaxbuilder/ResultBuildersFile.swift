@@ -18,15 +18,15 @@ import Utils
 let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("import SwiftSyntax")
 
-  for node in SYNTAX_NODES where node.isSyntaxCollection {
-    let type = SyntaxBuildableType(syntaxKind: node.syntaxKind)
+  for node in SYNTAX_NODES.compactMap(\.collectionNode) {
+    let type = SyntaxBuildableType(kind: .node(kind: node.kind))
     let elementType = node.collectionElementType
-    let expressionType: TypeSyntax = (node.collectionElementChoices?.isEmpty ?? true) ? elementType.parameterType : TypeSyntax("\(type.buildable).Element")
+    let expressionType: TypeSyntax = node.elementChoices.count == 1 ? elementType.parameterType : TypeSyntax("\(type.buildable).Element")
 
     try! StructDeclSyntax(
       """
       @resultBuilder
-      public struct \(raw: type.syntaxKind)Builder
+      public struct \(type.resultBuilderType)
       """
     ) {
       DeclSyntax(
@@ -73,16 +73,18 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
-      for elementChoice in node.collectionElementChoices ?? [] {
-        DeclSyntax(
-          """
-          /// If declared, provides contextual type information for statement
-          /// expressions to translate them into partial results.
-          public static func buildExpression(_ expression: \(raw: elementChoice)Syntax) -> Self.Component {
-            return buildExpression(.init(expression))
-          }
-          """
-        )
+      if node.elementChoices.count > 1 {
+        for elementChoice in node.elementChoices {
+          DeclSyntax(
+            """
+            /// If declared, provides contextual type information for statement
+            /// expressions to translate them into partial results.
+            public static func buildExpression(_ expression: \(elementChoice.syntaxType)) -> Self.Component {
+              return buildExpression(.init(expression))
+            }
+            """
+          )
+        }
       }
 
       DeclSyntax(
@@ -172,7 +174,7 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       public extension \(raw: type.syntaxBaseName) {
-        init(@\(raw: type.resultBuilderBaseName) itemsBuilder: () throws -> \(raw: type.syntaxBaseName)) rethrows {
+        init(@\(type.resultBuilderType) itemsBuilder: () throws -> \(raw: type.syntaxBaseName)) rethrows {
           self = try itemsBuilder()
         }
       }

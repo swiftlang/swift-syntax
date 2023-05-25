@@ -26,11 +26,11 @@ public enum TokenChoice {
 
 public enum ChildKind {
   /// The child always contains a node of the given `kind`.
-  case node(kind: String)
+  case node(kind: SyntaxNodeKind)
   /// The child always contains a node that matches one of the `choices`.
   case nodeChoices(choices: [Child])
   /// The child is a collection of `kind`.
-  case collection(kind: String, collectionElementName: String)
+  case collection(kind: SyntaxNodeKind, collectionElementName: String)
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
@@ -66,18 +66,28 @@ public class Child {
   public let isOptional: Bool
   public let classification: SyntaxClassification?
 
-  public var swiftName: String {
-    return lowercaseFirstWord(name: name)
-  }
-
-  public var syntaxKind: String {
+  public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {
     case .node(kind: let kind):
       return kind
     case .nodeChoices:
-      return "Syntax"
+      return .syntax
     case .collection(kind: let kind, collectionElementName: _):
       return kind
+    case .token:
+      return .token
+    }
+  }
+
+  /// A name of this child that's suitable to be used for variable or enum case names.
+  public var varName: String {
+    return lowercaseFirstWord(name: name)
+  }
+
+  /// If the child ends with "token" in the kind, it's considered a token node.
+  /// Grab the existing reference to that token from the global list.
+  public var tokenKind: String? {
+    switch kind {
     case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
       if choices.count == 1 {
         switch choices.first! {
@@ -91,22 +101,7 @@ public class Child {
           return "Token"
         }
       }
-    }
-  }
-
-  public var swiftSyntaxKind: String {
-    return lowercaseFirstWord(name: syntaxKind)
-  }
-
-  public var typeName: String {
-    return kindToType(kind: syntaxKind)
-  }
-
-  /// If the child ends with "token" in the kind, it's considered a token node. Grab the existing reference to that token from the global list.
-  public var tokenKind: String? {
-    if syntaxKind.hasSuffix("Token") {
-      return syntaxKind
-    } else {
+    default:
       return nil
     }
   }
@@ -123,7 +118,12 @@ public class Child {
 
   /// Whether this child has syntax kind `UnexpectedNodes`.
   public var isUnexpectedNodes: Bool {
-    syntaxKind == "UnexpectedNodes"
+    switch kind {
+    case .collection(kind: .unexpectedNodes, collectionElementName: _):
+      return true
+    default:
+      return false
+    }
   }
 
   /// Returns `true` if this child's type is one of the base syntax kinds and
@@ -131,11 +131,13 @@ public class Child {
   public var hasBaseType: Bool {
     switch kind {
     case .nodeChoices(let choices):
-      return choices.isEmpty && SYNTAX_BASE_KINDS.contains(syntaxKind)
-    case .node,
-      .collection,
-      .token:
-      return SYNTAX_BASE_KINDS.contains(syntaxKind)
+      return choices.isEmpty
+    case .node(let kind):
+      return kind.isBase
+    case .collection(kind: let kind, collectionElementName: _):
+      return kind.isBase
+    case .token:
+      return false
     }
   }
 

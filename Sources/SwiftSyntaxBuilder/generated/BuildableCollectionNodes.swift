@@ -14,126 +14,126 @@
 
 import SwiftSyntax
 
-/// `AccessorList` represents a collection of `AccessorDeclSyntax`
+/// `AccessorListSyntax` represents a collection of `AccessorDeclSyntax`
 extension AccessorListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ArrayElementList` represents a collection of `ArrayElementSyntax`
+/// `ArrayElementListSyntax` represents a collection of `ArrayElementSyntax`
 extension ArrayElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `AttributeList` represents a collection of `Syntax`
+/// `AttributeListSyntax` represents a collection of `Syntax`
 extension AttributeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `AvailabilitySpecList` represents a collection of `AvailabilityArgumentSyntax`
+/// `AvailabilitySpecListSyntax` represents a collection of `AvailabilityArgumentSyntax`
 extension AvailabilitySpecListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `AvailabilityVersionRestrictionList` represents a collection of `AvailabilityVersionRestrictionListEntrySyntax`
+/// `AvailabilityVersionRestrictionListSyntax` represents a collection of `AvailabilityVersionRestrictionListEntrySyntax`
 extension AvailabilityVersionRestrictionListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `CaseItemList` represents a collection of `CaseItemSyntax`
+/// `CaseItemListSyntax` represents a collection of `CaseItemSyntax`
 extension CaseItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `CatchClauseList` represents a collection of `CatchClauseSyntax`
+/// `CatchClauseListSyntax` represents a collection of `CatchClauseSyntax`
 extension CatchClauseListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `CatchItemList` represents a collection of `CatchItemSyntax`
+/// `CatchItemListSyntax` represents a collection of `CatchItemSyntax`
 extension CatchItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ClosureCaptureItemList` represents a collection of `ClosureCaptureItemSyntax`
+/// `ClosureCaptureItemListSyntax` represents a collection of `ClosureCaptureItemSyntax`
 extension ClosureCaptureItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ClosureParamList` represents a collection of `ClosureParamSyntax`
+/// `ClosureParamListSyntax` represents a collection of `ClosureParamSyntax`
 extension ClosureParamListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ClosureParameterList` represents a collection of `ClosureParameterSyntax`
+/// `ClosureParameterListSyntax` represents a collection of `ClosureParameterSyntax`
 extension ClosureParameterListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `CodeBlockItemList` represents a collection of `CodeBlockItemSyntax`
+/// `CodeBlockItemListSyntax` represents a collection of `CodeBlockItemSyntax`
 extension CodeBlockItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `CompositionTypeElementList` represents a collection of `CompositionTypeElementSyntax`
+/// `CompositionTypeElementListSyntax` represents a collection of `CompositionTypeElementSyntax`
 extension CompositionTypeElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ConditionElementList` represents a collection of `ConditionElementSyntax`
+/// `ConditionElementListSyntax` represents a collection of `ConditionElementSyntax`
 extension ConditionElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `DeclNameArgumentList` represents a collection of `DeclNameArgumentSyntax`
+/// `DeclNameArgumentListSyntax` represents a collection of `DeclNameArgumentSyntax`
 extension DeclNameArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `DesignatedTypeList` represents a collection of `DesignatedTypeElementSyntax`
+/// `DesignatedTypeListSyntax` represents a collection of `DesignatedTypeElementSyntax`
 extension DesignatedTypeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `DictionaryElementList` represents a collection of `DictionaryElementSyntax`
+/// `DictionaryElementListSyntax` represents a collection of `DictionaryElementSyntax`
 extension DictionaryElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `DifferentiabilityParamList` represents a collection of `DifferentiabilityParamSyntax`
+/// `DifferentiabilityParamListSyntax` represents a collection of `DifferentiabilityParamSyntax`
 extension DifferentiabilityParamListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
@@ -161,7 +161,7 @@ extension EnumCaseElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `EnumCaseParameterList` represents a collection of `EnumCaseParameterSyntax`
+/// `EnumCaseParameterListSyntax` represents a collection of `EnumCaseParameterSyntax`
 extension EnumCaseParameterListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
@@ -181,112 +181,112 @@ extension ExprListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `FunctionParameterList` represents a collection of `FunctionParameterSyntax`
+/// `FunctionParameterListSyntax` represents a collection of `FunctionParameterSyntax`
 extension FunctionParameterListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `GenericArgumentList` represents a collection of `GenericArgumentSyntax`
+/// `GenericArgumentListSyntax` represents a collection of `GenericArgumentSyntax`
 extension GenericArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `GenericParameterList` represents a collection of `GenericParameterSyntax`
+/// `GenericParameterListSyntax` represents a collection of `GenericParameterSyntax`
 extension GenericParameterListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `GenericRequirementList` represents a collection of `GenericRequirementSyntax`
+/// `GenericRequirementListSyntax` represents a collection of `GenericRequirementSyntax`
 extension GenericRequirementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `IfConfigClauseList` represents a collection of `IfConfigClauseSyntax`
+/// `IfConfigClauseListSyntax` represents a collection of `IfConfigClauseSyntax`
 extension IfConfigClauseListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ImportPath` represents a collection of `ImportPathComponentSyntax`
+/// `ImportPathSyntax` represents a collection of `ImportPathComponentSyntax`
 extension ImportPathSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `InheritedTypeList` represents a collection of `InheritedTypeSyntax`
+/// `InheritedTypeListSyntax` represents a collection of `InheritedTypeSyntax`
 extension InheritedTypeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `KeyPathComponentList` represents a collection of `KeyPathComponentSyntax`
+/// `KeyPathComponentListSyntax` represents a collection of `KeyPathComponentSyntax`
 extension KeyPathComponentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `MemberDeclList` represents a collection of `MemberDeclListItemSyntax`
+/// `MemberDeclListSyntax` represents a collection of `MemberDeclListItemSyntax`
 extension MemberDeclListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ModifierList` represents a collection of `DeclModifierSyntax`
+/// `ModifierListSyntax` represents a collection of `DeclModifierSyntax`
 extension ModifierListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `MultipleTrailingClosureElementList` represents a collection of `MultipleTrailingClosureElementSyntax`
+/// `MultipleTrailingClosureElementListSyntax` represents a collection of `MultipleTrailingClosureElementSyntax`
 extension MultipleTrailingClosureElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `ObjCSelector` represents a collection of `ObjCSelectorPieceSyntax`
+/// `ObjCSelectorSyntax` represents a collection of `ObjCSelectorPieceSyntax`
 extension ObjCSelectorSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `PatternBindingList` represents a collection of `PatternBindingSyntax`
+/// `PatternBindingListSyntax` represents a collection of `PatternBindingSyntax`
 extension PatternBindingListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `PrecedenceGroupAttributeList` represents a collection of `Syntax`
+/// `PrecedenceGroupAttributeListSyntax` represents a collection of `Syntax`
 extension PrecedenceGroupAttributeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `PrecedenceGroupNameList` represents a collection of `PrecedenceGroupNameElementSyntax`
+/// `PrecedenceGroupNameListSyntax` represents a collection of `PrecedenceGroupNameElementSyntax`
 extension PrecedenceGroupNameListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `PrimaryAssociatedTypeList` represents a collection of `PrimaryAssociatedTypeSyntax`
+/// `PrimaryAssociatedTypeListSyntax` represents a collection of `PrimaryAssociatedTypeSyntax`
 extension PrimaryAssociatedTypeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
@@ -300,35 +300,35 @@ extension SpecializeAttributeSpecListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `StringLiteralSegments` represents a collection of `Syntax`
+/// `StringLiteralSegmentsSyntax` represents a collection of `Syntax`
 extension StringLiteralSegmentsSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `SwitchCaseList` represents a collection of `Syntax`
+/// `SwitchCaseListSyntax` represents a collection of `Syntax`
 extension SwitchCaseListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `TupleExprElementList` represents a collection of `TupleExprElementSyntax`
+/// `TupleExprElementListSyntax` represents a collection of `TupleExprElementSyntax`
 extension TupleExprElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `TuplePatternElementList` represents a collection of `TuplePatternElementSyntax`
+/// `TuplePatternElementListSyntax` represents a collection of `TuplePatternElementSyntax`
 extension TuplePatternElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `TupleTypeElementList` represents a collection of `TupleTypeElementSyntax`
+/// `TupleTypeElementListSyntax` represents a collection of `TupleTypeElementSyntax`
 extension TupleTypeElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
@@ -348,14 +348,14 @@ extension UnexpectedNodesSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `VersionComponentList` represents a collection of `VersionComponentSyntax`
+/// `VersionComponentListSyntax` represents a collection of `VersionComponentSyntax`
 extension VersionComponentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
-/// `YieldExprList` represents a collection of `YieldExprListElementSyntax`
+/// `YieldExprListSyntax` represents a collection of `YieldExprListElementSyntax`
 extension YieldExprListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)

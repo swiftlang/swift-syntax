@@ -37,38 +37,41 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   )
 
-  for node in SYNTAX_NODES where node.isSyntaxCollection {
+  for node in SYNTAX_NODES.compactMap(\.collectionNode) {
     let documentation =
-      node.description.map { "/// " + $0 }
-        ?? """
-        /// `\(node.name)` represents a collection of one or more
-        /// `\(node.collectionElement)` nodes. \(node.name) behaves
-        /// as a regular Swift collection, and has accessors that return new
-        /// versions of the collection with different children.
-        """
+      !node.documentation.isEmpty
+      ? node.documentation
+      : """
+      /// `\(node.kind.syntaxType)` represents a collection of one or more
+      /// `\(node.collectionElementType.syntaxBaseName)` nodes. \(node.kind.syntaxType) behaves
+      /// as a regular Swift collection, and has accessors that return new
+      /// versions of the collection with different children.
+      """
 
     try! StructDeclSyntax(
       """
       \(raw: documentation)
-      public struct \(raw: node.name): SyntaxCollection, SyntaxHashable
+      public struct \(raw: node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {
-      if let collectionElementChoices = node.collectionElementChoices, !collectionElementChoices.isEmpty {
+      if let onlyElement = node.elementChoices.only {
+        DeclSyntax("public typealias Element = \(onlyElement.syntaxType)")
+      } else {
         try EnumDeclSyntax(
           """
           public enum Element: SyntaxChildChoices
           """
         ) {
-          for choiceName in collectionElementChoices {
+          for choiceName in node.elementChoices {
             let choice = SYNTAX_NODE_MAP[choiceName]!
-            DeclSyntax("case `\(raw: choice.swiftSyntaxKind)`(\(raw: choice.name))")
+            DeclSyntax("case `\(choice.varOrCaseName)`(\(choice.kind.syntaxType))")
           }
 
           try VariableDeclSyntax("public var _syntaxNode: Syntax") {
             SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
-              for choiceName in node.collectionElementChoices ?? [] {
+              for choiceName in node.elementChoices {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
-                SwitchCaseSyntax("case .\(raw: choice.swiftSyntaxKind)(let node):") {
+                SwitchCaseSyntax("case .\(choice.varOrCaseName)(let node):") {
                   StmtSyntax("return node._syntaxNode")
                 }
               }
@@ -77,13 +80,13 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
           DeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
 
-          for choiceName in node.collectionElementChoices ?? [] {
+          for choiceName in node.elementChoices {
             let choiceNode = SYNTAX_NODE_MAP[choiceName]!
-            if choiceNode.isBase {
+            if choiceNode.kind.isBase {
               DeclSyntax(
                 """
-                public init(_ node: some \(raw: choiceNode.name)Protocol) {
-                  self = .\(raw: choiceNode.swiftSyntaxKind)(\(raw: choiceNode.name)(node))
+                public init(_ node: some \(choiceNode.kind.protocolType)) {
+                  self = .\(choiceNode.varOrCaseName)(\(choiceNode.kind.syntaxType)(node))
                 }
                 """
               )
@@ -91,8 +94,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             } else {
               DeclSyntax(
                 """
-                public init(_ node: \(raw: choiceNode.name)) {
-                  self = .\(raw: choiceNode.swiftSyntaxKind)(node)
+                public init(_ node: \(choiceNode.kind.syntaxType)) {
+                  self = .\(choiceNode.varOrCaseName)(node)
                 }
                 """
               )
@@ -100,12 +103,12 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
 
           try InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
-            for choiceName in node.collectionElementChoices ?? [] {
+            for choiceName in node.elementChoices {
               let choiceNode = SYNTAX_NODE_MAP[choiceName]!
               StmtSyntax(
                 """
-                if let node = node.as(\(raw: choiceNode.name).self) {
-                  self = .\(raw: choiceNode.swiftSyntaxKind)(node)
+                if let node = node.as(\(choiceNode.kind.syntaxType).self) {
+                  self = .\(choiceNode.varOrCaseName)(node)
                   return
                 }
                 """
@@ -117,11 +120,11 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
           try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
             let choices = ArrayExprSyntax {
-              for choiceName in node.collectionElementChoices ?? [] {
+              for choiceName in node.elementChoices {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
                 ArrayElementSyntax(
                   leadingTrivia: .newline,
-                  expression: ExprSyntax(".node(\(raw: choice.name).self)")
+                  expression: ExprSyntax(".node(\(choice.kind.syntaxType).self)")
                 )
               }
             }
@@ -129,8 +132,6 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             StmtSyntax("return .choices(\(choices))")
           }
         }
-      } else {
-        DeclSyntax("public typealias Element = \(raw: node.collectionElementType.syntaxBaseName)")
       }
 
       DeclSyntax("public let _syntaxNode: Syntax")
@@ -146,7 +147,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         public init?(_ node: some SyntaxProtocol) {
-          guard node.raw.kind == .\(raw: node.swiftSyntaxKind) else { return nil }
+          guard node.raw.kind == .\(node.varOrCaseName) else { return nil }
           self._syntaxNode = node._syntaxNode
         }
         """
@@ -158,7 +159,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
         /// is undefined.
         internal init(_ data: SyntaxData) {
-          precondition(data.raw.kind == .\(raw: node.swiftSyntaxKind))
+          precondition(data.raw.kind == .\(node.varOrCaseName))
           self._syntaxNode = Syntax(data)
         }
         """
@@ -168,7 +169,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         public init(_ children: [Element]) {
           let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-            let raw = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: node.swiftSyntaxKind),
+            let raw = RawSyntax.makeLayout(kind: SyntaxKind.\(node.varOrCaseName),
                                            from: children.map { $0.raw }, arena: arena)
             return SyntaxData.forRoot(raw)
           }
@@ -186,29 +187,29 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by replacing the underlying layout with
+        /// Creates a new `\(node.kind.syntaxType)` by replacing the underlying layout with
         /// a different set of raw syntax nodes.
         ///
         /// - Parameter layout: The new list of raw syntax nodes underlying this
         ///                     collection.
-        /// - Returns: A new `\(raw: node.name)` with the new layout underlying it.
-        internal func replacingLayout(_ layout: [RawSyntax?]) -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with the new layout underlying it.
+        internal func replacingLayout(_ layout: [RawSyntax?]) -> \(node.kind.syntaxType) {
           let arena = SyntaxArena()
           let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
           let newData = data.replacingSelf(newRaw, arena: arena)
-          return \(raw: node.name)(newData)
+          return \(node.kind.syntaxType)(newData)
         }
         """
       )
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by appending the provided syntax element
+        /// Creates a new `\(node.kind.syntaxType)` by appending the provided syntax element
         /// to the children.
         ///
         /// - Parameter syntax: The element to append.
-        /// - Returns: A new `\(raw: node.name)` with that element appended to the end.
-        public func appending(_ syntax: Element) -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with that element appended to the end.
+        public func appending(_ syntax: Element) -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           newLayout.append(syntax.raw)
           return replacingLayout(newLayout)
@@ -218,13 +219,13 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by prepending the provided syntax element
+        /// Creates a new `\(node.kind.syntaxType)` by prepending the provided syntax element
         /// to the children.
         ///
         /// - Parameter syntax: The element to prepend.
-        /// - Returns: A new `\(raw: node.name)` with that element prepended to the
+        /// - Returns: A new `\(node.kind.syntaxType)` with that element prepended to the
         ///            beginning.
-        public func prepending(_ syntax: Element) -> \(raw: node.name) {
+        public func prepending(_ syntax: Element) -> \(node.kind.syntaxType) {
           return inserting(syntax, at: 0)
         }
         """
@@ -232,15 +233,15 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by inserting the provided syntax element
+        /// Creates a new `\(node.kind.syntaxType)` by inserting the provided syntax element
         /// at the provided index in the children.
         ///
         /// - Parameters:
         ///   - syntax: The element to insert.
         ///   - index: The index at which to insert the element in the collection.
         ///
-        /// - Returns: A new `\(raw: node.name)` with that element appended to the end.
-        public func inserting(_ syntax: Element, at index: Int) -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with that element appended to the end.
+        public func inserting(_ syntax: Element, at index: Int) -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           /// Make sure the index is a valid insertion index (0 to 1 past the end)
           precondition((newLayout.startIndex...newLayout.endIndex).contains(index),
@@ -253,15 +254,15 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by replacing the syntax element
+        /// Creates a new `\(node.kind.syntaxType)` by replacing the syntax element
         /// at the provided index.
         ///
         /// - Parameters:
         ///   - index: The index at which to replace the element in the collection.
         ///   - syntax: The element to replace with.
         ///
-        /// - Returns: A new `\(raw: node.name)` with the new element at the provided index.
-        public func replacing(childAt index: Int, with syntax: Element) -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with the new element at the provided index.
+        public func replacing(childAt index: Int, with syntax: Element) -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           /// Make sure the index is a valid index for replacing
           precondition((newLayout.startIndex..<newLayout.endIndex).contains(index),
@@ -274,13 +275,13 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by removing the syntax element at the
+        /// Creates a new `\(node.kind.syntaxType)` by removing the syntax element at the
         /// provided index.
         ///
         /// - Parameter index: The index of the element to remove from the collection.
-        /// - Returns: A new `\(raw: node.name)` with the element at the provided index
+        /// - Returns: A new `\(node.kind.syntaxType)` with the element at the provided index
         ///            removed.
-        public func removing(childAt index: Int) -> \(raw: node.name) {
+        public func removing(childAt index: Int) -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           newLayout.remove(at: index)
           return replacingLayout(newLayout)
@@ -290,10 +291,10 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by removing the first element.
+        /// Creates a new `\(node.kind.syntaxType)` by removing the first element.
         ///
-        /// - Returns: A new `\(raw: node.name)` with the first element removed.
-        public func removingFirst() -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with the first element removed.
+        public func removingFirst() -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           newLayout.removeFirst()
           return replacingLayout(newLayout)
@@ -303,10 +304,10 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Creates a new `\(raw: node.name)` by removing the last element.
+        /// Creates a new `\(node.kind.syntaxType)` by removing the last element.
         ///
-        /// - Returns: A new `\(raw: node.name)` with the last element removed.
-        public func removingLast() -> \(raw: node.name) {
+        /// - Returns: A new `\(node.kind.syntaxType)` with the last element removed.
+        public func removingLast() -> \(node.kind.syntaxType) {
           var newLayout = layoutView.formLayoutArray()
           newLayout.removeLast()
           return replacingLayout(newLayout)
@@ -317,8 +318,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! ExtensionDeclSyntax(
       """
-      /// Conformance for `\(raw: node.name)` to the `BidirectionalCollection` protocol.
-      extension \(raw: node.name): BidirectionalCollection
+      /// Conformance for `\(node.kind.syntaxType)` to the `BidirectionalCollection` protocol.
+      extension \(node.kind.syntaxType): BidirectionalCollection
       """
     ) {
       DeclSyntax("public typealias Index = SyntaxChildrenIndex")

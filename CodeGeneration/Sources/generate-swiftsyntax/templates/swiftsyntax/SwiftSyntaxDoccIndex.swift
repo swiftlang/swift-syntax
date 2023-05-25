@@ -27,17 +27,17 @@ let nodesSections: String = {
     result += "\n"
   }
 
-  var nodeKinds = [
-    ("Decl", "Declarations"),
-    ("Expr", "Expressions"),
-    ("Pattern", "Patterns"),
-    ("Stmt", "Statements"),
-    ("Type", "Types"),
+  var nodeKinds: [(SyntaxNodeKind, String)] = [
+    (.decl, "Declarations"),
+    (.expr, "Expressions"),
+    (.pattern, "Patterns"),
+    (.stmt, "Statements"),
+    (.type, "Types"),
   ]
 
   for (baseKind, heading) in nodeKinds {
-    let baseTypes = ["\(baseKind)Syntax", "\(baseKind)SyntaxProtocol", "Missing\(baseKind)Syntax"]
-    let leafTypes = SYNTAX_NODES.filter({ $0.baseKind == baseKind && !$0.isMissing }).map(\.name)
+    let baseTypes = ["\(baseKind.syntaxType)", "\(baseKind.syntaxType)Protocol", "Missing\(baseKind.syntaxType)"]
+    let leafTypes = SYNTAX_NODES.filter({ $0.base == baseKind && !$0.kind.isMissing }).map(\.kind.syntaxType.description)
     addSection(heading: heading, types: baseTypes + leafTypes)
   }
 
@@ -49,18 +49,18 @@ let nodesSections: String = {
       "SyntaxChildrenIndexData",
     ]
       + SYNTAX_NODES.flatMap({ (node: Node) -> [String] in
-        guard node.isSyntaxCollection else {
+        guard let node = node.collectionNode else {
           return []
         }
-        if !handledSyntaxTypes.contains(node.collectionElement) && SYNTAX_NODE_MAP[node.collectionElement] != nil {
-          return ["\(node.name)", "\(node.collectionElement)Syntax"]
-        } else {
-          return ["\(node.name)"]
-        }
+        return [node.kind.syntaxType.description]
+          + node.elementChoices
+          .filter { SYNTAX_NODE_MAP[$0] != nil }
+          .map(\.syntaxType.description)
+          .filter { !handledSyntaxTypes.contains($0) }
       })
   )
 
-  addSection(heading: "Miscellaneous Syntax", types: SYNTAX_NODES.map(\.name).filter({ !handledSyntaxTypes.contains($0) }))
+  addSection(heading: "Miscellaneous Syntax", types: SYNTAX_NODES.map(\.kind.syntaxType.description).filter({ !handledSyntaxTypes.contains($0) }))
 
   addSection(heading: "Traits", types: TRAITS.map(\.traitName))
 

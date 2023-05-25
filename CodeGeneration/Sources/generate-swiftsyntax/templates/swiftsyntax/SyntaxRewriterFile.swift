@@ -32,25 +32,25 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     DeclSyntax("public init() {}")
 
-    for node in SYNTAX_NODES where node.isVisitable {
-      if node.baseType.baseName == "Syntax" && node.name != "MissingSyntax" {
+    for node in SYNTAX_NODES where !node.kind.isBase {
+      if (node.base == .syntax || node.base == .syntaxCollection) && node.kind != .missing {
         DeclSyntax(
           """
-          /// Visit a `\(raw: node.name)`.
+          /// Visit a `\(node.kind.syntaxType)`.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
-          open func visit(_ node: \(raw: node.name)) -> \(raw: node.name) {
-            return Syntax(visitChildren(node)).cast(\(raw: node.name).self)
+          open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
+            return Syntax(visitChildren(node)).cast(\(node.kind.syntaxType).self)
           }
           """
         )
       } else {
         DeclSyntax(
           """
-          /// Visit a `\(raw: node.name)`.
+          /// Visit a `\(node.kind.syntaxType)`.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
-          open func visit(_ node: \(raw: node.name)) -> \(raw: node.baseType.syntaxBaseName) {
+          open func visit(_ node: \(node.kind.syntaxType)) -> \(raw: node.baseType.syntaxBaseName) {
             return \(raw: node.baseType.syntaxBaseName)(visitChildren(node))
           }
           """
@@ -119,14 +119,14 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for baseKind in SYNTAX_BASE_KINDS.filter({ !["Syntax", "SyntaxCollection"].contains($0) }) {
+    for baseKind in SyntaxNodeKind.allCases where baseKind.isBase && baseKind != .syntax && baseKind != .syntaxCollection {
       DeclSyntax(
         """
-        /// Visit any \(raw: baseKind)Syntax node.
+        /// Visit any \(raw: baseKind.syntaxType) node.
         ///   - Parameter node: the node that is being visited
         ///   - Returns: the rewritten node
-        public func visit(_ node: \(raw: baseKind)Syntax) -> \(raw: baseKind)Syntax {
-          return visit(node.data).cast(\(raw: baseKind)Syntax.self)
+        public func visit(_ node: \(raw: baseKind.syntaxType)) -> \(raw: baseKind.syntaxType) {
+          return visit(node.data).cast(\(raw: baseKind.syntaxType).self)
         }
         """
       )
@@ -136,8 +136,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Implementation detail of visit(_:). Do not call directly.
-        private func visitImpl\(raw: node.name)(_ data: SyntaxData) -> Syntax {
-          let node = \(raw: node.name)(data)
+        private func visitImpl\(node.kind.syntaxType)(_ data: SyntaxData) -> Syntax {
+          let node = \(node.kind.syntaxType)(data)
           // Accessing _syntaxNode directly is faster than calling Syntax(node)
           visitPre(node._syntaxNode)
           defer { visitPost(node._syntaxNode) }
@@ -207,8 +207,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
-                    SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-                      StmtSyntax("return visitImpl\(raw: node.name)")
+                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                      StmtSyntax("return visitImpl\(node.kind.syntaxType)")
                     }
                   }
                 }
@@ -235,8 +235,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
-                    SwitchCaseSyntax("case .\(raw: node.swiftSyntaxKind):") {
-                      StmtSyntax("return visitImpl\(raw: node.name)(data)")
+                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                      StmtSyntax("return visitImpl\(node.kind.syntaxType)(data)")
                     }
                   }
                 }

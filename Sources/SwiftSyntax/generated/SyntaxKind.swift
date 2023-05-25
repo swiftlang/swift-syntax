@@ -403,6 +403,8 @@ public enum SyntaxKind {
       return true
     case .missingStmt:
       return true
+    case .missing:
+      return true
     case .missingType:
       return true
     default:

@@ -31,17 +31,16 @@ extension Child {
 /// files at a managable file size, it is to be invoked multiple times with the
 /// variable `emitKind` set to a base kind listed in
 /// It then only emits those syntax nodes whose base kind are that specified kind.
-func syntaxNode(emitKind: String) -> SourceFileSyntax {
+func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
-    for node in SYNTAX_NODES where !node.isBase && node.collectionElement.isEmpty && node.baseKind == emitKind {
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) where node.base == emitKind {
       // We are actually handling this node now
-      let nodeDoc = node.description?.split(separator: "\n", omittingEmptySubsequences: false).map { "/// \($0)" }.joined(separator: "\n")
       try! StructDeclSyntax(
         """
-        // MARK: - \(raw: node.name)
+        // MARK: - \(raw: node.kind.syntaxType)
 
-        \(raw: nodeDoc ?? "")
-        public struct \(raw: node.name): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
+        \(raw: node.documentation)
+        public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {
         for child in node.children {
@@ -59,7 +58,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
         DeclSyntax(
           """
           public init?(_ node: some SyntaxProtocol) {
-            guard node.raw.kind == .\(raw: node.swiftSyntaxKind) else { return nil }
+            guard node.raw.kind == .\(raw: node.varOrCaseName) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
           """
@@ -67,11 +66,11 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          /// Creates a `\(raw: node.name)` node from the given `SyntaxData`. This assumes
+          /// Creates a `\(node.kind.syntaxType)` node from the given `SyntaxData`. This assumes
           /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
           /// is undefined.
           internal init(_ data: SyntaxData) {
-            precondition(data.raw.kind == .\(raw: node.swiftSyntaxKind))
+            precondition(data.raw.kind == .\(raw: node.varOrCaseName))
             self._syntaxNode = Syntax(data)
           }
           """
@@ -80,7 +79,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
         try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader())") {
           let parameters = ClosureParameterListSyntax {
             for child in node.children {
-              ClosureParameterSyntax(firstName: .identifier(child.swiftName))
+              ClosureParameterSyntax(firstName: .identifier(child.varName))
             }
           }
 
@@ -98,7 +97,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
             for child in node.children {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.swiftName)")),
+                  base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.varName)")),
                   dot: .periodToken(),
                   name: "raw"
                 )
@@ -115,13 +114,13 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
               if node.children.isEmpty {
-                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(raw: node.swiftSyntaxKind), arena: arena)")
+                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(raw: node.varOrCaseName), arena: arena)")
               } else {
                 DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
                 DeclSyntax(
                   """
                   let raw = RawSyntax.makeLayout(
-                    kind: SyntaxKind.\(raw: node.swiftSyntaxKind),
+                    kind: SyntaxKind.\(raw: node.varOrCaseName),
                     from: layout,
                     arena: arena,
                     leadingTrivia: leadingTrivia,
@@ -154,13 +153,13 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           // Children properties
           // ===================
 
-          let childType: String = child.kind.isNodeChoicesEmpty ? child.typeName : child.name
+          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name)"
           let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
 
           try! VariableDeclSyntax(
             """
             \(raw: child.docComment)
-            public var \(raw: child.swiftName): \(type)
+            public var \(raw: child.varName): \(type)
             """
           ) {
             AccessorDeclSyntax(accessorKind: .keyword(.get)) {
@@ -174,7 +173,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
             AccessorDeclSyntax(
               """
               set(value) {
-                self = \(raw: node.name)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").raw, arena: SyntaxArena()))
+                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").raw, arena: SyntaxArena()))
               }
               """
             )
@@ -185,8 +184,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           // ===============
           // We don't currently support adding elements to a specific unexpected collection.
           // If needed, this could be added in the future, but for now withUnexpected should be sufficient.
-          if let childNode = SYNTAX_NODE_MAP[child.syntaxKind],
-            childNode.isSyntaxCollection,
+          if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
             !child.isUnexpectedNodes,
             case .collection(_, let childElt) = child.kind
           {
@@ -194,23 +192,23 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
 
             DeclSyntax(
               """
-              /// Adds the provided `\(raw: childElt)` to the node's `\(raw: child.swiftName)`
+              /// Adds the provided `\(raw: childElt)` to the node's `\(raw: child.varName)`
               /// collection.
               /// - param element: The new `\(raw: childElt)` to add to the node's
-              ///                  `\(raw: child.swiftName)` collection.
+              ///                  `\(raw: child.varName)` collection.
               /// - returns: A copy of the receiver with the provided `\(raw: childElt)`
-              ///            appended to its `\(raw: child.swiftName)` collection.
-              public func add\(raw: childElt)(_ element: \(raw: childEltType)) -> \(raw: node.name) {
+              ///            appended to its `\(raw: child.varName)` collection.
+              public func add\(raw: childElt)(_ element: \(raw: childEltType)) -> \(node.kind.syntaxType) {
                 var collection: RawSyntax
                 let arena = SyntaxArena()
                 if let col = raw.layoutView!.children[\(raw: index)] {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
-                  collection = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: childNode.swiftSyntaxKind),
+                  collection = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: childNode.varOrCaseName),
                                                     from: [element.raw], arena: arena)
                 }
                 let newData = data.replacingChild(at: \(raw: index), with: collection, arena: arena)
-                return \(raw: node.name)(newData)
+                return \(node.kind.syntaxType)(newData)
               }
               """
             )
@@ -221,7 +219,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
           let layout = ArrayExprSyntax {
             for child in node.children {
               ArrayElementSyntax(
-                expression: ExprSyntax(#"\Self.\#(raw: child.swiftName)"#)
+                expression: ExprSyntax(#"\Self.\#(raw: child.varName)"#)
               )
             }
           }
@@ -240,13 +238,13 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
 
   return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
     for choice in choices {
-      DeclSyntax("case `\(raw: choice.swiftName)`(\(raw: choice.typeName))")
+      DeclSyntax("case `\(raw: choice.varName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
     }
 
     try! VariableDeclSyntax("public var _syntaxNode: Syntax") {
       try! SwitchExprSyntax("switch self") {
         for choice in choices {
-          SwitchCaseSyntax("case .\(raw: choice.swiftName)(let node):") {
+          SwitchCaseSyntax("case .\(raw: choice.varName)(let node):") {
             StmtSyntax("return node._syntaxNode")
           }
         }
@@ -256,11 +254,11 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
     DeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
 
     for choice in choices {
-      if let choiceNode = SYNTAX_NODE_MAP[choice.syntaxKind], choiceNode.isBase {
+      if let choiceNode = SYNTAX_NODE_MAP[choice.syntaxNodeKind], choiceNode.kind.isBase {
         DeclSyntax(
           """
-          public init(_ node: some \(raw: choiceNode.name)Protocol) {
-            self = .\(raw: choice.swiftName)(\(raw: choiceNode.name)(node))
+          public init(_ node: some \(choiceNode.kind.protocolType)) {
+            self = .\(raw: choice.varName)(\(choiceNode.kind.syntaxType)(node))
           }
           """
         )
@@ -268,8 +266,8 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       } else {
         DeclSyntax(
           """
-          public init(_ node: \(raw: choice.typeName)) {
-            self = .\(raw: choice.swiftName)(node)
+          public init(_ node: \(choice.syntaxNodeKind.syntaxType)) {
+            self = .\(raw: choice.varName)(node)
           }
           """
         )
@@ -280,8 +278,8 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       for choice in choices {
         StmtSyntax(
           """
-          if let node = node.as(\(raw: choice.typeName).self) {
-            self = .\(raw: choice.swiftName)(node)
+          if let node = node.as(\(choice.syntaxNodeKind.syntaxType).self) {
+            self = .\(raw: choice.varName)(node)
             return
           }
           """
@@ -295,7 +293,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       let choices = ArrayExprSyntax {
         for choice in choices {
           ArrayElementSyntax(
-            expression: ExprSyntax(".node(\(raw: choice.typeName).self)")
+            expression: ExprSyntax(".node(\(choice.syntaxNodeKind.syntaxType).self)")
           )
         }
       }
@@ -305,7 +303,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
   }
 }
 
-fileprivate extension Node {
+fileprivate extension LayoutNode {
   func generateInitializerDeclHeader() -> PartialSyntaxNodeString {
     if children.isEmpty {
       return "public init()"
@@ -316,9 +314,9 @@ fileprivate extension Node {
       if !child.kind.isNodeChoicesEmpty {
         paramType = "\(raw: child.name)"
       } else if child.hasBaseType {
-        paramType = "some \(raw: child.typeName)Protocol"
+        paramType = "some \(raw: child.syntaxNodeKind.protocolType)"
       } else {
-        paramType = "\(raw: child.typeName)"
+        paramType = child.syntaxNodeKind.syntaxType
       }
 
       if child.isOptional {
@@ -331,8 +329,8 @@ fileprivate extension Node {
 
       return FunctionParameterSyntax(
         leadingTrivia: .newline,
-        firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.swiftName),
-        secondName: child.isUnexpectedNodes ? .identifier(child.swiftName) : nil,
+        firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.varName),
+        secondName: child.isUnexpectedNodes ? .identifier(child.varName) : nil,
         colon: .colonToken(),
         type: paramType,
         defaultArgument: child.defaultInitialization

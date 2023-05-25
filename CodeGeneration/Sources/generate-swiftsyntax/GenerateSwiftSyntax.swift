@@ -15,6 +15,7 @@ import Dispatch
 import Foundation
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SyntaxSupport
 import Utils
 
 private let generatedDirName = "generated"
@@ -25,13 +26,13 @@ private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
-private let BASE_KIND_FILES = [
-  "Decl": "SyntaxDeclNodes.swift",
-  "Expr": "SyntaxExprNodes.swift",
-  "Pattern": "SyntaxPatternNodes.swift",
-  "Stmt": "SyntaxStmtNodes.swift",
-  "Syntax": "SyntaxNodes.swift",
-  "Type": "SyntaxTypeNodes.swift",
+private let BASE_KIND_FILES: [SyntaxNodeKind: String] = [
+  .decl: "SyntaxDeclNodes.swift",
+  .expr: "SyntaxExprNodes.swift",
+  .pattern: "SyntaxPatternNodes.swift",
+  .stmt: "SyntaxStmtNodes.swift",
+  .syntax: "SyntaxNodes.swift",
+  .type: "SyntaxTypeNodes.swift",
 ]
 
 struct GeneratedFileSpec {

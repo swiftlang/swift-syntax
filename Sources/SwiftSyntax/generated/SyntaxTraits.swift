@@ -539,6 +539,8 @@ extension DoStmtSyntax: WithCodeBlockSyntax {}
 
 extension DocumentationAttributeArgumentSyntax: WithTrailingCommaSyntax {}
 
+extension EditorPlaceholderDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+
 extension EnumCaseDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 
 extension EnumCaseElementSyntax: WithTrailingCommaSyntax {}

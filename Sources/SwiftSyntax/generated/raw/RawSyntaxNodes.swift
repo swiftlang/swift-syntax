@@ -7666,31 +7666,55 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil, 
-      identifier: RawTokenSyntax, 
-      _ unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
+      attributes: RawAttributeListSyntax?, 
+      _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
+      modifiers: RawModifierListSyntax?, 
+      _ unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? = nil, 
+      placeholder: RawTokenSyntax, 
+      _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .editorPlaceholderDecl, uninitializedCount: 3, arena: arena) { layout in
+      kind: .editorPlaceholderDecl, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeIdentifier?.raw
-      layout[1] = identifier.raw
-      layout[2] = unexpectedAfterIdentifier?.raw
+      layout[0] = unexpectedBeforeAttributes?.raw
+      layout[1] = attributes?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
+      layout[3] = modifiers?.raw
+      layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
+      layout[5] = placeholder.raw
+      layout[6] = unexpectedAfterPlaceholder?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var identifier: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  public var attributes: RawAttributeListSyntax? {
+    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
   }
   
-  public var unexpectedAfterIdentifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var modifiers: RawModifierListSyntax? {
+    layoutView.children[3].map(RawModifierListSyntax.init(raw:))
+  }
+  
+  public var unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

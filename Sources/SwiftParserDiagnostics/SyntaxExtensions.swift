@@ -14,26 +14,30 @@
 @_spi(Diagnostics) import SwiftParser
 
 extension UnexpectedNodesSyntax {
-  func tokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
+  func presentTokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
     return self.children(viewMode: .sourceAccurate).compactMap({ $0.as(TokenSyntax.self) }).filter(isIncluded)
   }
 
-  func tokens(withKind kind: TokenKind) -> [TokenSyntax] {
-    return self.tokens(satisfying: { $0.tokenKind == kind })
+  func presentTokens(withKind kind: TokenKind) -> [TokenSyntax] {
+    return self.presentTokens(satisfying: { $0.tokenKind == kind })
   }
 
-  /// If this only contains a single item, which is a token satisfying `condition`, return that token, otherwise return `nil`.
-  func onlyToken(where condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
-    if self.count == 1, let token = self.first?.as(TokenSyntax.self), condition(token) {
+  /// If this only contains a single item, which is a present token satisfying `condition`, return that token, otherwise return `nil`.
+  func onlyPresentToken(where condition: (TokenSyntax) -> Bool) -> TokenSyntax? {
+    if self.count == 1,
+      let token = self.first?.as(TokenSyntax.self),
+      condition(token),
+      token.presence == .present
+    {
       return token
     } else {
       return nil
     }
   }
 
-  /// If this only contains tokens satisfying `condition`, return an array containing those tokens, otherwise return `nil`.
-  func onlyTokens(satisfying condition: (TokenSyntax) -> Bool) -> [TokenSyntax]? {
-    let tokens = tokens(satisfying: condition)
+  /// If this only contains present tokens satisfying `condition`, return an array containing those tokens, otherwise return `nil`.
+  func onlyPresentTokens(satisfying condition: (TokenSyntax) -> Bool) -> [TokenSyntax]? {
+    let tokens = presentTokens(satisfying: condition)
     if tokens.count == self.count {
       return tokens
     } else {
@@ -41,9 +45,9 @@ extension UnexpectedNodesSyntax {
     }
   }
 
-  /// If this only contains two tokens, the first satisfying `firstCondition`, and the second satisfying `secondCondition`,
+  /// If this only contains two present tokens, the first satisfying `firstCondition`, and the second satisfying `secondCondition`,
   /// return these tokens as a tuple, otherwise return `nil`.
-  func twoTokens(
+  func twoPresentTokens(
     firstSatisfying firstCondition: (TokenSyntax) -> Bool,
     secondSatisfying secondCondition: (TokenSyntax) -> Bool
   ) -> (first: TokenSyntax, second: TokenSyntax)? {
@@ -95,7 +99,7 @@ extension SyntaxProtocol {
       } else {
         return "braces"
       }
-    } else if let token = Syntax(self).as(UnexpectedNodesSyntax.self)?.onlyTokens(satisfying: { $0.tokenKind.isLexerClassifiedKeyword })?.only {
+    } else if let token = Syntax(self).as(UnexpectedNodesSyntax.self)?.onlyPresentTokens(satisfying: { $0.tokenKind.isLexerClassifiedKeyword })?.only {
       return "'\(token.text)' keyword"
     } else if let token = Syntax(self).as(TokenSyntax.self) {
       return "'\(token.text)' keyword"

@@ -560,19 +560,19 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        description: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDecl`` will contain these.",
+        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDecl`` will contain these.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
-        description: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these.",
+        documentation: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these.",
         isOptional: true
       ),
       Child(
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
-        description: """
+        documentation: """
           The actual editor placeholder that starts with `<#` and ends with `#>`.
           """
       ),

@@ -702,6 +702,7 @@ func assertParse<S: SyntaxProtocol>(
   if enableLongTests {
     DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
       let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
+      _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
       assertRoundTrip(source: flippedTokenTree.syntaxTextBytes, parse, file: file, line: line)
     }
 

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 extension RawSyntax {
-  /// A view into the `RawSyntax` that exposes functionality that's specific to layout nodes.
+  /// A view into the ``RawSyntax`` that exposes functionality that's specific to layout nodes.
   /// The token's payload must be a layout, otherwise this traps.
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView? {
@@ -24,7 +24,7 @@ extension RawSyntax {
   }
 }
 
-/// A view into `RawSyntax` that exposes functionality that only applies to layout nodes.
+/// A view into ``RawSyntax`` that exposes functionality that only applies to layout nodes.
 @_spi(RawSyntax)
 public struct RawSyntaxLayoutView {
   private let raw: RawSyntax

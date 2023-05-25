@@ -14,7 +14,7 @@
 
 /// A parser for the Swift programming language.
 ///
-/// `Parser` implements a recursive descent parser that produces a SwiftSyntax
+/// ``Parser`` implements a recursive descent parser that produces a SwiftSyntax
 /// tree. Its implementation is divided among a set of files named for the
 /// class of syntax nodes they parse. For example, declaration parsing happens
 /// in `Declaration.swift`, and expression parsing happens in `Expression.swift`.
@@ -110,7 +110,7 @@ public struct Parser {
   static let defaultMaximumNestingLevel = 256
   #endif
 
-  /// Initializes a `Parser` from the given string.
+  /// Initializes a ``Parser`` from the given string.
   public init(_ input: String, maximumNestingLevel: Int? = nil) {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
@@ -128,7 +128,7 @@ public struct Parser {
     self.currentToken = self.lexemes.advance()
   }
 
-  /// Initializes a `Parser` from the given input buffer.
+  /// Initializes a ``Parser`` from the given input buffer.
   ///
   /// - Parameters
   ///   - input: An input buffer containing Swift source text.
@@ -212,7 +212,7 @@ public struct Parser {
 
   /// When compiled with `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION`, and
   /// `shouldRecordAlternativeTokenChoices` is `true` the parser records which
-  /// `TokenSpec`s it checked for a token at a specific offset in the source
+  /// ``TokenSpec``s it checked for a token at a specific offset in the source
   /// file. The offsets are the location of the token text's start (excluding
   /// leading trivia).
   ///
@@ -246,12 +246,12 @@ extension Parser {
 extension Parser: TokenConsumer {}
 
 extension Parser {
-  /// Consumes the current token and sets its kind to the given `TokenKind`,
+  /// Consumes the current token and sets its kind to the given ``TokenKind``,
   /// then advances the lexer to the next token.
   ///
   /// - Parameter kind: The kind to reset the consumed token to.
   /// - Returns: The token that was consumed with its kind re-mapped to the
-  ///            given `TokenKind`.
+  ///            given ``TokenKind``.
   mutating func consumeAnyToken(remapping kind: RawTokenKind) -> RawTokenSyntax {
     self.currentToken.rawTokenKind = kind
     return self.consumeAnyToken()

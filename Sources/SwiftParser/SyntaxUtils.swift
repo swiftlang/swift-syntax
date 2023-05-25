@@ -26,7 +26,7 @@ extension RawUnexpectedNodesSyntax {
     })
   }
 
-  /// If `nodes` is not empty, construct a `RawUnexpectedNodesSyntax`
+  /// If `nodes` is not empty, construct a ``RawUnexpectedNodesSyntax``
   /// containing those tokens, otherwise return `nil`.
   init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType], arena: __shared SyntaxArena) {
     if nodes.isEmpty {
@@ -36,7 +36,7 @@ extension RawUnexpectedNodesSyntax {
     }
   }
 
-  /// If `nodes` contains non-`nil` values, construct a `RawUnexpectedNodesSyntax`
+  /// If `nodes` contains non-`nil` values, construct a ``RawUnexpectedNodesSyntax``
   /// containing those tokens, otherwise return `nil`.
   init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType?], arena: __shared SyntaxArena) {
     self.init(nodes.compactMap({ $0 }), arena: arena)

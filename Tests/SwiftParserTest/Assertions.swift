@@ -209,7 +209,7 @@ struct NoteSpec {
   /// Asserts that the note has this message.
   let message: String
 
-  /// The file and line at which this `NoteSpec` was created, so that assertion failures can be reported at its location.
+  /// The file and line at which this ``NoteSpec`` was created, so that assertion failures can be reported at its location.
   let file: StaticString
   let line: UInt
 
@@ -244,7 +244,7 @@ struct DiagnosticSpec {
   /// Use the `fixedSource` parameter on `AssertParse` to check that applying the Fix-It yields the expected result.
   let fixIts: [String]
 
-  /// The file and line at which this `DiagnosticSpec` was created, so that assertion failures can be reported at its location.
+  /// The file and line at which this ``DiagnosticSpec`` was created, so that assertion failures can be reported at its location.
   let file: StaticString
   let line: UInt
 
@@ -449,7 +449,7 @@ class MutatedTreePrinter: SyntaxVisitor {
   private var printedSource: [UInt8] = []
 
   /// Prints `tree` by replacing the tokens whose offset is in `mutations` by
-  /// a token that matches the corresponding `TokenSpec`.
+  /// a token that matches the corresponding ``TokenSpec``.
   static func print(tree: Syntax, mutations: [Int: TokenSpec]) -> [UInt8] {
     let printer = MutatedTreePrinter(mutations: mutations)
     printer.walk(tree)
@@ -494,7 +494,7 @@ public struct AssertParseOptions: OptionSet {
 }
 
 /// Same as `assertParse` overload with a `(String) -> S` `parse`,
-/// parsing the resulting `String` as a `SourceFileSyntax`.
+/// parsing the resulting `String` as a ``SourceFileSyntax``.
 func assertParse(
   _ markedSource: String,
   substructure expectedSubstructure: Syntax? = nil,

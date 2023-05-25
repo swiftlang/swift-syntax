@@ -25,7 +25,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ArrayTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ArrayTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -167,7 +167,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `AttributedTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``AttributedTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -256,7 +256,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Attribute` to the node's `attributes`
+  /// Adds the provided `element` to the node's `attributes`
   /// collection.
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
@@ -328,7 +328,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ClassRestrictionTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ClassRestrictionTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -406,7 +406,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `CompositionTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``CompositionTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -457,7 +457,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
@@ -503,7 +503,7 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ConstrainedSugarTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ConstrainedSugarTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -619,7 +619,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `DictionaryTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``DictionaryTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -813,7 +813,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `FunctionTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``FunctionTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -914,7 +914,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Argument` to the node's `arguments`
+  /// Adds the provided `element` to the node's `arguments`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
@@ -1026,7 +1026,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ImplicitlyUnwrappedOptionalTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ImplicitlyUnwrappedOptionalTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1142,7 +1142,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MemberTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MemberTypeIdentifierSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1310,7 +1310,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MetatypeTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MetatypeTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1452,7 +1452,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MissingTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MissingTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1531,7 +1531,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `NamedOpaqueReturnTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``NamedOpaqueReturnTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1647,7 +1647,7 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `OptionalTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``OptionalTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1763,7 +1763,7 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PackExpansionTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PackExpansionTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1879,7 +1879,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PackReferenceTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PackReferenceTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1995,7 +1995,7 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SimpleTypeIdentifierSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SimpleTypeIdentifierSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2111,7 +2111,7 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SuppressedTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SuppressedTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2227,7 +2227,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TupleTypeSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TupleTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2316,7 +2316,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.

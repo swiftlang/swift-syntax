@@ -42,7 +42,7 @@ extension Parser {
   /// declarations, and expressions. It is generic over the particular kind of
   /// parse that must occur for these elements, and allows a context-specific
   /// syntax kind to be emitted to collect the results. For example, declaration
-  /// parsing parses items and collects the items into a `MemberDeclListSyntax`
+  /// parsing parses items and collects the items into a ``MemberDeclListSyntax``
   /// node.
   ///
   /// Grammar

@@ -145,7 +145,7 @@ open class BasicFormat: SyntaxRewriter {
 
   open func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
     // We don't want to add newlines inside string interpolation.
-    // When first or second `TokenSyntax` is a multiline quote we want special handling
+    // When first or second ``TokenSyntax`` is a multiline quote we want special handling
     // even if it's inside a string interpolation, because it still requires newline
     // after open quote and before close quote.
     if let first,

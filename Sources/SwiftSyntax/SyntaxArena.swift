@@ -77,7 +77,7 @@ public class SyntaxArena {
     return allocator.allocate(RawSyntax?.self, count: count)
   }
 
-  /// Allcates a buffer of `RawTriviaPiece` with the given count, then returns
+  /// Allcates a buffer of ``RawTriviaPiece`` with the given count, then returns
   /// the uninitialized memory range as a `UnsafeMutableBufferPointer<RawTriviaPiece>`.
   func allocateRawTriviaPieceBuffer(
     count: Int
@@ -91,8 +91,8 @@ public class SyntaxArena {
     return allocator.allocate(UInt8.self, count: count)
   }
 
-  /// Copies the contents of a `SyntaxText` to the memory this arena manages,
-  /// and return the `SyntaxText` in the destiation.
+  /// Copies the contents of a ``SyntaxText`` to the memory this arena manages,
+  /// and return the ``SyntaxText`` in the destiation.
   @_spi(RawSyntax)
   public func intern(_ value: SyntaxText) -> SyntaxText {
     // Return the passed-in value if it's already managed by this arena.
@@ -106,7 +106,7 @@ public class SyntaxArena {
   }
 
   /// Copies a UTF8 sequence of `String` to the memory this arena manages, and
-  /// returns the copied string as a `SyntaxText`
+  /// returns the copied string as a ``SyntaxText``
   @_spi(RawSyntax)
   public func intern(_ value: String) -> SyntaxText {
     if value.isEmpty { return SyntaxText() }
@@ -126,7 +126,7 @@ public class SyntaxArena {
     return UnsafePointer(allocated)
   }
 
-  /// Adds an `SyntaxArena` to this arena as a "child". Do nothing if `arenaRef`
+  /// Adds an ``SyntaxArena`` to this arena as a "child". Do nothing if `arenaRef`
   /// refers `self`.
   ///
   /// When an arena added to another arena, it's owned and is never released
@@ -224,18 +224,18 @@ public class ParsingSyntaxArena: SyntaxArena {
     return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
   }
 
-  /// Parse `source` into a list of `RawTriviaPiece` using `parseTriviaFunction`.
+  /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
   @_spi(RawSyntax)
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
     return self.parseTriviaFunction(source, position)
   }
 }
 
-/// Unsafely unowned reference to `SyntaxArena`. The user is responsible to
-/// maintain the lifetime of the `SyntaxArena`.
+/// Unsafely unowned reference to ``SyntaxArena``. The user is responsible to
+/// maintain the lifetime of the ``SyntaxArena``.
 ///
-/// `RawSyntaxData` holds its `SyntaxArena` in this form to prevent their cyclic
-/// strong references. Also, passing around `SyntaxArena` in this form doesn't
+/// `RawSyntaxData` holds its ``SyntaxArena`` in this form to prevent their cyclic
+/// strong references. Also, passing around ``SyntaxArena`` in this form doesn't
 /// cause any ref-counting traffic.
 struct SyntaxArenaRef: Hashable {
   private let _value: Unmanaged<SyntaxArena>
@@ -244,7 +244,7 @@ struct SyntaxArenaRef: Hashable {
     self._value = .passUnretained(value)
   }
 
-  /// Returns the `SyntaxArena`
+  /// Returns the ``SyntaxArena``
   var value: SyntaxArena {
     get { self._value.takeUnretainedValue() }
   }

@@ -43,21 +43,21 @@ public struct Trivia {
     return sourceLength.utf8Length
   }
 
-  /// Creates a new `Trivia` by appending the provided `TriviaPiece` to the end.
+  /// Creates a new ``Trivia`` by appending the provided ``TriviaPiece`` to the end.
   public func appending(_ piece: TriviaPiece) -> Trivia {
     var copy = pieces
     copy.append(piece)
     return Trivia(pieces: copy)
   }
 
-  /// Creates a new `Trivia` by appending the given trivia to the end.
+  /// Creates a new ``Trivia`` by appending the given trivia to the end.
   public func appending(_ trivia: Trivia) -> Trivia {
     var copy = pieces
     copy.append(contentsOf: trivia.pieces)
     return Trivia(pieces: copy)
   }
 
-  /// Creates a new `Trivia` by merging in the given trivia. Only includes one
+  /// Creates a new ``Trivia`` by merging in the given trivia. Only includes one
   /// copy of a common prefix of `self` and `trivia`.
   public func merging(_ trivia: Trivia) -> Trivia {
     let lhs = self.decomposed
@@ -70,19 +70,19 @@ public struct Trivia {
     return lhs.appending(rhs)
   }
 
-  /// Creates a new `Trivia` by merging the leading and trailing `Trivia`
+  /// Creates a new ``Trivia`` by merging the leading and trailing ``Trivia``
   /// of `triviaOf` into the end of `self`. Only includes one copy of any
   /// common prefixes.
   public func merging(triviaOf node: some SyntaxProtocol) -> Trivia {
     return merging(node.leadingTrivia).merging(node.trailingTrivia)
   }
 
-  /// Concatenates two collections of `Trivia` into one collection.
+  /// Concatenates two collections of ``Trivia`` into one collection.
   public static func + (lhs: Trivia, rhs: Trivia) -> Trivia {
     return lhs.appending(rhs)
   }
 
-  /// Concatenates two collections of `Trivia` into the left-hand side.
+  /// Concatenates two collections of ``Trivia`` into the left-hand side.
   public static func += (lhs: inout Trivia, rhs: Trivia) {
     lhs = lhs.appending(rhs)
   }

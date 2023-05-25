@@ -92,7 +92,7 @@ public class CodeGenerationFormat: BasicFormat {
   // MARK: - Private
 
   private func shouldBeSeparatedByTwoNewlines(node: CodeBlockItemSyntax) -> Bool {
-    // First item in the `CodeBlockItemListSyntax` don't need a newline or identation if the parent is a `SourceFileSyntax`.
+    // First item in the ``CodeBlockItemListSyntax`` don't need a newline or identation if the parent is a ``SourceFileSyntax``.
     // We want to group imports so newline between them should be omitted
     return node.parent?.as(CodeBlockItemListSyntax.self)?.first == node || node.item.is(ImportDeclSyntax.self)
   }

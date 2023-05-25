@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// A `SyntaxVisitor` that can visit the nodes as generic `Syntax` values.
+/// A `SyntaxVisitor` that can visit the nodes as generic ``Syntax`` values.
 ///
 /// This subclass of `SyntaxVisitor` is slower than the type-specific visitation
 /// of `SyntaxVisitor`. Use `SyntaxAnyVisitor` if the `visitAny(_)` function

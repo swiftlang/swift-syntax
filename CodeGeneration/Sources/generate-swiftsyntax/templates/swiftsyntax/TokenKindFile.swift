@@ -252,7 +252,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! FunctionDeclSyntax(
       """
-      /// Returns the `RawTokenKind` of this `TokenKind` and, if this `TokenKind`
+      /// Returns the ``RawTokenKind`` of this ``TokenKind`` and, if this ``TokenKind``
       /// has associated text, the associated text, otherwise `nil`.
       @_spi(RawSyntax)
       public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?)

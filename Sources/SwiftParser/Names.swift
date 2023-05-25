@@ -284,8 +284,8 @@ extension Lexer.Lexeme {
   }
 
   var isLexerClassifiedKeyword: Bool {
-    // Only lexer-classified lexemes have `RawTokenKind` of `keyword.
-    // Contextual keywords will only be made keywords when a `RawTokenSyntax` is
+    // Only lexer-classified lexemes have ``RawTokenKind`` of `keyword.
+    // Contextual keywords will only be made keywords when a ``RawTokenSyntax`` is
     // constructed from them.
     return self.rawTokenKind == .keyword
   }

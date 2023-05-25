@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// A contiguous stretch of a single kind of trivia. The constituent part of
-/// a `Trivia` collection.
+/// a ``Trivia`` collection.
 ///
 /// For example, four spaces would be represented by
 /// `.spaces(4)`
@@ -299,7 +299,7 @@ extension TriviaPiece {
 
 /// Trivia piece for token RawSyntax.
 ///
-/// In contrast to `TriviaPiece`, a `RawTriviaPiece` does not own the source
+/// In contrast to ``TriviaPiece``, a ``RawTriviaPiece`` does not own the source
 /// text of a the trivia.
 @_spi(RawSyntax)
 public enum RawTriviaPiece: Equatable {

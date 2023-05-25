@@ -21,8 +21,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(node.kind.syntaxType)
 
-      /// Protocol to which all `\(node.kind.syntaxType)` nodes conform. Extension point to add
-      /// common methods to all `\(node.kind.syntaxType)` nodes.
+      /// Protocol to which all ``\(node.kind.syntaxType)`` nodes conform. Extension point to add
+      /// common methods to all ``\(node.kind.syntaxType)`` nodes.
       /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
       public protocol \(node.kind.protocolType): \(raw: node.base.protocolType) {}
       """
@@ -62,7 +62,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a `\(node.kind.syntaxType)` node from a specialized syntax node.
+        /// Create a ``\(node.kind.syntaxType)`` node from a specialized syntax node.
         public init(_ syntax: some \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
@@ -74,7 +74,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a `\(node.kind.syntaxType)` node from a specialized optional syntax node.
+        /// Create a ``\(node.kind.syntaxType)`` node from a specialized optional syntax node.
         public init?(_ syntax: (some \(node.kind.protocolType))?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
@@ -95,7 +95,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a `\(node.kind.syntaxType)` node from a specialized optional syntax node.
+        /// Create a ``\(node.kind.syntaxType)`` node from a specialized optional syntax node.
         public init?(fromProtocol syntax: \(node.kind.protocolType)?) {
           guard let syntax = syntax else { return nil }
           self.init(fromProtocol: syntax)
@@ -131,8 +131,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       try InitializerDeclSyntax(
         """
-        /// Creates a `\(node.kind.syntaxType)` node from the given `SyntaxData`. This assumes
-        /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+        /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. This assumes
+        /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
         /// is undefined.
         internal init(_ data: SyntaxData)
         """

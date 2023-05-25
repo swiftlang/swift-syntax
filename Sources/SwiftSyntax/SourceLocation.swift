@@ -83,8 +83,8 @@ public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
   }
 }
 
-/// Converts `AbsolutePosition`s of syntax nodes to `SourceLocation`s, and
-/// vice-versa. The `AbsolutePosition`s must be originating from nodes that are
+/// Converts ``AbsolutePosition``s of syntax nodes to ``SourceLocation``s, and
+/// vice-versa. The ``AbsolutePosition``s must be originating from nodes that are
 /// part of the same tree that was used to initialize this class.
 public final class SourceLocationConverter {
   let file: String
@@ -145,8 +145,8 @@ public final class SourceLocationConverter {
     }
   }
 
-  /// Convert a `AbsolutePosition` to a `SourceLocation`. If the position is
-  /// exceeding the file length then the `SourceLocation` for the end of file
+  /// Convert a ``AbsolutePosition`` to a ``SourceLocation``. If the position is
+  /// exceeding the file length then the ``SourceLocation`` for the end of file
   /// is returned. If position is negative the location for start of file is
   /// returned.
   public func location(for origpos: AbsolutePosition) -> SourceLocation {
@@ -190,7 +190,7 @@ public final class SourceLocationConverter {
     )
   }
 
-  /// Convert a line/column to a `SourceLocation`. If the line/column exceeds
+  /// Convert a line/column to a ``SourceLocation``. If the line/column exceeds
   /// the boundaries of the file or the line, the position returned is one
   /// adjusted to the closest boundary (beginning/end of file or line).
   ///
@@ -389,9 +389,9 @@ fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], Abso
 }
 
 fileprivate extension SyntaxText {
-  /// Walks and passes to `body` the `SourceLength` for every detected line,
+  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
-  /// - Returns: The leftover `SourceLength` at the end of the walk.
+  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()
@@ -436,9 +436,9 @@ fileprivate extension SyntaxText {
 }
 
 fileprivate extension RawTriviaPiece {
-  /// Walks and passes to `body` the `SourceLength` for every detected line,
+  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
-  /// - Returns: The leftover `SourceLength` at the end of the walk.
+  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()
@@ -483,9 +483,9 @@ fileprivate extension RawTriviaPiece {
 }
 
 fileprivate extension Array where Element == RawTriviaPiece {
-  /// Walks and passes to `body` the `SourceLength` for every detected line,
+  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
-  /// - Returns: The leftover `SourceLength` at the end of the walk.
+  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()
@@ -499,9 +499,9 @@ fileprivate extension Array where Element == RawTriviaPiece {
 }
 
 fileprivate extension TokenSyntax {
-  /// Walks and passes to `body` the `SourceLength` for every detected line,
+  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
-  /// - Returns: The leftover `SourceLength` at the end of the walk.
+  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()

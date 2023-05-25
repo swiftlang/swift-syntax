@@ -25,7 +25,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ArrayExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ArrayExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -114,7 +114,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
@@ -186,7 +186,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ArrowExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ArrowExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -302,7 +302,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `AsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``AsExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -470,7 +470,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `AssignmentExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``AssignmentExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -548,7 +548,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `AwaitExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``AwaitExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -664,7 +664,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `BinaryOperatorExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``BinaryOperatorExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -742,7 +742,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `BooleanLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``BooleanLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -820,7 +820,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `BorrowExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``BorrowExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -936,7 +936,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `CanImportExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``CanImportExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1130,7 +1130,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `CanImportVersionInfoSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``CanImportVersionInfoSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1298,7 +1298,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ClosureExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ClosureExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1411,7 +1411,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Statement` to the node's `statements`
+  /// Adds the provided `element` to the node's `statements`
   /// collection.
   /// - param element: The new `Statement` to add to the node's
   ///                  `statements` collection.
@@ -1485,7 +1485,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `CopyExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``CopyExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1643,7 +1643,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `DictionaryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``DictionaryExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1785,7 +1785,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `DiscardAssignmentExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``DiscardAssignmentExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1863,7 +1863,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `EditorPlaceholderExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``EditorPlaceholderExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -1941,7 +1941,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `FloatLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``FloatLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2019,7 +2019,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ForcedValueExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ForcedValueExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2135,7 +2135,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `FunctionCallExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``FunctionCallExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2260,7 +2260,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Argument` to the node's `argumentList`
+  /// Adds the provided `element` to the node's `argumentList`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
   ///                  `argumentList` collection.
@@ -2333,7 +2333,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
+  /// Adds the provided `element` to the node's `additionalTrailingClosures`
   /// collection.
   /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
@@ -2393,7 +2393,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IdentifierExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IdentifierExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2551,7 +2551,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IfExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IfExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2652,7 +2652,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Condition` to the node's `conditions`
+  /// Adds the provided `element` to the node's `conditions`
   /// collection.
   /// - param element: The new `Condition` to add to the node's
   ///                  `conditions` collection.
@@ -2764,7 +2764,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `InOutExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``InOutExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -2880,7 +2880,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `InfixOperatorExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``InfixOperatorExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3022,7 +3022,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IntegerLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IntegerLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3106,7 +3106,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IsExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3251,7 +3251,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `KeyPathExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``KeyPathExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3358,7 +3358,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `KeyPathComponent` to the node's `components`
+  /// Adds the provided `element` to the node's `components`
   /// collection.
   /// - param element: The new `KeyPathComponent` to add to the node's
   ///                  `components` collection.
@@ -3412,7 +3412,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MacroExpansionExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MacroExpansionExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3586,7 +3586,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Argument` to the node's `argumentList`
+  /// Adds the provided `element` to the node's `argumentList`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
   ///                  `argumentList` collection.
@@ -3659,7 +3659,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
+  /// Adds the provided `element` to the node's `additionalTrailingClosures`
   /// collection.
   /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
@@ -3723,7 +3723,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MemberAccessExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MemberAccessExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3891,7 +3891,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MissingExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MissingExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -3970,7 +3970,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MoveExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MoveExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4086,7 +4086,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `NilLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``NilLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4164,7 +4164,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `OptionalChainingExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``OptionalChainingExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4280,7 +4280,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PackElementExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PackElementExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4396,7 +4396,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PackExpansionExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PackExpansionExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4512,7 +4512,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PostfixIfConfigExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PostfixIfConfigExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4628,7 +4628,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PostfixUnaryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PostfixUnaryExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4744,7 +4744,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `PrefixOperatorExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``PrefixOperatorExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -4860,7 +4860,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `RegexLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``RegexLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5054,7 +5054,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SequenceExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SequenceExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5105,7 +5105,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
@@ -5151,7 +5151,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SpecializeExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SpecializeExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5267,7 +5267,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `StringLiteralExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``StringLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5386,7 +5386,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Segment` to the node's `segments`
+  /// Adds the provided `element` to the node's `segments`
   /// collection.
   /// - param element: The new `Segment` to add to the node's
   ///                  `segments` collection.
@@ -5480,7 +5480,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SubscriptExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SubscriptExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5605,7 +5605,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Argument` to the node's `argumentList`
+  /// Adds the provided `element` to the node's `argumentList`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
   ///                  `argumentList` collection.
@@ -5678,7 +5678,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `AdditionalTrailingClosure` to the node's `additionalTrailingClosures`
+  /// Adds the provided `element` to the node's `additionalTrailingClosures`
   /// collection.
   /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
@@ -5738,7 +5738,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SuperRefExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SuperRefExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5816,7 +5816,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `SwitchExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``SwitchExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -5953,7 +5953,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Case` to the node's `cases`
+  /// Adds the provided `element` to the node's `cases`
   /// collection.
   /// - param element: The new `Case` to add to the node's
   ///                  `cases` collection.
@@ -6029,7 +6029,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TernaryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TernaryExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6223,7 +6223,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TryExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6365,7 +6365,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TupleExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TupleExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6454,7 +6454,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
@@ -6526,7 +6526,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TypeExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TypeExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6604,7 +6604,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `UnresolvedAsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``UnresolvedAsExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6720,7 +6720,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `UnresolvedIsExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``UnresolvedIsExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6798,7 +6798,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `UnresolvedPatternExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``UnresolvedPatternExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -6876,7 +6876,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `UnresolvedTernaryExprSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``UnresolvedTernaryExprSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {

@@ -86,7 +86,7 @@ public struct SyntaxBuildableType: Hashable {
   /// These names look as follows:
   ///  - For nodes: The node name, e.g. `IdentifierExpr` (these are implemented as structs)
   ///  - For base kinds: `<BaseKind>Buildable`, e.g. `ExprBuildable` (these are implemented as protocols)
-  ///  - For token: `TokenSyntax` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
+  ///  - For token: ``TokenSyntax`` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
   public var buildable: TypeSyntax {
     optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(syntaxBaseName)))

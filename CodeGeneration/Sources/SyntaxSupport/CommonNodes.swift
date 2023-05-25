@@ -152,13 +152,13 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "Attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        documentation: "If there were standalone attributes without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
+        documentation: "If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.",
         isOptional: true
       ),
       Child(
         name: "Modifiers",
         kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
-        documentation: "If there were standalone modifiers without a declaration to attach them to, the `MissingDeclSyntax` will contain these.",
+        documentation: "If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.",
         isOptional: true
       ),
       Child(

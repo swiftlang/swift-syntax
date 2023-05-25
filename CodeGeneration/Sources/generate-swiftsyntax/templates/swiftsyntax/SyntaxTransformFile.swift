@@ -26,7 +26,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(node.kind.syntaxType)` specifically.
+        /// Visiting ``\(node.kind.syntaxType)`` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: the sum of whatever the child visitors return.
         func visit(_ node: \(node.kind.syntaxType)) -> ResultType
@@ -47,7 +47,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(node.kind.syntaxType)` specifically.
+        /// Visiting ``\(node.kind.syntaxType)`` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: nil by default.
         public func visit(_ node: \(node.kind.syntaxType)) -> ResultType {

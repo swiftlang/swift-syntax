@@ -19,7 +19,7 @@ extension SyntaxProtocol {
   /// throw an error with diagnostics describing the syntax errors.
   ///
   /// This allows clients to e.g. write `try DeclSyntax(validating: "struct Foo {}")`
-  /// which constructs a `DeclSyntax` that's guaranteed to be free of syntax
+  /// which constructs a ``DeclSyntax`` that's guaranteed to be free of syntax
   /// errors.
   public init(validating node: Self) throws {
     if node.hasError {

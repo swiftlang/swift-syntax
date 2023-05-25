@@ -168,7 +168,7 @@ extension EnumCaseParameterListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.
+/// A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.
 extension ExprListSyntax: ExpressibleByArrayLiteral {
   public init(_ elements: [ExprSyntaxProtocol]) {
     self = ExprListSyntax(elements.map {

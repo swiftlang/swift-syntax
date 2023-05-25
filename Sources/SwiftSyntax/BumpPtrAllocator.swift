@@ -135,7 +135,7 @@ public class BumpPtrAllocator {
   ///
   /// The returned buffer is bound to the type, but not initialized.
   /// Clients should never call `deallocate()` on the returned buffer.
-  /// In general, using `BumpPtrAllocator` for placing non-trivial values (e.g.
+  /// In general, using ``BumpPtrAllocator`` for placing non-trivial values (e.g.
   /// class instances, existentials, etc.) is strongly discouraged because they
   /// are not automatically deinitialized.
   public func allocate<T>(_: T.Type, count: Int) -> UnsafeMutableBufferPointer<T> {

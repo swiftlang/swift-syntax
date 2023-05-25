@@ -149,7 +149,7 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
       return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
     case .diagnostics(let diagnostics, let tree):
       // Start the diagnostic on a new line so it isn't prefixed with the file, which messes up the
-      // column-aligned message from `DiagnosticsFormatter`.
+      // column-aligned message from ``DiagnosticsFormatter``.
       return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
     }
   }
@@ -161,7 +161,7 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
 /// Conforming types do not *contain* Swift source code; rather, they can be
 /// *expressed* in Swift source code, and this protocol can be used to get
 /// whatever source code would do that. For example, `String` is
-/// `ExpressibleByLiteralSyntax` but `StringLiteralExprSyntax` is not.
+/// `ExpressibleByLiteralSyntax` but ``StringLiteralExprSyntax`` is not.
 ///
 /// This protocol is usually not used directly. Instead, conforming types can
 /// be turned into syntax trees using ``Expr/init(literal:)``:

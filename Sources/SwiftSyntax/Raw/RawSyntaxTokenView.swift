@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 extension RawSyntax {
-  /// A view into the `RawSyntax` that exposes functionality that's specific to tokens.
+  /// A view into the ``RawSyntax`` that exposes functionality that's specific to tokens.
   /// The token's payload must be a token, otherwise this traps.
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView? {
@@ -24,7 +24,7 @@ extension RawSyntax {
   }
 }
 
-/// A view into `RawSyntax` that exposes functionality that only applies to tokens.
+/// A view into ``RawSyntax`` that exposes functionality that only applies to tokens.
 @_spi(RawSyntax)
 public struct RawSyntaxTokenView {
   let raw: RawSyntax
@@ -117,13 +117,13 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  /// Returns the leading `Trivia` length.
+  /// Returns the leading ``Trivia`` length.
   @_spi(RawSyntax)
   public var leadingTriviaLength: SourceLength {
     return SourceLength(utf8Length: leadingTriviaByteLength)
   }
 
-  /// Returns the trailing `Trivia` length.
+  /// Returns the trailing ``Trivia`` length.
   @_spi(RawSyntax)
   public var trailingTriviaLength: SourceLength {
     return SourceLength(utf8Length: trailingTriviaByteLength)
@@ -157,20 +157,20 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  /// Returns the leading `Trivia`.
+  /// Returns the leading ``Trivia``.
   @_spi(RawSyntax)
   public func formLeadingTrivia() -> Trivia {
     return Trivia(pieces: leadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
-  /// Returns the trailing `Trivia`.
+  /// Returns the trailing ``Trivia``.
   /// - Returns: nil if called on a layout node.
   @_spi(RawSyntax)
   public func formTrailingTrivia() -> Trivia {
     return Trivia(pieces: trailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
-  /// Returns a `RawSyntax` node with the same source text but with the token
+  /// Returns a ``RawSyntax`` node with the same source text but with the token
   /// kind changed to `newValue`.
   @_spi(RawSyntax)
   public func withKind(_ newValue: TokenKind, arena: SyntaxArena) -> RawSyntax {
@@ -198,7 +198,7 @@ public struct RawSyntaxTokenView {
     }
   }
 
-  /// Returns a `RawSyntax` node with the presence changed to `newValue`.
+  /// Returns a ``RawSyntax`` node with the presence changed to `newValue`.
   @_spi(RawSyntax)
   public func withPresence(_ newValue: SourcePresence, arena: SyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)

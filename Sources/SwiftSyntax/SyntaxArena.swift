@@ -21,18 +21,20 @@
 /// chunk of memory at a time, which it can then use to store syntax nodes in.
 /// This way, only a single memory allocation needs to be performed for multiple
 /// syntax nodes and since memory allocations have a non-trivial cost, this
-/// signficiantly speeds up parsing.
+/// significantly speeds up parsing.
 ///
 /// As a consequence, syntax nodes cannot be freed individually but the memory
 /// will get freed once the owning ``SyntaxArena`` gets freed. Thus, it needs to
-/// be manually ensured that the ``SyntaxArena`` is not deallocated before any
+/// be manually ensured that the ``SyntaxArena`` is not deallocated while any
 /// of its nodes are being accessed. The ``SyntaxData`` type ensures this as
-/// follows: Each node retains its parent ``SyntaxData``, thus keeping it alive.
-/// The tree’s root keeps the ``SyntaxArena`` it is contained in alive. And if
-/// any children of this tree are allocated within a different ``SyntaxArena``,
-/// the root arena keeps those arenas alive via the `childRefs` property.
+/// follows:
+/// - The root node has a strong reference to its ``SyntaxArena``
+/// - Each node retains its parent ``SyntaxData``, thus keeping it alive.
+/// - If any node is allocated within a different ``SyntaxArena``,  that arena
+///   is added to the root's `childRefs` property and thus kept a live as long
+///   as the parent tree is alive.
 ///
-/// As an added benefit of the ``SyntaxArena``, `RawSyntax` nodes don’t need to
+/// As an added benefit of the ``SyntaxArena``, ``RawSyntax`` nodes don’t need to
 /// be reference-counted, further improving the performance of ``SwiftSyntax``
 /// when worked with at that level.
 public class SyntaxArena {

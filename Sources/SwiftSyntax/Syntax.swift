@@ -59,7 +59,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   /// Needed for the conformance to ``SyntaxProtocol``.
   ///
-  /// Kind of non-sensical on `Syntax` since this just returns `self`.
+  /// Needed for the conformance to ``SyntaxProtocol``. Just returns `self`.
   public var _syntaxNode: Syntax {
     return self
   }
@@ -73,12 +73,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self.init(.forRoot(raw))
   }
 
-  /// Create a `Syntax` node from a specialized syntax node.
+  /// Create a ``Syntax`` node from a specialized syntax node.
   public init(_ syntax: some SyntaxProtocol) {
     self = syntax._syntaxNode
   }
 
-  /// Creates a new `Syntax` node from any concrete node that conforms to `SyntaxProtocol`.
+  /// Creates a new `Syntax` node from any node that conforms to ``SyntaxProtocol``.
   public init(fromProtocol syntax: SyntaxProtocol) {
     self = syntax._syntaxNode
   }
@@ -111,14 +111,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// Returns `true` if `rhs` and `lhs` have the same ID.
   ///
   /// Note `lhs` and `rhs` might have the same contents even if their IDs are
-  /// different. For example two different `FunctionDeclSyntax` nodes in the
-  /// might have the exact same contents but if they occur at a different
-  /// location in the source file, they have different IDs.
-  ///
-  /// Also note that the ID of a syntax node changes when it is anchored in a
-  /// different syntax tree. Modifying any node in the syntax tree a node is
-  /// contained in generates a copy of that tree and thus changes the IDs of all
-  /// nodes in the tree, not just the modified node's children.
+  /// different. See documentation on ``SyntaxIdentifier``.
   public static func == (lhs: Syntax, rhs: Syntax) -> Bool {
     return lhs.data.nodeId == rhs.data.nodeId
   }
@@ -244,11 +237,11 @@ extension SyntaxProtocol {
     return raw.kind
   }
 
-  /// The dynamic metatype of this node. You almost always want to prefer this
-  /// over `type(of: self)` because if `self` is a `DeclSyntax` representing a
-  /// `FunctionDeclSyntax`, `type(of: self)` will return `DeclSyntax`, while
+  /// The dynamic metatype of the concrete node. You almost always want to prefer this
+  /// over `type(of: self)` because if `self` is a ``DeclSyntax`` representing a
+  /// ``FunctionDeclSyntax``, `type(of: self)` will return `DeclSyntax`, while
   /// `syntaxNodeType` looks at the dynamic kind of this node and returns
-  /// `FunctionDeclSyntax`.
+  /// ``FunctionDeclSyntax``.
   public var syntaxNodeType: SyntaxProtocol.Type {
     return self.raw.kind.syntaxNodeType
   }
@@ -780,7 +773,7 @@ public struct ReversedTokenSequence: Sequence {
     }
 
     /// Returns the next element in a ``ReversedTokenSequence``, i.e. the one
-    /// that occured before the current token in source order.
+    /// that occurred before the current token in source order.
     public mutating func next() -> TokenSyntax? {
       guard let token = self.nextToken else { return nil }
       self.nextToken = token.previousToken(viewMode: viewMode)

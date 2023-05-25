@@ -204,8 +204,8 @@ public extension SwiftSyntax.TokenDiagnostic {
       }
       let replacedText =
         text
-        .replacingFirstOccurence(of: "“", with: #"""#)
-        .replacingLastOccurence(of: "”", with: #"""#)
+        .replacingFirstOccurrence(of: "“", with: #"""#)
+        .replacingLastOccurrence(of: "”", with: #"""#)
 
       let fixedToken = token.with(\.tokenKind, TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [

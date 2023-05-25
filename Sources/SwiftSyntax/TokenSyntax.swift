@@ -152,7 +152,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 extension TokenSyntax: CustomReflectable {
-  /// A custom mirror that shows the token properties in a better for, making
+  /// A custom mirror that shows the token properties in a simpler form, making
   /// the debug output of the token easier to read.
   public var customMirror: Mirror {
     return Mirror(

@@ -55,20 +55,22 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
   }
 }
 
-/// Represents a start and end location in a Swift file.
+/// Represents a half-open range in a Swift file.
 public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
 
-  /// The beginning location in the source range.
+  /// The beginning location of the source range.
   ///
   /// This location is included in the range
   public let start: SourceLocation
 
-  /// The beginning location in the source range.
+  /// The end location of the source range.
   ///
-  /// This location is no longer part of the range
+  /// The location of the character after the end of the range,
+  /// ie. this location is not included in the range.
   public let end: SourceLocation
 
-  /// A description describing this range for debugging purposes, don't rely on it.
+  /// A description describing this range for debugging purposes, don't rely on
+  /// it being stable
   public var debugDescription: String {
     return "(\(start.debugDescription),\(end.debugDescription))"
   }

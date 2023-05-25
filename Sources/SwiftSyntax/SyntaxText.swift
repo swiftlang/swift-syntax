@@ -222,7 +222,7 @@ extension SyntaxText: CustomStringConvertible {
 
 extension SyntaxText: CustomDebugStringConvertible {
   /// The string value of this text, which may be lossy if the text contains
-  /// invalid Unicode.
+  /// invalid Unicode. Don’t rely on this value being stable.
   public var debugDescription: String { description.debugDescription }
 }
 

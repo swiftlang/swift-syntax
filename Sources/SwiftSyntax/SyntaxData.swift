@@ -93,10 +93,10 @@ public struct SyntaxIndexInTree: Comparable, Hashable {
   }
 }
 
-/// Provides a stable and unique identity for `Syntax` nodes.
+/// Provides a stable and unique identity for ``Syntax`` nodes.
 ///
 /// Note that two nodes might have the same contents even if their IDs are
-/// different. For example two different `FunctionDeclSyntax` nodes in the
+/// different. For example two different ``FunctionDeclSyntax`` nodes in the
 /// might have the exact same contents but if they occur at a different
 /// location in the source file, they have different IDs.
 ///

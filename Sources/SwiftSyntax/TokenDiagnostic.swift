@@ -116,9 +116,9 @@ public struct TokenDiagnostic: Hashable {
   /// Since the offset within the token is represented by 16 bits only,
   /// diagnostics that are more than 2^16 bytes from the token's start cannot
   /// be represented. In that case, emit a `tokenDiagnosticOffsetOverflow`
-  /// diagnostic at the token’s start. 2^16 are quite a lot of characters for
+  /// diagnostic at the token’s start. 2^16 is quite a lot of characters for
   /// a single token (even when we include comments as trivia), so we don’t
-  /// expect to hit this case in the vast majority.
+  /// expect to hit this case most of the time.
   public init(_ kind: Kind, byteOffset: Int) {
     precondition(byteOffset >= 0)
     // `type(of: self.byteOffset).max` gets optimized to a constant

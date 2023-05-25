@@ -17,6 +17,7 @@ import SwiftDiagnostics
 extension ParseDiagnosticsGenerator {
   func handleMissingToken(_ missingToken: TokenSyntax) {
     guard let invalidToken = missingToken.previousToken(viewMode: .all),
+      invalidToken.presence == .present,
       let invalidTokenContainer = invalidToken.parent?.as(UnexpectedNodesSyntax.self),
       invalidTokenContainer.count == 1
     else {

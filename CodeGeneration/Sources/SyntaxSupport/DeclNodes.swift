@@ -464,7 +464,7 @@ public let DECL_NODES: [Node] = [
       An editor placeholder, e.g. `<#declaration#>` that is used in a position that expects a declaration.
       """,
     kind: "Decl",
-    traits:[
+    traits: [
       "WithAttributes",
       "WithModifiers",
     ],

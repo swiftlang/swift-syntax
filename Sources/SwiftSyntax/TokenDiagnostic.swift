@@ -19,6 +19,7 @@ public struct TokenDiagnostic: Hashable {
     case error
   }
 
+  /// Each diagnostic kind is uniquely represented by a value in this enum.
   public enum Kind {
     // Please order these alphabetically
 
@@ -53,19 +54,71 @@ public struct TokenDiagnostic: Hashable {
     case unicodeCurlyQuote
     case unprintableAsciiCharacter
     case unterminatedBlockComment
+
+    /// The severity of the diagnostic, i.e. whether it’s a warning or error.
+    var severity: Severity {
+      switch self {
+      case .editorPlaceholder: return .error
+      case .equalMustHaveConsistentWhitespaceOnBothSides: return .error
+      case .expectedBinaryExponentInHexFloatLiteral: return .error
+      case .expectedClosingBraceInUnicodeEscape: return .error
+      case .expectedDigitInFloatLiteral: return .error
+      case .expectedHexCodeInUnicodeEscape: return .error
+      case .expectedHexDigitInHexLiteral: return .error
+      case .insufficientIndentationInMultilineStringLiteral: return .error
+      case .invalidBinaryDigitInIntegerLiteral: return .error
+      case .invalidCharacter: return .error
+      case .invalidDecimalDigitInIntegerLiteral: return .error
+      case .invalidEscapeSequenceInStringLiteral: return .error
+      case .invalidFloatingPointExponentCharacter: return .error
+      case .invalidFloatingPointExponentDigit: return .error
+      case .invalidHexDigitInIntegerLiteral: return .error
+      case .invalidIdentifierStartCharacter: return .error
+      case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
+      case .invalidOctalDigitInIntegerLiteral: return .error
+      case .invalidUtf8: return .error
+      case .multilineRegexClosingNotOnNewline: return .error
+      case .nonBreakingSpace: return .warning
+      case .nulCharacter: return .warning
+      case .sourceConflictMarker: return .error
+      case .spaceAtEndOfRegexLiteral: return .error
+      case .spaceAtStartOfRegexLiteral: return .error
+      case .tokenDiagnosticOffsetOverflow: return .error
+      case .unexpectedBlockCommentEnd: return .error
+      case .unicodeCurlyQuote: return .error
+      case .unprintableAsciiCharacter: return .error
+      case .unterminatedBlockComment: return .error
+      }
+    }
   }
 
+  /// The unique kind of this diagnostic.
+  ///
+  /// This kind determines the message that will be shown by the diagnostic.
   public let kind: Kind
 
   /// The offset at which the error is, in bytes relative to the token's leading
   /// trivia start (i.e. relative to the token's `position`)
   public let byteOffset: UInt16
 
+  /// Construct a diagnostic of the given `kind` that is anchored at `byteOffset`,
+  /// measured in UTF-8 bytes relative to the leading trivia start of the token
+  /// this diagnostic will be attached to.
   public init(_ kind: Kind, byteOffset: UInt16) {
     self.kind = kind
     self.byteOffset = byteOffset
   }
 
+  /// Construct a diagnostic of the given `kind` that is anchored at `byteOffset`,
+  /// measured in UTF-8 bytes relative to the leading trivia start of the token
+  /// this diagnostic will be attached to.
+  ///
+  /// Since the offset within the token is represented by 16 bits only,
+  /// diagnostics that are more than 2^16 bytes from the token's start cannot
+  /// be represented. In that case, emit a `tokenDiagnosticOffsetOverflow`
+  /// diagnostic at the token’s start. 2^16 are quite a lot of characters for
+  /// a single token (even when we include comments as trivia), so we don’t
+  /// expect to hit this case in the vast majority.
   public init(_ kind: Kind, byteOffset: Int) {
     precondition(byteOffset >= 0)
     // `type(of: self.byteOffset).max` gets optimized to a constant
@@ -98,38 +151,8 @@ public struct TokenDiagnostic: Hashable {
     }
   }
 
+  /// The severity of the diagnostic, i.e. whether it’s a warning or error.
   public var severity: Severity {
-    switch kind {
-    case .editorPlaceholder: return .error
-    case .equalMustHaveConsistentWhitespaceOnBothSides: return .error
-    case .expectedBinaryExponentInHexFloatLiteral: return .error
-    case .expectedClosingBraceInUnicodeEscape: return .error
-    case .expectedDigitInFloatLiteral: return .error
-    case .expectedHexCodeInUnicodeEscape: return .error
-    case .expectedHexDigitInHexLiteral: return .error
-    case .insufficientIndentationInMultilineStringLiteral: return .error
-    case .invalidBinaryDigitInIntegerLiteral: return .error
-    case .invalidCharacter: return .error
-    case .invalidDecimalDigitInIntegerLiteral: return .error
-    case .invalidEscapeSequenceInStringLiteral: return .error
-    case .invalidFloatingPointExponentCharacter: return .error
-    case .invalidFloatingPointExponentDigit: return .error
-    case .invalidHexDigitInIntegerLiteral: return .error
-    case .invalidIdentifierStartCharacter: return .error
-    case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
-    case .invalidOctalDigitInIntegerLiteral: return .error
-    case .invalidUtf8: return .error
-    case .multilineRegexClosingNotOnNewline: return .error
-    case .nonBreakingSpace: return .warning
-    case .nulCharacter: return .warning
-    case .sourceConflictMarker: return .error
-    case .spaceAtEndOfRegexLiteral: return .error
-    case .spaceAtStartOfRegexLiteral: return .error
-    case .tokenDiagnosticOffsetOverflow: return .error
-    case .unexpectedBlockCommentEnd: return .error
-    case .unicodeCurlyQuote: return .error
-    case .unprintableAsciiCharacter: return .error
-    case .unterminatedBlockComment: return .error
-    }
+    return kind.severity
   }
 }

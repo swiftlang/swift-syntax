@@ -51,6 +51,7 @@ struct SyntaxChildrenIndexData: Comparable {
 
 /// An index in a syntax children collection.
 public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
+  /// Construct the `endIndex` of a ``SyntaxChildren`` collection.
   public init(nilLiteral: ()) {
     self.data = nil
   }
@@ -84,6 +85,7 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
     self.data = SyntaxChildrenIndexData(absoluteSyntaxInfo)
   }
 
+  /// Returns `true` if `lhs` occurs before `rhs`.
   public static func < (lhs: SyntaxChildrenIndex, rhs: SyntaxChildrenIndex)
     -> Bool
   {
@@ -423,7 +425,10 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
 
 /// Collection that contains the present child `Syntax` nodes of the given node.
 public struct SyntaxChildren: BidirectionalCollection {
+  /// ``SyntaxChildren`` is indexed by ``SyntaxChildrenIndex``.
   public typealias Index = SyntaxChildrenIndex
+
+  /// ``SyntaxChildren`` contains ``Syntax`` nodes.
   public typealias Element = Syntax
 
   /// The collection that contains the raw child nodes. `Syntax` nodes are
@@ -433,19 +438,25 @@ public struct SyntaxChildren: BidirectionalCollection {
   /// The parent node of the children. Used to build the `Syntax` nodes.
   private let parent: Syntax
 
+  /// The index of the first child in this collection.
   public var startIndex: SyntaxChildrenIndex { return rawChildren.startIndex }
+
+  /// The index that’s one after the last element in the collection.
   public var endIndex: SyntaxChildrenIndex { return rawChildren.endIndex }
 
+  /// The index for the child that’s after the child at `index`.
   public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     return rawChildren.index(after: index)
   }
 
+  /// The index for the child that’s before the child at `index`.
   public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
     return rawChildren.index(before: index)
   }
 
-  public subscript(position: SyntaxChildrenIndex) -> Syntax {
-    let child = rawChildren[position]
+  /// The syntax node at the given `index`
+  public subscript(index: SyntaxChildrenIndex) -> Syntax {
+    let child = rawChildren[index]
     let data = SyntaxData(child, parent: parent)
     return Syntax(data)
   }

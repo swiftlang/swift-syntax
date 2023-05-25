@@ -14,13 +14,20 @@
 
 /// A Syntax node representing a single token.
 public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
+  /// The ``Syntax`` node that provides the underlying data.
+  ///
+  /// Don’t access this. Use `Syntax(token)` instead.
   public let _syntaxNode: Syntax
 
+  /// The ``RawSyntaxTokenView`` of this token that allows accessing raw
+  /// properties of the token.
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView {
     return raw.tokenView!
   }
 
+  /// If `node` is a token, return the ``TokenSyntax`` that represents it.
+  /// Otherwise, return `nil`.
   public init?<S: SyntaxProtocol>(_ node: S) {
     guard node.raw.kind == .token else { return nil }
     self._syntaxNode = node._syntaxNode
@@ -34,6 +41,8 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
 
+  /// Construct a new token with the given `kind`, `leadingTrivia`,
+  /// `trailingTrivia` and `presence`.
   public init(
     _ kind: TokenKind,
     leadingTrivia: Trivia = [],
@@ -54,6 +63,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
 
+  /// Whether the token is present or missing.
   public var presence: SourcePresence {
     get {
       return tokenView.presence
@@ -125,6 +135,12 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return raw.totalLength
   }
 
+  /// A token by itself has no structure, so we represent its structure by an
+  /// empty layout node.
+  ///
+  /// Every syntax node that contains a token will have a
+  /// ``SyntaxNodeStructure.SyntaxChoices.choices`` case for the token and those
+  /// choices represent the token kinds the token might have.
   public static var structure: SyntaxNodeStructure {
     return .layout([])
   }
@@ -136,6 +152,8 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 extension TokenSyntax: CustomReflectable {
+  /// A custom mirror that shows the token properties in a better for, making
+  /// the debug output of the token easier to read.
   public var customMirror: Mirror {
     return Mirror(
       self,

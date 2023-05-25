@@ -1257,7 +1257,31 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           node.closeQuote.id,
         ].compactMap { $0 }
       )
+    } else if node.openQuote.presence == .missing,
+      node.unexpectedBetweenOpenDelimiterAndOpenQuote == nil,
+      node.closeQuote.presence == .missing,
+      node.unexpectedBetweenCloseQuoteAndCloseDelimiter == nil,
+      !node.segments.isMissingAllTokens
+    {
+      addDiagnostic(
+        node,
+        MissingBothStringQuotesOfStringSegments(stringSegments: node.segments),
+        fixIts: [
+          FixIt(
+            message: InsertTokenFixIt(missingNodes: [Syntax(node.openQuote), Syntax(node.closeQuote)]),
+            changes: [
+              .makePresent(node.openQuote),
+              .makePresent(node.closeQuote),
+            ]
+          )
+        ],
+        handledNodes: [
+          node.openQuote.id,
+          node.closeQuote.id,
+        ]
+      )
     }
+
     for (diagnostic, handledNodes) in MultiLineStringLiteralIndentatinDiagnosticsGenerator.diagnose(node) {
       addDiagnostic(diagnostic, handledNodes: handledNodes)
     }

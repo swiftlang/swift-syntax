@@ -454,19 +454,14 @@ final class AttributeTests: XCTestCase {
 
     assertParse(
       """
-      @_expose(Cxx, 1️⃣baz2️⃣) func foo() {}
+      @_expose(Cxx, 1️⃣baz) func foo() {}
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: #"expected '"' in string literal"#,
-          fixIts: [#"insert '"'"#]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: #"expected '"' to end string literal"#,
-          fixIts: [#"insert '"'"#]
-        ),
+          message: #"expected code 'baz' to be surrounded by '"'"#,
+          fixIts: [#"insert '"' and '"'"#]
+        )
       ],
       fixedSource: """
         @_expose(Cxx, "baz") func foo() {}
@@ -543,20 +538,15 @@ final class AttributeTests: XCTestCase {
 
     assertParse(
       """
-      @_unavailableFromAsync(message: 1️⃣abc2️⃣)
+      @_unavailableFromAsync(message: 1️⃣abc)
       func foo() {}
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: #"expected '"' in string literal"#,
-          fixIts: [#"insert '"'"#]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: #"expected '"' to end string literal"#,
-          fixIts: [#"insert '"'"#]
-        ),
+          message: #"expected code 'abc' to be surrounded by '"'"#,
+          fixIts: [#"insert '"' and '"'"#]
+        )
       ],
       fixedSource: """
         @_unavailableFromAsync(message: "abc")

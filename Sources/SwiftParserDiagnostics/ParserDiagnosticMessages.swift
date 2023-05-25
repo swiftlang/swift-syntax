@@ -386,6 +386,14 @@ public struct MissingAttributeArgument: ParserError {
   }
 }
 
+public struct MissingBothStringQuotesOfStringSegments: ParserError {
+  public let stringSegments: StringLiteralSegmentsSyntax
+
+  public var message: String {
+    return #"expected \#(stringSegments.shortSingleLineContentDescription) to be surrounded by '"'"#
+  }
+}
+
 public struct MissingConditionInStatement: ParserError {
   let node: SyntaxProtocol
 

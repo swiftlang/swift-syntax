@@ -86,13 +86,8 @@ final class OriginalDefinedInAttrTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: #"expected '"' in string literal"#,
-          fixIts: [#"insert '"'"#]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: #"expected '"' to end string literal"#,
-          fixIts: [#"insert '"'"#]
+          message: #"expected code 'OSX' to be surrounded by '"'"#,
+          fixIts: [#"insert '"' and '"'"#]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",

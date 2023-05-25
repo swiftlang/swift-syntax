@@ -228,6 +228,16 @@ extension String {
   }
 }
 
+fileprivate extension Unicode.Scalar {
+  /// Whether this character represents a printable ASCII character,
+  /// for the purposes of pattern parsing.
+  var isPrintableASCII: Bool {
+    // Exclude non-printables before the space character U+20, and anything
+    // including and above the DEL character U+7F.
+    return self.value >= 0x20 && self.value < 0x7F
+  }
+}
+
 extension StringLiteralExprSyntax {
   private enum PoundState {
     case afterQuote, afterBackslash, none

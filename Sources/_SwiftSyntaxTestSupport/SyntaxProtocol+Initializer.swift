@@ -13,6 +13,7 @@
 import SwiftBasicFormat
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
+@_spi(Testing) import SwiftParser
 
 private class InitializerExprFormat: BasicFormat {
   public init() {

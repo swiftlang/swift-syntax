@@ -410,6 +410,7 @@ enum SwitchCaseStart: TokenSpecSet {
   }
 }
 
+@_spi(Diagnostics)
 public enum TypeSpecifier: TokenSpecSet {
   case inoutKeyword
   case owned
@@ -428,6 +429,7 @@ public enum TypeSpecifier: TokenSpecSet {
     }
   }
 
+  @_spi(Diagnostics)
   public init?(token: TokenSyntax) {
     switch token {
     case TokenSpec(.inout): self = .inoutKeyword

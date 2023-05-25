@@ -1840,7 +1840,3 @@ final class DeclarationTests: XCTestCase {
     )
   }
 }
-
-extension Parser.DeclAttributes {
-  static let empty = Parser.DeclAttributes(attributes: nil, modifiers: nil)
-}

@@ -16,5 +16,6 @@
 ///
 /// - Seealso: ``Lexer/Lexeme``
 /// - Seealso: ``Lexer/Cursor``
+@_spi(Testing)
 public enum Lexer {
 }

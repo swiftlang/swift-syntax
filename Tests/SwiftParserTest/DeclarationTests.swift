@@ -2222,4 +2222,14 @@ final class DeclarationTests: XCTestCase {
         """
     )
   }
+
+  func testEmptyPrimaryAssociatedType() {
+    assertParse(
+      "protocol X<1️⃣> {}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected name in primary associated type clause", fixIts: ["insert name"])
+      ],
+      fixedSource: "protocol X<<#identifier#>> {}"
+    )
+  }
 }

@@ -551,6 +551,8 @@ fileprivate func assertRoundTrip<S: SyntaxProtocol>(
     // the mutated source and that it round-trips
     var mutatedParser = Parser(buf)
     let mutatedTree = parse(&mutatedParser)
+    // Run the diagnostic generator to make sure it doesn’t crash
+    _ = ParseDiagnosticsGenerator.diagnostics(for: mutatedTree)
     assertStringsEqualWithDiff(
       "\(mutatedTree)",
       mutatedSource,

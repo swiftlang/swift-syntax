@@ -56,11 +56,9 @@ function(add_swift_host_library name)
       -emit-module-interface-path;${module_interface_file}
       >)
 
-  if(NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+  if(CMAKE_VERSION VERSION_LESS 3.26.0 AND SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26)
     target_compile_options(${name} PRIVATE
-        $<$<COMPILE_LANGUAGE:Swift>:
-        -wmo
-        >)
+        $<$<COMPILE_LANGUAGE:Swift>:-wmo>)
   endif()
 
   # NOTE: workaround for CMake not setting up include flags yet

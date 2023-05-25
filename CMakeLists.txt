@@ -23,6 +23,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/${SWIFT_HOST_LIBRARI
 
 set(CMAKE_MACOSX_RPATH YES)
 
+option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
+       "Enable Whole Module Optimization (WMO) - requires swift-driver"
+       $<IF:$<AND:$<NOT:$<CONFIG:Debug>>,$<PLATFORM_ID:Darwin>>,YES,NO>)
+
 include(AddSwiftHostLibrary)
 
 # Ensure that we do not link the _StringProcessing module. But we can

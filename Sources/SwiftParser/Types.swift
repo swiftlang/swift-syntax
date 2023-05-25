@@ -546,7 +546,7 @@ extension Parser {
               inOut: nil,
               name: nil,
               secondName: nil,
-              unexpectedBeforeColon,
+              RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
               type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
               ellipsis: nil,

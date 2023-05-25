@@ -22,3 +22,23 @@ public extension DeclGroupSyntax {
 
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
+
+public extension EditorPlaceholderDeclSyntax {
+  @available(*, deprecated, renamed: "placeholder")
+  var identifier: TokenSyntax { placeholder }
+
+  @available(*, deprecated, renamed: "placeholder")
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeIdentifier,
+      placeholder: identifier,
+      unexpectedAfterIdentifier
+    )
+  }
+}

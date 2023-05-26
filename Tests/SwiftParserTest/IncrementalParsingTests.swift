@@ -13,34 +13,43 @@
 import XCTest
 import SwiftSyntax
 import SwiftParser
+import _SwiftSyntaxTestSupport
 
 public class IncrementalParsingTests: XCTestCase {
 
   public func testIncrementalInvalid() {
-    let original = "struct A { func f() {"
-    let step: (String, (Int, Int, String)) =
-      ("struct AA { func f() {", (8, 0, "A"))
+    let source = "struct A⏩️⏸️A⏪️ { func f() {"
+    let (concurrentEdits, originalSubString, editedSubString) = getEditsAndSources(source)
 
-    var tree = Parser.parse(source: original)
-    let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
-    let lookup = IncrementalParseTransition(previousTree: tree, edits: ConcurrentEdits(sourceEdit))
-    tree = Parser.parse(source: step.0, parseTransition: lookup)
-    XCTAssertEqual("\(tree)", step.0)
+    let originalSource = String(originalSubString)
+    let editedSource = String(editedSubString)
+
+    var tree = Parser.parse(source: originalSource)
+
+    let lookup = IncrementalParseTransition(previousTree: tree, edits: concurrentEdits)
+    tree = Parser.parse(source: editedSource, parseTransition: lookup)
+    XCTAssertEqual("\(tree)", editedSource)
   }
 
   public func testReusedNode() throws {
     try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
 
-    let original = "struct A {}\nstruct B {}\n"
-    let step: (String, (Int, Int, String)) =
-      ("struct AA {}\nstruct B {}\n", (8, 0, "A"))
+    let source =
+      """
+      struct A⏩️⏸️A⏪️ {}
+      struct B {}
+      """
 
-    let origTree = Parser.parse(source: original)
-    let sourceEdit = SourceEdit(range: ByteSourceRange(offset: step.1.0, length: step.1.1), replacementLength: step.1.2.utf8.count)
+    let (concurrentEdits, originalSubString, editedSubString) = getEditsAndSources(source)
+
+    let originalSource = String(originalSubString)
+    let editedSource = String(editedSubString)
+
+    let origTree = Parser.parse(source: originalSource)
     let reusedNodeCollector = IncrementalParseReusedNodeCollector()
-    let transition = IncrementalParseTransition(previousTree: origTree, edits: ConcurrentEdits(sourceEdit), reusedNodeDelegate: reusedNodeCollector)
-    let newTree = Parser.parse(source: step.0, parseTransition: transition)
-    XCTAssertEqual("\(newTree)", step.0)
+    let transition = IncrementalParseTransition(previousTree: origTree, edits: concurrentEdits, reusedNodeDelegate: reusedNodeCollector)
+    let newTree = Parser.parse(source: editedSource, parseTransition: transition)
+    XCTAssertEqual("\(newTree)", editedSource)
 
     let origStructB = origTree.statements[1]
     let newStructB = newTree.statements[1]

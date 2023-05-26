@@ -12,6 +12,7 @@
 
 import XCTest
 import SwiftSyntax
+import _SwiftSyntaxTestSupport
 
 let longString = """
   1234567890abcdefghijklmnopqrstuvwxyz\
@@ -25,36 +26,6 @@ let longString = """
   1234567890abcdefghijklmnopqrstuvwxyz\
   1234567890abcdefghijklmnopqrstuvwzyz
   """
-
-/// Apply the given edits to `testString` and return the resulting string.
-/// `concurrent` specifies whether the edits should be interpreted as being
-/// applied sequentially or concurrently.
-func applyEdits(
-  _ edits: [SourceEdit],
-  concurrent: Bool,
-  to testString: String = longString,
-  replacementChar: Character = "?"
-) -> String {
-  guard let replacementAscii = replacementChar.asciiValue else {
-    fatalError("replacementChar must be an ASCII character")
-  }
-  var edits = edits
-  if concurrent {
-    XCTAssert(ConcurrentEdits._isValidConcurrentEditArray(edits))
-
-    // If the edits are concurrent, sorted and not overlapping (as guaranteed by
-    // the check above, we can apply them sequentially to the string in reverse
-    // order because later edits don't affect earlier edits.
-    edits = edits.reversed()
-  }
-  var bytes = Array(testString.utf8)
-  for edit in edits {
-    assert(edit.endOffset <= bytes.count)
-    bytes.removeSubrange(edit.offset..<edit.endOffset)
-    bytes.insert(contentsOf: [UInt8](repeating: replacementAscii, count: edit.replacementLength), at: edit.offset)
-  }
-  return String(bytes: bytes, encoding: .utf8)!
-}
 
 /// Verifies that
 ///  1. translation of the `sequential` edits results in the
@@ -364,7 +335,7 @@ final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
       }
       print(edits)
       let normalizedEdits = ConcurrentEdits(fromSequential: edits)
-      if applyEdits(edits, concurrent: false) != applyEdits(normalizedEdits.edits, concurrent: true) {
+      if applyEdits(edits, concurrent: false, to: longString) != applyEdits(normalizedEdits.edits, concurrent: true, to: longString) {
         print("failed \(i)")
         fatalError()
       } else {

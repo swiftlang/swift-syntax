@@ -74,40 +74,40 @@ enum AccessorKind: TokenSpecSet {
 }
 
 enum CanBeStatementStart: TokenSpecSet {
-  case breakKeyword
-  case continueKeyword
-  case deferKeyword
-  case doKeyword
-  case fallthroughKeyword
-  case forKeyword
-  case forgetKeyword  // NOTE: support for deprecated _forget
-  case discardKeyword
-  case guardKeyword
-  case ifKeyword
-  case repeatKeyword
-  case returnKeyword
-  case switchKeyword
-  case throwKeyword
-  case whileKeyword
+  case _forget  // NOTE: support for deprecated _forget
+  case `break`
+  case `continue`
+  case `defer`
+  case `do`
+  case `fallthrough`
+  case `for`
+  case discard
+  case `guard`
+  case `if`
+  case `repeat`
+  case `return`
+  case `switch`
+  case `throw`
+  case `while`
   case yield
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.break): self = .breakKeyword
-    case TokenSpec(.continue): self = .continueKeyword
-    case TokenSpec(.defer): self = .deferKeyword
-    case TokenSpec(.do): self = .doKeyword
-    case TokenSpec(.fallthrough): self = .fallthroughKeyword
-    case TokenSpec(.for): self = .forKeyword
-    case TokenSpec(._forget): self = .forgetKeyword
-    case TokenSpec(.discard): self = .discardKeyword
-    case TokenSpec(.guard): self = .guardKeyword
-    case TokenSpec(.if): self = .ifKeyword
-    case TokenSpec(.repeat): self = .repeatKeyword
-    case TokenSpec(.return): self = .returnKeyword
-    case TokenSpec(.switch): self = .switchKeyword
-    case TokenSpec(.throw): self = .throwKeyword
-    case TokenSpec(.while): self = .whileKeyword
+    case TokenSpec(._forget): self = ._forget
+    case TokenSpec(.break): self = .break
+    case TokenSpec(.continue): self = .continue
+    case TokenSpec(.defer): self = .defer
+    case TokenSpec(.do): self = .do
+    case TokenSpec(.fallthrough): self = .fallthrough
+    case TokenSpec(.for): self = .for
+    case TokenSpec(.discard): self = .discard
+    case TokenSpec(.guard): self = .guard
+    case TokenSpec(.if): self = .if
+    case TokenSpec(.repeat): self = .repeat
+    case TokenSpec(.return): self = .return
+    case TokenSpec(.switch): self = .switch
+    case TokenSpec(.throw): self = .throw
+    case TokenSpec(.while): self = .while
     case TokenSpec(.yield): self = .yield
     default: return nil
     }
@@ -115,45 +115,45 @@ enum CanBeStatementStart: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case .breakKeyword: return .keyword(.break)
-    case .continueKeyword: return .keyword(.continue)
-    case .deferKeyword: return .keyword(.defer)
-    case .doKeyword: return .keyword(.do)
-    case .fallthroughKeyword: return .keyword(.fallthrough)
-    case .forKeyword: return .keyword(.for)
-    case .forgetKeyword: return TokenSpec(._forget, recoveryPrecedence: .stmtKeyword)
-    case .discardKeyword: return TokenSpec(.discard, recoveryPrecedence: .stmtKeyword)
-    case .guardKeyword: return .keyword(.guard)
-    case .ifKeyword: return .keyword(.if)
-    case .repeatKeyword: return .keyword(.repeat)
-    case .returnKeyword: return .keyword(.return)
-    case .switchKeyword: return .keyword(.switch)
-    case .throwKeyword: return .keyword(.throw)
-    case .whileKeyword: return .keyword(.while)
+    case ._forget: return TokenSpec(._forget, recoveryPrecedence: .stmtKeyword)
+    case .break: return .keyword(.break)
+    case .continue: return .keyword(.continue)
+    case .defer: return .keyword(.defer)
+    case .do: return .keyword(.do)
+    case .fallthrough: return .keyword(.fallthrough)
+    case .for: return .keyword(.for)
+    case .discard: return TokenSpec(.discard, recoveryPrecedence: .stmtKeyword)
+    case .guard: return .keyword(.guard)
+    case .if: return .keyword(.if)
+    case .repeat: return .keyword(.repeat)
+    case .return: return .keyword(.return)
+    case .switch: return .keyword(.switch)
+    case .throw: return .keyword(.throw)
+    case .while: return .keyword(.while)
     case .yield: return .keyword(.yield)
     }
   }
 }
 
 enum CompilationCondition: TokenSpecSet {
-  case swiftKeyword
-  case compilerKeyword
-  case canImportKeyword
+  case swift
+  case compiler
+  case canImport
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.swift): self = .swiftKeyword
-    case TokenSpec(.compiler): self = .compilerKeyword
-    case TokenSpec(.canImport): self = .canImportKeyword
+    case TokenSpec(.swift): self = .swift
+    case TokenSpec(.compiler): self = .compiler
+    case TokenSpec(.canImport): self = .canImport
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .swiftKeyword: return .keyword(.swift)
-    case .compilerKeyword: return .keyword(.compiler)
-    case .canImportKeyword: return .keyword(.canImport)
+    case .swift: return .keyword(.swift)
+    case .compiler: return .keyword(.compiler)
+    case .canImport: return .keyword(.canImport)
     }
   }
 
@@ -252,50 +252,50 @@ enum ContextualDeclKeyword: TokenSpecSet {
 }
 
 enum DeclarationStart: TokenSpecSet {
-  case actorKeyword
-  case associatedtypeKeyword
-  case caseKeyword
-  case classKeyword
-  case deinitKeyword
-  case enumKeyword
-  case extensionKeyword
-  case funcKeyword
-  case importKeyword
-  case initKeyword
-  case letKeyword
-  case macroKeyword
-  case operatorKeyword
-  case precedencegroupKeyword
-  case protocolKeyword
-  case structKeyword
-  case subscriptKeyword
-  case typealiasKeyword
-  case varKeyword
-  case inoutKeyword
+  case actor
+  case `associatedtype`
+  case `case`
+  case `class`
+  case `deinit`
+  case `enum`
+  case `extension`
+  case `func`
+  case `import`
+  case `init`
+  case `let`
+  case macro
+  case `operator`
+  case `precedencegroup`
+  case `protocol`
+  case `struct`
+  case `subscript`
+  case `typealias`
+  case `var`
+  case `inout`
   case pound
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.actor): self = .actorKeyword
-    case TokenSpec(.macro): self = .macroKeyword
-    case TokenSpec(.associatedtype): self = .associatedtypeKeyword
-    case TokenSpec(.case): self = .caseKeyword
-    case TokenSpec(.class): self = .classKeyword
-    case TokenSpec(.deinit): self = .deinitKeyword
-    case TokenSpec(.enum): self = .enumKeyword
-    case TokenSpec(.extension): self = .extensionKeyword
-    case TokenSpec(.func): self = .funcKeyword
-    case TokenSpec(.import): self = .importKeyword
-    case TokenSpec(.`init`): self = .initKeyword
-    case TokenSpec(.let): self = .letKeyword
-    case TokenSpec(.operator): self = .operatorKeyword
-    case TokenSpec(.precedencegroup): self = .precedencegroupKeyword
-    case TokenSpec(.protocol): self = .protocolKeyword
-    case TokenSpec(.struct): self = .structKeyword
-    case TokenSpec(.subscript): self = .subscriptKeyword
-    case TokenSpec(.typealias): self = .typealiasKeyword
-    case TokenSpec(.var): self = .varKeyword
-    case TokenSpec(.inout): self = .inoutKeyword
+    case TokenSpec(.actor): self = .actor
+    case TokenSpec(.macro): self = .macro
+    case TokenSpec(.associatedtype): self = .associatedtype
+    case TokenSpec(.case): self = .case
+    case TokenSpec(.class): self = .class
+    case TokenSpec(.deinit): self = .deinit
+    case TokenSpec(.enum): self = .enum
+    case TokenSpec(.extension): self = .extension
+    case TokenSpec(.func): self = .func
+    case TokenSpec(.import): self = .import
+    case TokenSpec(.`init`): self = .`init`
+    case TokenSpec(.let): self = .let
+    case TokenSpec(.operator): self = .operator
+    case TokenSpec(.precedencegroup): self = .precedencegroup
+    case TokenSpec(.protocol): self = .protocol
+    case TokenSpec(.struct): self = .struct
+    case TokenSpec(.subscript): self = .subscript
+    case TokenSpec(.typealias): self = .typealias
+    case TokenSpec(.var): self = .var
+    case TokenSpec(.inout): self = .inout
     case TokenSpec(.pound): self = .pound
     default: return nil
     }
@@ -303,26 +303,26 @@ enum DeclarationStart: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case .actorKeyword: return TokenSpec(.actor, recoveryPrecedence: .declKeyword)
-    case .associatedtypeKeyword: return .keyword(.associatedtype)
-    case .caseKeyword: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
-    case .classKeyword: return .keyword(.class)
-    case .deinitKeyword: return .keyword(.deinit)
-    case .enumKeyword: return .keyword(.enum)
-    case .extensionKeyword: return .keyword(.extension)
-    case .funcKeyword: return .keyword(.func)
-    case .importKeyword: return .keyword(.import)
-    case .initKeyword: return .keyword(.`init`)
-    case .letKeyword: return .keyword(.let)
-    case .macroKeyword: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
-    case .operatorKeyword: return .keyword(.operator)
-    case .precedencegroupKeyword: return .keyword(.precedencegroup)
-    case .protocolKeyword: return .keyword(.protocol)
-    case .structKeyword: return .keyword(.struct)
-    case .subscriptKeyword: return .keyword(.subscript)
-    case .typealiasKeyword: return .keyword(.typealias)
-    case .varKeyword: return .keyword(.var)
-    case .inoutKeyword: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
+    case .actor: return TokenSpec(.actor, recoveryPrecedence: .declKeyword)
+    case .associatedtype: return .keyword(.associatedtype)
+    case .case: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
+    case .class: return .keyword(.class)
+    case .deinit: return .keyword(.deinit)
+    case .enum: return .keyword(.enum)
+    case .extension: return .keyword(.extension)
+    case .func: return .keyword(.func)
+    case .import: return .keyword(.import)
+    case .`init`: return .keyword(.`init`)
+    case .let: return .keyword(.let)
+    case .macro: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
+    case .operator: return .keyword(.operator)
+    case .precedencegroup: return .keyword(.precedencegroup)
+    case .protocol: return .keyword(.protocol)
+    case .struct: return .keyword(.struct)
+    case .subscript: return .keyword(.subscript)
+    case .typealias: return .keyword(.typealias)
+    case .var: return .keyword(.var)
+    case .inout: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
     }
   }
@@ -415,28 +415,28 @@ enum PoundDeclarationStart: TokenSpecSet {
 }
 
 enum SwitchCaseStart: TokenSpecSet {
-  case caseKeyword
-  case defaultKeyword
+  case `case`
+  case `default`
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.case): self = .caseKeyword
-    case TokenSpec(.default): self = .defaultKeyword
+    case TokenSpec(.case): self = .case
+    case TokenSpec(.default): self = .default
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .caseKeyword: return .keyword(.case)
-    case .defaultKeyword: return .keyword(.default)
+    case .case: return .keyword(.case)
+    case .default: return .keyword(.default)
     }
   }
 }
 
 @_spi(Diagnostics)
 public enum TypeSpecifier: TokenSpecSet {
-  case inoutKeyword
+  case `inout`
   case owned
   case shared
   case borrowing
@@ -444,7 +444,7 @@ public enum TypeSpecifier: TokenSpecSet {
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.inout): self = .inoutKeyword
+    case TokenSpec(.inout): self = .inout
     case TokenSpec(.__owned): self = .owned
     case TokenSpec(.__shared): self = .shared
     case TokenSpec(.consuming): self = .consuming
@@ -456,7 +456,7 @@ public enum TypeSpecifier: TokenSpecSet {
   @_spi(Diagnostics)
   public init?(token: TokenSyntax) {
     switch token {
-    case TokenSpec(.inout): self = .inoutKeyword
+    case TokenSpec(.inout): self = .inout
     case TokenSpec(.__owned): self = .owned
     case TokenSpec(.__shared): self = .shared
     case TokenSpec(.consuming): self = .shared
@@ -467,7 +467,7 @@ public enum TypeSpecifier: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case .inoutKeyword: return .keyword(.inout)
+    case .inout: return .keyword(.inout)
     case .owned: return .keyword(.__owned)
     case .shared: return .keyword(.__shared)
     case .borrowing: return .keyword(.borrowing)
@@ -479,53 +479,53 @@ public enum TypeSpecifier: TokenSpecSet {
 // MARK: Expression start
 
 enum ExpressionModifierKeyword: TokenSpecSet {
-  case awaitKeyword
-  case _moveKeyword
-  case _borrowKeyword
-  case tryKeyword
-  case consumeKeyword
-  case copyKeyword
+  case await
+  case _move
+  case _borrow
+  case `try`
+  case consume
+  case copy
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.await): self = .awaitKeyword
-    case TokenSpec(._move): self = ._moveKeyword
-    case TokenSpec(._borrow): self = ._borrowKeyword
-    case TokenSpec(.try): self = .tryKeyword
-    case TokenSpec(.consume): self = .consumeKeyword
-    case TokenSpec(.copy): self = .copyKeyword
+    case TokenSpec(.await): self = .await
+    case TokenSpec(._move): self = ._move
+    case TokenSpec(._borrow): self = ._borrow
+    case TokenSpec(.try): self = .try
+    case TokenSpec(.consume): self = .consume
+    case TokenSpec(.copy): self = .copy
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .awaitKeyword: return .keyword(.await)
-    case ._moveKeyword: return .keyword(._move)
-    case ._borrowKeyword: return .keyword(._borrow)
-    case .consumeKeyword: return .keyword(.consume)
-    case .copyKeyword: return .keyword(.copy)
-    case .tryKeyword: return .keyword(.try)
+    case .await: return .keyword(.await)
+    case ._move: return .keyword(._move)
+    case ._borrow: return .keyword(._borrow)
+    case .consume: return .keyword(.consume)
+    case .copy: return .keyword(.copy)
+    case .try: return .keyword(.try)
     }
   }
 }
 
 enum IfOrSwitch: TokenSpecSet {
-  case ifKeyword
-  case switchKeyword
+  case `if`
+  case `switch`
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.if): self = .ifKeyword
-    case TokenSpec(.switch): self = .switchKeyword
+    case TokenSpec(.if): self = .if
+    case TokenSpec(.switch): self = .switch
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .ifKeyword: return .keyword(.if)
-    case .switchKeyword: return .keyword(.switch)
+    case .if: return .keyword(.if)
+    case .switch: return .keyword(.switch)
     }
   }
 }
@@ -554,27 +554,27 @@ enum ExpressionPrefixOperator: TokenSpecSet {
 }
 
 enum MatchingPatternStart: TokenSpecSet {
-  case isKeyword
-  case letKeyword
-  case varKeyword
-  case inoutKeyword
+  case `is`
+  case `let`
+  case `var`
+  case `inout`
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.is): self = .isKeyword
-    case TokenSpec(.let): self = .letKeyword
-    case TokenSpec(.var): self = .varKeyword
-    case TokenSpec(.inout): self = .inoutKeyword
+    case TokenSpec(.is): self = .is
+    case TokenSpec(.let): self = .let
+    case TokenSpec(.var): self = .var
+    case TokenSpec(.inout): self = .inout
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .isKeyword: return .keyword(.is)
-    case .letKeyword: return .keyword(.let)
-    case .varKeyword: return .keyword(.var)
-    case .inoutKeyword: return .keyword(.inout)
+    case .is: return .keyword(.is)
+    case .let: return .keyword(.let)
+    case .var: return .keyword(.var)
+    case .inout: return .keyword(.inout)
     }
   }
 }
@@ -600,28 +600,28 @@ enum ParameterModifier: TokenSpecSet {
 }
 
 enum PrimaryExpressionStart: TokenSpecSet {
-  case anyKeyword
+  case `Any`
   case atSign  // For recovery
-  case capitalSelfKeyword
+  case `Self`
   case dollarIdentifier
-  case falseKeyword
+  case `false`
   case floatingLiteral
   case identifier
-  case initKeyword
+  case `init`
   case integerLiteral
   case leftBrace
   case leftParen
   case leftSquareBracket
-  case nilKeyword
+  case `nil`
   case period
   case pound
   case poundAvailableKeyword  // For recovery
   case poundUnavailableKeyword  // For recovery
   case regexSlash
   case extendedRegexDelimiter
-  case selfKeyword
-  case superKeyword
-  case trueKeyword
+  case `self`
+  case `super`
+  case `true`
   case wildcard
   case rawStringDelimiter
   case stringQuote
@@ -630,28 +630,28 @@ enum PrimaryExpressionStart: TokenSpecSet {
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.Any): self = .anyKeyword
+    case TokenSpec(.Any): self = .Any
     case TokenSpec(.atSign): self = .atSign
-    case TokenSpec(.Self): self = .capitalSelfKeyword
+    case TokenSpec(.Self): self = .Self
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
-    case TokenSpec(.false): self = .falseKeyword
+    case TokenSpec(.false): self = .false
     case TokenSpec(.floatingLiteral): self = .floatingLiteral
     case TokenSpec(.identifier): self = .identifier
-    case TokenSpec(.`init`): self = .initKeyword
+    case TokenSpec(.`init`): self = .`init`
     case TokenSpec(.integerLiteral): self = .integerLiteral
     case TokenSpec(.leftBrace): self = .leftBrace
     case TokenSpec(.leftParen): self = .leftParen
     case TokenSpec(.leftSquareBracket): self = .leftSquareBracket
-    case TokenSpec(.nil): self = .nilKeyword
+    case TokenSpec(.nil): self = .nil
     case TokenSpec(.period): self = .period
     case TokenSpec(.pound): self = .pound
     case TokenSpec(.poundAvailableKeyword): self = .poundAvailableKeyword
     case TokenSpec(.poundUnavailableKeyword): self = .poundUnavailableKeyword
     case TokenSpec(.regexSlash): self = .regexSlash
     case TokenSpec(.extendedRegexDelimiter): self = .extendedRegexDelimiter
-    case TokenSpec(.self): self = .selfKeyword
-    case TokenSpec(.super): self = .superKeyword
-    case TokenSpec(.true): self = .trueKeyword
+    case TokenSpec(.self): self = .self
+    case TokenSpec(.super): self = .super
+    case TokenSpec(.true): self = .true
     case TokenSpec(.wildcard): self = .wildcard
     case TokenSpec(.rawStringDelimiter): self = .rawStringDelimiter
     case TokenSpec(.stringQuote): self = .stringQuote
@@ -663,28 +663,28 @@ enum PrimaryExpressionStart: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case .anyKeyword: return .keyword(.Any)
+    case .Any: return .keyword(.Any)
     case .atSign: return .atSign
-    case .capitalSelfKeyword: return .keyword(.Self)
+    case .Self: return .keyword(.Self)
     case .dollarIdentifier: return .dollarIdentifier
-    case .falseKeyword: return .keyword(.false)
+    case .false: return .keyword(.false)
     case .floatingLiteral: return .floatingLiteral
     case .identifier: return .identifier
-    case .initKeyword: return .keyword(.`init`)
+    case .`init`: return .keyword(.`init`)
     case .integerLiteral: return .integerLiteral
     case .leftBrace: return .leftBrace
     case .leftParen: return .leftParen
     case .leftSquareBracket: return .leftSquareBracket
-    case .nilKeyword: return .keyword(.nil)
+    case .nil: return .keyword(.nil)
     case .period: return .period
     case .pound: return .pound
     case .poundAvailableKeyword: return .poundAvailableKeyword
     case .poundUnavailableKeyword: return .poundUnavailableKeyword
     case .regexSlash: return .regexSlash
     case .extendedRegexDelimiter: return .extendedRegexDelimiter
-    case .selfKeyword: return .keyword(.self)
-    case .superKeyword: return .keyword(.super)
-    case .trueKeyword: return .keyword(.true)
+    case .self: return .keyword(.self)
+    case .super: return .keyword(.super)
+    case .true: return .keyword(.true)
     case .wildcard: return .wildcard
     case .rawStringDelimiter: return .rawStringDelimiter
     case .stringQuote: return .stringQuote

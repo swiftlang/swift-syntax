@@ -263,7 +263,7 @@ extension Parser.Lookahead {
 extension Lexer.Lexeme {
   func canBeArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
     // `inout` is reserved as an argument label for historical reasons.
-    if TypeSpecifier(lexeme: self) == .inoutKeyword {
+    if TypeSpecifier(lexeme: self) == .inout {
       return false
     }
 

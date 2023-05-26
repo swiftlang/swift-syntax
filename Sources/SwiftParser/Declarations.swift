@@ -100,7 +100,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
     }
     switch declStartKeyword {
-    case .actorKeyword:
+    case .actor:
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -113,13 +113,13 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
-    case .caseKeyword:
+    case .case:
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
-    case .initKeyword:
+    case .`init`:
       return allowInitDecl
-    case .macroKeyword:
+    case .macro:
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
     case .pound:
@@ -234,42 +234,42 @@ extension Parser {
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
     switch self.canRecoverTo(anyIn: DeclarationStart.self, overrideRecoveryPrecedence: recoveryPrecedence) {
-    case (.importKeyword, let handle)?:
+    case (.import, let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
-    case (.classKeyword, let handle)?:
+    case (.class, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.enumKeyword, let handle)?:
+    case (.enum, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.caseKeyword, let handle)?:
+    case (.case, let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
-    case (.structKeyword, let handle)?:
+    case (.struct, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.protocolKeyword, let handle)?:
+    case (.protocol, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.associatedtypeKeyword, let handle)?:
+    case (.associatedtype, let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
-    case (.typealiasKeyword, let handle)?:
+    case (.typealias, let handle)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
-    case (.extensionKeyword, let handle)?:
+    case (.extension, let handle)?:
       return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
-    case (.funcKeyword, let handle)?:
+    case (.func, let handle)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
-    case (.subscriptKeyword, let handle)?:
+    case (.subscript, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
-    case (.letKeyword, let handle)?, (.varKeyword, let handle)?,
-      (.inoutKeyword, let handle)?:
+    case (.let, let handle)?, (.var, let handle)?,
+      (.inout, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
-    case (.initKeyword, let handle)?:
+    case (.`init`, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
-    case (.deinitKeyword, let handle)?:
+    case (.deinit, let handle)?:
       return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
-    case (.operatorKeyword, let handle)?:
+    case (.operator, let handle)?:
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
-    case (.precedencegroupKeyword, let handle)?:
+    case (.precedencegroup, let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.actorKeyword, let handle)?:
+    case (.actor, let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.macroKeyword, let handle)?:
+    case (.macro, let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.pound, let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
@@ -575,50 +575,50 @@ extension Parser {
   }
 
   enum LayoutConstraint: TokenSpecSet {
-    case trivialLayout
-    case trivialAtMostLayout
-    case unknownLayout
-    case refCountedObjectLayout
-    case nativeRefCountedObjectLayout
-    case classLayout
-    case nativeClassLayout
+    case _Trivial
+    case _TrivialAtMost
+    case _UnknownLayout
+    case _RefCountedObjectLayout
+    case _NativeRefCountedObjectLayout
+    case _Class
+    case _NativeClass
 
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._Trivial): self = .trivialLayout
-      case TokenSpec(._TrivialAtMost): self = .trivialAtMostLayout
-      case TokenSpec(._UnknownLayout): self = .unknownLayout
-      case TokenSpec(._RefCountedObject): self = .refCountedObjectLayout
-      case TokenSpec(._NativeRefCountedObject): self = .nativeRefCountedObjectLayout
-      case TokenSpec(._Class): self = .classLayout
-      case TokenSpec(._NativeClass): self = .nativeClassLayout
+      case TokenSpec(._Trivial): self = ._Trivial
+      case TokenSpec(._TrivialAtMost): self = ._TrivialAtMost
+      case TokenSpec(._UnknownLayout): self = ._UnknownLayout
+      case TokenSpec(._RefCountedObject): self = ._RefCountedObjectLayout
+      case TokenSpec(._NativeRefCountedObject): self = ._NativeRefCountedObjectLayout
+      case TokenSpec(._Class): self = ._Class
+      case TokenSpec(._NativeClass): self = ._NativeClass
       default: return nil
       }
     }
 
     var spec: TokenSpec {
       switch self {
-      case .trivialLayout: return .keyword(._Trivial)
-      case .trivialAtMostLayout: return .keyword(._TrivialAtMost)
-      case .unknownLayout: return .keyword(._UnknownLayout)
-      case .refCountedObjectLayout: return .keyword(._RefCountedObject)
-      case .nativeRefCountedObjectLayout: return .keyword(._NativeRefCountedObject)
-      case .classLayout: return .keyword(._Class)
-      case .nativeClassLayout: return .keyword(._NativeClass)
+      case ._Trivial: return .keyword(._Trivial)
+      case ._TrivialAtMost: return .keyword(._TrivialAtMost)
+      case ._UnknownLayout: return .keyword(._UnknownLayout)
+      case ._RefCountedObjectLayout: return .keyword(._RefCountedObject)
+      case ._NativeRefCountedObjectLayout: return .keyword(._NativeRefCountedObject)
+      case ._Class: return .keyword(._Class)
+      case ._NativeClass: return .keyword(._NativeClass)
       }
     }
 
     var hasArguments: Bool {
       switch self {
-      case .trivialLayout,
-        .trivialAtMostLayout:
+      case ._Trivial,
+        ._TrivialAtMost:
         return true
 
-      case .unknownLayout,
-        .refCountedObjectLayout,
-        .nativeRefCountedObjectLayout,
-        .classLayout,
-        .nativeClassLayout:
+      case ._UnknownLayout,
+        ._RefCountedObjectLayout,
+        ._NativeRefCountedObjectLayout,
+        ._Class,
+        ._NativeClass:
         return false
       }
     }
@@ -696,7 +696,7 @@ extension Parser {
             let rightParen: RawTokenSyntax?
             // Unlike the other layout constraints, _Trivial's argument list
             // is optional.
-            if layoutConstraint.hasArguments && (layoutConstraint != .trivialLayout || self.at(.leftParen)) {
+            if layoutConstraint.hasArguments && (layoutConstraint != ._Trivial || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
               size = self.expectWithoutRecovery(.integerLiteral)
               comma = self.consume(if: .comma)

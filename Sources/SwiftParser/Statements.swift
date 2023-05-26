@@ -94,46 +94,44 @@ extension Parser {
 
     let optLabel = self.parseOptionalStatementLabel()
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
-    case (.forKeyword, let handle)?:
+    case (.for, let handle)?:
       return label(self.parseForEachStatement(forHandle: handle), with: optLabel)
-    case (.whileKeyword, let handle)?:
+    case (.while, let handle)?:
       return label(self.parseWhileStatement(whileHandle: handle), with: optLabel)
-    case (.repeatKeyword, let handle)?:
+    case (.repeat, let handle)?:
       return label(self.parseRepeatWhileStatement(repeatHandle: handle), with: optLabel)
 
-    case (.ifKeyword, let handle)?:
+    case (.if, let handle)?:
       let ifExpr = self.parseIfExpression(ifHandle: handle)
       let ifStmt = RawExpressionStmtSyntax(
         expression: RawExprSyntax(ifExpr),
         arena: self.arena
       )
       return label(ifStmt, with: optLabel)
-    case (.guardKeyword, let handle)?:
+    case (.guard, let handle)?:
       return label(self.parseGuardStatement(guardHandle: handle), with: optLabel)
-    case (.switchKeyword, let handle)?:
+    case (.switch, let handle)?:
       let switchExpr = self.parseSwitchExpression(switchHandle: handle)
       let switchStmt = RawExpressionStmtSyntax(
         expression: RawExprSyntax(switchExpr),
         arena: self.arena
       )
       return label(switchStmt, with: optLabel)
-    case (.breakKeyword, let handle)?:
+    case (.break, let handle)?:
       return label(self.parseBreakStatement(breakHandle: handle), with: optLabel)
-    case (.continueKeyword, let handle)?:
+    case (.continue, let handle)?:
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
-    case (.fallthroughKeyword, let handle)?:
+    case (.fallthrough, let handle)?:
       return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
-    case (.forgetKeyword, let handle)?:  // NOTE: support for deprecated _forget
-      fallthrough
-    case (.discardKeyword, let handle)?:
+    case (._forget, let handle)?, (.discard, let handle)?:  // NOTE: support for deprecated _forget
       return label(self.parseDiscardStatement(discardHandle: handle), with: optLabel)
-    case (.returnKeyword, let handle)?:
+    case (.return, let handle)?:
       return label(self.parseReturnStatement(returnHandle: handle), with: optLabel)
-    case (.throwKeyword, let handle)?:
+    case (.throw, let handle)?:
       return label(self.parseThrowStatement(throwHandle: handle), with: optLabel)
-    case (.deferKeyword, let handle)?:
+    case (.defer, let handle)?:
       return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
-    case (.doKeyword, let handle)?:
+    case (.do, let handle)?:
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
@@ -955,20 +953,20 @@ extension Parser.Lookahead {
       switchSubject = self.at(anyIn: CanBeStatementStart.self)?.0
     }
     switch switchSubject {
-    case .returnKeyword?,
-      .throwKeyword?,
-      .deferKeyword?,
-      .ifKeyword?,
-      .guardKeyword?,
-      .whileKeyword?,
-      .doKeyword?,
-      .forKeyword?,
-      .breakKeyword?,
-      .continueKeyword?,
-      .fallthroughKeyword?,
-      .switchKeyword?:
+    case .return?,
+      .throw?,
+      .defer?,
+      .if?,
+      .guard?,
+      .while?,
+      .do?,
+      .for?,
+      .break?,
+      .continue?,
+      .fallthrough?,
+      .switch?:
       return true
-    case .repeatKeyword?:
+    case .repeat?:
       // 'repeat' followed by anything other than a brace stmt
       // is a pack expansion expression.
       // FIXME: 'repeat' followed by '{' could be a pack expansion
@@ -992,9 +990,7 @@ extension Parser.Lookahead {
         // yield statement of some singular expression.
         return !self.peek().isAtStartOfLine
       }
-    case .forgetKeyword?:  // NOTE: support for deprecated _forget
-      fallthrough
-    case .discardKeyword?:
+    case ._forget?, .discard?:  // NOTE: support for deprecated _forget
       let next = peek()
       // The thing to be discarded must be on the same line as `discard`.
       if next.isAtStartOfLine {

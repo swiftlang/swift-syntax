@@ -362,14 +362,14 @@ extension Parser {
 
   enum DifferentiabilityKind: TokenSpecSet {
     case reverse
-    case linear
-    case forward
+    case _linear
+    case _forward
 
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.reverse): self = .reverse
-      case TokenSpec(._linear): self = .linear
-      case TokenSpec(._forward): self = .forward
+      case TokenSpec(._linear): self = ._linear
+      case TokenSpec(._forward): self = ._forward
       default: return nil
       }
     }
@@ -377,8 +377,8 @@ extension Parser {
     var spec: TokenSpec {
       switch self {
       case .reverse: return .keyword(.reverse)
-      case .linear: return .keyword(._linear)
-      case .forward: return .keyword(._forward)
+      case ._linear: return .keyword(._linear)
+      case ._forward: return .keyword(._forward)
       }
     }
   }
@@ -474,13 +474,13 @@ extension Parser {
     enum ExpectedTokenKind: TokenSpecSet {
       case identifier
       case integerLiteral
-      case selfKeyword
+      case `self`
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.identifier): self = .identifier
         case TokenSpec(.integerLiteral): self = .integerLiteral
-        case TokenSpec(.self): self = .selfKeyword
+        case TokenSpec(.self): self = .self
         default: return nil
         }
       }
@@ -489,7 +489,7 @@ extension Parser {
         switch self {
         case .identifier: return .identifier
         case .integerLiteral: return .integerLiteral
-        case .selfKeyword: return .keyword(.self)
+        case .self: return .keyword(.self)
         }
       }
     }
@@ -511,7 +511,7 @@ extension Parser {
         trailingComma: comma,
         arena: self.arena
       )
-    case (.selfKeyword, let handle)?:
+    case (.self, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityParamSyntax(

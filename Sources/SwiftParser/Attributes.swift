@@ -46,6 +46,7 @@ extension Parser {
     case _originallyDefinedIn
     case _private
     case _projectedValueProperty
+    case _section
     case _semantics
     case _silgen_name
     case _specialize
@@ -81,6 +82,7 @@ extension Parser {
       case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
       case TokenSpec(._private): self = ._private
       case TokenSpec(._projectedValueProperty): self = ._projectedValueProperty
+      case TokenSpec(._section): self = ._section
       case TokenSpec(._semantics): self = ._semantics
       case TokenSpec(._silgen_name): self = ._silgen_name
       case TokenSpec(._specialize): self = ._specialize
@@ -120,6 +122,7 @@ extension Parser {
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
       case ._private: return .keyword(._private)
       case ._projectedValueProperty: return .keyword(._projectedValueProperty)
+      case ._section: return .keyword(._section)
       case ._semantics: return .keyword(._semantics)
       case ._silgen_name: return .keyword(._silgen_name)
       case ._specialize: return .keyword(._specialize)
@@ -304,6 +307,10 @@ extension Parser {
     case ._expose:
       return parseAttribute(argumentMode: .required) { parser in
         return .exposeAttributeArguments(parser.parseExposeArguments())
+      }
+    case ._section:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .string(parser.parseStringLiteral())
       }
     case ._originallyDefinedIn:
       return parseAttribute(argumentMode: .required) { parser in

@@ -652,6 +652,16 @@ public let DECL_ATTR_KINDS: [Attribute] = [
     className: "RuntimeMetadata",
     swiftName: "runtimeMetadata"
   ),
+  SimpleDeclAttribute(
+    name: "_used",
+    className: "Used",
+    swiftName: "_used"
+  ),
+  DeclAttribute(
+    name: "_section",
+    className: "Section",
+    swiftName: "_section"
+  ),
 ]
 
 /// Schema for declaration modifiers:

@@ -48,6 +48,7 @@ public enum Keyword: UInt8, Hashable {
   case _projectedValueProperty
   case _read
   case _RefCountedObject
+  case _section
   case _semantics
   case _silgen_name
   case _specialize
@@ -471,6 +472,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._forward
       case "_private":
         self = ._private
+      case "_section":
+        self = ._section
       case "_Trivial":
         self = ._Trivial
       case "_version":
@@ -791,6 +794,7 @@ public enum Keyword: UInt8, Hashable {
       "_projectedValueProperty", 
       "_read", 
       "_RefCountedObject", 
+      "_section", 
       "_semantics", 
       "_silgen_name", 
       "_specialize", 

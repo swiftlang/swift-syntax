@@ -72,6 +72,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("_projectedValueProperty"),
   KeywordSpec("_read"),
   KeywordSpec("_RefCountedObject"),
+  KeywordSpec("_section"),
   KeywordSpec("_semantics"),
   KeywordSpec("_silgen_name"),
   KeywordSpec("_specialize"),

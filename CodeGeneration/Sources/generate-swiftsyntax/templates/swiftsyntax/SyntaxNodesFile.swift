@@ -17,7 +17,7 @@ import Utils
 
 extension Child {
   public var docComment: SwiftSyntax.Trivia {
-    guard let description = description else {
+    guard let description = documentation else {
       return []
     }
     let dedented = dedented(string: description)

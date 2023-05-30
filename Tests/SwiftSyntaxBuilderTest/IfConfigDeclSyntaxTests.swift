@@ -34,7 +34,22 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
           )
         )
         IfConfigClauseSyntax(
-          poundKeyword: .poundElseKeyword(leadingTrivia: .newline),
+          poundKeyword: .poundElseifKeyword(),
+          condition: ExprSyntax("TEST"),
+          elements: .statements(
+            CodeBlockItemListSyntax {
+              DeclSyntax(
+                """
+                public func debug(_ data: Foo) -> String {
+                  return data.description
+                }
+                """
+              )
+            }
+          )
+        )
+        IfConfigClauseSyntax(
+          poundKeyword: .poundElseKeyword(),
           elements: .statements(
             CodeBlockItemListSyntax {
               DeclSyntax(
@@ -48,7 +63,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
           )
         )
       },
-      poundEndif: .poundEndifKeyword(leadingTrivia: .newline)
+      poundEndif: .poundEndifKeyword()
     )
 
     assertBuildResult(
@@ -57,6 +72,10 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
       #if DEBUG
       public func debug(_ data: Foo) -> String {
         return data.debugDescription
+      }
+      #elseif TEST
+      public func debug(_ data: Foo) -> String {
+        return data.description
       }
       #else
       public func debug(_ data: Foo) -> String {

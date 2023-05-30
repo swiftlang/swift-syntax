@@ -155,10 +155,6 @@ open class BasicFormat: SyntaxRewriter {
     {
       return false
     } else if let second {
-      if second.requiresLeadingNewline {
-        return true
-      }
-
       var ancestor: Syntax = Syntax(second)
       while let parent = ancestor.parent {
         ancestor = parent
@@ -178,11 +174,16 @@ open class BasicFormat: SyntaxRewriter {
     }
 
     switch (first?.tokenKind, second?.tokenKind) {
+
     case (.multilineStringQuote, .backslash),  // string interpolation segment inside a multi-line string literal
       (.multilineStringQuote, .multilineStringQuote),  // empty multi-line string literal
       (.multilineStringQuote, .stringSegment),  // segment starting a multi-line string literal
       (.stringSegment, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
-      (.rightParen, .multilineStringQuote):  // ending a multi-line string literal that has a string interpolation segment at its end
+      (.rightParen, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
+      (_, .poundElseKeyword),
+      (_, .poundElseifKeyword),
+      (_, .poundEndifKeyword),
+      (_, .rightBrace):
       return true
     default:
       return false

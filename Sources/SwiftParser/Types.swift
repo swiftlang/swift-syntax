@@ -1011,7 +1011,7 @@ extension Parser {
   }
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    let typeAttr = Parser.TypeAttribute(lexeme: self.peek())
+    let typeAttr = TypeAttribute(lexeme: self.peek())
 
     switch typeAttr {
     case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape, .Sendable, .unchecked, .autoclosure:

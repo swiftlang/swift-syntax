@@ -141,7 +141,7 @@ extension Parser.Lookahead {
     }
 
     // Determine which attribute it is.
-    if let (attr, handle) = self.at(anyIn: Parser.TypeAttribute.self) {
+    if let (attr, handle) = self.at(anyIn: TypeAttribute.self) {
       // Ok, it is a valid attribute, eat it, and then process it.
       self.eat(handle)
       if case .convention = attr {

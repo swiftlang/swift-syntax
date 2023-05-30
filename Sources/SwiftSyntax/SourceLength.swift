@@ -61,9 +61,7 @@ public struct SourceLength: Comparable {
 extension AbsolutePosition {
   /// Determine the AbsolutePosition by advancing the `lhs` by the given source
   /// length.
-  public static func + (lhs: AbsolutePosition, rhs: SourceLength)
-    -> AbsolutePosition
-  {
+  public static func + (lhs: AbsolutePosition, rhs: SourceLength) -> AbsolutePosition {
     let utf8Offset = lhs.utf8Offset + rhs.utf8Length
     return AbsolutePosition(utf8Offset: utf8Offset)
   }

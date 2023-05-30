@@ -294,7 +294,12 @@ extension Parser {
         unexpectedTrailingComponents = RawUnexpectedNodesSyntax(elements: trailingComponents.compactMap { $0.as(RawSyntax.self) }, arena: self.arena)
       }
 
-      return RawVersionTupleSyntax(major: major, components: RawVersionComponentListSyntax(elements: components, arena: self.arena), unexpectedTrailingComponents, arena: self.arena)
+      return RawVersionTupleSyntax(
+        major: major,
+        components: RawVersionComponentListSyntax(elements: components, arena: self.arena),
+        unexpectedTrailingComponents,
+        arena: self.arena
+      )
 
     } else {
       let major = self.expectDecimalIntegerWithoutRecovery()

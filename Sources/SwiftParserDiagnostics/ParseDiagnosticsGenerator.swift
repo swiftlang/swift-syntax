@@ -344,7 +344,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         FixIt(
           message: .joinIdentifiers,
           changes: [
-            FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joined), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present)))),
+            FixIt.MultiNodeChange(
+              .replace(
+                oldNode: Syntax(previousToken),
+                newNode: Syntax(TokenSyntax(.identifier(joined), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present))
+              )
+            ),
             .makeMissing(tokens),
           ]
         )
@@ -355,7 +360,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: .joinIdentifiersWithCamelCase,
             changes: [
-              FixIt.MultiNodeChange(.replace(oldNode: Syntax(previousToken), newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present)))),
+              FixIt.MultiNodeChange(
+                .replace(
+                  oldNode: Syntax(previousToken),
+                  newNode: Syntax(TokenSyntax(.identifier(joinedUsingCamelCase), trailingTrivia: tokens.last?.trailingTrivia ?? [], presence: .present))
+                )
+              ),
               .makeMissing(tokens),
             ]
           )
@@ -500,7 +510,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         AvailabilityConditionAsExpression(availabilityToken: node.availabilityKeyword, negatedAvailabilityToken: negatedAvailabilityKeyword),
         fixIts: [
           FixIt(
-            message: ReplaceTokensFixIt(replaceTokens: getTokens(between: node.availabilityKeyword, and: falseKeyword), replacements: getTokens(between: negatedAvailability.availabilityKeyword, and: negatedAvailability.rightParen)),
+            message: ReplaceTokensFixIt(
+              replaceTokens: getTokens(between: node.availabilityKeyword, and: falseKeyword),
+              replacements: getTokens(between: negatedAvailability.availabilityKeyword, and: negatedAvailability.rightParen)
+            ),
             changes: [
               .replace(oldNode: Syntax(node), newNode: Syntax(negatedAvailability))
             ]
@@ -728,7 +741,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if node.floatingDigits.presence == .missing,
-      let (period, integerLiteral) = node.unexpectedAfterFloatingDigits?.twoTokens(firstSatisfying: { $0.tokenKind == .period }, secondSatisfying: { $0.tokenKind.isIntegerLiteral })
+      let (period, integerLiteral) = node.unexpectedAfterFloatingDigits?.twoTokens(
+        firstSatisfying: { $0.tokenKind == .period },
+        secondSatisfying: { $0.tokenKind.isIntegerLiteral }
+      )
     {
       addDiagnostic(
         node,
@@ -954,7 +970,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if node.conditions.count == 1, node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true, !node.body.leftBrace.isMissingAllTokens {
+    if node.conditions.count == 1,
+      node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true,
+      !node.body.leftBrace.isMissingAllTokens
+    {
       addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
     }
 
@@ -1122,8 +1141,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         .missingFixityInOperatorDeclaration,
         fixIts: [
           FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.prefix)), changes: .makePresent(node.fixity)),
-          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.infix)), changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.infix), presence: .present))))]),
-          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.postfix)), changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.postfix), presence: .present))))]),
+          FixIt(
+            message: InsertFixIt(tokenToBeInserted: .keyword(.infix)),
+            changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.infix), presence: .present))))]
+          ),
+          FixIt(
+            message: InsertFixIt(tokenToBeInserted: .keyword(.postfix)),
+            changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.postfix), presence: .present))))]
+          ),
         ],
         handledNodes: [node.fixity.id]
       )
@@ -1650,7 +1675,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if node.conditions.count == 1, node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true, !node.body.leftBrace.isMissingAllTokens {
+    if node.conditions.count == 1,
+      node.conditions.first?.as(ConditionElementSyntax.self)?.condition.is(MissingExprSyntax.self) == true,
+      !node.body.leftBrace.isMissingAllTokens
+    {
       addDiagnostic(node.conditions, MissingConditionInStatement(node: node), handledNodes: [node.conditions.id])
     }
 

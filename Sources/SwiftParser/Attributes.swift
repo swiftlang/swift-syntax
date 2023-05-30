@@ -165,7 +165,10 @@ extension Parser {
     case optional
   }
 
-  mutating func parseAttribute(argumentMode: AttributeArgumentMode, parseArguments: (inout Parser) -> RawAttributeSyntax.Argument) -> RawAttributeListSyntax.Element {
+  mutating func parseAttribute(
+    argumentMode: AttributeArgumentMode,
+    parseArguments: (inout Parser) -> RawAttributeSyntax.Argument
+  ) -> RawAttributeListSyntax.Element {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let attributeName = self.parseType()
     let shouldParseArgument: Bool

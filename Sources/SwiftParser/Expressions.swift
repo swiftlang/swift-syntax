@@ -1112,7 +1112,9 @@ extension Parser {
 
       // Check for a .name or .1 suffix.
       if self.at(.period) {
-        let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw)
+        let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(
+          previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw
+        )
         components.append(
           RawKeyPathComponentSyntax(
             unexpectedPeriod,
@@ -2223,7 +2225,10 @@ extension Parser.Lookahead {
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
-    while !backtrack.at(.eof, .rightBrace) && !backtrack.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) && loopProgress.evaluate(backtrack.currentToken) {
+    while !backtrack.at(.eof, .rightBrace)
+      && !backtrack.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword)
+      && loopProgress.evaluate(backtrack.currentToken)
+    {
       backtrack.skipSingle()
     }
 
@@ -2615,7 +2620,15 @@ extension Parser {
 
       let version = self.parseVersionTuple(maxComponentCount: 4)
 
-      versionInfo = RawCanImportVersionInfoSyntax(comma: comma, unexpectedBeforeLabel, label: label, unexpectedBeforeColon, colon: colon, versionTuple: version, arena: self.arena)
+      versionInfo = RawCanImportVersionInfoSyntax(
+        comma: comma,
+        unexpectedBeforeLabel,
+        label: label,
+        unexpectedBeforeColon,
+        colon: colon,
+        versionTuple: version,
+        arena: self.arena
+      )
     }
 
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)

@@ -318,7 +318,10 @@ extension StringLiteralExprSyntax {
       }
     }
 
-    let escapedContent = content.escapingForStringLiteral(usingDelimiter: closeDelimiter?.text ?? "", isMultiline: openQuote.tokenView.rawKind == .multilineStringQuote)
+    let escapedContent = content.escapingForStringLiteral(
+      usingDelimiter: closeDelimiter?.text ?? "",
+      isMultiline: openQuote.tokenView.rawKind == .multilineStringQuote
+    )
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
     let segments = StringLiteralSegmentsSyntax([.stringSegment(segment)])

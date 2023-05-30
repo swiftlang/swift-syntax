@@ -53,7 +53,11 @@ final class DeclarationTests: XCTestCase {
       r3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'where' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'where' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
@@ -2149,7 +2153,10 @@ final class DeclarationTests: XCTestCase {
         Syntax(
           SuppressedTypeSyntax(
             withoutTilde: .prefixOperator("~"),
-            patternType: FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
+            patternType: FunctionTypeSyntax(
+              arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
+              output: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
+            )
           )
         )
     )
@@ -2177,7 +2184,12 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before modifier"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end class", notes: [NoteSpec(message: "to match this opening '{'")], fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected '}' to end class",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
       ],
       fixedSource:
         """

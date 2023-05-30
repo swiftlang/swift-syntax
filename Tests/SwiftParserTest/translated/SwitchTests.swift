@@ -34,7 +34,11 @@ final class SwitchTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement", fixIts: ["insert expression and '{}'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier and function signature in function", fixIts: ["insert identifier and function signature"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier and function signature in function",
+          fixIts: ["insert identifier and function signature"]
+        ),
       ],
       fixedSource: """
         func parseError1(x: Int) {

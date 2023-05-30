@@ -352,8 +352,17 @@ open class BasicFormat: SyntaxRewriter {
       guard let nextToken = nextToken else {
         return false
       }
-      return nextToken.leadingTrivia.startsWithNewline
-        || (requiresNewline(between: token, and: nextToken) && isMutable(nextToken) && !token.trailingTrivia.endsWithNewline && !token.isStringSegmentWithLastCharacterBeingNewline)
+      if nextToken.leadingTrivia.startsWithNewline {
+        return true
+      }
+      if requiresNewline(between: token, and: nextToken),
+        isMutable(nextToken),
+        !token.trailingTrivia.endsWithNewline,
+        !token.isStringSegmentWithLastCharacterBeingNewline
+      {
+        return true
+      }
+      return false
     }()
 
     /// This token's trailing trivia + any spaces or tabs at the start of the

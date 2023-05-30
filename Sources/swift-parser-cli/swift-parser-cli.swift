@@ -157,7 +157,8 @@ class VerifyRoundTrip: ParsableCommand {
 class PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "performance-test",
-    abstract: "Parse all .swift files in '--directory' and its subdirectories '--iteration' times and output the average time (in milliseconds) one iteration took."
+    abstract:
+      "Parse all .swift files in '--directory' and its subdirectories '--iteration' times and output the average time (in milliseconds) one iteration took."
   )
 
   required init() {}

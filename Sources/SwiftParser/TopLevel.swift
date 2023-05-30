@@ -58,7 +58,11 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseCodeBlockItemList(isAtTopLevel: Bool = false, allowInitDecl: Bool = true, until stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemListSyntax {
+  mutating func parseCodeBlockItemList(
+    isAtTopLevel: Bool = false,
+    allowInitDecl: Bool = true,
+    until stopCondition: (inout Parser) -> Bool
+  ) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), loopProgress.evaluate(currentToken) {

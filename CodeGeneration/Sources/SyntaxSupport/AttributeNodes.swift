@@ -298,7 +298,13 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "DeclBaseName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .keyword(text: "init"), .keyword(text: "self"), .keyword(text: "Self")]),
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .token(tokenKind: "BinaryOperatorToken"),
+          .keyword(text: "init"),
+          .keyword(text: "self"),
+          .keyword(text: "Self"),
+        ]),
         nameForDiagnostics: "base name",
         documentation: "The base name of the protocol's requirement."
       ),
@@ -322,7 +328,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .derivativeRegistrationAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "attribute arguments",
-    documentation: "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
+    documentation:
+      "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
     children: [
       Child(
         name: "OfLabel",
@@ -461,7 +468,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .differentiableAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "'@differentiable' arguments",
-    documentation: "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
+    documentation:
+      "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
     children: [
       Child(
         name: "DiffKind",
@@ -515,7 +523,14 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Token",
-            kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "private"), .keyword(text: "fileprivate"), .keyword(text: "internal"), .keyword(text: "public"), .keyword(text: "open")])
+            kind: .token(choices: [
+              .token(tokenKind: "IdentifierToken"),
+              .keyword(text: "private"),
+              .keyword(text: "fileprivate"),
+              .keyword(text: "internal"),
+              .keyword(text: "public"),
+              .keyword(text: "open"),
+            ])
           ),  // Keywords can be: public, internal, private, fileprivate, open
           Child(
             name: "String",
@@ -670,7 +685,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .objCSelectorPiece,
     base: .syntax,
     nameForDiagnostics: "Objective-C selector piece",
-    documentation: "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
+    documentation:
+      "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
     children: [
       Child(
         name: "Name",
@@ -776,7 +792,13 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self"), .keyword(text: "init"), .token(tokenKind: "BinaryOperatorToken")]),
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .keyword(text: "self"),
+          .keyword(text: "Self"),
+          .keyword(text: "init"),
+          .token(tokenKind: "BinaryOperatorToken"),
+        ]),
         nameForDiagnostics: "base name",
         documentation: "The base name of the referenced function."
       ),

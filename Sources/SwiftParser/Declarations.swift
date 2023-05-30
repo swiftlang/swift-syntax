@@ -487,7 +487,8 @@ extension Parser {
         var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.currentToken.starts(with: ">") {
+        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.currentToken.starts(with: ">")
+        {
           break
         }
 
@@ -1724,7 +1725,12 @@ extension Parser {
         let fixityModifier = modifiers[firstFixityIndex]
         fixity = fixityModifier.name
 
-        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(combining: unexpectedBeforeFixity, RawUnexpectedNodesSyntax(Array(modifiers[0..<firstFixityIndex]), arena: self.arena), fixityModifier.unexpectedBeforeName, arena: self.arena)
+        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
+          combining: unexpectedBeforeFixity,
+          RawUnexpectedNodesSyntax(Array(modifiers[0..<firstFixityIndex]), arena: self.arena),
+          fixityModifier.unexpectedBeforeName,
+          arena: self.arena
+        )
 
         unexpectedAfterFixity = RawUnexpectedNodesSyntax(
           combining: fixityModifier.unexpectedBetweenNameAndDetail,
@@ -1735,7 +1741,11 @@ extension Parser {
         )
 
       } else {
-        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(combining: unexpectedBeforeFixity, RawUnexpectedNodesSyntax(modifiers, arena: self.arena), arena: self.arena)
+        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
+          combining: unexpectedBeforeFixity,
+          RawUnexpectedNodesSyntax(modifiers, arena: self.arena),
+          arena: self.arena
+        )
       }
     }
 

@@ -49,7 +49,11 @@ fileprivate class StringLiteralExpressionIndentationChecker {
       return nil
     }
     let hasSufficientIndentation = token.tokenView.leadingTrivia { leadingTrivia -> Bool in
-      let indentationStartIndex = leadingTrivia.lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\r") })?.advanced(by: 1) ?? leadingTrivia.startIndex
+      let indentationStartIndex =
+        leadingTrivia
+        .lastIndex(where: { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\r") })?
+        .advanced(by: 1)
+        ?? leadingTrivia.startIndex
       return SyntaxText(rebasing: leadingTrivia[indentationStartIndex...]).hasPrefix(expectedIndentation)
     }
     if hasSufficientIndentation {
@@ -249,7 +253,9 @@ extension Parser {
               segment.unexpectedAfterContent,
               arena: self.arena
             )
-          } else if (segment.content.tokenText == "" || segment.content.tokenText.triviaPieceIfNewline != nil) && segment.content.trailingTriviaPieces.allSatisfy({ $0.isNewline }) {
+          } else if (segment.content.tokenText == "" || segment.content.tokenText.triviaPieceIfNewline != nil)
+            && segment.content.trailingTriviaPieces.allSatisfy({ $0.isNewline })
+          {
             // Empty lines don't need to be indented and there's no indentation we need to strip away.
           } else {
             let actualIndentation = SyntaxText(rebasing: segment.content.tokenText.prefix(while: { $0 == UInt8(ascii: " ") || $0 == UInt8(ascii: "\t") }))
@@ -556,7 +562,12 @@ extension Parser {
     let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
-      let postProcessed = postProcessMultilineStringLiteral(rawStringDelimitersToken: openDelimiter, openQuote: openQuote, segments: segments, closeQuote: closeQuote)
+      let postProcessed = postProcessMultilineStringLiteral(
+        rawStringDelimitersToken: openDelimiter,
+        openQuote: openQuote,
+        segments: segments,
+        closeQuote: closeQuote
+      )
       return RawStringLiteralExprSyntax(
         openDelimiter: openDelimiter,
         RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, postProcessed.unexpectedBeforeOpenQuote, arena: self.arena),

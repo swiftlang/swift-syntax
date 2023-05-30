@@ -177,7 +177,10 @@ extension Parser {
     }
     var lookahead = self.lookahead()
     lookahead.consumeAnyToken()  // consume `#`
-    guard lookahead.at(TokenSpec(.identifier, allowAtStartOfLine: false)), lookahead.currentToken.tokenText == "elif", lookahead.currentToken.leadingTriviaText.isEmpty else {
+    guard lookahead.at(TokenSpec(.identifier, allowAtStartOfLine: false)),
+      lookahead.currentToken.tokenText == "elif",
+      lookahead.currentToken.leadingTriviaText.isEmpty
+    else {
       return false  // `#` and `elif` must not be separated by trivia
     }
     lookahead.consumeAnyToken()  // consume `elif`
@@ -192,7 +195,11 @@ extension Parser {
   ) -> [Element] {
     var elements = [Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.eof) && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword) && !self.atElifTypo() && elementsProgress.evaluate(currentToken) {
+    while !self.at(.eof)
+      && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword)
+      && !self.atElifTypo()
+      && elementsProgress.evaluate(currentToken)
+    {
       let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
       guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
         break

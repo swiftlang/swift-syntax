@@ -504,7 +504,11 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        )
       ],
       fixedSource: """
         for <#pattern#> in <#expression#> {
@@ -521,7 +525,11 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        )
       ],
       fixedSource: """
         for <#pattern#> in <#expression#>
@@ -570,7 +578,11 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'in' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'in' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' and expression in 'for' statement", fixIts: ["insert 'in' and expression"]),
       ],
       fixedSource: """
@@ -603,7 +615,11 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'for' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop", fixIts: ["insert expression"]),
       ],
       fixedSource: """
@@ -656,7 +672,11 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"]),
       ],

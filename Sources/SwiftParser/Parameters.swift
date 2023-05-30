@@ -278,7 +278,9 @@ extension Parser {
     var elements = [ParameterClause.ParameterList.ParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
-    let shouldSkipParameterParsing = lparen.isMissing && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
+    let shouldSkipParameterParsing =
+      lparen.isMissing
+      && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()

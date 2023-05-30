@@ -18,7 +18,12 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .token(tokenKind: "BinaryOperatorToken"),
+          .token(tokenKind: "PrefixOperatorToken"),
+          .token(tokenKind: "PostfixOperatorToken"),
+        ]),
         nameForDiagnostics: "name"
       ),
       Child(
@@ -81,7 +86,20 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "AccessorKind",
-        kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set"), .keyword(text: "didSet"), .keyword(text: "willSet"), .keyword(text: "unsafeAddress"), .keyword(text: "addressWithOwner"), .keyword(text: "addressWithNativeOwner"), .keyword(text: "unsafeMutableAddress"), .keyword(text: "mutableAddressWithOwner"), .keyword(text: "mutableAddressWithNativeOwner"), .keyword(text: "_read"), .keyword(text: "_modify")])
+        kind: .token(choices: [
+          .keyword(text: "get"),
+          .keyword(text: "set"),
+          .keyword(text: "didSet"),
+          .keyword(text: "willSet"),
+          .keyword(text: "unsafeAddress"),
+          .keyword(text: "addressWithOwner"),
+          .keyword(text: "addressWithNativeOwner"),
+          .keyword(text: "unsafeMutableAddress"),
+          .keyword(text: "mutableAddressWithOwner"),
+          .keyword(text: "mutableAddressWithNativeOwner"),
+          .keyword(text: "_read"),
+          .keyword(text: "_modify"),
+        ])
       ),
       Child(
         name: "Parameter",
@@ -373,7 +391,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "MemberBlock",
         kind: .node(kind: .memberDeclBlock),
-        documentation: "The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type."
+        documentation:
+          "The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),
@@ -766,7 +785,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "MemberBlock",
         kind: .node(kind: .memberDeclBlock),
-        documentation: "The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
+        documentation:
+          "The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),
@@ -854,7 +874,12 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .token(tokenKind: "BinaryOperatorToken"),
+          .token(tokenKind: "PrefixOperatorToken"),
+          .token(tokenKind: "PostfixOperatorToken"),
+        ])
       ),
       Child(
         name: "GenericParameterClause",
@@ -1085,7 +1110,17 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "ImportKind",
-        kind: .token(choices: [.keyword(text: "typealias"), .keyword(text: "struct"), .keyword(text: "class"), .keyword(text: "enum"), .keyword(text: "protocol"), .keyword(text: "var"), .keyword(text: "let"), .keyword(text: "func"), .keyword(text: "inout")]),
+        kind: .token(choices: [
+          .keyword(text: "typealias"),
+          .keyword(text: "struct"),
+          .keyword(text: "class"),
+          .keyword(text: "enum"),
+          .keyword(text: "protocol"),
+          .keyword(text: "var"),
+          .keyword(text: "let"),
+          .keyword(text: "func"),
+          .keyword(text: "inout"),
+        ]),
         documentation: "The kind of declaration being imported. For example, a struct can be imported from a specific module.",
         isOptional: true
       ),
@@ -1181,7 +1216,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "OptionalMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "InfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+        kind: .token(choices: [
+          .token(tokenKind: "PostfixQuestionMarkToken"),
+          .token(tokenKind: "InfixQuestionMarkToken"),
+          .token(tokenKind: "ExclamationMarkToken"),
+        ]),
         documentation: "If the initializer is failable, a question mark to indicate that.",
         isOptional: true
       ),
@@ -1638,7 +1677,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Flag",
         kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]),
-        documentation: "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment."
+        documentation:
+          "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment."
       ),
     ]
   ),
@@ -1663,7 +1703,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Value",
         kind: .token(choices: [.keyword(text: "left"), .keyword(text: "right"), .keyword(text: "none")]),
-        documentation: "Operators that are `left`-associative group left-to-right. Operators that are `right`-associative group right-to-left. Operators that are specified with an associativity of `none` don't associate at all"
+        documentation:
+          "Operators that are `left`-associative group left-to-right. Operators that are `right`-associative group right-to-left. Operators that are specified with an associativity of `none` don't associate at all"
       ),
     ]
   ),
@@ -2017,7 +2058,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "MemberBlock",
         kind: .node(kind: .memberDeclBlock),
-        documentation: "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
+        documentation:
+          "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),

@@ -222,7 +222,11 @@ extension Parser {
 
     // Parse the basic expression case.  If we have a leading let, var, inout,
     // borrow, case keyword or an assignment, then we know this is a binding.
-    guard self.at(.keyword(.let), .keyword(.var), .keyword(.case)) || self.at(.keyword(.inout)) || (lastBindingKind != nil && self.peek().rawTokenKind == .equal) else {
+    guard
+      self.at(.keyword(.let), .keyword(.var), .keyword(.case))
+        || self.at(.keyword(.inout))
+        || (lastBindingKind != nil && self.peek().rawTokenKind == .equal)
+    else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in
       // which a comma followed by an expression could actually be a pattern

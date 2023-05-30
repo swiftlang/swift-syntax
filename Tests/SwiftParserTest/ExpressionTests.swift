@@ -1201,7 +1201,9 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentsSyntax([
-            .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))),
+            .stringSegment(
+              StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))
+            ),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
           closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
@@ -1384,7 +1386,11 @@ final class ExpressionTests: XCTestCase {
     assertParse(
       "a 1️⃣\u{a0}+ 2",
       diagnostics: [
-        DiagnosticSpec(message: "non-breaking space (U+00A0) used instead of regular space", severity: .warning, fixIts: ["replace non-breaking space with ' '"])
+        DiagnosticSpec(
+          message: "non-breaking space (U+00A0) used instead of regular space",
+          severity: .warning,
+          fixIts: ["replace non-breaking space with ' '"]
+        )
       ],
       fixedSource: "a  + 2"
     )

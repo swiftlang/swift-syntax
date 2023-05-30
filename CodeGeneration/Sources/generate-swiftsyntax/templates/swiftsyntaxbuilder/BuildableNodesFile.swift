@@ -71,7 +71,9 @@ private func createConvenienceInitializer(node: LayoutNode) throws -> Initialize
         produceExpr = ExprSyntax("\(raw: child.varName)Builder()")
       }
       builderParameters.append(
-        FunctionParameterSyntax("@\(builderInitializableType.resultBuilderType) \(raw: child.varName)Builder: () throws-> \(raw: builderInitializableType.syntax)")
+        FunctionParameterSyntax(
+          "@\(builderInitializableType.resultBuilderType) \(raw: child.varName)Builder: () throws-> \(raw: builderInitializableType.syntax)"
+        )
       )
     } else {
       produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)

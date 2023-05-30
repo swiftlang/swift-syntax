@@ -86,9 +86,7 @@ public struct SyntaxChildrenIndex: Comparable, ExpressibleByNilLiteral {
   }
 
   /// Returns `true` if `lhs` occurs before `rhs`.
-  public static func < (lhs: SyntaxChildrenIndex, rhs: SyntaxChildrenIndex)
-    -> Bool
-  {
+  public static func < (lhs: SyntaxChildrenIndex, rhs: SyntaxChildrenIndex) -> Bool {
     switch (lhs.data, rhs.data) {
     case (.some(let lhsData), .some(let rhsData)):
       return lhsData < rhsData
@@ -233,9 +231,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
     }
   }
 
-  func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex)
-    -> Int
-  {
+  func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex) -> Int {
     switch (start.data, end.data) {
     case (.some(let start), .some(let end)):
       return Int(end.indexInParent - start.indexInParent)
@@ -248,9 +244,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
     }
   }
 
-  subscript(index: SyntaxChildrenIndex)
-    -> (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo)
-  {
+  subscript(index: SyntaxChildrenIndex) -> (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo) {
     // Accessing the end index is undefined. So we can assume a non-end index.
     let index = index.data!
 
@@ -334,9 +328,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     after index: SyntaxChildrenIndex,
     in children: RawSyntaxChildren,
     viewMode: SyntaxTreeViewMode
-  )
-    -> SyntaxChildrenIndex
-  {
+  ) -> SyntaxChildrenIndex {
     var advancedIndex = index
     while true {
       if advancedIndex != children.endIndex {
@@ -361,9 +353,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     before index: SyntaxChildrenIndex,
     in children: RawSyntaxChildren,
     viewMode: SyntaxTreeViewMode
-  )
-    -> SyntaxChildrenIndex
-  {
+  ) -> SyntaxChildrenIndex {
     var reversedIndex = index
     while true {
       if reversedIndex < children.endIndex,

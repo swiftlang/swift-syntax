@@ -27,7 +27,11 @@ public let AVAILABILITY_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Token",
-            kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false)
+            kind: .token(
+              choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")],
+              requiresLeadingSpace: false,
+              requiresTrailingSpace: false
+            )
           ),
           Child(
             name: "AvailabilityVersionRestriction",
@@ -59,7 +63,13 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "Label",
-        kind: .token(choices: [.keyword(text: "message"), .keyword(text: "renamed"), .keyword(text: "introduced"), .keyword(text: "obsoleted"), .keyword(text: "deprecated")]),
+        kind: .token(choices: [
+          .keyword(text: "message"),
+          .keyword(text: "renamed"),
+          .keyword(text: "introduced"),
+          .keyword(text: "obsoleted"),
+          .keyword(text: "deprecated"),
+        ]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),
@@ -106,7 +116,8 @@ public let AVAILABILITY_NODES: [Node] = [
         name: "Platform",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
         nameForDiagnostics: "platform",
-        documentation: "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.",
+        documentation:
+          "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.",
         classification: "Keyword"
       ),
       Child(

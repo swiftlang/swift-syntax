@@ -419,7 +419,10 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 }
 
 extension TokenConsumer {
-  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(anyIn specSet1: SpecSet1.Type, or specSet2: SpecSet2.Type) -> (spec: TokenSpec, handle: TokenConsumptionHandle, matchedSubset: Any.Type)? {
+  mutating func at<SpecSet1: TokenSpecSet, SpecSet2: TokenSpecSet>(
+    anyIn specSet1: SpecSet1.Type,
+    or specSet2: SpecSet2.Type
+  ) -> (spec: TokenSpec, handle: TokenConsumptionHandle, matchedSubset: Any.Type)? {
     if let (spec, handle) = self.at(anyIn: specSet1) {
       return (spec.spec, handle, SpecSet1.self)
     } else if let (spec, handle) = self.at(anyIn: specSet2) {

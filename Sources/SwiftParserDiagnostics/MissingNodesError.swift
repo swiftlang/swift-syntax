@@ -398,7 +398,10 @@ extension ParseDiagnosticsGenerator {
     if missingNodes.count == 1,
       let token = missingNodes.last?.as(TokenSyntax.self),
       let matchingStartMarkerKind = token.tokenKind.matchingStartMarkerKind,
-      let startToken = token.parent?.children(viewMode: .sourceAccurate).lazy.compactMap({ $0.as(TokenSyntax.self) }).first(where: { $0.tokenKind == matchingStartMarkerKind })
+      let startToken = token.parent?.children(viewMode: .sourceAccurate)
+        .lazy
+        .compactMap({ $0.as(TokenSyntax.self) })
+        .first(where: { $0.tokenKind == matchingStartMarkerKind })
     {
       notes.append(Note(node: Syntax(startToken), message: MatchingOpeningTokenNote(openingToken: startToken)))
     }

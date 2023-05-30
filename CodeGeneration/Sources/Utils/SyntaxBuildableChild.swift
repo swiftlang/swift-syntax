@@ -57,12 +57,6 @@ public extension Child {
     return self.type.optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(parameterBaseType)))
   }
 
-  /// If the child node has documentation associated with it, return it as single
-  /// line string. Otherwise return an empty string.
-  var documentation: String {
-    flattened(indentedDocumentation: description ?? "")
-  }
-
   /// If the child node has a default value, return an expression of the form
   /// ` = default_value` that can be used as the default value to for a
   /// function parameter. Otherwise, return `nil`.

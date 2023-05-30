@@ -59,7 +59,7 @@ public class Child {
   public let name: String
   public let kind: ChildKind
   public let nameForDiagnostics: String?
-  public let description: String?
+  public let documentation: String?
   public let forceClassification: Bool
   public let isIndented: Bool
   public let requiresLeadingNewline: Bool
@@ -156,7 +156,7 @@ public class Child {
     name: String,
     kind: ChildKind,
     nameForDiagnostics: String? = nil,
-    description: String? = nil,
+    documentation: String? = nil,
     isOptional: Bool = false,
     classification: String? = nil,
     forceClassification: Bool = false,
@@ -169,7 +169,7 @@ public class Child {
     self.name = name
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    self.description = description
+    self.documentation = documentation
     self.classification = classificationByName(classification)
     self.forceClassification = forceClassification
     self.isIndented = isIndented

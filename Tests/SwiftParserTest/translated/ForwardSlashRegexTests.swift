@@ -1077,7 +1077,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         TupleExprElementListSyntax([
           .init(
             expression: TupleExprSyntax(
-              elementList: .init([
+              elements: .init([
                 .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")))
               ])
             ),
@@ -1118,7 +1118,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         TupleExprElementListSyntax([
           .init(
             expression: TupleExprSyntax(
-              elementList: .init([
+              elements: .init([
                 .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")))
               ])
             ),

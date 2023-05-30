@@ -52,7 +52,7 @@ fileprivate extension AnyKeyPath {
       return true
     case \SwitchCaseSyntax.statements:
       return true
-    case \TupleExprSyntax.elementList:
+    case \TupleExprSyntax.elements:
       return true
     case \TupleTypeSyntax.elements:
       return true

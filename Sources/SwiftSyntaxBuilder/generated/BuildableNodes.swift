@@ -1350,20 +1350,20 @@ extension TupleExprSyntax {
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
       leftParen: TokenSyntax = .leftParenToken(), 
-      unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil, 
-      unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder elementListBuilder: () throws -> TupleExprElementListSyntax, 
+      @TupleExprElementListBuilder elementsBuilder: () throws -> TupleExprElementListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeLeftParen, 
         leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndElementList, 
-        elementList: elementListBuilder(), 
-        unexpectedBetweenElementListAndRightParen, 
+        unexpectedBetweenLeftParenAndElements, 
+        elements: elementsBuilder(), 
+        unexpectedBetweenElementsAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia

@@ -116,3 +116,39 @@ public extension NamedOpaqueReturnTypeSyntax {
     )
   }
 }
+
+extension TupleExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
+  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? { unexpectedBetweenLeftParenAndElements }
+
+  @available(*, deprecated, renamed: "elements")
+  public var elementList: TupleExprElementListSyntax { elements }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
+  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? { unexpectedBetweenElementsAndRightParen }
+
+  @available(*, deprecated, message: "Use an initializer with a elements argument")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
+    elementList: TupleExprElementListSyntax,
+    _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndElementList,
+      elements: elementList,
+      unexpectedBetweenElementListAndRightParen,
+      rightParen: rightParen,
+      unexpectedAfterRightParen,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}

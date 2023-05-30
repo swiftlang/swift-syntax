@@ -20339,9 +20339,9 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? = nil, 
-      elementList: RawTupleExprElementListSyntax, 
-      _ unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? = nil, 
+      elements: RawTupleExprElementListSyntax, 
+      _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -20351,9 +20351,9 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndElementList?.raw
-      layout[3] = elementList.raw
-      layout[4] = unexpectedBetweenElementListAndRightParen?.raw
+      layout[2] = unexpectedBetweenLeftParenAndElements?.raw
+      layout[3] = elements.raw
+      layout[4] = unexpectedBetweenElementsAndRightParen?.raw
       layout[5] = rightParen.raw
       layout[6] = unexpectedAfterRightParen?.raw
     }
@@ -20368,15 +20368,15 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndElementList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var elementList: RawTupleExprElementListSyntax {
+  public var elements: RawTupleExprElementListSyntax {
     layoutView.children[3].map(RawTupleExprElementListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenElementListAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

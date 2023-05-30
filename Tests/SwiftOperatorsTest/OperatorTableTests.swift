@@ -46,8 +46,8 @@ class ExplicitParenFolder: SyntaxRewriter {
   override func visit(_ node: TupleExprSyntax) -> ExprSyntax {
     // Identify syntax nodes of the form (x (op) y), which is a
     // TupleExprSyntax(SequenceExpr(x, (op), y)).
-    guard node.elementList.count == 1,
-      let firstNode = node.elementList.first,
+    guard node.elements.count == 1,
+      let firstNode = node.elements.first,
       firstNode.label == nil,
       let sequenceExpr = firstNode.expression.as(SequenceExprSyntax.self),
       sequenceExpr.elements.count == 3,

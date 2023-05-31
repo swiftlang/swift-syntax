@@ -132,25 +132,29 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl6() {
     assertParse(
       """
-      operator ++*** : A
+      1️⃣operator ++*** : A
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
-      ]
+        DiagnosticSpec(message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"])
+      ],
+      fixedSource:
+        """
+        prefix operator ++*** : A
+        """
     )
   }
 
   func testOperatorDecl7() {
     assertParse(
       """
-      operator +*+++ 1️⃣{ }
+      1️⃣operator +*+++ 2️⃣{ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
-        DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ],
       fixedSource: """
-        operator +*+++
+        prefix operator +*+++
         """
     )
   }
@@ -158,14 +162,14 @@ final class OperatorDeclTests: XCTestCase {
   func testOperatorDecl8() {
     assertParse(
       """
-      operator +*++* : A 1️⃣{ }
+      1️⃣operator +*++* : A 2️⃣{ }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: operator must be declared as 'prefix', 'postfix', or 'infix'
-        DiagnosticSpec(message: "operator should not be declared with body", fixIts: ["remove operator body"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ],
       fixedSource: """
-        operator +*++* : A
+        prefix operator +*++* : A
         """
     )
   }
@@ -191,8 +195,13 @@ final class OperatorDeclTests: XCTestCase {
       prefix operator %%+
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code before operator declaration")
-      ]
+        DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';'"])
+      ],
+      fixedSource:
+        """
+
+        prefix operator %%+
+        """
     )
   }
 
@@ -536,6 +545,67 @@ final class OperatorDeclTests: XCTestCase {
       fixedSource: """
         postfix operator ++: <#identifier#>
         """
+    )
+  }
+
+  func testOperatorDecl124() {
+    assertParse(
+      """
+      1️⃣@objc
+      postfix operator ++: PrecedenceGroup
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '@objc' before operator declaration")
+      ]
+    )
+  }
+
+  func testOperatorDecl125() {
+    assertParse(
+      """
+      1️⃣mutating postfix operator --: UndefinedPrecedenceGroup
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'mutating' before operator declaration")
+      ]
+    )
+  }
+
+  func testOperatorDecl126() {
+    assertParse(
+      """
+      1️⃣private(set) infix operator ~~~
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'private(set)' before operator declaration")
+      ]
+    )
+  }
+
+  func testOperatorDecl127() {
+    assertParse(
+      """
+      1️⃣dynamic 2️⃣operator ~~~
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'dynamic' before operator declaration"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+      ],
+      fixedSource:
+        """
+        dynamic prefix operator ~~~
+        """
+    )
+  }
+
+  func testMultipleFixity() {
+    assertParse(
+      """
+      prefix 1️⃣infix operator &+&
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'infix' in operator declaration")
+      ]
     )
   }
 

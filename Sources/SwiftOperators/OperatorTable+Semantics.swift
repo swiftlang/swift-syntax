@@ -68,11 +68,7 @@ extension Operator {
   /// TODO: This ignores all semantic errors.
   init(from syntax: OperatorDeclSyntax) {
     self.syntax = syntax
-
-    kind =
-      syntax.modifiers?.compactMap {
-        OperatorKind(rawValue: $0.name.text)
-      }.first ?? .infix
+    kind = OperatorKind(rawValue: syntax.fixity.text) ?? .infix
 
     name = syntax.identifier.text
 

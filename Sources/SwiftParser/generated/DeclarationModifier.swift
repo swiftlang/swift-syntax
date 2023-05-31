@@ -15,6 +15,15 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 enum DeclarationModifier: TokenSpecSet {
+  case weak
+  case unowned
+  case `rethrows`
+  case isolated
+  case async
+  case reasync
+  case consuming
+  case borrowing
+  case _const
   case `static`
   case `class`
   case final
@@ -37,22 +46,31 @@ enum DeclarationModifier: TokenSpecSet {
   case package
   case open
   case __setter_access
-  case weak
-  case unowned
-  case `rethrows`
   case indirect
-  case isolated
-  case async
-  case reasync
   case nonisolated
   case distributed
-  case _const
   case _local
-  case consuming
-  case borrowing
   
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.weak):
+      self = .weak
+    case TokenSpec(.unowned):
+      self = .unowned
+    case TokenSpec(.`rethrows`):
+      self = .`rethrows`
+    case TokenSpec(.isolated):
+      self = .isolated
+    case TokenSpec(.async):
+      self = .async
+    case TokenSpec(.reasync):
+      self = .reasync
+    case TokenSpec(.consuming):
+      self = .consuming
+    case TokenSpec(.borrowing):
+      self = .borrowing
+    case TokenSpec(._const):
+      self = ._const
     case TokenSpec(.`static`):
       self = .`static`
     case TokenSpec(.`class`):
@@ -97,32 +115,14 @@ enum DeclarationModifier: TokenSpecSet {
       self = .open
     case TokenSpec(.__setter_access):
       self = .__setter_access
-    case TokenSpec(.weak):
-      self = .weak
-    case TokenSpec(.unowned):
-      self = .unowned
-    case TokenSpec(.`rethrows`):
-      self = .`rethrows`
     case TokenSpec(.indirect):
       self = .indirect
-    case TokenSpec(.isolated):
-      self = .isolated
-    case TokenSpec(.async):
-      self = .async
-    case TokenSpec(.reasync):
-      self = .reasync
     case TokenSpec(.nonisolated):
       self = .nonisolated
     case TokenSpec(.distributed):
       self = .distributed
-    case TokenSpec(._const):
-      self = ._const
     case TokenSpec(._local):
       self = ._local
-    case TokenSpec(.consuming):
-      self = .consuming
-    case TokenSpec(.borrowing):
-      self = .borrowing
     default:
       return nil
     }
@@ -174,32 +174,32 @@ enum DeclarationModifier: TokenSpecSet {
       return .keyword(.open)
     case .__setter_access:
       return .keyword(.__setter_access)
-    case .weak:
-      return .keyword(.weak)
-    case .unowned:
-      return .keyword(.unowned)
-    case .`rethrows`:
-      return .keyword(.`rethrows`)
     case .indirect:
       return .keyword(.indirect)
-    case .isolated:
-      return .keyword(.isolated)
-    case .async:
-      return .keyword(.async)
-    case .reasync:
-      return .keyword(.reasync)
     case .nonisolated:
       return .keyword(.nonisolated)
     case .distributed:
       return .keyword(.distributed)
-    case ._const:
-      return .keyword(._const)
     case ._local:
       return .keyword(._local)
+    case .weak:
+      return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
+    case .unowned:
+      return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
+    case .`rethrows`:
+      return TokenSpec(.`rethrows`, recoveryPrecedence: .declKeyword)
+    case .isolated:
+      return TokenSpec(.isolated, recoveryPrecedence: .declKeyword)
+    case .async:
+      return TokenSpec(.async, recoveryPrecedence: .declKeyword)
+    case .reasync:
+      return TokenSpec(.reasync, recoveryPrecedence: .declKeyword)
     case .consuming:
-      return .keyword(.consuming)
+      return TokenSpec(.consuming, recoveryPrecedence: .declKeyword)
     case .borrowing:
-      return .keyword(.borrowing)
+      return TokenSpec(.borrowing, recoveryPrecedence: .declKeyword)
+    case ._const:
+      return TokenSpec(._const, recoveryPrecedence: .declKeyword)
     }
   }
 }

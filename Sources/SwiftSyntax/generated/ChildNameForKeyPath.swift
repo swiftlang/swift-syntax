@@ -2281,16 +2281,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "ordinal"
   case \OpaqueReturnTypeOfAttributeArgumentsSyntax.unexpectedAfterOrdinal:
     return "unexpectedAfterOrdinal"
-  case \OperatorDeclSyntax.unexpectedBeforeAttributes:
-    return "unexpectedBeforeAttributes"
-  case \OperatorDeclSyntax.attributes:
-    return "attributes"
-  case \OperatorDeclSyntax.unexpectedBetweenAttributesAndModifiers:
-    return "unexpectedBetweenAttributesAndModifiers"
-  case \OperatorDeclSyntax.modifiers:
-    return "modifiers"
-  case \OperatorDeclSyntax.unexpectedBetweenModifiersAndOperatorKeyword:
-    return "unexpectedBetweenModifiersAndOperatorKeyword"
+  case \OperatorDeclSyntax.unexpectedBeforeFixity:
+    return "unexpectedBeforeFixity"
+  case \OperatorDeclSyntax.fixity:
+    return "fixity"
+  case \OperatorDeclSyntax.unexpectedBetweenFixityAndOperatorKeyword:
+    return "unexpectedBetweenFixityAndOperatorKeyword"
   case \OperatorDeclSyntax.operatorKeyword:
     return "operatorKeyword"
   case \OperatorDeclSyntax.unexpectedBetweenOperatorKeywordAndIdentifier:

@@ -17,36 +17,38 @@ extension Parser {
     var elements = [RawDeclModifierSyntax]()
     var modifierLoopCondition = LoopProgressCondition()
     MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
-      switch self.at(anyIn: DeclarationModifier.self) {
-      case (.private, _)?,
-        (.fileprivate, _)?,
-        (.internal, _)?,
-        (.public, _)?:
+      switch self.canRecoverTo(anyIn: DeclarationStart.self) {
+      case (.declarationModifier(.private), _)?,
+        (.declarationModifier(.fileprivate), _)?,
+        (.declarationModifier(.internal), _)?,
+        (.declarationModifier(.public), _)?:
         elements.append(parseAccessLevelModifier())
-      case (.package, _)?:
+      case (.declarationModifier(.package), _)?:
         elements.append(parsePackageAccessLevelModifier())
-      case (.open, _)?:
+      case (.declarationModifier(.open), _)?:
         elements.append(parseOpenAccessLevelModifier())
-      case (.static, let handle)?:
-        let staticKeyword = self.eat(handle)
+      case (.declarationModifier(.static), let handle)?:
+        let (unexpectedBeforeKeyword, staticKeyword) = self.eat(handle)
         elements.append(
           RawDeclModifierSyntax(
+            unexpectedBeforeKeyword,
             name: staticKeyword,
             detail: nil,
             arena: self.arena
           )
         )
-      case (.class, let handle)?:
+      case (.declarationModifier(.class), let handle)?:
         var lookahead = self.lookahead()
-        lookahead.eat(.keyword(.class))
+        lookahead.consume(to: .keyword(.class))
         // When followed by an 'override' or CC token inside a class,
         // treat 'class' as a modifier in the case of a following CC
         // token, we cannot be sure there is no intention to override
         // or witness something static.
         if lookahead.atStartOfDeclaration() || lookahead.at(.keyword(.override)) {
-          let classKeyword = self.eat(handle)
+          let (unexpectedBeforeKeyword, classKeyword) = self.eat(handle)
           elements.append(
             RawDeclModifierSyntax(
+              unexpectedBeforeKeyword,
               name: classKeyword,
               detail: nil,
               arena: self.arena
@@ -56,38 +58,38 @@ extension Parser {
         } else {
           break MODIFIER_LOOP
         }
-      case (.unowned, _)?:
-        elements.append(self.parseUnownedModifier())
-      case (.final, let handle)?,
-        (.required, let handle)?,
-        (.optional, let handle)?,
-        (.lazy, let handle)?,
-        (.dynamic, let handle)?,
-        (.infix, let handle)?,
-        (.prefix, let handle)?,
-        (.postfix, let handle)?,
-        (.__consuming, let handle)?,
-        (.borrowing, let handle)?,
-        (.consuming, let handle)?,
-        (.mutating, let handle)?,
-        (.nonmutating, let handle)?,
-        (.convenience, let handle)?,
-        (.override, let handle)?,
-        (.weak, let handle)?,
-        (.indirect, let handle)?,
-        (.isolated, let handle)?,
-        (.async, let handle)?,
-        (.nonisolated, let handle)?,
-        (.distributed, let handle)?,
-        (._const, let handle)?,
-        (._local, let handle)?,
-        (.__setter_access, let handle)?,
-        (.reasync, let handle)?:
-        let keyword = self.eat(handle)
-        elements.append(RawDeclModifierSyntax(name: keyword, detail: nil, arena: self.arena))
-      case (.rethrows, _)?:
+      case (.declarationModifier(.unowned), let handle)?:
+        elements.append(self.parseUnownedModifier(handle))
+      case (.declarationModifier(.final), let handle)?,
+        (.declarationModifier(.required), let handle)?,
+        (.declarationModifier(.optional), let handle)?,
+        (.declarationModifier(.lazy), let handle)?,
+        (.declarationModifier(.dynamic), let handle)?,
+        (.declarationModifier(.infix), let handle)?,
+        (.declarationModifier(.prefix), let handle)?,
+        (.declarationModifier(.postfix), let handle)?,
+        (.declarationModifier(.__consuming), let handle)?,
+        (.declarationModifier(.borrowing), let handle)?,
+        (.declarationModifier(.consuming), let handle)?,
+        (.declarationModifier(.mutating), let handle)?,
+        (.declarationModifier(.nonmutating), let handle)?,
+        (.declarationModifier(.convenience), let handle)?,
+        (.declarationModifier(.override), let handle)?,
+        (.declarationModifier(.weak), let handle)?,
+        (.declarationModifier(.indirect), let handle)?,
+        (.declarationModifier(.isolated), let handle)?,
+        (.declarationModifier(.async), let handle)?,
+        (.declarationModifier(.nonisolated), let handle)?,
+        (.declarationModifier(.distributed), let handle)?,
+        (.declarationModifier(._const), let handle)?,
+        (.declarationModifier(._local), let handle)?,
+        (.declarationModifier(.__setter_access), let handle)?,
+        (.declarationModifier(.reasync), let handle)?:
+        let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
+        elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
+      case (.declarationModifier(.rethrows), _)?:
         fallthrough
-      case nil:
+      default:
         break MODIFIER_LOOP
       }
     }
@@ -111,8 +113,8 @@ extension Parser {
     )
   }
 
-  mutating func parseUnownedModifier() -> RawDeclModifierSyntax {
-    let (unexpectedBeforeKeyword, keyword) = self.expect(.keyword(.unowned))
+  mutating func parseUnownedModifier(_ handle: RecoveryConsumptionHandle) -> RawDeclModifierSyntax {
+    let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {

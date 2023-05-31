@@ -2163,4 +2163,31 @@ final class DeclarationTests: XCTestCase {
       ]
     )
   }
+
+  func testUnexpectedTokenInClassFollowedByUnownedModifier() {
+    assertParse(
+      """
+      class A ℹ️{
+        1️⃣^
+      }
+      unowned 2️⃣B 3️⃣{
+      }4️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before modifier"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end class", notes: [NoteSpec(message: "to match this opening '{'")], fixIts: ["insert '}'"]),
+      ],
+      fixedSource:
+        """
+        class A {
+          ^
+        }
+        unowned func B() {
+        }
+        }
+        """
+    )
+  }
 }

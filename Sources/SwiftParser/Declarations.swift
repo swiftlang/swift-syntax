@@ -89,15 +89,15 @@ extension TokenConsumer {
       return attrLookahead.consumeIfConfigOfAttributes()
     }
 
-    let declStartKeyword: DeclarationStart?
+    let declStartKeyword: DeclarationKeyword?
     if allowRecovery {
       declStartKeyword =
         subparser.canRecoverTo(
-          anyIn: DeclarationStart.self,
+          anyIn: DeclarationKeyword.self,
           overrideRecoveryPrecedence: isAtTopLevel ? nil : .closingBrace
         )?.0
     } else {
-      declStartKeyword = subparser.at(anyIn: DeclarationStart.self)?.0
+      declStartKeyword = subparser.at(anyIn: DeclarationKeyword.self)?.0
     }
     switch declStartKeyword {
     case .actor:
@@ -233,7 +233,7 @@ extension Parser {
     // while recoverying to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
-    switch self.canRecoverTo(anyIn: DeclarationStart.self, overrideRecoveryPrecedence: recoveryPrecedence) {
+    switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
     case (.import, let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.class, let handle)?:
@@ -1694,11 +1694,69 @@ extension Parser {
   ///     postfix-operator-declaration → 'postfix' 'operator' operator
   ///     infix-operator-declaration → 'infix' 'operator' operator infix-operator-group?
   ///     infix-operator-group → ':' precedence-group-name
+
+  struct OperatorDeclIntroducer {
+    var unexpectedBeforeFixity: RawUnexpectedNodesSyntax?
+    var fixity: RawTokenSyntax
+    var unexpectedBeforeOperatorKeyword: RawUnexpectedNodesSyntax?
+    var operatorKeyword: RawTokenSyntax
+  }
+
+  mutating func parseOperatorDeclIntroducer(_ attrs: DeclAttributes, _ handle: RecoveryConsumptionHandle) -> OperatorDeclIntroducer {
+    func isFixity(_ modifier: RawDeclModifierSyntax) -> Bool {
+      switch modifier.name {
+      case .keyword(.prefix),
+        .keyword(.infix),
+        .keyword(.postfix):
+        return true
+      default:
+        return false
+      }
+    }
+
+    var unexpectedBeforeFixity = RawUnexpectedNodesSyntax(attrs.attributes?.elements ?? [], arena: self.arena)
+
+    var fixity: RawTokenSyntax?
+    var unexpectedAfterFixity: RawUnexpectedNodesSyntax?
+
+    if let modifiers = attrs.modifiers?.elements {
+      if let firstFixityIndex = modifiers.firstIndex(where: { isFixity($0) }) {
+        let fixityModifier = modifiers[firstFixityIndex]
+        fixity = fixityModifier.name
+
+        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(combining: unexpectedBeforeFixity, RawUnexpectedNodesSyntax(Array(modifiers[0..<firstFixityIndex]), arena: self.arena), fixityModifier.unexpectedBeforeName, arena: self.arena)
+
+        unexpectedAfterFixity = RawUnexpectedNodesSyntax(
+          combining: fixityModifier.unexpectedBetweenNameAndDetail,
+          RawUnexpectedNodesSyntax([fixityModifier.detail], arena: self.arena),
+          fixityModifier.unexpectedAfterDetail,
+          RawUnexpectedNodesSyntax(Array(modifiers[modifiers.index(after: firstFixityIndex)...]), arena: self.arena),
+          arena: self.arena
+        )
+
+      } else {
+        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(combining: unexpectedBeforeFixity, RawUnexpectedNodesSyntax(modifiers, arena: self.arena), arena: self.arena)
+      }
+    }
+
+    var (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.expect(.keyword(.operator))
+
+    unexpectedBeforeOperatorKeyword = RawUnexpectedNodesSyntax(combining: unexpectedAfterFixity, unexpectedBeforeOperatorKeyword, arena: self.arena)
+
+    return OperatorDeclIntroducer(
+      unexpectedBeforeFixity: unexpectedBeforeFixity,
+      fixity: fixity ?? self.missingToken(.prefix),
+      unexpectedBeforeOperatorKeyword: unexpectedBeforeOperatorKeyword,
+      operatorKeyword: operatorKeyword
+    )
+  }
+
   mutating func parseOperatorDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawOperatorDeclSyntax {
-    let (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.eat(handle)
+    let introducer = parseOperatorDeclIntroducer(attrs, handle)
+
     let unexpectedBeforeName: RawUnexpectedNodesSyntax?
     let name: RawTokenSyntax
     switch self.canRecoverTo(anyIn: OperatorLike.self) {
@@ -1775,10 +1833,10 @@ extension Parser {
       unexpectedAtEnd = nil
     }
     return RawOperatorDeclSyntax(
-      attributes: attrs.attributes,
-      modifiers: attrs.modifiers,
-      unexpectedBeforeOperatorKeyword,
-      operatorKeyword: operatorKeyword,
+      introducer.unexpectedBeforeFixity,
+      fixity: introducer.fixity,
+      introducer.unexpectedBeforeOperatorKeyword,
+      operatorKeyword: introducer.operatorKeyword,
       unexpectedBeforeName,
       identifier: name,
       RawUnexpectedNodesSyntax(identifiersAfterOperatorName, arena: self.arena),

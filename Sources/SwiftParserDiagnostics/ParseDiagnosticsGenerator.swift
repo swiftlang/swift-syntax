@@ -1115,6 +1115,20 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    if node.fixity.presence == .missing {
+      addDiagnostic(
+        node.fixity,
+        .missingFixityInOperatorDeclaration,
+        fixIts: [
+          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.prefix)), changes: .makePresent(node.fixity)),
+          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.infix)), changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.infix), presence: .present))))]),
+          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.postfix)), changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.postfix), presence: .present))))]),
+        ],
+        handledNodes: [node.fixity.id]
+      )
+    }
+
     if let unexpected = node.unexpectedAfterOperatorPrecedenceAndTypes,
       unexpected.contains(where: { $0.is(PrecedenceGroupAttributeListSyntax.self) }) == true
     {

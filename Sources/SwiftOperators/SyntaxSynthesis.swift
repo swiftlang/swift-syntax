@@ -26,9 +26,7 @@ extension Operator {
   /// Synthesize a syntactic representation of this operator based on its
   /// semantic definition.
   public func synthesizedSyntax() -> OperatorDeclSyntax {
-    let modifiers = ModifierListSyntax(
-      [DeclModifierSyntax(name: .keyword(kind.keyword))]
-    )
+    let fixity = TokenSyntax.keyword(kind.keyword)
     let operatorKeyword = TokenSyntax.keyword(.operator, leadingTrivia: .space)
     let identifierSyntax =
       TokenSyntax.binaryOperator(name, leadingTrivia: .space)
@@ -41,7 +39,7 @@ extension Operator {
     }
 
     return OperatorDeclSyntax(
-      modifiers: modifiers,
+      fixity: fixity,
       operatorKeyword: operatorKeyword,
       identifier: identifierSyntax,
       operatorPrecedenceAndTypes: precedenceGroupSyntax

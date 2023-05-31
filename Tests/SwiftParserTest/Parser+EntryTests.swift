@@ -49,7 +49,7 @@ public class EntryTests: XCTestCase {
 
   func testRemainderUnexpectedDoesntOverrideExistingUnexpected() throws {
     assertParse(
-      "operator 1️⃣test 2️⃣{} other tokens",
+      "1️⃣operator 2️⃣test 3️⃣{} other tokens",
       { DeclSyntax.parse(from: &$0) },
       substructure: Syntax(
         UnexpectedNodesSyntax([
@@ -60,13 +60,14 @@ public class EntryTests: XCTestCase {
           TokenSyntax.identifier("tokens"),
         ])
       ),
-      substructureAfterMarker: "2️⃣",
+      substructureAfterMarker: "3️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'test' is considered an identifier and must not appear within an operator name"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'test' is considered an identifier and must not appear within an operator name"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ],
       fixedSource: """
-        operator test
+        prefix operator test
         """
     )
   }

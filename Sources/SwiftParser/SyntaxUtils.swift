@@ -80,6 +80,10 @@ extension RawUnexpectedNodesSyntax {
   init?(combining syntax1: some UnexpectedNodesCombinable, _ syntax2: some UnexpectedNodesCombinable, _ syntax3: some UnexpectedNodesCombinable, arena: __shared SyntaxArena) {
     self.init(syntax1.elements + syntax2.elements + syntax3.elements, arena: arena)
   }
+
+  init?(combining syntax1: some UnexpectedNodesCombinable, _ syntax2: some UnexpectedNodesCombinable, _ syntax3: some UnexpectedNodesCombinable, _ syntax4: some UnexpectedNodesCombinable, arena: __shared SyntaxArena) {
+    self.init(syntax1.elements + syntax2.elements + syntax3.elements + syntax4.elements, arena: arena)
+  }
 }
 
 // MARK: - Misc

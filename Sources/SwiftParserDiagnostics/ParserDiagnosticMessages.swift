@@ -195,6 +195,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var misspelledThrows: Self {
     .init("expected throwing specifier; did you mean 'throws'?")
   }
+  public static var missingFixityInOperatorDeclaration: Self {
+    .init("operator must be declared as 'prefix', 'postfix', or 'infix'")
+  }
   public static var multiLineStringLiteralMustBeginOnNewLine: Self {
     .init("multi-line string literal content must begin on a new line")
   }

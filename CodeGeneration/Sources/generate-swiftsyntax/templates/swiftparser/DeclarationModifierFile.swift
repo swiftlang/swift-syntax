@@ -38,13 +38,14 @@ let declarationModifierFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try VariableDeclSyntax("var spec: TokenSpec") {
       try SwitchExprSyntax("switch self") {
-        for attribute in DECL_MODIFIER_KINDS {
+        for attribute in NONCONTEXTUAL_DECL_MODIFIER_KINDS {
           SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
-            if attribute.swiftName.hasSuffix("Keyword") {
-              StmtSyntax("return .\(raw: attribute.swiftName)")
-            } else {
-              StmtSyntax("return .keyword(.\(raw: attribute.swiftName))")
-            }
+            StmtSyntax("return .keyword(.\(raw: attribute.swiftName))")
+          }
+        }
+        for attribute in CONTEXTUAL_DECL_MODIFIER_KINDS {
+          SwitchCaseSyntax("case .\(raw: attribute.swiftName):") {
+            StmtSyntax("return TokenSpec(.\(raw: attribute.swiftName), recoveryPrecedence: .declKeyword)")
           }
         }
       }

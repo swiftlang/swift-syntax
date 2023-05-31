@@ -4283,11 +4283,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
-      _ unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeFixity: UnexpectedNodesSyntax? = nil,
+      fixity: TokenSyntax,
+      _ unexpectedBetweenFixityAndOperatorKeyword: UnexpectedNodesSyntax? = nil,
       operatorKeyword: TokenSyntax = .keyword(.operator),
       _ unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
@@ -4300,11 +4298,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndOperatorKeyword, 
+            unexpectedBeforeFixity, 
+            fixity, 
+            unexpectedBetweenFixityAndOperatorKeyword, 
             operatorKeyword, 
             unexpectedBetweenOperatorKeywordAndIdentifier, 
             identifier, 
@@ -4313,11 +4309,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedAfterOperatorPrecedenceAndTypes
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers?.raw, 
-          unexpectedBetweenModifiersAndOperatorKeyword?.raw, 
+          unexpectedBeforeFixity?.raw, 
+          fixity.raw, 
+          unexpectedBetweenFixityAndOperatorKeyword?.raw, 
           operatorKeyword.raw, 
           unexpectedBetweenOperatorKeywordAndIdentifier?.raw, 
           identifier.raw, 
@@ -4338,7 +4332,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeFixity: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4347,36 +4341,17 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The attributes applied to the 'operator' declaration.
-  public var attributes: AttributeListSyntax? {
+  /// The fixity applied to the 'operator' declaration.
+  public var fixity: TokenSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = OperatorDeclSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = OperatorDeclSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  /// Adds the provided `Attribute` to the node's `attributes`
-  /// collection.
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  public func addAttribute(_ element: Syntax) -> OperatorDeclSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
-    return OperatorDeclSyntax(newData)
-  }
-  
-  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenFixityAndOperatorKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4385,36 +4360,16 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The declaration modifiers applied to the 'operator' declaration.
-  public var modifiers: ModifierListSyntax? {
+  public var operatorKeyword: TokenSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(ModifierListSyntax.init)
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = OperatorDeclSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = OperatorDeclSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
     }
   }
   
-  /// Adds the provided `Modifier` to the node's `modifiers`
-  /// collection.
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  public func addModifier(_ element: DeclModifierSyntax) -> OperatorDeclSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
-    return OperatorDeclSyntax(newData)
-  }
-  
-  public var unexpectedBetweenModifiersAndOperatorKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4423,7 +4378,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var operatorKeyword: TokenSyntax {
+  public var identifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -4432,7 +4387,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4441,16 +4396,17 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  /// Optionally specify a precedence group and designated types.
+  public var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? {
     get {
-      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return data.child(at: 7, parent: Syntax(self)).map(OperatorPrecedenceAndTypesSyntax.init)
     }
     set(value) {
-      self = OperatorDeclSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = OperatorDeclSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
+  public var unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4459,32 +4415,11 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Optionally specify a precedence group and designated types.
-  public var operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? {
-    get {
-      return data.child(at: 9, parent: Syntax(self)).map(OperatorPrecedenceAndTypesSyntax.init)
-    }
-    set(value) {
-      self = OperatorDeclSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = OperatorDeclSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
-    }
-  }
-  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeAttributes, 
-          \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndModifiers, 
-          \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndOperatorKeyword, 
+          \Self.unexpectedBeforeFixity, 
+          \Self.fixity, 
+          \Self.unexpectedBetweenFixityAndOperatorKeyword, 
           \Self.operatorKeyword, 
           \Self.unexpectedBetweenOperatorKeywordAndIdentifier, 
           \Self.identifier, 

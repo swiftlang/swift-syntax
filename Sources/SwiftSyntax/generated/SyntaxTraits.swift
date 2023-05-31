@@ -591,7 +591,7 @@ extension MemberDeclBlockSyntax: BracedSyntax {}
 
 extension MissingDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 
-extension OperatorDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
 
 extension ParameterClauseSyntax: ParenthesizedSyntax {}
 

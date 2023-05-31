@@ -251,7 +251,7 @@ enum ContextualDeclKeyword: TokenSpecSet {
   }
 }
 
-enum DeclarationStart: TokenSpecSet {
+enum DeclarationKeyword: TokenSpecSet {
   case actor
   case `associatedtype`
   case `case`
@@ -324,6 +324,35 @@ enum DeclarationStart: TokenSpecSet {
     case .var: return .keyword(.var)
     case .inout: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+    }
+  }
+}
+
+/// Union of the following token kind subsets:
+///  - `DeclarationModifier`
+///  - `DeclarationKeyword`
+enum DeclarationStart: TokenSpecSet {
+  case declarationModifier(DeclarationModifier)
+  case declarationKeyword(DeclarationKeyword)
+
+  init?(lexeme: Lexer.Lexeme) {
+    if let subset = DeclarationModifier(lexeme: lexeme) {
+      self = .declarationModifier(subset)
+    } else if let subset = DeclarationKeyword(lexeme: lexeme) {
+      self = .declarationKeyword(subset)
+    } else {
+      return nil
+    }
+  }
+
+  static var allCases: [DeclarationStart] {
+    return DeclarationModifier.allCases.map(Self.declarationModifier) + DeclarationKeyword.allCases.map(Self.declarationKeyword)
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .declarationModifier(let underlyingKind): return underlyingKind.spec
+    case .declarationKeyword(let underlyingKind): return underlyingKind.spec
     }
   }
 }

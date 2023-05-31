@@ -15206,11 +15206,9 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
-      attributes: RawAttributeListSyntax?, 
-      _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawModifierListSyntax?, 
-      _ unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeFixity: RawUnexpectedNodesSyntax? = nil, 
+      fixity: RawTokenSyntax, 
+      _ unexpectedBetweenFixityAndOperatorKeyword: RawUnexpectedNodesSyntax? = nil, 
       operatorKeyword: RawTokenSyntax, 
       _ unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax? = nil, 
       identifier: RawTokenSyntax, 
@@ -15220,65 +15218,55 @@ public struct RawOperatorDeclSyntax: RawDeclSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .operatorDecl, uninitializedCount: 11, arena: arena) { layout in
+      kind: .operatorDecl, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAttributes?.raw
-      layout[1] = attributes?.raw
-      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
-      layout[4] = unexpectedBetweenModifiersAndOperatorKeyword?.raw
-      layout[5] = operatorKeyword.raw
-      layout[6] = unexpectedBetweenOperatorKeywordAndIdentifier?.raw
-      layout[7] = identifier.raw
-      layout[8] = unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw
-      layout[9] = operatorPrecedenceAndTypes?.raw
-      layout[10] = unexpectedAfterOperatorPrecedenceAndTypes?.raw
+      layout[0] = unexpectedBeforeFixity?.raw
+      layout[1] = fixity.raw
+      layout[2] = unexpectedBetweenFixityAndOperatorKeyword?.raw
+      layout[3] = operatorKeyword.raw
+      layout[4] = unexpectedBetweenOperatorKeywordAndIdentifier?.raw
+      layout[5] = identifier.raw
+      layout[6] = unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw
+      layout[7] = operatorPrecedenceAndTypes?.raw
+      layout[8] = unexpectedAfterOperatorPrecedenceAndTypes?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeFixity: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var attributes: RawAttributeListSyntax? {
-    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))
+  public var fixity: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenFixityAndOperatorKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawModifierListSyntax? {
-    layoutView.children[3].map(RawModifierListSyntax.init(raw:))
-  }
-  
-  public var unexpectedBetweenModifiersAndOperatorKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
   public var operatorKeyword: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenOperatorKeywordAndIdentifier: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
   public var identifier: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
   public var operatorPrecedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax? {
-    layoutView.children[9].map(RawOperatorPrecedenceAndTypesSyntax.init(raw:))
+    layoutView.children[7].map(RawOperatorPrecedenceAndTypesSyntax.init(raw:))
   }
   
   public var unexpectedAfterOperatorPrecedenceAndTypes: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

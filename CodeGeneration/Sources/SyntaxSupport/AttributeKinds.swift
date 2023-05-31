@@ -676,10 +676,57 @@ public let DECL_ATTR_KINDS: [Attribute] = [
 ///
 /// If you're adding a new kind of attribute that is spelled with a leading
 /// '@' symbol, add an entry to the `DECL_ATTR_KINDS` array instead.
-public let DECL_MODIFIER_KINDS: [Attribute] = [
-  // These are not really attributes or modifiers in the C++ AST and they are
-  // serialized directly into the ASTs they are attached to rather than using
-  // the generic attribute serialization infrastructure.
+
+// These are not really attributes or modifiers in the C++ AST and they are
+// serialized directly into the ASTs they are attached to rather than using
+// the generic attribute serialization infrastructure.
+public let DECL_MODIFIER_KINDS: [Attribute] = CONTEXTUAL_DECL_MODIFIER_KINDS + NONCONTEXTUAL_DECL_MODIFIER_KINDS
+
+// Modifiers that not exclusively used for declarations
+public let CONTEXTUAL_DECL_MODIFIER_KINDS: [Attribute] = [
+  ContextualDeclAttribute(
+    name: "weak",
+    className: "ReferenceOwnership"
+  ),
+  ContextualDeclAttributeAlias(
+    name: "unowned",
+    className: "ReferenceOwnership",
+    swiftName: "unowned"
+  ),
+  SimpleDeclAttribute(
+    name: "rethrows",
+    className: "Rethrows",
+    swiftName: "`rethrows`"
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "isolated",
+    className: "Isolated"
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "async",
+    className: "Async"
+  ),
+  SimpleDeclAttribute(
+    name: "reasync",
+    className: "Reasync",
+    swiftName: "reasync"
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "consuming",
+    className: "Consuming"
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "borrowing",
+    className: "Borrowing"
+  ),
+  ContextualSimpleDeclAttribute(
+    name: "_const",
+    className: "CompileTimeConst"
+  ),
+]
+
+// Modifiers that exclusively used for declarations
+public let NONCONTEXTUAL_DECL_MODIFIER_KINDS: [Attribute] = [
   BuiltinDeclModifier(
     name: "static",
     swiftName: "`static`"
@@ -775,36 +822,9 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
     className: "SetterAccess",
     swiftName: "__setter_access"
   ),
-  ContextualDeclAttribute(
-    name: "weak",
-    className: "ReferenceOwnership"
-  ),
-  ContextualDeclAttributeAlias(
-    name: "unowned",
-    className: "ReferenceOwnership",
-    swiftName: "unowned"
-  ),
-  SimpleDeclAttribute(
-    name: "rethrows",
-    className: "Rethrows",
-    swiftName: "`rethrows`"
-  ),
   ContextualSimpleDeclAttribute(
     name: "indirect",
     className: "Indirect"
-  ),
-  ContextualSimpleDeclAttribute(
-    name: "isolated",
-    className: "Isolated"
-  ),
-  ContextualSimpleDeclAttribute(
-    name: "async",
-    className: "Async"
-  ),
-  SimpleDeclAttribute(
-    name: "reasync",
-    className: "Reasync",
-    swiftName: "reasync"
   ),
   ContextualSimpleDeclAttribute(
     name: "nonisolated",
@@ -815,20 +835,8 @@ public let DECL_MODIFIER_KINDS: [Attribute] = [
     className: "DistributedActor"
   ),
   ContextualSimpleDeclAttribute(
-    name: "_const",
-    className: "CompileTimeConst"
-  ),
-  ContextualSimpleDeclAttribute(
     name: "_local",
     className: "KnownToBeLocal"
-  ),
-  ContextualSimpleDeclAttribute(
-    name: "consuming",
-    className: "Consuming"
-  ),
-  ContextualSimpleDeclAttribute(
-    name: "borrowing",
-    className: "Borrowing"
   ),
 ]
 

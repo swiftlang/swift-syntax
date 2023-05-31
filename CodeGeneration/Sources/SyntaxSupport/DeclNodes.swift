@@ -1422,25 +1422,14 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "operator declaration",
     documentation: "A Swift `operator` declaration.",
     traits: [
-      "IdentifiedDecl",
-      "WithAttributes",
-      "WithModifiers",
+      "IdentifiedDecl"
     ],
     children: [
       Child(
-        name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        documentation: "The attributes applied to the 'operator' declaration.",
-        isOptional: true
-      ),
-      Child(
-        name: "Modifiers",
-        kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        documentation: "The declaration modifiers applied to the 'operator' declaration.",
-        isOptional: true,
-        classification: "Attribute"
+        name: "Fixity",
+        kind: .token(choices: [.keyword(text: "prefix"), .keyword(text: "postfix"), .keyword(text: "infix")]),
+        nameForDiagnostics: "fixity",
+        documentation: "The fixity applied to the 'operator' declaration."
       ),
       Child(
         name: "OperatorKeyword",

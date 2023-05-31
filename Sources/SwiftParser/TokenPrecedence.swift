@@ -218,6 +218,8 @@ enum TokenPrecedence: Comparable {
       .let, .var,
       // Operator stuff
       .operator, .precedencegroup,
+      // Declaration Modifiers
+      .__consuming, .final, .required, .optional, .lazy, .dynamic, .infix, .postfix, .prefix, .mutating, .nonmutating, .convenience, .override, .package, .open, .__setter_access, .indirect, .nonisolated, .distributed, ._local,
       // Misc
       .import:
       self = .declKeyword

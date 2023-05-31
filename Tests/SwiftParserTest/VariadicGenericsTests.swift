@@ -206,7 +206,7 @@ final class VariadicGenericsTests: XCTestCase {
             callee: MemberAccessExprSyntax(
               base: ExprSyntax(
                 TupleExprSyntax(
-                  elementList: .init([
+                  elements: .init([
                     TupleExprElementSyntax(
                       expression: PackElementExprSyntax(
                         eachKeyword: .keyword(.each),

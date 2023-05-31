@@ -1760,7 +1760,7 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "ElementList",
+        name: "Elements",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element"),
         isIndented: true
       ),

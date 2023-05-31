@@ -6377,9 +6377,9 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-      elementList: TupleExprElementListSyntax,
-      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil,
+      elements: TupleExprElementListSyntax,
+      _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -6390,18 +6390,18 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndElementList, 
-            elementList, 
-            unexpectedBetweenElementListAndRightParen, 
+            unexpectedBetweenLeftParenAndElements, 
+            elements, 
+            unexpectedBetweenElementsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndElementList?.raw, 
-          elementList.raw, 
-          unexpectedBetweenElementListAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndElements?.raw, 
+          elements.raw, 
+          unexpectedBetweenElementsAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -6436,7 +6436,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6445,7 +6445,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var elementList: TupleExprElementListSyntax {
+  public var elements: TupleExprElementListSyntax {
     get {
       return TupleExprElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -6454,12 +6454,12 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elementList`
+  /// Adds the provided `Element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
-  ///                  `elementList` collection.
+  ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
-  ///            appended to its `elementList` collection.
+  ///            appended to its `elements` collection.
   public func addElement(_ element: TupleExprElementSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6473,7 +6473,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return TupleExprSyntax(newData)
   }
   
-  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6504,9 +6504,9 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElementList, 
-          \Self.elementList, 
-          \Self.unexpectedBetweenElementListAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndElements, 
+          \Self.elements, 
+          \Self.unexpectedBetweenElementsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])

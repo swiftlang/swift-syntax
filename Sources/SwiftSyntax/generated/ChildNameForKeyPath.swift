@@ -3079,12 +3079,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \TupleExprSyntax.leftParen:
     return "leftParen"
-  case \TupleExprSyntax.unexpectedBetweenLeftParenAndElementList:
-    return "unexpectedBetweenLeftParenAndElementList"
-  case \TupleExprSyntax.elementList:
-    return "elementList"
-  case \TupleExprSyntax.unexpectedBetweenElementListAndRightParen:
-    return "unexpectedBetweenElementListAndRightParen"
+  case \TupleExprSyntax.unexpectedBetweenLeftParenAndElements:
+    return "unexpectedBetweenLeftParenAndElements"
+  case \TupleExprSyntax.elements:
+    return "elements"
+  case \TupleExprSyntax.unexpectedBetweenElementsAndRightParen:
+    return "unexpectedBetweenElementsAndRightParen"
   case \TupleExprSyntax.rightParen:
     return "rightParen"
   case \TupleExprSyntax.unexpectedAfterRightParen:

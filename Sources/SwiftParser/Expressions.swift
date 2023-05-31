@@ -1576,7 +1576,7 @@ extension Parser {
     return RawTupleExprSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
-      elementList: RawTupleExprElementListSyntax(elements: elements, arena: self.arena),
+      elements: RawTupleExprElementListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
       arena: self.arena

@@ -83,7 +83,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -92,7 +92,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -101,7 +101,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -110,7 +110,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ArrayElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -138,7 +138,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -147,7 +147,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -156,7 +156,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrayExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = ArrayExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -238,7 +238,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrowExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ArrowExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -247,7 +247,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(TypeEffectSpecifiersSyntax.init)
     }
     set(value) {
-      self = ArrowExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = ArrowExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -256,7 +256,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrowExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ArrowExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -265,7 +265,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ArrowExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = ArrowExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -274,7 +274,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ArrowExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = ArrowExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -366,7 +366,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -375,7 +375,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -384,7 +384,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -393,7 +393,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -402,7 +402,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -411,7 +411,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 5, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -420,7 +420,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -429,7 +429,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -438,7 +438,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AsExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = AsExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -508,7 +508,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AssignmentExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = AssignmentExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -517,7 +517,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = AssignmentExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = AssignmentExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -526,7 +526,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AssignmentExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = AssignmentExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -600,7 +600,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AwaitExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = AwaitExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -609,7 +609,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = AwaitExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = AwaitExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -618,7 +618,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AwaitExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = AwaitExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -627,7 +627,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = AwaitExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = AwaitExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -636,7 +636,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = AwaitExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = AwaitExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -702,7 +702,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BinaryOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -711,7 +711,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = BinaryOperatorExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -720,7 +720,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BinaryOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -780,7 +780,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BooleanLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -789,7 +789,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = BooleanLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -798,7 +798,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BooleanLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = BooleanLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -872,7 +872,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BorrowExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = BorrowExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -881,7 +881,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = BorrowExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = BorrowExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -890,7 +890,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BorrowExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = BorrowExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -899,7 +899,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = BorrowExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = BorrowExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -908,7 +908,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = BorrowExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = BorrowExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1000,7 +1000,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1009,7 +1009,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1018,7 +1018,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1027,7 +1027,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(ClosureSignatureSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1036,7 +1036,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1045,7 +1045,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return CodeBlockItemListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1073,7 +1073,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1082,7 +1082,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1091,7 +1091,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ClosureExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = ClosureExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1175,7 +1175,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = CopyExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = CopyExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1184,7 +1184,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = CopyExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = CopyExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1193,7 +1193,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = CopyExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = CopyExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1202,7 +1202,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = CopyExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = CopyExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1211,7 +1211,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = CopyExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = CopyExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1339,7 +1339,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1348,7 +1348,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1357,7 +1357,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1366,7 +1366,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return Content(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1375,7 +1375,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1384,7 +1384,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1393,7 +1393,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DictionaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = DictionaryExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1461,7 +1461,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1470,7 +1470,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1479,7 +1479,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = DiscardAssignmentExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1539,7 +1539,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1548,7 +1548,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1557,7 +1557,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = EditorPlaceholderExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1617,7 +1617,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FloatLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1626,7 +1626,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FloatLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1635,7 +1635,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FloatLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = FloatLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1709,7 +1709,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ForcedValueExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ForcedValueExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1718,7 +1718,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ForcedValueExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = ForcedValueExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1727,7 +1727,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ForcedValueExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ForcedValueExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1736,7 +1736,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ForcedValueExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = ForcedValueExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1745,7 +1745,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ForcedValueExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = ForcedValueExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1849,7 +1849,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1858,7 +1858,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1867,7 +1867,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1876,7 +1876,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1885,7 +1885,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1894,7 +1894,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1922,7 +1922,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1931,7 +1931,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1940,7 +1940,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1949,7 +1949,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 9, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1958,7 +1958,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1967,7 +1967,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1995,7 +1995,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2083,7 +2083,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2092,7 +2092,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IdentifierExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2101,7 +2101,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2110,7 +2110,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
     }
     set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2119,7 +2119,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2259,7 +2259,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2268,7 +2268,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2277,7 +2277,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2286,7 +2286,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ConditionElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2314,7 +2314,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2323,7 +2323,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return CodeBlockSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2332,7 +2332,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2341,7 +2341,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2350,7 +2350,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2359,7 +2359,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 9, parent: Syntax(self)).map(ElseBody.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2368,7 +2368,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IfExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = IfExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2454,7 +2454,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InOutExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = InOutExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2463,7 +2463,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = InOutExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = InOutExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2472,7 +2472,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InOutExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = InOutExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2481,7 +2481,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = InOutExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = InOutExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2490,7 +2490,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InOutExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = InOutExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2576,7 +2576,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2585,7 +2585,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2594,7 +2594,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2603,7 +2603,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2612,7 +2612,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2621,7 +2621,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2630,7 +2630,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = InfixOperatorExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = InfixOperatorExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2698,7 +2698,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IntegerLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2707,7 +2707,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IntegerLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2716,7 +2716,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IntegerLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IntegerLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2796,7 +2796,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2805,7 +2805,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2814,7 +2814,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2823,7 +2823,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2832,7 +2832,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2841,7 +2841,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2850,7 +2850,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = IsExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2973,7 +2973,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2982,7 +2982,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2991,7 +2991,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3000,7 +3000,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TypeSyntax.init)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3009,7 +3009,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3018,7 +3018,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return KeyPathComponentListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3046,7 +3046,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = KeyPathExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = KeyPathExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3164,7 +3164,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3174,7 +3174,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3183,7 +3183,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3192,7 +3192,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3201,7 +3201,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3210,7 +3210,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 5, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3219,7 +3219,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3228,7 +3228,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3237,7 +3237,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3246,7 +3246,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TupleExprElementListSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3274,7 +3274,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3283,7 +3283,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3292,7 +3292,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3301,7 +3301,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 13, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 13, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3310,7 +3310,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 14, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3319,7 +3319,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 15, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3347,7 +3347,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 16, with: value?.raw, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3490,7 +3490,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3499,7 +3499,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3508,7 +3508,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3517,7 +3517,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3526,7 +3526,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3535,7 +3535,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3544,7 +3544,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3553,7 +3553,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 7, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 7, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3562,7 +3562,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = MemberAccessExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3632,7 +3632,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MissingExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = MissingExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3642,7 +3642,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MissingExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = MissingExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3651,7 +3651,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MissingExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MissingExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3725,7 +3725,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MoveExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = MoveExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3734,7 +3734,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MoveExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = MoveExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3743,7 +3743,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MoveExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MoveExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3752,7 +3752,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = MoveExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = MoveExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3761,7 +3761,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MoveExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = MoveExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3827,7 +3827,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = NilLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = NilLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3836,7 +3836,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = NilLiteralExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = NilLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3845,7 +3845,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = NilLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = NilLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3919,7 +3919,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = OptionalChainingExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3928,7 +3928,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = OptionalChainingExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3937,7 +3937,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = OptionalChainingExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -3946,7 +3946,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = OptionalChainingExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3955,7 +3955,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = OptionalChainingExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = OptionalChainingExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4035,7 +4035,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackElementExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = PackElementExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4044,7 +4044,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackElementExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = PackElementExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4053,7 +4053,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackElementExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = PackElementExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4062,7 +4062,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackElementExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PackElementExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4071,7 +4071,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackElementExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = PackElementExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4151,7 +4151,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackExpansionExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = PackExpansionExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4160,7 +4160,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackExpansionExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = PackExpansionExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4169,7 +4169,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackExpansionExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = PackExpansionExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4178,7 +4178,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackExpansionExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PackExpansionExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4187,7 +4187,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackExpansionExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = PackExpansionExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4298,7 +4298,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4307,7 +4307,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
     }
     set(value) {
-      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4316,7 +4316,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4325,7 +4325,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return IfConfigDeclSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4334,7 +4334,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixIfConfigExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4414,7 +4414,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixUnaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4423,7 +4423,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PostfixUnaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4432,7 +4432,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixUnaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4441,7 +4441,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PostfixUnaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4450,7 +4450,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PostfixUnaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = PostfixUnaryExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4530,7 +4530,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4539,7 +4539,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4548,7 +4548,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4557,7 +4557,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4566,7 +4566,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4664,7 +4664,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4673,7 +4673,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4682,7 +4682,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4691,7 +4691,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4700,7 +4700,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4709,7 +4709,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4718,7 +4718,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4727,7 +4727,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4736,7 +4736,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4745,7 +4745,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4754,7 +4754,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = RegexLiteralExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = RegexLiteralExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4826,7 +4826,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SequenceExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = SequenceExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4835,7 +4835,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SequenceExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = SequenceExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4863,7 +4863,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SequenceExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = SequenceExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4937,7 +4937,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SpecializeExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = SpecializeExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4946,7 +4946,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SpecializeExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = SpecializeExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4955,7 +4955,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SpecializeExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = SpecializeExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4964,7 +4964,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return GenericArgumentClauseSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = SpecializeExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = SpecializeExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4973,7 +4973,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SpecializeExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = SpecializeExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5071,7 +5071,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5080,7 +5080,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5089,7 +5089,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5098,7 +5098,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5107,7 +5107,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5116,7 +5116,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return StringLiteralSegmentsSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5144,7 +5144,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5153,7 +5153,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5162,7 +5162,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5171,7 +5171,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5180,7 +5180,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = StringLiteralExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = StringLiteralExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5290,7 +5290,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5299,7 +5299,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5308,7 +5308,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5317,7 +5317,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5326,7 +5326,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5335,7 +5335,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5363,7 +5363,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5372,7 +5372,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5381,7 +5381,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5390,7 +5390,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 9, parent: Syntax(self)).map(ClosureExprSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 9, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5399,7 +5399,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5408,7 +5408,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 11, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5436,7 +5436,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SubscriptExprSyntax(data.replacingChild(at: 12, with: value?.raw, arena: SyntaxArena()))
+      self = SubscriptExprSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5510,7 +5510,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SuperRefExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = SuperRefExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5519,7 +5519,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SuperRefExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = SuperRefExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5528,7 +5528,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SuperRefExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = SuperRefExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5620,7 +5620,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5629,7 +5629,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5638,7 +5638,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5647,7 +5647,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5656,7 +5656,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5665,7 +5665,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5674,7 +5674,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5683,7 +5683,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return SwitchCaseListSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5711,7 +5711,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5720,7 +5720,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5729,7 +5729,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SwitchExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = SwitchExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5833,7 +5833,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5842,7 +5842,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5851,7 +5851,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5860,7 +5860,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5869,7 +5869,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5878,7 +5878,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5887,7 +5887,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5896,7 +5896,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5905,7 +5905,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -5914,7 +5914,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 9, with: value.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5923,7 +5923,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TernaryExprSyntax(data.replacingChild(at: 10, with: value?.raw, arena: SyntaxArena()))
+      self = TernaryExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6015,7 +6015,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6024,7 +6024,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6033,7 +6033,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6042,7 +6042,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6051,7 +6051,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6060,7 +6060,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6069,7 +6069,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = TryExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6157,7 +6157,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6166,7 +6166,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6175,7 +6175,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6184,7 +6184,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TupleExprElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6212,7 +6212,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6221,7 +6221,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6230,7 +6230,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TupleExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = TupleExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6298,7 +6298,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TypeExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = TypeExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6307,7 +6307,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TypeExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = TypeExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6316,7 +6316,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TypeExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = TypeExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6390,7 +6390,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedAsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6399,7 +6399,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedAsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6408,7 +6408,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedAsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6417,7 +6417,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = UnresolvedAsExprSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6426,7 +6426,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedAsExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedAsExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6492,7 +6492,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedIsExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6501,7 +6501,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedIsExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6510,7 +6510,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedIsExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedIsExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6570,7 +6570,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6579,7 +6579,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return PatternSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6588,7 +6588,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedPatternExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6668,7 +6668,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6677,7 +6677,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6686,7 +6686,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6695,7 +6695,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6704,7 +6704,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -6713,7 +6713,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6722,7 +6722,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = UnresolvedTernaryExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   

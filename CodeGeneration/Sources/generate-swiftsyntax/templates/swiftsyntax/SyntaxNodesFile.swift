@@ -221,7 +221,7 @@ func syntaxNode(emitKind: String) -> SourceFileSyntax {
             AccessorDeclSyntax(
               """
               set(value) {
-                self = \(raw: node.name)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").raw, arena: SyntaxArena()))
+                self = \(raw: node.name)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").data, arena: SyntaxArena()))
               }
               """
             )

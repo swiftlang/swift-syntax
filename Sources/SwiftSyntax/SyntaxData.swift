@@ -311,8 +311,10 @@ struct SyntaxData {
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
-      // Otherwise, we're already the root, so return the new root data.
-      return .forRoot(newRaw)
+      return withExtendedLifetime(arena) {
+        // Otherwise, we're already the root, so return the new root data.
+        return .forRoot(newRaw)
+      }
     }
   }
 
@@ -330,6 +332,15 @@ struct SyntaxData {
   func replacingChild(at index: Int, with newChild: RawSyntax?, arena: SyntaxArena) -> SyntaxData {
     let newRaw = raw.layoutView!.replacingChild(at: index, with: newChild, arena: arena)
     return replacingSelf(newRaw, arena: arena)
+  }
+
+  /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
+  /// that ensures that the arena of`newChild` doesn’t get de-allocated before
+  /// `newChild` has been addded to the result.
+  func replacingChild(at index: Int, with newChild: SyntaxData?, arena: SyntaxArena) -> SyntaxData {
+    return withExtendedLifetime(newChild) {
+      return replacingChild(at: index, with: newChild?.raw, arena: arena)
+    }
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {

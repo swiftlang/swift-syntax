@@ -12,15 +12,15 @@
 
 import SyntaxSupport
 
-/// Extension to the `Node` type to provide functionality specific to
+/// Extension to the ``Node`` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
 public extension Node {
-  /// The node's syntax kind as `SyntaxBuildableType`.
+  /// The node's syntax kind as ``SyntaxBuildableType``.
   var type: SyntaxBuildableType {
     SyntaxBuildableType(kind: .node(kind: kind))
   }
 
-  /// The node's syntax kind as `SyntaxBuildableType`.
+  /// The node's syntax kind as ``SyntaxBuildableType``.
   var baseType: SyntaxBuildableType {
     if base == .syntaxCollection {
       return SyntaxBuildableType(kind: .node(kind: .syntax))

@@ -53,7 +53,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting `\(node.kind.syntaxType)` specifically.
+        /// Visiting ``\(node.kind.syntaxType)`` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
         open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
@@ -64,7 +64,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// The function called after visiting `\(node.kind.syntaxType)` and its descendents.
+        /// The function called after visiting ``\(node.kind.syntaxType)`` and its descendents.
         ///   - node: the node we just finished visiting.
         open func visitPost(_ node: \(node.kind.syntaxType)) {}
         """
@@ -73,7 +73,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// Visiting `TokenSyntax` specifically.
+      /// Visiting ``TokenSyntax`` specifically.
       ///   - Parameter node: the node we are visiting.
       ///   - Returns: how should we continue visiting.
       open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {

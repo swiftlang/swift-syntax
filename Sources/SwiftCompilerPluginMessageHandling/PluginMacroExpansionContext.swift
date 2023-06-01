@@ -62,7 +62,7 @@ class SourceManager {
   /// Syntax added by `add(_:)` method. Keyed by the `id` of the node.
   private var knownSourceSyntax: [Syntax.ID: KnownSourceSyntax] = [:]
 
-  /// Convert syntax information to a `Syntax` node. The location informations
+  /// Convert syntax information to a ``Syntax`` node. The location informations
   /// are cached in the source manager to provide `location(of:)` et al.
   func add(
     _ syntaxInfo: PluginMessage.Syntax,
@@ -120,7 +120,7 @@ class SourceManager {
     )
   }
 
-  /// Get `SourceRange` (file name + UTF-8 offset range) of `node` in the known root nodes.
+  /// Get ``SourceRange`` (file name + UTF-8 offset range) of `node` in the known root nodes.
   /// The root node of `node` must be one of the retured value from `add(_:)`.
   func range(
     of node: Syntax,
@@ -174,7 +174,7 @@ class SourceManager {
 }
 
 fileprivate extension Syntax {
-  /// Get a position in the node by `PositionInSyntaxNode`.
+  /// Get a position in the node by ``PositionInSyntaxNode``.
   func position(at pos: PositionInSyntaxNode) -> AbsolutePosition {
     switch pos {
     case .beforeLeadingTrivia:

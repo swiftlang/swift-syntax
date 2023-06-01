@@ -26,7 +26,7 @@ fileprivate extension SyntaxProtocol {
 }
 
 extension TokenSyntax {
-  /// The `SyntaxClassifiedRange` for the token text, excluding trivia.
+  /// The ``SyntaxClassifiedRange`` for the token text, excluding trivia.
   public var tokenClassification: SyntaxClassifiedRange {
     let contextualClassification = self.contextualClassification
     let relativeOffset = leadingTriviaLength.utf8Length
@@ -122,7 +122,7 @@ private struct ClassificationVisitor {
     self.targetRange = range
     self.classifications = []
 
-    // `withExtendedLifetime` to make sure `SyntaxArena` for the node alive
+    // `withExtendedLifetime` to make sure ``SyntaxArena`` for the node alive
     // during the visit.
     withExtendedLifetime(node) {
       _ = self.visit(
@@ -235,7 +235,7 @@ private struct ClassificationVisitor {
   }
 }
 
-/// Provides a sequence of `SyntaxClassifiedRange`s for a syntax node.
+/// Provides a sequence of ``SyntaxClassifiedRange``s for a syntax node.
 public struct SyntaxClassifications: Sequence {
   public typealias Iterator = Array<SyntaxClassifiedRange>.Iterator
 

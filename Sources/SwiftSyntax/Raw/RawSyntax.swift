@@ -26,10 +26,10 @@ struct RecursiveRawSyntaxFlags: OptionSet {
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
-  ///  - tokens with a `TokenDiagnostic` of severity `error`
+  ///  - tokens with a ``TokenDiagnostic`` of severity `error`
   static let hasError = RecursiveRawSyntaxFlags(rawValue: 1 << 0)
   /// Whether the tree contained by this layout has any tokens with a
-  /// `TokenDiagnostic` of severity `warning`.
+  /// ``TokenDiagnostic`` of severity `warning`.
   static let hasWarning = RecursiveRawSyntaxFlags(rawValue: 1 << 1)
   static let hasSequenceExpr = RecursiveRawSyntaxFlags(rawValue: 1 << 2)
   static let hasMaximumNestingLevelOverflow = RecursiveRawSyntaxFlags(rawValue: 1 << 3)
@@ -61,7 +61,7 @@ internal struct RawSyntaxData {
 
     var presence: SourcePresence
 
-    /// Store the members of `TokenDiagnostic` individually so the compiler can pack
+    /// Store the members of ``TokenDiagnostic`` individually so the compiler can pack
     /// `ParsedToken` more efficiently (saving 2 bytes)
     /// `tokenDiagnosticByteOffset` is ignored if `tokenDiagnosticKind` is `nil`
     private var tokenDiagnosticKind: TokenDiagnostic.Kind?
@@ -104,7 +104,7 @@ internal struct RawSyntaxData {
     var numLeadingTrivia: UInt32
     var byteLength: UInt32
     var presence: SourcePresence
-    /// Store the members of `TokenDiagnostic` individually so the compiler can pack
+    /// Store the members of ``TokenDiagnostic`` individually so the compiler can pack
     /// `ParsedToken` more efficiently (saving 2 bytes)
     /// `tokenDiagnosticByteOffset` is ignored if `tokenDiagnosticKind` is `nil`
     private var tokenDiagnosticKind: TokenDiagnostic.Kind?
@@ -383,7 +383,7 @@ extension RawSyntax {
   /// Unlike `description`, this provides a source-accurate representation
   /// even in the presence of malformed UTF-8 in the input source.
   ///
-  /// The `SyntaxText` arguments passed to the visitor are only guaranteed
+  /// The ``SyntaxText`` arguments passed to the visitor are only guaranteed
   /// to be valid within that call. It is unsafe to escape the `SyntaxValue`
   /// values outside of the closure.
   public func withEachSyntaxText(body: (SyntaxText) throws -> Void) rethrows {

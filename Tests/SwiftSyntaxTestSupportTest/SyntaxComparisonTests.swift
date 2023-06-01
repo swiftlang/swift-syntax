@@ -177,7 +177,7 @@ public class SyntaxComparisonTests: XCTestCase {
     XCTAssertEqual(bodyDiff.reason, .additionalNode)
   }
 
-  /// Generates a `FunctionDeclSyntax` with the given `identifier`, `keyword`,
+  /// Generates a ``FunctionDeclSyntax`` with the given `identifier`, `keyword`,
   /// and `body` with some optional leading indentation (which applied only to
   /// the start, not the entire body).
   private func makeFunc(
@@ -211,7 +211,7 @@ public class SyntaxComparisonTests: XCTestCase {
     return fd
   }
 
-  /// Creates a `CodeBlockSyntax` that consists of `statementCount` integer
+  /// Creates a ``CodeBlockSyntax`` that consists of `statementCount` integer
   /// literals with increasing values. Ie. `makeBody(statementCount: 2)`
   /// generates:
   /// ```

@@ -23,13 +23,13 @@
 /// This type does not own the string data. The data reside in some other buffer
 /// whose lifetime extends past that of the SyntaxText.
 ///
-/// `SyntaxText` is a `Collection` of `UInt8` which is _expected_ to be a UTF8
+/// ``SyntaxText`` is a `Collection` of `UInt8` which is _expected_ to be a UTF8
 /// encoded byte sequence. However, since that is essentialy just a span of a
 /// memory buffer, it may contain ill-formed UTF8 sequences. And their
 /// comparision (e.g.`==`, hasPrefix()) are purely based on the byte squences,
 /// without any Unicode normalization or anything.
 ///
-/// Since it's just a byte sequence, `SyntaxText` can represent the exact source
+/// Since it's just a byte sequence, ``SyntaxText`` can represent the exact source
 /// buffer regardless of whether it is a valid UTF8. When creating
 /// `Swift.String`, ill-formed UTF8 sequences are replaced with the Unicode
 /// replacement character (`\u{FFFD}`).
@@ -54,17 +54,17 @@ public struct SyntaxText {
     buffer = .init(start: baseAddress, count: count)
   }
 
-  /// Creates an empty `SyntaxText`
+  /// Creates an empty ``SyntaxText``
   public init() {
     self.init(baseAddress: nil, count: 0)
   }
 
-  /// Creates a `SyntaxText` from a `StaticString`
+  /// Creates a ``SyntaxText`` from a `StaticString`
   public init(_ string: StaticString) {
     self.init(baseAddress: string.utf8Start, count: string.utf8CodeUnitCount)
   }
 
-  /// Creates a `SyntaxText` over the same memory as the given slice.
+  /// Creates a ``SyntaxText`` over the same memory as the given slice.
   public init(rebasing slice: SubSequence) {
     self.init(
       baseAddress: slice.base.baseAddress?.advanced(by: slice.startIndex),
@@ -103,7 +103,7 @@ public struct SyntaxText {
     return (other.baseAddress! <= self.baseAddress! && self.baseAddress! + count <= other.baseAddress! + other.count)
   }
 
-  /// Returns `true` if `other` is a substring of this `SyntaxText`.
+  /// Returns `true` if `other` is a substring of this ``SyntaxText``.
   public func contains(_ other: SyntaxText) -> Bool {
     return firstRange(of: other) != nil
   }
@@ -145,12 +145,12 @@ public struct SyntaxText {
   }
 }
 
-/// `SyntaxText` is a collection of `UInt8`.
+/// ``SyntaxText`` is a collection of `UInt8`.
 extension SyntaxText: RandomAccessCollection {
   /// SyntaxText operates on bytes and each byte is represented by a `UInt8`.
   public typealias Element = UInt8
 
-  /// `SyntaxText` is a continuous memory region that can be accessed by an integer.
+  /// ``SyntaxText`` is a continuous memory region that can be accessed by an integer.
   public typealias Index = Int
 
   /// `Slice<SyntaxText>` represents a part of a ``SyntaxText``.
@@ -227,7 +227,7 @@ extension SyntaxText: CustomDebugStringConvertible {
 }
 
 extension String {
-  /// Creates a `String` from a `SyntaxText`.
+  /// Creates a `String` from a ``SyntaxText``.
   ///
   /// Ill-formed UTF-8 sequences in `syntaxText` are replaced with the Unicode
   /// replacement character `\u{FFFD}`.
@@ -246,7 +246,7 @@ extension String {
     }
   }
 
-  /// Runs `body` with a `SyntaxText` that refers the contiguous memory of this
+  /// Runs `body` with a ``SyntaxText`` that refers the contiguous memory of this
   /// string. Like `String.withUTF8(_:)`, this may mutate the string if this
   /// string was not contiguous.
   @_spi(RawSyntax)

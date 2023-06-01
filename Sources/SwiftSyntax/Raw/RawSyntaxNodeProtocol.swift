@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// All typed raw syntax nodes conform to this protocol.
-/// `RawXXXSyntax` is a typed wrappeer of `RawSyntax`.
+/// `RawXXXSyntax` is a typed wrappeer of ``RawSyntax``.
 @_spi(RawSyntax)
 public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStreamable {
   /// Returns `true` if `raw` can be cast to this concrete raw syntax type.
@@ -50,13 +50,13 @@ public extension RawSyntaxNodeProtocol {
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
-  ///  - tokens with a `TokenDiagnostic` of severity `error`
+  ///  - tokens with a ``TokenDiagnostic`` of severity `error`
   var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)
   }
 }
 
-/// `RawSyntax` itself conforms to `RawSyntaxNodeProtocol`.
+/// ``RawSyntax`` itself conforms to `RawSyntaxNodeProtocol`.
 extension RawSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -171,7 +171,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     tokenView.trailingRawTriviaPieces
   }
 
-  /// Creates a `RawTokenSyntax`. `wholeText` must be managed by the same
+  /// Creates a ``RawTokenSyntax``. `wholeText` must be managed by the same
   /// `arena`. `textRange` is a range of the token text in `wholeText`.
   public init(
     kind: RawTokenKind,
@@ -192,7 +192,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     self = RawTokenSyntax(unchecked: raw)
   }
 
-  /// Creates a `RawTokenSyntax`. `text` and trivia must be managed by the same
+  /// Creates a ``RawTokenSyntax``. `text` and trivia must be managed by the same
   /// `arena`.
   public init(
     kind: RawTokenKind,
@@ -255,7 +255,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     self = RawTokenSyntax(unchecked: raw)
   }
 
-  /// Creates a missing `TokenSyntax` with the specified kind.
+  /// Creates a missing ``TokenSyntax`` with the specified kind.
   /// If `text` is passed, it will be used to represent the missing token's text.
   /// If `text` is `nil`, the `kind`'s default text will be used.
   /// If that is also `nil`, the token will have empty text.

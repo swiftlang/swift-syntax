@@ -14,8 +14,8 @@
 
 // MARK: - DeclSyntax
 
-/// Protocol to which all `DeclSyntax` nodes conform. Extension point to add
-/// common methods to all `DeclSyntax` nodes.
+/// Protocol to which all ``DeclSyntax`` nodes conform. Extension point to add
+/// common methods to all ``DeclSyntax`` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
@@ -38,7 +38,7 @@ public extension Syntax {
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  /// Create a `DeclSyntax` node from a specialized syntax node.
+  /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: some DeclSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -46,7 +46,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `DeclSyntax` node from a specialized optional syntax node.
+  /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
   public init?(_ syntax: (some DeclSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -61,7 +61,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `DeclSyntax` node from a specialized optional syntax node.
+  /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
   public init?(fromProtocol syntax: DeclSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -78,8 +78,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a `DeclSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// Creates a ``DeclSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
@@ -149,8 +149,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ExprSyntax
 
-/// Protocol to which all `ExprSyntax` nodes conform. Extension point to add
-/// common methods to all `ExprSyntax` nodes.
+/// Protocol to which all ``ExprSyntax`` nodes conform. Extension point to add
+/// common methods to all ``ExprSyntax`` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 
@@ -173,7 +173,7 @@ public extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  /// Create a `ExprSyntax` node from a specialized syntax node.
+  /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -181,7 +181,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `ExprSyntax` node from a specialized optional syntax node.
+  /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
   public init?(_ syntax: (some ExprSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -196,7 +196,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `ExprSyntax` node from a specialized optional syntax node.
+  /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
   public init?(fromProtocol syntax: ExprSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -213,8 +213,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a `ExprSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// Creates a ``ExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
@@ -311,8 +311,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 // MARK: - PatternSyntax
 
-/// Protocol to which all `PatternSyntax` nodes conform. Extension point to add
-/// common methods to all `PatternSyntax` nodes.
+/// Protocol to which all ``PatternSyntax`` nodes conform. Extension point to add
+/// common methods to all ``PatternSyntax`` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 
@@ -335,7 +335,7 @@ public extension Syntax {
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  /// Create a `PatternSyntax` node from a specialized syntax node.
+  /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: some PatternSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -343,7 +343,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `PatternSyntax` node from a specialized optional syntax node.
+  /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
   public init?(_ syntax: (some PatternSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -358,7 +358,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `PatternSyntax` node from a specialized optional syntax node.
+  /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
   public init?(fromProtocol syntax: PatternSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -375,8 +375,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a `PatternSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// Creates a ``PatternSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
@@ -429,8 +429,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 // MARK: - StmtSyntax
 
-/// Protocol to which all `StmtSyntax` nodes conform. Extension point to add
-/// common methods to all `StmtSyntax` nodes.
+/// Protocol to which all ``StmtSyntax`` nodes conform. Extension point to add
+/// common methods to all ``StmtSyntax`` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 
@@ -453,7 +453,7 @@ public extension Syntax {
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  /// Create a `StmtSyntax` node from a specialized syntax node.
+  /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: some StmtSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -461,7 +461,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `StmtSyntax` node from a specialized optional syntax node.
+  /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
   public init?(_ syntax: (some StmtSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -476,7 +476,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `StmtSyntax` node from a specialized optional syntax node.
+  /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
   public init?(fromProtocol syntax: StmtSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -493,8 +493,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a `StmtSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// Creates a ``StmtSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
@@ -556,8 +556,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 // MARK: - TypeSyntax
 
-/// Protocol to which all `TypeSyntax` nodes conform. Extension point to add
-/// common methods to all `TypeSyntax` nodes.
+/// Protocol to which all ``TypeSyntax`` nodes conform. Extension point to add
+/// common methods to all ``TypeSyntax`` nodes.
 /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
 public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 
@@ -580,7 +580,7 @@ public extension Syntax {
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
-  /// Create a `TypeSyntax` node from a specialized syntax node.
+  /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: some TypeSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -588,7 +588,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `TypeSyntax` node from a specialized optional syntax node.
+  /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
   public init?(_ syntax: (some TypeSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -603,7 +603,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(syntax._syntaxNode.data)
   }
   
-  /// Create a `TypeSyntax` node from a specialized optional syntax node.
+  /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
   public init?(fromProtocol syntax: TypeSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -620,8 +620,8 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a `TypeSyntax` node from the given `SyntaxData`. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// Creates a ``TypeSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {

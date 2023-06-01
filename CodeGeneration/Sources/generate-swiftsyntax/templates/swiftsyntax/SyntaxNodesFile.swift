@@ -66,7 +66,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          /// Creates a `\(node.kind.syntaxType)` node from the given `SyntaxData`. This assumes
+          /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. This assumes
           /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
           /// is undefined.
           internal init(_ data: SyntaxData) {
@@ -192,7 +192,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
             DeclSyntax(
               """
-              /// Adds the provided `\(raw: childElt)` to the node's `\(raw: child.varName)`
+              /// Adds the provided `element` to the node's `\(raw: child.varName)`
               /// collection.
               /// - param element: The new `\(raw: childElt)` to add to the node's
               ///                  `\(raw: child.varName)` collection.

@@ -28,8 +28,8 @@ public extension SyntaxCollection {
   }
 }
 
-/// `AccessorListSyntax` represents a collection of one or more
-/// `AccessorDeclSyntax` nodes. AccessorListSyntax behaves
+/// ``AccessorListSyntax`` represents a collection of one or more
+/// ``AccessorDeclSyntax`` nodes. ``AccessorListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
@@ -72,12 +72,12 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `AccessorListSyntax` by replacing the underlying layout with
+  /// Creates a new ``AccessorListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `AccessorListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``AccessorListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> AccessorListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -85,35 +85,35 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return AccessorListSyntax(newData)
   }
   
-  /// Creates a new `AccessorListSyntax` by appending the provided syntax element
+  /// Creates a new ``AccessorListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `AccessorListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AccessorListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AccessorListSyntax` by prepending the provided syntax element
+  /// Creates a new ``AccessorListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `AccessorListSyntax` with that element prepended to the
+  /// - Returns: A new ``AccessorListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> AccessorListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `AccessorListSyntax` by inserting the provided syntax element
+  /// Creates a new ``AccessorListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `AccessorListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AccessorListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -123,14 +123,14 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AccessorListSyntax` by replacing the syntax element
+  /// Creates a new ``AccessorListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `AccessorListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``AccessorListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -140,11 +140,11 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AccessorListSyntax` by removing the syntax element at the
+  /// Creates a new ``AccessorListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `AccessorListSyntax` with the element at the provided index
+  /// - Returns: A new ``AccessorListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -152,18 +152,18 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AccessorListSyntax` by removing the first element.
+  /// Creates a new ``AccessorListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `AccessorListSyntax` with the first element removed.
+  /// - Returns: A new ``AccessorListSyntax`` with the first element removed.
   public func removingFirst() -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AccessorListSyntax` by removing the last element.
+  /// Creates a new ``AccessorListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `AccessorListSyntax` with the last element removed.
+  /// - Returns: A new ``AccessorListSyntax`` with the last element removed.
   public func removingLast() -> AccessorListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -171,7 +171,7 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `AccessorListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``AccessorListSyntax`` to the `BidirectionalCollection` protocol.
 extension AccessorListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -237,8 +237,8 @@ extension AccessorListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ArrayElementListSyntax` represents a collection of one or more
-/// `ArrayElementSyntax` nodes. ArrayElementListSyntax behaves
+/// ``ArrayElementListSyntax`` represents a collection of one or more
+/// ``ArrayElementSyntax`` nodes. ``ArrayElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -281,12 +281,12 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ArrayElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ArrayElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ArrayElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ArrayElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ArrayElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -294,35 +294,35 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     return ArrayElementListSyntax(newData)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``ArrayElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ArrayElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ArrayElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ArrayElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``ArrayElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ArrayElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ArrayElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ArrayElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ArrayElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -332,14 +332,14 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by replacing the syntax element
+  /// Creates a new ``ArrayElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ArrayElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ArrayElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -349,11 +349,11 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``ArrayElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ArrayElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``ArrayElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -361,18 +361,18 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by removing the first element.
+  /// Creates a new ``ArrayElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ArrayElementListSyntax` with the first element removed.
+  /// - Returns: A new ``ArrayElementListSyntax`` with the first element removed.
   public func removingFirst() -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ArrayElementListSyntax` by removing the last element.
+  /// Creates a new ``ArrayElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ArrayElementListSyntax` with the last element removed.
+  /// - Returns: A new ``ArrayElementListSyntax`` with the last element removed.
   public func removingLast() -> ArrayElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -380,7 +380,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ArrayElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ArrayElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension ArrayElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -446,8 +446,8 @@ extension ArrayElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `AttributeListSyntax` represents a collection of one or more
-/// `Syntax` nodes. AttributeListSyntax behaves
+/// ``AttributeListSyntax`` represents a collection of one or more
+/// ``Syntax`` nodes. ``AttributeListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -532,12 +532,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `AttributeListSyntax` by replacing the underlying layout with
+  /// Creates a new ``AttributeListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `AttributeListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``AttributeListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> AttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -545,35 +545,35 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return AttributeListSyntax(newData)
   }
   
-  /// Creates a new `AttributeListSyntax` by appending the provided syntax element
+  /// Creates a new ``AttributeListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `AttributeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AttributeListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AttributeListSyntax` by prepending the provided syntax element
+  /// Creates a new ``AttributeListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `AttributeListSyntax` with that element prepended to the
+  /// - Returns: A new ``AttributeListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> AttributeListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `AttributeListSyntax` by inserting the provided syntax element
+  /// Creates a new ``AttributeListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `AttributeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AttributeListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -583,14 +583,14 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AttributeListSyntax` by replacing the syntax element
+  /// Creates a new ``AttributeListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `AttributeListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``AttributeListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -600,11 +600,11 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AttributeListSyntax` by removing the syntax element at the
+  /// Creates a new ``AttributeListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `AttributeListSyntax` with the element at the provided index
+  /// - Returns: A new ``AttributeListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -612,18 +612,18 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AttributeListSyntax` by removing the first element.
+  /// Creates a new ``AttributeListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `AttributeListSyntax` with the first element removed.
+  /// - Returns: A new ``AttributeListSyntax`` with the first element removed.
   public func removingFirst() -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AttributeListSyntax` by removing the last element.
+  /// Creates a new ``AttributeListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `AttributeListSyntax` with the last element removed.
+  /// - Returns: A new ``AttributeListSyntax`` with the last element removed.
   public func removingLast() -> AttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -631,7 +631,7 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `AttributeListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``AttributeListSyntax`` to the `BidirectionalCollection` protocol.
 extension AttributeListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -697,8 +697,8 @@ extension AttributeListSyntax: BidirectionalCollection {
   }
 }
 
-/// `AvailabilitySpecListSyntax` represents a collection of one or more
-/// `AvailabilityArgumentSyntax` nodes. AvailabilitySpecListSyntax behaves
+/// ``AvailabilitySpecListSyntax`` represents a collection of one or more
+/// ``AvailabilityArgumentSyntax`` nodes. ``AvailabilitySpecListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
@@ -741,12 +741,12 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by replacing the underlying layout with
+  /// Creates a new ``AvailabilitySpecListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `AvailabilitySpecListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilitySpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -754,35 +754,35 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     return AvailabilitySpecListSyntax(newData)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by appending the provided syntax element
+  /// Creates a new ``AvailabilitySpecListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `AvailabilitySpecListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by prepending the provided syntax element
+  /// Creates a new ``AvailabilitySpecListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `AvailabilitySpecListSyntax` with that element prepended to the
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> AvailabilitySpecListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by inserting the provided syntax element
+  /// Creates a new ``AvailabilitySpecListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `AvailabilitySpecListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -792,14 +792,14 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by replacing the syntax element
+  /// Creates a new ``AvailabilitySpecListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `AvailabilitySpecListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -809,11 +809,11 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by removing the syntax element at the
+  /// Creates a new ``AvailabilitySpecListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `AvailabilitySpecListSyntax` with the element at the provided index
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -821,18 +821,18 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by removing the first element.
+  /// Creates a new ``AvailabilitySpecListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `AvailabilitySpecListSyntax` with the first element removed.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with the first element removed.
   public func removingFirst() -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilitySpecListSyntax` by removing the last element.
+  /// Creates a new ``AvailabilitySpecListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `AvailabilitySpecListSyntax` with the last element removed.
+  /// - Returns: A new ``AvailabilitySpecListSyntax`` with the last element removed.
   public func removingLast() -> AvailabilitySpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -840,7 +840,7 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `AvailabilitySpecListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``AvailabilitySpecListSyntax`` to the `BidirectionalCollection` protocol.
 extension AvailabilitySpecListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -906,8 +906,8 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
   }
 }
 
-/// `AvailabilityVersionRestrictionListSyntax` represents a collection of one or more
-/// `AvailabilityVersionRestrictionListEntrySyntax` nodes. AvailabilityVersionRestrictionListSyntax behaves
+/// ``AvailabilityVersionRestrictionListSyntax`` represents a collection of one or more
+/// ``AvailabilityVersionRestrictionListEntrySyntax`` nodes. ``AvailabilityVersionRestrictionListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
@@ -950,12 +950,12 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return layoutView.children.count
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the underlying layout with
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> AvailabilityVersionRestrictionListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -963,35 +963,35 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return AvailabilityVersionRestrictionListSyntax(newData)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by appending the provided syntax element
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by prepending the provided syntax element
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element prepended to the
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by inserting the provided syntax element
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with that element appended to the end.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -1001,14 +1001,14 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by replacing the syntax element
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -1018,11 +1018,11 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the syntax element at the
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the element at the provided index
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -1030,18 +1030,18 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the first element.
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the first element removed.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with the first element removed.
   public func removingFirst() -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `AvailabilityVersionRestrictionListSyntax` by removing the last element.
+  /// Creates a new ``AvailabilityVersionRestrictionListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `AvailabilityVersionRestrictionListSyntax` with the last element removed.
+  /// - Returns: A new ``AvailabilityVersionRestrictionListSyntax`` with the last element removed.
   public func removingLast() -> AvailabilityVersionRestrictionListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -1049,7 +1049,7 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   }
 }
 
-/// Conformance for `AvailabilityVersionRestrictionListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``AvailabilityVersionRestrictionListSyntax`` to the `BidirectionalCollection` protocol.
 extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -1115,8 +1115,8 @@ extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
   }
 }
 
-/// `CaseItemListSyntax` represents a collection of one or more
-/// `CaseItemSyntax` nodes. CaseItemListSyntax behaves
+/// ``CaseItemListSyntax`` represents a collection of one or more
+/// ``CaseItemSyntax`` nodes. ``CaseItemListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1159,12 +1159,12 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `CaseItemListSyntax` by replacing the underlying layout with
+  /// Creates a new ``CaseItemListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `CaseItemListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``CaseItemListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> CaseItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -1172,35 +1172,35 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     return CaseItemListSyntax(newData)
   }
   
-  /// Creates a new `CaseItemListSyntax` by appending the provided syntax element
+  /// Creates a new ``CaseItemListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `CaseItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CaseItemListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CaseItemListSyntax` by prepending the provided syntax element
+  /// Creates a new ``CaseItemListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `CaseItemListSyntax` with that element prepended to the
+  /// - Returns: A new ``CaseItemListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> CaseItemListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `CaseItemListSyntax` by inserting the provided syntax element
+  /// Creates a new ``CaseItemListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `CaseItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CaseItemListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -1210,14 +1210,14 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CaseItemListSyntax` by replacing the syntax element
+  /// Creates a new ``CaseItemListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `CaseItemListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``CaseItemListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -1227,11 +1227,11 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CaseItemListSyntax` by removing the syntax element at the
+  /// Creates a new ``CaseItemListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `CaseItemListSyntax` with the element at the provided index
+  /// - Returns: A new ``CaseItemListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -1239,18 +1239,18 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CaseItemListSyntax` by removing the first element.
+  /// Creates a new ``CaseItemListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `CaseItemListSyntax` with the first element removed.
+  /// - Returns: A new ``CaseItemListSyntax`` with the first element removed.
   public func removingFirst() -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CaseItemListSyntax` by removing the last element.
+  /// Creates a new ``CaseItemListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `CaseItemListSyntax` with the last element removed.
+  /// - Returns: A new ``CaseItemListSyntax`` with the last element removed.
   public func removingLast() -> CaseItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -1258,7 +1258,7 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `CaseItemListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``CaseItemListSyntax`` to the `BidirectionalCollection` protocol.
 extension CaseItemListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -1324,8 +1324,8 @@ extension CaseItemListSyntax: BidirectionalCollection {
   }
 }
 
-/// `CatchClauseListSyntax` represents a collection of one or more
-/// `CatchClauseSyntax` nodes. CatchClauseListSyntax behaves
+/// ``CatchClauseListSyntax`` represents a collection of one or more
+/// ``CatchClauseSyntax`` nodes. ``CatchClauseListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1368,12 +1368,12 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `CatchClauseListSyntax` by replacing the underlying layout with
+  /// Creates a new ``CatchClauseListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `CatchClauseListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``CatchClauseListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -1381,35 +1381,35 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return CatchClauseListSyntax(newData)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by appending the provided syntax element
+  /// Creates a new ``CatchClauseListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `CatchClauseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CatchClauseListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by prepending the provided syntax element
+  /// Creates a new ``CatchClauseListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `CatchClauseListSyntax` with that element prepended to the
+  /// - Returns: A new ``CatchClauseListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> CatchClauseListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by inserting the provided syntax element
+  /// Creates a new ``CatchClauseListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `CatchClauseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CatchClauseListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -1419,14 +1419,14 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by replacing the syntax element
+  /// Creates a new ``CatchClauseListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `CatchClauseListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``CatchClauseListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -1436,11 +1436,11 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by removing the syntax element at the
+  /// Creates a new ``CatchClauseListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `CatchClauseListSyntax` with the element at the provided index
+  /// - Returns: A new ``CatchClauseListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -1448,18 +1448,18 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by removing the first element.
+  /// Creates a new ``CatchClauseListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `CatchClauseListSyntax` with the first element removed.
+  /// - Returns: A new ``CatchClauseListSyntax`` with the first element removed.
   public func removingFirst() -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchClauseListSyntax` by removing the last element.
+  /// Creates a new ``CatchClauseListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `CatchClauseListSyntax` with the last element removed.
+  /// - Returns: A new ``CatchClauseListSyntax`` with the last element removed.
   public func removingLast() -> CatchClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -1467,7 +1467,7 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `CatchClauseListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``CatchClauseListSyntax`` to the `BidirectionalCollection` protocol.
 extension CatchClauseListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -1533,8 +1533,8 @@ extension CatchClauseListSyntax: BidirectionalCollection {
   }
 }
 
-/// `CatchItemListSyntax` represents a collection of one or more
-/// `CatchItemSyntax` nodes. CatchItemListSyntax behaves
+/// ``CatchItemListSyntax`` represents a collection of one or more
+/// ``CatchItemSyntax`` nodes. ``CatchItemListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1577,12 +1577,12 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `CatchItemListSyntax` by replacing the underlying layout with
+  /// Creates a new ``CatchItemListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `CatchItemListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``CatchItemListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> CatchItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -1590,35 +1590,35 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     return CatchItemListSyntax(newData)
   }
   
-  /// Creates a new `CatchItemListSyntax` by appending the provided syntax element
+  /// Creates a new ``CatchItemListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `CatchItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CatchItemListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchItemListSyntax` by prepending the provided syntax element
+  /// Creates a new ``CatchItemListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `CatchItemListSyntax` with that element prepended to the
+  /// - Returns: A new ``CatchItemListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> CatchItemListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `CatchItemListSyntax` by inserting the provided syntax element
+  /// Creates a new ``CatchItemListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `CatchItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CatchItemListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -1628,14 +1628,14 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchItemListSyntax` by replacing the syntax element
+  /// Creates a new ``CatchItemListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `CatchItemListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``CatchItemListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -1645,11 +1645,11 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchItemListSyntax` by removing the syntax element at the
+  /// Creates a new ``CatchItemListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `CatchItemListSyntax` with the element at the provided index
+  /// - Returns: A new ``CatchItemListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -1657,18 +1657,18 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchItemListSyntax` by removing the first element.
+  /// Creates a new ``CatchItemListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `CatchItemListSyntax` with the first element removed.
+  /// - Returns: A new ``CatchItemListSyntax`` with the first element removed.
   public func removingFirst() -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CatchItemListSyntax` by removing the last element.
+  /// Creates a new ``CatchItemListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `CatchItemListSyntax` with the last element removed.
+  /// - Returns: A new ``CatchItemListSyntax`` with the last element removed.
   public func removingLast() -> CatchItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -1676,7 +1676,7 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `CatchItemListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``CatchItemListSyntax`` to the `BidirectionalCollection` protocol.
 extension CatchItemListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -1742,8 +1742,8 @@ extension CatchItemListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ClosureCaptureItemListSyntax` represents a collection of one or more
-/// `ClosureCaptureItemSyntax` nodes. ClosureCaptureItemListSyntax behaves
+/// ``ClosureCaptureItemListSyntax`` represents a collection of one or more
+/// ``ClosureCaptureItemSyntax`` nodes. ``ClosureCaptureItemListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1786,12 +1786,12 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureCaptureItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -1799,35 +1799,35 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return ClosureCaptureItemListSyntax(newData)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by appending the provided syntax element
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with that element prepended to the
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ClosureCaptureItemListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -1837,14 +1837,14 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by replacing the syntax element
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -1854,11 +1854,11 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by removing the syntax element at the
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with the element at the provided index
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -1866,18 +1866,18 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by removing the first element.
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with the first element removed.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with the first element removed.
   public func removingFirst() -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureCaptureItemListSyntax` by removing the last element.
+  /// Creates a new ``ClosureCaptureItemListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ClosureCaptureItemListSyntax` with the last element removed.
+  /// - Returns: A new ``ClosureCaptureItemListSyntax`` with the last element removed.
   public func removingLast() -> ClosureCaptureItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -1885,7 +1885,7 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ClosureCaptureItemListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ClosureCaptureItemListSyntax`` to the `BidirectionalCollection` protocol.
 extension ClosureCaptureItemListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -1951,8 +1951,8 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ClosureParamListSyntax` represents a collection of one or more
-/// `ClosureParamSyntax` nodes. ClosureParamListSyntax behaves
+/// ``ClosureParamListSyntax`` represents a collection of one or more
+/// ``ClosureParamSyntax`` nodes. ``ClosureParamListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
@@ -1995,12 +1995,12 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ClosureParamListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ClosureParamListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ClosureParamListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ClosureParamListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -2008,35 +2008,35 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     return ClosureParamListSyntax(newData)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by appending the provided syntax element
+  /// Creates a new ``ClosureParamListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ClosureParamListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureParamListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ClosureParamListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ClosureParamListSyntax` with that element prepended to the
+  /// - Returns: A new ``ClosureParamListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ClosureParamListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ClosureParamListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ClosureParamListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureParamListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -2046,14 +2046,14 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by replacing the syntax element
+  /// Creates a new ``ClosureParamListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ClosureParamListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ClosureParamListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -2063,11 +2063,11 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by removing the syntax element at the
+  /// Creates a new ``ClosureParamListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ClosureParamListSyntax` with the element at the provided index
+  /// - Returns: A new ``ClosureParamListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -2075,18 +2075,18 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by removing the first element.
+  /// Creates a new ``ClosureParamListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ClosureParamListSyntax` with the first element removed.
+  /// - Returns: A new ``ClosureParamListSyntax`` with the first element removed.
   public func removingFirst() -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParamListSyntax` by removing the last element.
+  /// Creates a new ``ClosureParamListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ClosureParamListSyntax` with the last element removed.
+  /// - Returns: A new ``ClosureParamListSyntax`` with the last element removed.
   public func removingLast() -> ClosureParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -2094,7 +2094,7 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ClosureParamListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ClosureParamListSyntax`` to the `BidirectionalCollection` protocol.
 extension ClosureParamListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -2160,8 +2160,8 @@ extension ClosureParamListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ClosureParameterListSyntax` represents a collection of one or more
-/// `ClosureParameterSyntax` nodes. ClosureParameterListSyntax behaves
+/// ``ClosureParameterListSyntax`` represents a collection of one or more
+/// ``ClosureParameterSyntax`` nodes. ``ClosureParameterListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2204,12 +2204,12 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ClosureParameterListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ClosureParameterListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ClosureParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -2217,35 +2217,35 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return ClosureParameterListSyntax(newData)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by appending the provided syntax element
+  /// Creates a new ``ClosureParameterListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ClosureParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ClosureParameterListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ClosureParameterListSyntax` with that element prepended to the
+  /// - Returns: A new ``ClosureParameterListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ClosureParameterListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ClosureParameterListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ClosureParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -2255,14 +2255,14 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by replacing the syntax element
+  /// Creates a new ``ClosureParameterListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ClosureParameterListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -2272,11 +2272,11 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by removing the syntax element at the
+  /// Creates a new ``ClosureParameterListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ClosureParameterListSyntax` with the element at the provided index
+  /// - Returns: A new ``ClosureParameterListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -2284,18 +2284,18 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by removing the first element.
+  /// Creates a new ``ClosureParameterListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ClosureParameterListSyntax` with the first element removed.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with the first element removed.
   public func removingFirst() -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ClosureParameterListSyntax` by removing the last element.
+  /// Creates a new ``ClosureParameterListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ClosureParameterListSyntax` with the last element removed.
+  /// - Returns: A new ``ClosureParameterListSyntax`` with the last element removed.
   public func removingLast() -> ClosureParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -2303,7 +2303,7 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ClosureParameterListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ClosureParameterListSyntax`` to the `BidirectionalCollection` protocol.
 extension ClosureParameterListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -2369,8 +2369,8 @@ extension ClosureParameterListSyntax: BidirectionalCollection {
   }
 }
 
-/// `CodeBlockItemListSyntax` represents a collection of one or more
-/// `CodeBlockItemSyntax` nodes. CodeBlockItemListSyntax behaves
+/// ``CodeBlockItemListSyntax`` represents a collection of one or more
+/// ``CodeBlockItemSyntax`` nodes. ``CodeBlockItemListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2413,12 +2413,12 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by replacing the underlying layout with
+  /// Creates a new ``CodeBlockItemListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `CodeBlockItemListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> CodeBlockItemListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -2426,35 +2426,35 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return CodeBlockItemListSyntax(newData)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by appending the provided syntax element
+  /// Creates a new ``CodeBlockItemListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `CodeBlockItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by prepending the provided syntax element
+  /// Creates a new ``CodeBlockItemListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `CodeBlockItemListSyntax` with that element prepended to the
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> CodeBlockItemListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by inserting the provided syntax element
+  /// Creates a new ``CodeBlockItemListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `CodeBlockItemListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -2464,14 +2464,14 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by replacing the syntax element
+  /// Creates a new ``CodeBlockItemListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `CodeBlockItemListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -2481,11 +2481,11 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by removing the syntax element at the
+  /// Creates a new ``CodeBlockItemListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `CodeBlockItemListSyntax` with the element at the provided index
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -2493,18 +2493,18 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by removing the first element.
+  /// Creates a new ``CodeBlockItemListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `CodeBlockItemListSyntax` with the first element removed.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with the first element removed.
   public func removingFirst() -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CodeBlockItemListSyntax` by removing the last element.
+  /// Creates a new ``CodeBlockItemListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `CodeBlockItemListSyntax` with the last element removed.
+  /// - Returns: A new ``CodeBlockItemListSyntax`` with the last element removed.
   public func removingLast() -> CodeBlockItemListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -2512,7 +2512,7 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `CodeBlockItemListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``CodeBlockItemListSyntax`` to the `BidirectionalCollection` protocol.
 extension CodeBlockItemListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -2578,8 +2578,8 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
   }
 }
 
-/// `CompositionTypeElementListSyntax` represents a collection of one or more
-/// `CompositionTypeElementSyntax` nodes. CompositionTypeElementListSyntax behaves
+/// ``CompositionTypeElementListSyntax`` represents a collection of one or more
+/// ``CompositionTypeElementSyntax`` nodes. ``CompositionTypeElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2622,12 +2622,12 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     return layoutView.children.count
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``CompositionTypeElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `CompositionTypeElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> CompositionTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -2635,35 +2635,35 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     return CompositionTypeElementListSyntax(newData)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``CompositionTypeElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `CompositionTypeElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``CompositionTypeElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `CompositionTypeElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> CompositionTypeElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``CompositionTypeElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `CompositionTypeElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -2673,14 +2673,14 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by replacing the syntax element
+  /// Creates a new ``CompositionTypeElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `CompositionTypeElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -2690,11 +2690,11 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``CompositionTypeElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `CompositionTypeElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -2702,18 +2702,18 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by removing the first element.
+  /// Creates a new ``CompositionTypeElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `CompositionTypeElementListSyntax` with the first element removed.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with the first element removed.
   public func removingFirst() -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `CompositionTypeElementListSyntax` by removing the last element.
+  /// Creates a new ``CompositionTypeElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `CompositionTypeElementListSyntax` with the last element removed.
+  /// - Returns: A new ``CompositionTypeElementListSyntax`` with the last element removed.
   public func removingLast() -> CompositionTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -2721,7 +2721,7 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
 }
 
-/// Conformance for `CompositionTypeElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``CompositionTypeElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension CompositionTypeElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -2787,8 +2787,8 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ConditionElementListSyntax` represents a collection of one or more
-/// `ConditionElementSyntax` nodes. ConditionElementListSyntax behaves
+/// ``ConditionElementListSyntax`` represents a collection of one or more
+/// ``ConditionElementSyntax`` nodes. ``ConditionElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -2831,12 +2831,12 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ConditionElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ConditionElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ConditionElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ConditionElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ConditionElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -2844,35 +2844,35 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return ConditionElementListSyntax(newData)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``ConditionElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ConditionElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ConditionElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ConditionElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ConditionElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``ConditionElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ConditionElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ConditionElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ConditionElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ConditionElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -2882,14 +2882,14 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by replacing the syntax element
+  /// Creates a new ``ConditionElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ConditionElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ConditionElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -2899,11 +2899,11 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``ConditionElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ConditionElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``ConditionElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -2911,18 +2911,18 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by removing the first element.
+  /// Creates a new ``ConditionElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ConditionElementListSyntax` with the first element removed.
+  /// - Returns: A new ``ConditionElementListSyntax`` with the first element removed.
   public func removingFirst() -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ConditionElementListSyntax` by removing the last element.
+  /// Creates a new ``ConditionElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ConditionElementListSyntax` with the last element removed.
+  /// - Returns: A new ``ConditionElementListSyntax`` with the last element removed.
   public func removingLast() -> ConditionElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -2930,7 +2930,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ConditionElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ConditionElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension ConditionElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -2996,8 +2996,8 @@ extension ConditionElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `DeclNameArgumentListSyntax` represents a collection of one or more
-/// `DeclNameArgumentSyntax` nodes. DeclNameArgumentListSyntax behaves
+/// ``DeclNameArgumentListSyntax`` represents a collection of one or more
+/// ``DeclNameArgumentSyntax`` nodes. ``DeclNameArgumentListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3040,12 +3040,12 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by replacing the underlying layout with
+  /// Creates a new ``DeclNameArgumentListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DeclNameArgumentListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> DeclNameArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -3053,35 +3053,35 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return DeclNameArgumentListSyntax(newData)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by appending the provided syntax element
+  /// Creates a new ``DeclNameArgumentListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DeclNameArgumentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by prepending the provided syntax element
+  /// Creates a new ``DeclNameArgumentListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DeclNameArgumentListSyntax` with that element prepended to the
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> DeclNameArgumentListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by inserting the provided syntax element
+  /// Creates a new ``DeclNameArgumentListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DeclNameArgumentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -3091,14 +3091,14 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by replacing the syntax element
+  /// Creates a new ``DeclNameArgumentListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DeclNameArgumentListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -3108,11 +3108,11 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by removing the syntax element at the
+  /// Creates a new ``DeclNameArgumentListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DeclNameArgumentListSyntax` with the element at the provided index
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -3120,18 +3120,18 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by removing the first element.
+  /// Creates a new ``DeclNameArgumentListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `DeclNameArgumentListSyntax` with the first element removed.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with the first element removed.
   public func removingFirst() -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DeclNameArgumentListSyntax` by removing the last element.
+  /// Creates a new ``DeclNameArgumentListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `DeclNameArgumentListSyntax` with the last element removed.
+  /// - Returns: A new ``DeclNameArgumentListSyntax`` with the last element removed.
   public func removingLast() -> DeclNameArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -3139,7 +3139,7 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `DeclNameArgumentListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``DeclNameArgumentListSyntax`` to the `BidirectionalCollection` protocol.
 extension DeclNameArgumentListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -3205,8 +3205,8 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
   }
 }
 
-/// `DesignatedTypeListSyntax` represents a collection of one or more
-/// `DesignatedTypeElementSyntax` nodes. DesignatedTypeListSyntax behaves
+/// ``DesignatedTypeListSyntax`` represents a collection of one or more
+/// ``DesignatedTypeElementSyntax`` nodes. ``DesignatedTypeListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3249,12 +3249,12 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by replacing the underlying layout with
+  /// Creates a new ``DesignatedTypeListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DesignatedTypeListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> DesignatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -3262,35 +3262,35 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return DesignatedTypeListSyntax(newData)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by appending the provided syntax element
+  /// Creates a new ``DesignatedTypeListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DesignatedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by prepending the provided syntax element
+  /// Creates a new ``DesignatedTypeListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DesignatedTypeListSyntax` with that element prepended to the
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> DesignatedTypeListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by inserting the provided syntax element
+  /// Creates a new ``DesignatedTypeListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DesignatedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -3300,14 +3300,14 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by replacing the syntax element
+  /// Creates a new ``DesignatedTypeListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DesignatedTypeListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -3317,11 +3317,11 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by removing the syntax element at the
+  /// Creates a new ``DesignatedTypeListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DesignatedTypeListSyntax` with the element at the provided index
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -3329,18 +3329,18 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by removing the first element.
+  /// Creates a new ``DesignatedTypeListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `DesignatedTypeListSyntax` with the first element removed.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with the first element removed.
   public func removingFirst() -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DesignatedTypeListSyntax` by removing the last element.
+  /// Creates a new ``DesignatedTypeListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `DesignatedTypeListSyntax` with the last element removed.
+  /// - Returns: A new ``DesignatedTypeListSyntax`` with the last element removed.
   public func removingLast() -> DesignatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -3348,7 +3348,7 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `DesignatedTypeListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``DesignatedTypeListSyntax`` to the `BidirectionalCollection` protocol.
 extension DesignatedTypeListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -3414,8 +3414,8 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
   }
 }
 
-/// `DictionaryElementListSyntax` represents a collection of one or more
-/// `DictionaryElementSyntax` nodes. DictionaryElementListSyntax behaves
+/// ``DictionaryElementListSyntax`` represents a collection of one or more
+/// ``DictionaryElementSyntax`` nodes. ``DictionaryElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3458,12 +3458,12 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``DictionaryElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DictionaryElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> DictionaryElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -3471,35 +3471,35 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     return DictionaryElementListSyntax(newData)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``DictionaryElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``DictionaryElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DictionaryElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``DictionaryElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> DictionaryElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``DictionaryElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DictionaryElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -3509,14 +3509,14 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by replacing the syntax element
+  /// Creates a new ``DictionaryElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DictionaryElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -3526,11 +3526,11 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``DictionaryElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DictionaryElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``DictionaryElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -3538,18 +3538,18 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by removing the first element.
+  /// Creates a new ``DictionaryElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `DictionaryElementListSyntax` with the first element removed.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with the first element removed.
   public func removingFirst() -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DictionaryElementListSyntax` by removing the last element.
+  /// Creates a new ``DictionaryElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `DictionaryElementListSyntax` with the last element removed.
+  /// - Returns: A new ``DictionaryElementListSyntax`` with the last element removed.
   public func removingLast() -> DictionaryElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -3557,7 +3557,7 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `DictionaryElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``DictionaryElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension DictionaryElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -3623,8 +3623,8 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `DifferentiabilityParamListSyntax` represents a collection of one or more
-/// `DifferentiabilityParamSyntax` nodes. DifferentiabilityParamListSyntax behaves
+/// ``DifferentiabilityParamListSyntax`` represents a collection of one or more
+/// ``DifferentiabilityParamSyntax`` nodes. ``DifferentiabilityParamListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable {
@@ -3667,12 +3667,12 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return layoutView.children.count
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by replacing the underlying layout with
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> DifferentiabilityParamListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -3680,35 +3680,35 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return DifferentiabilityParamListSyntax(newData)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by appending the provided syntax element
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by prepending the provided syntax element
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element prepended to the
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> DifferentiabilityParamListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by inserting the provided syntax element
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with that element appended to the end.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -3718,14 +3718,14 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by replacing the syntax element
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -3735,11 +3735,11 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by removing the syntax element at the
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with the element at the provided index
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -3747,18 +3747,18 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by removing the first element.
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with the first element removed.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with the first element removed.
   public func removingFirst() -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DifferentiabilityParamListSyntax` by removing the last element.
+  /// Creates a new ``DifferentiabilityParamListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `DifferentiabilityParamListSyntax` with the last element removed.
+  /// - Returns: A new ``DifferentiabilityParamListSyntax`` with the last element removed.
   public func removingLast() -> DifferentiabilityParamListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -3766,7 +3766,7 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
 }
 
-/// Conformance for `DifferentiabilityParamListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``DifferentiabilityParamListSyntax`` to the `BidirectionalCollection` protocol.
 extension DifferentiabilityParamListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -3873,12 +3873,12 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     return layoutView.children.count
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by replacing the underlying layout with
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the new layout underlying it.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> DocumentationAttributeArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -3886,35 +3886,35 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     return DocumentationAttributeArgumentsSyntax(newData)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by appending the provided syntax element
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by prepending the provided syntax element
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with that element prepended to the
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> DocumentationAttributeArgumentsSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by inserting the provided syntax element
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -3924,14 +3924,14 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by replacing the syntax element
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the new element at the provided index.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -3941,11 +3941,11 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by removing the syntax element at the
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the element at the provided index
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -3953,18 +3953,18 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by removing the first element.
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the first element removed.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with the first element removed.
   public func removingFirst() -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `DocumentationAttributeArgumentsSyntax` by removing the last element.
+  /// Creates a new ``DocumentationAttributeArgumentsSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `DocumentationAttributeArgumentsSyntax` with the last element removed.
+  /// - Returns: A new ``DocumentationAttributeArgumentsSyntax`` with the last element removed.
   public func removingLast() -> DocumentationAttributeArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -3972,7 +3972,7 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   }
 }
 
-/// Conformance for `DocumentationAttributeArgumentsSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``DocumentationAttributeArgumentsSyntax`` to the `BidirectionalCollection` protocol.
 extension DocumentationAttributeArgumentsSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -4079,12 +4079,12 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by replacing the underlying layout with
+  /// Creates a new ``EffectsArgumentsSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `EffectsArgumentsSyntax` with the new layout underlying it.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> EffectsArgumentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -4092,35 +4092,35 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return EffectsArgumentsSyntax(newData)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by appending the provided syntax element
+  /// Creates a new ``EffectsArgumentsSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `EffectsArgumentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by prepending the provided syntax element
+  /// Creates a new ``EffectsArgumentsSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `EffectsArgumentsSyntax` with that element prepended to the
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> EffectsArgumentsSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by inserting the provided syntax element
+  /// Creates a new ``EffectsArgumentsSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `EffectsArgumentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -4130,14 +4130,14 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by replacing the syntax element
+  /// Creates a new ``EffectsArgumentsSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `EffectsArgumentsSyntax` with the new element at the provided index.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -4147,11 +4147,11 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by removing the syntax element at the
+  /// Creates a new ``EffectsArgumentsSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `EffectsArgumentsSyntax` with the element at the provided index
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -4159,18 +4159,18 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by removing the first element.
+  /// Creates a new ``EffectsArgumentsSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `EffectsArgumentsSyntax` with the first element removed.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with the first element removed.
   public func removingFirst() -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EffectsArgumentsSyntax` by removing the last element.
+  /// Creates a new ``EffectsArgumentsSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `EffectsArgumentsSyntax` with the last element removed.
+  /// - Returns: A new ``EffectsArgumentsSyntax`` with the last element removed.
   public func removingLast() -> EffectsArgumentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -4178,7 +4178,7 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `EffectsArgumentsSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``EffectsArgumentsSyntax`` to the `BidirectionalCollection` protocol.
 extension EffectsArgumentsSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -4285,12 +4285,12 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``EnumCaseElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `EnumCaseElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -4298,35 +4298,35 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return EnumCaseElementListSyntax(newData)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``EnumCaseElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `EnumCaseElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``EnumCaseElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `EnumCaseElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> EnumCaseElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``EnumCaseElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `EnumCaseElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -4336,14 +4336,14 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by replacing the syntax element
+  /// Creates a new ``EnumCaseElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `EnumCaseElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -4353,11 +4353,11 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``EnumCaseElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `EnumCaseElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -4365,18 +4365,18 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by removing the first element.
+  /// Creates a new ``EnumCaseElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `EnumCaseElementListSyntax` with the first element removed.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with the first element removed.
   public func removingFirst() -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseElementListSyntax` by removing the last element.
+  /// Creates a new ``EnumCaseElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `EnumCaseElementListSyntax` with the last element removed.
+  /// - Returns: A new ``EnumCaseElementListSyntax`` with the last element removed.
   public func removingLast() -> EnumCaseElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -4384,7 +4384,7 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `EnumCaseElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``EnumCaseElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension EnumCaseElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -4450,8 +4450,8 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `EnumCaseParameterListSyntax` represents a collection of one or more
-/// `EnumCaseParameterSyntax` nodes. EnumCaseParameterListSyntax behaves
+/// ``EnumCaseParameterListSyntax`` represents a collection of one or more
+/// ``EnumCaseParameterSyntax`` nodes. ``EnumCaseParameterListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -4494,12 +4494,12 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by replacing the underlying layout with
+  /// Creates a new ``EnumCaseParameterListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `EnumCaseParameterListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> EnumCaseParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -4507,35 +4507,35 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return EnumCaseParameterListSyntax(newData)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by appending the provided syntax element
+  /// Creates a new ``EnumCaseParameterListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `EnumCaseParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by prepending the provided syntax element
+  /// Creates a new ``EnumCaseParameterListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `EnumCaseParameterListSyntax` with that element prepended to the
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> EnumCaseParameterListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by inserting the provided syntax element
+  /// Creates a new ``EnumCaseParameterListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `EnumCaseParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -4545,14 +4545,14 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by replacing the syntax element
+  /// Creates a new ``EnumCaseParameterListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `EnumCaseParameterListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -4562,11 +4562,11 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by removing the syntax element at the
+  /// Creates a new ``EnumCaseParameterListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `EnumCaseParameterListSyntax` with the element at the provided index
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -4574,18 +4574,18 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by removing the first element.
+  /// Creates a new ``EnumCaseParameterListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `EnumCaseParameterListSyntax` with the first element removed.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with the first element removed.
   public func removingFirst() -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `EnumCaseParameterListSyntax` by removing the last element.
+  /// Creates a new ``EnumCaseParameterListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `EnumCaseParameterListSyntax` with the last element removed.
+  /// - Returns: A new ``EnumCaseParameterListSyntax`` with the last element removed.
   public func removingLast() -> EnumCaseParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -4593,7 +4593,7 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `EnumCaseParameterListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``EnumCaseParameterListSyntax`` to the `BidirectionalCollection` protocol.
 extension EnumCaseParameterListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -4659,7 +4659,7 @@ extension EnumCaseParameterListSyntax: BidirectionalCollection {
   }
 }
 
-/// A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.
+/// A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.
 public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ExprSyntax
   
@@ -4700,12 +4700,12 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ExprListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ExprListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ExprListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ExprListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -4713,35 +4713,35 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     return ExprListSyntax(newData)
   }
   
-  /// Creates a new `ExprListSyntax` by appending the provided syntax element
+  /// Creates a new ``ExprListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ExprListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ExprListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ExprListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ExprListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ExprListSyntax` with that element prepended to the
+  /// - Returns: A new ``ExprListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ExprListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ExprListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ExprListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ExprListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ExprListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -4751,14 +4751,14 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ExprListSyntax` by replacing the syntax element
+  /// Creates a new ``ExprListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ExprListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ExprListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -4768,11 +4768,11 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ExprListSyntax` by removing the syntax element at the
+  /// Creates a new ``ExprListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ExprListSyntax` with the element at the provided index
+  /// - Returns: A new ``ExprListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -4780,18 +4780,18 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ExprListSyntax` by removing the first element.
+  /// Creates a new ``ExprListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ExprListSyntax` with the first element removed.
+  /// - Returns: A new ``ExprListSyntax`` with the first element removed.
   public func removingFirst() -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ExprListSyntax` by removing the last element.
+  /// Creates a new ``ExprListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ExprListSyntax` with the last element removed.
+  /// - Returns: A new ``ExprListSyntax`` with the last element removed.
   public func removingLast() -> ExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -4799,7 +4799,7 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ExprListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ExprListSyntax`` to the `BidirectionalCollection` protocol.
 extension ExprListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -4865,8 +4865,8 @@ extension ExprListSyntax: BidirectionalCollection {
   }
 }
 
-/// `FunctionParameterListSyntax` represents a collection of one or more
-/// `FunctionParameterSyntax` nodes. FunctionParameterListSyntax behaves
+/// ``FunctionParameterListSyntax`` represents a collection of one or more
+/// ``FunctionParameterSyntax`` nodes. ``FunctionParameterListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -4909,12 +4909,12 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by replacing the underlying layout with
+  /// Creates a new ``FunctionParameterListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `FunctionParameterListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> FunctionParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -4922,35 +4922,35 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return FunctionParameterListSyntax(newData)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by appending the provided syntax element
+  /// Creates a new ``FunctionParameterListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `FunctionParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by prepending the provided syntax element
+  /// Creates a new ``FunctionParameterListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `FunctionParameterListSyntax` with that element prepended to the
+  /// - Returns: A new ``FunctionParameterListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> FunctionParameterListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by inserting the provided syntax element
+  /// Creates a new ``FunctionParameterListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `FunctionParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -4960,14 +4960,14 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by replacing the syntax element
+  /// Creates a new ``FunctionParameterListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `FunctionParameterListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -4977,11 +4977,11 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by removing the syntax element at the
+  /// Creates a new ``FunctionParameterListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `FunctionParameterListSyntax` with the element at the provided index
+  /// - Returns: A new ``FunctionParameterListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -4989,18 +4989,18 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by removing the first element.
+  /// Creates a new ``FunctionParameterListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `FunctionParameterListSyntax` with the first element removed.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with the first element removed.
   public func removingFirst() -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `FunctionParameterListSyntax` by removing the last element.
+  /// Creates a new ``FunctionParameterListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `FunctionParameterListSyntax` with the last element removed.
+  /// - Returns: A new ``FunctionParameterListSyntax`` with the last element removed.
   public func removingLast() -> FunctionParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -5008,7 +5008,7 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `FunctionParameterListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``FunctionParameterListSyntax`` to the `BidirectionalCollection` protocol.
 extension FunctionParameterListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -5074,8 +5074,8 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
   }
 }
 
-/// `GenericArgumentListSyntax` represents a collection of one or more
-/// `GenericArgumentSyntax` nodes. GenericArgumentListSyntax behaves
+/// ``GenericArgumentListSyntax`` represents a collection of one or more
+/// ``GenericArgumentSyntax`` nodes. ``GenericArgumentListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5118,12 +5118,12 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by replacing the underlying layout with
+  /// Creates a new ``GenericArgumentListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `GenericArgumentListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericArgumentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -5131,35 +5131,35 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return GenericArgumentListSyntax(newData)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by appending the provided syntax element
+  /// Creates a new ``GenericArgumentListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `GenericArgumentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by prepending the provided syntax element
+  /// Creates a new ``GenericArgumentListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `GenericArgumentListSyntax` with that element prepended to the
+  /// - Returns: A new ``GenericArgumentListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> GenericArgumentListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by inserting the provided syntax element
+  /// Creates a new ``GenericArgumentListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `GenericArgumentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -5169,14 +5169,14 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by replacing the syntax element
+  /// Creates a new ``GenericArgumentListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `GenericArgumentListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -5186,11 +5186,11 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by removing the syntax element at the
+  /// Creates a new ``GenericArgumentListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `GenericArgumentListSyntax` with the element at the provided index
+  /// - Returns: A new ``GenericArgumentListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -5198,18 +5198,18 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by removing the first element.
+  /// Creates a new ``GenericArgumentListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `GenericArgumentListSyntax` with the first element removed.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with the first element removed.
   public func removingFirst() -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericArgumentListSyntax` by removing the last element.
+  /// Creates a new ``GenericArgumentListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `GenericArgumentListSyntax` with the last element removed.
+  /// - Returns: A new ``GenericArgumentListSyntax`` with the last element removed.
   public func removingLast() -> GenericArgumentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -5217,7 +5217,7 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `GenericArgumentListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``GenericArgumentListSyntax`` to the `BidirectionalCollection` protocol.
 extension GenericArgumentListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -5283,8 +5283,8 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
   }
 }
 
-/// `GenericParameterListSyntax` represents a collection of one or more
-/// `GenericParameterSyntax` nodes. GenericParameterListSyntax behaves
+/// ``GenericParameterListSyntax`` represents a collection of one or more
+/// ``GenericParameterSyntax`` nodes. ``GenericParameterListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5327,12 +5327,12 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `GenericParameterListSyntax` by replacing the underlying layout with
+  /// Creates a new ``GenericParameterListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `GenericParameterListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``GenericParameterListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericParameterListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -5340,35 +5340,35 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return GenericParameterListSyntax(newData)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by appending the provided syntax element
+  /// Creates a new ``GenericParameterListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `GenericParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericParameterListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by prepending the provided syntax element
+  /// Creates a new ``GenericParameterListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `GenericParameterListSyntax` with that element prepended to the
+  /// - Returns: A new ``GenericParameterListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> GenericParameterListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by inserting the provided syntax element
+  /// Creates a new ``GenericParameterListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `GenericParameterListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericParameterListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -5378,14 +5378,14 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by replacing the syntax element
+  /// Creates a new ``GenericParameterListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `GenericParameterListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``GenericParameterListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -5395,11 +5395,11 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by removing the syntax element at the
+  /// Creates a new ``GenericParameterListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `GenericParameterListSyntax` with the element at the provided index
+  /// - Returns: A new ``GenericParameterListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -5407,18 +5407,18 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by removing the first element.
+  /// Creates a new ``GenericParameterListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `GenericParameterListSyntax` with the first element removed.
+  /// - Returns: A new ``GenericParameterListSyntax`` with the first element removed.
   public func removingFirst() -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericParameterListSyntax` by removing the last element.
+  /// Creates a new ``GenericParameterListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `GenericParameterListSyntax` with the last element removed.
+  /// - Returns: A new ``GenericParameterListSyntax`` with the last element removed.
   public func removingLast() -> GenericParameterListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -5426,7 +5426,7 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `GenericParameterListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``GenericParameterListSyntax`` to the `BidirectionalCollection` protocol.
 extension GenericParameterListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -5492,8 +5492,8 @@ extension GenericParameterListSyntax: BidirectionalCollection {
   }
 }
 
-/// `GenericRequirementListSyntax` represents a collection of one or more
-/// `GenericRequirementSyntax` nodes. GenericRequirementListSyntax behaves
+/// ``GenericRequirementListSyntax`` represents a collection of one or more
+/// ``GenericRequirementSyntax`` nodes. ``GenericRequirementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5536,12 +5536,12 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``GenericRequirementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `GenericRequirementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> GenericRequirementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -5549,35 +5549,35 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     return GenericRequirementListSyntax(newData)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by appending the provided syntax element
+  /// Creates a new ``GenericRequirementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `GenericRequirementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``GenericRequirementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `GenericRequirementListSyntax` with that element prepended to the
+  /// - Returns: A new ``GenericRequirementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> GenericRequirementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``GenericRequirementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `GenericRequirementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -5587,14 +5587,14 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by replacing the syntax element
+  /// Creates a new ``GenericRequirementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `GenericRequirementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -5604,11 +5604,11 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by removing the syntax element at the
+  /// Creates a new ``GenericRequirementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `GenericRequirementListSyntax` with the element at the provided index
+  /// - Returns: A new ``GenericRequirementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -5616,18 +5616,18 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by removing the first element.
+  /// Creates a new ``GenericRequirementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `GenericRequirementListSyntax` with the first element removed.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with the first element removed.
   public func removingFirst() -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `GenericRequirementListSyntax` by removing the last element.
+  /// Creates a new ``GenericRequirementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `GenericRequirementListSyntax` with the last element removed.
+  /// - Returns: A new ``GenericRequirementListSyntax`` with the last element removed.
   public func removingLast() -> GenericRequirementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -5635,7 +5635,7 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `GenericRequirementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``GenericRequirementListSyntax`` to the `BidirectionalCollection` protocol.
 extension GenericRequirementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -5701,8 +5701,8 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `IfConfigClauseListSyntax` represents a collection of one or more
-/// `IfConfigClauseSyntax` nodes. IfConfigClauseListSyntax behaves
+/// ``IfConfigClauseListSyntax`` represents a collection of one or more
+/// ``IfConfigClauseSyntax`` nodes. ``IfConfigClauseListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
@@ -5745,12 +5745,12 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by replacing the underlying layout with
+  /// Creates a new ``IfConfigClauseListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `IfConfigClauseListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> IfConfigClauseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -5758,35 +5758,35 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return IfConfigClauseListSyntax(newData)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by appending the provided syntax element
+  /// Creates a new ``IfConfigClauseListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `IfConfigClauseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by prepending the provided syntax element
+  /// Creates a new ``IfConfigClauseListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `IfConfigClauseListSyntax` with that element prepended to the
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> IfConfigClauseListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by inserting the provided syntax element
+  /// Creates a new ``IfConfigClauseListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `IfConfigClauseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -5796,14 +5796,14 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by replacing the syntax element
+  /// Creates a new ``IfConfigClauseListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `IfConfigClauseListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -5813,11 +5813,11 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by removing the syntax element at the
+  /// Creates a new ``IfConfigClauseListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `IfConfigClauseListSyntax` with the element at the provided index
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -5825,18 +5825,18 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by removing the first element.
+  /// Creates a new ``IfConfigClauseListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `IfConfigClauseListSyntax` with the first element removed.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with the first element removed.
   public func removingFirst() -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `IfConfigClauseListSyntax` by removing the last element.
+  /// Creates a new ``IfConfigClauseListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `IfConfigClauseListSyntax` with the last element removed.
+  /// - Returns: A new ``IfConfigClauseListSyntax`` with the last element removed.
   public func removingLast() -> IfConfigClauseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -5844,7 +5844,7 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `IfConfigClauseListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``IfConfigClauseListSyntax`` to the `BidirectionalCollection` protocol.
 extension IfConfigClauseListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -5910,8 +5910,8 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ImportPathSyntax` represents a collection of one or more
-/// `ImportPathComponentSyntax` nodes. ImportPathSyntax behaves
+/// ``ImportPathSyntax`` represents a collection of one or more
+/// ``ImportPathComponentSyntax`` nodes. ``ImportPathSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
@@ -5954,12 +5954,12 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ImportPathSyntax` by replacing the underlying layout with
+  /// Creates a new ``ImportPathSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ImportPathSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ImportPathSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ImportPathSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -5967,35 +5967,35 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
     return ImportPathSyntax(newData)
   }
   
-  /// Creates a new `ImportPathSyntax` by appending the provided syntax element
+  /// Creates a new ``ImportPathSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ImportPathSyntax` with that element appended to the end.
+  /// - Returns: A new ``ImportPathSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ImportPathSyntax` by prepending the provided syntax element
+  /// Creates a new ``ImportPathSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ImportPathSyntax` with that element prepended to the
+  /// - Returns: A new ``ImportPathSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ImportPathSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ImportPathSyntax` by inserting the provided syntax element
+  /// Creates a new ``ImportPathSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ImportPathSyntax` with that element appended to the end.
+  /// - Returns: A new ``ImportPathSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -6005,14 +6005,14 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ImportPathSyntax` by replacing the syntax element
+  /// Creates a new ``ImportPathSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ImportPathSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ImportPathSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -6022,11 +6022,11 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ImportPathSyntax` by removing the syntax element at the
+  /// Creates a new ``ImportPathSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ImportPathSyntax` with the element at the provided index
+  /// - Returns: A new ``ImportPathSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -6034,18 +6034,18 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ImportPathSyntax` by removing the first element.
+  /// Creates a new ``ImportPathSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ImportPathSyntax` with the first element removed.
+  /// - Returns: A new ``ImportPathSyntax`` with the first element removed.
   public func removingFirst() -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ImportPathSyntax` by removing the last element.
+  /// Creates a new ``ImportPathSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ImportPathSyntax` with the last element removed.
+  /// - Returns: A new ``ImportPathSyntax`` with the last element removed.
   public func removingLast() -> ImportPathSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -6053,7 +6053,7 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ImportPathSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ImportPathSyntax`` to the `BidirectionalCollection` protocol.
 extension ImportPathSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -6119,8 +6119,8 @@ extension ImportPathSyntax: BidirectionalCollection {
   }
 }
 
-/// `InheritedTypeListSyntax` represents a collection of one or more
-/// `InheritedTypeSyntax` nodes. InheritedTypeListSyntax behaves
+/// ``InheritedTypeListSyntax`` represents a collection of one or more
+/// ``InheritedTypeSyntax`` nodes. ``InheritedTypeListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6163,12 +6163,12 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by replacing the underlying layout with
+  /// Creates a new ``InheritedTypeListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `InheritedTypeListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> InheritedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -6176,35 +6176,35 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return InheritedTypeListSyntax(newData)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by appending the provided syntax element
+  /// Creates a new ``InheritedTypeListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `InheritedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by prepending the provided syntax element
+  /// Creates a new ``InheritedTypeListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `InheritedTypeListSyntax` with that element prepended to the
+  /// - Returns: A new ``InheritedTypeListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> InheritedTypeListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by inserting the provided syntax element
+  /// Creates a new ``InheritedTypeListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `InheritedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -6214,14 +6214,14 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by replacing the syntax element
+  /// Creates a new ``InheritedTypeListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `InheritedTypeListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -6231,11 +6231,11 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by removing the syntax element at the
+  /// Creates a new ``InheritedTypeListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `InheritedTypeListSyntax` with the element at the provided index
+  /// - Returns: A new ``InheritedTypeListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -6243,18 +6243,18 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by removing the first element.
+  /// Creates a new ``InheritedTypeListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `InheritedTypeListSyntax` with the first element removed.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with the first element removed.
   public func removingFirst() -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `InheritedTypeListSyntax` by removing the last element.
+  /// Creates a new ``InheritedTypeListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `InheritedTypeListSyntax` with the last element removed.
+  /// - Returns: A new ``InheritedTypeListSyntax`` with the last element removed.
   public func removingLast() -> InheritedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -6262,7 +6262,7 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `InheritedTypeListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``InheritedTypeListSyntax`` to the `BidirectionalCollection` protocol.
 extension InheritedTypeListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -6328,8 +6328,8 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
   }
 }
 
-/// `KeyPathComponentListSyntax` represents a collection of one or more
-/// `KeyPathComponentSyntax` nodes. KeyPathComponentListSyntax behaves
+/// ``KeyPathComponentListSyntax`` represents a collection of one or more
+/// ``KeyPathComponentSyntax`` nodes. ``KeyPathComponentListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6372,12 +6372,12 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by replacing the underlying layout with
+  /// Creates a new ``KeyPathComponentListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `KeyPathComponentListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> KeyPathComponentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -6385,35 +6385,35 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return KeyPathComponentListSyntax(newData)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by appending the provided syntax element
+  /// Creates a new ``KeyPathComponentListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `KeyPathComponentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by prepending the provided syntax element
+  /// Creates a new ``KeyPathComponentListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `KeyPathComponentListSyntax` with that element prepended to the
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> KeyPathComponentListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by inserting the provided syntax element
+  /// Creates a new ``KeyPathComponentListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `KeyPathComponentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -6423,14 +6423,14 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by replacing the syntax element
+  /// Creates a new ``KeyPathComponentListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `KeyPathComponentListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -6440,11 +6440,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by removing the syntax element at the
+  /// Creates a new ``KeyPathComponentListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `KeyPathComponentListSyntax` with the element at the provided index
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -6452,18 +6452,18 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by removing the first element.
+  /// Creates a new ``KeyPathComponentListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `KeyPathComponentListSyntax` with the first element removed.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with the first element removed.
   public func removingFirst() -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `KeyPathComponentListSyntax` by removing the last element.
+  /// Creates a new ``KeyPathComponentListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `KeyPathComponentListSyntax` with the last element removed.
+  /// - Returns: A new ``KeyPathComponentListSyntax`` with the last element removed.
   public func removingLast() -> KeyPathComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -6471,7 +6471,7 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `KeyPathComponentListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``KeyPathComponentListSyntax`` to the `BidirectionalCollection` protocol.
 extension KeyPathComponentListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -6537,8 +6537,8 @@ extension KeyPathComponentListSyntax: BidirectionalCollection {
   }
 }
 
-/// `MemberDeclListSyntax` represents a collection of one or more
-/// `MemberDeclListItemSyntax` nodes. MemberDeclListSyntax behaves
+/// ``MemberDeclListSyntax`` represents a collection of one or more
+/// ``MemberDeclListItemSyntax`` nodes. ``MemberDeclListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6581,12 +6581,12 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `MemberDeclListSyntax` by replacing the underlying layout with
+  /// Creates a new ``MemberDeclListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `MemberDeclListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``MemberDeclListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> MemberDeclListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -6594,35 +6594,35 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     return MemberDeclListSyntax(newData)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by appending the provided syntax element
+  /// Creates a new ``MemberDeclListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `MemberDeclListSyntax` with that element appended to the end.
+  /// - Returns: A new ``MemberDeclListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by prepending the provided syntax element
+  /// Creates a new ``MemberDeclListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `MemberDeclListSyntax` with that element prepended to the
+  /// - Returns: A new ``MemberDeclListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> MemberDeclListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by inserting the provided syntax element
+  /// Creates a new ``MemberDeclListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `MemberDeclListSyntax` with that element appended to the end.
+  /// - Returns: A new ``MemberDeclListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -6632,14 +6632,14 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by replacing the syntax element
+  /// Creates a new ``MemberDeclListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `MemberDeclListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``MemberDeclListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -6649,11 +6649,11 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by removing the syntax element at the
+  /// Creates a new ``MemberDeclListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `MemberDeclListSyntax` with the element at the provided index
+  /// - Returns: A new ``MemberDeclListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -6661,18 +6661,18 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by removing the first element.
+  /// Creates a new ``MemberDeclListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `MemberDeclListSyntax` with the first element removed.
+  /// - Returns: A new ``MemberDeclListSyntax`` with the first element removed.
   public func removingFirst() -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MemberDeclListSyntax` by removing the last element.
+  /// Creates a new ``MemberDeclListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `MemberDeclListSyntax` with the last element removed.
+  /// - Returns: A new ``MemberDeclListSyntax`` with the last element removed.
   public func removingLast() -> MemberDeclListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -6680,7 +6680,7 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `MemberDeclListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``MemberDeclListSyntax`` to the `BidirectionalCollection` protocol.
 extension MemberDeclListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -6746,8 +6746,8 @@ extension MemberDeclListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ModifierListSyntax` represents a collection of one or more
-/// `DeclModifierSyntax` nodes. ModifierListSyntax behaves
+/// ``ModifierListSyntax`` represents a collection of one or more
+/// ``DeclModifierSyntax`` nodes. ``ModifierListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6790,12 +6790,12 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ModifierListSyntax` by replacing the underlying layout with
+  /// Creates a new ``ModifierListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ModifierListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ModifierListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ModifierListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -6803,35 +6803,35 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return ModifierListSyntax(newData)
   }
   
-  /// Creates a new `ModifierListSyntax` by appending the provided syntax element
+  /// Creates a new ``ModifierListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ModifierListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ModifierListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ModifierListSyntax` by prepending the provided syntax element
+  /// Creates a new ``ModifierListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ModifierListSyntax` with that element prepended to the
+  /// - Returns: A new ``ModifierListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ModifierListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ModifierListSyntax` by inserting the provided syntax element
+  /// Creates a new ``ModifierListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ModifierListSyntax` with that element appended to the end.
+  /// - Returns: A new ``ModifierListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -6841,14 +6841,14 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ModifierListSyntax` by replacing the syntax element
+  /// Creates a new ``ModifierListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ModifierListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ModifierListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -6858,11 +6858,11 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ModifierListSyntax` by removing the syntax element at the
+  /// Creates a new ``ModifierListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ModifierListSyntax` with the element at the provided index
+  /// - Returns: A new ``ModifierListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -6870,18 +6870,18 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ModifierListSyntax` by removing the first element.
+  /// Creates a new ``ModifierListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ModifierListSyntax` with the first element removed.
+  /// - Returns: A new ``ModifierListSyntax`` with the first element removed.
   public func removingFirst() -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ModifierListSyntax` by removing the last element.
+  /// Creates a new ``ModifierListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ModifierListSyntax` with the last element removed.
+  /// - Returns: A new ``ModifierListSyntax`` with the last element removed.
   public func removingLast() -> ModifierListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -6889,7 +6889,7 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ModifierListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ModifierListSyntax`` to the `BidirectionalCollection` protocol.
 extension ModifierListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -6955,8 +6955,8 @@ extension ModifierListSyntax: BidirectionalCollection {
   }
 }
 
-/// `MultipleTrailingClosureElementListSyntax` represents a collection of one or more
-/// `MultipleTrailingClosureElementSyntax` nodes. MultipleTrailingClosureElementListSyntax behaves
+/// ``MultipleTrailingClosureElementListSyntax`` represents a collection of one or more
+/// ``MultipleTrailingClosureElementSyntax`` nodes. ``MultipleTrailingClosureElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -6999,12 +6999,12 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     return layoutView.children.count
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> MultipleTrailingClosureElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -7012,35 +7012,35 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     return MultipleTrailingClosureElementListSyntax(newData)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> MultipleTrailingClosureElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -7050,14 +7050,14 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by replacing the syntax element
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -7067,11 +7067,11 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -7079,18 +7079,18 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the first element.
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the first element removed.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with the first element removed.
   public func removingFirst() -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `MultipleTrailingClosureElementListSyntax` by removing the last element.
+  /// Creates a new ``MultipleTrailingClosureElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `MultipleTrailingClosureElementListSyntax` with the last element removed.
+  /// - Returns: A new ``MultipleTrailingClosureElementListSyntax`` with the last element removed.
   public func removingLast() -> MultipleTrailingClosureElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -7098,7 +7098,7 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
 }
 
-/// Conformance for `MultipleTrailingClosureElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``MultipleTrailingClosureElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -7164,8 +7164,8 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `ObjCSelectorSyntax` represents a collection of one or more
-/// `ObjCSelectorPieceSyntax` nodes. ObjCSelectorSyntax behaves
+/// ``ObjCSelectorSyntax`` represents a collection of one or more
+/// ``ObjCSelectorPieceSyntax`` nodes. ``ObjCSelectorSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
@@ -7208,12 +7208,12 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by replacing the underlying layout with
+  /// Creates a new ``ObjCSelectorSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `ObjCSelectorSyntax` with the new layout underlying it.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> ObjCSelectorSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -7221,35 +7221,35 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return ObjCSelectorSyntax(newData)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by appending the provided syntax element
+  /// Creates a new ``ObjCSelectorSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `ObjCSelectorSyntax` with that element appended to the end.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by prepending the provided syntax element
+  /// Creates a new ``ObjCSelectorSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `ObjCSelectorSyntax` with that element prepended to the
+  /// - Returns: A new ``ObjCSelectorSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> ObjCSelectorSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by inserting the provided syntax element
+  /// Creates a new ``ObjCSelectorSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `ObjCSelectorSyntax` with that element appended to the end.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -7259,14 +7259,14 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by replacing the syntax element
+  /// Creates a new ``ObjCSelectorSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `ObjCSelectorSyntax` with the new element at the provided index.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -7276,11 +7276,11 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by removing the syntax element at the
+  /// Creates a new ``ObjCSelectorSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `ObjCSelectorSyntax` with the element at the provided index
+  /// - Returns: A new ``ObjCSelectorSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -7288,18 +7288,18 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by removing the first element.
+  /// Creates a new ``ObjCSelectorSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `ObjCSelectorSyntax` with the first element removed.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with the first element removed.
   public func removingFirst() -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `ObjCSelectorSyntax` by removing the last element.
+  /// Creates a new ``ObjCSelectorSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `ObjCSelectorSyntax` with the last element removed.
+  /// - Returns: A new ``ObjCSelectorSyntax`` with the last element removed.
   public func removingLast() -> ObjCSelectorSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -7307,7 +7307,7 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `ObjCSelectorSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``ObjCSelectorSyntax`` to the `BidirectionalCollection` protocol.
 extension ObjCSelectorSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -7373,8 +7373,8 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
   }
 }
 
-/// `PatternBindingListSyntax` represents a collection of one or more
-/// `PatternBindingSyntax` nodes. PatternBindingListSyntax behaves
+/// ``PatternBindingListSyntax`` represents a collection of one or more
+/// ``PatternBindingSyntax`` nodes. ``PatternBindingListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
@@ -7417,12 +7417,12 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `PatternBindingListSyntax` by replacing the underlying layout with
+  /// Creates a new ``PatternBindingListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `PatternBindingListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``PatternBindingListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> PatternBindingListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -7430,35 +7430,35 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     return PatternBindingListSyntax(newData)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by appending the provided syntax element
+  /// Creates a new ``PatternBindingListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `PatternBindingListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PatternBindingListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by prepending the provided syntax element
+  /// Creates a new ``PatternBindingListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `PatternBindingListSyntax` with that element prepended to the
+  /// - Returns: A new ``PatternBindingListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> PatternBindingListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by inserting the provided syntax element
+  /// Creates a new ``PatternBindingListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `PatternBindingListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PatternBindingListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -7468,14 +7468,14 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by replacing the syntax element
+  /// Creates a new ``PatternBindingListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `PatternBindingListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``PatternBindingListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -7485,11 +7485,11 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by removing the syntax element at the
+  /// Creates a new ``PatternBindingListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `PatternBindingListSyntax` with the element at the provided index
+  /// - Returns: A new ``PatternBindingListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -7497,18 +7497,18 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by removing the first element.
+  /// Creates a new ``PatternBindingListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `PatternBindingListSyntax` with the first element removed.
+  /// - Returns: A new ``PatternBindingListSyntax`` with the first element removed.
   public func removingFirst() -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PatternBindingListSyntax` by removing the last element.
+  /// Creates a new ``PatternBindingListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `PatternBindingListSyntax` with the last element removed.
+  /// - Returns: A new ``PatternBindingListSyntax`` with the last element removed.
   public func removingLast() -> PatternBindingListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -7516,7 +7516,7 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `PatternBindingListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``PatternBindingListSyntax`` to the `BidirectionalCollection` protocol.
 extension PatternBindingListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -7582,8 +7582,8 @@ extension PatternBindingListSyntax: BidirectionalCollection {
   }
 }
 
-/// `PrecedenceGroupAttributeListSyntax` represents a collection of one or more
-/// `Syntax` nodes. PrecedenceGroupAttributeListSyntax behaves
+/// ``PrecedenceGroupAttributeListSyntax`` represents a collection of one or more
+/// ``Syntax`` nodes. ``PrecedenceGroupAttributeListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -7680,12 +7680,12 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return layoutView.children.count
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by replacing the underlying layout with
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupAttributeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -7693,35 +7693,35 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return PrecedenceGroupAttributeListSyntax(newData)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by appending the provided syntax element
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by prepending the provided syntax element
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with that element prepended to the
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> PrecedenceGroupAttributeListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by inserting the provided syntax element
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -7731,14 +7731,14 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by replacing the syntax element
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -7748,11 +7748,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by removing the syntax element at the
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the element at the provided index
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -7760,18 +7760,18 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by removing the first element.
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the first element removed.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with the first element removed.
   public func removingFirst() -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupAttributeListSyntax` by removing the last element.
+  /// Creates a new ``PrecedenceGroupAttributeListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `PrecedenceGroupAttributeListSyntax` with the last element removed.
+  /// - Returns: A new ``PrecedenceGroupAttributeListSyntax`` with the last element removed.
   public func removingLast() -> PrecedenceGroupAttributeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -7779,7 +7779,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
 }
 
-/// Conformance for `PrecedenceGroupAttributeListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``PrecedenceGroupAttributeListSyntax`` to the `BidirectionalCollection` protocol.
 extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -7845,8 +7845,8 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
   }
 }
 
-/// `PrecedenceGroupNameListSyntax` represents a collection of one or more
-/// `PrecedenceGroupNameElementSyntax` nodes. PrecedenceGroupNameListSyntax behaves
+/// ``PrecedenceGroupNameListSyntax`` represents a collection of one or more
+/// ``PrecedenceGroupNameElementSyntax`` nodes. ``PrecedenceGroupNameListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
@@ -7889,12 +7889,12 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by replacing the underlying layout with
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> PrecedenceGroupNameListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -7902,35 +7902,35 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return PrecedenceGroupNameListSyntax(newData)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by appending the provided syntax element
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by prepending the provided syntax element
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with that element prepended to the
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> PrecedenceGroupNameListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by inserting the provided syntax element
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -7940,14 +7940,14 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by replacing the syntax element
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -7957,11 +7957,11 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by removing the syntax element at the
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with the element at the provided index
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -7969,18 +7969,18 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by removing the first element.
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with the first element removed.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with the first element removed.
   public func removingFirst() -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrecedenceGroupNameListSyntax` by removing the last element.
+  /// Creates a new ``PrecedenceGroupNameListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `PrecedenceGroupNameListSyntax` with the last element removed.
+  /// - Returns: A new ``PrecedenceGroupNameListSyntax`` with the last element removed.
   public func removingLast() -> PrecedenceGroupNameListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -7988,7 +7988,7 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `PrecedenceGroupNameListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``PrecedenceGroupNameListSyntax`` to the `BidirectionalCollection` protocol.
 extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -8054,8 +8054,8 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
   }
 }
 
-/// `PrimaryAssociatedTypeListSyntax` represents a collection of one or more
-/// `PrimaryAssociatedTypeSyntax` nodes. PrimaryAssociatedTypeListSyntax behaves
+/// ``PrimaryAssociatedTypeListSyntax`` represents a collection of one or more
+/// ``PrimaryAssociatedTypeSyntax`` nodes. ``PrimaryAssociatedTypeListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
@@ -8098,12 +8098,12 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     return layoutView.children.count
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the underlying layout with
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> PrimaryAssociatedTypeListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -8111,35 +8111,35 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     return PrimaryAssociatedTypeListSyntax(newData)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by appending the provided syntax element
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by prepending the provided syntax element
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element prepended to the
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> PrimaryAssociatedTypeListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by inserting the provided syntax element
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with that element appended to the end.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -8149,14 +8149,14 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by replacing the syntax element
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -8166,11 +8166,11 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the syntax element at the
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the element at the provided index
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -8178,18 +8178,18 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the first element.
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the first element removed.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with the first element removed.
   public func removingFirst() -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `PrimaryAssociatedTypeListSyntax` by removing the last element.
+  /// Creates a new ``PrimaryAssociatedTypeListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `PrimaryAssociatedTypeListSyntax` with the last element removed.
+  /// - Returns: A new ``PrimaryAssociatedTypeListSyntax`` with the last element removed.
   public func removingLast() -> PrimaryAssociatedTypeListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -8197,7 +8197,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
 }
 
-/// Conformance for `PrimaryAssociatedTypeListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``PrimaryAssociatedTypeListSyntax`` to the `BidirectionalCollection` protocol.
 extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -8371,12 +8371,12 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return layoutView.children.count
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by replacing the underlying layout with
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> SpecializeAttributeSpecListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -8384,35 +8384,35 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return SpecializeAttributeSpecListSyntax(newData)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by appending the provided syntax element
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with that element appended to the end.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by prepending the provided syntax element
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with that element prepended to the
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> SpecializeAttributeSpecListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by inserting the provided syntax element
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with that element appended to the end.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -8422,14 +8422,14 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by replacing the syntax element
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -8439,11 +8439,11 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by removing the syntax element at the
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the element at the provided index
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -8451,18 +8451,18 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by removing the first element.
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the first element removed.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with the first element removed.
   public func removingFirst() -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SpecializeAttributeSpecListSyntax` by removing the last element.
+  /// Creates a new ``SpecializeAttributeSpecListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `SpecializeAttributeSpecListSyntax` with the last element removed.
+  /// - Returns: A new ``SpecializeAttributeSpecListSyntax`` with the last element removed.
   public func removingLast() -> SpecializeAttributeSpecListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -8470,7 +8470,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
 }
 
-/// Conformance for `SpecializeAttributeSpecListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``SpecializeAttributeSpecListSyntax`` to the `BidirectionalCollection` protocol.
 extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -8536,8 +8536,8 @@ extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
   }
 }
 
-/// `StringLiteralSegmentsSyntax` represents a collection of one or more
-/// `Syntax` nodes. StringLiteralSegmentsSyntax behaves
+/// ``StringLiteralSegmentsSyntax`` represents a collection of one or more
+/// ``Syntax`` nodes. ``StringLiteralSegmentsSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
@@ -8622,12 +8622,12 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by replacing the underlying layout with
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with the new layout underlying it.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> StringLiteralSegmentsSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -8635,35 +8635,35 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     return StringLiteralSegmentsSyntax(newData)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by appending the provided syntax element
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by prepending the provided syntax element
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with that element prepended to the
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> StringLiteralSegmentsSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by inserting the provided syntax element
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with that element appended to the end.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -8673,14 +8673,14 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by replacing the syntax element
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with the new element at the provided index.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -8690,11 +8690,11 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by removing the syntax element at the
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with the element at the provided index
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -8702,18 +8702,18 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by removing the first element.
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with the first element removed.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with the first element removed.
   public func removingFirst() -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `StringLiteralSegmentsSyntax` by removing the last element.
+  /// Creates a new ``StringLiteralSegmentsSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `StringLiteralSegmentsSyntax` with the last element removed.
+  /// - Returns: A new ``StringLiteralSegmentsSyntax`` with the last element removed.
   public func removingLast() -> StringLiteralSegmentsSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -8721,7 +8721,7 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `StringLiteralSegmentsSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``StringLiteralSegmentsSyntax`` to the `BidirectionalCollection` protocol.
 extension StringLiteralSegmentsSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -8787,8 +8787,8 @@ extension StringLiteralSegmentsSyntax: BidirectionalCollection {
   }
 }
 
-/// `SwitchCaseListSyntax` represents a collection of one or more
-/// `Syntax` nodes. SwitchCaseListSyntax behaves
+/// ``SwitchCaseListSyntax`` represents a collection of one or more
+/// ``Syntax`` nodes. ``SwitchCaseListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
@@ -8873,12 +8873,12 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by replacing the underlying layout with
+  /// Creates a new ``SwitchCaseListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `SwitchCaseListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> SwitchCaseListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -8886,35 +8886,35 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return SwitchCaseListSyntax(newData)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by appending the provided syntax element
+  /// Creates a new ``SwitchCaseListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `SwitchCaseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by prepending the provided syntax element
+  /// Creates a new ``SwitchCaseListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `SwitchCaseListSyntax` with that element prepended to the
+  /// - Returns: A new ``SwitchCaseListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> SwitchCaseListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by inserting the provided syntax element
+  /// Creates a new ``SwitchCaseListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `SwitchCaseListSyntax` with that element appended to the end.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -8924,14 +8924,14 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by replacing the syntax element
+  /// Creates a new ``SwitchCaseListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `SwitchCaseListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -8941,11 +8941,11 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by removing the syntax element at the
+  /// Creates a new ``SwitchCaseListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `SwitchCaseListSyntax` with the element at the provided index
+  /// - Returns: A new ``SwitchCaseListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -8953,18 +8953,18 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by removing the first element.
+  /// Creates a new ``SwitchCaseListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `SwitchCaseListSyntax` with the first element removed.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with the first element removed.
   public func removingFirst() -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `SwitchCaseListSyntax` by removing the last element.
+  /// Creates a new ``SwitchCaseListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `SwitchCaseListSyntax` with the last element removed.
+  /// - Returns: A new ``SwitchCaseListSyntax`` with the last element removed.
   public func removingLast() -> SwitchCaseListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -8972,7 +8972,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `SwitchCaseListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``SwitchCaseListSyntax`` to the `BidirectionalCollection` protocol.
 extension SwitchCaseListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -9038,8 +9038,8 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
   }
 }
 
-/// `TupleExprElementListSyntax` represents a collection of one or more
-/// `TupleExprElementSyntax` nodes. TupleExprElementListSyntax behaves
+/// ``TupleExprElementListSyntax`` represents a collection of one or more
+/// ``TupleExprElementSyntax`` nodes. ``TupleExprElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9082,12 +9082,12 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``TupleExprElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `TupleExprElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleExprElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -9095,35 +9095,35 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     return TupleExprElementListSyntax(newData)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``TupleExprElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `TupleExprElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``TupleExprElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `TupleExprElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``TupleExprElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> TupleExprElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``TupleExprElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `TupleExprElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -9133,14 +9133,14 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by replacing the syntax element
+  /// Creates a new ``TupleExprElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `TupleExprElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -9150,11 +9150,11 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``TupleExprElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `TupleExprElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``TupleExprElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -9162,18 +9162,18 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by removing the first element.
+  /// Creates a new ``TupleExprElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `TupleExprElementListSyntax` with the first element removed.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with the first element removed.
   public func removingFirst() -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleExprElementListSyntax` by removing the last element.
+  /// Creates a new ``TupleExprElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `TupleExprElementListSyntax` with the last element removed.
+  /// - Returns: A new ``TupleExprElementListSyntax`` with the last element removed.
   public func removingLast() -> TupleExprElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -9181,7 +9181,7 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `TupleExprElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``TupleExprElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension TupleExprElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -9247,8 +9247,8 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `TuplePatternElementListSyntax` represents a collection of one or more
-/// `TuplePatternElementSyntax` nodes. TuplePatternElementListSyntax behaves
+/// ``TuplePatternElementListSyntax`` represents a collection of one or more
+/// ``TuplePatternElementSyntax`` nodes. ``TuplePatternElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9291,12 +9291,12 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``TuplePatternElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `TuplePatternElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> TuplePatternElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -9304,35 +9304,35 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return TuplePatternElementListSyntax(newData)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``TuplePatternElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `TuplePatternElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``TuplePatternElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `TuplePatternElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> TuplePatternElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``TuplePatternElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `TuplePatternElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -9342,14 +9342,14 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by replacing the syntax element
+  /// Creates a new ``TuplePatternElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `TuplePatternElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -9359,11 +9359,11 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``TuplePatternElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `TuplePatternElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -9371,18 +9371,18 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by removing the first element.
+  /// Creates a new ``TuplePatternElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `TuplePatternElementListSyntax` with the first element removed.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with the first element removed.
   public func removingFirst() -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TuplePatternElementListSyntax` by removing the last element.
+  /// Creates a new ``TuplePatternElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `TuplePatternElementListSyntax` with the last element removed.
+  /// - Returns: A new ``TuplePatternElementListSyntax`` with the last element removed.
   public func removingLast() -> TuplePatternElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -9390,7 +9390,7 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `TuplePatternElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``TuplePatternElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension TuplePatternElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -9456,8 +9456,8 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
   }
 }
 
-/// `TupleTypeElementListSyntax` represents a collection of one or more
-/// `TupleTypeElementSyntax` nodes. TupleTypeElementListSyntax behaves
+/// ``TupleTypeElementListSyntax`` represents a collection of one or more
+/// ``TupleTypeElementSyntax`` nodes. ``TupleTypeElementListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9500,12 +9500,12 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by replacing the underlying layout with
+  /// Creates a new ``TupleTypeElementListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `TupleTypeElementListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> TupleTypeElementListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -9513,35 +9513,35 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return TupleTypeElementListSyntax(newData)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by appending the provided syntax element
+  /// Creates a new ``TupleTypeElementListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `TupleTypeElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by prepending the provided syntax element
+  /// Creates a new ``TupleTypeElementListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `TupleTypeElementListSyntax` with that element prepended to the
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> TupleTypeElementListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by inserting the provided syntax element
+  /// Creates a new ``TupleTypeElementListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `TupleTypeElementListSyntax` with that element appended to the end.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -9551,14 +9551,14 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by replacing the syntax element
+  /// Creates a new ``TupleTypeElementListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `TupleTypeElementListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -9568,11 +9568,11 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by removing the syntax element at the
+  /// Creates a new ``TupleTypeElementListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `TupleTypeElementListSyntax` with the element at the provided index
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -9580,18 +9580,18 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by removing the first element.
+  /// Creates a new ``TupleTypeElementListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `TupleTypeElementListSyntax` with the first element removed.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with the first element removed.
   public func removingFirst() -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `TupleTypeElementListSyntax` by removing the last element.
+  /// Creates a new ``TupleTypeElementListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `TupleTypeElementListSyntax` with the last element removed.
+  /// - Returns: A new ``TupleTypeElementListSyntax`` with the last element removed.
   public func removingLast() -> TupleTypeElementListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -9599,7 +9599,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `TupleTypeElementListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``TupleTypeElementListSyntax`` to the `BidirectionalCollection` protocol.
 extension TupleTypeElementListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -9706,12 +9706,12 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by replacing the underlying layout with
+  /// Creates a new ``UnexpectedNodesSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `UnexpectedNodesSyntax` with the new layout underlying it.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> UnexpectedNodesSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -9719,35 +9719,35 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     return UnexpectedNodesSyntax(newData)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by appending the provided syntax element
+  /// Creates a new ``UnexpectedNodesSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by prepending the provided syntax element
+  /// Creates a new ``UnexpectedNodesSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `UnexpectedNodesSyntax` with that element prepended to the
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> UnexpectedNodesSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by inserting the provided syntax element
+  /// Creates a new ``UnexpectedNodesSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `UnexpectedNodesSyntax` with that element appended to the end.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -9757,14 +9757,14 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by replacing the syntax element
+  /// Creates a new ``UnexpectedNodesSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `UnexpectedNodesSyntax` with the new element at the provided index.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -9774,11 +9774,11 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by removing the syntax element at the
+  /// Creates a new ``UnexpectedNodesSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `UnexpectedNodesSyntax` with the element at the provided index
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -9786,18 +9786,18 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by removing the first element.
+  /// Creates a new ``UnexpectedNodesSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `UnexpectedNodesSyntax` with the first element removed.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with the first element removed.
   public func removingFirst() -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `UnexpectedNodesSyntax` by removing the last element.
+  /// Creates a new ``UnexpectedNodesSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `UnexpectedNodesSyntax` with the last element removed.
+  /// - Returns: A new ``UnexpectedNodesSyntax`` with the last element removed.
   public func removingLast() -> UnexpectedNodesSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -9805,7 +9805,7 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `UnexpectedNodesSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``UnexpectedNodesSyntax`` to the `BidirectionalCollection` protocol.
 extension UnexpectedNodesSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -9871,8 +9871,8 @@ extension UnexpectedNodesSyntax: BidirectionalCollection {
   }
 }
 
-/// `VersionComponentListSyntax` represents a collection of one or more
-/// `VersionComponentSyntax` nodes. VersionComponentListSyntax behaves
+/// ``VersionComponentListSyntax`` represents a collection of one or more
+/// ``VersionComponentSyntax`` nodes. ``VersionComponentListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
@@ -9915,12 +9915,12 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `VersionComponentListSyntax` by replacing the underlying layout with
+  /// Creates a new ``VersionComponentListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `VersionComponentListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``VersionComponentListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> VersionComponentListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -9928,35 +9928,35 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return VersionComponentListSyntax(newData)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by appending the provided syntax element
+  /// Creates a new ``VersionComponentListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `VersionComponentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``VersionComponentListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by prepending the provided syntax element
+  /// Creates a new ``VersionComponentListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `VersionComponentListSyntax` with that element prepended to the
+  /// - Returns: A new ``VersionComponentListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> VersionComponentListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by inserting the provided syntax element
+  /// Creates a new ``VersionComponentListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `VersionComponentListSyntax` with that element appended to the end.
+  /// - Returns: A new ``VersionComponentListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -9966,14 +9966,14 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by replacing the syntax element
+  /// Creates a new ``VersionComponentListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `VersionComponentListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``VersionComponentListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -9983,11 +9983,11 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by removing the syntax element at the
+  /// Creates a new ``VersionComponentListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `VersionComponentListSyntax` with the element at the provided index
+  /// - Returns: A new ``VersionComponentListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -9995,18 +9995,18 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by removing the first element.
+  /// Creates a new ``VersionComponentListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `VersionComponentListSyntax` with the first element removed.
+  /// - Returns: A new ``VersionComponentListSyntax`` with the first element removed.
   public func removingFirst() -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `VersionComponentListSyntax` by removing the last element.
+  /// Creates a new ``VersionComponentListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `VersionComponentListSyntax` with the last element removed.
+  /// - Returns: A new ``VersionComponentListSyntax`` with the last element removed.
   public func removingLast() -> VersionComponentListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -10014,7 +10014,7 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `VersionComponentListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``VersionComponentListSyntax`` to the `BidirectionalCollection` protocol.
 extension VersionComponentListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   
@@ -10080,8 +10080,8 @@ extension VersionComponentListSyntax: BidirectionalCollection {
   }
 }
 
-/// `YieldExprListSyntax` represents a collection of one or more
-/// `YieldExprListElementSyntax` nodes. YieldExprListSyntax behaves
+/// ``YieldExprListSyntax`` represents a collection of one or more
+/// ``YieldExprListElementSyntax`` nodes. ``YieldExprListSyntax`` behaves
 /// as a regular Swift collection, and has accessors that return new
 /// versions of the collection with different children.
 public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
@@ -10124,12 +10124,12 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     return layoutView.children.count
   }
   
-  /// Creates a new `YieldExprListSyntax` by replacing the underlying layout with
+  /// Creates a new ``YieldExprListSyntax`` by replacing the underlying layout with
   /// a different set of raw syntax nodes.
   ///
   /// - Parameter layout: The new list of raw syntax nodes underlying this
   ///                     collection.
-  /// - Returns: A new `YieldExprListSyntax` with the new layout underlying it.
+  /// - Returns: A new ``YieldExprListSyntax`` with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> YieldExprListSyntax {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
@@ -10137,35 +10137,35 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     return YieldExprListSyntax(newData)
   }
   
-  /// Creates a new `YieldExprListSyntax` by appending the provided syntax element
+  /// Creates a new ``YieldExprListSyntax`` by appending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to append.
-  /// - Returns: A new `YieldExprListSyntax` with that element appended to the end.
+  /// - Returns: A new ``YieldExprListSyntax`` with that element appended to the end.
   public func appending(_ syntax: Element) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `YieldExprListSyntax` by prepending the provided syntax element
+  /// Creates a new ``YieldExprListSyntax`` by prepending the provided syntax element
   /// to the children.
   ///
   /// - Parameter syntax: The element to prepend.
-  /// - Returns: A new `YieldExprListSyntax` with that element prepended to the
+  /// - Returns: A new ``YieldExprListSyntax`` with that element prepended to the
   ///            beginning.
   public func prepending(_ syntax: Element) -> YieldExprListSyntax {
     return inserting(syntax, at: 0)
   }
   
-  /// Creates a new `YieldExprListSyntax` by inserting the provided syntax element
+  /// Creates a new ``YieldExprListSyntax`` by inserting the provided syntax element
   /// at the provided index in the children.
   ///
   /// - Parameters:
   ///   - syntax: The element to insert.
   ///   - index: The index at which to insert the element in the collection.
   ///
-  /// - Returns: A new `YieldExprListSyntax` with that element appended to the end.
+  /// - Returns: A new ``YieldExprListSyntax`` with that element appended to the end.
   public func inserting(_ syntax: Element, at index: Int) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -10175,14 +10175,14 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `YieldExprListSyntax` by replacing the syntax element
+  /// Creates a new ``YieldExprListSyntax`` by replacing the syntax element
   /// at the provided index.
   ///
   /// - Parameters:
   ///   - index: The index at which to replace the element in the collection.
   ///   - syntax: The element to replace with.
   ///
-  /// - Returns: A new `YieldExprListSyntax` with the new element at the provided index.
+  /// - Returns: A new ``YieldExprListSyntax`` with the new element at the provided index.
   public func replacing(childAt index: Int, with syntax: Element) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -10192,11 +10192,11 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `YieldExprListSyntax` by removing the syntax element at the
+  /// Creates a new ``YieldExprListSyntax`` by removing the syntax element at the
   /// provided index.
   ///
   /// - Parameter index: The index of the element to remove from the collection.
-  /// - Returns: A new `YieldExprListSyntax` with the element at the provided index
+  /// - Returns: A new ``YieldExprListSyntax`` with the element at the provided index
   ///            removed.
   public func removing(childAt index: Int) -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
@@ -10204,18 +10204,18 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `YieldExprListSyntax` by removing the first element.
+  /// Creates a new ``YieldExprListSyntax`` by removing the first element.
   ///
-  /// - Returns: A new `YieldExprListSyntax` with the first element removed.
+  /// - Returns: A new ``YieldExprListSyntax`` with the first element removed.
   public func removingFirst() -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
     return replacingLayout(newLayout)
   }
   
-  /// Creates a new `YieldExprListSyntax` by removing the last element.
+  /// Creates a new ``YieldExprListSyntax`` by removing the last element.
   ///
-  /// - Returns: A new `YieldExprListSyntax` with the last element removed.
+  /// - Returns: A new ``YieldExprListSyntax`` with the last element removed.
   public func removingLast() -> YieldExprListSyntax {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()
@@ -10223,7 +10223,7 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
 }
 
-/// Conformance for `YieldExprListSyntax` to the `BidirectionalCollection` protocol.
+/// Conformance for ``YieldExprListSyntax`` to the `BidirectionalCollection` protocol.
 extension YieldExprListSyntax: BidirectionalCollection {
   public typealias Index = SyntaxChildrenIndex
   

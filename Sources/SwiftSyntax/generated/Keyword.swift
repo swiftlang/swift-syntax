@@ -753,7 +753,7 @@ public enum Keyword: UInt8, Hashable {
   /// This is really unfortunate. Really, we should have a `switch` in
   /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
   /// table is significantly faster. Ideally, we could also get the compiler to
-  /// constant-evaluate `Keyword.spi.defaultText` to a `SyntaxText` but I don't
+  /// constant-evaluate `Keyword.spi.defaultText` to a ``SyntaxText`` but I don't
   /// see how that's possible right now.
   private static let keywordTextLookupTable: [SyntaxText] = [
       "__consuming", 

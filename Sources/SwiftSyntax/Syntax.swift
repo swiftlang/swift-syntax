@@ -78,7 +78,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self = syntax._syntaxNode
   }
 
-  /// Creates a new `Syntax` node from any node that conforms to ``SyntaxProtocol``.
+  /// Creates a new ``Syntax`` node from any node that conforms to ``SyntaxProtocol``.
   public init(fromProtocol syntax: SyntaxProtocol) {
     self = syntax._syntaxNode
   }
@@ -118,7 +118,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 }
 
 extension Syntax: Identifiable {
-  /// `SyntaxIdentifier` uniquely identifies a node.
+  /// ``SyntaxIdentifier`` uniquely identifies a node.
   public typealias ID = SyntaxIdentifier
 }
 
@@ -129,7 +129,7 @@ extension Syntax {
   /// Unlike `description`, this provides a source-accurate representation
   /// even in the presence of malformed UTF-8 in the input source.
   ///
-  /// The `SyntaxText` arguments passed to the visitor are only guaranteed
+  /// The ``SyntaxText`` arguments passed to the visitor are only guaranteed
   /// to be valid within that call. It is unsafe to escape the `SyntaxValue`
   /// values outside of the closure.
   @_spi(RawSyntax)
@@ -239,7 +239,7 @@ extension SyntaxProtocol {
 
   /// The dynamic metatype of the concrete node. You almost always want to prefer this
   /// over `type(of: self)` because if `self` is a ``DeclSyntax`` representing a
-  /// ``FunctionDeclSyntax``, `type(of: self)` will return `DeclSyntax`, while
+  /// ``FunctionDeclSyntax``, `type(of: self)` will return ``DeclSyntax``, while
   /// `syntaxNodeType` looks at the dynamic kind of this node and returns
   /// ``FunctionDeclSyntax``.
   public var syntaxNodeType: SyntaxProtocol.Type {
@@ -253,7 +253,7 @@ public extension SyntaxProtocol {
     return SyntaxChildren(_syntaxNode, viewMode: viewMode)
   }
 
-  /// The index of this node in a `SyntaxChildren` collection.
+  /// The index of this node in a ``SyntaxChildren`` collection.
   var index: SyntaxChildrenIndex {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
@@ -267,7 +267,7 @@ public extension SyntaxProtocol {
   }
 
   /// Whether the tree contained by this layout has any tokens with a
-  /// `TokenDiagnostic` of severity `warning`.
+  /// ``TokenDiagnostic`` of severity `warning`.
   var hasWarning: Bool {
     return raw.recursiveFlags.contains(.hasWarning)
   }
@@ -454,7 +454,7 @@ public extension SyntaxProtocol {
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
   ///
-  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// Note: ``Trivia`` is not able to represent invalid UTF-8 sequences. To get
   /// the leading trivia text including all invalid UTF-8 sequences, use
   /// ```
   /// node.syntaxTextBytes.prefix(self.leadingTriviaLength.utf8Length)
@@ -472,7 +472,7 @@ public extension SyntaxProtocol {
   /// the last token syntax contained by this node. Without such token, this
   /// property will return nil.
   ///
-  /// Note: `Trivia` is not able to represent invalid UTF-8 sequences. To get
+  /// Note: ``Trivia`` is not able to represent invalid UTF-8 sequences. To get
   /// the leading trivia text including all invalid UTF-8 sequences, use
   /// ```
   /// node.syntaxTextBytes[(node.byteSize - node.trailingTriviaLength.utf8Length)...]
@@ -697,7 +697,7 @@ public extension SyntaxProtocol {
   }
 }
 
-/// Protocol for the enums nested inside `Syntax` nodes that enumerate all the
+/// Protocol for the enums nested inside ``Syntax`` nodes that enumerate all the
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
 
@@ -731,7 +731,7 @@ public struct TokenSequence: Sequence {
   let node: Syntax
   let viewMode: SyntaxTreeViewMode
 
-  /// Construct a `TokenSequence` that walks all tokens in `node` in source order,
+  /// Construct a ``TokenSequence`` that walks all tokens in `node` in source order,
   /// recursively walking into child nodes.
   ///
   /// All nodes that are not visible in the given `viewMode` are skipped.
@@ -815,7 +815,7 @@ extension ReversedTokenSequence: CustomReflectable {
   }
 }
 
-/// `SyntaxNode` used to be a pervasive type name in SwiftSyntax that has been
+/// ``SyntaxNode`` used to be a pervasive type name in SwiftSyntax that has been
 /// replaced by the ``Syntax`` type.
 @available(*, unavailable, message: "use 'Syntax' instead")
 public struct SyntaxNode {}

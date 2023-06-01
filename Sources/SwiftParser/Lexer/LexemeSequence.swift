@@ -26,7 +26,7 @@ extension Lexer {
     /// retain/release cost of an array.
     ///
     /// The states will be freed when the lexer is finished, i.e. when this
-    /// `LexemeSequence` is deallocated.
+    /// ``LexemeSequence`` is deallocated.
     ///
     /// The memory footpring of not freeing past lexer states is neglible. It's
     /// usually less than 0.1% of the memory allocated by the syntax arena.
@@ -87,7 +87,7 @@ extension Lexer {
     }
 
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
-    /// If `pointer` is in the source buffer of this `LexemeSequence`, return
+    /// If `pointer` is in the source buffer of this ``LexemeSequence``, return
     /// its offset, otherwise `nil`. Should only be used for the parser's
     /// alternate token introspection
     func offset(of pointer: UnsafePointer<UInt8>) -> Int? {

@@ -34,3295 +34,3295 @@ open class SyntaxVisitor {
     visit(node.data)
   }
   
-  /// Visiting `AccessorBlockSyntax` specifically.
+  /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AccessorBlockSyntax` and its descendents.
+  /// The function called after visiting ``AccessorBlockSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorBlockSyntax) {
   }
   
-  /// Visiting `AccessorDeclSyntax` specifically.
+  /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AccessorDeclSyntax` and its descendents.
+  /// The function called after visiting ``AccessorDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorDeclSyntax) {
   }
   
-  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  /// Visiting ``AccessorEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AccessorEffectSpecifiersSyntax` and its descendents.
+  /// The function called after visiting ``AccessorEffectSpecifiersSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorEffectSpecifiersSyntax) {
   }
   
-  /// Visiting `AccessorListSyntax` specifically.
+  /// Visiting ``AccessorListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AccessorListSyntax` and its descendents.
+  /// The function called after visiting ``AccessorListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorListSyntax) {
   }
   
-  /// Visiting `AccessorParameterSyntax` specifically.
+  /// Visiting ``AccessorParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AccessorParameterSyntax` and its descendents.
+  /// The function called after visiting ``AccessorParameterSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorParameterSyntax) {
   }
   
-  /// Visiting `ActorDeclSyntax` specifically.
+  /// Visiting ``ActorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ActorDeclSyntax` and its descendents.
+  /// The function called after visiting ``ActorDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ActorDeclSyntax) {
   }
   
-  /// Visiting `ArrayElementListSyntax` specifically.
+  /// Visiting ``ArrayElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ArrayElementListSyntax` and its descendents.
+  /// The function called after visiting ``ArrayElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayElementListSyntax) {
   }
   
-  /// Visiting `ArrayElementSyntax` specifically.
+  /// Visiting ``ArrayElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ArrayElementSyntax` and its descendents.
+  /// The function called after visiting ``ArrayElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayElementSyntax) {
   }
   
-  /// Visiting `ArrayExprSyntax` specifically.
+  /// Visiting ``ArrayExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ArrayExprSyntax` and its descendents.
+  /// The function called after visiting ``ArrayExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayExprSyntax) {
   }
   
-  /// Visiting `ArrayTypeSyntax` specifically.
+  /// Visiting ``ArrayTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ArrayTypeSyntax` and its descendents.
+  /// The function called after visiting ``ArrayTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayTypeSyntax) {
   }
   
-  /// Visiting `ArrowExprSyntax` specifically.
+  /// Visiting ``ArrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ArrowExprSyntax` and its descendents.
+  /// The function called after visiting ``ArrowExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrowExprSyntax) {
   }
   
-  /// Visiting `AsExprSyntax` specifically.
+  /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AsExprSyntax` and its descendents.
+  /// The function called after visiting ``AsExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AsExprSyntax) {
   }
   
-  /// Visiting `AssignmentExprSyntax` specifically.
+  /// Visiting ``AssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AssignmentExprSyntax` and its descendents.
+  /// The function called after visiting ``AssignmentExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AssignmentExprSyntax) {
   }
   
-  /// Visiting `AssociatedtypeDeclSyntax` specifically.
+  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AssociatedtypeDeclSyntax` and its descendents.
+  /// The function called after visiting ``AssociatedtypeDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AssociatedtypeDeclSyntax) {
   }
   
-  /// Visiting `AttributeListSyntax` specifically.
+  /// Visiting ``AttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AttributeListSyntax` and its descendents.
+  /// The function called after visiting ``AttributeListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributeListSyntax) {
   }
   
-  /// Visiting `AttributeSyntax` specifically.
+  /// Visiting ``AttributeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AttributeSyntax` and its descendents.
+  /// The function called after visiting ``AttributeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributeSyntax) {
   }
   
-  /// Visiting `AttributedTypeSyntax` specifically.
+  /// Visiting ``AttributedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AttributedTypeSyntax` and its descendents.
+  /// The function called after visiting ``AttributedTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributedTypeSyntax) {
   }
   
-  /// Visiting `AvailabilityArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityArgumentSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityArgumentSyntax) {
   }
   
-  /// Visiting `AvailabilityConditionSyntax` specifically.
+  /// Visiting ``AvailabilityConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityConditionSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityConditionSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityConditionSyntax) {
   }
   
-  /// Visiting `AvailabilityEntrySyntax` specifically.
+  /// Visiting ``AvailabilityEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityEntrySyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityEntrySyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityEntrySyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityEntrySyntax) {
   }
   
-  /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityLabeledArgumentSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
   }
   
-  /// Visiting `AvailabilitySpecListSyntax` specifically.
+  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilitySpecListSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilitySpecListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilitySpecListSyntax) {
   }
   
-  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityVersionRestrictionListEntrySyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionListEntrySyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionListEntrySyntax) {
   }
   
-  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityVersionRestrictionListSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionListSyntax) {
   }
   
-  /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AvailabilityVersionRestrictionSyntax` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
   }
   
-  /// Visiting `AwaitExprSyntax` specifically.
+  /// Visiting ``AwaitExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `AwaitExprSyntax` and its descendents.
+  /// The function called after visiting ``AwaitExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AwaitExprSyntax) {
   }
   
-  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
+  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BackDeployedAttributeSpecListSyntax` and its descendents.
+  /// The function called after visiting ``BackDeployedAttributeSpecListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
   }
   
-  /// Visiting `BinaryOperatorExprSyntax` specifically.
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BinaryOperatorExprSyntax` and its descendents.
+  /// The function called after visiting ``BinaryOperatorExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BinaryOperatorExprSyntax) {
   }
   
-  /// Visiting `BooleanLiteralExprSyntax` specifically.
+  /// Visiting ``BooleanLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BooleanLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``BooleanLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BooleanLiteralExprSyntax) {
   }
   
-  /// Visiting `BorrowExprSyntax` specifically.
+  /// Visiting ``BorrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: BorrowExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BorrowExprSyntax` and its descendents.
+  /// The function called after visiting ``BorrowExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BorrowExprSyntax) {
   }
   
-  /// Visiting `BreakStmtSyntax` specifically.
+  /// Visiting ``BreakStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `BreakStmtSyntax` and its descendents.
+  /// The function called after visiting ``BreakStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BreakStmtSyntax) {
   }
   
-  /// Visiting `CanImportExprSyntax` specifically.
+  /// Visiting ``CanImportExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CanImportExprSyntax` and its descendents.
+  /// The function called after visiting ``CanImportExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CanImportExprSyntax) {
   }
   
-  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  /// Visiting ``CanImportVersionInfoSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CanImportVersionInfoSyntax` and its descendents.
+  /// The function called after visiting ``CanImportVersionInfoSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CanImportVersionInfoSyntax) {
   }
   
-  /// Visiting `CaseItemListSyntax` specifically.
+  /// Visiting ``CaseItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CaseItemListSyntax` and its descendents.
+  /// The function called after visiting ``CaseItemListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemListSyntax) {
   }
   
-  /// Visiting `CaseItemSyntax` specifically.
+  /// Visiting ``CaseItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CaseItemSyntax` and its descendents.
+  /// The function called after visiting ``CaseItemSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemSyntax) {
   }
   
-  /// Visiting `CatchClauseListSyntax` specifically.
+  /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CatchClauseListSyntax` and its descendents.
+  /// The function called after visiting ``CatchClauseListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchClauseListSyntax) {
   }
   
-  /// Visiting `CatchClauseSyntax` specifically.
+  /// Visiting ``CatchClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CatchClauseSyntax` and its descendents.
+  /// The function called after visiting ``CatchClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchClauseSyntax) {
   }
   
-  /// Visiting `CatchItemListSyntax` specifically.
+  /// Visiting ``CatchItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CatchItemListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CatchItemListSyntax` and its descendents.
+  /// The function called after visiting ``CatchItemListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemListSyntax) {
   }
   
-  /// Visiting `CatchItemSyntax` specifically.
+  /// Visiting ``CatchItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CatchItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CatchItemSyntax` and its descendents.
+  /// The function called after visiting ``CatchItemSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemSyntax) {
   }
   
-  /// Visiting `ClassDeclSyntax` specifically.
+  /// Visiting ``ClassDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClassDeclSyntax` and its descendents.
+  /// The function called after visiting ``ClassDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClassDeclSyntax) {
   }
   
-  /// Visiting `ClassRestrictionTypeSyntax` specifically.
+  /// Visiting ``ClassRestrictionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClassRestrictionTypeSyntax` and its descendents.
+  /// The function called after visiting ``ClassRestrictionTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClassRestrictionTypeSyntax) {
   }
   
-  /// Visiting `ClosureCaptureItemListSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureCaptureItemListSyntax` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemListSyntax) {
   }
   
-  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureCaptureItemSpecifierSyntax` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemSpecifierSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
   }
   
-  /// Visiting `ClosureCaptureItemSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureCaptureItemSyntax` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemSyntax) {
   }
   
-  /// Visiting `ClosureCaptureSignatureSyntax` specifically.
+  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureCaptureSignatureSyntax` and its descendents.
+  /// The function called after visiting ``ClosureCaptureSignatureSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureSignatureSyntax) {
   }
   
-  /// Visiting `ClosureExprSyntax` specifically.
+  /// Visiting ``ClosureExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureExprSyntax` and its descendents.
+  /// The function called after visiting ``ClosureExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureExprSyntax) {
   }
   
-  /// Visiting `ClosureParamListSyntax` specifically.
+  /// Visiting ``ClosureParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureParamListSyntax` and its descendents.
+  /// The function called after visiting ``ClosureParamListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParamListSyntax) {
   }
   
-  /// Visiting `ClosureParamSyntax` specifically.
+  /// Visiting ``ClosureParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureParamSyntax` and its descendents.
+  /// The function called after visiting ``ClosureParamSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParamSyntax) {
   }
   
-  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  /// Visiting ``ClosureParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureParameterClauseSyntax` and its descendents.
+  /// The function called after visiting ``ClosureParameterClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterClauseSyntax) {
   }
   
-  /// Visiting `ClosureParameterListSyntax` specifically.
+  /// Visiting ``ClosureParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureParameterListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureParameterListSyntax` and its descendents.
+  /// The function called after visiting ``ClosureParameterListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterListSyntax) {
   }
   
-  /// Visiting `ClosureParameterSyntax` specifically.
+  /// Visiting ``ClosureParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureParameterSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureParameterSyntax` and its descendents.
+  /// The function called after visiting ``ClosureParameterSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterSyntax) {
   }
   
-  /// Visiting `ClosureSignatureSyntax` specifically.
+  /// Visiting ``ClosureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ClosureSignatureSyntax` and its descendents.
+  /// The function called after visiting ``ClosureSignatureSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureSignatureSyntax) {
   }
   
-  /// Visiting `CodeBlockItemListSyntax` specifically.
+  /// Visiting ``CodeBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CodeBlockItemListSyntax` and its descendents.
+  /// The function called after visiting ``CodeBlockItemListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockItemListSyntax) {
   }
   
-  /// Visiting `CodeBlockItemSyntax` specifically.
+  /// Visiting ``CodeBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CodeBlockItemSyntax` and its descendents.
+  /// The function called after visiting ``CodeBlockItemSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockItemSyntax) {
   }
   
-  /// Visiting `CodeBlockSyntax` specifically.
+  /// Visiting ``CodeBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CodeBlockSyntax` and its descendents.
+  /// The function called after visiting ``CodeBlockSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockSyntax) {
   }
   
-  /// Visiting `CompositionTypeElementListSyntax` specifically.
+  /// Visiting ``CompositionTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CompositionTypeElementListSyntax` and its descendents.
+  /// The function called after visiting ``CompositionTypeElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeElementListSyntax) {
   }
   
-  /// Visiting `CompositionTypeElementSyntax` specifically.
+  /// Visiting ``CompositionTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CompositionTypeElementSyntax` and its descendents.
+  /// The function called after visiting ``CompositionTypeElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeElementSyntax) {
   }
   
-  /// Visiting `CompositionTypeSyntax` specifically.
+  /// Visiting ``CompositionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CompositionTypeSyntax` and its descendents.
+  /// The function called after visiting ``CompositionTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeSyntax) {
   }
   
-  /// Visiting `ConditionElementListSyntax` specifically.
+  /// Visiting ``ConditionElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConditionElementListSyntax` and its descendents.
+  /// The function called after visiting ``ConditionElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConditionElementListSyntax) {
   }
   
-  /// Visiting `ConditionElementSyntax` specifically.
+  /// Visiting ``ConditionElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConditionElementSyntax` and its descendents.
+  /// The function called after visiting ``ConditionElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConditionElementSyntax) {
   }
   
-  /// Visiting `ConformanceRequirementSyntax` specifically.
+  /// Visiting ``ConformanceRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConformanceRequirementSyntax` and its descendents.
+  /// The function called after visiting ``ConformanceRequirementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConformanceRequirementSyntax) {
   }
   
-  /// Visiting `ConstrainedSugarTypeSyntax` specifically.
+  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConstrainedSugarTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConstrainedSugarTypeSyntax` and its descendents.
+  /// The function called after visiting ``ConstrainedSugarTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConstrainedSugarTypeSyntax) {
   }
   
-  /// Visiting `ContinueStmtSyntax` specifically.
+  /// Visiting ``ContinueStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ContinueStmtSyntax` and its descendents.
+  /// The function called after visiting ``ContinueStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ContinueStmtSyntax) {
   }
   
-  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConventionAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``ConventionAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ConventionWitnessMethodAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `CopyExprSyntax` specifically.
+  /// Visiting ``CopyExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: CopyExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `CopyExprSyntax` and its descendents.
+  /// The function called after visiting ``CopyExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CopyExprSyntax) {
   }
   
-  /// Visiting `DeclModifierDetailSyntax` specifically.
+  /// Visiting ``DeclModifierDetailSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclModifierDetailSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclModifierDetailSyntax` and its descendents.
+  /// The function called after visiting ``DeclModifierDetailSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclModifierDetailSyntax) {
   }
   
-  /// Visiting `DeclModifierSyntax` specifically.
+  /// Visiting ``DeclModifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclModifierSyntax` and its descendents.
+  /// The function called after visiting ``DeclModifierSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclModifierSyntax) {
   }
   
-  /// Visiting `DeclNameArgumentListSyntax` specifically.
+  /// Visiting ``DeclNameArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclNameArgumentListSyntax` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentListSyntax) {
   }
   
-  /// Visiting `DeclNameArgumentSyntax` specifically.
+  /// Visiting ``DeclNameArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclNameArgumentSyntax` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentSyntax) {
   }
   
-  /// Visiting `DeclNameArgumentsSyntax` specifically.
+  /// Visiting ``DeclNameArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclNameArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentsSyntax) {
   }
   
-  /// Visiting `DeclNameSyntax` specifically.
+  /// Visiting ``DeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeclNameSyntax` and its descendents.
+  /// The function called after visiting ``DeclNameSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameSyntax) {
   }
   
-  /// Visiting `DeferStmtSyntax` specifically.
+  /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeferStmtSyntax` and its descendents.
+  /// The function called after visiting ``DeferStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeferStmtSyntax) {
   }
   
-  /// Visiting `DeinitializerDeclSyntax` specifically.
+  /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DeinitializerDeclSyntax` and its descendents.
+  /// The function called after visiting ``DeinitializerDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeinitializerDeclSyntax) {
   }
   
-  /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DerivativeRegistrationAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
+  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DesignatedTypeElementSyntax` and its descendents.
+  /// The function called after visiting ``DesignatedTypeElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DesignatedTypeElementSyntax) {
   }
   
-  /// Visiting `DesignatedTypeListSyntax` specifically.
+  /// Visiting ``DesignatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DesignatedTypeListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DesignatedTypeListSyntax` and its descendents.
+  /// The function called after visiting ``DesignatedTypeListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DesignatedTypeListSyntax) {
   }
   
-  /// Visiting `DictionaryElementListSyntax` specifically.
+  /// Visiting ``DictionaryElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DictionaryElementListSyntax` and its descendents.
+  /// The function called after visiting ``DictionaryElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryElementListSyntax) {
   }
   
-  /// Visiting `DictionaryElementSyntax` specifically.
+  /// Visiting ``DictionaryElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DictionaryElementSyntax` and its descendents.
+  /// The function called after visiting ``DictionaryElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryElementSyntax) {
   }
   
-  /// Visiting `DictionaryExprSyntax` specifically.
+  /// Visiting ``DictionaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DictionaryExprSyntax` and its descendents.
+  /// The function called after visiting ``DictionaryExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryExprSyntax) {
   }
   
-  /// Visiting `DictionaryTypeSyntax` specifically.
+  /// Visiting ``DictionaryTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DictionaryTypeSyntax` and its descendents.
+  /// The function called after visiting ``DictionaryTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryTypeSyntax) {
   }
   
-  /// Visiting `DifferentiabilityParamListSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DifferentiabilityParamListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DifferentiabilityParamListSyntax` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamListSyntax) {
   }
   
-  /// Visiting `DifferentiabilityParamSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DifferentiabilityParamSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DifferentiabilityParamSyntax` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamSyntax) {
   }
   
-  /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DifferentiabilityParamsClauseSyntax` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamsClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {
   }
   
-  /// Visiting `DifferentiabilityParamsSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DifferentiabilityParamsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DifferentiabilityParamsSyntax` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamsSyntax) {
   }
   
-  /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DifferentiableAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DifferentiableAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``DifferentiableAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiableAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `DiscardAssignmentExprSyntax` specifically.
+  /// Visiting ``DiscardAssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DiscardAssignmentExprSyntax` and its descendents.
+  /// The function called after visiting ``DiscardAssignmentExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DiscardAssignmentExprSyntax) {
   }
   
-  /// Visiting `DiscardStmtSyntax` specifically.
+  /// Visiting ``DiscardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DiscardStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DiscardStmtSyntax` and its descendents.
+  /// The function called after visiting ``DiscardStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DiscardStmtSyntax) {
   }
   
-  /// Visiting `DoStmtSyntax` specifically.
+  /// Visiting ``DoStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DoStmtSyntax` and its descendents.
+  /// The function called after visiting ``DoStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DoStmtSyntax) {
   }
   
-  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DocumentationAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DocumentationAttributeArgumentSyntax` and its descendents.
+  /// The function called after visiting ``DocumentationAttributeArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
   }
   
-  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DocumentationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DocumentationAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``DocumentationAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DocumentationAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: DynamicReplacementArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `DynamicReplacementArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``DynamicReplacementArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DynamicReplacementArgumentsSyntax) {
   }
   
-  /// Visiting `EditorPlaceholderDeclSyntax` specifically.
+  /// Visiting ``EditorPlaceholderDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EditorPlaceholderDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EditorPlaceholderDeclSyntax` and its descendents.
+  /// The function called after visiting ``EditorPlaceholderDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EditorPlaceholderDeclSyntax) {
   }
   
-  /// Visiting `EditorPlaceholderExprSyntax` specifically.
+  /// Visiting ``EditorPlaceholderExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EditorPlaceholderExprSyntax` and its descendents.
+  /// The function called after visiting ``EditorPlaceholderExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EditorPlaceholderExprSyntax) {
   }
   
-  /// Visiting `EffectsArgumentsSyntax` specifically.
+  /// Visiting ``EffectsArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EffectsArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EffectsArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``EffectsArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EffectsArgumentsSyntax) {
   }
   
-  /// Visiting `EnumCaseDeclSyntax` specifically.
+  /// Visiting ``EnumCaseDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseDeclSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseDeclSyntax) {
   }
   
-  /// Visiting `EnumCaseElementListSyntax` specifically.
+  /// Visiting ``EnumCaseElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseElementListSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseElementListSyntax) {
   }
   
-  /// Visiting `EnumCaseElementSyntax` specifically.
+  /// Visiting ``EnumCaseElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseElementSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseElementSyntax) {
   }
   
-  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  /// Visiting ``EnumCaseParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseParameterClauseSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterClauseSyntax) {
   }
   
-  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  /// Visiting ``EnumCaseParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseParameterListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseParameterListSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterListSyntax) {
   }
   
-  /// Visiting `EnumCaseParameterSyntax` specifically.
+  /// Visiting ``EnumCaseParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumCaseParameterSyntax` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterSyntax) {
   }
   
-  /// Visiting `EnumDeclSyntax` specifically.
+  /// Visiting ``EnumDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `EnumDeclSyntax` and its descendents.
+  /// The function called after visiting ``EnumDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumDeclSyntax) {
   }
   
-  /// Visiting `ExposeAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ExposeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExposeAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``ExposeAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `ExprListSyntax` specifically.
+  /// Visiting ``ExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExprListSyntax` and its descendents.
+  /// The function called after visiting ``ExprListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExprListSyntax) {
   }
   
-  /// Visiting `ExpressionPatternSyntax` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExpressionPatternSyntax` and its descendents.
+  /// The function called after visiting ``ExpressionPatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionPatternSyntax) {
   }
   
-  /// Visiting `ExpressionSegmentSyntax` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExpressionSegmentSyntax` and its descendents.
+  /// The function called after visiting ``ExpressionSegmentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionSegmentSyntax) {
   }
   
-  /// Visiting `ExpressionStmtSyntax` specifically.
+  /// Visiting ``ExpressionStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExpressionStmtSyntax` and its descendents.
+  /// The function called after visiting ``ExpressionStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionStmtSyntax) {
   }
   
-  /// Visiting `ExtensionDeclSyntax` specifically.
+  /// Visiting ``ExtensionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ExtensionDeclSyntax` and its descendents.
+  /// The function called after visiting ``ExtensionDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExtensionDeclSyntax) {
   }
   
-  /// Visiting `FallthroughStmtSyntax` specifically.
+  /// Visiting ``FallthroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FallthroughStmtSyntax` and its descendents.
+  /// The function called after visiting ``FallthroughStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FallthroughStmtSyntax) {
   }
   
-  /// Visiting `FloatLiteralExprSyntax` specifically.
+  /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FloatLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``FloatLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FloatLiteralExprSyntax) {
   }
   
-  /// Visiting `ForInStmtSyntax` specifically.
+  /// Visiting ``ForInStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ForInStmtSyntax` and its descendents.
+  /// The function called after visiting ``ForInStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForInStmtSyntax) {
   }
   
-  /// Visiting `ForcedValueExprSyntax` specifically.
+  /// Visiting ``ForcedValueExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ForcedValueExprSyntax` and its descendents.
+  /// The function called after visiting ``ForcedValueExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForcedValueExprSyntax) {
   }
   
-  /// Visiting `FunctionCallExprSyntax` specifically.
+  /// Visiting ``FunctionCallExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionCallExprSyntax` and its descendents.
+  /// The function called after visiting ``FunctionCallExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionCallExprSyntax) {
   }
   
-  /// Visiting `FunctionDeclSyntax` specifically.
+  /// Visiting ``FunctionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionDeclSyntax` and its descendents.
+  /// The function called after visiting ``FunctionDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionDeclSyntax) {
   }
   
-  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  /// Visiting ``FunctionEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionEffectSpecifiersSyntax` and its descendents.
+  /// The function called after visiting ``FunctionEffectSpecifiersSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionEffectSpecifiersSyntax) {
   }
   
-  /// Visiting `FunctionParameterListSyntax` specifically.
+  /// Visiting ``FunctionParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionParameterListSyntax` and its descendents.
+  /// The function called after visiting ``FunctionParameterListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionParameterListSyntax) {
   }
   
-  /// Visiting `FunctionParameterSyntax` specifically.
+  /// Visiting ``FunctionParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionParameterSyntax` and its descendents.
+  /// The function called after visiting ``FunctionParameterSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionParameterSyntax) {
   }
   
-  /// Visiting `FunctionSignatureSyntax` specifically.
+  /// Visiting ``FunctionSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionSignatureSyntax` and its descendents.
+  /// The function called after visiting ``FunctionSignatureSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionSignatureSyntax) {
   }
   
-  /// Visiting `FunctionTypeSyntax` specifically.
+  /// Visiting ``FunctionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `FunctionTypeSyntax` and its descendents.
+  /// The function called after visiting ``FunctionTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionTypeSyntax) {
   }
   
-  /// Visiting `GenericArgumentClauseSyntax` specifically.
+  /// Visiting ``GenericArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericArgumentClauseSyntax` and its descendents.
+  /// The function called after visiting ``GenericArgumentClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentClauseSyntax) {
   }
   
-  /// Visiting `GenericArgumentListSyntax` specifically.
+  /// Visiting ``GenericArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericArgumentListSyntax` and its descendents.
+  /// The function called after visiting ``GenericArgumentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentListSyntax) {
   }
   
-  /// Visiting `GenericArgumentSyntax` specifically.
+  /// Visiting ``GenericArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericArgumentSyntax` and its descendents.
+  /// The function called after visiting ``GenericArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentSyntax) {
   }
   
-  /// Visiting `GenericParameterClauseSyntax` specifically.
+  /// Visiting ``GenericParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericParameterClauseSyntax` and its descendents.
+  /// The function called after visiting ``GenericParameterClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterClauseSyntax) {
   }
   
-  /// Visiting `GenericParameterListSyntax` specifically.
+  /// Visiting ``GenericParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericParameterListSyntax` and its descendents.
+  /// The function called after visiting ``GenericParameterListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterListSyntax) {
   }
   
-  /// Visiting `GenericParameterSyntax` specifically.
+  /// Visiting ``GenericParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericParameterSyntax` and its descendents.
+  /// The function called after visiting ``GenericParameterSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterSyntax) {
   }
   
-  /// Visiting `GenericRequirementListSyntax` specifically.
+  /// Visiting ``GenericRequirementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericRequirementListSyntax` and its descendents.
+  /// The function called after visiting ``GenericRequirementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericRequirementListSyntax) {
   }
   
-  /// Visiting `GenericRequirementSyntax` specifically.
+  /// Visiting ``GenericRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericRequirementSyntax` and its descendents.
+  /// The function called after visiting ``GenericRequirementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericRequirementSyntax) {
   }
   
-  /// Visiting `GenericWhereClauseSyntax` specifically.
+  /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GenericWhereClauseSyntax` and its descendents.
+  /// The function called after visiting ``GenericWhereClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericWhereClauseSyntax) {
   }
   
-  /// Visiting `GuardStmtSyntax` specifically.
+  /// Visiting ``GuardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `GuardStmtSyntax` and its descendents.
+  /// The function called after visiting ``GuardStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GuardStmtSyntax) {
   }
   
-  /// Visiting `IdentifierExprSyntax` specifically.
+  /// Visiting ``IdentifierExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IdentifierExprSyntax` and its descendents.
+  /// The function called after visiting ``IdentifierExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IdentifierExprSyntax) {
   }
   
-  /// Visiting `IdentifierPatternSyntax` specifically.
+  /// Visiting ``IdentifierPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IdentifierPatternSyntax` and its descendents.
+  /// The function called after visiting ``IdentifierPatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IdentifierPatternSyntax) {
   }
   
-  /// Visiting `IfConfigClauseListSyntax` specifically.
+  /// Visiting ``IfConfigClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IfConfigClauseListSyntax` and its descendents.
+  /// The function called after visiting ``IfConfigClauseListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigClauseListSyntax) {
   }
   
-  /// Visiting `IfConfigClauseSyntax` specifically.
+  /// Visiting ``IfConfigClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IfConfigClauseSyntax` and its descendents.
+  /// The function called after visiting ``IfConfigClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigClauseSyntax) {
   }
   
-  /// Visiting `IfConfigDeclSyntax` specifically.
+  /// Visiting ``IfConfigDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IfConfigDeclSyntax` and its descendents.
+  /// The function called after visiting ``IfConfigDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigDeclSyntax) {
   }
   
-  /// Visiting `IfExprSyntax` specifically.
+  /// Visiting ``IfExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IfExprSyntax` and its descendents.
+  /// The function called after visiting ``IfExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfExprSyntax) {
   }
   
-  /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ImplementsAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ImplementsAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``ImplementsAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
+  /// Visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ImplicitlyUnwrappedOptionalTypeSyntax` and its descendents.
+  /// The function called after visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {
   }
   
-  /// Visiting `ImportDeclSyntax` specifically.
+  /// Visiting ``ImportDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ImportDeclSyntax` and its descendents.
+  /// The function called after visiting ``ImportDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportDeclSyntax) {
   }
   
-  /// Visiting `ImportPathComponentSyntax` specifically.
+  /// Visiting ``ImportPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ImportPathComponentSyntax` and its descendents.
+  /// The function called after visiting ``ImportPathComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportPathComponentSyntax) {
   }
   
-  /// Visiting `ImportPathSyntax` specifically.
+  /// Visiting ``ImportPathSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ImportPathSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ImportPathSyntax` and its descendents.
+  /// The function called after visiting ``ImportPathSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportPathSyntax) {
   }
   
-  /// Visiting `InOutExprSyntax` specifically.
+  /// Visiting ``InOutExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InOutExprSyntax` and its descendents.
+  /// The function called after visiting ``InOutExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InOutExprSyntax) {
   }
   
-  /// Visiting `InfixOperatorExprSyntax` specifically.
+  /// Visiting ``InfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InfixOperatorExprSyntax` and its descendents.
+  /// The function called after visiting ``InfixOperatorExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InfixOperatorExprSyntax) {
   }
   
-  /// Visiting `InheritedTypeListSyntax` specifically.
+  /// Visiting ``InheritedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InheritedTypeListSyntax` and its descendents.
+  /// The function called after visiting ``InheritedTypeListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InheritedTypeListSyntax) {
   }
   
-  /// Visiting `InheritedTypeSyntax` specifically.
+  /// Visiting ``InheritedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InheritedTypeSyntax` and its descendents.
+  /// The function called after visiting ``InheritedTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InheritedTypeSyntax) {
   }
   
-  /// Visiting `InitializerClauseSyntax` specifically.
+  /// Visiting ``InitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InitializerClauseSyntax` and its descendents.
+  /// The function called after visiting ``InitializerClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InitializerClauseSyntax) {
   }
   
-  /// Visiting `InitializerDeclSyntax` specifically.
+  /// Visiting ``InitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `InitializerDeclSyntax` and its descendents.
+  /// The function called after visiting ``InitializerDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InitializerDeclSyntax) {
   }
   
-  /// Visiting `IntegerLiteralExprSyntax` specifically.
+  /// Visiting ``IntegerLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IntegerLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``IntegerLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IntegerLiteralExprSyntax) {
   }
   
-  /// Visiting `IsExprSyntax` specifically.
+  /// Visiting ``IsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IsExprSyntax` and its descendents.
+  /// The function called after visiting ``IsExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IsExprSyntax) {
   }
   
-  /// Visiting `IsTypePatternSyntax` specifically.
+  /// Visiting ``IsTypePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `IsTypePatternSyntax` and its descendents.
+  /// The function called after visiting ``IsTypePatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IsTypePatternSyntax) {
   }
   
-  /// Visiting `KeyPathComponentListSyntax` specifically.
+  /// Visiting ``KeyPathComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathComponentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathComponentListSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathComponentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathComponentListSyntax) {
   }
   
-  /// Visiting `KeyPathComponentSyntax` specifically.
+  /// Visiting ``KeyPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathComponentSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathComponentSyntax) {
   }
   
-  /// Visiting `KeyPathExprSyntax` specifically.
+  /// Visiting ``KeyPathExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathExprSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathExprSyntax) {
   }
   
-  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  /// Visiting ``KeyPathOptionalComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathOptionalComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathOptionalComponentSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathOptionalComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathOptionalComponentSyntax) {
   }
   
-  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  /// Visiting ``KeyPathPropertyComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathPropertyComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathPropertyComponentSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathPropertyComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathPropertyComponentSyntax) {
   }
   
-  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  /// Visiting ``KeyPathSubscriptComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: KeyPathSubscriptComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `KeyPathSubscriptComponentSyntax` and its descendents.
+  /// The function called after visiting ``KeyPathSubscriptComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
   }
   
-  /// Visiting `LabeledSpecializeEntrySyntax` specifically.
+  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `LabeledSpecializeEntrySyntax` and its descendents.
+  /// The function called after visiting ``LabeledSpecializeEntrySyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LabeledSpecializeEntrySyntax) {
   }
   
-  /// Visiting `LabeledStmtSyntax` specifically.
+  /// Visiting ``LabeledStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `LabeledStmtSyntax` and its descendents.
+  /// The function called after visiting ``LabeledStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LabeledStmtSyntax) {
   }
   
-  /// Visiting `LayoutRequirementSyntax` specifically.
+  /// Visiting ``LayoutRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: LayoutRequirementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `LayoutRequirementSyntax` and its descendents.
+  /// The function called after visiting ``LayoutRequirementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LayoutRequirementSyntax) {
   }
   
-  /// Visiting `MacroDeclSyntax` specifically.
+  /// Visiting ``MacroDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MacroDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MacroDeclSyntax` and its descendents.
+  /// The function called after visiting ``MacroDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroDeclSyntax) {
   }
   
-  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  /// Visiting ``MacroExpansionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MacroExpansionDeclSyntax` and its descendents.
+  /// The function called after visiting ``MacroExpansionDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroExpansionDeclSyntax) {
   }
   
-  /// Visiting `MacroExpansionExprSyntax` specifically.
+  /// Visiting ``MacroExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MacroExpansionExprSyntax` and its descendents.
+  /// The function called after visiting ``MacroExpansionExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroExpansionExprSyntax) {
   }
   
-  /// Visiting `MatchingPatternConditionSyntax` specifically.
+  /// Visiting ``MatchingPatternConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MatchingPatternConditionSyntax` and its descendents.
+  /// The function called after visiting ``MatchingPatternConditionSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MatchingPatternConditionSyntax) {
   }
   
-  /// Visiting `MemberAccessExprSyntax` specifically.
+  /// Visiting ``MemberAccessExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MemberAccessExprSyntax` and its descendents.
+  /// The function called after visiting ``MemberAccessExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberAccessExprSyntax) {
   }
   
-  /// Visiting `MemberDeclBlockSyntax` specifically.
+  /// Visiting ``MemberDeclBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MemberDeclBlockSyntax` and its descendents.
+  /// The function called after visiting ``MemberDeclBlockSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclBlockSyntax) {
   }
   
-  /// Visiting `MemberDeclListItemSyntax` specifically.
+  /// Visiting ``MemberDeclListItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MemberDeclListItemSyntax` and its descendents.
+  /// The function called after visiting ``MemberDeclListItemSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclListItemSyntax) {
   }
   
-  /// Visiting `MemberDeclListSyntax` specifically.
+  /// Visiting ``MemberDeclListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MemberDeclListSyntax` and its descendents.
+  /// The function called after visiting ``MemberDeclListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclListSyntax) {
   }
   
-  /// Visiting `MemberTypeIdentifierSyntax` specifically.
+  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MemberTypeIdentifierSyntax` and its descendents.
+  /// The function called after visiting ``MemberTypeIdentifierSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberTypeIdentifierSyntax) {
   }
   
-  /// Visiting `MetatypeTypeSyntax` specifically.
+  /// Visiting ``MetatypeTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MetatypeTypeSyntax` and its descendents.
+  /// The function called after visiting ``MetatypeTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MetatypeTypeSyntax) {
   }
   
-  /// Visiting `MissingDeclSyntax` specifically.
+  /// Visiting ``MissingDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingDeclSyntax` and its descendents.
+  /// The function called after visiting ``MissingDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingDeclSyntax) {
   }
   
-  /// Visiting `MissingExprSyntax` specifically.
+  /// Visiting ``MissingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingExprSyntax` and its descendents.
+  /// The function called after visiting ``MissingExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingExprSyntax) {
   }
   
-  /// Visiting `MissingPatternSyntax` specifically.
+  /// Visiting ``MissingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingPatternSyntax` and its descendents.
+  /// The function called after visiting ``MissingPatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingPatternSyntax) {
   }
   
-  /// Visiting `MissingStmtSyntax` specifically.
+  /// Visiting ``MissingStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingStmtSyntax` and its descendents.
+  /// The function called after visiting ``MissingStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingStmtSyntax) {
   }
   
-  /// Visiting `MissingSyntax` specifically.
+  /// Visiting ``MissingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingSyntax` and its descendents.
+  /// The function called after visiting ``MissingSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingSyntax) {
   }
   
-  /// Visiting `MissingTypeSyntax` specifically.
+  /// Visiting ``MissingTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MissingTypeSyntax` and its descendents.
+  /// The function called after visiting ``MissingTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingTypeSyntax) {
   }
   
-  /// Visiting `ModifierListSyntax` specifically.
+  /// Visiting ``ModifierListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ModifierListSyntax` and its descendents.
+  /// The function called after visiting ``ModifierListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ModifierListSyntax) {
   }
   
-  /// Visiting `MoveExprSyntax` specifically.
+  /// Visiting ``MoveExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MoveExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MoveExprSyntax` and its descendents.
+  /// The function called after visiting ``MoveExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MoveExprSyntax) {
   }
   
-  /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MultipleTrailingClosureElementListSyntax` and its descendents.
+  /// The function called after visiting ``MultipleTrailingClosureElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MultipleTrailingClosureElementListSyntax) {
   }
   
-  /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: MultipleTrailingClosureElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `MultipleTrailingClosureElementSyntax` and its descendents.
+  /// The function called after visiting ``MultipleTrailingClosureElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {
   }
   
-  /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
+  /// Visiting ``NamedOpaqueReturnTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: NamedOpaqueReturnTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `NamedOpaqueReturnTypeSyntax` and its descendents.
+  /// The function called after visiting ``NamedOpaqueReturnTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: NamedOpaqueReturnTypeSyntax) {
   }
   
-  /// Visiting `NilLiteralExprSyntax` specifically.
+  /// Visiting ``NilLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `NilLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``NilLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: NilLiteralExprSyntax) {
   }
   
-  /// Visiting `ObjCSelectorPieceSyntax` specifically.
+  /// Visiting ``ObjCSelectorPieceSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ObjCSelectorPieceSyntax` and its descendents.
+  /// The function called after visiting ``ObjCSelectorPieceSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjCSelectorPieceSyntax) {
   }
   
-  /// Visiting `ObjCSelectorSyntax` specifically.
+  /// Visiting ``ObjCSelectorSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ObjCSelectorSyntax` and its descendents.
+  /// The function called after visiting ``ObjCSelectorSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjCSelectorSyntax) {
   }
   
-  /// Visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` specifically.
+  /// Visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `OperatorDeclSyntax` specifically.
+  /// Visiting ``OperatorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OperatorDeclSyntax` and its descendents.
+  /// The function called after visiting ``OperatorDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OperatorDeclSyntax) {
   }
   
-  /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
+  /// Visiting ``OperatorPrecedenceAndTypesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OperatorPrecedenceAndTypesSyntax` and its descendents.
+  /// The function called after visiting ``OperatorPrecedenceAndTypesSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {
   }
   
-  /// Visiting `OptionalBindingConditionSyntax` specifically.
+  /// Visiting ``OptionalBindingConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OptionalBindingConditionSyntax` and its descendents.
+  /// The function called after visiting ``OptionalBindingConditionSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalBindingConditionSyntax) {
   }
   
-  /// Visiting `OptionalChainingExprSyntax` specifically.
+  /// Visiting ``OptionalChainingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OptionalChainingExprSyntax` and its descendents.
+  /// The function called after visiting ``OptionalChainingExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalChainingExprSyntax) {
   }
   
-  /// Visiting `OptionalTypeSyntax` specifically.
+  /// Visiting ``OptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OptionalTypeSyntax` and its descendents.
+  /// The function called after visiting ``OptionalTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalTypeSyntax) {
   }
   
-  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `OriginallyDefinedInArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``OriginallyDefinedInArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OriginallyDefinedInArgumentsSyntax) {
   }
   
-  /// Visiting `PackElementExprSyntax` specifically.
+  /// Visiting ``PackElementExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PackElementExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PackElementExprSyntax` and its descendents.
+  /// The function called after visiting ``PackElementExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackElementExprSyntax) {
   }
   
-  /// Visiting `PackExpansionExprSyntax` specifically.
+  /// Visiting ``PackExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PackExpansionExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PackExpansionExprSyntax` and its descendents.
+  /// The function called after visiting ``PackExpansionExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackExpansionExprSyntax) {
   }
   
-  /// Visiting `PackExpansionTypeSyntax` specifically.
+  /// Visiting ``PackExpansionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PackExpansionTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PackExpansionTypeSyntax` and its descendents.
+  /// The function called after visiting ``PackExpansionTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackExpansionTypeSyntax) {
   }
   
-  /// Visiting `PackReferenceTypeSyntax` specifically.
+  /// Visiting ``PackReferenceTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PackReferenceTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PackReferenceTypeSyntax` and its descendents.
+  /// The function called after visiting ``PackReferenceTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackReferenceTypeSyntax) {
   }
   
-  /// Visiting `ParameterClauseSyntax` specifically.
+  /// Visiting ``ParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ParameterClauseSyntax` and its descendents.
+  /// The function called after visiting ``ParameterClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ParameterClauseSyntax) {
   }
   
-  /// Visiting `PatternBindingListSyntax` specifically.
+  /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PatternBindingListSyntax` and its descendents.
+  /// The function called after visiting ``PatternBindingListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PatternBindingListSyntax) {
   }
   
-  /// Visiting `PatternBindingSyntax` specifically.
+  /// Visiting ``PatternBindingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PatternBindingSyntax` and its descendents.
+  /// The function called after visiting ``PatternBindingSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PatternBindingSyntax) {
   }
   
-  /// Visiting `PostfixIfConfigExprSyntax` specifically.
+  /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PostfixIfConfigExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PostfixIfConfigExprSyntax` and its descendents.
+  /// The function called after visiting ``PostfixIfConfigExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PostfixIfConfigExprSyntax) {
   }
   
-  /// Visiting `PostfixUnaryExprSyntax` specifically.
+  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PostfixUnaryExprSyntax` and its descendents.
+  /// The function called after visiting ``PostfixUnaryExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PostfixUnaryExprSyntax) {
   }
   
-  /// Visiting `PoundSourceLocationArgsSyntax` specifically.
+  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PoundSourceLocationArgsSyntax` and its descendents.
+  /// The function called after visiting ``PoundSourceLocationArgsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundSourceLocationArgsSyntax) {
   }
   
-  /// Visiting `PoundSourceLocationSyntax` specifically.
+  /// Visiting ``PoundSourceLocationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PoundSourceLocationSyntax` and its descendents.
+  /// The function called after visiting ``PoundSourceLocationSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundSourceLocationSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssignmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupAssignmentSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAssignmentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssociativitySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupAssociativitySyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAssociativitySyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {
   }
   
-  /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupAttributeListSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAttributeListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupDeclSyntax` specifically.
+  /// Visiting ``PrecedenceGroupDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupDeclSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupDeclSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupNameElementSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupNameElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupNameListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupNameListSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupNameListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupNameListSyntax) {
   }
   
-  /// Visiting `PrecedenceGroupRelationSyntax` specifically.
+  /// Visiting ``PrecedenceGroupRelationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrecedenceGroupRelationSyntax` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupRelationSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupRelationSyntax) {
   }
   
-  /// Visiting `PrefixOperatorExprSyntax` specifically.
+  /// Visiting ``PrefixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrefixOperatorExprSyntax` and its descendents.
+  /// The function called after visiting ``PrefixOperatorExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrefixOperatorExprSyntax) {
   }
   
-  /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrimaryAssociatedTypeClauseSyntax` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeClauseSyntax) {
   }
   
-  /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrimaryAssociatedTypeListSyntax` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeListSyntax) {
   }
   
-  /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: PrimaryAssociatedTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `PrimaryAssociatedTypeSyntax` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeSyntax) {
   }
   
-  /// Visiting `ProtocolDeclSyntax` specifically.
+  /// Visiting ``ProtocolDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ProtocolDeclSyntax` and its descendents.
+  /// The function called after visiting ``ProtocolDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ProtocolDeclSyntax) {
   }
   
-  /// Visiting `QualifiedDeclNameSyntax` specifically.
+  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: QualifiedDeclNameSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `QualifiedDeclNameSyntax` and its descendents.
+  /// The function called after visiting ``QualifiedDeclNameSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: QualifiedDeclNameSyntax) {
   }
   
-  /// Visiting `RegexLiteralExprSyntax` specifically.
+  /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: RegexLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `RegexLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``RegexLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: RegexLiteralExprSyntax) {
   }
   
-  /// Visiting `RepeatWhileStmtSyntax` specifically.
+  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `RepeatWhileStmtSyntax` and its descendents.
+  /// The function called after visiting ``RepeatWhileStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: RepeatWhileStmtSyntax) {
   }
   
-  /// Visiting `ReturnClauseSyntax` specifically.
+  /// Visiting ``ReturnClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ReturnClauseSyntax` and its descendents.
+  /// The function called after visiting ``ReturnClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ReturnClauseSyntax) {
   }
   
-  /// Visiting `ReturnStmtSyntax` specifically.
+  /// Visiting ``ReturnStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ReturnStmtSyntax` and its descendents.
+  /// The function called after visiting ``ReturnStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ReturnStmtSyntax) {
   }
   
-  /// Visiting `SameTypeRequirementSyntax` specifically.
+  /// Visiting ``SameTypeRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SameTypeRequirementSyntax` and its descendents.
+  /// The function called after visiting ``SameTypeRequirementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SameTypeRequirementSyntax) {
   }
   
-  /// Visiting `SequenceExprSyntax` specifically.
+  /// Visiting ``SequenceExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SequenceExprSyntax` and its descendents.
+  /// The function called after visiting ``SequenceExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SequenceExprSyntax) {
   }
   
-  /// Visiting `SimpleTypeIdentifierSyntax` specifically.
+  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SimpleTypeIdentifierSyntax` and its descendents.
+  /// The function called after visiting ``SimpleTypeIdentifierSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
   }
   
-  /// Visiting `SourceFileSyntax` specifically.
+  /// Visiting ``SourceFileSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SourceFileSyntax` and its descendents.
+  /// The function called after visiting ``SourceFileSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SourceFileSyntax) {
   }
   
-  /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
+  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SpecializeAttributeSpecListSyntax` and its descendents.
+  /// The function called after visiting ``SpecializeAttributeSpecListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
   }
   
-  /// Visiting `SpecializeExprSyntax` specifically.
+  /// Visiting ``SpecializeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SpecializeExprSyntax` and its descendents.
+  /// The function called after visiting ``SpecializeExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SpecializeExprSyntax) {
   }
   
-  /// Visiting `StringLiteralExprSyntax` specifically.
+  /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `StringLiteralExprSyntax` and its descendents.
+  /// The function called after visiting ``StringLiteralExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringLiteralExprSyntax) {
   }
   
-  /// Visiting `StringLiteralSegmentsSyntax` specifically.
+  /// Visiting ``StringLiteralSegmentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `StringLiteralSegmentsSyntax` and its descendents.
+  /// The function called after visiting ``StringLiteralSegmentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringLiteralSegmentsSyntax) {
   }
   
-  /// Visiting `StringSegmentSyntax` specifically.
+  /// Visiting ``StringSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `StringSegmentSyntax` and its descendents.
+  /// The function called after visiting ``StringSegmentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringSegmentSyntax) {
   }
   
-  /// Visiting `StructDeclSyntax` specifically.
+  /// Visiting ``StructDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `StructDeclSyntax` and its descendents.
+  /// The function called after visiting ``StructDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StructDeclSyntax) {
   }
   
-  /// Visiting `SubscriptDeclSyntax` specifically.
+  /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SubscriptDeclSyntax` and its descendents.
+  /// The function called after visiting ``SubscriptDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SubscriptDeclSyntax) {
   }
   
-  /// Visiting `SubscriptExprSyntax` specifically.
+  /// Visiting ``SubscriptExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SubscriptExprSyntax` and its descendents.
+  /// The function called after visiting ``SubscriptExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SubscriptExprSyntax) {
   }
   
-  /// Visiting `SuperRefExprSyntax` specifically.
+  /// Visiting ``SuperRefExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SuperRefExprSyntax` and its descendents.
+  /// The function called after visiting ``SuperRefExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SuperRefExprSyntax) {
   }
   
-  /// Visiting `SuppressedTypeSyntax` specifically.
+  /// Visiting ``SuppressedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SuppressedTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SuppressedTypeSyntax` and its descendents.
+  /// The function called after visiting ``SuppressedTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SuppressedTypeSyntax) {
   }
   
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  /// Visiting ``SwitchCaseLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SwitchCaseLabelSyntax` and its descendents.
+  /// The function called after visiting ``SwitchCaseLabelSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseLabelSyntax) {
   }
   
-  /// Visiting `SwitchCaseListSyntax` specifically.
+  /// Visiting ``SwitchCaseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SwitchCaseListSyntax` and its descendents.
+  /// The function called after visiting ``SwitchCaseListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseListSyntax) {
   }
   
-  /// Visiting `SwitchCaseSyntax` specifically.
+  /// Visiting ``SwitchCaseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SwitchCaseSyntax` and its descendents.
+  /// The function called after visiting ``SwitchCaseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseSyntax) {
   }
   
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  /// Visiting ``SwitchDefaultLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SwitchDefaultLabelSyntax` and its descendents.
+  /// The function called after visiting ``SwitchDefaultLabelSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchDefaultLabelSyntax) {
   }
   
-  /// Visiting `SwitchExprSyntax` specifically.
+  /// Visiting ``SwitchExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `SwitchExprSyntax` and its descendents.
+  /// The function called after visiting ``SwitchExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchExprSyntax) {
   }
   
-  /// Visiting `TargetFunctionEntrySyntax` specifically.
+  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TargetFunctionEntrySyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TargetFunctionEntrySyntax` and its descendents.
+  /// The function called after visiting ``TargetFunctionEntrySyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TargetFunctionEntrySyntax) {
   }
   
-  /// Visiting `TernaryExprSyntax` specifically.
+  /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TernaryExprSyntax` and its descendents.
+  /// The function called after visiting ``TernaryExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TernaryExprSyntax) {
   }
   
-  /// Visiting `ThrowStmtSyntax` specifically.
+  /// Visiting ``ThrowStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ThrowStmtSyntax` and its descendents.
+  /// The function called after visiting ``ThrowStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ThrowStmtSyntax) {
   }
   
-  /// Visiting `TryExprSyntax` specifically.
+  /// Visiting ``TryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TryExprSyntax` and its descendents.
+  /// The function called after visiting ``TryExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TryExprSyntax) {
   }
   
-  /// Visiting `TupleExprElementListSyntax` specifically.
+  /// Visiting ``TupleExprElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleExprElementListSyntax` and its descendents.
+  /// The function called after visiting ``TupleExprElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprElementListSyntax) {
   }
   
-  /// Visiting `TupleExprElementSyntax` specifically.
+  /// Visiting ``TupleExprElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleExprElementSyntax` and its descendents.
+  /// The function called after visiting ``TupleExprElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprElementSyntax) {
   }
   
-  /// Visiting `TupleExprSyntax` specifically.
+  /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleExprSyntax` and its descendents.
+  /// The function called after visiting ``TupleExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprSyntax) {
   }
   
-  /// Visiting `TuplePatternElementListSyntax` specifically.
+  /// Visiting ``TuplePatternElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TuplePatternElementListSyntax` and its descendents.
+  /// The function called after visiting ``TuplePatternElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternElementListSyntax) {
   }
   
-  /// Visiting `TuplePatternElementSyntax` specifically.
+  /// Visiting ``TuplePatternElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TuplePatternElementSyntax` and its descendents.
+  /// The function called after visiting ``TuplePatternElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternElementSyntax) {
   }
   
-  /// Visiting `TuplePatternSyntax` specifically.
+  /// Visiting ``TuplePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TuplePatternSyntax` and its descendents.
+  /// The function called after visiting ``TuplePatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternSyntax) {
   }
   
-  /// Visiting `TupleTypeElementListSyntax` specifically.
+  /// Visiting ``TupleTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleTypeElementListSyntax` and its descendents.
+  /// The function called after visiting ``TupleTypeElementListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeElementListSyntax) {
   }
   
-  /// Visiting `TupleTypeElementSyntax` specifically.
+  /// Visiting ``TupleTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleTypeElementSyntax` and its descendents.
+  /// The function called after visiting ``TupleTypeElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeElementSyntax) {
   }
   
-  /// Visiting `TupleTypeSyntax` specifically.
+  /// Visiting ``TupleTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TupleTypeSyntax` and its descendents.
+  /// The function called after visiting ``TupleTypeSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeSyntax) {
   }
   
-  /// Visiting `TypeAnnotationSyntax` specifically.
+  /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypeAnnotationSyntax` and its descendents.
+  /// The function called after visiting ``TypeAnnotationSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeAnnotationSyntax) {
   }
   
-  /// Visiting `TypeEffectSpecifiersSyntax` specifically.
+  /// Visiting ``TypeEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypeEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypeEffectSpecifiersSyntax` and its descendents.
+  /// The function called after visiting ``TypeEffectSpecifiersSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeEffectSpecifiersSyntax) {
   }
   
-  /// Visiting `TypeExprSyntax` specifically.
+  /// Visiting ``TypeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypeExprSyntax` and its descendents.
+  /// The function called after visiting ``TypeExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeExprSyntax) {
   }
   
-  /// Visiting `TypeInheritanceClauseSyntax` specifically.
+  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypeInheritanceClauseSyntax` and its descendents.
+  /// The function called after visiting ``TypeInheritanceClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeInheritanceClauseSyntax) {
   }
   
-  /// Visiting `TypeInitializerClauseSyntax` specifically.
+  /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypeInitializerClauseSyntax` and its descendents.
+  /// The function called after visiting ``TypeInitializerClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeInitializerClauseSyntax) {
   }
   
-  /// Visiting `TypealiasDeclSyntax` specifically.
+  /// Visiting ``TypealiasDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `TypealiasDeclSyntax` and its descendents.
+  /// The function called after visiting ``TypealiasDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypealiasDeclSyntax) {
   }
   
-  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnavailableFromAsyncArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``UnavailableFromAsyncArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnavailableFromAsyncArgumentsSyntax) {
   }
   
-  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnderscorePrivateAttributeArgumentsSyntax` and its descendents.
+  /// The function called after visiting ``UnderscorePrivateAttributeArgumentsSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
   }
   
-  /// Visiting `UnexpectedNodesSyntax` specifically.
+  /// Visiting ``UnexpectedNodesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnexpectedNodesSyntax` and its descendents.
+  /// The function called after visiting ``UnexpectedNodesSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnexpectedNodesSyntax) {
   }
   
-  /// Visiting `UnresolvedAsExprSyntax` specifically.
+  /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnresolvedAsExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnresolvedAsExprSyntax` and its descendents.
+  /// The function called after visiting ``UnresolvedAsExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedAsExprSyntax) {
   }
   
-  /// Visiting `UnresolvedIsExprSyntax` specifically.
+  /// Visiting ``UnresolvedIsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnresolvedIsExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnresolvedIsExprSyntax` and its descendents.
+  /// The function called after visiting ``UnresolvedIsExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedIsExprSyntax) {
   }
   
-  /// Visiting `UnresolvedPatternExprSyntax` specifically.
+  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnresolvedPatternExprSyntax` and its descendents.
+  /// The function called after visiting ``UnresolvedPatternExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedPatternExprSyntax) {
   }
   
-  /// Visiting `UnresolvedTernaryExprSyntax` specifically.
+  /// Visiting ``UnresolvedTernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `UnresolvedTernaryExprSyntax` and its descendents.
+  /// The function called after visiting ``UnresolvedTernaryExprSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedTernaryExprSyntax) {
   }
   
-  /// Visiting `ValueBindingPatternSyntax` specifically.
+  /// Visiting ``ValueBindingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `ValueBindingPatternSyntax` and its descendents.
+  /// The function called after visiting ``ValueBindingPatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ValueBindingPatternSyntax) {
   }
   
-  /// Visiting `VariableDeclSyntax` specifically.
+  /// Visiting ``VariableDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `VariableDeclSyntax` and its descendents.
+  /// The function called after visiting ``VariableDeclSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VariableDeclSyntax) {
   }
   
-  /// Visiting `VersionComponentListSyntax` specifically.
+  /// Visiting ``VersionComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: VersionComponentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `VersionComponentListSyntax` and its descendents.
+  /// The function called after visiting ``VersionComponentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionComponentListSyntax) {
   }
   
-  /// Visiting `VersionComponentSyntax` specifically.
+  /// Visiting ``VersionComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: VersionComponentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `VersionComponentSyntax` and its descendents.
+  /// The function called after visiting ``VersionComponentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionComponentSyntax) {
   }
   
-  /// Visiting `VersionTupleSyntax` specifically.
+  /// Visiting ``VersionTupleSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `VersionTupleSyntax` and its descendents.
+  /// The function called after visiting ``VersionTupleSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionTupleSyntax) {
   }
   
-  /// Visiting `WhereClauseSyntax` specifically.
+  /// Visiting ``WhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `WhereClauseSyntax` and its descendents.
+  /// The function called after visiting ``WhereClauseSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WhereClauseSyntax) {
   }
   
-  /// Visiting `WhileStmtSyntax` specifically.
+  /// Visiting ``WhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `WhileStmtSyntax` and its descendents.
+  /// The function called after visiting ``WhileStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WhileStmtSyntax) {
   }
   
-  /// Visiting `WildcardPatternSyntax` specifically.
+  /// Visiting ``WildcardPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `WildcardPatternSyntax` and its descendents.
+  /// The function called after visiting ``WildcardPatternSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WildcardPatternSyntax) {
   }
   
-  /// Visiting `YieldExprListElementSyntax` specifically.
+  /// Visiting ``YieldExprListElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: YieldExprListElementSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `YieldExprListElementSyntax` and its descendents.
+  /// The function called after visiting ``YieldExprListElementSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldExprListElementSyntax) {
   }
   
-  /// Visiting `YieldExprListSyntax` specifically.
+  /// Visiting ``YieldExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `YieldExprListSyntax` and its descendents.
+  /// The function called after visiting ``YieldExprListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldExprListSyntax) {
   }
   
-  /// Visiting `YieldListSyntax` specifically.
+  /// Visiting ``YieldListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `YieldListSyntax` and its descendents.
+  /// The function called after visiting ``YieldListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldListSyntax) {
   }
   
-  /// Visiting `YieldStmtSyntax` specifically.
+  /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting `YieldStmtSyntax` and its descendents.
+  /// The function called after visiting ``YieldStmtSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldStmtSyntax) {
   }
   
-  /// Visiting `TokenSyntax` specifically.
+  /// Visiting ``TokenSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {

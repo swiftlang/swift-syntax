@@ -25,7 +25,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ExpressionPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ExpressionPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -103,7 +103,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IdentifierPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IdentifierPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -181,7 +181,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `IsTypePatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``IsTypePatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -297,7 +297,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `MissingPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``MissingPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -376,7 +376,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `TuplePatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``TuplePatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -465,7 +465,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Element` to the node's `elements`
+  /// Adds the provided `element` to the node's `elements`
   /// collection.
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
@@ -537,7 +537,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `ValueBindingPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``ValueBindingPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
@@ -653,7 +653,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a `WildcardPatternSyntax` node from the given `SyntaxData`. This assumes
+  /// Creates a ``WildcardPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {

@@ -14,7 +14,7 @@ import SwiftSyntax
 
 public extension SyntaxProtocol {
 
-  /// Sequence of `SyntaxClassifiedRange`s for this syntax node.
+  /// Sequence of ``SyntaxClassifiedRange``s for this syntax node.
   ///
   /// The provided classified ranges are consecutive and cover the full source
   /// text of the node. The ranges may also span multiple tokens, if multiple
@@ -25,7 +25,7 @@ public extension SyntaxProtocol {
     return SyntaxClassifications(_syntaxNode, in: fullRange)
   }
 
-  /// Sequence of `SyntaxClassifiedRange`s contained in this syntax node within
+  /// Sequence of ``SyntaxClassifiedRange``s contained in this syntax node within
   /// a relative range.
   ///
   /// The provided classified ranges may extend beyond the provided `range`.
@@ -37,16 +37,16 @@ public extension SyntaxProtocol {
   /// intersect the provided `range`.
   ///
   /// - Parameters:
-  ///   - in: The relative byte range to pull `SyntaxClassifiedRange`s from.
-  /// - Returns: Sequence of `SyntaxClassifiedRange`s.
+  ///   - in: The relative byte range to pull ``SyntaxClassifiedRange``s from.
+  /// - Returns: Sequence of ``SyntaxClassifiedRange``s.
   func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
     return SyntaxClassifications(_syntaxNode, in: range)
   }
 
-  /// The `SyntaxClassifiedRange` for a relative byte offset.
+  /// The ``SyntaxClassifiedRange`` for a relative byte offset.
   /// - Parameters:
   ///   - at: The relative to the node byte offset.
-  /// - Returns: The `SyntaxClassifiedRange` for the offset or nil if the source text
+  /// - Returns: The ``SyntaxClassifiedRange`` for the offset or nil if the source text
   ///   at the given offset is unclassified.
   func classification(at offset: Int) -> SyntaxClassifiedRange? {
     let classifications = SyntaxClassifications(_syntaxNode, in: ByteSourceRange(offset: offset, length: 1))
@@ -54,10 +54,10 @@ public extension SyntaxProtocol {
     return iterator.next()
   }
 
-  /// The `SyntaxClassifiedRange` for an absolute position.
+  /// The ``SyntaxClassifiedRange`` for an absolute position.
   /// - Parameters:
   ///   - at: The absolute position.
-  /// - Returns: The `SyntaxClassifiedRange` for the position or nil if the source text
+  /// - Returns: The ``SyntaxClassifiedRange`` for the position or nil if the source text
   ///   at the given position is unclassified.
   func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
     let relativeOffset = position.utf8Offset - self.position.utf8Offset

@@ -136,19 +136,19 @@ public enum EffectSpecifier: TokenSpecSet {
 /// Specify the effect specifiers trait manually as a one off.
 protocol RawEffectSpecifiersTrait {
   /// The token kinds that should be consumed as misspelled `asyncSpecifier`.
-  /// Should be a subset of `AsyncEffectSpecifier`.
+  /// Should be a subset of ``AsyncEffectSpecifier``.
   associatedtype MisspelledAsyncSpecifiers: TokenSpecSet
 
   /// The token kinds that we can consume as a correct `asyncSpecifier`.
-  /// Should be a subset of `AsyncEffectSpecifier`.
+  /// Should be a subset of ``AsyncEffectSpecifier``.
   associatedtype CorrectAsyncTokenKinds: TokenSpecSet
 
   /// The token kinds that should be consumed as misspelled `throwsSpecifier`.
-  /// Should be a subset of `ThrowsEffectSpecifier`.
+  /// Should be a subset of ``ThrowsEffectSpecifier``.
   associatedtype MisspelledThrowsTokenKinds: TokenSpecSet
 
   /// The token kinds that we can consume as a correct `throwsSpecifier`.
-  /// Should be a subset of `ThrowsEffectSpecifier`.
+  /// Should be a subset of ``ThrowsEffectSpecifier``.
   associatedtype CorrectThrowsTokenKinds: TokenSpecSet
 
   var unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax? { get }

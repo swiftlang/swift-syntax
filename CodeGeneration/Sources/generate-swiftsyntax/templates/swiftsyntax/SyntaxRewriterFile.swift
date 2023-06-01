@@ -36,7 +36,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if (node.base == .syntax || node.base == .syntaxCollection) && node.kind != .missing {
         DeclSyntax(
           """
-          /// Visit a `\(node.kind.syntaxType)`.
+          /// Visit a ``\(node.kind.syntaxType)``.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
@@ -47,7 +47,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else {
         DeclSyntax(
           """
-          /// Visit a `\(node.kind.syntaxType)`.
+          /// Visit a ``\(node.kind.syntaxType)``.
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           open func visit(_ node: \(node.kind.syntaxType)) -> \(raw: node.baseType.syntaxBaseName) {
@@ -60,7 +60,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// Visit a `TokenSyntax`.
+      /// Visit a ``TokenSyntax``.
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
       open func visit(_ token: TokenSyntax) -> TokenSyntax {

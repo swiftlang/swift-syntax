@@ -12,7 +12,7 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-/// A type that consumes  instances of `TokenSyntax`.
+/// A type that consumes  instances of ``TokenSyntax``.
 protocol TokenConsumer {
   associatedtype Token
   /// The current token syntax being examined by the consumer

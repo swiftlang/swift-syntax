@@ -21,10 +21,10 @@ public enum SyntaxOrTokenNodeKind: Hashable {
   case token(tokenKind: String)
 }
 
-/// Extension to the `Child` type to provide functionality specific to
+/// Extension to the ``Child`` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
 public extension Child {
-  /// The type of this child, represented by a `SyntaxBuildableType`, which can
+  /// The type of this child, represented by a ``SyntaxBuildableType``, which can
   /// be used to create the corresponding `Buildable` and `ExpressibleAs` types.
   var type: SyntaxBuildableType {
     let buildableKind: SyntaxOrTokenNodeKind
@@ -96,7 +96,7 @@ public extension Child {
 
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `precondition` statement that verifies the variable with name var_name and of type
-  /// `TokenSyntax` contains one of the supported text options. Otherwise return `nil`.
+  /// ``TokenSyntax`` contains one of the supported text options. Otherwise return `nil`.
   func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
     guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _) = kind else {
       return nil

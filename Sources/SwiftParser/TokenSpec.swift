@@ -14,7 +14,7 @@
 
 /// Pre-computes the keyword a lexeme might represent. This makes matching
 /// a lexeme that has been converted into `PrepareForKeyword` match cheaper to
-/// match against multiple `TokenSpec` that assume a keyword.
+/// match against multiple ``TokenSpec`` that assume a keyword.
 struct PrepareForKeywordMatch {
   /// The kind of the lexeme.
   fileprivate let rawTokenKind: RawTokenKind
@@ -40,14 +40,14 @@ struct PrepareForKeywordMatch {
 
 /// Describes a token that should be consumed by the parser.
 ///
-/// All the methods in here and all functions that take a `TokenSpec` need to be
-/// marked `@inline(__always)` so the compiler inlines the `RawTokenKind` we are
+/// All the methods in here and all functions that take a ``TokenSpec`` need to be
+/// marked `@inline(__always)` so the compiler inlines the ``RawTokenKind`` we are
 /// matching against and is thus able to rule out one of the branches in
 /// `matches(rawTokenKind:text:)` based on the matched kind.
 @_spi(AlternateTokenIntrospection)
 public struct TokenSpec {
   /// The kind we expect the token that we want to consume to have.
-  /// This can be a keyword, in which case the `TokenSpec` will also match an
+  /// This can be a keyword, in which case the ``TokenSpec`` will also match an
   /// identifier with the same text as the keyword and remap it to that keyword
   /// when consumed.
   ///
@@ -162,8 +162,8 @@ public struct TokenSpec {
     )
   }
 
-  /// Returns a `TokenKind` that will most likely be parsed as a token that
-  /// matches this `TokenSpec`.
+  /// Returns a ``TokenKind`` that will most likely be parsed as a token that
+  /// matches this ``TokenSpec``.
   ///
   /// IMPORTANT: Should only be used when generating tokens during the
   /// modification of test cases. This should never be used in the parser itself.

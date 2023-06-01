@@ -707,7 +707,7 @@ public let EXPR_NODES: [Node] = [
     kind: .exprList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    documentation: "A list of expressions connected by operators. This list is contained by a `SequenceExprSyntax`.",
+    documentation: "A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.",
     elementChoices: [.expr]
   ),
 

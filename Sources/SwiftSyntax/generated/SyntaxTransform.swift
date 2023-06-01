@@ -19,1372 +19,1372 @@ public protocol SyntaxTransformVisitor {
   
   func visit(_ token: TokenSyntax) -> ResultType
   
-  /// Visiting `AccessorBlockSyntax` specifically.
+  /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorBlockSyntax) -> ResultType
   
-  /// Visiting `AccessorDeclSyntax` specifically.
+  /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorDeclSyntax) -> ResultType
   
-  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  /// Visiting ``AccessorEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType
   
-  /// Visiting `AccessorListSyntax` specifically.
+  /// Visiting ``AccessorListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorListSyntax) -> ResultType
   
-  /// Visiting `AccessorParameterSyntax` specifically.
+  /// Visiting ``AccessorParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorParameterSyntax) -> ResultType
   
-  /// Visiting `ActorDeclSyntax` specifically.
+  /// Visiting ``ActorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ActorDeclSyntax) -> ResultType
   
-  /// Visiting `ArrayElementListSyntax` specifically.
+  /// Visiting ``ArrayElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrayElementListSyntax) -> ResultType
   
-  /// Visiting `ArrayElementSyntax` specifically.
+  /// Visiting ``ArrayElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrayElementSyntax) -> ResultType
   
-  /// Visiting `ArrayExprSyntax` specifically.
+  /// Visiting ``ArrayExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrayExprSyntax) -> ResultType
   
-  /// Visiting `ArrayTypeSyntax` specifically.
+  /// Visiting ``ArrayTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrayTypeSyntax) -> ResultType
   
-  /// Visiting `ArrowExprSyntax` specifically.
+  /// Visiting ``ArrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrowExprSyntax) -> ResultType
   
-  /// Visiting `AsExprSyntax` specifically.
+  /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AsExprSyntax) -> ResultType
   
-  /// Visiting `AssignmentExprSyntax` specifically.
+  /// Visiting ``AssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AssignmentExprSyntax) -> ResultType
   
-  /// Visiting `AssociatedtypeDeclSyntax` specifically.
+  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType
   
-  /// Visiting `AttributeListSyntax` specifically.
+  /// Visiting ``AttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AttributeListSyntax) -> ResultType
   
-  /// Visiting `AttributeSyntax` specifically.
+  /// Visiting ``AttributeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AttributeSyntax) -> ResultType
   
-  /// Visiting `AttributedTypeSyntax` specifically.
+  /// Visiting ``AttributedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AttributedTypeSyntax) -> ResultType
   
-  /// Visiting `AvailabilityArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityArgumentSyntax) -> ResultType
   
-  /// Visiting `AvailabilityConditionSyntax` specifically.
+  /// Visiting ``AvailabilityConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityConditionSyntax) -> ResultType
   
-  /// Visiting `AvailabilityEntrySyntax` specifically.
+  /// Visiting ``AvailabilityEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityEntrySyntax) -> ResultType
   
-  /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType
   
-  /// Visiting `AvailabilitySpecListSyntax` specifically.
+  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilitySpecListSyntax) -> ResultType
   
-  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType
   
-  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType
   
-  /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType
   
-  /// Visiting `AwaitExprSyntax` specifically.
+  /// Visiting ``AwaitExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AwaitExprSyntax) -> ResultType
   
-  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
+  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType
   
-  /// Visiting `BinaryOperatorExprSyntax` specifically.
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BinaryOperatorExprSyntax) -> ResultType
   
-  /// Visiting `BooleanLiteralExprSyntax` specifically.
+  /// Visiting ``BooleanLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BooleanLiteralExprSyntax) -> ResultType
   
-  /// Visiting `BorrowExprSyntax` specifically.
+  /// Visiting ``BorrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BorrowExprSyntax) -> ResultType
   
-  /// Visiting `BreakStmtSyntax` specifically.
+  /// Visiting ``BreakStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BreakStmtSyntax) -> ResultType
   
-  /// Visiting `CanImportExprSyntax` specifically.
+  /// Visiting ``CanImportExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CanImportExprSyntax) -> ResultType
   
-  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  /// Visiting ``CanImportVersionInfoSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CanImportVersionInfoSyntax) -> ResultType
   
-  /// Visiting `CaseItemListSyntax` specifically.
+  /// Visiting ``CaseItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CaseItemListSyntax) -> ResultType
   
-  /// Visiting `CaseItemSyntax` specifically.
+  /// Visiting ``CaseItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CaseItemSyntax) -> ResultType
   
-  /// Visiting `CatchClauseListSyntax` specifically.
+  /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CatchClauseListSyntax) -> ResultType
   
-  /// Visiting `CatchClauseSyntax` specifically.
+  /// Visiting ``CatchClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CatchClauseSyntax) -> ResultType
   
-  /// Visiting `CatchItemListSyntax` specifically.
+  /// Visiting ``CatchItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CatchItemListSyntax) -> ResultType
   
-  /// Visiting `CatchItemSyntax` specifically.
+  /// Visiting ``CatchItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CatchItemSyntax) -> ResultType
   
-  /// Visiting `ClassDeclSyntax` specifically.
+  /// Visiting ``ClassDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClassDeclSyntax) -> ResultType
   
-  /// Visiting `ClassRestrictionTypeSyntax` specifically.
+  /// Visiting ``ClassRestrictionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType
   
-  /// Visiting `ClosureCaptureItemListSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType
   
-  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType
   
-  /// Visiting `ClosureCaptureItemSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureCaptureItemSyntax) -> ResultType
   
-  /// Visiting `ClosureCaptureSignatureSyntax` specifically.
+  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType
   
-  /// Visiting `ClosureExprSyntax` specifically.
+  /// Visiting ``ClosureExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureExprSyntax) -> ResultType
   
-  /// Visiting `ClosureParamListSyntax` specifically.
+  /// Visiting ``ClosureParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParamListSyntax) -> ResultType
   
-  /// Visiting `ClosureParamSyntax` specifically.
+  /// Visiting ``ClosureParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParamSyntax) -> ResultType
   
-  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  /// Visiting ``ClosureParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParameterClauseSyntax) -> ResultType
   
-  /// Visiting `ClosureParameterListSyntax` specifically.
+  /// Visiting ``ClosureParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParameterListSyntax) -> ResultType
   
-  /// Visiting `ClosureParameterSyntax` specifically.
+  /// Visiting ``ClosureParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParameterSyntax) -> ResultType
   
-  /// Visiting `ClosureSignatureSyntax` specifically.
+  /// Visiting ``ClosureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureSignatureSyntax) -> ResultType
   
-  /// Visiting `CodeBlockItemListSyntax` specifically.
+  /// Visiting ``CodeBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CodeBlockItemListSyntax) -> ResultType
   
-  /// Visiting `CodeBlockItemSyntax` specifically.
+  /// Visiting ``CodeBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CodeBlockItemSyntax) -> ResultType
   
-  /// Visiting `CodeBlockSyntax` specifically.
+  /// Visiting ``CodeBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CodeBlockSyntax) -> ResultType
   
-  /// Visiting `CompositionTypeElementListSyntax` specifically.
+  /// Visiting ``CompositionTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CompositionTypeElementListSyntax) -> ResultType
   
-  /// Visiting `CompositionTypeElementSyntax` specifically.
+  /// Visiting ``CompositionTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CompositionTypeElementSyntax) -> ResultType
   
-  /// Visiting `CompositionTypeSyntax` specifically.
+  /// Visiting ``CompositionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CompositionTypeSyntax) -> ResultType
   
-  /// Visiting `ConditionElementListSyntax` specifically.
+  /// Visiting ``ConditionElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConditionElementListSyntax) -> ResultType
   
-  /// Visiting `ConditionElementSyntax` specifically.
+  /// Visiting ``ConditionElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConditionElementSyntax) -> ResultType
   
-  /// Visiting `ConformanceRequirementSyntax` specifically.
+  /// Visiting ``ConformanceRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConformanceRequirementSyntax) -> ResultType
   
-  /// Visiting `ConstrainedSugarTypeSyntax` specifically.
+  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType
   
-  /// Visiting `ContinueStmtSyntax` specifically.
+  /// Visiting ``ContinueStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ContinueStmtSyntax) -> ResultType
   
-  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConventionAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `CopyExprSyntax` specifically.
+  /// Visiting ``CopyExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CopyExprSyntax) -> ResultType
   
-  /// Visiting `DeclModifierDetailSyntax` specifically.
+  /// Visiting ``DeclModifierDetailSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclModifierDetailSyntax) -> ResultType
   
-  /// Visiting `DeclModifierSyntax` specifically.
+  /// Visiting ``DeclModifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclModifierSyntax) -> ResultType
   
-  /// Visiting `DeclNameArgumentListSyntax` specifically.
+  /// Visiting ``DeclNameArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameArgumentListSyntax) -> ResultType
   
-  /// Visiting `DeclNameArgumentSyntax` specifically.
+  /// Visiting ``DeclNameArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameArgumentSyntax) -> ResultType
   
-  /// Visiting `DeclNameArgumentsSyntax` specifically.
+  /// Visiting ``DeclNameArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameArgumentsSyntax) -> ResultType
   
-  /// Visiting `DeclNameSyntax` specifically.
+  /// Visiting ``DeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameSyntax) -> ResultType
   
-  /// Visiting `DeferStmtSyntax` specifically.
+  /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeferStmtSyntax) -> ResultType
   
-  /// Visiting `DeinitializerDeclSyntax` specifically.
+  /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeinitializerDeclSyntax) -> ResultType
   
-  /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
+  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DesignatedTypeElementSyntax) -> ResultType
   
-  /// Visiting `DesignatedTypeListSyntax` specifically.
+  /// Visiting ``DesignatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DesignatedTypeListSyntax) -> ResultType
   
-  /// Visiting `DictionaryElementListSyntax` specifically.
+  /// Visiting ``DictionaryElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryElementListSyntax) -> ResultType
   
-  /// Visiting `DictionaryElementSyntax` specifically.
+  /// Visiting ``DictionaryElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryElementSyntax) -> ResultType
   
-  /// Visiting `DictionaryExprSyntax` specifically.
+  /// Visiting ``DictionaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryExprSyntax) -> ResultType
   
-  /// Visiting `DictionaryTypeSyntax` specifically.
+  /// Visiting ``DictionaryTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryTypeSyntax) -> ResultType
   
-  /// Visiting `DifferentiabilityParamListSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType
   
-  /// Visiting `DifferentiabilityParamSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiabilityParamSyntax) -> ResultType
   
-  /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType
   
-  /// Visiting `DifferentiabilityParamsSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType
   
-  /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DifferentiableAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `DiscardAssignmentExprSyntax` specifically.
+  /// Visiting ``DiscardAssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType
   
-  /// Visiting `DiscardStmtSyntax` specifically.
+  /// Visiting ``DiscardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DiscardStmtSyntax) -> ResultType
   
-  /// Visiting `DoStmtSyntax` specifically.
+  /// Visiting ``DoStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DoStmtSyntax) -> ResultType
   
-  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType
   
-  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType
   
-  /// Visiting `EditorPlaceholderDeclSyntax` specifically.
+  /// Visiting ``EditorPlaceholderDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderDeclSyntax) -> ResultType
   
-  /// Visiting `EditorPlaceholderExprSyntax` specifically.
+  /// Visiting ``EditorPlaceholderExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
   
-  /// Visiting `EffectsArgumentsSyntax` specifically.
+  /// Visiting ``EffectsArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EffectsArgumentsSyntax) -> ResultType
   
-  /// Visiting `EnumCaseDeclSyntax` specifically.
+  /// Visiting ``EnumCaseDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseDeclSyntax) -> ResultType
   
-  /// Visiting `EnumCaseElementListSyntax` specifically.
+  /// Visiting ``EnumCaseElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseElementListSyntax) -> ResultType
   
-  /// Visiting `EnumCaseElementSyntax` specifically.
+  /// Visiting ``EnumCaseElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseElementSyntax) -> ResultType
   
-  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  /// Visiting ``EnumCaseParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseParameterClauseSyntax) -> ResultType
   
-  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  /// Visiting ``EnumCaseParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseParameterListSyntax) -> ResultType
   
-  /// Visiting `EnumCaseParameterSyntax` specifically.
+  /// Visiting ``EnumCaseParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumCaseParameterSyntax) -> ResultType
   
-  /// Visiting `EnumDeclSyntax` specifically.
+  /// Visiting ``EnumDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EnumDeclSyntax) -> ResultType
   
-  /// Visiting `ExposeAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ExposeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExposeAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `ExprListSyntax` specifically.
+  /// Visiting ``ExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExprListSyntax) -> ResultType
   
-  /// Visiting `ExpressionPatternSyntax` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExpressionPatternSyntax) -> ResultType
   
-  /// Visiting `ExpressionSegmentSyntax` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExpressionSegmentSyntax) -> ResultType
   
-  /// Visiting `ExpressionStmtSyntax` specifically.
+  /// Visiting ``ExpressionStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExpressionStmtSyntax) -> ResultType
   
-  /// Visiting `ExtensionDeclSyntax` specifically.
+  /// Visiting ``ExtensionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExtensionDeclSyntax) -> ResultType
   
-  /// Visiting `FallthroughStmtSyntax` specifically.
+  /// Visiting ``FallthroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FallthroughStmtSyntax) -> ResultType
   
-  /// Visiting `FloatLiteralExprSyntax` specifically.
+  /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FloatLiteralExprSyntax) -> ResultType
   
-  /// Visiting `ForInStmtSyntax` specifically.
+  /// Visiting ``ForInStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ForInStmtSyntax) -> ResultType
   
-  /// Visiting `ForcedValueExprSyntax` specifically.
+  /// Visiting ``ForcedValueExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ForcedValueExprSyntax) -> ResultType
   
-  /// Visiting `FunctionCallExprSyntax` specifically.
+  /// Visiting ``FunctionCallExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionCallExprSyntax) -> ResultType
   
-  /// Visiting `FunctionDeclSyntax` specifically.
+  /// Visiting ``FunctionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionDeclSyntax) -> ResultType
   
-  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  /// Visiting ``FunctionEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType
   
-  /// Visiting `FunctionParameterListSyntax` specifically.
+  /// Visiting ``FunctionParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionParameterListSyntax) -> ResultType
   
-  /// Visiting `FunctionParameterSyntax` specifically.
+  /// Visiting ``FunctionParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionParameterSyntax) -> ResultType
   
-  /// Visiting `FunctionSignatureSyntax` specifically.
+  /// Visiting ``FunctionSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionSignatureSyntax) -> ResultType
   
-  /// Visiting `FunctionTypeSyntax` specifically.
+  /// Visiting ``FunctionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionTypeSyntax) -> ResultType
   
-  /// Visiting `GenericArgumentClauseSyntax` specifically.
+  /// Visiting ``GenericArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericArgumentClauseSyntax) -> ResultType
   
-  /// Visiting `GenericArgumentListSyntax` specifically.
+  /// Visiting ``GenericArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericArgumentListSyntax) -> ResultType
   
-  /// Visiting `GenericArgumentSyntax` specifically.
+  /// Visiting ``GenericArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericArgumentSyntax) -> ResultType
   
-  /// Visiting `GenericParameterClauseSyntax` specifically.
+  /// Visiting ``GenericParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericParameterClauseSyntax) -> ResultType
   
-  /// Visiting `GenericParameterListSyntax` specifically.
+  /// Visiting ``GenericParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericParameterListSyntax) -> ResultType
   
-  /// Visiting `GenericParameterSyntax` specifically.
+  /// Visiting ``GenericParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericParameterSyntax) -> ResultType
   
-  /// Visiting `GenericRequirementListSyntax` specifically.
+  /// Visiting ``GenericRequirementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericRequirementListSyntax) -> ResultType
   
-  /// Visiting `GenericRequirementSyntax` specifically.
+  /// Visiting ``GenericRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericRequirementSyntax) -> ResultType
   
-  /// Visiting `GenericWhereClauseSyntax` specifically.
+  /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericWhereClauseSyntax) -> ResultType
   
-  /// Visiting `GuardStmtSyntax` specifically.
+  /// Visiting ``GuardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GuardStmtSyntax) -> ResultType
   
-  /// Visiting `IdentifierExprSyntax` specifically.
+  /// Visiting ``IdentifierExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IdentifierExprSyntax) -> ResultType
   
-  /// Visiting `IdentifierPatternSyntax` specifically.
+  /// Visiting ``IdentifierPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IdentifierPatternSyntax) -> ResultType
   
-  /// Visiting `IfConfigClauseListSyntax` specifically.
+  /// Visiting ``IfConfigClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfConfigClauseListSyntax) -> ResultType
   
-  /// Visiting `IfConfigClauseSyntax` specifically.
+  /// Visiting ``IfConfigClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfConfigClauseSyntax) -> ResultType
   
-  /// Visiting `IfConfigDeclSyntax` specifically.
+  /// Visiting ``IfConfigDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfConfigDeclSyntax) -> ResultType
   
-  /// Visiting `IfExprSyntax` specifically.
+  /// Visiting ``IfExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IfExprSyntax) -> ResultType
   
-  /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ImplementsAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
+  /// Visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> ResultType
   
-  /// Visiting `ImportDeclSyntax` specifically.
+  /// Visiting ``ImportDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportDeclSyntax) -> ResultType
   
-  /// Visiting `ImportPathComponentSyntax` specifically.
+  /// Visiting ``ImportPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportPathComponentSyntax) -> ResultType
   
-  /// Visiting `ImportPathSyntax` specifically.
+  /// Visiting ``ImportPathSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportPathSyntax) -> ResultType
   
-  /// Visiting `InOutExprSyntax` specifically.
+  /// Visiting ``InOutExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InOutExprSyntax) -> ResultType
   
-  /// Visiting `InfixOperatorExprSyntax` specifically.
+  /// Visiting ``InfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InfixOperatorExprSyntax) -> ResultType
   
-  /// Visiting `InheritedTypeListSyntax` specifically.
+  /// Visiting ``InheritedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InheritedTypeListSyntax) -> ResultType
   
-  /// Visiting `InheritedTypeSyntax` specifically.
+  /// Visiting ``InheritedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InheritedTypeSyntax) -> ResultType
   
-  /// Visiting `InitializerClauseSyntax` specifically.
+  /// Visiting ``InitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InitializerClauseSyntax) -> ResultType
   
-  /// Visiting `InitializerDeclSyntax` specifically.
+  /// Visiting ``InitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InitializerDeclSyntax) -> ResultType
   
-  /// Visiting `IntegerLiteralExprSyntax` specifically.
+  /// Visiting ``IntegerLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IntegerLiteralExprSyntax) -> ResultType
   
-  /// Visiting `IsExprSyntax` specifically.
+  /// Visiting ``IsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IsExprSyntax) -> ResultType
   
-  /// Visiting `IsTypePatternSyntax` specifically.
+  /// Visiting ``IsTypePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IsTypePatternSyntax) -> ResultType
   
-  /// Visiting `KeyPathComponentListSyntax` specifically.
+  /// Visiting ``KeyPathComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathComponentListSyntax) -> ResultType
   
-  /// Visiting `KeyPathComponentSyntax` specifically.
+  /// Visiting ``KeyPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathComponentSyntax) -> ResultType
   
-  /// Visiting `KeyPathExprSyntax` specifically.
+  /// Visiting ``KeyPathExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathExprSyntax) -> ResultType
   
-  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  /// Visiting ``KeyPathOptionalComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType
   
-  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  /// Visiting ``KeyPathPropertyComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathPropertyComponentSyntax) -> ResultType
   
-  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  /// Visiting ``KeyPathSubscriptComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
   
-  /// Visiting `LabeledSpecializeEntrySyntax` specifically.
+  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType
   
-  /// Visiting `LabeledStmtSyntax` specifically.
+  /// Visiting ``LabeledStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: LabeledStmtSyntax) -> ResultType
   
-  /// Visiting `LayoutRequirementSyntax` specifically.
+  /// Visiting ``LayoutRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: LayoutRequirementSyntax) -> ResultType
   
-  /// Visiting `MacroDeclSyntax` specifically.
+  /// Visiting ``MacroDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MacroDeclSyntax) -> ResultType
   
-  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  /// Visiting ``MacroExpansionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MacroExpansionDeclSyntax) -> ResultType
   
-  /// Visiting `MacroExpansionExprSyntax` specifically.
+  /// Visiting ``MacroExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MacroExpansionExprSyntax) -> ResultType
   
-  /// Visiting `MatchingPatternConditionSyntax` specifically.
+  /// Visiting ``MatchingPatternConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MatchingPatternConditionSyntax) -> ResultType
   
-  /// Visiting `MemberAccessExprSyntax` specifically.
+  /// Visiting ``MemberAccessExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberAccessExprSyntax) -> ResultType
   
-  /// Visiting `MemberDeclBlockSyntax` specifically.
+  /// Visiting ``MemberDeclBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberDeclBlockSyntax) -> ResultType
   
-  /// Visiting `MemberDeclListItemSyntax` specifically.
+  /// Visiting ``MemberDeclListItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberDeclListItemSyntax) -> ResultType
   
-  /// Visiting `MemberDeclListSyntax` specifically.
+  /// Visiting ``MemberDeclListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberDeclListSyntax) -> ResultType
   
-  /// Visiting `MemberTypeIdentifierSyntax` specifically.
+  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType
   
-  /// Visiting `MetatypeTypeSyntax` specifically.
+  /// Visiting ``MetatypeTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MetatypeTypeSyntax) -> ResultType
   
-  /// Visiting `MissingDeclSyntax` specifically.
+  /// Visiting ``MissingDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingDeclSyntax) -> ResultType
   
-  /// Visiting `MissingExprSyntax` specifically.
+  /// Visiting ``MissingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingExprSyntax) -> ResultType
   
-  /// Visiting `MissingPatternSyntax` specifically.
+  /// Visiting ``MissingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingPatternSyntax) -> ResultType
   
-  /// Visiting `MissingStmtSyntax` specifically.
+  /// Visiting ``MissingStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingStmtSyntax) -> ResultType
   
-  /// Visiting `MissingSyntax` specifically.
+  /// Visiting ``MissingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingSyntax) -> ResultType
   
-  /// Visiting `MissingTypeSyntax` specifically.
+  /// Visiting ``MissingTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingTypeSyntax) -> ResultType
   
-  /// Visiting `ModifierListSyntax` specifically.
+  /// Visiting ``ModifierListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ModifierListSyntax) -> ResultType
   
-  /// Visiting `MoveExprSyntax` specifically.
+  /// Visiting ``MoveExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MoveExprSyntax) -> ResultType
   
-  /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MultipleTrailingClosureElementListSyntax) -> ResultType
   
-  /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType
   
-  /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
+  /// Visiting ``NamedOpaqueReturnTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: NamedOpaqueReturnTypeSyntax) -> ResultType
   
-  /// Visiting `NilLiteralExprSyntax` specifically.
+  /// Visiting ``NilLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: NilLiteralExprSyntax) -> ResultType
   
-  /// Visiting `ObjCSelectorPieceSyntax` specifically.
+  /// Visiting ``ObjCSelectorPieceSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType
   
-  /// Visiting `ObjCSelectorSyntax` specifically.
+  /// Visiting ``ObjCSelectorSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ObjCSelectorSyntax) -> ResultType
   
-  /// Visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` specifically.
+  /// Visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `OperatorDeclSyntax` specifically.
+  /// Visiting ``OperatorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OperatorDeclSyntax) -> ResultType
   
-  /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
+  /// Visiting ``OperatorPrecedenceAndTypesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> ResultType
   
-  /// Visiting `OptionalBindingConditionSyntax` specifically.
+  /// Visiting ``OptionalBindingConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OptionalBindingConditionSyntax) -> ResultType
   
-  /// Visiting `OptionalChainingExprSyntax` specifically.
+  /// Visiting ``OptionalChainingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OptionalChainingExprSyntax) -> ResultType
   
-  /// Visiting `OptionalTypeSyntax` specifically.
+  /// Visiting ``OptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OptionalTypeSyntax) -> ResultType
   
-  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType
   
-  /// Visiting `PackElementExprSyntax` specifically.
+  /// Visiting ``PackElementExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackElementExprSyntax) -> ResultType
   
-  /// Visiting `PackExpansionExprSyntax` specifically.
+  /// Visiting ``PackExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackExpansionExprSyntax) -> ResultType
   
-  /// Visiting `PackExpansionTypeSyntax` specifically.
+  /// Visiting ``PackExpansionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackExpansionTypeSyntax) -> ResultType
   
-  /// Visiting `PackReferenceTypeSyntax` specifically.
+  /// Visiting ``PackReferenceTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackReferenceTypeSyntax) -> ResultType
   
-  /// Visiting `ParameterClauseSyntax` specifically.
+  /// Visiting ``ParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ParameterClauseSyntax) -> ResultType
   
-  /// Visiting `PatternBindingListSyntax` specifically.
+  /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PatternBindingListSyntax) -> ResultType
   
-  /// Visiting `PatternBindingSyntax` specifically.
+  /// Visiting ``PatternBindingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PatternBindingSyntax) -> ResultType
   
-  /// Visiting `PostfixIfConfigExprSyntax` specifically.
+  /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType
   
-  /// Visiting `PostfixUnaryExprSyntax` specifically.
+  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PostfixUnaryExprSyntax) -> ResultType
   
-  /// Visiting `PoundSourceLocationArgsSyntax` specifically.
+  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType
   
-  /// Visiting `PoundSourceLocationSyntax` specifically.
+  /// Visiting ``PoundSourceLocationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PoundSourceLocationSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssignmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupAssignmentSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssociativitySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupAttributeListSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupDeclSyntax` specifically.
+  /// Visiting ``PrecedenceGroupDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupNameListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType
   
-  /// Visiting `PrecedenceGroupRelationSyntax` specifically.
+  /// Visiting ``PrecedenceGroupRelationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupRelationSyntax) -> ResultType
   
-  /// Visiting `PrefixOperatorExprSyntax` specifically.
+  /// Visiting ``PrefixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrefixOperatorExprSyntax) -> ResultType
   
-  /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> ResultType
   
-  /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrimaryAssociatedTypeListSyntax) -> ResultType
   
-  /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrimaryAssociatedTypeSyntax) -> ResultType
   
-  /// Visiting `ProtocolDeclSyntax` specifically.
+  /// Visiting ``ProtocolDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ProtocolDeclSyntax) -> ResultType
   
-  /// Visiting `QualifiedDeclNameSyntax` specifically.
+  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: QualifiedDeclNameSyntax) -> ResultType
   
-  /// Visiting `RegexLiteralExprSyntax` specifically.
+  /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: RegexLiteralExprSyntax) -> ResultType
   
-  /// Visiting `RepeatWhileStmtSyntax` specifically.
+  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: RepeatWhileStmtSyntax) -> ResultType
   
-  /// Visiting `ReturnClauseSyntax` specifically.
+  /// Visiting ``ReturnClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ReturnClauseSyntax) -> ResultType
   
-  /// Visiting `ReturnStmtSyntax` specifically.
+  /// Visiting ``ReturnStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ReturnStmtSyntax) -> ResultType
   
-  /// Visiting `SameTypeRequirementSyntax` specifically.
+  /// Visiting ``SameTypeRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SameTypeRequirementSyntax) -> ResultType
   
-  /// Visiting `SequenceExprSyntax` specifically.
+  /// Visiting ``SequenceExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SequenceExprSyntax) -> ResultType
   
-  /// Visiting `SimpleTypeIdentifierSyntax` specifically.
+  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType
   
-  /// Visiting `SourceFileSyntax` specifically.
+  /// Visiting ``SourceFileSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SourceFileSyntax) -> ResultType
   
-  /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
+  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType
   
-  /// Visiting `SpecializeExprSyntax` specifically.
+  /// Visiting ``SpecializeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SpecializeExprSyntax) -> ResultType
   
-  /// Visiting `StringLiteralExprSyntax` specifically.
+  /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StringLiteralExprSyntax) -> ResultType
   
-  /// Visiting `StringLiteralSegmentsSyntax` specifically.
+  /// Visiting ``StringLiteralSegmentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType
   
-  /// Visiting `StringSegmentSyntax` specifically.
+  /// Visiting ``StringSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StringSegmentSyntax) -> ResultType
   
-  /// Visiting `StructDeclSyntax` specifically.
+  /// Visiting ``StructDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StructDeclSyntax) -> ResultType
   
-  /// Visiting `SubscriptDeclSyntax` specifically.
+  /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SubscriptDeclSyntax) -> ResultType
   
-  /// Visiting `SubscriptExprSyntax` specifically.
+  /// Visiting ``SubscriptExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SubscriptExprSyntax) -> ResultType
   
-  /// Visiting `SuperRefExprSyntax` specifically.
+  /// Visiting ``SuperRefExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SuperRefExprSyntax) -> ResultType
   
-  /// Visiting `SuppressedTypeSyntax` specifically.
+  /// Visiting ``SuppressedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SuppressedTypeSyntax) -> ResultType
   
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  /// Visiting ``SwitchCaseLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchCaseLabelSyntax) -> ResultType
   
-  /// Visiting `SwitchCaseListSyntax` specifically.
+  /// Visiting ``SwitchCaseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchCaseListSyntax) -> ResultType
   
-  /// Visiting `SwitchCaseSyntax` specifically.
+  /// Visiting ``SwitchCaseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchCaseSyntax) -> ResultType
   
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  /// Visiting ``SwitchDefaultLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType
   
-  /// Visiting `SwitchExprSyntax` specifically.
+  /// Visiting ``SwitchExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchExprSyntax) -> ResultType
   
-  /// Visiting `TargetFunctionEntrySyntax` specifically.
+  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TargetFunctionEntrySyntax) -> ResultType
   
-  /// Visiting `TernaryExprSyntax` specifically.
+  /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TernaryExprSyntax) -> ResultType
   
-  /// Visiting `ThrowStmtSyntax` specifically.
+  /// Visiting ``ThrowStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ThrowStmtSyntax) -> ResultType
   
-  /// Visiting `TryExprSyntax` specifically.
+  /// Visiting ``TryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TryExprSyntax) -> ResultType
   
-  /// Visiting `TupleExprElementListSyntax` specifically.
+  /// Visiting ``TupleExprElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleExprElementListSyntax) -> ResultType
   
-  /// Visiting `TupleExprElementSyntax` specifically.
+  /// Visiting ``TupleExprElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleExprElementSyntax) -> ResultType
   
-  /// Visiting `TupleExprSyntax` specifically.
+  /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleExprSyntax) -> ResultType
   
-  /// Visiting `TuplePatternElementListSyntax` specifically.
+  /// Visiting ``TuplePatternElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TuplePatternElementListSyntax) -> ResultType
   
-  /// Visiting `TuplePatternElementSyntax` specifically.
+  /// Visiting ``TuplePatternElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TuplePatternElementSyntax) -> ResultType
   
-  /// Visiting `TuplePatternSyntax` specifically.
+  /// Visiting ``TuplePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TuplePatternSyntax) -> ResultType
   
-  /// Visiting `TupleTypeElementListSyntax` specifically.
+  /// Visiting ``TupleTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleTypeElementListSyntax) -> ResultType
   
-  /// Visiting `TupleTypeElementSyntax` specifically.
+  /// Visiting ``TupleTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleTypeElementSyntax) -> ResultType
   
-  /// Visiting `TupleTypeSyntax` specifically.
+  /// Visiting ``TupleTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleTypeSyntax) -> ResultType
   
-  /// Visiting `TypeAnnotationSyntax` specifically.
+  /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeAnnotationSyntax) -> ResultType
   
-  /// Visiting `TypeEffectSpecifiersSyntax` specifically.
+  /// Visiting ``TypeEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeEffectSpecifiersSyntax) -> ResultType
   
-  /// Visiting `TypeExprSyntax` specifically.
+  /// Visiting ``TypeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeExprSyntax) -> ResultType
   
-  /// Visiting `TypeInheritanceClauseSyntax` specifically.
+  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType
   
-  /// Visiting `TypeInitializerClauseSyntax` specifically.
+  /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeInitializerClauseSyntax) -> ResultType
   
-  /// Visiting `TypealiasDeclSyntax` specifically.
+  /// Visiting ``TypealiasDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypealiasDeclSyntax) -> ResultType
   
-  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType
   
-  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> ResultType
   
-  /// Visiting `UnexpectedNodesSyntax` specifically.
+  /// Visiting ``UnexpectedNodesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnexpectedNodesSyntax) -> ResultType
   
-  /// Visiting `UnresolvedAsExprSyntax` specifically.
+  /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedAsExprSyntax) -> ResultType
   
-  /// Visiting `UnresolvedIsExprSyntax` specifically.
+  /// Visiting ``UnresolvedIsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedIsExprSyntax) -> ResultType
   
-  /// Visiting `UnresolvedPatternExprSyntax` specifically.
+  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType
   
-  /// Visiting `UnresolvedTernaryExprSyntax` specifically.
+  /// Visiting ``UnresolvedTernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedTernaryExprSyntax) -> ResultType
   
-  /// Visiting `ValueBindingPatternSyntax` specifically.
+  /// Visiting ``ValueBindingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ValueBindingPatternSyntax) -> ResultType
   
-  /// Visiting `VariableDeclSyntax` specifically.
+  /// Visiting ``VariableDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: VariableDeclSyntax) -> ResultType
   
-  /// Visiting `VersionComponentListSyntax` specifically.
+  /// Visiting ``VersionComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: VersionComponentListSyntax) -> ResultType
   
-  /// Visiting `VersionComponentSyntax` specifically.
+  /// Visiting ``VersionComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: VersionComponentSyntax) -> ResultType
   
-  /// Visiting `VersionTupleSyntax` specifically.
+  /// Visiting ``VersionTupleSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: VersionTupleSyntax) -> ResultType
   
-  /// Visiting `WhereClauseSyntax` specifically.
+  /// Visiting ``WhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: WhereClauseSyntax) -> ResultType
   
-  /// Visiting `WhileStmtSyntax` specifically.
+  /// Visiting ``WhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: WhileStmtSyntax) -> ResultType
   
-  /// Visiting `WildcardPatternSyntax` specifically.
+  /// Visiting ``WildcardPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: WildcardPatternSyntax) -> ResultType
   
-  /// Visiting `YieldExprListElementSyntax` specifically.
+  /// Visiting ``YieldExprListElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: YieldExprListElementSyntax) -> ResultType
   
-  /// Visiting `YieldExprListSyntax` specifically.
+  /// Visiting ``YieldExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: YieldExprListSyntax) -> ResultType
   
-  /// Visiting `YieldListSyntax` specifically.
+  /// Visiting ``YieldListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: YieldListSyntax) -> ResultType
   
-  /// Visiting `YieldStmtSyntax` specifically.
+  /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: YieldStmtSyntax) -> ResultType
@@ -1395,1918 +1395,1918 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(token))
   }
   
-  /// Visiting `AccessorBlockSyntax` specifically.
+  /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorBlockSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AccessorDeclSyntax` specifically.
+  /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AccessorEffectSpecifiersSyntax` specifically.
+  /// Visiting ``AccessorEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AccessorListSyntax` specifically.
+  /// Visiting ``AccessorListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AccessorParameterSyntax` specifically.
+  /// Visiting ``AccessorParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ActorDeclSyntax` specifically.
+  /// Visiting ``ActorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ActorDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ArrayElementListSyntax` specifically.
+  /// Visiting ``ArrayElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ArrayElementSyntax` specifically.
+  /// Visiting ``ArrayElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ArrayExprSyntax` specifically.
+  /// Visiting ``ArrayExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ArrayTypeSyntax` specifically.
+  /// Visiting ``ArrayTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrayTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ArrowExprSyntax` specifically.
+  /// Visiting ``ArrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ArrowExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AsExprSyntax` specifically.
+  /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AsExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AssignmentExprSyntax` specifically.
+  /// Visiting ``AssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AssignmentExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AssociatedtypeDeclSyntax` specifically.
+  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AttributeListSyntax` specifically.
+  /// Visiting ``AttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AttributeSyntax` specifically.
+  /// Visiting ``AttributeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AttributedTypeSyntax` specifically.
+  /// Visiting ``AttributedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AttributedTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityConditionSyntax` specifically.
+  /// Visiting ``AvailabilityConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityConditionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityEntrySyntax` specifically.
+  /// Visiting ``AvailabilityEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityEntrySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityLabeledArgumentSyntax` specifically.
+  /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilitySpecListSyntax` specifically.
+  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilitySpecListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityVersionRestrictionListEntrySyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityVersionRestrictionListSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AvailabilityVersionRestrictionSyntax` specifically.
+  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `AwaitExprSyntax` specifically.
+  /// Visiting ``AwaitExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AwaitExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `BackDeployedAttributeSpecListSyntax` specifically.
+  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `BinaryOperatorExprSyntax` specifically.
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BinaryOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `BooleanLiteralExprSyntax` specifically.
+  /// Visiting ``BooleanLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BooleanLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `BorrowExprSyntax` specifically.
+  /// Visiting ``BorrowExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BorrowExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `BreakStmtSyntax` specifically.
+  /// Visiting ``BreakStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BreakStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CanImportExprSyntax` specifically.
+  /// Visiting ``CanImportExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CanImportExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CanImportVersionInfoSyntax` specifically.
+  /// Visiting ``CanImportVersionInfoSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CanImportVersionInfoSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CaseItemListSyntax` specifically.
+  /// Visiting ``CaseItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CaseItemListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CaseItemSyntax` specifically.
+  /// Visiting ``CaseItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CaseItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CatchClauseListSyntax` specifically.
+  /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchClauseListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CatchClauseSyntax` specifically.
+  /// Visiting ``CatchClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CatchItemListSyntax` specifically.
+  /// Visiting ``CatchItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchItemListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CatchItemSyntax` specifically.
+  /// Visiting ``CatchItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CatchItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClassDeclSyntax` specifically.
+  /// Visiting ``ClassDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClassDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClassRestrictionTypeSyntax` specifically.
+  /// Visiting ``ClassRestrictionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureCaptureItemListSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureCaptureItemSpecifierSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureCaptureItemSyntax` specifically.
+  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureCaptureSignatureSyntax` specifically.
+  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureExprSyntax` specifically.
+  /// Visiting ``ClosureExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureParamListSyntax` specifically.
+  /// Visiting ``ClosureParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParamListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureParamSyntax` specifically.
+  /// Visiting ``ClosureParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParamSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureParameterClauseSyntax` specifically.
+  /// Visiting ``ClosureParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParameterClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureParameterListSyntax` specifically.
+  /// Visiting ``ClosureParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureParameterSyntax` specifically.
+  /// Visiting ``ClosureParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ClosureSignatureSyntax` specifically.
+  /// Visiting ``ClosureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureSignatureSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CodeBlockItemListSyntax` specifically.
+  /// Visiting ``CodeBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockItemListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CodeBlockItemSyntax` specifically.
+  /// Visiting ``CodeBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CodeBlockSyntax` specifically.
+  /// Visiting ``CodeBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CodeBlockSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CompositionTypeElementListSyntax` specifically.
+  /// Visiting ``CompositionTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CompositionTypeElementSyntax` specifically.
+  /// Visiting ``CompositionTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CompositionTypeSyntax` specifically.
+  /// Visiting ``CompositionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CompositionTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConditionElementListSyntax` specifically.
+  /// Visiting ``ConditionElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConditionElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConditionElementSyntax` specifically.
+  /// Visiting ``ConditionElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConditionElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConformanceRequirementSyntax` specifically.
+  /// Visiting ``ConformanceRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConformanceRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConstrainedSugarTypeSyntax` specifically.
+  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ContinueStmtSyntax` specifically.
+  /// Visiting ``ContinueStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ContinueStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConventionAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConventionAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ConventionWitnessMethodAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `CopyExprSyntax` specifically.
+  /// Visiting ``CopyExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: CopyExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclModifierDetailSyntax` specifically.
+  /// Visiting ``DeclModifierDetailSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclModifierDetailSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclModifierSyntax` specifically.
+  /// Visiting ``DeclModifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclModifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclNameArgumentListSyntax` specifically.
+  /// Visiting ``DeclNameArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclNameArgumentSyntax` specifically.
+  /// Visiting ``DeclNameArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclNameArgumentsSyntax` specifically.
+  /// Visiting ``DeclNameArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeclNameSyntax` specifically.
+  /// Visiting ``DeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeferStmtSyntax` specifically.
+  /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeferStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DeinitializerDeclSyntax` specifically.
+  /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeinitializerDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DerivativeRegistrationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DesignatedTypeElementSyntax` specifically.
+  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DesignatedTypeElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DesignatedTypeListSyntax` specifically.
+  /// Visiting ``DesignatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DesignatedTypeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DictionaryElementListSyntax` specifically.
+  /// Visiting ``DictionaryElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DictionaryElementSyntax` specifically.
+  /// Visiting ``DictionaryElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DictionaryExprSyntax` specifically.
+  /// Visiting ``DictionaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DictionaryTypeSyntax` specifically.
+  /// Visiting ``DictionaryTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DictionaryTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DifferentiabilityParamListSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DifferentiabilityParamSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DifferentiabilityParamsClauseSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DifferentiabilityParamsSyntax` specifically.
+  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DifferentiableAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DifferentiableAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DiscardAssignmentExprSyntax` specifically.
+  /// Visiting ``DiscardAssignmentExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DiscardAssignmentExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DiscardStmtSyntax` specifically.
+  /// Visiting ``DiscardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DiscardStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DoStmtSyntax` specifically.
+  /// Visiting ``DoStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DoStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DocumentationAttributeArgumentSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DocumentationAttributeArgumentsSyntax` specifically.
+  /// Visiting ``DocumentationAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `DynamicReplacementArgumentsSyntax` specifically.
+  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EditorPlaceholderDeclSyntax` specifically.
+  /// Visiting ``EditorPlaceholderDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EditorPlaceholderDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EditorPlaceholderExprSyntax` specifically.
+  /// Visiting ``EditorPlaceholderExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EffectsArgumentsSyntax` specifically.
+  /// Visiting ``EffectsArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EffectsArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseDeclSyntax` specifically.
+  /// Visiting ``EnumCaseDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseElementListSyntax` specifically.
+  /// Visiting ``EnumCaseElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseElementSyntax` specifically.
+  /// Visiting ``EnumCaseElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseParameterClauseSyntax` specifically.
+  /// Visiting ``EnumCaseParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseParameterClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseParameterListSyntax` specifically.
+  /// Visiting ``EnumCaseParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumCaseParameterSyntax` specifically.
+  /// Visiting ``EnumCaseParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumCaseParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `EnumDeclSyntax` specifically.
+  /// Visiting ``EnumDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: EnumDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExposeAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ExposeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExposeAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExprListSyntax` specifically.
+  /// Visiting ``ExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExprListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExpressionPatternSyntax` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExpressionSegmentSyntax` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionSegmentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExpressionStmtSyntax` specifically.
+  /// Visiting ``ExpressionStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExpressionStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ExtensionDeclSyntax` specifically.
+  /// Visiting ``ExtensionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ExtensionDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FallthroughStmtSyntax` specifically.
+  /// Visiting ``FallthroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FallthroughStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FloatLiteralExprSyntax` specifically.
+  /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FloatLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ForInStmtSyntax` specifically.
+  /// Visiting ``ForInStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForInStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ForcedValueExprSyntax` specifically.
+  /// Visiting ``ForcedValueExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ForcedValueExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionCallExprSyntax` specifically.
+  /// Visiting ``FunctionCallExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionCallExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionDeclSyntax` specifically.
+  /// Visiting ``FunctionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionEffectSpecifiersSyntax` specifically.
+  /// Visiting ``FunctionEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionParameterListSyntax` specifically.
+  /// Visiting ``FunctionParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionParameterSyntax` specifically.
+  /// Visiting ``FunctionParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionSignatureSyntax` specifically.
+  /// Visiting ``FunctionSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionSignatureSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `FunctionTypeSyntax` specifically.
+  /// Visiting ``FunctionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericArgumentClauseSyntax` specifically.
+  /// Visiting ``GenericArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericArgumentListSyntax` specifically.
+  /// Visiting ``GenericArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericArgumentSyntax` specifically.
+  /// Visiting ``GenericArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericParameterClauseSyntax` specifically.
+  /// Visiting ``GenericParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericParameterListSyntax` specifically.
+  /// Visiting ``GenericParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericParameterSyntax` specifically.
+  /// Visiting ``GenericParameterSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericRequirementListSyntax` specifically.
+  /// Visiting ``GenericRequirementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericRequirementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericRequirementSyntax` specifically.
+  /// Visiting ``GenericRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GenericWhereClauseSyntax` specifically.
+  /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GenericWhereClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `GuardStmtSyntax` specifically.
+  /// Visiting ``GuardStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GuardStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IdentifierExprSyntax` specifically.
+  /// Visiting ``IdentifierExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IdentifierPatternSyntax` specifically.
+  /// Visiting ``IdentifierPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IfConfigClauseListSyntax` specifically.
+  /// Visiting ``IfConfigClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigClauseListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IfConfigClauseSyntax` specifically.
+  /// Visiting ``IfConfigClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IfConfigDeclSyntax` specifically.
+  /// Visiting ``IfConfigDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfConfigDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IfExprSyntax` specifically.
+  /// Visiting ``IfExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IfExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ImplementsAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ImplementsAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ImplicitlyUnwrappedOptionalTypeSyntax` specifically.
+  /// Visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ImportDeclSyntax` specifically.
+  /// Visiting ``ImportDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImportDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ImportPathComponentSyntax` specifically.
+  /// Visiting ``ImportPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImportPathComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ImportPathSyntax` specifically.
+  /// Visiting ``ImportPathSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImportPathSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InOutExprSyntax` specifically.
+  /// Visiting ``InOutExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InOutExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InfixOperatorExprSyntax` specifically.
+  /// Visiting ``InfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InfixOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InheritedTypeListSyntax` specifically.
+  /// Visiting ``InheritedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InheritedTypeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InheritedTypeSyntax` specifically.
+  /// Visiting ``InheritedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InheritedTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InitializerClauseSyntax` specifically.
+  /// Visiting ``InitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InitializerClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `InitializerDeclSyntax` specifically.
+  /// Visiting ``InitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InitializerDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IntegerLiteralExprSyntax` specifically.
+  /// Visiting ``IntegerLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IntegerLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IsExprSyntax` specifically.
+  /// Visiting ``IsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IsExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `IsTypePatternSyntax` specifically.
+  /// Visiting ``IsTypePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IsTypePatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathComponentListSyntax` specifically.
+  /// Visiting ``KeyPathComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathComponentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathComponentSyntax` specifically.
+  /// Visiting ``KeyPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathExprSyntax` specifically.
+  /// Visiting ``KeyPathExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathOptionalComponentSyntax` specifically.
+  /// Visiting ``KeyPathOptionalComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathOptionalComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathPropertyComponentSyntax` specifically.
+  /// Visiting ``KeyPathPropertyComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathPropertyComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `KeyPathSubscriptComponentSyntax` specifically.
+  /// Visiting ``KeyPathSubscriptComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `LabeledSpecializeEntrySyntax` specifically.
+  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `LabeledStmtSyntax` specifically.
+  /// Visiting ``LabeledStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LabeledStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `LayoutRequirementSyntax` specifically.
+  /// Visiting ``LayoutRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: LayoutRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MacroDeclSyntax` specifically.
+  /// Visiting ``MacroDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MacroDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MacroExpansionDeclSyntax` specifically.
+  /// Visiting ``MacroExpansionDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MacroExpansionDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MacroExpansionExprSyntax` specifically.
+  /// Visiting ``MacroExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MacroExpansionExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MatchingPatternConditionSyntax` specifically.
+  /// Visiting ``MatchingPatternConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MatchingPatternConditionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MemberAccessExprSyntax` specifically.
+  /// Visiting ``MemberAccessExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberAccessExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MemberDeclBlockSyntax` specifically.
+  /// Visiting ``MemberDeclBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclBlockSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MemberDeclListItemSyntax` specifically.
+  /// Visiting ``MemberDeclListItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclListItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MemberDeclListSyntax` specifically.
+  /// Visiting ``MemberDeclListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberDeclListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MemberTypeIdentifierSyntax` specifically.
+  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MetatypeTypeSyntax` specifically.
+  /// Visiting ``MetatypeTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MetatypeTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingDeclSyntax` specifically.
+  /// Visiting ``MissingDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingExprSyntax` specifically.
+  /// Visiting ``MissingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingPatternSyntax` specifically.
+  /// Visiting ``MissingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingStmtSyntax` specifically.
+  /// Visiting ``MissingStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingSyntax` specifically.
+  /// Visiting ``MissingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MissingTypeSyntax` specifically.
+  /// Visiting ``MissingTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ModifierListSyntax` specifically.
+  /// Visiting ``ModifierListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ModifierListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MoveExprSyntax` specifically.
+  /// Visiting ``MoveExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MoveExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MultipleTrailingClosureElementListSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MultipleTrailingClosureElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `MultipleTrailingClosureElementSyntax` specifically.
+  /// Visiting ``MultipleTrailingClosureElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MultipleTrailingClosureElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `NamedOpaqueReturnTypeSyntax` specifically.
+  /// Visiting ``NamedOpaqueReturnTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: NamedOpaqueReturnTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `NilLiteralExprSyntax` specifically.
+  /// Visiting ``NilLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: NilLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ObjCSelectorPieceSyntax` specifically.
+  /// Visiting ``ObjCSelectorPieceSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ObjCSelectorSyntax` specifically.
+  /// Visiting ``ObjCSelectorSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjCSelectorSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OpaqueReturnTypeOfAttributeArgumentsSyntax` specifically.
+  /// Visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OperatorDeclSyntax` specifically.
+  /// Visiting ``OperatorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OperatorDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OperatorPrecedenceAndTypesSyntax` specifically.
+  /// Visiting ``OperatorPrecedenceAndTypesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OptionalBindingConditionSyntax` specifically.
+  /// Visiting ``OptionalBindingConditionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalBindingConditionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OptionalChainingExprSyntax` specifically.
+  /// Visiting ``OptionalChainingExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalChainingExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OptionalTypeSyntax` specifically.
+  /// Visiting ``OptionalTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OptionalTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `OriginallyDefinedInArgumentsSyntax` specifically.
+  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PackElementExprSyntax` specifically.
+  /// Visiting ``PackElementExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PackElementExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PackExpansionExprSyntax` specifically.
+  /// Visiting ``PackExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PackExpansionExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PackExpansionTypeSyntax` specifically.
+  /// Visiting ``PackExpansionTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PackExpansionTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PackReferenceTypeSyntax` specifically.
+  /// Visiting ``PackReferenceTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PackReferenceTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ParameterClauseSyntax` specifically.
+  /// Visiting ``ParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ParameterClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PatternBindingListSyntax` specifically.
+  /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PatternBindingListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PatternBindingSyntax` specifically.
+  /// Visiting ``PatternBindingSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PatternBindingSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PostfixIfConfigExprSyntax` specifically.
+  /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PostfixUnaryExprSyntax` specifically.
+  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PostfixUnaryExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PoundSourceLocationArgsSyntax` specifically.
+  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PoundSourceLocationSyntax` specifically.
+  /// Visiting ``PoundSourceLocationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PoundSourceLocationSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupAssignmentSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssignmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAssignmentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupAssociativitySyntax` specifically.
+  /// Visiting ``PrecedenceGroupAssociativitySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAssociativitySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupAttributeListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupAttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupAttributeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupDeclSyntax` specifically.
+  /// Visiting ``PrecedenceGroupDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupNameElementSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupNameListSyntax` specifically.
+  /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrecedenceGroupRelationSyntax` specifically.
+  /// Visiting ``PrecedenceGroupRelationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupRelationSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrefixOperatorExprSyntax` specifically.
+  /// Visiting ``PrefixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrefixOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrimaryAssociatedTypeClauseSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrimaryAssociatedTypeListSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `PrimaryAssociatedTypeSyntax` specifically.
+  /// Visiting ``PrimaryAssociatedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrimaryAssociatedTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ProtocolDeclSyntax` specifically.
+  /// Visiting ``ProtocolDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ProtocolDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `QualifiedDeclNameSyntax` specifically.
+  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: QualifiedDeclNameSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `RegexLiteralExprSyntax` specifically.
+  /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: RegexLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `RepeatWhileStmtSyntax` specifically.
+  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: RepeatWhileStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ReturnClauseSyntax` specifically.
+  /// Visiting ``ReturnClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ReturnClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ReturnStmtSyntax` specifically.
+  /// Visiting ``ReturnStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ReturnStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SameTypeRequirementSyntax` specifically.
+  /// Visiting ``SameTypeRequirementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SameTypeRequirementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SequenceExprSyntax` specifically.
+  /// Visiting ``SequenceExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SequenceExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SimpleTypeIdentifierSyntax` specifically.
+  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SourceFileSyntax` specifically.
+  /// Visiting ``SourceFileSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SourceFileSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SpecializeAttributeSpecListSyntax` specifically.
+  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SpecializeExprSyntax` specifically.
+  /// Visiting ``SpecializeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SpecializeExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `StringLiteralExprSyntax` specifically.
+  /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringLiteralExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `StringLiteralSegmentsSyntax` specifically.
+  /// Visiting ``StringLiteralSegmentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `StringSegmentSyntax` specifically.
+  /// Visiting ``StringSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StringSegmentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `StructDeclSyntax` specifically.
+  /// Visiting ``StructDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: StructDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SubscriptDeclSyntax` specifically.
+  /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SubscriptDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SubscriptExprSyntax` specifically.
+  /// Visiting ``SubscriptExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SubscriptExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SuperRefExprSyntax` specifically.
+  /// Visiting ``SuperRefExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SuperRefExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SuppressedTypeSyntax` specifically.
+  /// Visiting ``SuppressedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SuppressedTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchCaseLabelSyntax` specifically.
+  /// Visiting ``SwitchCaseLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseLabelSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchCaseListSyntax` specifically.
+  /// Visiting ``SwitchCaseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchCaseSyntax` specifically.
+  /// Visiting ``SwitchCaseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchCaseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchDefaultLabelSyntax` specifically.
+  /// Visiting ``SwitchDefaultLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchDefaultLabelSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `SwitchExprSyntax` specifically.
+  /// Visiting ``SwitchExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SwitchExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TargetFunctionEntrySyntax` specifically.
+  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TargetFunctionEntrySyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TernaryExprSyntax` specifically.
+  /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TernaryExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ThrowStmtSyntax` specifically.
+  /// Visiting ``ThrowStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ThrowStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TryExprSyntax` specifically.
+  /// Visiting ``TryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TryExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleExprElementListSyntax` specifically.
+  /// Visiting ``TupleExprElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleExprElementSyntax` specifically.
+  /// Visiting ``TupleExprElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleExprSyntax` specifically.
+  /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TuplePatternElementListSyntax` specifically.
+  /// Visiting ``TuplePatternElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TuplePatternElementSyntax` specifically.
+  /// Visiting ``TuplePatternElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TuplePatternSyntax` specifically.
+  /// Visiting ``TuplePatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TuplePatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleTypeElementListSyntax` specifically.
+  /// Visiting ``TupleTypeElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeElementListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleTypeElementSyntax` specifically.
+  /// Visiting ``TupleTypeElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TupleTypeSyntax` specifically.
+  /// Visiting ``TupleTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TupleTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypeAnnotationSyntax` specifically.
+  /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeAnnotationSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypeEffectSpecifiersSyntax` specifically.
+  /// Visiting ``TypeEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypeExprSyntax` specifically.
+  /// Visiting ``TypeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypeInheritanceClauseSyntax` specifically.
+  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypeInitializerClauseSyntax` specifically.
+  /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypeInitializerClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `TypealiasDeclSyntax` specifically.
+  /// Visiting ``TypealiasDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TypealiasDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnavailableFromAsyncArgumentsSyntax` specifically.
+  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnderscorePrivateAttributeArgumentsSyntax` specifically.
+  /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnexpectedNodesSyntax` specifically.
+  /// Visiting ``UnexpectedNodesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnexpectedNodesSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnresolvedAsExprSyntax` specifically.
+  /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedAsExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnresolvedIsExprSyntax` specifically.
+  /// Visiting ``UnresolvedIsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedIsExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnresolvedPatternExprSyntax` specifically.
+  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `UnresolvedTernaryExprSyntax` specifically.
+  /// Visiting ``UnresolvedTernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedTernaryExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `ValueBindingPatternSyntax` specifically.
+  /// Visiting ``ValueBindingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ValueBindingPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `VariableDeclSyntax` specifically.
+  /// Visiting ``VariableDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VariableDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `VersionComponentListSyntax` specifically.
+  /// Visiting ``VersionComponentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VersionComponentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `VersionComponentSyntax` specifically.
+  /// Visiting ``VersionComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VersionComponentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `VersionTupleSyntax` specifically.
+  /// Visiting ``VersionTupleSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: VersionTupleSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `WhereClauseSyntax` specifically.
+  /// Visiting ``WhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WhereClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `WhileStmtSyntax` specifically.
+  /// Visiting ``WhileStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WhileStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `WildcardPatternSyntax` specifically.
+  /// Visiting ``WildcardPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: WildcardPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `YieldExprListElementSyntax` specifically.
+  /// Visiting ``YieldExprListElementSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldExprListElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `YieldExprListSyntax` specifically.
+  /// Visiting ``YieldExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldExprListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `YieldListSyntax` specifically.
+  /// Visiting ``YieldListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting `YieldStmtSyntax` specifically.
+  /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldStmtSyntax) -> ResultType {

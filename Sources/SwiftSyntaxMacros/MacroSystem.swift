@@ -65,7 +65,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   var context: Context
   var skipNodes: Set<Syntax> = []
 
-  /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
+  /// A stack of member attribute macos to expand when iterating over a ``MemberDeclListSyntax``.
   var memberAttributeMacros: [([(AttributeSyntax, MemberAttributeMacro.Type)], DeclSyntax)] = []
 
   init(

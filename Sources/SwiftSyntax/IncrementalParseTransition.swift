@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Accepts the re-used `Syntax` nodes that `IncrementalParseTransition`
+/// Accepts the re-used ``Syntax`` nodes that `IncrementalParseTransition`
 /// determined they should be re-used for a parse invocation.
 ///
 /// The client can use this information to potentially avoid unnecessary work
@@ -19,7 +19,7 @@
 /// This is also used for testing purposes to ensure incremental reparsing
 /// worked as expected.
 public protocol IncrementalParseReusedNodeDelegate {
-  /// Accepts the range and `Syntax` node of skipped source region.
+  /// Accepts the range and ``Syntax`` node of skipped source region.
   ///
   /// - Parameters:
   ///   - range: The source region of the currently parsed source.
@@ -206,7 +206,7 @@ public struct IncrementalParseLookup {
   fileprivate let transition: IncrementalParseTransition
   fileprivate var cursor: SyntaxCursor
 
-  /// Create a new `IncrementalParseLookup` that can look nodes up based on the
+  /// Create a new ``IncrementalParseLookup`` that can look nodes up based on the
   /// given ``IncrementalParseTransition``.
   public init(transition: IncrementalParseTransition) {
     self.transition = transition
@@ -222,15 +222,15 @@ public struct IncrementalParseLookup {
   }
 
   /// Does a lookup to see if the current source `offset` should be associated
-  /// with a known `Syntax` node and its region skipped during parsing.
+  /// with a known ``Syntax`` node and its region skipped during parsing.
   ///
   /// The implementation is responsible for checking whether an incremental edit
-  /// has invalidated the previous `Syntax` node.
+  /// has invalidated the previous ``Syntax`` node.
   ///
   /// - Parameters:
   ///   - offset: The byte offset of the source string that is currently parsed.
   ///   - kind: The `CSyntaxKind` that the parser expects at this position.
-  /// - Returns: A `Syntax` node from the previous parse invocation,
+  /// - Returns: A ``Syntax`` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
   @_spi(RawSyntax)

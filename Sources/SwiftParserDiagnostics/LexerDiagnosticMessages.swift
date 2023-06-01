@@ -129,7 +129,7 @@ public struct InvalidDigitInIntegerLiteral: TokenError {
 // MARK: - Convert TokenDiagnostic from SwiftSyntax to error messages
 
 public extension SwiftSyntax.TokenDiagnostic {
-  /// `tokenText` is the entire text of the token in which the `TokenDiagnostic`
+  /// `tokenText` is the entire text of the token in which the ``TokenDiagnostic``
   /// occurred, including trivia.
   @_spi(RawSyntax)
   func diagnosticMessage(wholeTextBytes: [UInt8]) -> DiagnosticMessage {

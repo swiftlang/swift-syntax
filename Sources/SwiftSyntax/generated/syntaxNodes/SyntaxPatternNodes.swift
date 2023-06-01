@@ -63,7 +63,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -72,7 +72,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -81,7 +81,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -141,7 +141,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -150,7 +150,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IdentifierPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -159,7 +159,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IdentifierPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IdentifierPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -233,7 +233,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsTypePatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = IsTypePatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -242,7 +242,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = IsTypePatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = IsTypePatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -251,7 +251,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsTypePatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = IsTypePatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -260,7 +260,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = IsTypePatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = IsTypePatternSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -269,7 +269,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = IsTypePatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = IsTypePatternSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -335,7 +335,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MissingPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = MissingPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -345,7 +345,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MissingPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = MissingPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -354,7 +354,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MissingPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = MissingPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -434,7 +434,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -443,7 +443,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -452,7 +452,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -461,7 +461,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TuplePatternElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -489,7 +489,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -498,7 +498,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -507,7 +507,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = TuplePatternSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+      self = TuplePatternSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -589,7 +589,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ValueBindingPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -598,7 +598,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ValueBindingPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -607,7 +607,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ValueBindingPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -616,7 +616,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return PatternSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ValueBindingPatternSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -625,7 +625,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ValueBindingPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = ValueBindingPatternSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -705,7 +705,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+      self = WildcardPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -714,7 +714,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+      self = WildcardPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -723,7 +723,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+      self = WildcardPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -732,7 +732,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
     }
     set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+      self = WildcardPatternSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -741,7 +741,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = WildcardPatternSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+      self = WildcardPatternSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   

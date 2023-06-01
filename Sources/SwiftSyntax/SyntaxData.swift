@@ -336,6 +336,15 @@ struct SyntaxData {
     return replacingSelf(newRaw, arena: arena)
   }
 
+  /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
+  /// that ensures that the arena of`newChild` doesn’t get de-allocated before
+  /// `newChild` has been addded to the result.
+  func replacingChild(at index: Int, with newChild: SyntaxData?, arena: SyntaxArena) -> SyntaxData {
+    return withExtendedLifetime(newChild) {
+      return replacingChild(at: index, with: newChild?.raw, arena: arena)
+    }
+  }
+
   func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {
     if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
       return replacingSelf(raw, arena: arena)

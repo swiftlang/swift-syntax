@@ -7183,8 +7183,8 @@ open class SyntaxRewriter {
       let arena = SyntaxArena()
       let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
-      return withExtendedLifetime((arena, rewrittens)) {
-        Syntax(raw: newRaw).cast(SyntaxType.self)
+      return withExtendedLifetime(rewrittens) {
+        Syntax(raw: newRaw, arena: arena).cast(SyntaxType.self)
       }
     } else {
       // No child node was rewritten. So no need to change this node as well.

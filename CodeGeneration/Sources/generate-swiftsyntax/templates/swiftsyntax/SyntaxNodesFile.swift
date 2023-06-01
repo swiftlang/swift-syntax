@@ -129,7 +129,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                   """
                 )
               }
-              StmtSyntax("return SyntaxData.forRoot(raw)")
+              StmtSyntax("return SyntaxData.forRoot(raw, arena: arena)")
             }
           )
 

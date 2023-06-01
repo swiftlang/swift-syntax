@@ -34,15 +34,13 @@ extension SyntaxCollection {
   }
 
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(
-        kind: Self.syntaxKind,
-        from: children.map { $0.raw },
-        arena: arena
-      )
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(
+      kind: Self.syntaxKind,
+      from: children.map { $0.raw },
+      arena: arena
+    )
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
 
   /// The number of elements, `present` or `missing`, in this collection.

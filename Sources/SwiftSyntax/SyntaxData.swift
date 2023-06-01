@@ -274,8 +274,13 @@ struct SyntaxData {
   }
 
   /// Creates a `SyntaxData` for a root raw node.
-  static func forRoot(_ raw: RawSyntax) -> SyntaxData {
-    SyntaxData(raw, info: .root(.init(arena: raw.arena)))
+  ///
+  /// `arena` must be the arena in which `raw` is allocated. It is passed to
+  /// make sure the arena doesn’t get de-allocated before the ``SyntaxData`` has
+  /// a chance to retain it.
+  static func forRoot(_ raw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
+    precondition(arena === raw.arena)
+    return SyntaxData(raw, info: .root(.init(arena: arena)))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -298,12 +303,11 @@ struct SyntaxData {
 
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
   /// the root.
-  /// - Parameters:
-  ///   - newRaw: The new RawSyntax that will back the new `Data`
-  ///   - arena: SyntaxArena to the result RawSyntax node data resides.
-  /// - Returns: A tuple of both the new root node and the new data with the raw
-  ///            layout replaced.
+  ///
+  /// `arena` is the arena in which `newRaw` resides. The new nodes will be
+  /// allocated in this arena.
   func replacingSelf(_ newRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
+    precondition(newRaw.arena === arena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent {
@@ -312,7 +316,7 @@ struct SyntaxData {
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
       // Otherwise, we're already the root, so return the new root data.
-      return .forRoot(newRaw)
+      return .forRoot(newRaw, arena: arena)
     }
   }
 
@@ -323,7 +327,7 @@ struct SyntaxData {
   ///   - index: The index pointing to where in the raw layout to place this
   ///            child.
   ///   - newChild: The raw syntax for the new child to replace.
-  ///   - arena: SyntaxArena to the result RawSyntax node data resides.
+  ///   - arena: The arena in which the new node will be allocated.
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)

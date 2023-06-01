@@ -209,7 +209,8 @@ public struct RawSyntax {
     rawData.arenaReference
   }
 
-  internal var arena: SyntaxArena {
+  @_spi(RawSyntax)
+  public var arena: SyntaxArena {
     rawData.arenaReference.value
   }
 

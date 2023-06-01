@@ -73,7 +73,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -228,7 +228,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -356,7 +356,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -498,7 +498,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -590,7 +590,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -692,7 +692,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -770,7 +770,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -862,7 +862,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -996,7 +996,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1184,7 +1184,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1352,7 +1352,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1527,7 +1527,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1691,7 +1691,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1813,7 +1813,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1891,7 +1891,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1969,7 +1969,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2061,7 +2061,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2201,7 +2201,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2435,7 +2435,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2611,7 +2611,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2806,7 +2806,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2928,7 +2928,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3050,7 +3050,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3154,7 +3154,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3299,7 +3299,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3490,7 +3490,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3777,7 +3777,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3919,7 +3919,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4012,7 +4012,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4114,7 +4114,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4206,7 +4206,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4322,7 +4322,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4438,7 +4438,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4554,7 +4554,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4670,7 +4670,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4786,7 +4786,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4920,7 +4920,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5082,7 +5082,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5193,7 +5193,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5327,7 +5327,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5546,7 +5546,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5766,7 +5766,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5876,7 +5876,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6089,7 +6089,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6271,7 +6271,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6413,7 +6413,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6554,7 +6554,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6646,7 +6646,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6748,7 +6748,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6826,7 +6826,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6924,7 +6924,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }

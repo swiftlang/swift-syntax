@@ -275,7 +275,7 @@ class FixItApplier: SyntaxRewriter {
   var changes: [FixIt.Change]
 
   init(diagnostics: [Diagnostic], withMessages messages: [String]?) {
-      let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
+    let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
     self.changes =
       diagnostics

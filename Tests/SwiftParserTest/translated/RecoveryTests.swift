@@ -938,7 +938,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery62() {
+  func testRecovery62a() {
     assertParse(
       """
       enum EE 1️⃣EE<T> where T : Multi {
@@ -954,11 +954,44 @@ final class RecoveryTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive declarations on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
       ],
+      applyFixIts: ["join the identifiers together", "insert newline"],
+      fixedSource: """
+        enum EEEE<T> where T : Multi {
+          case a
+          a
+          case b
+        }
+        """
+    )
+  }
+
+  func testRecovery62b() {
+    assertParse(
+      """
+      enum EE 1️⃣EE<T> where T : Multi {
+        case a2️⃣ 3️⃣a
+        case b
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "found an unexpected second identifier in enum; is there an accidental break?",
+          fixIts: ["join the identifiers together"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
+      ],
+      applyFixIts: ["join the identifiers together", "insert ';'"],
       fixedSource: """
         enum EEEE<T> where T : Multi {
           case a;a
@@ -1565,8 +1598,8 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive declarations on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -1605,7 +1638,8 @@ final class RecoveryTests: XCTestCase {
       ],
       fixedSource: """
         struct ErrorTypeInVarDeclDictionaryType {
-          let a1: String;:
+          let a1: String
+          :
           let a2: [String: Int]
           let a3: [String: [Int]]
           let a4: [String: Int]

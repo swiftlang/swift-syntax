@@ -166,7 +166,11 @@ final class IdentifiersTests: XCTestCase {
       func 2️⃣_(_ x: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "keyword 'public' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "keyword 'public' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'_' cannot be used as an identifier here"),
       ],
       fixedSource: """

@@ -77,7 +77,8 @@ extension Lexer {
 
     @_spi(Testing)
     public var debugDescription: String {
-      let remainingText = self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
+      let remainingText =
+        self.nextToken.debugDescription + String(syntaxText: SyntaxText(baseAddress: self.cursor.input.baseAddress, count: self.cursor.input.count))
       if remainingText.count > 100 {
         return remainingText.prefix(100) + "..."
       } else {

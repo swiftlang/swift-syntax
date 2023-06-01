@@ -109,7 +109,12 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerMacro.Type || macro is MemberMacro.Type || macro is AccessorMacro.Type || macro is MemberAttributeMacro.Type || macro is ConformanceMacro.Type)
+        return
+          !(macro is PeerMacro.Type
+          || macro is MemberMacro.Type
+          || macro is AccessorMacro.Type
+          || macro is MemberAttributeMacro.Type
+          || macro is ConformanceMacro.Type)
       }
 
       if newAttributes.isEmpty {

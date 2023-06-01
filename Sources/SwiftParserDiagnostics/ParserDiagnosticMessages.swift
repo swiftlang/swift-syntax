@@ -426,7 +426,8 @@ public struct NegatedAvailabilityCondition: ParserError {
   public let negatedAvailabilityKeyword: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
+    return
+      "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
   }
 }
 
@@ -486,7 +487,9 @@ public struct UnexpectedNodesError: ParserError {
   public var message: String {
     var message = "unexpected \(unexpectedNodes.shortSingleLineContentDescription)"
     if let parent = unexpectedNodes.parent {
-      if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false), parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id {
+      if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false),
+        parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id
+      {
         message += " before \(parentTypeName)"
       } else if let parentTypeName = parent.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {
         message += " in \(parentTypeName)"

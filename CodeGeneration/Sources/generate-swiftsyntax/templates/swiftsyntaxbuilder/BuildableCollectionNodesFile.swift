@@ -22,7 +22,10 @@ let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: copyrightHead
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
     let elementType = node.collectionElementType
 
-    let docComment = node.documentation.isEmpty ? [.docLineComment("/// `\(node.kind.syntaxType)` represents a collection of `\(elementType.syntaxBaseName)`")] : node.documentation
+    let docComment =
+      node.documentation.isEmpty
+      ? [.docLineComment("/// `\(node.kind.syntaxType)` represents a collection of `\(elementType.syntaxBaseName)`")]
+      : node.documentation
     // Generate collection node struct
     try! ExtensionDeclSyntax(
       """

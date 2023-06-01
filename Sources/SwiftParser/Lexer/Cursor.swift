@@ -1056,13 +1056,19 @@ extension Lexer.Cursor {
     switch self.peek() {
     case UInt8(ascii: "("):
       _ = self.advance()
-      return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount + 1)))
+      return Lexer.Result(
+        .leftParen,
+        stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount + 1))
+      )
     case UInt8(ascii: ")"):
       _ = self.advance()
       if parenCount == 0 {
         return Lexer.Result(.rightParen, stateTransition: .pop)
       } else {
-        return Lexer.Result(.rightParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount - 1)))
+        return Lexer.Result(
+          .rightParen,
+          stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: parenCount - 1))
+        )
       }
     case UInt8(ascii: "\r"), UInt8(ascii: "\n"):
       // We don't eat newlines as leading trivia in string interpolation of

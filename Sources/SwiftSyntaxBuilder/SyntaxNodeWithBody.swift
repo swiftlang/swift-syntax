@@ -197,7 +197,11 @@ public extension IfExprSyntax {
   /// This function takes care of inserting the braces as well.
   ///
   /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true") {}`
-  init(_ header: PartialSyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }) throws {
+  init(
+    _ header: PartialSyntaxNodeString,
+    @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax,
+    @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }
+  ) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)

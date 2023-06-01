@@ -171,7 +171,14 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "AtSign", kind: "at_sign", text: "@", classification: "Attribute"),
   PunctuatorSpec(name: "Backslash", kind: "backslash", text: "\\"),
   PunctuatorSpec(name: "Backtick", kind: "backtick", text: "`"),
-  MiscSpec(name: "BinaryOperator", kind: "oper_binary", nameForDiagnostics: "binary operator", classification: "OperatorIdentifier", requiresLeadingSpace: true, requiresTrailingSpace: true),
+  MiscSpec(
+    name: "BinaryOperator",
+    kind: "oper_binary",
+    nameForDiagnostics: "binary operator",
+    classification: "OperatorIdentifier",
+    requiresLeadingSpace: true,
+    requiresTrailingSpace: true
+  ),
   PunctuatorSpec(name: "Colon", kind: "colon", text: ":", requiresTrailingSpace: true),
   PunctuatorSpec(name: "Comma", kind: "comma", text: ",", requiresTrailingSpace: true),
   MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),

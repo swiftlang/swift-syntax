@@ -110,7 +110,15 @@ internal struct RawSyntaxData {
     private var tokenDiagnosticKind: TokenDiagnostic.Kind?
     private var tokenDiagnosticByteOffset: UInt16
 
-    init(tokenKind: RawTokenKind, tokenText: SyntaxText, triviaPieces: RawTriviaPieceBuffer, numLeadingTrivia: UInt32, byteLength: UInt32, presence: SourcePresence, tokenDiagnostic: TokenDiagnostic?) {
+    init(
+      tokenKind: RawTokenKind,
+      tokenText: SyntaxText,
+      triviaPieces: RawTriviaPieceBuffer,
+      numLeadingTrivia: UInt32,
+      byteLength: UInt32,
+      presence: SourcePresence,
+      tokenDiagnostic: TokenDiagnostic?
+    ) {
       self.tokenKind = tokenKind
       self.tokenText = tokenText
       self.triviaPieces = triviaPieces

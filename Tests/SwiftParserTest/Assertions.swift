@@ -337,7 +337,11 @@ func assertLocation<T: SyntaxProtocol>(
     let actualLocation = location
     let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
     if actualLocation.line != expectedLocation.line || actualLocation.column != expectedLocation.column {
-      XCTFail("Expected location \(expectedLocation.line):\(expectedLocation.column) but got \(actualLocation.line):\(actualLocation.column)", file: file, line: line)
+      XCTFail(
+        "Expected location \(expectedLocation.line):\(expectedLocation.column) but got \(actualLocation.line):\(actualLocation.column)",
+        file: file,
+        line: line
+      )
     }
   } else {
     XCTFail("Did not find marker \(locationMarker) in the source code", file: file, line: line)
@@ -578,7 +582,13 @@ func assertParse<S: SyntaxProtocol>(
   if let expectedSubstructure {
     let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: markerLocations)
     do {
-      try subtreeMatcher.assertSameStructure(afterMarker: substructureAfterMarker, Syntax(expectedSubstructure), includeTrivia: options.contains(.substructureCheckTrivia), file: file, line: line)
+      try subtreeMatcher.assertSameStructure(
+        afterMarker: substructureAfterMarker,
+        Syntax(expectedSubstructure),
+        includeTrivia: options.contains(.substructureCheckTrivia),
+        file: file,
+        line: line
+      )
     } catch {
       XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
     }

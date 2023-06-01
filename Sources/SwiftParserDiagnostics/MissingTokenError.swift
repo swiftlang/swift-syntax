@@ -56,7 +56,9 @@ extension ParseDiagnosticsGenerator {
           changes: [
             .replace(
               oldNode: Syntax(invalidToken),
-              newNode: Syntax(TokenSyntax.identifier("`\(invalidToken.text)`", leadingTrivia: invalidToken.leadingTrivia, trailingTrivia: invalidToken.trailingTrivia))
+              newNode: Syntax(
+                TokenSyntax.identifier("`\(invalidToken.text)`", leadingTrivia: invalidToken.leadingTrivia, trailingTrivia: invalidToken.trailingTrivia)
+              )
             )
           ]
         )

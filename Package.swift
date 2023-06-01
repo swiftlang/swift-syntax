@@ -181,7 +181,10 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxMacrosTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]
+      dependencies: [
+        "_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosTestSupport",
+      ]
     ),
 
     // MARK: SwiftSyntaxMacroExpansion

@@ -120,7 +120,10 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableCollectionNodes.swift"], buildableCollectionNodesFile),
         GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableNodes.swift"], buildableNodesFile),
         GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["ResultBuilders.swift"], resultBuildersFile),
-        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["SyntaxExpressibleByStringInterpolationConformances.swift"], syntaxExpressibleByStringInterpolationConformancesFile),
+        GeneratedFileSpec(
+          swiftSyntaxBuilderGeneratedDir + ["SyntaxExpressibleByStringInterpolationConformances.swift"],
+          syntaxExpressibleByStringInterpolationConformancesFile
+        ),
       ]
       + BASE_KIND_FILES.map { baseKind in
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["syntaxNodes", baseKind.value], syntaxNode(emitKind: baseKind.key))

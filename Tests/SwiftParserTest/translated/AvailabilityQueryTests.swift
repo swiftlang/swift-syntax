@@ -65,7 +65,10 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' with '#unavailable'"])
+        DiagnosticSpec(
+          message: "availability condition cannot be used in an expression; did you mean '#unavailable'?",
+          fixIts: ["replace '!#available' with '#unavailable'"]
+        )
       ],
       fixedSource: """
         if #unavailable(OSX 10.52, *) {
@@ -81,7 +84,10 @@ final class AvailabilityQueryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "availability condition cannot be used in an expression; did you mean '#unavailable'?", fixIts: ["replace '!#available' with '#unavailable'"])
+        DiagnosticSpec(
+          message: "availability condition cannot be used in an expression; did you mean '#unavailable'?",
+          fixIts: ["replace '!#available' with '#unavailable'"]
+        )
       ],
       fixedSource: """
         if let _ = Optional(5), #unavailable(OSX 10.52, *) {

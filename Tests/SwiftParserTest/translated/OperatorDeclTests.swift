@@ -135,7 +135,10 @@ final class OperatorDeclTests: XCTestCase {
       1️⃣operator ++*** : A
       """,
       diagnostics: [
-        DiagnosticSpec(message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"])
+        DiagnosticSpec(
+          message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
+          fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
+        )
       ],
       fixedSource:
         """
@@ -150,7 +153,11 @@ final class OperatorDeclTests: XCTestCase {
       1️⃣operator +*+++ 2️⃣{ }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
+          fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ],
       fixedSource: """
@@ -165,7 +172,11 @@ final class OperatorDeclTests: XCTestCase {
       1️⃣operator +*++* : A 2️⃣{ }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
+          fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
       ],
       fixedSource: """
@@ -589,7 +600,11 @@ final class OperatorDeclTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'dynamic' before operator declaration"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator must be declared as 'prefix', 'postfix', or 'infix'", fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
+          fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
+        ),
       ],
       fixedSource:
         """

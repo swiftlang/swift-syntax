@@ -382,7 +382,8 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "SecondName",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
-        documentation: "If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.",
+        documentation:
+          "If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.",
         isOptional: true
       ),
       Child(
@@ -831,7 +832,14 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self"), .keyword(text: "init"), .token(tokenKind: "DollarIdentifierToken"), .token(tokenKind: "BinaryOperatorToken")])
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .keyword(text: "self"),
+          .keyword(text: "Self"),
+          .keyword(text: "init"),
+          .token(tokenKind: "DollarIdentifierToken"),
+          .token(tokenKind: "BinaryOperatorToken"),
+        ])
       ),
       Child(
         name: "DeclNameArguments",
@@ -1067,7 +1075,15 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self"), .keyword(text: "init"), .token(tokenKind: "DollarIdentifierToken"), .token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IntegerLiteralToken")])
+        kind: .token(choices: [
+          .token(tokenKind: "IdentifierToken"),
+          .keyword(text: "self"),
+          .keyword(text: "Self"),
+          .keyword(text: "init"),
+          .token(tokenKind: "DollarIdentifierToken"),
+          .token(tokenKind: "BinaryOperatorToken"),
+          .token(tokenKind: "IntegerLiteralToken"),
+        ])
       ),
       Child(
         name: "DeclNameArguments",

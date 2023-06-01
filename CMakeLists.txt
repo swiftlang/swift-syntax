@@ -33,7 +33,7 @@ execute_process(
     "${CMAKE_Swift_COMPILER}"
     -Xfrontend -disable-implicit-string-processing-module-import
     -Xfrontend -parse-stdlib
-    -typecheck
+    -typecheck "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift"
   OUTPUT_QUIET ERROR_QUIET
   RESULT_VARIABLE
     SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)

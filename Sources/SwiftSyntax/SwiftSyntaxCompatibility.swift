@@ -85,6 +85,81 @@ public extension EnumDeclSyntax {
   }
 }
 
+public extension FunctionTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
+  var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndParameters
+    }
+    set(value) {
+      unexpectedBetweenLeftParenAndParameters = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "parameters")
+  var arguments: TupleTypeElementListSyntax {
+    get {
+      return parameters
+    }
+    set(value) {
+      parameters = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
+  var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParametersAndRightParen
+    }
+    set(value) {
+      unexpectedBetweenParametersAndRightParen = value
+    }
+  }
+
+  /// Adds the provided `element` to the node's `arguments`
+  /// - param element: The new `Argument` to add to the node's
+  ///                  `arguments` collection.
+  /// - returns: A copy of the receiver with the provided `Argument`
+  ///            appended to its `arguments` collection.
+  @available(*, deprecated, renamed: "addParameter")
+  func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
+    return self.addParameter(element)
+  }
+
+  @available(*, deprecated, message: "Use an initializer with a parameters")
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: TupleTypeElementListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+    effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+    output: ReturnClauseSyntax,
+    _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      parameters: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndEffectSpecifiers,
+      effectSpecifiers: effectSpecifiers,
+      unexpectedBetweenEffectSpecifiersAndOutput,
+      output: output,
+      unexpectedAfterOutput,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 public extension NamedOpaqueReturnTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeGenericParameterClause")
   var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? { unexpectedBeforeGenericParameterClause }

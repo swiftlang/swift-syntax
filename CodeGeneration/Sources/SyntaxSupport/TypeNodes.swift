@@ -183,8 +183,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "Arguments",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Argument"),
+        name: "Parameters",
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter"),
         isIndented: true
       ),
       Child(

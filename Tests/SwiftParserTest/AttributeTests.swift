@@ -371,6 +371,15 @@ final class AttributeTests: XCTestCase {
     )
   }
 
+  func testSpiAttributeWithUnderscore() {
+    assertParse(
+      "@_spi(_) class Foo {}"
+    )
+    assertParse(
+      "@_spi(_) import Foo"
+    )
+  }
+
   func testSilgenName() {
     assertParse(
       """

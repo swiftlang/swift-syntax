@@ -1099,12 +1099,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "declname"
   case \DynamicReplacementArgumentsSyntax.unexpectedAfterDeclname:
     return "unexpectedAfterDeclname"
-  case \EditorPlaceholderDeclSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \EditorPlaceholderDeclSyntax.identifier:
-    return "identifier"
-  case \EditorPlaceholderDeclSyntax.unexpectedAfterIdentifier:
-    return "unexpectedAfterIdentifier"
+  case \EditorPlaceholderDeclSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \EditorPlaceholderDeclSyntax.attributes:
+    return "attributes"
+  case \EditorPlaceholderDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \EditorPlaceholderDeclSyntax.modifiers:
+    return "modifiers"
+  case \EditorPlaceholderDeclSyntax.unexpectedBetweenModifiersAndPlaceholder:
+    return "unexpectedBetweenModifiersAndPlaceholder"
+  case \EditorPlaceholderDeclSyntax.placeholder:
+    return "placeholder"
+  case \EditorPlaceholderDeclSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
   case \EditorPlaceholderExprSyntax.unexpectedBeforeIdentifier:
     return "unexpectedBeforeIdentifier"
   case \EditorPlaceholderExprSyntax.identifier:

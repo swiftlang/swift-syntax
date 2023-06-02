@@ -333,7 +333,7 @@ extension Parser {
   }
 
   mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
-    let langle = self.consumeAnyToken(remapping: .leftAngle)
+    let langle = self.consumePrefix("<", as: .leftAngle)
     var associatedTypes = [RawPrimaryAssociatedTypeSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil

@@ -1512,7 +1512,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Attribute` to the node's `attributes`
+  /// Adds the provided `element` to the node's `attributes`
   /// collection.
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
@@ -1550,7 +1550,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `Modifier` to the node's `modifiers`
+  /// Adds the provided `element` to the node's `modifiers`
   /// collection.
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.

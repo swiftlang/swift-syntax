@@ -13,13 +13,6 @@
 // This file provides compatiblity aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-public extension DeclGroupSyntax {
-  @available(*, deprecated, renamed: "memberBlock")
-  var members: MemberDeclBlockSyntax {
-    return self.memberBlock
-  }
-}
-
 @available(*, deprecated, renamed: "ImportPathSyntax")
 public typealias AccessPathSyntax = ImportPathSyntax
 
@@ -28,6 +21,13 @@ public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
+
+public extension DeclGroupSyntax {
+  @available(*, deprecated, renamed: "memberBlock")
+  var members: MemberDeclBlockSyntax {
+    return self.memberBlock
+  }
+}
 
 public extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenIdentifierAndGenericParameterClause")
@@ -192,18 +192,18 @@ public extension NamedOpaqueReturnTypeSyntax {
   }
 }
 
-extension TupleExprSyntax {
+public extension TupleExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
-  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? { unexpectedBetweenLeftParenAndElements }
+  var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? { unexpectedBetweenLeftParenAndElements }
 
   @available(*, deprecated, renamed: "elements")
-  public var elementList: TupleExprElementListSyntax { elements }
+  var elementList: TupleExprElementListSyntax { elements }
 
   @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
-  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? { unexpectedBetweenElementsAndRightParen }
+  var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? { unexpectedBetweenElementsAndRightParen }
 
   @available(*, deprecated, message: "Use an initializer with a elements argument")
-  public init(
+  init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
     leftParen: TokenSyntax = .leftParenToken(),

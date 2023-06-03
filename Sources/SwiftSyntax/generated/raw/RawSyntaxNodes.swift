@@ -9991,9 +9991,9 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil, 
-      arguments: RawTupleTypeElementListSyntax, 
-      _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndParameters: RawUnexpectedNodesSyntax? = nil, 
+      parameters: RawTupleTypeElementListSyntax, 
+      _ unexpectedBetweenParametersAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedBetweenRightParenAndEffectSpecifiers: RawUnexpectedNodesSyntax? = nil, 
       effectSpecifiers: RawTypeEffectSpecifiersSyntax?, 
@@ -10007,9 +10007,9 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndArguments?.raw
-      layout[3] = arguments.raw
-      layout[4] = unexpectedBetweenArgumentsAndRightParen?.raw
+      layout[2] = unexpectedBetweenLeftParenAndParameters?.raw
+      layout[3] = parameters.raw
+      layout[4] = unexpectedBetweenParametersAndRightParen?.raw
       layout[5] = rightParen.raw
       layout[6] = unexpectedBetweenRightParenAndEffectSpecifiers?.raw
       layout[7] = effectSpecifiers?.raw
@@ -10028,15 +10028,15 @@ public struct RawFunctionTypeSyntax: RawTypeSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var arguments: RawTupleTypeElementListSyntax {
+  public var parameters: RawTupleTypeElementListSyntax {
     layoutView.children[3].map(RawTupleTypeElementListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

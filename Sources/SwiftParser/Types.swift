@@ -61,21 +61,21 @@ extension Parser {
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
       let leftParen: RawTokenSyntax
       let unexpectedBetweenLeftParenAndElements: RawUnexpectedNodesSyntax?
-      let arguments: RawTupleTypeElementListSyntax
+      let parameters: RawTupleTypeElementListSyntax
       let unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax?
       let rightParen: RawTokenSyntax
       if let input = base.as(RawTupleTypeSyntax.self) {
         unexpectedBeforeLeftParen = input.unexpectedBeforeLeftParen
         leftParen = input.leftParen
         unexpectedBetweenLeftParenAndElements = input.unexpectedBetweenLeftParenAndElements
-        arguments = input.elements
+        parameters = input.elements
         unexpectedBetweenElementsAndRightParen = input.unexpectedBetweenElementsAndRightParen
         rightParen = input.rightParen
       } else {
         unexpectedBeforeLeftParen = nil
         leftParen = RawTokenSyntax(missing: .leftParen, arena: self.arena)
         unexpectedBetweenLeftParenAndElements = nil
-        arguments = RawTupleTypeElementListSyntax(
+        parameters = RawTupleTypeElementListSyntax(
           elements: [
             RawTupleTypeElementSyntax(
               inOut: nil,
@@ -100,7 +100,7 @@ extension Parser {
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
           unexpectedBetweenLeftParenAndElements,
-          arguments: arguments,
+          parameters: parameters,
           unexpectedBetweenElementsAndRightParen,
           rightParen: rightParen,
           effectSpecifiers: effectSpecifiers,

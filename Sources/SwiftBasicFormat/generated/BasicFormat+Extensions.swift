@@ -44,7 +44,7 @@ fileprivate extension AnyKeyPath {
       return true
     case \FunctionCallExprSyntax.argumentList:
       return true
-    case \FunctionTypeSyntax.arguments:
+    case \FunctionTypeSyntax.parameters:
       return true
     case \MemberDeclBlockSyntax.members:
       return true

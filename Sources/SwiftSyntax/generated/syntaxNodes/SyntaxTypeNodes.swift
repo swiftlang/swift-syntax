@@ -825,9 +825,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleTypeElementListSyntax,
-      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil,
+      parameters: TupleTypeElementListSyntax,
+      _ unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
@@ -842,9 +842,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightParen, 
+            unexpectedBetweenLeftParenAndParameters, 
+            parameters, 
+            unexpectedBetweenParametersAndRightParen, 
             rightParen, 
             unexpectedBetweenRightParenAndEffectSpecifiers, 
             effectSpecifiers, 
@@ -855,9 +855,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndArguments?.raw, 
-          arguments.raw, 
-          unexpectedBetweenArgumentsAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndParameters?.raw, 
+          parameters.raw, 
+          unexpectedBetweenParametersAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedBetweenRightParenAndEffectSpecifiers?.raw, 
           effectSpecifiers?.raw, 
@@ -896,7 +896,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -905,7 +905,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleTypeElementListSyntax {
+  public var parameters: TupleTypeElementListSyntax {
     get {
       return TupleTypeElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -914,13 +914,13 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `arguments`
+  /// Adds the provided `element` to the node's `parameters`
   /// collection.
-  /// - param element: The new `Argument` to add to the node's
-  ///                  `arguments` collection.
-  /// - returns: A copy of the receiver with the provided `Argument`
-  ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
+  /// - param element: The new `Parameter` to add to the node's
+  ///                  `parameters` collection.
+  /// - returns: A copy of the receiver with the provided `Parameter`
+  ///            appended to its `parameters` collection.
+  public func addParameter(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -933,7 +933,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return FunctionTypeSyntax(newData)
   }
   
-  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1000,9 +1000,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArguments, 
-          \Self.arguments, 
-          \Self.unexpectedBetweenArgumentsAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndParameters, 
+          \Self.parameters, 
+          \Self.unexpectedBetweenParametersAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedBetweenRightParenAndEffectSpecifiers, 
           \Self.effectSpecifiers, 

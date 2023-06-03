@@ -1501,12 +1501,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \FunctionTypeSyntax.leftParen:
     return "leftParen"
-  case \FunctionTypeSyntax.unexpectedBetweenLeftParenAndArguments:
-    return "unexpectedBetweenLeftParenAndArguments"
-  case \FunctionTypeSyntax.arguments:
-    return "arguments"
-  case \FunctionTypeSyntax.unexpectedBetweenArgumentsAndRightParen:
-    return "unexpectedBetweenArgumentsAndRightParen"
+  case \FunctionTypeSyntax.unexpectedBetweenLeftParenAndParameters:
+    return "unexpectedBetweenLeftParenAndParameters"
+  case \FunctionTypeSyntax.parameters:
+    return "parameters"
+  case \FunctionTypeSyntax.unexpectedBetweenParametersAndRightParen:
+    return "unexpectedBetweenParametersAndRightParen"
   case \FunctionTypeSyntax.rightParen:
     return "rightParen"
   case \FunctionTypeSyntax.unexpectedBetweenRightParenAndEffectSpecifiers:

@@ -97,7 +97,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -135,7 +135,12 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return AccessorDeclSyntax(newData)
   }
   
@@ -368,7 +373,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -406,7 +411,12 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ActorDeclSyntax(newData)
   }
   
@@ -443,7 +453,12 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ActorDeclSyntax(newData)
   }
   
@@ -694,7 +709,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -733,7 +748,12 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return AssociatedtypeDeclSyntax(newData)
   }
   
@@ -771,7 +791,12 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return AssociatedtypeDeclSyntax(newData)
   }
   
@@ -1011,7 +1036,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -1050,7 +1075,12 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ClassDeclSyntax(newData)
   }
   
@@ -1088,7 +1118,12 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ClassDeclSyntax(newData)
   }
   
@@ -1316,7 +1351,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -1355,7 +1390,12 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return DeinitializerDeclSyntax(newData)
   }
   
@@ -1393,7 +1433,12 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return DeinitializerDeclSyntax(newData)
   }
   
@@ -1540,7 +1585,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -1579,7 +1624,12 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EditorPlaceholderDeclSyntax(newData)
   }
   
@@ -1617,7 +1667,12 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EditorPlaceholderDeclSyntax(newData)
   }
   
@@ -1729,7 +1784,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -1768,7 +1823,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EnumCaseDeclSyntax(newData)
   }
   
@@ -1806,7 +1866,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EnumCaseDeclSyntax(newData)
   }
   
@@ -1863,7 +1928,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 7, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EnumCaseDeclSyntax(newData)
   }
   
@@ -1982,7 +2052,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -2021,7 +2091,12 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EnumDeclSyntax(newData)
   }
   
@@ -2059,7 +2134,12 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return EnumDeclSyntax(newData)
   }
   
@@ -2294,7 +2374,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -2332,7 +2412,12 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ExtensionDeclSyntax(newData)
   }
   
@@ -2369,7 +2454,12 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ExtensionDeclSyntax(newData)
   }
   
@@ -2584,7 +2674,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -2622,7 +2712,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return FunctionDeclSyntax(newData)
   }
   
@@ -2659,7 +2754,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return FunctionDeclSyntax(newData)
   }
   
@@ -2858,7 +2958,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -2896,7 +2996,12 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return IfConfigDeclSyntax(newData)
   }
   
@@ -3015,7 +3120,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -3054,7 +3159,12 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ImportDeclSyntax(newData)
   }
   
@@ -3092,7 +3202,12 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ImportDeclSyntax(newData)
   }
   
@@ -3168,7 +3283,12 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.importPath,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 9, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 9, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ImportDeclSyntax(newData)
   }
   
@@ -3296,7 +3416,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -3335,7 +3455,12 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return InitializerDeclSyntax(newData)
   }
   
@@ -3373,7 +3498,12 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return InitializerDeclSyntax(newData)
   }
   
@@ -3614,7 +3744,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -3652,7 +3782,12 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroDeclSyntax(newData)
   }
   
@@ -3689,7 +3824,12 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroDeclSyntax(newData)
   }
   
@@ -3936,7 +4076,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -3974,7 +4114,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroExpansionDeclSyntax(newData)
   }
   
@@ -4011,7 +4156,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroExpansionDeclSyntax(newData)
   }
   
@@ -4121,7 +4271,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 13, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 13, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroExpansionDeclSyntax(newData)
   }
   
@@ -4194,7 +4349,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 19, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 19, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MacroExpansionDeclSyntax(newData)
   }
   
@@ -4295,7 +4455,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -4334,7 +4494,12 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MissingDeclSyntax(newData)
   }
   
@@ -4372,7 +4537,12 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return MissingDeclSyntax(newData)
   }
   
@@ -4484,7 +4654,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -4654,7 +4824,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -4840,7 +5010,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -4879,7 +5049,12 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return PrecedenceGroupDeclSyntax(newData)
   }
   
@@ -4917,7 +5092,12 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return PrecedenceGroupDeclSyntax(newData)
   }
   
@@ -5010,7 +5190,12 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 11, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 11, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return PrecedenceGroupDeclSyntax(newData)
   }
   
@@ -5159,7 +5344,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -5198,7 +5383,12 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ProtocolDeclSyntax(newData)
   }
   
@@ -5236,7 +5426,12 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return ProtocolDeclSyntax(newData)
   }
   
@@ -5531,7 +5726,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -5570,7 +5765,12 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return StructDeclSyntax(newData)
   }
   
@@ -5608,7 +5808,12 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return StructDeclSyntax(newData)
   }
   
@@ -5891,7 +6096,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -5929,7 +6134,12 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return SubscriptDeclSyntax(newData)
   }
   
@@ -5966,7 +6176,12 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return SubscriptDeclSyntax(newData)
   }
   
@@ -6195,7 +6410,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -6233,7 +6448,12 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return TypealiasDeclSyntax(newData)
   }
   
@@ -6270,7 +6490,12 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return TypealiasDeclSyntax(newData)
   }
   
@@ -6461,7 +6686,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw, arena: arena)
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
     }
     self.init(data)
   }
@@ -6499,7 +6724,12 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 1, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 1, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return VariableDeclSyntax(newData)
   }
   
@@ -6536,7 +6766,12 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 3, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return VariableDeclSyntax(newData)
   }
   
@@ -6591,7 +6826,12 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
                                         from: [element.raw], arena: arena)
     }
-    let newData = data.replacingChild(at: 7, with: collection, arena: arena)
+    let newData = data.replacingChild(
+        at: 7, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
     return VariableDeclSyntax(newData)
   }
   

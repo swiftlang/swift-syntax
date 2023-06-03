@@ -69,8 +69,8 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   @_spi(RawSyntax)
-  public init(raw: RawSyntax, arena: __shared SyntaxArena) {
-    self.init(.forRoot(raw, arena: arena))
+  public init(raw: RawSyntax, rawNodeArena: __shared SyntaxArena) {
+    self.init(.forRoot(raw, rawNodeArena: rawNodeArena))
   }
 
   /// Create a ``Syntax`` node from a specialized syntax node.
@@ -229,7 +229,7 @@ extension SyntaxProtocol {
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
-      return Syntax(raw: self.raw, arena: self.raw.arena).cast(Self.self)
+      return Syntax(raw: self.raw, rawNodeArena: self.raw.arena).cast(Self.self)
     }
   }
 

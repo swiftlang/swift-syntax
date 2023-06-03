@@ -40,7 +40,7 @@ extension SyntaxCollection {
       from: children.map { $0.raw },
       arena: arena
     )
-    self.init(SyntaxData.forRoot(raw, arena: arena))
+    self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -57,7 +57,7 @@ extension SyntaxCollection {
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-    let newData = data.replacingSelf(newRaw, arena: arena)
+    let newData = data.replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena)
     return Syntax(newData).cast(Self.self)
   }
 

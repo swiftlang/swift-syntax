@@ -54,6 +54,8 @@ public struct RawSyntaxLayoutView {
   }
 
   /// Creates a new node of the same kind but with children replaced by `elements`.
+  ///
+  /// The newly created syntax node is allocated in `arena`.
   @_spi(RawSyntax)
   public func replacingLayout(
     with elements: some Collection<RawSyntax?>,

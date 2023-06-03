@@ -129,7 +129,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                   """
                 )
               }
-              StmtSyntax("return SyntaxData.forRoot(raw, arena: arena)")
+              StmtSyntax("return SyntaxData.forRoot(raw, rawNodeArena: arena)")
             }
           )
 
@@ -207,7 +207,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: childNode.varOrCaseName),
                                                     from: [element.raw], arena: arena)
                 }
-                let newData = data.replacingChild(at: \(raw: index), with: collection, arena: arena)
+                let newData = data.replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
                 return \(node.kind.syntaxType)(newData)
               }
               """

@@ -7184,7 +7184,7 @@ open class SyntaxRewriter {
       let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
-        Syntax(raw: newRaw, arena: arena).cast(SyntaxType.self)
+        Syntax(raw: newRaw, rawNodeArena: arena).cast(SyntaxType.self)
       }
     } else {
       // No child node was rewritten. So no need to change this node as well.
@@ -7197,7 +7197,7 @@ open class SyntaxRewriter {
   public func rewrite(_ node: Syntax) -> Syntax {
     let rewritten = self.visit(node)
     return withExtendedLifetime(rewritten) {
-      return Syntax(node.data.replacingSelf(rewritten.raw, arena: rewritten.raw.arena))
+      return Syntax(node.data.replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena()))
     }
   }
 }

@@ -30,7 +30,7 @@ final class SourceLocationConverterTests: XCTestCase {
         arena: arena
       )
 
-      return Syntax(raw: nodeWithInvalidUtf8.raw, arena: arena).cast(TokenSyntax.self)
+      return Syntax(raw: nodeWithInvalidUtf8.raw, rawNodeArena: arena).cast(TokenSyntax.self)
     }
 
     let tree = SourceFileSyntax(statements: [], eofToken: eofToken)

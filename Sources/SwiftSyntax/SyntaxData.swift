@@ -278,9 +278,9 @@ struct SyntaxData {
   /// `arena` must be the arena in which `raw` is allocated. It is passed to
   /// make sure the arena doesn’t get de-allocated before the ``SyntaxData`` has
   /// a chance to retain it.
-  static func forRoot(_ raw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
-    precondition(arena === raw.arena)
-    return SyntaxData(raw, info: .root(.init(arena: arena)))
+  static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> SyntaxData {
+    precondition(rawNodeArena === raw.arena)
+    return SyntaxData(raw, info: .root(.init(arena: rawNodeArena)))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -304,19 +304,23 @@ struct SyntaxData {
   /// Creates a copy of `self` and recursively creates `SyntaxData` nodes up to
   /// the root.
   ///
-  /// `arena` is the arena in which `newRaw` resides. The new nodes will be
-  /// allocated in this arena.
-  func replacingSelf(_ newRaw: RawSyntax, arena: SyntaxArena) -> SyntaxData {
-    precondition(newRaw.arena === arena)
+  /// - Parameters:
+  ///   - newRaw: The node that should replace `self`
+  ///   - rawNodeArena: The arena in which `newRaw` resides
+  ///   - arena: The arena in which  new nodes should be allocated
+  /// - Returns: A syntax tree with all parents where this node has been
+  ///            replaced by `newRaw`
+  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: SyntaxArena, allocationArena: SyntaxArena) -> SyntaxData {
+    precondition(newRaw.arena === rawNodeArena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent {
-      let parentData = parent.replacingChild(at: indexInParent, with: newRaw, arena: arena)
+      let parentData = parent.replacingChild(at: indexInParent, with: newRaw, rawNodeArena: rawNodeArena, allocationArena: allocationArena)
       let newParent = Syntax(parentData)
       return SyntaxData(absoluteRaw.replacingSelf(newRaw, newRootId: parentData.nodeId.rootId), parent: newParent)
     } else {
       // Otherwise, we're already the root, so return the new root data.
-      return .forRoot(newRaw, arena: arena)
+      return .forRoot(newRaw, rawNodeArena: rawNodeArena)
     }
   }
 
@@ -327,13 +331,20 @@ struct SyntaxData {
   ///   - index: The index pointing to where in the raw layout to place this
   ///            child.
   ///   - newChild: The raw syntax for the new child to replace.
+  ///   - newChildArena: The arena in which `newChild` resides.
   ///   - arena: The arena in which the new node will be allocated.
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(at index: Int, with newChild: RawSyntax?, arena: SyntaxArena) -> SyntaxData {
-    let newRaw = raw.layoutView!.replacingChild(at: index, with: newChild, arena: arena)
-    return replacingSelf(newRaw, arena: arena)
+  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: SyntaxArena?, allocationArena: SyntaxArena) -> SyntaxData {
+    precondition(newChild?.arena === rawNodeArena || newChild == nil)
+    // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
+    // be a child arena of `allocationArena` and thus, `allocationArena` will
+    // keep `newChild` alive.
+    let newRaw = withExtendedLifetime(rawNodeArena) {
+      raw.layoutView!.replacingChild(at: index, with: newChild, arena: allocationArena)
+    }
+    return replacingSelf(newRaw, rawNodeArena: allocationArena, allocationArena: allocationArena)
   }
 
   /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
@@ -341,13 +352,13 @@ struct SyntaxData {
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: SyntaxData?, arena: SyntaxArena) -> SyntaxData {
     return withExtendedLifetime(newChild) {
-      return replacingChild(at: index, with: newChild?.raw, arena: arena)
+      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
     }
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {
     if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
-      return replacingSelf(raw, arena: arena)
+      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
     } else {
       return self
     }
@@ -355,7 +366,7 @@ struct SyntaxData {
 
   func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> SyntaxData {
     if let raw = raw.withTrailingTrivia(trailingTrivia, arena: arena) {
-      return replacingSelf(raw, arena: arena)
+      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
     } else {
       return self
     }
@@ -363,7 +374,7 @@ struct SyntaxData {
 
   func withPresence(_ presence: SourcePresence, arena: SyntaxArena) -> SyntaxData {
     if let raw = raw.tokenView?.withPresence(presence, arena: arena) {
-      return replacingSelf(raw, arena: arena)
+      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
     } else {
       return self
     }

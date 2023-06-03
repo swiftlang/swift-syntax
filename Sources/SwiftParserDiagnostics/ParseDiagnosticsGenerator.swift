@@ -727,13 +727,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         // Only diagnose the missing semicolon if the item doesn't contain any errors.
         // If the item contains errors, the root cause is most likely something different and not the missing semicolon.
         let position = semicolon.previousToken(viewMode: .sourceAccurate)?.endPositionBeforeTrailingTrivia
+        var fixIts: [FixIt] = [
+          FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
+        ]
+        if let firstToken = node.firstToken(viewMode: .sourceAccurate),
+          let lastToken = node.lastToken(viewMode: .sourceAccurate)
+        {
+          fixIts.insert(
+            FixIt(
+              message: .insertNewline,
+              changes: [
+                .replaceTrailingTrivia(token: lastToken, newTrivia: lastToken.trailingTrivia + .newlines(1) + firstToken.indentationOfLine)
+              ]
+            ),
+            at: 0
+          )
+        }
+
         addDiagnostic(
           semicolon,
           position: position,
           .consecutiveStatementsOnSameLine,
-          fixIts: [
-            FixIt(message: .insertSemicolon, changes: .makePresent(semicolon))
-          ],
+          fixIts: fixIts,
           handledNodes: [semicolon.id]
         )
       } else {

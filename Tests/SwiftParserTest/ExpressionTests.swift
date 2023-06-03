@@ -857,8 +857,8 @@ final class ExpressionTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
@@ -879,6 +879,53 @@ final class ExpressionTests: XCTestCase {
           fixIts: ["insert '}'"]
         ),
       ],
+      applyFixIts: ["insert newline", #"insert '"'"#, "insert '}'"],
+      fixedSource: #"""
+        func nestThoseIfs() {
+          \n
+          if false != true {
+            \n
+            print
+            "\(i)\"\n"
+        }
+        }
+        """#
+    )
+
+    assertParse(
+      #"""
+      func nestThoseIfs() 1️⃣{
+        \n
+        if false != true 2️⃣{
+          \n
+          print3️⃣ 4️⃣"\(i)\"\n5️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "4️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '}' to end 'if' statement",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'", #"insert '"'"#, "insert '}'"],
       fixedSource: #"""
         func nestThoseIfs() {
           \n
@@ -1958,7 +2005,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testUnterminatedString3() {
+  func testUnterminatedString3a() {
     assertParse(
       #"""
       1️⃣"abc2️⃣
@@ -1973,8 +2020,8 @@ final class StatementExpressionTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
@@ -1983,6 +2030,41 @@ final class StatementExpressionTests: XCTestCase {
           fixIts: [#"insert '"'"#]
         ),
       ],
+      applyFixIts: [#"insert '"'"#, "insert newline"],
+      fixedSource: #"""
+        "abc"
+        \(def)
+        ""
+        """#
+    )
+  }
+
+  func testUnterminatedString3b() {
+    assertParse(
+      #"""
+      1️⃣"abc2️⃣
+      \(def)3️⃣"4️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      applyFixIts: [#"insert '"'"#, "insert ';'"],
       fixedSource: #"""
         "abc"
         \(def); ""
@@ -2051,7 +2133,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testUnterminatedString6() {
+  func testUnterminatedString6a() {
     assertParse(
       #"""
       1️⃣"abc2️⃣\3️⃣
@@ -2070,8 +2152,8 @@ final class StatementExpressionTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
@@ -2080,6 +2162,45 @@ final class StatementExpressionTests: XCTestCase {
           fixIts: [#"insert '"'"#]
         ),
       ],
+      applyFixIts: [#"insert '"'"#, "insert newline"],
+      fixedSource: #"""
+        "abc\"
+        (def)
+        ""
+        """#
+    )
+  }
+
+  func testUnterminatedString6b() {
+    assertParse(
+      #"""
+      1️⃣"abc2️⃣\3️⃣
+      (def)4️⃣"5️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "invalid escape sequence in literal"
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "4️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      applyFixIts: [#"insert '"'"#, "insert ';'"],
       fixedSource: #"""
         "abc\"
         (def); ""
@@ -2087,7 +2208,39 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testUnterminatedString7() {
+  func testUnterminatedString7a() {
+    assertParse(
+      #"""
+      #1️⃣
+      "abc"2️⃣#3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
+      ],
+      applyFixIts: ["insert identifier", "insert newline"],
+      fixedSource: #"""
+        #<#identifier#>
+        "abc"
+        #<#identifier#>
+        """#
+    )
+  }
+
+  func testUnterminatedString7b() {
     assertParse(
       #"""
       #1️⃣
@@ -2095,9 +2248,14 @@ final class StatementExpressionTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
+      applyFixIts: ["insert identifier", "insert ';'"],
       fixedSource: #"""
         #<#identifier#>
         "abc"; #<#identifier#>
@@ -2105,7 +2263,7 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testUnterminatedString8() {
+  func testUnterminatedString8a() {
     assertParse(
       #"""
       #"1️⃣
@@ -2119,8 +2277,8 @@ final class StatementExpressionTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -2129,6 +2287,40 @@ final class StatementExpressionTests: XCTestCase {
           fixIts: [#"insert '"'"#]
         ),
       ],
+      applyFixIts: [##"insert '"#'"##, "insert newline", #"insert '"'"#],
+      fixedSource: #"""
+        #""#
+        abc
+        "#"
+        """#
+    )
+  }
+
+  func testUnterminatedString8b() {
+    assertParse(
+      #"""
+      #"1️⃣
+      abc2️⃣"#3️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: ##"expected '"#' to end string literal"##,
+          fixIts: [##"insert '"#'"##]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "2️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      applyFixIts: [##"insert '"#'"##, "insert ';'", #"insert '"'"#],
       fixedSource: #"""
         #""#
         abc; "#"
@@ -2187,15 +2379,72 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements1() {
+  func testConsecutiveStatements1a() {
     assertParse(
       "{a1️⃣ b2️⃣ c}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        {a
+        b
+        c}
+        """
+    )
+  }
+
+  func testConsecutiveStatements1b() {
+    assertParse(
+      "{a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         {a; b; c}
+        """
+    )
+  }
+
+  func testConsecutiveStatements2a() {
+    assertParse(
+      "switch x {case y: a1️⃣ b2️⃣ c}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        switch x {case y: a
+        b
+        c}
         """
     )
   }
@@ -2204,39 +2453,118 @@ final class StatementExpressionTests: XCTestCase {
     assertParse(
       "switch x {case y: a1️⃣ b2️⃣ c}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         switch x {case y: a; b; c}
         """
     )
   }
 
-  func testConsecutiveStatements3() {
+  func testConsecutiveStatements3a() {
     assertParse(
       """
       var i: Int { a1️⃣ b2️⃣ c }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        var i: Int { a
+        b
+        c }
+        """
+    )
+  }
+
+  func testConsecutiveStatements3b() {
+    assertParse(
+      """
+      var i: Int { a1️⃣ b2️⃣ c }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         var i: Int { a; b; c }
         """
     )
   }
 
-  func testConsecutiveStatements4() {
+  func testConsecutiveStatements4a() {
     assertParse(
       """
       var i: Int { get {a1️⃣ b} set {c2️⃣ d} }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        var i: Int { get {a
+        b} set {c
+        d} }
+        """
+    )
+  }
+
+  func testConsecutiveStatements4b() {
+    assertParse(
+      """
+      var i: Int { get {a1️⃣ b} set {c2️⃣ d} }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         var i: Int { get {a; b} set {c; d} }
         """
@@ -2280,14 +2608,37 @@ final class StatementExpressionTests: XCTestCase {
     )
   }
 
-  func testStringLiteralAfterKeyPath() {
+  func testStringLiteralAfterKeyPath1() {
     assertParse(
       #"""
       \String.?1️⃣""
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: #"""
+        \String.?
+        ""
+        """#
+    )
+  }
+
+  func testStringLiteralAfterKeyPath2() {
+    assertParse(
+      #"""
+      \String.?1️⃣""
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: #"""
         \String.?; ""
         """#

@@ -331,28 +331,71 @@ final class OperatorsTests: XCTestCase {
     )
   }
 
-  func testOperators34() {
+  func testOperators34a() {
     assertParse(
       """
       foo!!1️⃣foo
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        foo!!
+        foo
+        """
+    )
+  }
+
+  func testOperators34b() {
+    assertParse(
+      """
+      foo!!1️⃣foo
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         foo!!; foo
         """
     )
   }
 
-  func testOperators35() {
+  func testOperators35a() {
     assertParse(
       """
       foo??1️⃣bar
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        foo??
+        bar
+        """
+    )
+  }
+
+  func testOperators35b() {
+    assertParse(
+      """
+      foo??1️⃣bar
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         foo??; bar
         """

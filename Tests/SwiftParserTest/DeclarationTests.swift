@@ -329,9 +329,54 @@ final class DeclarationTests: XCTestCase {
       internal(set) var defaultProp = 0
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        open
+        open(set)
+        var openProp = 0
+        public public(set) var publicProp = 0
+        package package(set) var packageProp = 0
+        internal internal(set) var internalProp = 0
+        fileprivate fileprivate(set) var fileprivateProp = 0
+        private private(set) var privateProp = 0
+        internal(set) var defaultProp = 0
+        """
+    )
+
+    assertParse(
+      """
+      open1️⃣ open(set)2️⃣ var openProp = 0
+      public public(set) var publicProp = 0
+      package package(set) var packageProp = 0
+      internal internal(set) var internalProp = 0
+      fileprivate fileprivate(set) var fileprivateProp = 0
+      private private(set) var privateProp = 0
+      internal(set) var defaultProp = 0
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         open; open(set); var openProp = 0
         public public(set) var publicProp = 0
@@ -1025,18 +1070,74 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testTextRecovery() {
+  func testTextRecovery1() {
     assertParse(
       """
       Lorem1️⃣ ipsum2️⃣ dolor3️⃣ sit4️⃣ amet5️⃣, consectetur adipiscing elit
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
         DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        Lorem
+        ipsum
+        dolor
+        sit
+        amet, consectetur adipiscing elit
+        """
+    )
+  }
+
+  func testTextRecovery2() {
+    assertParse(
+      """
+      Lorem1️⃣ ipsum2️⃣ dolor3️⃣ sit4️⃣ amet5️⃣, consectetur adipiscing elit
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         Lorem; ipsum; dolor; sit; amet, consectetur adipiscing elit
         """
@@ -2407,6 +2508,26 @@ final class DeclarationTests: XCTestCase {
         DiagnosticSpec(message: "expected name in primary associated type clause", fixIts: ["insert name"])
       ],
       fixedSource: "protocol X<<#identifier#>> {}"
+    )
+  }
+
+  func testCorrectIndentationWithNewline() {
+    assertParse(
+      """
+      func
+        test() {}1️⃣ var other: Int
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      fixedSource: """
+        func
+          test() {}
+        var other: Int
+        """
     )
   }
 }

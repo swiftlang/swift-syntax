@@ -31,15 +31,33 @@ final class PoundAssertTests: XCTestCase {
     )
   }
 
-  func testPoundAssert3() {
+  func testPoundAssert3a() {
     assertParse(
       #"""
       #assert1️⃣ true2️⃣, "error message")
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: #"""
+        #assert
+        true, "error message")
+        """#
+    )
+  }
+
+  func testPoundAssert3b() {
+    assertParse(
+      #"""
+      #assert1️⃣ true2️⃣, "error message")
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: #"""
         #assert; true, "error message")
         """#

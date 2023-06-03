@@ -328,6 +328,125 @@ enum DeclarationKeyword: TokenSpecSet {
   }
 }
 
+enum DeclarationModifier: TokenSpecSet {
+  case __consuming
+  case __setter_access
+  case _const
+  case _local
+  case async
+  case borrowing
+  case `class`
+  case consuming
+  case convenience
+  case distributed
+  case dynamic
+  case `fileprivate`
+  case final
+  case indirect
+  case infix
+  case `internal`
+  case isolated
+  case lazy
+  case mutating
+  case nonisolated
+  case nonmutating
+  case open
+  case optional
+  case override
+  case package
+  case postfix
+  case prefix
+  case `private`
+  case `public`
+  case reasync
+  case required
+  case `rethrows`
+  case `static`
+  case unowned
+  case weak
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.__consuming): self = .__consuming
+    case TokenSpec(.__setter_access): self = .__setter_access
+    case TokenSpec(._const): self = ._const
+    case TokenSpec(._local): self = ._local
+    case TokenSpec(.async): self = .async
+    case TokenSpec(.borrowing): self = .borrowing
+    case TokenSpec(.class): self = .class
+    case TokenSpec(.consuming): self = .consuming
+    case TokenSpec(.convenience): self = .convenience
+    case TokenSpec(.distributed): self = .distributed
+    case TokenSpec(.dynamic): self = .dynamic
+    case TokenSpec(.fileprivate): self = .fileprivate
+    case TokenSpec(.final): self = .final
+    case TokenSpec(.indirect): self = .indirect
+    case TokenSpec(.infix): self = .infix
+    case TokenSpec(.internal): self = .internal
+    case TokenSpec(.isolated): self = .isolated
+    case TokenSpec(.lazy): self = .lazy
+    case TokenSpec(.mutating): self = .mutating
+    case TokenSpec(.nonisolated): self = .nonisolated
+    case TokenSpec(.nonmutating): self = .nonmutating
+    case TokenSpec(.open): self = .open
+    case TokenSpec(.optional): self = .optional
+    case TokenSpec(.override): self = .override
+    case TokenSpec(.package): self = .package
+    case TokenSpec(.postfix): self = .postfix
+    case TokenSpec(.prefix): self = .prefix
+    case TokenSpec(.private): self = .private
+    case TokenSpec(.public): self = .public
+    case TokenSpec(.reasync): self = .reasync
+    case TokenSpec(.required): self = .required
+    case TokenSpec(.rethrows): self = .rethrows
+    case TokenSpec(.static): self = .static
+    case TokenSpec(.unowned): self = .unowned
+    case TokenSpec(.weak): self = .weak
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .__consuming: return .keyword(.__consuming)
+    case .__setter_access: return .keyword(.__setter_access)
+    case ._const: return TokenSpec(._const, recoveryPrecedence: .declKeyword)
+    case ._local: return .keyword(._local)
+    case .async: return TokenSpec(.async, recoveryPrecedence: .declKeyword)
+    case .borrowing: return TokenSpec(.borrowing, recoveryPrecedence: .declKeyword)
+    case .class: return .keyword(.class)
+    case .consuming: return TokenSpec(.consuming, recoveryPrecedence: .declKeyword)
+    case .convenience: return .keyword(.convenience)
+    case .distributed: return .keyword(.distributed)
+    case .dynamic: return .keyword(.dynamic)
+    case .fileprivate: return .keyword(.fileprivate)
+    case .final: return .keyword(.final)
+    case .indirect: return .keyword(.indirect)
+    case .infix: return .keyword(.infix)
+    case .internal: return .keyword(.internal)
+    case .isolated: return TokenSpec(.isolated, recoveryPrecedence: .declKeyword)
+    case .lazy: return .keyword(.lazy)
+    case .mutating: return .keyword(.mutating)
+    case .nonisolated: return .keyword(.nonisolated)
+    case .nonmutating: return .keyword(.nonmutating)
+    case .open: return .keyword(.open)
+    case .optional: return .keyword(.optional)
+    case .override: return .keyword(.override)
+    case .package: return .keyword(.package)
+    case .postfix: return .keyword(.postfix)
+    case .prefix: return .keyword(.prefix)
+    case .private: return .keyword(.private)
+    case .public: return .keyword(.public)
+    case .reasync: return TokenSpec(.reasync, recoveryPrecedence: .declKeyword)
+    case .required: return .keyword(.required)
+    case .rethrows: return TokenSpec(.rethrows, recoveryPrecedence: .declKeyword)
+    case .static: return .keyword(.static)
+    case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
+    case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
+    }
+  }
+}
+
 /// Union of the following token kind subsets:
 ///  - `DeclarationModifier`
 ///  - `DeclarationKeyword`
@@ -442,6 +561,56 @@ enum SwitchCaseStart: TokenSpecSet {
     switch self {
     case .case: return .keyword(.case)
     case .default: return .keyword(.default)
+    }
+  }
+}
+
+enum TypeAttribute: TokenSpecSet {
+  case _local
+  case _noMetadata
+  case _opaqueReturnTypeOf
+  case async
+  case autoclosure
+  case convention
+  case differentiable
+  case escaping
+  case noDerivative
+  case noescape
+  case Sendable
+  case unchecked
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(._local): self = ._local
+    case TokenSpec(._noMetadata): self = ._noMetadata
+    case TokenSpec(._opaqueReturnTypeOf): self = ._opaqueReturnTypeOf
+    case TokenSpec(.async): self = .async
+    case TokenSpec(.autoclosure): self = .autoclosure
+    case TokenSpec(.convention): self = .convention
+    case TokenSpec(.differentiable): self = .differentiable
+    case TokenSpec(.escaping): self = .escaping
+    case TokenSpec(.noDerivative): self = .noDerivative
+    case TokenSpec(.noescape): self = .noescape
+    case TokenSpec(.Sendable): self = .Sendable
+    case TokenSpec(.unchecked): self = .unchecked
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case ._local: return .keyword(._local)
+    case ._noMetadata: return .keyword(._noMetadata)
+    case ._opaqueReturnTypeOf: return .keyword(._opaqueReturnTypeOf)
+    case .async: return .keyword(.async)
+    case .autoclosure: return .keyword(.autoclosure)
+    case .convention: return .keyword(.convention)
+    case .differentiable: return .keyword(.differentiable)
+    case .escaping: return .keyword(.escaping)
+    case .noDerivative: return .keyword(.noDerivative)
+    case .noescape: return .keyword(.noescape)
+    case .Sendable: return .keyword(.Sendable)
+    case .unchecked: return .keyword(.unchecked)
     }
   }
 }

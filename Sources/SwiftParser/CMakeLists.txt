@@ -35,11 +35,9 @@ add_swift_host_library(SwiftParser
   TriviaParser.swift
   Types.swift
 
-  generated/DeclarationModifier.swift
   generated/IsLexerClassified.swift
   generated/Parser+Entry.swift
   generated/TokenSpecStaticMembers.swift
-  generated/TypeAttribute.swift
 
   Lexer/Cursor.swift
   Lexer/Lexeme.swift

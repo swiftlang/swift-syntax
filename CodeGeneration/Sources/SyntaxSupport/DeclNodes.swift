@@ -1200,7 +1200,7 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "ImportTok",
+        name: "ImportKeyword",
         kind: .token(choices: [.keyword(text: "import")]),
         documentation: "The `import` keyword for this declaration."
       ),

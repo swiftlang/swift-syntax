@@ -11741,9 +11741,9 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
       modifiers: RawModifierListSyntax?, 
-      _ unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax? = nil, 
-      importTok: RawTokenSyntax, 
-      _ unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenModifiersAndImportKeyword: RawUnexpectedNodesSyntax? = nil, 
+      importKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenImportKeywordAndImportKind: RawUnexpectedNodesSyntax? = nil, 
       importKind: RawTokenSyntax?, 
       _ unexpectedBetweenImportKindAndPath: RawUnexpectedNodesSyntax? = nil, 
       path: RawImportPathSyntax, 
@@ -11757,9 +11757,9 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
       layout[3] = modifiers?.raw
-      layout[4] = unexpectedBetweenModifiersAndImportTok?.raw
-      layout[5] = importTok.raw
-      layout[6] = unexpectedBetweenImportTokAndImportKind?.raw
+      layout[4] = unexpectedBetweenModifiersAndImportKeyword?.raw
+      layout[5] = importKeyword.raw
+      layout[6] = unexpectedBetweenImportKeywordAndImportKind?.raw
       layout[7] = importKind?.raw
       layout[8] = unexpectedBetweenImportKindAndPath?.raw
       layout[9] = path.raw
@@ -11784,15 +11784,15 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[3].map(RawModifierListSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenModifiersAndImportTok: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndImportKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var importTok: RawTokenSyntax {
+  public var importKeyword: RawTokenSyntax {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenImportTokAndImportKind: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenImportKeywordAndImportKind: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

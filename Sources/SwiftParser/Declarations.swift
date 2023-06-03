@@ -331,7 +331,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeImportKeyword,
-      importTok: importKeyword,
+      importKeyword: importKeyword,
       importKind: kind,
       path: path,
       arena: self.arena

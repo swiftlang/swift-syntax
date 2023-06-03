@@ -25,19 +25,45 @@ public typealias AttributedSyntax = WithAttributesSyntax
 public extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
   var members: MemberDeclBlockSyntax {
-    return self.memberBlock
+    get {
+      return memberBlock
+    }
+    set(value) {
+      memberBlock = value
+    }
   }
 }
 
 public extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenIdentifierAndGenericParameterClause")
-  var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? { unexpectedBetweenIdentifierAndGenericParameterClause }
+  var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenIdentifierAndGenericParameterClause
+    }
+    set(value) {
+      unexpectedBetweenIdentifierAndGenericParameterClause = value
+    }
+  }
 
   @available(*, deprecated, renamed: "genericParameterClause")
-  var genericParameters: GenericParameterClauseSyntax? { genericParameterClause }
+  var genericParameters: GenericParameterClauseSyntax? {
+    get {
+      return genericParameterClause
+    }
+    set(value) {
+      genericParameterClause = value
+    }
+  }
 
   @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndInheritanceClause")
-  var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? { unexpectedBetweenGenericParameterClauseAndInheritanceClause }
+  var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericParameterClauseAndInheritanceClause
+    }
+    set(value) {
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause = value
+    }
+  }
 
   @available(*, deprecated, message: "Use an initializer with a genericParameterClause argument.")
   init(
@@ -162,13 +188,34 @@ public extension FunctionTypeSyntax {
 
 public extension NamedOpaqueReturnTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeGenericParameterClause")
-  var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? { unexpectedBeforeGenericParameterClause }
+  var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeGenericParameterClause
+    }
+    set(value) {
+      unexpectedBeforeGenericParameterClause = value
+    }
+  }
 
   @available(*, deprecated, renamed: "genericParameterClause")
-  var genericParameters: GenericParameterClauseSyntax? { genericParameterClause }
+  var genericParameters: GenericParameterClauseSyntax {
+    get {
+      return genericParameterClause
+    }
+    set(value) {
+      genericParameterClause = value
+    }
+  }
 
   @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndBaseType")
-  var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? { unexpectedBetweenGenericParameterClauseAndBaseType }
+  var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericParameterClauseAndBaseType
+    }
+    set(value) {
+      unexpectedBetweenGenericParameterClauseAndBaseType = value
+    }
+  }
 
   @available(*, deprecated, message: "Use an initializer with a genericParameterClause argument.")
   init(
@@ -194,13 +241,34 @@ public extension NamedOpaqueReturnTypeSyntax {
 
 public extension TupleExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
-  var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? { unexpectedBetweenLeftParenAndElements }
+  var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndElements
+    }
+    set(value) {
+      unexpectedBetweenLeftParenAndElements = value
+    }
+  }
 
   @available(*, deprecated, renamed: "elements")
-  var elementList: TupleExprElementListSyntax { elements }
+  var elementList: TupleExprElementListSyntax {
+    get {
+      return elements
+    }
+    set(value) {
+      elements = value
+    }
+  }
 
   @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
-  var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? { unexpectedBetweenElementsAndRightParen }
+  var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenElementsAndRightParen
+    }
+    set(value) {
+      unexpectedBetweenElementsAndRightParen = value
+    }
+  }
 
   @available(*, deprecated, message: "Use an initializer with a elements argument")
   init(

@@ -1411,21 +1411,25 @@ extension Parser {
     pattern: PatternContext,
     flavor: ExprFlavor
   ) -> RawMacroExpansionExprSyntax {
-    if !atStartOfFreestandingMacroExpansion() {
-      return RawMacroExpansionExprSyntax(
-        poundToken: self.consumeAnyToken(),
-        macro: self.missingToken(.identifier),
-        genericArguments: nil,
-        leftParen: nil,
-        argumentList: .init(elements: [], arena: self.arena),
-        rightParen: nil,
-        trailingClosure: nil,
-        additionalTrailingClosures: nil,
-        arena: self.arena
-      )
+    var (unexpectedBeforePound, pound) = self.expect(.pound)
+    if pound.trailingTriviaByteLength != 0 {
+      // If there are whitespaces after '#' diagnose.
+      unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, arena: self.arena)
+      pound = self.missingToken(.pound)
     }
-    let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+    var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
+    var macro: RawTokenSyntax
+    if !self.currentToken.isAtStartOfLine {
+      (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+      if macro.leadingTriviaByteLength != 0 {
+        // If there're whitespaces after '#' diagnose.
+        unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)
+        pound = self.missingToken(.identifier, text: macro.tokenText)
+      }
+    } else {
+      unexpectedBeforeMacro = nil
+      macro = self.missingToken(.identifier)
+    }
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?
@@ -1460,7 +1464,8 @@ extension Parser {
     }
 
     return RawMacroExpansionExprSyntax(
-      poundToken: poundKeyword,
+      unexpectedBeforePound,
+      poundToken: pound,
       unexpectedBeforeMacro,
       macro: macro,
       genericArguments: generics,

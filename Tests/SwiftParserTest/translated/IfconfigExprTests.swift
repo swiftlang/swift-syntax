@@ -524,23 +524,22 @@ final class IfconfigExprTests: XCTestCase {
     )
   }
 
-  // FIXME: Diagnostics could be better.
   func testIfConfigExpr35() {
     assertParse(
       """
       #if MY_FLAG
-      # 1️⃣elif
+      #1️⃣ elif
       #endif
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected identifier in macro expansion",
-          fixIts: ["insert identifier"]
+          message: "extraneous whitespace after '#' is not permitted",
+          fixIts: ["remove whitespace"]
         )
       ],
       fixedSource: """
         #if MY_FLAG
-        #<#identifier#>elif
+        #elif
         #endif
         """
     )

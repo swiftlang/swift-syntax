@@ -426,23 +426,6 @@ enum OperatorLike: TokenSpecSet {
   }
 }
 
-enum PoundDeclarationStart: TokenSpecSet {
-  case poundIfKeyword
-
-  init?(lexeme: Lexer.Lexeme) {
-    switch lexeme.rawTokenKind {
-    case .poundIfKeyword: self = .poundIfKeyword
-    default: return nil
-    }
-  }
-
-  var spec: TokenSpec {
-    switch self {
-    case .poundIfKeyword: return .poundIfKeyword
-    }
-  }
-}
-
 enum SwitchCaseStart: TokenSpecSet {
   case `case`
   case `default`

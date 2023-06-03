@@ -751,10 +751,9 @@ final class RegexLiteralTests: XCTestCase {
   }
 
   func testBinOpDisambiguation26() {
-    // FIXME: The diagnostic should be one character back
     assertParse(
       """
-      # 1️⃣/^ x/
+      #1️⃣ /^ x/
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in macro expansion", fixIts: ["insert identifier"])

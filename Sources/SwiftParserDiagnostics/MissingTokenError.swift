@@ -108,7 +108,7 @@ extension ParseDiagnosticsGenerator {
 
     if let identifier = missingToken.nextToken(viewMode: .all),
       identifier.tokenView.rawKind == .identifier,
-      identifier.presence == .missing
+      identifier.isMissing
     {
       // The extraneous whitespace caused a missing identifier, output a
       // diagnostic inserting it instead of a diagnostic to fix the trivia
@@ -126,7 +126,7 @@ extension ParseDiagnosticsGenerator {
       )
     } else {
       let fixIt = FixIt(message: .removeExtraneousWhitespace, changes: changes)
-      addDiagnostic(invalidToken, .invalidWhitespaceAfterPeriod, fixIts: [fixIt], handledNodes: [invalidTokenContainer.id])
+      addDiagnostic(invalidToken, ExtraneousWhitespace(tokenWithWhitespace: invalidToken), fixIts: [fixIt], handledNodes: [invalidTokenContainer.id])
     }
     return true
   }

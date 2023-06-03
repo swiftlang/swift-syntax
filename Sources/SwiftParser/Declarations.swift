@@ -30,16 +30,22 @@ extension DeclarationModifier {
 
 extension TokenConsumer {
   mutating func atStartOfFreestandingMacroExpansion() -> Bool {
+    // Check if "'#' <identifier>" where the identifier is on the sameline.
     if !self.at(.pound) {
       return false
     }
-    if self.peek().rawTokenKind != .identifier && !self.peek().isLexerClassifiedKeyword {
+    if self.peek().isAtStartOfLine {
       return false
     }
-    if self.currentToken.trailingTriviaByteLength != 0 || self.peek().leadingTriviaByteLength != 0 {
+    switch self.peek().rawTokenKind {
+    case .identifier:
+      return true
+    case .keyword:
+      // allow keywords right after '#' so we can diagnose it when parsing.
+      return (self.currentToken.trailingTriviaByteLength == 0 && self.peek().leadingTriviaByteLength == 0)
+    default:
       return false
     }
-    return true
   }
 
   mutating func atStartOfDeclaration(
@@ -47,7 +53,7 @@ extension TokenConsumer {
     allowInitDecl: Bool = true,
     allowRecovery: Bool = false
   ) -> Bool {
-    if self.at(anyIn: PoundDeclarationStart.self) != nil {
+    if self.at(.poundIfKeyword) {
       return true
     }
 
@@ -188,13 +194,9 @@ extension Parser {
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows futher recovery.
   mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
-    switch self.at(anyIn: PoundDeclarationStart.self) {
-    case (.poundIfKeyword, _)?:
-      if self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
-        // If we are at a `#if` of attributes, the `#if` directive should be
-        // parsed when we're parsing the attributes.
-        break
-      }
+    // If we are at a `#if` of attributes, the `#if` directive should be
+    // parsed when we're parsing the attributes.
+    if self.at(.poundIfKeyword) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       let directive = self.parsePoundIfDirective { (parser, _) in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
@@ -220,8 +222,6 @@ extension Parser {
         return .decls(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
       }
       return RawDeclSyntax(directive)
-    case nil:
-      break
     }
 
     let attrs = DeclAttributes(
@@ -2096,25 +2096,24 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawMacroExpansionDeclSyntax {
 
-    let (unexpectedBeforePound, poundKeyword) = self.eat(handle)
-    // Don't allow space between '#' and the macro name.
-    if poundKeyword.trailingTriviaByteLength != 0 || self.currentToken.leadingTriviaByteLength != 0 {
-      return RawMacroExpansionDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        unexpectedBeforePound,
-        poundToken: poundKeyword,
-        macro: self.missingToken(.identifier),
-        genericArguments: nil,
-        leftParen: nil,
-        argumentList: .init(elements: [], arena: self.arena),
-        rightParen: nil,
-        trailingClosure: nil,
-        additionalTrailingClosures: nil,
-        arena: self.arena
-      )
+    var (unexpectedBeforePound, pound) = self.eat(handle)
+    if pound.trailingTriviaByteLength != 0 {
+      // `#` and the macro name must not be separated by a newline.
+      unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, arena: self.arena)
+      pound = RawTokenSyntax(missing: .pound, text: "#", leadingTriviaPieces: pound.leadingTriviaPieces, arena: self.arena)
     }
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+    var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
+    var macro: RawTokenSyntax
+    if !self.currentToken.isAtStartOfLine {
+      (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+      if macro.leadingTriviaByteLength != 0 {
+        unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)
+        pound = self.missingToken(.identifier, text: macro.tokenText)
+      }
+    } else {
+      unexpectedBeforeMacro = nil
+      macro = self.missingToken(.identifier)
+    }
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?
@@ -2155,7 +2154,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforePound,
-      poundToken: poundKeyword,
+      poundToken: pound,
       unexpectedBeforeMacro,
       macro: macro,
       genericArguments: generics,

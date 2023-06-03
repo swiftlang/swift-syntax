@@ -173,3 +173,13 @@ public extension TriviaPiece {
     }
   }
 }
+
+extension TokenSyntax {
+  var isMissing: Bool {
+    return presence == .missing
+  }
+
+  var isPresent: Bool {
+    return presence == .present
+  }
+}

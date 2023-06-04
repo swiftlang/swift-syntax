@@ -14,6 +14,37 @@
 
 import SwiftSyntax
 
+extension AccessesEffectSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? = nil, 
+      accessesKeyword: TokenSyntax = .keyword(.accesses), 
+      unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder propertyListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAccessesKeyword, 
+        accessesKeyword: accessesKeyword, 
+        unexpectedBetweenAccessesKeywordAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndPropertyList, 
+        propertyList: propertyListBuilder(), 
+        unexpectedBetweenPropertyListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension AccessorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -28,7 +59,9 @@ extension AccessorDeclSyntax {
       parameter: AccessorParameterSyntax? = nil, 
       unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
-      unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil, 
+      initEffects: AccessorInitEffectsSyntax? = nil, 
+      unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax?, 
       trailingTrivia: Trivia? = nil
@@ -45,7 +78,9 @@ extension AccessorDeclSyntax {
         parameter: parameter, 
         unexpectedBetweenParameterAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
-        unexpectedBetweenEffectSpecifiersAndBody, 
+        unexpectedBetweenEffectSpecifiersAndInitEffects, 
+        initEffects: initEffects, 
+        unexpectedBetweenInitEffectsAndBody, 
         body: bodyBuilder().map {
           CodeBlockSyntax(statements: $0)
         }, 
@@ -871,6 +906,37 @@ extension InitializerDeclSyntax {
           CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension InitializesEffectSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? = nil, 
+      initializesKeyword: TokenSyntax = .keyword(.initializes), 
+      unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder propertyListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeInitializesKeyword, 
+        initializesKeyword: initializesKeyword, 
+        unexpectedBetweenInitializesKeywordAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndPropertyList, 
+        propertyList: propertyListBuilder(), 
+        unexpectedBetweenPropertyListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

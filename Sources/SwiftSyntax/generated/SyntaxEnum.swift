@@ -18,9 +18,11 @@ public enum SyntaxEnum {
   case token(TokenSyntax)
   case accessPathComponent(AccessPathComponentSyntax)
   case accessPath(AccessPathSyntax)
+  case accessesEffect(AccessesEffectSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDecl(AccessorDeclSyntax)
   case accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax)
+  case accessorInitEffects(AccessorInitEffectsSyntax)
   case accessorList(AccessorListSyntax)
   case accessorParameter(AccessorParameterSyntax)
   case actorDecl(ActorDeclSyntax)
@@ -160,6 +162,7 @@ public enum SyntaxEnum {
   case inheritedType(InheritedTypeSyntax)
   case initializerClause(InitializerClauseSyntax)
   case initializerDecl(InitializerDeclSyntax)
+  case initializesEffect(InitializesEffectSyntax)
   case integerLiteralExpr(IntegerLiteralExprSyntax)
   case isExpr(IsExprSyntax)
   case isTypePattern(IsTypePatternSyntax)
@@ -298,12 +301,16 @@ public extension Syntax {
       return .accessPathComponent(AccessPathComponentSyntax(self)!)
     case .accessPath:
       return .accessPath(AccessPathSyntax(self)!)
+    case .accessesEffect:
+      return .accessesEffect(AccessesEffectSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDecl:
       return .accessorDecl(AccessorDeclSyntax(self)!)
     case .accessorEffectSpecifiers:
       return .accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax(self)!)
+    case .accessorInitEffects:
+      return .accessorInitEffects(AccessorInitEffectsSyntax(self)!)
     case .accessorList:
       return .accessorList(AccessorListSyntax(self)!)
     case .accessorParameter:
@@ -582,6 +589,8 @@ public extension Syntax {
       return .initializerClause(InitializerClauseSyntax(self)!)
     case .initializerDecl:
       return .initializerDecl(InitializerDeclSyntax(self)!)
+    case .initializesEffect:
+      return .initializesEffect(InitializesEffectSyntax(self)!)
     case .integerLiteralExpr:
       return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
     case .isExpr:

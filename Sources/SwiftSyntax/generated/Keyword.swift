@@ -60,6 +60,7 @@ public enum Keyword: UInt8, Hashable {
   case _typeEraser
   case _unavailableFromAsync
   case _UnknownLayout
+  case accesses
   case actor
   case addressWithNativeOwner
   case addressWithOwner
@@ -125,6 +126,7 @@ public enum Keyword: UInt8, Hashable {
   case indirect
   case infix
   case `init`
+  case initializes
   case inline
   case `inout`
   case `internal`
@@ -470,6 +472,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._private
       case "_Trivial":
         self = ._Trivial
+      case "accesses":
+        self = .accesses
       case "continue":
         self = .`continue`
       case "escaping":
@@ -587,6 +591,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`fallthrough`
       case "fileprivate":
         self = .`fileprivate`
+      case "initializes":
+        self = .initializes
       case "nonisolated":
         self = .nonisolated
       case "nonmutating":
@@ -786,6 +792,7 @@ public enum Keyword: UInt8, Hashable {
       "_typeEraser", 
       "_unavailableFromAsync", 
       "_UnknownLayout", 
+      "accesses", 
       "actor", 
       "addressWithNativeOwner", 
       "addressWithOwner", 
@@ -851,6 +858,7 @@ public enum Keyword: UInt8, Hashable {
       "indirect", 
       "infix", 
       "init", 
+      "initializes", 
       "inline", 
       "inout", 
       "internal", 

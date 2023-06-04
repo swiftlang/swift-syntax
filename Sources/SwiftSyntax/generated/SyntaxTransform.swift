@@ -29,6 +29,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessPathSyntax) -> ResultType
   
+  /// Visiting `AccessesEffectSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AccessesEffectSyntax) -> ResultType
+  
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -43,6 +48,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType
+  
+  /// Visiting `AccessorInitEffectsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AccessorInitEffectsSyntax) -> ResultType
   
   /// Visiting `AccessorListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -739,6 +749,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InitializerDeclSyntax) -> ResultType
   
+  /// Visiting `InitializesEffectSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: InitializesEffectSyntax) -> ResultType
+  
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1389,6 +1404,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `AccessesEffectSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AccessesEffectSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `AccessorBlockSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1407,6 +1429,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AccessorEffectSpecifiersSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting `AccessorInitEffectsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AccessorInitEffectsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2383,6 +2412,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting `InitializesEffectSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: InitializesEffectSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting `IntegerLiteralExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3273,11 +3309,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .accessPath(let derived):
       return visit(derived)
+    case .accessesEffect(let derived):
+      return visit(derived)
     case .accessorBlock(let derived):
       return visit(derived)
     case .accessorDecl(let derived):
       return visit(derived)
     case .accessorEffectSpecifiers(let derived):
+      return visit(derived)
+    case .accessorInitEffects(let derived):
       return visit(derived)
     case .accessorList(let derived):
       return visit(derived)
@@ -3556,6 +3596,8 @@ extension SyntaxTransformVisitor {
     case .initializerClause(let derived):
       return visit(derived)
     case .initializerDecl(let derived):
+      return visit(derived)
+    case .initializesEffect(let derived):
       return visit(derived)
     case .integerLiteralExpr(let derived):
       return visit(derived)

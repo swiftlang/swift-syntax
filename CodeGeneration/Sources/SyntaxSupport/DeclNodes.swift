@@ -154,7 +154,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "AccessorKind",
-        kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set"), .keyword(text: "didSet"), .keyword(text: "willSet"), .keyword(text: "unsafeAddress"), .keyword(text: "addressWithOwner"), .keyword(text: "addressWithNativeOwner"), .keyword(text: "unsafeMutableAddress"), .keyword(text: "mutableAddressWithOwner"), .keyword(text: "mutableAddressWithNativeOwner"), .keyword(text: "_read"), .keyword(text: "_modify")])
+        kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set"), .keyword(text: "didSet"), .keyword(text: "willSet"), .keyword(text: "unsafeAddress"), .keyword(text: "addressWithOwner"), .keyword(text: "addressWithNativeOwner"), .keyword(text: "unsafeMutableAddress"), .keyword(text: "mutableAddressWithOwner"), .keyword(text: "mutableAddressWithNativeOwner"), .keyword(text: "_read"), .keyword(text: "_modify"), .keyword(text: "init")])
       ),
       Child(
         name: "Parameter",

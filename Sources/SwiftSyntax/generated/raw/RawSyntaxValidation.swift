@@ -260,7 +260,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("mutableAddressWithOwner"), 
             .keyword("mutableAddressWithNativeOwner"), 
             .keyword("_read"), 
-            .keyword("_modify")
+            .keyword("_modify"), 
+            .keyword("init")
           ]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawAccessorParameterSyntax?.self))

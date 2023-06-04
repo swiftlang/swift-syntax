@@ -167,6 +167,7 @@ public let DECL_NODES: [Node] = [
           .keyword(text: "mutableAddressWithNativeOwner"),
           .keyword(text: "_read"),
           .keyword(text: "_modify"),
+          .keyword(text: "init"),
         ])
       ),
       Child(

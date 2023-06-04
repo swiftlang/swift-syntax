@@ -64,6 +64,74 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    name: "AccessesEffect",
+    nameForDiagnostics: "accesses effect",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "AccessesKeyword",
+        kind: .token(choices: [.keyword(text: "accesses")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "PropertyList",
+        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Property"),
+        nameForDiagnostics: "properties"
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    name: "InitializesEffect",
+    nameForDiagnostics: "initializes effect",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "InitializesKeyword",
+        kind: .token(choices: [.keyword(text: "initializes")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "PropertyList",
+        kind: .collection(kind: "TupleExprElementList", collectionElementName: "Property"),
+        nameForDiagnostics: "properties"
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    name: "AccessorInitEffects",
+    nameForDiagnostics: "init accessor effects",
+    kind: "Syntax",
+    children: [
+      Child(
+        name: "InitializesEffect",
+        kind: .node(kind: "InitializesEffect"),
+        isOptional: true
+      ),
+      Child(
+        name: "AccessesEffect",
+        kind: .node(kind: "AccessesEffect"),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     name: "AccessorDecl",
     nameForDiagnostics: "accessor",
     kind: "Decl",
@@ -97,6 +165,11 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "EffectSpecifiers",
         kind: .node(kind: "AccessorEffectSpecifiers"),
+        isOptional: true
+      ),
+      Child(
+        name: "InitEffects",
+        kind: .node(kind: "AccessorInitEffects"),
         isOptional: true
       ),
       Child(

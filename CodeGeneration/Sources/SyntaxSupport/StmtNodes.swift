@@ -26,7 +26,7 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "AvailabilitySpec",
+        name: "AvailabilityArguments",
         kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument")
       ),
       Child(

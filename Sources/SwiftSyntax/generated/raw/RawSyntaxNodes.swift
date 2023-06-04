@@ -1948,9 +1948,9 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
       availabilityKeyword: RawTokenSyntax, 
       _ unexpectedBetweenAvailabilityKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? = nil, 
-      availabilitySpec: RawAvailabilitySpecListSyntax, 
-      _ unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndAvailabilityArguments: RawUnexpectedNodesSyntax? = nil, 
+      availabilityArguments: RawAvailabilitySpecListSyntax, 
+      _ unexpectedBetweenAvailabilityArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -1962,9 +1962,9 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
       layout[1] = availabilityKeyword.raw
       layout[2] = unexpectedBetweenAvailabilityKeywordAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = unexpectedBetweenLeftParenAndAvailabilitySpec?.raw
-      layout[5] = availabilitySpec.raw
-      layout[6] = unexpectedBetweenAvailabilitySpecAndRightParen?.raw
+      layout[4] = unexpectedBetweenLeftParenAndAvailabilityArguments?.raw
+      layout[5] = availabilityArguments.raw
+      layout[6] = unexpectedBetweenAvailabilityArgumentsAndRightParen?.raw
       layout[7] = rightParen.raw
       layout[8] = unexpectedAfterRightParen?.raw
     }
@@ -1987,15 +1987,15 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndAvailabilitySpec: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndAvailabilityArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var availabilitySpec: RawAvailabilitySpecListSyntax {
+  public var availabilityArguments: RawAvailabilitySpecListSyntax {
     layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenAvailabilitySpecAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -2042,9 +2042,9 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
       label: RawTokenSyntax, 
       _ unexpectedBetweenLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
-      _ unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax? = nil, 
-      availabilityList: RawAvailabilitySpecListSyntax, 
-      _ unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenColonAndAvailabilityArguments: RawUnexpectedNodesSyntax? = nil, 
+      availabilityArguments: RawAvailabilitySpecListSyntax, 
+      _ unexpectedBetweenAvailabilityArgumentsAndSemicolon: RawUnexpectedNodesSyntax? = nil, 
       semicolon: RawTokenSyntax, 
       _ unexpectedAfterSemicolon: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -2056,9 +2056,9 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
       layout[1] = label.raw
       layout[2] = unexpectedBetweenLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = unexpectedBetweenColonAndAvailabilityList?.raw
-      layout[5] = availabilityList.raw
-      layout[6] = unexpectedBetweenAvailabilityListAndSemicolon?.raw
+      layout[4] = unexpectedBetweenColonAndAvailabilityArguments?.raw
+      layout[5] = availabilityArguments.raw
+      layout[6] = unexpectedBetweenAvailabilityArgumentsAndSemicolon?.raw
       layout[7] = semicolon.raw
       layout[8] = unexpectedAfterSemicolon?.raw
     }
@@ -2081,15 +2081,15 @@ public struct RawAvailabilityEntrySyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenColonAndAvailabilityList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndAvailabilityArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var availabilityList: RawAvailabilitySpecListSyntax {
+  public var availabilityArguments: RawAvailabilitySpecListSyntax {
     layoutView.children[5].map(RawAvailabilitySpecListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenAvailabilityListAndSemicolon: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityArgumentsAndSemicolon: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -2558,9 +2558,9 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
       beforeLabel: RawTokenSyntax, 
       _ unexpectedBetweenBeforeLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
-      _ unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax? = nil, 
-      versionList: RawAvailabilityVersionRestrictionListSyntax, 
-      _ unexpectedAfterVersionList: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenColonAndPlatforms: RawUnexpectedNodesSyntax? = nil, 
+      platforms: RawAvailabilityVersionRestrictionListSyntax, 
+      _ unexpectedAfterPlatforms: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -2570,9 +2570,9 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
       layout[1] = beforeLabel.raw
       layout[2] = unexpectedBetweenBeforeLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = unexpectedBetweenColonAndVersionList?.raw
-      layout[5] = versionList.raw
-      layout[6] = unexpectedAfterVersionList?.raw
+      layout[4] = unexpectedBetweenColonAndPlatforms?.raw
+      layout[5] = platforms.raw
+      layout[6] = unexpectedAfterPlatforms?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2593,15 +2593,15 @@ public struct RawBackDeployedAttributeSpecListSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenColonAndVersionList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndPlatforms: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var versionList: RawAvailabilityVersionRestrictionListSyntax {
+  public var platforms: RawAvailabilityVersionRestrictionListSyntax {
     layoutView.children[5].map(RawAvailabilityVersionRestrictionListSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterVersionList: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterPlatforms: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -10475,9 +10475,9 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftAngleBracket: RawUnexpectedNodesSyntax? = nil, 
       leftAngleBracket: RawTokenSyntax, 
-      _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? = nil, 
-      genericParameterList: RawGenericParameterListSyntax, 
-      _ unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftAngleBracketAndParameters: RawUnexpectedNodesSyntax? = nil, 
+      parameters: RawGenericParameterListSyntax, 
+      _ unexpectedBetweenParametersAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
       _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: RawUnexpectedNodesSyntax? = nil, 
       rightAngleBracket: RawTokenSyntax, 
@@ -10489,9 +10489,9 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftAngleBracket?.raw
       layout[1] = leftAngleBracket.raw
-      layout[2] = unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw
-      layout[3] = genericParameterList.raw
-      layout[4] = unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw
+      layout[2] = unexpectedBetweenLeftAngleBracketAndParameters?.raw
+      layout[3] = parameters.raw
+      layout[4] = unexpectedBetweenParametersAndGenericWhereClause?.raw
       layout[5] = genericWhereClause?.raw
       layout[6] = unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw
       layout[7] = rightAngleBracket.raw
@@ -10508,15 +10508,15 @@ public struct RawGenericParameterClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftAngleBracketAndGenericParameterList: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftAngleBracketAndParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var genericParameterList: RawGenericParameterListSyntax {
+  public var parameters: RawGenericParameterListSyntax {
     layoutView.children[3].map(RawGenericParameterListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenGenericParameterListAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

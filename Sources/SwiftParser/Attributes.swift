@@ -729,7 +729,7 @@ extension Parser {
               label: ident,
               unexpectedBeforeColon,
               colon: colon,
-              availabilityList: availability,
+              availabilityArguments: availability,
               unexpectedBeforeSemi,
               semicolon: semi,
               arena: self.arena
@@ -949,7 +949,7 @@ extension Parser {
       beforeLabel: label,
       unexpectedBeforeColon,
       colon: colon,
-      versionList: RawAvailabilityVersionRestrictionListSyntax(elements: elements, arena: self.arena),
+      platforms: RawAvailabilityVersionRestrictionListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
   }

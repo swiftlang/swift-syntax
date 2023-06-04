@@ -336,7 +336,7 @@ extension Parser {
     precondition(self.at(.poundAvailableKeyword, .poundUnavailableKeyword))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let spec = self.parseAvailabilitySpecList()
+    let arguments = self.parseAvailabilitySpecList()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     let unexpectedAfterRParen: RawUnexpectedNodesSyntax?
     if let (equalOperator, falseKeyword) = self.consume(if: { $0.isContextualPunctuator("==") }, followedBy: { TokenSpec.keyword(.false) ~= $0 }) {
@@ -349,7 +349,7 @@ extension Parser {
         availabilityKeyword: keyword,
         unexpectedBeforeLParen,
         leftParen: lparen,
-        availabilitySpec: spec,
+        availabilityArguments: arguments,
         unexpectedBeforeRParen,
         rightParen: rparen,
         unexpectedAfterRParen,

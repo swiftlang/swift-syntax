@@ -168,8 +168,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The colon separating the label and the value"
       ),
       Child(
-        name: "AvailabilityList",
-        kind: .collection(kind: .availabilitySpecList, collectionElementName: "Availability")
+        name: "AvailabilityArguments",
+        kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument")
       ),
       Child(
         name: "Semicolon",
@@ -227,8 +227,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The colon separating \"before\" and the parameter list."
       ),
       Child(
-        name: "VersionList",
-        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Availability"),
+        name: "Platforms",
+        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Platform"),
         documentation: "The list of OS versions in which the declaration became ABI stable."
       ),
     ]

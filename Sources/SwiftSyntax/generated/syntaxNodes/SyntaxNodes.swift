@@ -12,6 +12,193 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - AccessesEffectSyntax
+
+
+public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .accessesEffect else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``AccessesEffectSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .accessesEffect)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? = nil,
+      accessesKeyword: TokenSyntax = .keyword(.accesses),
+      _ unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
+      propertyList: TupleExprElementListSyntax,
+      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeAccessesKeyword, 
+            accessesKeyword, 
+            unexpectedBetweenAccessesKeywordAndLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndPropertyList, 
+            propertyList, 
+            unexpectedBetweenPropertyListAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeAccessesKeyword?.raw, 
+          accessesKeyword.raw, 
+          unexpectedBetweenAccessesKeywordAndLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndPropertyList?.raw, 
+          propertyList.raw, 
+          unexpectedBetweenPropertyListAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.accessesEffect,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var accessesKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var propertyList: TupleExprElementListSyntax {
+    get {
+      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `element` to the node's `propertyList`
+  /// collection.
+  /// - param element: The new `Property` to add to the node's
+  ///                  `propertyList` collection.
+  /// - returns: A copy of the receiver with the provided `Property`
+  ///            appended to its `propertyList` collection.
+  public func addProperty(_ element: TupleExprElementSyntax) -> AccessesEffectSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 5, with: collection, arena: arena)
+    return AccessesEffectSyntax(newData)
+  }
+  
+  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessesEffectSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeAccessesKeyword, 
+          \Self.accessesKeyword, 
+          \Self.unexpectedBetweenAccessesKeywordAndLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndPropertyList, 
+          \Self.propertyList, 
+          \Self.unexpectedBetweenPropertyListAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
+        ])
+  }
+}
+
 // MARK: - AccessorBlockSyntax
 
 
@@ -285,6 +472,122 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
           \Self.throwsSpecifier, 
           \Self.unexpectedAfterThrowsSpecifier
+        ])
+  }
+}
+
+// MARK: - AccessorInitEffectsSyntax
+
+
+public struct AccessorInitEffectsSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .accessorInitEffects else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``AccessorInitEffectsSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .accessorInitEffects)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInitializesEffect: UnexpectedNodesSyntax? = nil,
+      initializesEffect: InitializesEffectSyntax? = nil,
+      _ unexpectedBetweenInitializesEffectAndAccessesEffect: UnexpectedNodesSyntax? = nil,
+      accessesEffect: AccessesEffectSyntax? = nil,
+      _ unexpectedAfterAccessesEffect: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeInitializesEffect, 
+            initializesEffect, 
+            unexpectedBetweenInitializesEffectAndAccessesEffect, 
+            accessesEffect, 
+            unexpectedAfterAccessesEffect
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeInitializesEffect?.raw, 
+          initializesEffect?.raw, 
+          unexpectedBetweenInitializesEffectAndAccessesEffect?.raw, 
+          accessesEffect?.raw, 
+          unexpectedAfterAccessesEffect?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.accessorInitEffects,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeInitializesEffect: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorInitEffectsSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var initializesEffect: InitializesEffectSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(InitializesEffectSyntax.init)
+    }
+    set(value) {
+      self = AccessorInitEffectsSyntax(data.replacingChild(at: 1, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenInitializesEffectAndAccessesEffect: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorInitEffectsSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var accessesEffect: AccessesEffectSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(AccessesEffectSyntax.init)
+    }
+    set(value) {
+      self = AccessorInitEffectsSyntax(data.replacingChild(at: 3, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterAccessesEffect: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = AccessorInitEffectsSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeInitializesEffect, 
+          \Self.initializesEffect, 
+          \Self.unexpectedBetweenInitializesEffectAndAccessesEffect, 
+          \Self.accessesEffect, 
+          \Self.unexpectedAfterAccessesEffect
         ])
   }
 }
@@ -10597,6 +10900,193 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenEqualAndValue, 
           \Self.value, 
           \Self.unexpectedAfterValue
+        ])
+  }
+}
+
+// MARK: - InitializesEffectSyntax
+
+
+public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .initializesEffect else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``InitializesEffectSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .initializesEffect)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? = nil,
+      initializesKeyword: TokenSyntax = .keyword(.initializes),
+      _ unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
+      propertyList: TupleExprElementListSyntax,
+      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeInitializesKeyword, 
+            initializesKeyword, 
+            unexpectedBetweenInitializesKeywordAndLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndPropertyList, 
+            propertyList, 
+            unexpectedBetweenPropertyListAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) {(arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeInitializesKeyword?.raw, 
+          initializesKeyword.raw, 
+          unexpectedBetweenInitializesKeywordAndLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndPropertyList?.raw, 
+          propertyList.raw, 
+          unexpectedBetweenPropertyListAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.initializesEffect,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 0, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var initializesKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 1, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 2, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 3, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 4, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var propertyList: TupleExprElementListSyntax {
+    get {
+      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 5, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `element` to the node's `propertyList`
+  /// collection.
+  /// - param element: The new `Property` to add to the node's
+  ///                  `propertyList` collection.
+  /// - returns: A copy of the receiver with the provided `Property`
+  ///            appended to its `propertyList` collection.
+  public func addProperty(_ element: TupleExprElementSyntax) -> InitializesEffectSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(at: 5, with: collection, arena: arena)
+    return InitializesEffectSyntax(newData)
+  }
+  
+  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 6, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 7, with: value.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = InitializesEffectSyntax(data.replacingChild(at: 8, with: value?.raw, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeInitializesKeyword, 
+          \Self.initializesKeyword, 
+          \Self.unexpectedBetweenInitializesKeywordAndLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndPropertyList, 
+          \Self.propertyList, 
+          \Self.unexpectedBetweenPropertyListAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
         ])
   }
 }

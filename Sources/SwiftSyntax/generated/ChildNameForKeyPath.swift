@@ -17,6 +17,24 @@
 @_spi(RawSyntax)
 public func childName(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
+  case \AccessesEffectSyntax.unexpectedBeforeAccessesKeyword:
+    return "unexpectedBeforeAccessesKeyword"
+  case \AccessesEffectSyntax.accessesKeyword:
+    return "accessesKeyword"
+  case \AccessesEffectSyntax.unexpectedBetweenAccessesKeywordAndLeftParen:
+    return "unexpectedBetweenAccessesKeywordAndLeftParen"
+  case \AccessesEffectSyntax.leftParen:
+    return "leftParen"
+  case \AccessesEffectSyntax.unexpectedBetweenLeftParenAndPropertyList:
+    return "unexpectedBetweenLeftParenAndPropertyList"
+  case \AccessesEffectSyntax.propertyList:
+    return "propertyList"
+  case \AccessesEffectSyntax.unexpectedBetweenPropertyListAndRightParen:
+    return "unexpectedBetweenPropertyListAndRightParen"
+  case \AccessesEffectSyntax.rightParen:
+    return "rightParen"
+  case \AccessesEffectSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:
@@ -51,8 +69,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenParameterAndEffectSpecifiers"
   case \AccessorDeclSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \AccessorDeclSyntax.unexpectedBetweenEffectSpecifiersAndBody:
-    return "unexpectedBetweenEffectSpecifiersAndBody"
+  case \AccessorDeclSyntax.unexpectedBetweenEffectSpecifiersAndInitEffects:
+    return "unexpectedBetweenEffectSpecifiersAndInitEffects"
+  case \AccessorDeclSyntax.initEffects:
+    return "initEffects"
+  case \AccessorDeclSyntax.unexpectedBetweenInitEffectsAndBody:
+    return "unexpectedBetweenInitEffectsAndBody"
   case \AccessorDeclSyntax.body:
     return "body"
   case \AccessorDeclSyntax.unexpectedAfterBody:
@@ -67,6 +89,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "throwsSpecifier"
   case \AccessorEffectSpecifiersSyntax.unexpectedAfterThrowsSpecifier:
     return "unexpectedAfterThrowsSpecifier"
+  case \AccessorInitEffectsSyntax.unexpectedBeforeInitializesEffect:
+    return "unexpectedBeforeInitializesEffect"
+  case \AccessorInitEffectsSyntax.initializesEffect:
+    return "initializesEffect"
+  case \AccessorInitEffectsSyntax.unexpectedBetweenInitializesEffectAndAccessesEffect:
+    return "unexpectedBetweenInitializesEffectAndAccessesEffect"
+  case \AccessorInitEffectsSyntax.accessesEffect:
+    return "accessesEffect"
+  case \AccessorInitEffectsSyntax.unexpectedAfterAccessesEffect:
+    return "unexpectedAfterAccessesEffect"
   case \AccessorParameterSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \AccessorParameterSyntax.leftParen:
@@ -1825,6 +1857,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \InitializerDeclSyntax.unexpectedAfterBody:
     return "unexpectedAfterBody"
+  case \InitializesEffectSyntax.unexpectedBeforeInitializesKeyword:
+    return "unexpectedBeforeInitializesKeyword"
+  case \InitializesEffectSyntax.initializesKeyword:
+    return "initializesKeyword"
+  case \InitializesEffectSyntax.unexpectedBetweenInitializesKeywordAndLeftParen:
+    return "unexpectedBetweenInitializesKeywordAndLeftParen"
+  case \InitializesEffectSyntax.leftParen:
+    return "leftParen"
+  case \InitializesEffectSyntax.unexpectedBetweenLeftParenAndPropertyList:
+    return "unexpectedBetweenLeftParenAndPropertyList"
+  case \InitializesEffectSyntax.propertyList:
+    return "propertyList"
+  case \InitializesEffectSyntax.unexpectedBetweenPropertyListAndRightParen:
+    return "unexpectedBetweenPropertyListAndRightParen"
+  case \InitializesEffectSyntax.rightParen:
+    return "rightParen"
+  case \InitializesEffectSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   case \IntegerLiteralExprSyntax.unexpectedBeforeDigits:
     return "unexpectedBeforeDigits"
   case \IntegerLiteralExprSyntax.digits:

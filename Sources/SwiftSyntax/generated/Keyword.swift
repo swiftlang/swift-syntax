@@ -61,6 +61,7 @@ public enum Keyword: UInt8, Hashable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
+  case accesses
   case actor
   case addressWithNativeOwner
   case addressWithOwner
@@ -128,6 +129,7 @@ public enum Keyword: UInt8, Hashable {
   case indirect
   case infix
   case `init`
+  case initializes
   case inline
   case `inout`
   case `internal`
@@ -475,6 +477,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._Trivial
       case "_version":
         self = ._version
+      case "accesses":
+        self = .accesses
       case "compiler":
         self = .compiler
       case "continue":
@@ -596,6 +600,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`fallthrough`
       case "fileprivate":
         self = .`fileprivate`
+      case "initializes":
+        self = .initializes
       case "nonisolated":
         self = .nonisolated
       case "nonmutating":
@@ -804,6 +810,7 @@ public enum Keyword: UInt8, Hashable {
       "_underlyingVersion", 
       "_UnknownLayout", 
       "_version", 
+      "accesses", 
       "actor", 
       "addressWithNativeOwner", 
       "addressWithOwner", 
@@ -871,6 +878,7 @@ public enum Keyword: UInt8, Hashable {
       "indirect", 
       "infix", 
       "init", 
+      "initializes", 
       "inline", 
       "inout", 
       "internal", 

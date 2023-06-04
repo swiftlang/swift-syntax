@@ -791,6 +791,48 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testInitAccessorEffects() {
+    assertParse(
+      """
+      struct S {
+        var value: Int {
+          init initializes(x) {}
+        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct S {
+        var value: Int {
+          init accesses(x) {}
+        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct S {
+        var value: Int {
+          init initializes(x) accesses(y) {}
+        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct S {
+        var value: Int {
+          init initializes(x, y, z) accesses(x, y, z) {}
+        }
+      }
+      """
+    )
+  }
+
   func testExpressionMember() {
     assertParse(
       """

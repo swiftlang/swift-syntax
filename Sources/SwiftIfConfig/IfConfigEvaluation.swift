@@ -191,3 +191,83 @@ extension IfConfigState {
     self = result ? .active : .inactive
   }
 }
+
+extension IfConfigDeclSyntax {
+  /// Given a particular build configuration, determine which clause (if any) is the "active" clause.
+  ///
+  /// For example, for code like the following:
+  /// ```
+  /// #if A
+  ///  func f()
+  /// #elseif B
+  ///  func g()
+  /// #endif
+  /// ```
+  ///
+  /// If the `A` configuration option was passed on the command line (e.g. via `-DA`), the first clause
+  /// (containing `func f()`) would be returned. If not, and if the `B`configuration was passed on the
+  /// command line, the second clause (containing `func g()`) would be returned. If neither was
+  /// passed, this function will return `nil` to indicate that none of the regions are active.
+  ///
+  /// If an error occurred while processing any of the `#if` clauses, this function will throw that error.
+  public func activeClause(in configuration: some BuildConfiguration) throws -> IfConfigClauseSyntax? {
+    for clause in clauses {
+      // If there is no condition, we have reached an unconditional clause. Return it.
+      guard let condition = clause.condition else {
+        return clause
+      }
+
+      // If this condition evaluates true, return this clause.
+      if try evaluateIfConfig(condition: condition, configuration: configuration) {
+        return clause
+      }
+    }
+
+    return nil
+  }
+}
+
+extension SyntaxProtocol {
+  /// Determine whether the given syntax node is active within the given build configuration.
+  ///
+  /// This function evaluates the enclosing stack of `#if` conditions to determine whether the
+  /// given node is active in the program when it is compiled with the given build configuration.
+  ///
+  /// For example, given code like the following:
+  /// #if DEBUG
+  ///   #if A
+  ///    func f()
+  ///  #elseif B
+  ///    func g()
+  /// #endif
+  /// #endif
+  ///
+  /// a call to `isActive` on the syntax node for the function `g` would return `true` when the
+  /// configuration options `DEBUG` and `B` are provided, but `A` is not.
+  public func isActive(in configuration: some BuildConfiguration) throws -> Bool {
+    var currentNode: Syntax = Syntax(self)
+    var currentClause = currentNode.as(IfConfigClauseSyntax.self)
+
+    while let parent = currentNode.parent {
+      // If the parent is an `#if` configuration, check whether our current
+      // clause is active. If not, we're in an inactive region.
+      if let parentIfConfig = parent.as(IfConfigDeclSyntax.self) {
+        if try currentClause != nil && parentIfConfig.activeClause(in: configuration) != currentClause {
+          return false
+        }
+
+        currentClause = nil
+      }
+
+      // If the parent node is an if configuration clause, store it.
+      if let parentClause = parent.as(IfConfigClauseSyntax.self) {
+        currentClause = parentClause
+      }
+
+      currentNode = parent
+    }
+
+    // No more enclosing nodes; this code is active.
+    return true
+  }
+}

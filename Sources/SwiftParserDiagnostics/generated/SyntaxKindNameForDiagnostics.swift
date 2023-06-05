@@ -19,10 +19,14 @@ extension SyntaxKind {
     switch self {
     case .token:
       return "token"
+    case .accessesEffect:
+      return "accesses effect"
     case .accessorDecl:
       return "accessor"
     case .accessorEffectSpecifiers:
       return "accessor specifiers"
+    case .accessorInitEffects:
+      return "init accessor effects"
     case .actorDecl:
       return "actor"
     case .arrayElement:
@@ -225,6 +229,8 @@ extension SyntaxKind {
       return "inherited type"
     case .initializerDecl:
       return "initializer"
+    case .initializesEffect:
+      return "initializes effect"
     case .integerLiteralExpr:
       return "integer literal"
     case .isExpr:

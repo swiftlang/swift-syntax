@@ -28,6 +28,7 @@ enum AccessorKind: TokenSpecSet {
   case `set`
   case `didSet`
   case `willSet`
+  case `init`
   case unsafeAddress
   case addressWithOwner
   case addressWithNativeOwner
@@ -43,6 +44,7 @@ enum AccessorKind: TokenSpecSet {
     case TokenSpec(.set): self = .set
     case TokenSpec(.didSet): self = .didSet
     case TokenSpec(.willSet): self = .willSet
+    case TokenSpec(.`init`): self = .`init`
     case TokenSpec(.unsafeAddress): self = .unsafeAddress
     case TokenSpec(.addressWithOwner): self = .addressWithOwner
     case TokenSpec(.addressWithNativeOwner): self = .addressWithNativeOwner
@@ -61,6 +63,7 @@ enum AccessorKind: TokenSpecSet {
     case .set: return .keyword(.set)
     case .didSet: return .keyword(.didSet)
     case .willSet: return .keyword(.willSet)
+    case .`init`: return .keyword(.`init`)
     case .unsafeAddress: return .keyword(.unsafeAddress)
     case .addressWithOwner: return .keyword(.addressWithOwner)
     case .addressWithNativeOwner: return .keyword(.addressWithNativeOwner)

@@ -66,6 +66,74 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .accessesEffect,
+    base: .syntax,
+    nameForDiagnostics: "accesses effect",
+    children: [
+      Child(
+        name: "AccessesKeyword",
+        kind: .token(choices: [.keyword(text: "accesses")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "PropertyList",
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
+        nameForDiagnostics: "properties"
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .initializesEffect,
+    base: .syntax,
+    nameForDiagnostics: "initializes effect",
+    children: [
+      Child(
+        name: "InitializesKeyword",
+        kind: .token(choices: [.keyword(text: "initializes")])
+      ),
+      Child(
+        name: "LeftParen",
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+      ),
+      Child(
+        name: "PropertyList",
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
+        nameForDiagnostics: "properties"
+      ),
+      Child(
+        name: "RightParen",
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .accessorInitEffects,
+    base: .syntax,
+    nameForDiagnostics: "init accessor effects",
+    children: [
+      Child(
+        name: "InitializesEffect",
+        kind: .node(kind: .initializesEffect),
+        isOptional: true
+      ),
+      Child(
+        name: "AccessesEffect",
+        kind: .node(kind: .accessesEffect),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .accessorDecl,
     base: .decl,
     nameForDiagnostics: "accessor",
@@ -99,6 +167,7 @@ public let DECL_NODES: [Node] = [
           .keyword(text: "mutableAddressWithNativeOwner"),
           .keyword(text: "_read"),
           .keyword(text: "_modify"),
+          .keyword(text: "init"),
         ])
       ),
       Child(
@@ -110,6 +179,11 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "EffectSpecifiers",
         kind: .node(kind: .accessorEffectSpecifiers),
+        isOptional: true
+      ),
+      Child(
+        name: "InitEffects",
+        kind: .node(kind: .accessorInitEffects),
         isOptional: true
       ),
       Child(

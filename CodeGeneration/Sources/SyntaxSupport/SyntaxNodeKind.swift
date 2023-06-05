@@ -20,9 +20,11 @@ import SwiftSyntaxBuilder
 public enum SyntaxNodeKind: String, CaseIterable {
   // Please keep this list sorted alphabetically
 
+  case accessesEffect
   case accessorBlock
   case accessorDecl
   case accessorEffectSpecifiers
+  case accessorInitEffects
   case accessorList
   case accessorParameter
   case actorDecl
@@ -168,6 +170,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case inheritedType
   case initializerClause
   case initializerDecl
+  case initializesEffect
   case integerLiteralExpr
   case isExpr
   case isTypePattern

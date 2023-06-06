@@ -1065,12 +1065,21 @@ extension Parser {
   mutating func parseUnavailableFromAsyncArguments() -> RawUnavailableFromAsyncArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
+
+    let unexpectedBetweenColonAndMessage: RawUnexpectedNodesSyntax?
+    if let equalToken = self.consume(if: .equal) {
+      unexpectedBetweenColonAndMessage = RawUnexpectedNodesSyntax([equalToken], arena: self.arena)
+    } else {
+      unexpectedBetweenColonAndMessage = nil
+    }
+
     let message = self.parseStringLiteral()
     return RawUnavailableFromAsyncArgumentsSyntax(
       unexpectedBeforeLabel,
       messageLabel: label,
       unexpectedBeforeColon,
       colon: colon,
+      unexpectedBetweenColonAndMessage,
       message: message,
       arena: self.arena
     )

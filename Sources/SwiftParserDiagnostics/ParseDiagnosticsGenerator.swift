@@ -1625,6 +1625,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
+    if let equalToken = node.unexpectedBetweenColonAndMessage?.onlyPresentToken(where: { $0.tokenKind == .equal }) {
+      addDiagnostic(
+        equalToken,
+        MissingNodesError(missingNodes: [Syntax(node.colon)]),
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(
+              replaceTokens: [equalToken],
+              replacements: [node.colon]
+            ),
+            changes: [
+              FixIt.MultiNodeChange.makeMissing(equalToken),
+              FixIt.MultiNodeChange.makePresent(node.colon),
+            ]
+          )
+        ],
+        handledNodes: [equalToken.id, node.colon.id]
+      )
+    }
+
     if let token = node.unexpectedBetweenMessageLabelAndColon?.onlyPresentToken(where: { $0.tokenKind.isIdentifier }),
       token.isPresent,
       node.messageLabel.isMissing

@@ -141,8 +141,10 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
               in: context
             )
             if let declExpansion = expansion.as(MacroExpansionDeclSyntax.self) {
+              let attributes = macro.propagateFreestandingMacroAttributes ? declExpansion.attributes : nil
+              let modifiers = macro.propagateFreestandingMacroModifiers ? declExpansion.modifiers : nil
               expandedItemList = expandedItemList.map {
-                $0.applying(attributes: declExpansion.attributes, modifiers: declExpansion.modifiers)
+                $0.applying(attributes: attributes, modifiers: modifiers)
               }
             }
             newItems.append(
@@ -198,8 +200,10 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             of: declExpansion,
             in: context
           )
+          let attributes = freestandingMacro.propagateFreestandingMacroAttributes ? declExpansion.attributes : nil
+          let modifiers = freestandingMacro.propagateFreestandingMacroModifiers ? declExpansion.modifiers : nil
           expandedList = expandedList.map {
-            $0.applying(attributes: declExpansion.attributes, modifiers: declExpansion.modifiers)
+            $0.applying(attributes: attributes, modifiers: modifiers)
           }
 
           newItems.append(

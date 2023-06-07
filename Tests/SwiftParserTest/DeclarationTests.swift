@@ -2350,7 +2350,7 @@ final class DeclarationTests: XCTestCase {
           SuppressedTypeSyntax(
             withoutTilde: .prefixOperator("~"),
             patternType: FunctionTypeSyntax(
-              arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
+              parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
               output: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
             )
           )

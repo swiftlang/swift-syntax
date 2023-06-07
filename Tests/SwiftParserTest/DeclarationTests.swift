@@ -26,6 +26,7 @@ final class DeclarationTests: XCTestCase {
 
     assertParse(#"@_private(sourceFile: "YetAnotherFile.swift") import Foundation"#)
   }
+
   func testStructParsing() {
     assertParse("struct Foo {}")
   }

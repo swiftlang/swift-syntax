@@ -918,7 +918,7 @@ extension Parser {
         let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
         let associatedValue: RawEnumCaseParameterClauseSyntax?
-        if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+        if self.at(TokenSpec(.leftParen)) {
           associatedValue = self.parseParameterClause(RawEnumCaseParameterClauseSyntax.self) { parser in
             parser.parseEnumCaseParameter()
           }

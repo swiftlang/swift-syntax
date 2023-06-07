@@ -1450,4 +1450,15 @@ final class EnumTests: XCTestCase {
       """#
     )
   }
+
+  func parseEnumCaseElementParameterOnNewline() {
+    assertParse(
+      """
+      enum E {
+        case a
+          (Int)
+      }
+      """
+    )
+  }
 }

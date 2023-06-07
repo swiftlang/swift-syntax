@@ -46,8 +46,10 @@ public func expandFreestandingMacro(
         var rewritten = try declMacroDef.expansion(of: node, in: context)
         // Copy attributes and modifiers to the generated decls.
         if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
+          let attributes = declMacroDef.propagateFreestandingMacroAttributes ? expansionDecl.attributes : nil
+          let modifiers = declMacroDef.propagateFreestandingMacroModifiers ? expansionDecl.modifiers : nil
           rewritten = rewritten.map {
-            $0.applying(attributes: expansionDecl.attributes, modifiers: expansionDecl.modifiers)
+            $0.applying(attributes: attributes, modifiers: modifiers)
           }
         }
         expandedSyntax = Syntax(

@@ -672,6 +672,30 @@ public struct DeclsFromStringsMacro: DeclarationMacro {
   }
 }
 
+public struct DeclsFromStringsMacroNoAttrs: DeclarationMacro {
+  public static var propagateFreestandingMacroAttributes: Bool { false }
+  public static var propagateFreestandingMacroModifiers: Bool { false }
+
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    var strings: [String] = []
+    for arg in node.argumentList {
+      guard
+        let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue
+      else {
+        continue
+      }
+      strings.append(value)
+    }
+
+    return strings.map {
+      "\(raw: $0)"
+    }
+  }
+}
+
 // MARK: Tests
 
 /// The set of test macros we use here.
@@ -1114,5 +1138,22 @@ final class MacroSystemTests: XCTestCase {
       macros: ["decls": DeclsFromStringsMacro.self],
       indentationWidth: indentationWidth
     )
+
+    assertMacroExpansion(
+      #"""
+      @attribute
+      @otherAttribute(x: 1)
+      public #decls("@moreAttibute var global = 42",
+                    "private func foo() {}")
+      """#,
+      expandedSource: #"""
+        @moreAttibute var global = 42
+        private func foo() {
+        }
+        """#,
+      macros: ["decls": DeclsFromStringsMacroNoAttrs.self],
+      indentationWidth: indentationWidth
+    )
+
   }
 }

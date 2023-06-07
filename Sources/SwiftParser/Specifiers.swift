@@ -569,3 +569,74 @@ extension Parser {
     return RawUnexpectedNodesSyntax(unexpected, arena: self.arena)
   }
 }
+
+// MARK: - Parsing `initializes` and `accesses` specifiers in init accessors
+
+extension Parser {
+  mutating func parseInitAccessorEffects() -> RawAccessorInitEffectsSyntax? {
+    let initializes = self.parseInitializesSpecifier()
+    let accesses = self.parseAccessesSpecifier()
+
+    if initializes == nil, accesses == nil {
+      return nil
+    }
+
+    return RawAccessorInitEffectsSyntax(
+      initializesEffect: initializes,
+      accessesEffect: accesses,
+      arena: self.arena
+    )
+  }
+
+  mutating func parseInitializesSpecifier() -> RawInitializesEffectSyntax? {
+    guard let keyword = self.consume(if: .keyword(.initializes)) else {
+      return nil
+    }
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+
+    let args = parseArgumentListElements(pattern: .none)
+    let argumentList = RawTupleExprElementListSyntax(
+      elements: args,
+      arena: self.arena
+    )
+
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawInitializesEffectSyntax(
+      initializesKeyword: keyword,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      propertyList: argumentList,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+  }
+
+  mutating func parseAccessesSpecifier() -> RawAccessesEffectSyntax? {
+    guard let keyword = self.consume(if: .keyword(.accesses)) else {
+      return nil
+    }
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+
+    let args = parseArgumentListElements(pattern: .none)
+    let argumentList = RawTupleExprElementListSyntax(
+      elements: args,
+      arena: self.arena
+    )
+
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawAccessesEffectSyntax(
+      accessesKeyword: keyword,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      propertyList: argumentList,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+  }
+}

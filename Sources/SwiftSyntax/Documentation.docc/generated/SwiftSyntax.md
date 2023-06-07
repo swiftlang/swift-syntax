@@ -285,8 +285,10 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 ### Miscellaneous Syntax
 
+- <doc:SwiftSyntax/AccessesEffectSyntax>
 - <doc:SwiftSyntax/AccessorBlockSyntax>
 - <doc:SwiftSyntax/AccessorEffectSpecifiersSyntax>
+- <doc:SwiftSyntax/AccessorInitEffectsSyntax>
 - <doc:SwiftSyntax/AccessorParameterSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
@@ -320,6 +322,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/GenericWhereClauseSyntax>
 - <doc:SwiftSyntax/ImplementsAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/InitializerClauseSyntax>
+- <doc:SwiftSyntax/InitializesEffectSyntax>
 - <doc:SwiftSyntax/KeyPathOptionalComponentSyntax>
 - <doc:SwiftSyntax/KeyPathPropertyComponentSyntax>
 - <doc:SwiftSyntax/KeyPathSubscriptComponentSyntax>

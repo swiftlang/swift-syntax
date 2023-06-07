@@ -18,9 +18,11 @@ public enum SyntaxKind {
   case token
   case accessPathComponent
   case accessPath
+  case accessesEffect
   case accessorBlock
   case accessorDecl
   case accessorEffectSpecifiers
+  case accessorInitEffects
   case accessorList
   case accessorParameter
   case actorDecl
@@ -160,6 +162,7 @@ public enum SyntaxKind {
   case inheritedType
   case initializerClause
   case initializerDecl
+  case initializesEffect
   case integerLiteralExpr
   case isExpr
   case isTypePattern
@@ -413,12 +416,16 @@ public enum SyntaxKind {
       return AccessPathComponentSyntax.self
     case .accessPath:
       return AccessPathSyntax.self
+    case .accessesEffect:
+      return AccessesEffectSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDecl:
       return AccessorDeclSyntax.self
     case .accessorEffectSpecifiers:
       return AccessorEffectSpecifiersSyntax.self
+    case .accessorInitEffects:
+      return AccessorInitEffectsSyntax.self
     case .accessorList:
       return AccessorListSyntax.self
     case .accessorParameter:
@@ -697,6 +704,8 @@ public enum SyntaxKind {
       return InitializerClauseSyntax.self
     case .initializerDecl:
       return InitializerDeclSyntax.self
+    case .initializesEffect:
+      return InitializesEffectSyntax.self
     case .integerLiteralExpr:
       return IntegerLiteralExprSyntax.self
     case .isExpr:

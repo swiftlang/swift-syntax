@@ -18,6 +18,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
   case \AccessPathComponentSyntax.name:
     return "name"
+  case \AccessesEffectSyntax.propertyList:
+    return "properties"
   case \AccessorDeclSyntax.attributes:
     return "attributes"
   case \AccessorDeclSyntax.modifier:
@@ -212,6 +214,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "function signature"
   case \InitializerDeclSyntax.genericWhereClause:
     return "generic where clause"
+  case \InitializesEffectSyntax.propertyList:
+    return "properties"
   case \KeyPathExprSyntax.root:
     return "root"
   case \KeyPathSubscriptComponentSyntax.argumentList:

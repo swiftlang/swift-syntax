@@ -460,12 +460,36 @@ public let DECL_NODES: [Node] = [
   Node(
     name: "EditorPlaceholderDecl",
     nameForDiagnostics: "editor placeholder",
+    description: """
+      An editor placeholder, e.g. `<#declaration#>` that is used in a position that expects a declaration.
+      """,
     kind: "Decl",
+    traits: [
+      "WithAttributes",
+      "WithModifiers",
+    ],
     children: [
       Child(
-        name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
-      )
+        name: "Attributes",
+        kind: .collection(kind: "AttributeList", collectionElementName: "Attribute"),
+        nameForDiagnostics: "attributes",
+        description: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDecl`` will contain these.",
+        isOptional: true
+      ),
+      Child(
+        name: "Modifiers",
+        kind: .collection(kind: "ModifierList", collectionElementName: "Modifier"),
+        nameForDiagnostics: "modifiers",
+        description: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these.",
+        isOptional: true
+      ),
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        description: """
+          The actual editor placeholder that starts with `<#` and ends with `#>`.
+          """
+      ),
     ]
   ),
 

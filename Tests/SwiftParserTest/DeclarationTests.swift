@@ -606,6 +606,19 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testEditorPlaceholderWithModifier() {
+    assertParse(
+      """
+      struct a {
+        public1️⃣<#declaration#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "editor placeholder in source file")
+      ]
+    )
+  }
+
   func testMissingColonInFunctionSignature() {
     assertParse(
       "func test(first second 1️⃣Int)",
@@ -1592,7 +1605,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       substructure: Syntax(
-        MemberDeclListItemSyntax(decl: EditorPlaceholderDeclSyntax(identifier: .identifier("<#code#>")))
+        MemberDeclListItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>")))
       ),
       diagnostics: [
         DiagnosticSpec(message: "editor placeholder in source file")
@@ -1699,48 +1712,55 @@ final class DeclarationTests: XCTestCase {
   }
 
   func testBorrowingConsumingParameterSpecifiers() {
+    assertParse("struct borrowing {}")
+    assertParse("struct consuming {}")
+
+    assertParse("struct Foo {}")
+
+    assertParse("func foo(x: borrowing Foo) {}")
+    assertParse("func bar(x: consuming Foo) {}")
+    assertParse("func baz(x: (borrowing Foo, consuming Foo) -> ()) {}")
+
+    // `borrowing` and `consuming` are contextual keywords, so they should also
+    // continue working as type and/or parameter names
+
+    assertParse("func zim(x: borrowing) {}")
+    assertParse("func zang(x: consuming) {}")
+    assertParse("func zung(x: borrowing consuming) {}")
+    assertParse("func zip(x: consuming borrowing) {}")
+    assertParse("func zap(x: (borrowing, consuming) -> ()) {}")
+    assertParse("func zoop(x: (borrowing consuming, consuming borrowing) -> ()) {}")
+
+    // Parameter specifier names are regular identifiers in other positions,
+    // including argument labels.
+
+    assertParse("func argumentLabelOnly(borrowing: Int) {}")
+    assertParse("func argumentLabelOnly(consuming: Int) {}")
+    assertParse("func argumentLabelOnly(__shared: Int) {}")
+    assertParse("func argumentLabelOnly(__owned: Int) {}")
+
+    assertParse("func argumentLabel(borrowing consuming: Int) {}")
+    assertParse("func argumentLabel(consuming borrowing: Int) {}")
+    assertParse("func argumentLabel(__shared __owned: Int) {}")
+    assertParse("func argumentLabel(__owned __shared: Int) {}")
+
+    // We should parse them as argument labels in function types, even though that
+    // isn't currently supported.
+
+    assertParse("func argumentLabel(anonBorrowingInClosure: (_ borrowing: Int) -> ()) {}")
+    assertParse("func argumentLabel(anonConsumingInClosure: (_ consuming: Int) -> ()) {}")
+    assertParse("func argumentLabel(anonSharedInClosure: (_ __shared: Int) -> ()) {}")
+    assertParse("func argumentLabel(anonOwnedInClosure: (_ __owned: Int) -> ()) {}")
+  }
+
+  func testMisplaceSpecifierInTupleTypeBody() {
     assertParse(
-      """
-      struct borrowing {}
-      struct consuming {}
-
-      struct Foo {}
-
-      func foo(x: borrowing Foo) {}
-      func bar(x: consuming Foo) {}
-      func baz(x: (borrowing Foo, consuming Foo) -> ()) {}
-
-      // `borrowing` and `consuming` are contextual keywords, so they should also
-      // continue working as type and/or parameter names
-
-      func zim(x: borrowing) {}
-      func zang(x: consuming) {}
-      func zung(x: borrowing consuming) {}
-      func zip(x: consuming borrowing) {}
-      func zap(x: (borrowing, consuming) -> ()) {}
-      func zoop(x: (borrowing consuming, consuming borrowing) -> ()) {}
-
-      // Parameter specifier names are regular identifiers in other positions,
-      // including argument labels.
-
-      func argumentLabelOnly(borrowing: Int) {}
-      func argumentLabelOnly(consuming: Int) {}
-      func argumentLabelOnly(__shared: Int) {}
-      func argumentLabelOnly(__owned: Int) {}
-
-      func argumentLabel(borrowing consuming: Int) {}
-      func argumentLabel(consuming borrowing: Int) {}
-      func argumentLabel(__shared __owned: Int) {}
-      func argumentLabel(__owned __shared: Int) {}
-
-      // We should parse them as argument labels in function types, even though that
-      // isn't currently supported.
-
-      func argumentLabel(anonBorrowingInClosure: (_ borrowing: Int) -> ()) {}
-      func argumentLabel(anonConsumingInClosure: (_ consuming: Int) -> ()) {}
-      func argumentLabel(anonSharedInClosure: (_ __shared: Int) -> ()) {}
-      func argumentLabel(anonOwnedInClosure: (_ __owned: Int) -> ()) {}
-      """
+      "func test(a: (1️⃣borrowing F 2️⃣o))",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'borrowing' in tuple type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type", fixIts: ["insert ','"]),
+      ],
+      fixedSource: "func test(a: (borrowing F, o))"
     )
   }
 
@@ -1837,6 +1857,16 @@ final class DeclarationTests: XCTestCase {
             patternType: FunctionTypeSyntax(arguments: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
           )
         )
+    )
+  }
+
+  func testEmptyPrimaryAssociatedType() {
+    assertParse(
+      "protocol X<1️⃣> {}",
+      diagnostics: [
+        DiagnosticSpec(message: "expected name in primary associated type clause", fixIts: ["insert name"])
+      ],
+      fixedSource: "protocol X<<#identifier#>> {}"
     )
   }
 }

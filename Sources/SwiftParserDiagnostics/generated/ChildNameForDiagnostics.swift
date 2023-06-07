@@ -108,6 +108,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \DocumentationAttributeArgumentSyntax.label:
     return "label"
+  case \EditorPlaceholderDeclSyntax.attributes:
+    return "attributes"
+  case \EditorPlaceholderDeclSyntax.modifiers:
+    return "modifiers"
   case \EnumCaseDeclSyntax.attributes:
     return "attributes"
   case \EnumCaseDeclSyntax.modifiers:

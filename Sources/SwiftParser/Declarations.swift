@@ -286,7 +286,9 @@ extension Parser {
           let placeholder = self.consumeAnyToken()
           return RawDeclSyntax(
             RawEditorPlaceholderDeclSyntax(
-              identifier: placeholder,
+              attributes: attrs.attributes,
+              modifiers: attrs.modifiers,
+              placeholder: placeholder,
               arena: self.arena
             )
           )
@@ -474,8 +476,12 @@ extension Parser {
       )
     }
 
-    precondition(self.currentToken.starts(with: "<"))
-    let langle = self.consumePrefix("<", as: .leftAngle)
+    let langle: RawTokenSyntax
+    if self.currentToken.starts(with: "<") {
+      langle = self.consumePrefix("<", as: .leftAngle)
+    } else {
+      langle = missingToken(.leftAngle)
+    }
     var elements = [RawGenericParameterSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil

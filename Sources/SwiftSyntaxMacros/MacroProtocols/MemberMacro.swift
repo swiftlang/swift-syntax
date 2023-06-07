@@ -32,6 +32,3 @@ public protocol MemberMacro: AttachedMacro {
     in context: Context
   ) throws -> [DeclSyntax]
 }
-
-@available(*, deprecated, renamed: "MemberMacro")
-public typealias MemberDeclarationMacro = MemberMacro

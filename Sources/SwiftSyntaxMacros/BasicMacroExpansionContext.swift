@@ -139,7 +139,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     of node: Node,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
-  ) -> SourceLocation? {
+  ) -> AbstractSourceLocation? {
     // Dig out the root source file and figure out how we need to adjust the
     // offset of the given syntax node to adjust for it.
     let rootSourceFile: SourceFileSyntax
@@ -188,6 +188,6 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
 
     // Do the location lookup.
     let converter = SourceLocationConverter(file: fileName, tree: rootSourceFile)
-    return converter.location(for: rawPosition.advanced(by: offsetAdjustment))
+    return AbstractSourceLocation(converter.location(for: rawPosition.advanced(by: offsetAdjustment)))
   }
 }

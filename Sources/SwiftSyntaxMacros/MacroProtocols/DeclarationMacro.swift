@@ -20,4 +20,16 @@ public protocol DeclarationMacro: FreestandingMacro {
     of node: Node,
     in context: Context
   ) throws -> [DeclSyntax]
+
+  /// Whether to copy attributes on the expansion syntax to expanded declarations,
+  /// 'true' by default.
+  static var propagateFreestandingMacroAttributes: Bool { get }
+  /// Whether to copy modifiers on the expansion syntax to expanded declarations,
+  /// 'true' by default.
+  static var propagateFreestandingMacroModifiers: Bool { get }
+}
+
+public extension DeclarationMacro {
+  static var propagateFreestandingMacroAttributes: Bool { true }
+  static var propagateFreestandingMacroModifiers: Bool { true }
 }

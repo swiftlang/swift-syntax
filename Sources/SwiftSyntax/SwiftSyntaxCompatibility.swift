@@ -34,6 +34,27 @@ public extension DeclGroupSyntax {
   }
 }
 
+public extension EditorPlaceholderDeclSyntax {
+  @available(*, deprecated, renamed: "placeholder")
+  var identifier: TokenSyntax { placeholder }
+
+  @available(*, deprecated, renamed: "placeholder")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeIdentifier,
+      placeholder: identifier,
+      unexpectedAfterIdentifier
+    )
+  }
+}
+
 public extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenIdentifierAndGenericParameterClause")
   var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
@@ -362,27 +383,6 @@ public extension TupleExprSyntax {
       rightParen: rightParen,
       unexpectedAfterRightParen,
       trailingTrivia: trailingTrivia
-    )
-  }
-}
-
-public extension EditorPlaceholderDeclSyntax {
-  @available(*, deprecated, renamed: "placeholder")
-  var identifier: TokenSyntax { placeholder }
-
-  @available(*, deprecated, renamed: "placeholder")
-  @_disfavoredOverload
-  init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-    identifier: TokenSyntax,
-    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeIdentifier,
-      placeholder: identifier,
-      unexpectedAfterIdentifier
     )
   }
 }

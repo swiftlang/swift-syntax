@@ -21,7 +21,7 @@ extension SyntaxProtocol {
       return basicContext.detach(self)
     }
 
-    return self.detach()
+    return self.detached
   }
 }
 

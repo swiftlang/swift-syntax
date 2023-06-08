@@ -38,7 +38,7 @@ public class SyntaxTests: XCTestCase {
     )
   }
 
-  public func testDetach() {
+  public func testDetached() {
     let s = StructDeclSyntax(
       structKeyword: .keyword(.struct),
       identifier: .identifier("someStruct"),
@@ -46,7 +46,7 @@ public class SyntaxTests: XCTestCase {
     )
 
     XCTAssertEqual(Syntax(s), s.memberBlock.parent)
-    XCTAssertNil(s.memberBlock.detach().parent)
+    XCTAssertNil(s.memberBlock.detached.parent)
   }
 
   public func testCasting() {

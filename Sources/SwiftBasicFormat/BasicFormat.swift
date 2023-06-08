@@ -437,7 +437,7 @@ open class BasicFormat: SyntaxRewriter {
       return token
     }
 
-    return token.detach().with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
+    return token.detached.with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
   }
 }
 

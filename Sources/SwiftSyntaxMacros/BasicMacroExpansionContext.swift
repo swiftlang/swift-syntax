@@ -80,7 +80,7 @@ extension BasicMacroExpansionContext {
 
   /// Detach the given node, and record where it came from.
   public func detach<Node: SyntaxProtocol>(_ node: Node) -> Node {
-    let detached = node.detach()
+    let detached = node.detached
 
     if let rootSourceFile = node.root.as(SourceFileSyntax.self) {
       addDisconnected(detached, at: node.position, in: rootSourceFile)

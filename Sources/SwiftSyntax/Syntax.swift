@@ -225,7 +225,7 @@ extension SyntaxProtocol {
 
   /// Return this subtree with this node as the root, ie. detach this node
   /// from its parent.
-  public func detach() -> Self {
+  public var detached: Self {
     return Syntax(raw: self.raw).cast(Self.self)
   }
 

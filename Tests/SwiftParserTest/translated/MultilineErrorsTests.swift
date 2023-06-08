@@ -64,6 +64,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -89,6 +90,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -114,6 +116,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -138,6 +141,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -162,6 +166,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -187,6 +192,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -213,6 +219,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected tab in indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -238,6 +245,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected tab in indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -263,6 +271,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected space in indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -288,6 +297,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected space in indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -381,6 +391,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected space in indentation of the next 2 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -416,18 +427,21 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "insufficient indentation of the next 4 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "unexpected space in indentation of the next 2 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
           message: "insufficient indentation of the next 2 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
@@ -463,6 +477,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of the next 2 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -490,12 +505,14 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
@@ -854,6 +871,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )
@@ -881,12 +899,14 @@ final class MultilineErrorsTests: XCTestCase {
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "insufficient indentation of line in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         ),
@@ -915,6 +935,7 @@ final class MultilineErrorsTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "insufficient indentation of the next 3 lines in multi-line string literal",
+          highlight: " ",
           notes: [NoteSpec(message: "should match indentation here")],
           fixIts: ["change indentation of this line to match closing delimiter"]
         )

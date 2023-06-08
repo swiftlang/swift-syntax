@@ -1508,9 +1508,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
       availabilityKeyword: TokenSyntax,
       _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
-      availabilitySpec: AvailabilitySpecListSyntax,
-      _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndAvailabilityArguments: UnexpectedNodesSyntax? = nil,
+      availabilityArguments: AvailabilitySpecListSyntax,
+      _ unexpectedBetweenAvailabilityArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -1523,9 +1523,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
             availabilityKeyword, 
             unexpectedBetweenAvailabilityKeywordAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndAvailabilitySpec, 
-            availabilitySpec, 
-            unexpectedBetweenAvailabilitySpecAndRightParen, 
+            unexpectedBetweenLeftParenAndAvailabilityArguments, 
+            availabilityArguments, 
+            unexpectedBetweenAvailabilityArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) {(arena, _) in
@@ -1534,9 +1534,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
           availabilityKeyword.raw, 
           unexpectedBetweenAvailabilityKeywordAndLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndAvailabilitySpec?.raw, 
-          availabilitySpec.raw, 
-          unexpectedBetweenAvailabilitySpecAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndAvailabilityArguments?.raw, 
+          availabilityArguments.raw, 
+          unexpectedBetweenAvailabilityArgumentsAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -1589,7 +1589,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndAvailabilityArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1598,7 +1598,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var availabilitySpec: AvailabilitySpecListSyntax {
+  public var availabilityArguments: AvailabilitySpecListSyntax {
     get {
       return AvailabilitySpecListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -1607,12 +1607,12 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `availabilitySpec`
+  /// Adds the provided `element` to the node's `availabilityArguments`
   /// collection.
   /// - param element: The new `AvailabilityArgument` to add to the node's
-  ///                  `availabilitySpec` collection.
+  ///                  `availabilityArguments` collection.
   /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
-  ///            appended to its `availabilitySpec` collection.
+  ///            appended to its `availabilityArguments` collection.
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityConditionSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1626,7 +1626,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityConditionSyntax(newData)
   }
   
-  public var unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1659,9 +1659,9 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.availabilityKeyword, 
           \Self.unexpectedBetweenAvailabilityKeywordAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndAvailabilitySpec, 
-          \Self.availabilitySpec, 
-          \Self.unexpectedBetweenAvailabilitySpecAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndAvailabilityArguments, 
+          \Self.availabilityArguments, 
+          \Self.unexpectedBetweenAvailabilityArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
@@ -1695,9 +1695,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
       label: TokenSyntax = .keyword(.availability),
       _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
-      availabilityList: AvailabilitySpecListSyntax,
-      _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndAvailabilityArguments: UnexpectedNodesSyntax? = nil,
+      availabilityArguments: AvailabilitySpecListSyntax,
+      _ unexpectedBetweenAvailabilityArgumentsAndSemicolon: UnexpectedNodesSyntax? = nil,
       semicolon: TokenSyntax = .semicolonToken(),
       _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -1710,9 +1710,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
             label, 
             unexpectedBetweenLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndAvailabilityList, 
-            availabilityList, 
-            unexpectedBetweenAvailabilityListAndSemicolon, 
+            unexpectedBetweenColonAndAvailabilityArguments, 
+            availabilityArguments, 
+            unexpectedBetweenAvailabilityArgumentsAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
           ))) {(arena, _) in
@@ -1721,9 +1721,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
           label.raw, 
           unexpectedBetweenLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndAvailabilityList?.raw, 
-          availabilityList.raw, 
-          unexpectedBetweenAvailabilityListAndSemicolon?.raw, 
+          unexpectedBetweenColonAndAvailabilityArguments?.raw, 
+          availabilityArguments.raw, 
+          unexpectedBetweenAvailabilityArgumentsAndSemicolon?.raw, 
           semicolon.raw, 
           unexpectedAfterSemicolon?.raw
         ]
@@ -1778,7 +1778,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndAvailabilityArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1787,7 +1787,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var availabilityList: AvailabilitySpecListSyntax {
+  public var availabilityArguments: AvailabilitySpecListSyntax {
     get {
       return AvailabilitySpecListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -1796,13 +1796,13 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `availabilityList`
+  /// Adds the provided `element` to the node's `availabilityArguments`
   /// collection.
-  /// - param element: The new `Availability` to add to the node's
-  ///                  `availabilityList` collection.
-  /// - returns: A copy of the receiver with the provided `Availability`
-  ///            appended to its `availabilityList` collection.
-  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
+  /// - param element: The new `AvailabilityArgument` to add to the node's
+  ///                  `availabilityArguments` collection.
+  /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
+  ///            appended to its `availabilityArguments` collection.
+  public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
@@ -1815,7 +1815,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
     return AvailabilityEntrySyntax(newData)
   }
   
-  public var unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAvailabilityArgumentsAndSemicolon: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1848,9 +1848,9 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
           \Self.label, 
           \Self.unexpectedBetweenLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndAvailabilityList, 
-          \Self.availabilityList, 
-          \Self.unexpectedBetweenAvailabilityListAndSemicolon, 
+          \Self.unexpectedBetweenColonAndAvailabilityArguments, 
+          \Self.availabilityArguments, 
+          \Self.unexpectedBetweenAvailabilityArgumentsAndSemicolon, 
           \Self.semicolon, 
           \Self.unexpectedAfterSemicolon
         ])
@@ -2305,9 +2305,9 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
       beforeLabel: TokenSyntax = .keyword(.before),
       _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
-      versionList: AvailabilityVersionRestrictionListSyntax,
-      _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndPlatforms: UnexpectedNodesSyntax? = nil,
+      platforms: AvailabilityVersionRestrictionListSyntax,
+      _ unexpectedAfterPlatforms: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2318,18 +2318,18 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
             beforeLabel, 
             unexpectedBetweenBeforeLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndVersionList, 
-            versionList, 
-            unexpectedAfterVersionList
+            unexpectedBetweenColonAndPlatforms, 
+            platforms, 
+            unexpectedAfterPlatforms
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBeforeLabel?.raw, 
           beforeLabel.raw, 
           unexpectedBetweenBeforeLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndVersionList?.raw, 
-          versionList.raw, 
-          unexpectedAfterVersionList?.raw
+          unexpectedBetweenColonAndPlatforms?.raw, 
+          platforms.raw, 
+          unexpectedAfterPlatforms?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.backDeployedAttributeSpecList,
@@ -2382,7 +2382,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
     }
   }
   
-  public var unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndPlatforms: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2392,7 +2392,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
   }
   
   /// The list of OS versions in which the declaration became ABI stable.
-  public var versionList: AvailabilityVersionRestrictionListSyntax {
+  public var platforms: AvailabilityVersionRestrictionListSyntax {
     get {
       return AvailabilityVersionRestrictionListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -2401,13 +2401,13 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
     }
   }
   
-  /// Adds the provided `element` to the node's `versionList`
+  /// Adds the provided `element` to the node's `platforms`
   /// collection.
-  /// - param element: The new `Availability` to add to the node's
-  ///                  `versionList` collection.
-  /// - returns: A copy of the receiver with the provided `Availability`
-  ///            appended to its `versionList` collection.
-  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeSpecListSyntax {
+  /// - param element: The new `Platform` to add to the node's
+  ///                  `platforms` collection.
+  /// - returns: A copy of the receiver with the provided `Platform`
+  ///            appended to its `platforms` collection.
+  public func addPlatform(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeSpecListSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
@@ -2420,7 +2420,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
     return BackDeployedAttributeSpecListSyntax(newData)
   }
   
-  public var unexpectedAfterVersionList: UnexpectedNodesSyntax? {
+  public var unexpectedAfterPlatforms: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2435,9 +2435,9 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
           \Self.beforeLabel, 
           \Self.unexpectedBetweenBeforeLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndVersionList, 
-          \Self.versionList, 
-          \Self.unexpectedAfterVersionList
+          \Self.unexpectedBetweenColonAndPlatforms, 
+          \Self.platforms, 
+          \Self.unexpectedAfterPlatforms
         ])
   }
 }
@@ -9456,9 +9456,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil,
       leftAngleBracket: TokenSyntax = .leftAngleToken(),
-      _ unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? = nil,
-      genericParameterList: GenericParameterListSyntax,
-      _ unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftAngleBracketAndParameters: UnexpectedNodesSyntax? = nil,
+      parameters: GenericParameterListSyntax,
+      _ unexpectedBetweenParametersAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
       rightAngleBracket: TokenSyntax = .rightAngleToken(),
@@ -9471,9 +9471,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftAngleBracket, 
             leftAngleBracket, 
-            unexpectedBetweenLeftAngleBracketAndGenericParameterList, 
-            genericParameterList, 
-            unexpectedBetweenGenericParameterListAndGenericWhereClause, 
+            unexpectedBetweenLeftAngleBracketAndParameters, 
+            parameters, 
+            unexpectedBetweenParametersAndGenericWhereClause, 
             genericWhereClause, 
             unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
             rightAngleBracket, 
@@ -9482,9 +9482,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
-          unexpectedBetweenLeftAngleBracketAndGenericParameterList?.raw, 
-          genericParameterList.raw, 
-          unexpectedBetweenGenericParameterListAndGenericWhereClause?.raw, 
+          unexpectedBetweenLeftAngleBracketAndParameters?.raw, 
+          parameters.raw, 
+          unexpectedBetweenParametersAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
           unexpectedBetweenGenericWhereClauseAndRightAngleBracket?.raw, 
           rightAngleBracket.raw, 
@@ -9521,7 +9521,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftAngleBracketAndGenericParameterList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftAngleBracketAndParameters: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -9530,7 +9530,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var genericParameterList: GenericParameterListSyntax {
+  public var parameters: GenericParameterListSyntax {
     get {
       return GenericParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -9539,13 +9539,13 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `genericParameterList`
+  /// Adds the provided `element` to the node's `parameters`
   /// collection.
-  /// - param element: The new `GenericParameter` to add to the node's
-  ///                  `genericParameterList` collection.
-  /// - returns: A copy of the receiver with the provided `GenericParameter`
-  ///            appended to its `genericParameterList` collection.
-  public func addGenericParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
+  /// - param element: The new `Parameter` to add to the node's
+  ///                  `parameters` collection.
+  /// - returns: A copy of the receiver with the provided `Parameter`
+  ///            appended to its `parameters` collection.
+  public func addParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -9558,7 +9558,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return GenericParameterClauseSyntax(newData)
   }
   
-  public var unexpectedBetweenGenericParameterListAndGenericWhereClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -9607,9 +9607,9 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftAngleBracket, 
           \Self.leftAngleBracket, 
-          \Self.unexpectedBetweenLeftAngleBracketAndGenericParameterList, 
-          \Self.genericParameterList, 
-          \Self.unexpectedBetweenGenericParameterListAndGenericWhereClause, 
+          \Self.unexpectedBetweenLeftAngleBracketAndParameters, 
+          \Self.parameters, 
+          \Self.unexpectedBetweenParametersAndGenericWhereClause, 
           \Self.genericWhereClause, 
           \Self.unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
           \Self.rightAngleBracket, 

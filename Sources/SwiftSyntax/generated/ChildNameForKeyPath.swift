@@ -303,12 +303,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAvailabilityKeywordAndLeftParen"
   case \AvailabilityConditionSyntax.leftParen:
     return "leftParen"
-  case \AvailabilityConditionSyntax.unexpectedBetweenLeftParenAndAvailabilitySpec:
-    return "unexpectedBetweenLeftParenAndAvailabilitySpec"
-  case \AvailabilityConditionSyntax.availabilitySpec:
-    return "availabilitySpec"
-  case \AvailabilityConditionSyntax.unexpectedBetweenAvailabilitySpecAndRightParen:
-    return "unexpectedBetweenAvailabilitySpecAndRightParen"
+  case \AvailabilityConditionSyntax.unexpectedBetweenLeftParenAndAvailabilityArguments:
+    return "unexpectedBetweenLeftParenAndAvailabilityArguments"
+  case \AvailabilityConditionSyntax.availabilityArguments:
+    return "availabilityArguments"
+  case \AvailabilityConditionSyntax.unexpectedBetweenAvailabilityArgumentsAndRightParen:
+    return "unexpectedBetweenAvailabilityArgumentsAndRightParen"
   case \AvailabilityConditionSyntax.rightParen:
     return "rightParen"
   case \AvailabilityConditionSyntax.unexpectedAfterRightParen:
@@ -321,12 +321,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenLabelAndColon"
   case \AvailabilityEntrySyntax.colon:
     return "colon"
-  case \AvailabilityEntrySyntax.unexpectedBetweenColonAndAvailabilityList:
-    return "unexpectedBetweenColonAndAvailabilityList"
-  case \AvailabilityEntrySyntax.availabilityList:
-    return "availabilityList"
-  case \AvailabilityEntrySyntax.unexpectedBetweenAvailabilityListAndSemicolon:
-    return "unexpectedBetweenAvailabilityListAndSemicolon"
+  case \AvailabilityEntrySyntax.unexpectedBetweenColonAndAvailabilityArguments:
+    return "unexpectedBetweenColonAndAvailabilityArguments"
+  case \AvailabilityEntrySyntax.availabilityArguments:
+    return "availabilityArguments"
+  case \AvailabilityEntrySyntax.unexpectedBetweenAvailabilityArgumentsAndSemicolon:
+    return "unexpectedBetweenAvailabilityArgumentsAndSemicolon"
   case \AvailabilityEntrySyntax.semicolon:
     return "semicolon"
   case \AvailabilityEntrySyntax.unexpectedAfterSemicolon:
@@ -383,12 +383,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBeforeLabelAndColon"
   case \BackDeployedAttributeSpecListSyntax.colon:
     return "colon"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedBetweenColonAndVersionList:
-    return "unexpectedBetweenColonAndVersionList"
-  case \BackDeployedAttributeSpecListSyntax.versionList:
-    return "versionList"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedAfterVersionList:
-    return "unexpectedAfterVersionList"
+  case \BackDeployedAttributeSpecListSyntax.unexpectedBetweenColonAndPlatforms:
+    return "unexpectedBetweenColonAndPlatforms"
+  case \BackDeployedAttributeSpecListSyntax.platforms:
+    return "platforms"
+  case \BackDeployedAttributeSpecListSyntax.unexpectedAfterPlatforms:
+    return "unexpectedAfterPlatforms"
   case \BinaryOperatorExprSyntax.unexpectedBeforeOperatorToken:
     return "unexpectedBeforeOperatorToken"
   case \BinaryOperatorExprSyntax.operatorToken:
@@ -1579,12 +1579,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftAngleBracket"
   case \GenericParameterClauseSyntax.leftAngleBracket:
     return "leftAngleBracket"
-  case \GenericParameterClauseSyntax.unexpectedBetweenLeftAngleBracketAndGenericParameterList:
-    return "unexpectedBetweenLeftAngleBracketAndGenericParameterList"
-  case \GenericParameterClauseSyntax.genericParameterList:
-    return "genericParameterList"
-  case \GenericParameterClauseSyntax.unexpectedBetweenGenericParameterListAndGenericWhereClause:
-    return "unexpectedBetweenGenericParameterListAndGenericWhereClause"
+  case \GenericParameterClauseSyntax.unexpectedBetweenLeftAngleBracketAndParameters:
+    return "unexpectedBetweenLeftAngleBracketAndParameters"
+  case \GenericParameterClauseSyntax.parameters:
+    return "parameters"
+  case \GenericParameterClauseSyntax.unexpectedBetweenParametersAndGenericWhereClause:
+    return "unexpectedBetweenParametersAndGenericWhereClause"
   case \GenericParameterClauseSyntax.genericWhereClause:
     return "genericWhereClause"
   case \GenericParameterClauseSyntax.unexpectedBetweenGenericWhereClauseAndRightAngleBracket:

@@ -44,8 +44,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
-        name: "GenericParameterList",
-        kind: .collection(kind: .genericParameterList, collectionElementName: "GenericParameter")
+        name: "Parameters",
+        kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter")
       ),
       Child(
         name: "GenericWhereClause",

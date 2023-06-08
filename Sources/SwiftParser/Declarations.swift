@@ -469,7 +469,7 @@ extension Parser {
       return RawGenericParameterClauseSyntax(
         remainingTokens,
         leftAngleBracket: missingToken(.leftAngle),
-        genericParameterList: RawGenericParameterListSyntax(elements: [], arena: self.arena),
+        parameters: RawGenericParameterListSyntax(elements: [], arena: self.arena),
         genericWhereClause: nil,
         rightAngleBracket: missingToken(.rightAngle),
         arena: self.arena
@@ -574,7 +574,7 @@ extension Parser {
     }
     return RawGenericParameterClauseSyntax(
       leftAngleBracket: langle,
-      genericParameterList: parameters,
+      parameters: parameters,
       genericWhereClause: whereClause,
       rightAngleBracket: rangle,
       arena: self.arena

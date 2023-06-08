@@ -2943,9 +2943,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: ModifierListSyntax? = nil,
-      _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil,
-      importTok: TokenSyntax = .keyword(.import),
-      _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenModifiersAndImportKeyword: UnexpectedNodesSyntax? = nil,
+      importKeyword: TokenSyntax = .keyword(.import),
+      _ unexpectedBetweenImportKeywordAndImportKind: UnexpectedNodesSyntax? = nil,
       importKind: TokenSyntax? = nil,
       _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
       path: ImportPathSyntax,
@@ -2960,9 +2960,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
             modifiers, 
-            unexpectedBetweenModifiersAndImportTok, 
-            importTok, 
-            unexpectedBetweenImportTokAndImportKind, 
+            unexpectedBetweenModifiersAndImportKeyword, 
+            importKeyword, 
+            unexpectedBetweenImportKeywordAndImportKind, 
             importKind, 
             unexpectedBetweenImportKindAndPath, 
             path, 
@@ -2973,9 +2973,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers?.raw, 
-          unexpectedBetweenModifiersAndImportTok?.raw, 
-          importTok.raw, 
-          unexpectedBetweenImportTokAndImportKind?.raw, 
+          unexpectedBetweenModifiersAndImportKeyword?.raw, 
+          importKeyword.raw, 
+          unexpectedBetweenImportKeywordAndImportKind?.raw, 
           importKind?.raw, 
           unexpectedBetweenImportKindAndPath?.raw, 
           path.raw, 
@@ -3070,7 +3070,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return ImportDeclSyntax(newData)
   }
   
-  public var unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndImportKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3080,7 +3080,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The `import` keyword for this declaration.
-  public var importTok: TokenSyntax {
+  public var importKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -3089,7 +3089,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenImportKeywordAndImportKind: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3161,9 +3161,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.attributes, 
           \Self.unexpectedBetweenAttributesAndModifiers, 
           \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndImportTok, 
-          \Self.importTok, 
-          \Self.unexpectedBetweenImportTokAndImportKind, 
+          \Self.unexpectedBetweenModifiersAndImportKeyword, 
+          \Self.importKeyword, 
+          \Self.unexpectedBetweenImportKeywordAndImportKind, 
           \Self.importKind, 
           \Self.unexpectedBetweenImportKindAndPath, 
           \Self.path, 

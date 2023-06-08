@@ -34,6 +34,27 @@ public extension DeclGroupSyntax {
   }
 }
 
+public extension EditorPlaceholderDeclSyntax {
+  @available(*, deprecated, renamed: "placeholder")
+  var identifier: TokenSyntax { placeholder }
+
+  @available(*, deprecated, renamed: "placeholder")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    identifier: TokenSyntax,
+    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeIdentifier,
+      placeholder: identifier,
+      unexpectedAfterIdentifier
+    )
+  }
+}
+
 public extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenIdentifierAndGenericParameterClause")
   var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
@@ -66,6 +87,7 @@ public extension EnumDeclSyntax {
   }
 
   @available(*, deprecated, message: "Use an initializer with a genericParameterClause argument.")
+  @_disfavoredOverload
   init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
@@ -153,6 +175,7 @@ public extension FunctionTypeSyntax {
   }
 
   @available(*, deprecated, message: "Use an initializer with a parameters")
+  @_disfavoredOverload
   init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
@@ -181,6 +204,72 @@ public extension FunctionTypeSyntax {
       unexpectedBetweenEffectSpecifiersAndOutput,
       output: output,
       unexpectedAfterOutput,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+public extension ImportDeclSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndImportKeyword")
+  var unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModifiersAndImportKeyword
+    }
+    set(value) {
+      unexpectedBetweenModifiersAndImportKeyword = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "importKeyword")
+  var importTok: TokenSyntax {
+    get {
+      return importKeyword
+    }
+    set(value) {
+      importKeyword = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenImportKeywordAndImportKind")
+  var unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenImportKeywordAndImportKind
+    }
+    set(value) {
+      unexpectedBetweenImportKeywordAndImportKind = value
+    }
+  }
+
+  @available(*, deprecated, message: "Use an initializer with importKeyword")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: ModifierListSyntax? = nil,
+    _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil,
+    importTok: TokenSyntax = .keyword(.import),
+    _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
+    importKind: TokenSyntax? = nil,
+    _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
+    path: ImportPathSyntax,
+    _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndImportTok,
+      importKeyword: importTok,
+      unexpectedBetweenImportTokAndImportKind,
+      importKind: importKind,
+      unexpectedBetweenImportKindAndPath,
+      path: path,
+      unexpectedAfterPath,
       trailingTrivia: trailingTrivia
     )
   }
@@ -218,6 +307,7 @@ public extension NamedOpaqueReturnTypeSyntax {
   }
 
   @available(*, deprecated, message: "Use an initializer with a genericParameterClause argument.")
+  @_disfavoredOverload
   init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? = nil,
@@ -271,6 +361,7 @@ public extension TupleExprSyntax {
   }
 
   @available(*, deprecated, message: "Use an initializer with a elements argument")
+  @_disfavoredOverload
   init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
@@ -292,26 +383,6 @@ public extension TupleExprSyntax {
       rightParen: rightParen,
       unexpectedAfterRightParen,
       trailingTrivia: trailingTrivia
-    )
-  }
-}
-
-public extension EditorPlaceholderDeclSyntax {
-  @available(*, deprecated, renamed: "placeholder")
-  var identifier: TokenSyntax { placeholder }
-
-  @available(*, deprecated, renamed: "placeholder")
-  init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-    identifier: TokenSyntax,
-    _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeIdentifier,
-      placeholder: identifier,
-      unexpectedAfterIdentifier
     )
   }
 }

@@ -1755,12 +1755,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAttributesAndModifiers"
   case \ImportDeclSyntax.modifiers:
     return "modifiers"
-  case \ImportDeclSyntax.unexpectedBetweenModifiersAndImportTok:
-    return "unexpectedBetweenModifiersAndImportTok"
-  case \ImportDeclSyntax.importTok:
-    return "importTok"
-  case \ImportDeclSyntax.unexpectedBetweenImportTokAndImportKind:
-    return "unexpectedBetweenImportTokAndImportKind"
+  case \ImportDeclSyntax.unexpectedBetweenModifiersAndImportKeyword:
+    return "unexpectedBetweenModifiersAndImportKeyword"
+  case \ImportDeclSyntax.importKeyword:
+    return "importKeyword"
+  case \ImportDeclSyntax.unexpectedBetweenImportKeywordAndImportKind:
+    return "unexpectedBetweenImportKeywordAndImportKind"
   case \ImportDeclSyntax.importKind:
     return "importKind"
   case \ImportDeclSyntax.unexpectedBetweenImportKindAndPath:

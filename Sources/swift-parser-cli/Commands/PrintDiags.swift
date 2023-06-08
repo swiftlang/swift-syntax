@@ -15,7 +15,7 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 
-class PrintDiags: ParsableCommand {
+class PrintDiags: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-diags",
     abstract: "Print the diagnostics produced by parsing a soruce file"
@@ -23,19 +23,14 @@ class PrintDiags: ParsableCommand {
 
   required init() {}
 
-  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
-  var sourceFile: String?
-
-  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
-  var foldSequences: Bool = false
+  @OptionGroup
+  var arguments: ParseArguments
 
   @Flag(name: .long, help: "Force output coloring with ANSI color codes")
   var colorize: Bool = false
 
   func run() throws {
-    let source = try getContentsOfSourceFile(at: sourceFile)
-
-    source.withUnsafeBufferPointer { sourceBuffer in
+    try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
       var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
       if foldSequences {
@@ -43,7 +38,7 @@ class PrintDiags: ParsableCommand {
       }
 
       var group = GroupedDiagnostics()
-      group.addSourceFile(tree: tree, displayName: sourceFile ?? "stdin", diagnostics: diags)
+      group.addSourceFile(tree: tree, displayName: sourceFileName, diagnostics: diags)
       let annotatedSource = DiagnosticsFormatter.annotateSources(
         in: group,
         colorize: colorize || TerminalHelper.isConnectedToTerminal

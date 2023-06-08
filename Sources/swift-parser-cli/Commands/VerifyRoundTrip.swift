@@ -16,7 +16,7 @@ import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
 
-class VerifyRoundTrip: ParsableCommand {
+class VerifyRoundTrip: ParsableCommand, ParseCommand {
   required init() {}
 
   static var configuration = CommandConfiguration(
@@ -25,14 +25,11 @@ class VerifyRoundTrip: ParsableCommand {
   )
 
   init(sourceFile: String?) {
-    self.sourceFile = sourceFile
+    self.arguments.sourceFile = sourceFile
   }
 
-  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
-  var sourceFile: String?
-
-  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
-  var foldSequences: Bool = false
+  @OptionGroup
+  var arguments: ParseArguments
 
   enum Error: Swift.Error, CustomStringConvertible {
     case roundTripFailed
@@ -46,9 +43,7 @@ class VerifyRoundTrip: ParsableCommand {
   }
 
   func run() throws {
-    let source = try getContentsOfSourceFile(at: sourceFile)
-
-    try source.withUnsafeBufferPointer { sourceBuffer in
+    try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
       try Self.run(
         source: sourceBuffer,
         foldSequences: foldSequences

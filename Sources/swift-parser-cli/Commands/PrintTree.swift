@@ -14,7 +14,7 @@ import ArgumentParser
 import SwiftSyntax
 import SwiftParser
 
-class PrintTree: ParsableCommand {
+class PrintTree: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-tree",
     abstract: "Print the syntax tree produced by parsing a source file"
@@ -22,19 +22,14 @@ class PrintTree: ParsableCommand {
 
   required init() {}
 
-  @Argument(help: "The source file that should be parsed; if omitted, use stdin")
-  var sourceFile: String?
-
-  @Flag(name: .long, help: "Perform sequence folding with the standard operators")
-  var foldSequences: Bool = false
+  @OptionGroup
+  var arguments: ParseArguments
 
   @Flag(name: .long, help: "Include trivia in the output")
   var includeTrivia: Bool = false
 
   func run() throws {
-    let source = try getContentsOfSourceFile(at: sourceFile)
-
-    source.withUnsafeBufferPointer { sourceBuffer in
+    try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
       let tree = Parser.parse(source: sourceBuffer)
 
       let resultTree: Syntax

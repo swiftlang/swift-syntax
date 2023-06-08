@@ -10,30 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InstructionCounter
-import SwiftDiagnostics
-import SwiftSyntax
-import SwiftParser
-import SwiftParserDiagnostics
-import SwiftOperators
 import Foundation
-import ArgumentParser
-#if os(Windows)
-import WinSDK
-#endif
 
-@main
-class SwiftParserCli: ParsableCommand {
-  required init() {}
-
-  static var configuration = CommandConfiguration(
-    abstract: "Utility to test SwiftSyntax syntax tree creation.",
-    subcommands: [
-      PerformanceTest.self,
-      PrintDiags.self,
-      PrintTree.self,
-      Reduce.self,
-      VerifyRoundTrip.self,
-    ]
-  )
+func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
+  let source: Data
+  if let path {
+    let sourceURL = URL(fileURLWithPath: path)
+    source = try Data(contentsOf: sourceURL)
+  } else {
+    source = FileHandle.standardInput.readDataToEndOfFile()
+  }
+  return [UInt8](source)
 }

@@ -31,7 +31,7 @@ protocol ParseCommand {
 extension ParseCommand {
   /// The name of the source file that can can be displayed to users
   ///
-  /// This is not necesarrily a file path if the file contents are read from
+  /// This is not necessarily a file path if the file contents are read from
   /// stdin or the command line arguments.
   var sourceFileName: String {
     return arguments.sourceFile ?? "stdin"

@@ -16,13 +16,13 @@ import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
 
-class VerifyRoundTrip: ParsableCommand, ParseCommand {
-  required init() {}
-
+struct VerifyRoundTrip: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "verify-round-trip",
     abstract: "Verify that printing the parsed syntax tree produces the original source"
   )
+
+  init() {}
 
   init(sourceFile: String?) {
     self.arguments.sourceFile = sourceFile

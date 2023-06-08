@@ -15,14 +15,12 @@ import ArgumentParser
 import Foundation
 import SwiftParser
 
-class PerformanceTest: ParsableCommand {
+struct PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "performance-test",
     abstract:
       "Parse all .swift files in '--directory' and its subdirectories '--iteration' times and output the average time (in milliseconds) one iteration took."
   )
-
-  required init() {}
 
   @Option(help: "The directory in which all .swift files should be parsed")
   var directory: String

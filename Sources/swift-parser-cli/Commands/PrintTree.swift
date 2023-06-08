@@ -14,13 +14,11 @@ import ArgumentParser
 import SwiftSyntax
 import SwiftParser
 
-class PrintTree: ParsableCommand, ParseCommand {
+struct PrintTree: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-tree",
     abstract: "Print the syntax tree produced by parsing a source file"
   )
-
-  required init() {}
 
   @OptionGroup
   var arguments: ParseArguments

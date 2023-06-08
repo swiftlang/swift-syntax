@@ -15,13 +15,11 @@ import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 
-class PrintDiags: ParsableCommand, ParseCommand {
+struct PrintDiags: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-diags",
     abstract: "Print the diagnostics produced by parsing a soruce file"
   )
-
-  required init() {}
 
   @OptionGroup
   var arguments: ParseArguments

@@ -31,13 +31,11 @@ fileprivate func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T
   return try body(tempFileURL)
 }
 
-class Reduce: ParsableCommand {
+struct Reduce: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "reduce",
     abstract: "Reduce a test case that crashes the parser or fails to round-trip to a smaller test case that still reproduces the issue"
   )
-
-  required init() {}
 
   @Argument(help: "The test case that should be reduced; if omitted, use stdin")
   var sourceFile: String?
@@ -198,4 +196,3 @@ class Reduce: ParsableCommand {
     FileHandle.standardOutput.write(Data(reduced))
   }
 }
-

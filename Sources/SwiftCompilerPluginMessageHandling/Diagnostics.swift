@@ -19,6 +19,7 @@ enum MacroExpansionError: String {
   case unmathedMacroRole = "macro doesn't conform to required macro role"
   case freestandingMacroSyntaxIsNotMacro = "macro syntax couldn't be parsed"
   case invalidExpansionMessage = "internal message error; please file a bug report"
+  case invalidMacroRole = "invalid macro role for expansion"
 }
 
 extension MacroExpansionError: DiagnosticMessage {

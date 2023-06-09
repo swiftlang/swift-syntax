@@ -25,6 +25,7 @@ private enum MacroExpansionError: String, Error, CustomStringConvertible {
 ///
 /// - Parameters:
 ///   - definition: a type conforms to one of freestanding `Macro` protocol.
+///   - macroRole: indicates which `Macro` protocol expansion should be performed
 ///   - node: macro expansion syntax node (e.g. `#macroName(argument)`).
 ///   - in: context of the expansion.
 /// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
@@ -32,17 +33,18 @@ private enum MacroExpansionError: String, Error, CustomStringConvertible {
 ///   guaranteed to be added to context.
 public func expandFreestandingMacro(
   definition: Macro.Type,
+  macroRole: MacroRole,
   node: FreestandingMacroExpansionSyntax,
   in context: some MacroExpansionContext
 ) -> String? {
   do {
     func _expand(node: some FreestandingMacroExpansionSyntax) throws -> String {
       let expandedSyntax: Syntax
-      switch definition {
-      case let exprMacroDef as ExpressionMacro.Type:
+      switch (macroRole, definition) {
+      case (.expression, let exprMacroDef as ExpressionMacro.Type):
         expandedSyntax = try Syntax(exprMacroDef.expansion(of: node, in: context))
 
-      case let declMacroDef as DeclarationMacro.Type:
+      case (.declaration, let declMacroDef as DeclarationMacro.Type):
         var rewritten = try declMacroDef.expansion(of: node, in: context)
         // Copy attributes and modifiers to the generated decls.
         if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
@@ -60,16 +62,52 @@ public func expandFreestandingMacro(
           )
         )
 
-      case let codeItemMacroDef as CodeItemMacro.Type:
+      case (.codeItem, let codeItemMacroDef as CodeItemMacro.Type):
         let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
         expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
-      default:
+      case (.expression, _), (.declaration, _), (.codeItem, _):
         throw MacroExpansionError.unmathedMacroRole
+
+      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.codeItem, _):
+        fatalError("macro role \(macroRole) is not a freestanding macro")
       }
       return expandedSyntax.formattedExpansion(definition.formatMode)
     }
     return try _openExistential(node, do: _expand)
+  } catch {
+    context.addDiagnostics(from: error, node: node)
+    return nil
+  }
+}
+
+/// Try to infer the freestanding macro role from the type definition itself.
+///
+/// This is a workaround for older compilers with a newer plugin
+public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRole {
+  switch definition {
+  case is ExpressionMacro.Type: return .expression
+  case is DeclarationMacro.Type: return .declaration
+  case is CodeItemMacro.Type: return .codeItem
+
+  default:
+    throw MacroExpansionError.unmathedMacroRole
+  }
+}
+
+@available(*, deprecated, message: "pass a macro role, please!")
+public func expandFreestandingMacro(
+  definition: Macro.Type,
+  node: FreestandingMacroExpansionSyntax,
+  in context: some MacroExpansionContext
+) -> String? {
+  do {
+    return expandFreestandingMacro(
+      definition: definition,
+      macroRole: try inferFreestandingMacroRole(definition: definition),
+      node: node,
+      in: context
+    )
   } catch {
     context.addDiagnostics(from: error, node: node)
     return nil

@@ -87,9 +87,10 @@ extension CompilerPluginMessageHandler {
       )
       try self.sendMessage(.getCapabilityResult(capability: capability))
 
-    case .expandFreestandingMacro(let macro, let discriminator, let expandingSyntax):
+    case .expandFreestandingMacro(let macro, let macroRole, let discriminator, let expandingSyntax):
       try expandFreestandingMacro(
         macro: macro,
+        macroRole: macroRole,
         discriminator: discriminator,
         expandingSyntax: expandingSyntax
       )

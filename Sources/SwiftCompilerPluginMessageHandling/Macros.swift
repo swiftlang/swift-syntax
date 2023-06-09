@@ -26,6 +26,7 @@ extension CompilerPluginMessageHandler {
   /// Expand `@freestainding(XXX)` macros.
   func expandFreestandingMacro(
     macro: PluginMessage.MacroReference,
+    macroRole pluginMacroRole: PluginMessage.MacroRole?,
     discriminator: String,
     expandingSyntax: PluginMessage.Syntax
   ) throws {
@@ -46,8 +47,23 @@ extension CompilerPluginMessageHandler {
         throw MacroExpansionError.macroTypeNotFound
       }
 
+      let macroRole: MacroRole
+      if let pluginMacroRole {
+        switch pluginMacroRole {
+        case .expression: macroRole = .expression
+        case .declaration: macroRole = .declaration
+        case .codeItem: macroRole = .codeItem
+
+        case .accessor, .conformance, .member, .memberAttribute, .peer:
+          throw MacroExpansionError.invalidMacroRole
+        }
+      } else {
+        macroRole = try inferFreestandingMacroRole(definition: macroDefinition)
+      }
+
       expandedSource = SwiftSyntaxMacroExpansion.expandFreestandingMacro(
         definition: macroDefinition,
+        macroRole: macroRole,
         node: macroSyntax,
         in: context
       )

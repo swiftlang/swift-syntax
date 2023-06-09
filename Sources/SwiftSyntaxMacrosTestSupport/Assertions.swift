@@ -275,8 +275,12 @@ public func assertMacroExpansion(
   let expandedSourceFile = origSourceFile.expand(macros: macros, in: context).formatted(using: BasicFormat(indentationWidth: indentationWidth))
 
   assertStringsEqualWithDiff(
-    expandedSourceFile.description,
-    expandedSource,
+    expandedSourceFile.description.trimmingCharacters(in: .newlines),
+    expandedSource.trimmingCharacters(in: .newlines),
+    additionalInfo: """
+      Actual expanded source:
+      \(expandedSource)
+      """,
     file: file,
     line: line
   )

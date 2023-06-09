@@ -78,7 +78,7 @@ extension FixIt.MultiNodeChange {
     guard let node = node else {
       return FixIt.MultiNodeChange(primitiveChanges: [])
     }
-    var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().visit(Syntax(node)))]
+    var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().rewrite(node))]
     if transferTrivia {
       changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: [node]).primitiveChanges
     }
@@ -123,7 +123,7 @@ extension FixIt.MultiNodeChange {
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> Self {
-    var presentNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(node))
+    var presentNode = MissingNodesBasicFormatter(viewMode: .fixedUp).rewrite(node)
     presentNode = PresentMaker().rewrite(presentNode)
 
     if let leadingTrivia {

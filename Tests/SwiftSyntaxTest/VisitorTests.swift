@@ -144,8 +144,8 @@ public class VisitorTests: XCTestCase {
       }
 
       static func print<Tree: SyntaxProtocol>(_ tree: Tree, viewMode: SyntaxTreeViewMode) -> String {
-        let printer = TreePrinter(viewMode: viewMode)
-        printer.walk(tree)
+        let printer = RewritingTreePrinter(viewMode: viewMode)
+        _ = printer.rewrite(Syntax(tree))
         return printer.out
       }
     }

@@ -380,4 +380,17 @@ final class BasicFormatTest: XCTestCase {
         """
     )
   }
+
+  func testUnexpectedIsNotFormatted() {
+    let expr: ExprSyntax = """
+      let foo=1
+      """
+
+    assertFormatted(
+      tree: expr,
+      expected: """
+        let foo=1
+        """
+    )
+  }
 }

@@ -125,7 +125,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
     in params: ParameterClauseSyntax,
     augmenting genericParams: GenericParameterClauseSyntax?
   ) -> (ParameterClauseSyntax, GenericParameterClauseSyntax)? {
-    let rewriter = SomeParameterRewriter()
+    let rewriter = SomeParameterRewriter(viewMode: .sourceAccurate)
     let rewrittenParams = rewriter.visit(params.parameterList)
 
     if rewriter.rewrittenSomeParameters.isEmpty {

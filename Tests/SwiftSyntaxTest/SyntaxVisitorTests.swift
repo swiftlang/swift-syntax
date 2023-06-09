@@ -158,7 +158,7 @@ public class SyntaxVisitorTests: XCTestCase {
     let closure = ClosureExprSyntax(
       statements: CodeBlockItemListSyntax([])
     )
-    let rewriter = ClosureRewriter()
+    let rewriter = ClosureRewriter(viewMode: .sourceAccurate)
     let rewritten = rewriter.visit(closure)
     XCTAssertEqual(closure.description, rewritten.description)
   }
@@ -168,6 +168,7 @@ public class SyntaxVisitorTests: XCTestCase {
       let transform: (TokenSyntax) -> TokenSyntax
       init(transform: @escaping (TokenSyntax) -> TokenSyntax) {
         self.transform = transform
+        super.init(viewMode: .sourceAccurate)
       }
       override func visitAny(_ node: Syntax) -> Syntax? {
         if let tok = node.as(TokenSyntax.self) {
@@ -235,7 +236,7 @@ public class SyntaxVisitorTests: XCTestCase {
       ])
     )
     XCTAssertEqual(source.description, "let a = 5")
-    let visitor = TriviaRemover()
+    let visitor = TriviaRemover(viewMode: .sourceAccurate)
     let rewritten = visitor.visit(source)
     XCTAssertEqual(rewritten.description, "leta=5")
   }

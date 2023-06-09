@@ -10,30 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InstructionCounter
 import SwiftDiagnostics
-import SwiftSyntax
-import SwiftParser
-import SwiftParserDiagnostics
 import SwiftOperators
-import Foundation
-import ArgumentParser
-#if os(Windows)
-import WinSDK
-#endif
+import SwiftSyntax
 
-@main
-class SwiftParserCli: ParsableCommand {
-  required init() {}
+/// Fold all of the sequences in the given source file.
+func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
+  var diags: [Diagnostic] = []
 
-  static var configuration = CommandConfiguration(
-    abstract: "Utility to test SwiftSyntax syntax tree creation.",
-    subcommands: [
-      PerformanceTest.self,
-      PrintDiags.self,
-      PrintTree.self,
-      Reduce.self,
-      VerifyRoundTrip.self,
-    ]
-  )
+  let recordOperatorError: (OperatorError) -> Void = { error in
+    diags.append(error.asDiagnostic)
+  }
+  var operatorTable = OperatorTable.standardOperators
+  operatorTable.addSourceFile(tree, errorHandler: recordOperatorError)
+  let resultTree = operatorTable.foldAll(tree, errorHandler: recordOperatorError)
+  return (resultTree, diags)
 }

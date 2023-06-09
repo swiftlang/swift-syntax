@@ -231,6 +231,7 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
   init(parameterReplacements: [IdentifierExprSyntax: Int], arguments: [ExprSyntax]) {
     self.parameterReplacements = parameterReplacements
     self.arguments = arguments
+    super.init(viewMode: .sourceAccurate)
   }
 
   override func visit(_ node: IdentifierExprSyntax) -> ExprSyntax {

@@ -36,6 +36,7 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
 
       init(provider: any RefactoringProvider.Type) {
         self.provider = provider
+        super.init(viewMode: .sourceAccurate)
       }
 
       override func visitAny(_ node: Syntax) -> Syntax? {

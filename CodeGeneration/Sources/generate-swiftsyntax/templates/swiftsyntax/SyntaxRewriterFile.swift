@@ -30,33 +30,28 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     open class SyntaxRewriter
     """
   ) {
-    DeclSyntax("public init() {}")
+    DeclSyntax("public let viewMode: SyntaxTreeViewMode")
 
-    for node in SYNTAX_NODES where node.isVisitable {
-      if node.baseType.baseName == "Syntax" && node.name != "MissingSyntax" {
-        DeclSyntax(
-          """
-          /// Visit a `\(raw: node.name)`.
-          ///   - Parameter node: the node that is being visited
-          ///   - Returns: the rewritten node
-          open func visit(_ node: \(raw: node.name)) -> \(raw: node.name) {
-            return Syntax(visitChildren(node)).cast(\(raw: node.name).self)
-          }
-          """
-        )
-      } else {
-        DeclSyntax(
-          """
-          /// Visit a `\(raw: node.name)`.
-          ///   - Parameter node: the node that is being visited
-          ///   - Returns: the rewritten node
-          open func visit(_ node: \(raw: node.name)) -> \(raw: node.baseType.syntaxBaseName) {
-            return \(raw: node.baseType.syntaxBaseName)(visitChildren(node))
-          }
-          """
-        )
+    DeclSyntax(
+      """
+      public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
+        self.viewMode = viewMode
       }
-    }
+      """
+    )
+
+    DeclSyntax(
+      """
+      /// Rewrite `node` and anchor, making sure that the rewritten node also has
+      /// a parent if `node` had one.
+      public func rewrite<SyntaxType: SyntaxProtocol>(_ node: SyntaxType) -> Syntax {
+        let rewritten = self.visit(node.data)
+        return withExtendedLifetime(rewritten) {
+          return Syntax(node.data.replacingSelf(rewritten.raw, arena: SyntaxArena()))
+        }
+      }
+      """
+    )
 
     DeclSyntax(
       """
@@ -105,6 +100,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Visit any Syntax node.
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
+      @available(*, deprecated, renamed: "rewrite(_:)")
       public func visit(_ node: Syntax) -> Syntax {
         return visit(node.data)
       }
@@ -114,10 +110,36 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
-        return visit(Syntax(node)).cast(T.self)
+        return visit(node.data).cast(T.self)
       }
       """
     )
+
+    for node in SYNTAX_NODES where node.isVisitable {
+      if node.baseType.baseName == "Syntax" && node.name != "MissingSyntax" {
+        DeclSyntax(
+          """
+          /// Visit a `\(raw: node.name)`.
+          ///   - Parameter node: the node that is being visited
+          ///   - Returns: the rewritten node
+          open func visit(_ node: \(raw: node.name)) -> \(raw: node.name) {
+            return Syntax(visitChildren(node)).cast(\(raw: node.name).self)
+          }
+          """
+        )
+      } else {
+        DeclSyntax(
+          """
+          /// Visit a `\(raw: node.name)`.
+          ///   - Parameter node: the node that is being visited
+          ///   - Returns: the rewritten node
+          open func visit(_ node: \(raw: node.name)) -> \(raw: node.baseType.syntaxBaseName) {
+            return \(raw: node.baseType.syntaxBaseName)(visitChildren(node))
+          }
+          """
+        )
+      }
+    }
 
     for baseKind in SYNTAX_BASE_KINDS.filter({ !["Syntax", "SyntaxCollection"].contains($0) }) {
       DeclSyntax(
@@ -258,34 +280,36 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         // initialize the new layout. Once we know that we have to rewrite the
         // layout, we need to collect all futher children, regardless of whether
         // they are rewritten or not.
-        
+
         // newLayout is nil until the first child node is rewritten and rewritten
         // nodes are being collected.
         var newLayout: ContiguousArray<RawSyntax?>?
-        
+
         // Rewritten children just to keep their 'SyntaxArena' alive until they are
         // wrapped with 'Syntax'
         var rewrittens: ContiguousArray<Syntax> = []
-        
+
         let syntaxNode = node._syntaxNode
-        
+
         // Incrementing i manually is faster than using .enumerated()
         var childIndex = 0
         for (raw, info) in RawSyntaxChildren(syntaxNode) {
           defer { childIndex += 1 }
-          guard let child = raw else {
-            // Node does not exist. If we are collecting rewritten nodes, we need to
-            // collect this one as well, otherwise we can ignore it.
+
+          guard let child = raw, viewMode.shouldTraverse(node: child) else {
+            // Node does not exist or should not be visited. If we are collecting
+            // rewritten nodes, we need to collect this one as well, otherwise we
+            // can ignore it.
             if newLayout != nil {
-              newLayout!.append(nil)
+              newLayout!.append(raw)
             }
             continue
           }
-          
+
           // Build the Syntax node to rewrite
           let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
           let data = SyntaxData(absoluteRaw, parent: syntaxNode)
-          
+
           let rewritten = visit(data)
           if rewritten.data.nodeId != info.nodeId {
             // The node was rewritten, let's handle it
@@ -293,7 +317,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               // We have not yet collected any previous rewritten nodes. Initialize
               // the new layout with the previous nodes of the parent. This is
               // possible, since we know they were not rewritten.
-              
+
               // The below implementation is based on Collection.map but directly
               // reserves enough capacity for the entire layout.
               newLayout = ContiguousArray<RawSyntax?>()
@@ -302,7 +326,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 newLayout!.append(node.raw.layoutView!.children[j])
               }
             }
-            
+
             // Now that we know we have a new layout in which we collect rewritten
             // nodes, add it.
             rewrittens.append(rewritten)
@@ -315,13 +339,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
         }
-        
+
         if let newLayout = newLayout {
           // A child node was rewritten. Build the updated node.
-          
+
           // Sanity check, ensure the new children are the same length.
           precondition(newLayout.count == node.raw.layoutView!.children.count)
-          
+
           let arena = SyntaxArena()
           let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
           // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
@@ -331,19 +355,6 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         } else {
           // No child node was rewritten. So no need to change this node as well.
           return node
-        }
-      }
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// Rewrite `node` and anchor, making sure that the rewritten node also has
-      /// a parent if `node` had one.
-      public func rewrite(_ node: Syntax) -> Syntax {
-        let rewritten = self.visit(node)
-        return withExtendedLifetime(rewritten) {
-          return Syntax(node.data.replacingSelf(rewritten.raw, arena: SyntaxArena()))
         }
       }
       """

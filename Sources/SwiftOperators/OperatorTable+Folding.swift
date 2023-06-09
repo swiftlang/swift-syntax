@@ -475,6 +475,7 @@ extension OperatorTable {
     ) {
       self.opPrecedence = opPrecedence
       self.errorHandler = errorHandler
+      super.init(viewMode: .fixedUp)
     }
 
     override func visitAny(_ node: Syntax) -> Syntax? {
@@ -538,7 +539,7 @@ extension OperatorTable {
         opPrecedence: self,
         errorHandler: errorHandler
       )
-      let result = folder.visit(Syntax(node))
+      let result = folder.rewrite(node)
 
       // If the sequence folder encountered an error that caused the error
       // handler to throw, invoke the error handler again with the original

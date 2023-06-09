@@ -12,6 +12,14 @@
 
 import SwiftSyntax
 
+/// A rewriter that performs a "basic" format of the passed tree.
+///
+/// The base implementation is primarily aimed at adding whitespace where
+/// required such that re-parsing the tree's description results in the same
+/// tree. But it also makes an attempt at adding in formatting, eg. splitting
+/// lines where obvious and some basic indentation at nesting levels.
+///
+/// Any subclasses *must* return the same node type as given.
 open class BasicFormat: SyntaxRewriter {
   /// How much indentation should be added at a new indentation level.
   public let indentationWidth: Trivia
@@ -35,8 +43,6 @@ open class BasicFormat: SyntaxRewriter {
   /// This is used as a reference-point to indent user-indented code.
   private var anchorPoints: [TokenSyntax: Trivia] = [:]
 
-  public let viewMode: SyntaxTreeViewMode
-
   /// The previously visited token. This is faster than accessing
   /// `token.previousToken` inside `visit(_:TokenSyntax)`. `nil` if no token has
   /// been visited yet.
@@ -49,7 +55,7 @@ open class BasicFormat: SyntaxRewriter {
   ) {
     self.indentationWidth = indentationWidth
     self.indentationStack = [(indentation: initialIndentation, isUserDefined: false)]
-    self.viewMode = viewMode
+    super.init(viewMode: viewMode)
   }
 
   // MARK: - Updating indentation level
@@ -68,6 +74,12 @@ open class BasicFormat: SyntaxRewriter {
       return
     }
     indentationStack.removeLast()
+  }
+
+  open override func visit(_ node: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
+    // Do not perform any formatting on unexpected nodes, the result won't make any
+    // sense as we rely on layout nodes to know what formatting to perform.
+    return node
   }
 
   open override func visitPre(_ node: Syntax) {

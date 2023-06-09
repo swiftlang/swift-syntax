@@ -144,7 +144,7 @@ extension RawTokenKind {
       return .none
     case .leftParen:
       return .none
-    case .leftSquareBracket:
+    case .leftSquare:
       return .none
     case .multilineStringQuote:
       return .stringLiteral
@@ -186,7 +186,7 @@ extension RawTokenKind {
       return .none
     case .rightParen:
       return .none
-    case .rightSquareBracket:
+    case .rightSquare:
       return .none
     case .semicolon:
       return .none

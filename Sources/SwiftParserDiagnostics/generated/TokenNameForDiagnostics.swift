@@ -57,7 +57,7 @@ extension TokenKind {
       return #"{"#
     case .leftParen:
       return #"("#
-    case .leftSquareBracket:
+    case .leftSquare:
       return #"["#
     case .multilineStringQuote:
       return #"""""#
@@ -99,7 +99,7 @@ extension TokenKind {
       return #"}"#
     case .rightParen:
       return #")"#
-    case .rightSquareBracket:
+    case .rightSquare:
       return #"]"#
     case .semicolon:
       return #";"#

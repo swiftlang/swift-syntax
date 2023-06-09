@@ -3273,11 +3273,11 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
-      leftSquare: TokenSyntax = .leftSquareBracketToken(),
+      leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
       items: ClosureCaptureItemListSyntax? = nil,
       _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
-      rightSquare: TokenSyntax = .rightSquareBracketToken(),
+      rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -11504,11 +11504,11 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil,
-      leftBracket: TokenSyntax = .leftSquareBracketToken(),
+      leftBracket: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
       argumentList: TupleExprElementListSyntax,
       _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
-      rightBracket: TokenSyntax = .rightSquareBracketToken(),
+      rightBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     

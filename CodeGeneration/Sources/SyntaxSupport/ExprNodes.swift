@@ -48,7 +48,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "Elements",
@@ -57,7 +57,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),
@@ -341,7 +341,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "Items",
@@ -350,7 +350,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),
@@ -654,7 +654,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "Content",
@@ -672,7 +672,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),
@@ -1106,7 +1106,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "ArgumentList",
@@ -1115,7 +1115,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),
@@ -1506,7 +1506,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "ArgumentList",
@@ -1515,7 +1515,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
       Child(
         name: "TrailingClosure",

@@ -35,35 +35,35 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
-      leftSquareBracket: TokenSyntax = .leftSquareBracketToken(),
-      _ unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
+      leftSquare: TokenSyntax = .leftSquareToken(),
+      _ unexpectedBetweenLeftSquareAndElementType: UnexpectedNodesSyntax? = nil,
       elementType: some TypeSyntaxProtocol,
-      _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
-      rightSquareBracket: TokenSyntax = .rightSquareBracketToken(),
-      _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenElementTypeAndRightSquare: UnexpectedNodesSyntax? = nil,
+      rightSquare: TokenSyntax = .rightSquareToken(),
+      _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftSquareBracket, 
-            leftSquareBracket, 
-            unexpectedBetweenLeftSquareBracketAndElementType, 
+            unexpectedBeforeLeftSquare, 
+            leftSquare, 
+            unexpectedBetweenLeftSquareAndElementType, 
             elementType, 
-            unexpectedBetweenElementTypeAndRightSquareBracket, 
-            rightSquareBracket, 
-            unexpectedAfterRightSquareBracket
+            unexpectedBetweenElementTypeAndRightSquare, 
+            rightSquare, 
+            unexpectedAfterRightSquare
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftSquareBracket?.raw, 
-          leftSquareBracket.raw, 
-          unexpectedBetweenLeftSquareBracketAndElementType?.raw, 
+          unexpectedBeforeLeftSquare?.raw, 
+          leftSquare.raw, 
+          unexpectedBetweenLeftSquareAndElementType?.raw, 
           elementType.raw, 
-          unexpectedBetweenElementTypeAndRightSquareBracket?.raw, 
-          rightSquareBracket.raw, 
-          unexpectedAfterRightSquareBracket?.raw
+          unexpectedBetweenElementTypeAndRightSquare?.raw, 
+          rightSquare.raw, 
+          unexpectedAfterRightSquare?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.arrayType,
@@ -78,7 +78,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -87,7 +87,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var leftSquareBracket: TokenSyntax {
+  public var leftSquare: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -96,7 +96,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftSquareAndElementType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -114,7 +114,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenElementTypeAndRightSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -123,7 +123,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var rightSquareBracket: TokenSyntax {
+  public var rightSquare: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -132,7 +132,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -143,13 +143,13 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLeftSquareBracket, 
-          \Self.leftSquareBracket, 
-          \Self.unexpectedBetweenLeftSquareBracketAndElementType, 
+          \Self.unexpectedBeforeLeftSquare, 
+          \Self.leftSquare, 
+          \Self.unexpectedBetweenLeftSquareAndElementType, 
           \Self.elementType, 
-          \Self.unexpectedBetweenElementTypeAndRightSquareBracket, 
-          \Self.rightSquareBracket, 
-          \Self.unexpectedAfterRightSquareBracket
+          \Self.unexpectedBetweenElementTypeAndRightSquare, 
+          \Self.rightSquare, 
+          \Self.unexpectedAfterRightSquare
         ])
   }
 }
@@ -629,47 +629,47 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
-      leftSquareBracket: TokenSyntax = .leftSquareBracketToken(),
-      _ unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
+      leftSquare: TokenSyntax = .leftSquareToken(),
+      _ unexpectedBetweenLeftSquareAndKeyType: UnexpectedNodesSyntax? = nil,
       keyType: some TypeSyntaxProtocol,
       _ unexpectedBetweenKeyTypeAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? = nil,
       valueType: some TypeSyntaxProtocol,
-      _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
-      rightSquareBracket: TokenSyntax = .rightSquareBracketToken(),
-      _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenValueTypeAndRightSquare: UnexpectedNodesSyntax? = nil,
+      rightSquare: TokenSyntax = .rightSquareToken(),
+      _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftSquareBracket, 
-            leftSquareBracket, 
-            unexpectedBetweenLeftSquareBracketAndKeyType, 
+            unexpectedBeforeLeftSquare, 
+            leftSquare, 
+            unexpectedBetweenLeftSquareAndKeyType, 
             keyType, 
             unexpectedBetweenKeyTypeAndColon, 
             colon, 
             unexpectedBetweenColonAndValueType, 
             valueType, 
-            unexpectedBetweenValueTypeAndRightSquareBracket, 
-            rightSquareBracket, 
-            unexpectedAfterRightSquareBracket
+            unexpectedBetweenValueTypeAndRightSquare, 
+            rightSquare, 
+            unexpectedAfterRightSquare
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftSquareBracket?.raw, 
-          leftSquareBracket.raw, 
-          unexpectedBetweenLeftSquareBracketAndKeyType?.raw, 
+          unexpectedBeforeLeftSquare?.raw, 
+          leftSquare.raw, 
+          unexpectedBetweenLeftSquareAndKeyType?.raw, 
           keyType.raw, 
           unexpectedBetweenKeyTypeAndColon?.raw, 
           colon.raw, 
           unexpectedBetweenColonAndValueType?.raw, 
           valueType.raw, 
-          unexpectedBetweenValueTypeAndRightSquareBracket?.raw, 
-          rightSquareBracket.raw, 
-          unexpectedAfterRightSquareBracket?.raw
+          unexpectedBetweenValueTypeAndRightSquare?.raw, 
+          rightSquare.raw, 
+          unexpectedAfterRightSquare?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.dictionaryType,
@@ -684,7 +684,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -693,7 +693,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var leftSquareBracket: TokenSyntax {
+  public var leftSquare: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -702,7 +702,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftSquareAndKeyType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -756,7 +756,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenValueTypeAndRightSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -765,7 +765,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var rightSquareBracket: TokenSyntax {
+  public var rightSquare: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
@@ -774,7 +774,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+  public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -785,17 +785,17 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLeftSquareBracket, 
-          \Self.leftSquareBracket, 
-          \Self.unexpectedBetweenLeftSquareBracketAndKeyType, 
+          \Self.unexpectedBeforeLeftSquare, 
+          \Self.leftSquare, 
+          \Self.unexpectedBetweenLeftSquareAndKeyType, 
           \Self.keyType, 
           \Self.unexpectedBetweenKeyTypeAndColon, 
           \Self.colon, 
           \Self.unexpectedBetweenColonAndValueType, 
           \Self.valueType, 
-          \Self.unexpectedBetweenValueTypeAndRightSquareBracket, 
-          \Self.rightSquareBracket, 
-          \Self.unexpectedAfterRightSquareBracket
+          \Self.unexpectedBetweenValueTypeAndRightSquare, 
+          \Self.rightSquare, 
+          \Self.unexpectedAfterRightSquare
         ])
   }
 }

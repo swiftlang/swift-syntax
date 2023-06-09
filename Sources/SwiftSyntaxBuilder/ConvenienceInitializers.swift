@@ -102,8 +102,8 @@ extension DictionaryExprSyntax {
   /// A convenience initializer that allows passing in members using a result builder
   /// instead of having to wrap them in a `DictionaryElementList`.
   public init(
-    leftSquare: TokenSyntax = .leftSquareBracketToken(),
-    rightSquare: TokenSyntax = .rightSquareBracketToken(),
+    leftSquare: TokenSyntax = .leftSquareToken(),
+    rightSquare: TokenSyntax = .rightSquareToken(),
     @DictionaryElementListBuilder contentBuilder: () -> DictionaryElementListSyntax = { DictionaryElementListSyntax([]) }
   ) {
     let elementList = contentBuilder()

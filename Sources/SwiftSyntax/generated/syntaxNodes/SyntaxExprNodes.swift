@@ -36,11 +36,11 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
-      leftSquare: TokenSyntax = .leftSquareBracketToken(),
+      leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil,
       elements: ArrayElementListSyntax,
       _ unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil,
-      rightSquare: TokenSyntax = .rightSquareBracketToken(),
+      rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1654,11 +1654,11 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
-      leftSquare: TokenSyntax = .leftSquareBracketToken(),
+      leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndContent: UnexpectedNodesSyntax? = nil,
       content: Content,
       _ unexpectedBetweenContentAndRightSquare: UnexpectedNodesSyntax? = nil,
-      rightSquare: TokenSyntax = .rightSquareBracketToken(),
+      rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5493,11 +5493,11 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
       calledExpression: some ExprSyntaxProtocol,
       _ unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil,
-      leftBracket: TokenSyntax = .leftSquareBracketToken(),
+      leftBracket: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
       argumentList: TupleExprElementListSyntax,
       _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
-      rightBracket: TokenSyntax = .rightSquareBracketToken(),
+      rightBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,

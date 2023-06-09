@@ -263,7 +263,7 @@ extension TokenConsumer {
     let lexeme = peek()
 
     switch lexeme.rawTokenKind {
-    case .atSign, .leftParen, .identifier, .leftSquareBracket, .wildcard:
+    case .atSign, .leftParen, .identifier, .leftSquare, .wildcard:
       return true
 
     case .keyword:

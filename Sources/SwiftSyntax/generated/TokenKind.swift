@@ -35,7 +35,7 @@ public enum TokenKind: Hashable {
   case leftAngle
   case leftBrace
   case leftParen
-  case leftSquareBracket
+  case leftSquare
   case multilineStringQuote
   case period
   case postfixOperator(String)
@@ -56,7 +56,7 @@ public enum TokenKind: Hashable {
   case rightAngle
   case rightBrace
   case rightParen
-  case rightSquareBracket
+  case rightSquare
   case semicolon
   case singleQuote
   case stringQuote
@@ -108,7 +108,7 @@ public enum TokenKind: Hashable {
       return #"{"#
     case .leftParen:
       return #"("#
-    case .leftSquareBracket:
+    case .leftSquare:
       return #"["#
     case .multilineStringQuote:
       return #"""""#
@@ -150,7 +150,7 @@ public enum TokenKind: Hashable {
       return #"}"#
     case .rightParen:
       return #")"#
-    case .rightSquareBracket:
+    case .rightSquare:
       return #"]"#
     case .semicolon:
       return #";"#
@@ -201,7 +201,7 @@ public enum TokenKind: Hashable {
       return #"{"#
     case .leftParen:
       return #"("#
-    case .leftSquareBracket:
+    case .leftSquare:
       return #"["#
     case .multilineStringQuote:
       return #"""""#
@@ -235,7 +235,7 @@ public enum TokenKind: Hashable {
       return #"}"#
     case .rightParen:
       return #")"#
-    case .rightSquareBracket:
+    case .rightSquare:
       return #"]"#
     case .semicolon:
       return #";"#
@@ -301,7 +301,7 @@ public enum TokenKind: Hashable {
       return true
     case .leftParen:
       return true
-    case .leftSquareBracket:
+    case .leftSquare:
       return true
     case .multilineStringQuote:
       return true
@@ -343,7 +343,7 @@ public enum TokenKind: Hashable {
       return true
     case .rightParen:
       return true
-    case .rightSquareBracket:
+    case .rightSquare:
       return true
     case .semicolon:
       return true
@@ -406,7 +406,7 @@ extension TokenKind: Equatable {
       return true
     case (.leftParen, .leftParen):
       return true
-    case (.leftSquareBracket, .leftSquareBracket):
+    case (.leftSquare, .leftSquare):
       return true
     case (.multilineStringQuote, .multilineStringQuote):
       return true
@@ -448,7 +448,7 @@ extension TokenKind: Equatable {
       return true
     case (.rightParen, .rightParen):
       return true
-    case (.rightSquareBracket, .rightSquareBracket):
+    case (.rightSquare, .rightSquare):
       return true
     case (.semicolon, .semicolon):
       return true
@@ -496,7 +496,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case leftAngle
   case leftBrace
   case leftParen
-  case leftSquareBracket
+  case leftSquare
   case multilineStringQuote
   case period
   case postfixOperator
@@ -517,7 +517,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case rightAngle
   case rightBrace
   case rightParen
-  case rightSquareBracket
+  case rightSquare
   case semicolon
   case singleQuote
   case stringQuote
@@ -556,7 +556,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #"{"#
     case .leftParen:
       return #"("#
-    case .leftSquareBracket:
+    case .leftSquare:
       return #"["#
     case .multilineStringQuote:
       return #"""""#
@@ -590,7 +590,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #"}"#
     case .rightParen:
       return #")"#
-    case .rightSquareBracket:
+    case .rightSquare:
       return #"]"#
     case .semicolon:
       return #";"#
@@ -654,7 +654,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .leftParen:
       return true
-    case .leftSquareBracket:
+    case .leftSquare:
       return true
     case .multilineStringQuote:
       return true
@@ -696,7 +696,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .rightParen:
       return true
-    case .rightSquareBracket:
+    case .rightSquare:
       return true
     case .semicolon:
       return true
@@ -777,9 +777,9 @@ extension TokenKind {
     case .leftParen:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftParen
-    case .leftSquareBracket:
+    case .leftSquare:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .leftSquareBracket
+      return .leftSquare
     case .multilineStringQuote:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .multilineStringQuote
@@ -836,9 +836,9 @@ extension TokenKind {
     case .rightParen:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .rightParen
-    case .rightSquareBracket:
+    case .rightSquare:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .rightSquareBracket
+      return .rightSquare
     case .semicolon:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .semicolon
@@ -905,8 +905,8 @@ extension TokenKind {
       return (.leftBrace, nil)
     case .leftParen:
       return (.leftParen, nil)
-    case .leftSquareBracket:
-      return (.leftSquareBracket, nil)
+    case .leftSquare:
+      return (.leftSquare, nil)
     case .multilineStringQuote:
       return (.multilineStringQuote, nil)
     case .period:
@@ -947,8 +947,8 @@ extension TokenKind {
       return (.rightBrace, nil)
     case .rightParen:
       return (.rightParen, nil)
-    case .rightSquareBracket:
-      return (.rightSquareBracket, nil)
+    case .rightSquare:
+      return (.rightSquare, nil)
     case .semicolon:
       return (.semicolon, nil)
     case .singleQuote:

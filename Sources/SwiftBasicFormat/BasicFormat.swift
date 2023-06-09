@@ -203,7 +203,7 @@ open class BasicFormat: SyntaxRewriter {
       (.extendedRegexDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
       (.identifier, .leftAngle),  // MyType<Int>
       (.identifier, .leftParen),  // foo()
-      (.identifier, .leftSquareBracket),  // myArray[1]
+      (.identifier, .leftSquare),  // myArray[1]
       (.identifier, .period),  // a.b
       (.integerLiteral, .period),  // macOS 11.2.1
       (.keyword(.`init`), .leftAngle),  // init<T>()
@@ -215,7 +215,7 @@ open class BasicFormat: SyntaxRewriter {
       (.keyword(.super), .period),  // super.someProperty
       (.leftBrace, _),
       (.leftParen, _),
-      (.leftSquareBracket, _),
+      (.leftSquare, _),
       (.multilineStringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
       (.period, _),
       (.postfixQuestionMark, .leftAngle),  // init?<T>()
@@ -235,7 +235,7 @@ open class BasicFormat: SyntaxRewriter {
       (.rightBrace, .leftParen),  // { return 1 }()
       (.rightParen, .leftParen),  // returnsClosure()()
       (.rightParen, .period),  // foo().bar
-      (.rightSquareBracket, .period),  // myArray[1].someProperty
+      (.rightSquare, .period),  // myArray[1].someProperty
       (.singleQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringSegment, _),
@@ -247,7 +247,7 @@ open class BasicFormat: SyntaxRewriter {
       (_, .postfixQuestionMark),
       (_, .rightBrace),
       (_, .rightParen),
-      (_, .rightSquareBracket),
+      (_, .rightSquare),
       (_, .semicolon),
       (_, nil),
       (nil, _):

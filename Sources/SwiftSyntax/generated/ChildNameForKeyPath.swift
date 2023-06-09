@@ -171,20 +171,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightSquare"
   case \ArrayExprSyntax.unexpectedAfterRightSquare:
     return "unexpectedAfterRightSquare"
-  case \ArrayTypeSyntax.unexpectedBeforeLeftSquareBracket:
-    return "unexpectedBeforeLeftSquareBracket"
-  case \ArrayTypeSyntax.leftSquareBracket:
-    return "leftSquareBracket"
-  case \ArrayTypeSyntax.unexpectedBetweenLeftSquareBracketAndElementType:
-    return "unexpectedBetweenLeftSquareBracketAndElementType"
+  case \ArrayTypeSyntax.unexpectedBeforeLeftSquare:
+    return "unexpectedBeforeLeftSquare"
+  case \ArrayTypeSyntax.leftSquare:
+    return "leftSquare"
+  case \ArrayTypeSyntax.unexpectedBetweenLeftSquareAndElementType:
+    return "unexpectedBetweenLeftSquareAndElementType"
   case \ArrayTypeSyntax.elementType:
     return "elementType"
-  case \ArrayTypeSyntax.unexpectedBetweenElementTypeAndRightSquareBracket:
-    return "unexpectedBetweenElementTypeAndRightSquareBracket"
-  case \ArrayTypeSyntax.rightSquareBracket:
-    return "rightSquareBracket"
-  case \ArrayTypeSyntax.unexpectedAfterRightSquareBracket:
-    return "unexpectedAfterRightSquareBracket"
+  case \ArrayTypeSyntax.unexpectedBetweenElementTypeAndRightSquare:
+    return "unexpectedBetweenElementTypeAndRightSquare"
+  case \ArrayTypeSyntax.rightSquare:
+    return "rightSquare"
+  case \ArrayTypeSyntax.unexpectedAfterRightSquare:
+    return "unexpectedAfterRightSquare"
   case \ArrowExprSyntax.unexpectedBeforeEffectSpecifiers:
     return "unexpectedBeforeEffectSpecifiers"
   case \ArrowExprSyntax.effectSpecifiers:
@@ -987,12 +987,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightSquare"
   case \DictionaryExprSyntax.unexpectedAfterRightSquare:
     return "unexpectedAfterRightSquare"
-  case \DictionaryTypeSyntax.unexpectedBeforeLeftSquareBracket:
-    return "unexpectedBeforeLeftSquareBracket"
-  case \DictionaryTypeSyntax.leftSquareBracket:
-    return "leftSquareBracket"
-  case \DictionaryTypeSyntax.unexpectedBetweenLeftSquareBracketAndKeyType:
-    return "unexpectedBetweenLeftSquareBracketAndKeyType"
+  case \DictionaryTypeSyntax.unexpectedBeforeLeftSquare:
+    return "unexpectedBeforeLeftSquare"
+  case \DictionaryTypeSyntax.leftSquare:
+    return "leftSquare"
+  case \DictionaryTypeSyntax.unexpectedBetweenLeftSquareAndKeyType:
+    return "unexpectedBetweenLeftSquareAndKeyType"
   case \DictionaryTypeSyntax.keyType:
     return "keyType"
   case \DictionaryTypeSyntax.unexpectedBetweenKeyTypeAndColon:
@@ -1003,12 +1003,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenColonAndValueType"
   case \DictionaryTypeSyntax.valueType:
     return "valueType"
-  case \DictionaryTypeSyntax.unexpectedBetweenValueTypeAndRightSquareBracket:
-    return "unexpectedBetweenValueTypeAndRightSquareBracket"
-  case \DictionaryTypeSyntax.rightSquareBracket:
-    return "rightSquareBracket"
-  case \DictionaryTypeSyntax.unexpectedAfterRightSquareBracket:
-    return "unexpectedAfterRightSquareBracket"
+  case \DictionaryTypeSyntax.unexpectedBetweenValueTypeAndRightSquare:
+    return "unexpectedBetweenValueTypeAndRightSquare"
+  case \DictionaryTypeSyntax.rightSquare:
+    return "rightSquare"
+  case \DictionaryTypeSyntax.unexpectedAfterRightSquare:
+    return "unexpectedAfterRightSquare"
   case \DifferentiabilityParamSyntax.unexpectedBeforeParameter:
     return "unexpectedBeforeParameter"
   case \DifferentiabilityParamSyntax.parameter:

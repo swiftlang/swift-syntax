@@ -1126,10 +1126,10 @@ final class DeclarationTests: XCTestCase {
           firstName: .identifier("first"),
           secondName: .identifier("second"),
           UnexpectedNodesSyntax([
-            TokenSyntax.leftSquareBracketToken(),
+            TokenSyntax.leftSquareToken(),
             TokenSyntax.identifier("third"),
             TokenSyntax.identifier("fourth"),
-            TokenSyntax.rightSquareBracketToken(),
+            TokenSyntax.rightSquareToken(),
           ]),
           colon: .colonToken(),
           type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
@@ -1150,9 +1150,9 @@ final class DeclarationTests: XCTestCase {
           secondName: .identifier("second"),
           colon: .colonToken(presence: .missing),
           type: ArrayTypeSyntax(
-            leftSquareBracket: .leftSquareBracketToken(),
+            leftSquare: .leftSquareToken(),
             elementType: SimpleTypeIdentifierSyntax(name: .identifier("third")),
-            rightSquareBracket: .rightSquareBracketToken(presence: .missing)
+            rightSquare: .rightSquareToken(presence: .missing)
           )
         )
       ),

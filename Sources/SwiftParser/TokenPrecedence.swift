@@ -133,8 +133,8 @@ enum TokenPrecedence: Comparable {
     // MARK: Weak bracketet
     case .leftParen:
       self = .weakBracketed(closingDelimiter: .rightParen)
-    case .leftSquareBracket:
-      self = .weakBracketed(closingDelimiter: .rightSquareBracket)
+    case .leftSquare:
+      self = .weakBracketed(closingDelimiter: .rightSquare)
     case .leftAngle:
       self = .weakBracketed(closingDelimiter: .rightAngle)
     case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote,
@@ -148,7 +148,7 @@ enum TokenPrecedence: Comparable {
 
     // MARK: Weak bracket close
     case  // Weak brackets
-    .rightAngle, .rightParen, .rightSquareBracket:
+    .rightAngle, .rightParen, .rightSquare:
       self = .weakBracketClose
 
     // MARK: Strong bracketet

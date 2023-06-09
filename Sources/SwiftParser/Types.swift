@@ -243,7 +243,7 @@ extension Parser {
       base = self.parseTypeIdentifier()
     case TokenSpec(.leftParen):
       base = RawTypeSyntax(self.parseTupleTypeBody())
-    case TokenSpec(.leftSquareBracket):
+    case TokenSpec(.leftSquare):
       base = RawTypeSyntax(self.parseCollectionType())
     case TokenSpec(.wildcard):
       base = RawTypeSyntax(self.parsePlaceholderType())
@@ -611,40 +611,40 @@ extension Parser {
       return RawTypeSyntax(
         RawArrayTypeSyntax(
           remaingingTokens,
-          leftSquareBracket: missingToken(.leftSquareBracket),
+          leftSquare: missingToken(.leftSquare),
           elementType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-          rightSquareBracket: missingToken(.rightSquareBracket),
+          rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
       )
     }
 
-    let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
+    let (unexpectedBeforeLSquare, leftsquare) = self.expect(.leftSquare)
     let firstType = self.parseType()
     if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
-      let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
+      let (unexpectedBeforeRSquareBracket, rightSquare) = self.expect(.rightSquare)
       return RawTypeSyntax(
         RawDictionaryTypeSyntax(
           unexpectedBeforeLSquare,
-          leftSquareBracket: lsquare,
+          leftSquare: leftsquare,
           keyType: firstType,
           colon: colon,
           valueType: secondType,
           unexpectedBeforeRSquareBracket,
-          rightSquareBracket: rSquareBracket,
+          rightSquare: rightSquare,
           arena: self.arena
         )
       )
     } else {
-      let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquareBracket)
+      let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquare)
       return RawTypeSyntax(
         RawArrayTypeSyntax(
           unexpectedBeforeLSquare,
-          leftSquareBracket: lsquare,
+          leftSquare: leftsquare,
           elementType: firstType,
           unexpectedBeforeRSquareBracket,
-          rightSquareBracket: rSquareBracket,
+          rightSquare: rSquareBracket,
           arena: self.arena
         )
       )
@@ -743,7 +743,7 @@ extension Parser.Lookahead {
       guard self.canParseTupleBodyType() else {
         return false
       }
-    case TokenSpec(.leftSquareBracket):
+    case TokenSpec(.leftSquare):
       self.consumeAnyToken()
       guard self.canParseType() else {
         return false
@@ -753,7 +753,7 @@ extension Parser.Lookahead {
           return false
         }
       }
-      guard self.consume(if: .rightSquareBracket) != nil else {
+      guard self.consume(if: .rightSquare) != nil else {
         return false
       }
     case TokenSpec(.wildcard):
@@ -1058,12 +1058,12 @@ extension Parser {
       }
 
       // If the right square bracket is at a new line, we should just return the result
-      if let rightSquareBracket = self.consume(if: TokenSpec(.rightSquareBracket, allowAtStartOfLine: false)) {
+      if let rightSquare = self.consume(if: TokenSpec(.rightSquare, allowAtStartOfLine: false)) {
         result = RawTypeSyntax(
           RawArrayTypeSyntax(
-            leftSquareBracket: missingToken(.leftSquareBracket),
+            leftSquare: missingToken(.leftSquare),
             elementType: result,
-            rightSquareBracket: rightSquareBracket,
+            rightSquare: rightSquare,
             arena: self.arena
           )
         )
@@ -1078,15 +1078,15 @@ extension Parser {
         }
 
         let secondType = self.parseSimpleType()
-        let rightSquareBracket = self.consume(if: .rightSquareBracket) ?? self.missingToken(.rightSquareBracket)
+        let rightSquare = self.consume(if: .rightSquare) ?? self.missingToken(.rightSquare)
 
         result = RawTypeSyntax(
           RawDictionaryTypeSyntax(
-            leftSquareBracket: self.missingToken(.leftSquareBracket),
+            leftSquare: self.missingToken(.leftSquare),
             keyType: result,
             colon: colon,
             valueType: secondType,
-            rightSquareBracket: rightSquareBracket,
+            rightSquare: rightSquare,
             arena: self.arena
           )
         )
@@ -1122,7 +1122,7 @@ extension Lexer.Lexeme {
   var isGenericTypeDisambiguatingToken: Bool {
     switch self.rawTokenKind {
     case .rightParen,
-      .rightSquareBracket,
+      .rightSquare,
       .leftBrace,
       .rightBrace,
       .period,
@@ -1137,7 +1137,7 @@ extension Lexer.Lexeme {
       return self.tokenText == "&"
     case .postfixOperator:
       return false
-    case .leftParen, .leftSquareBracket:
+    case .leftParen, .leftSquare:
       // These only apply to the generic type if they don't start a new line.
       return !self.isAtStartOfLine
     default:

@@ -22,6 +22,89 @@ public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
+public extension ArrayTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeLeftSquare")
+  var unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? {
+    return unexpectedBeforeLeftSquare
+  }
+
+  @available(*, deprecated, renamed: "leftSquare")
+  var leftSquareBracket: TokenSyntax {
+    get {
+      return leftSquare
+    }
+    set(value) {
+      leftSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndElementType")
+  var unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftSquareAndElementType
+    }
+    set(value) {
+      unexpectedBetweenLeftSquareAndElementType = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenElementTypeAndRightSquare")
+  var unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenElementTypeAndRightSquare
+    }
+    set(value) {
+      unexpectedBetweenElementTypeAndRightSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "rightSquare")
+  var rightSquareBracket: TokenSyntax {
+    get {
+      return rightSquare
+    }
+    set(value) {
+      rightSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedAfterRightSquare")
+  var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRightSquare
+    }
+    set(value) {
+      unexpectedAfterRightSquare = value
+    }
+  }
+
+  @available(*, deprecated, message: "Use an initializer with leftSquare and rightSquare arguments")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
+    leftSquareBracket: TokenSyntax = .leftSquareToken(),
+    _ unexpectedBetweenLeftSquareBracketAndElementType: UnexpectedNodesSyntax? = nil,
+    elementType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
+    rightSquareBracket: TokenSyntax = .rightSquareToken(),
+    _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeLeftSquareBracket,
+      leftSquare: leftSquareBracket,
+      unexpectedBetweenLeftSquareBracketAndElementType,
+      elementType: elementType,
+      unexpectedBetweenElementTypeAndRightSquareBracket,
+      rightSquare: rightSquareBracket,
+      unexpectedAfterRightSquareBracket,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 public extension AvailabilityConditionSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndAvailabilityArguments")
   var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
@@ -216,6 +299,103 @@ public extension EditorPlaceholderDeclSyntax {
       unexpectedBeforeIdentifier,
       placeholder: identifier,
       unexpectedAfterIdentifier
+    )
+  }
+}
+
+public extension DictionaryTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeLeftSquare")
+  var unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeLeftSquare
+    }
+    set(value) {
+      unexpectedBeforeLeftSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "leftSquare")
+  var leftSquareBracket: TokenSyntax {
+    get {
+      return leftSquare
+    }
+    set(value) {
+      leftSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndKeyType")
+  var unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftSquareAndKeyType
+    }
+    set(value) {
+      unexpectedBetweenLeftSquareAndKeyType = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenValueTypeAndRightSquare")
+  var unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenValueTypeAndRightSquare
+    }
+    set(value) {
+      unexpectedBetweenValueTypeAndRightSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "rightSquare")
+  var rightSquareBracket: TokenSyntax {
+    get {
+      return rightSquare
+    }
+    set(value) {
+      rightSquare = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedAfterRightSquare")
+  var unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRightSquare
+    }
+    set(value) {
+      unexpectedAfterRightSquare = value
+    }
+  }
+
+  @available(*, deprecated, message: "Use an initializer with leftSquare and rightSquare arguments")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftSquareBracket: UnexpectedNodesSyntax? = nil,
+    leftSquareBracket: TokenSyntax = .leftSquareToken(),
+    _ unexpectedBetweenLeftSquareBracketAndKeyType: UnexpectedNodesSyntax? = nil,
+    keyType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenKeyTypeAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndValueType: UnexpectedNodesSyntax? = nil,
+    valueType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
+    rightSquareBracket: TokenSyntax = .rightSquareToken(),
+    _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeLeftSquareBracket,
+      leftSquare: leftSquareBracket,
+      unexpectedBetweenLeftSquareBracketAndKeyType,
+      keyType: keyType,
+      unexpectedBetweenKeyTypeAndColon,
+      colon: colon,
+      unexpectedBetweenColonAndValueType,
+      valueType: valueType,
+      unexpectedBetweenValueTypeAndRightSquareBracket,
+      rightSquare: rightSquareBracket,
+      unexpectedAfterRightSquareBracket,
+      trailingTrivia: trailingTrivia
     )
   }
 }
@@ -616,6 +796,46 @@ public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {
     return detached
+  }
+}
+
+public extension TokenKind {
+  @available(*, deprecated, renamed: "leftSquare")
+  static var leftSquareBracket: TokenKind {
+    return .leftSquare
+  }
+
+  @available(*, deprecated, renamed: "rightSquare")
+  static var rightSquareBracket: TokenKind {
+    return .rightSquare
+  }
+}
+
+public extension TokenSyntax {
+  @available(*, deprecated, renamed: "leftSquareToken")
+  static func leftSquareBracketToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return .leftSquareToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "rightSquareToken")
+  static func rightSquareBracketToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return .rightSquareToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
   }
 }
 

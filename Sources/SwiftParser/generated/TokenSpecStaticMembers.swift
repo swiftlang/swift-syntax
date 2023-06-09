@@ -95,8 +95,8 @@ extension TokenSpec {
     return TokenSpec(.leftParen)
   }
   
-  static var leftSquareBracket: TokenSpec {
-    return TokenSpec(.leftSquareBracket)
+  static var leftSquare: TokenSpec {
+    return TokenSpec(.leftSquare)
   }
   
   static var multilineStringQuote: TokenSpec {
@@ -179,8 +179,8 @@ extension TokenSpec {
     return TokenSpec(.rightParen)
   }
   
-  static var rightSquareBracket: TokenSpec {
-    return TokenSpec(.rightSquareBracket)
+  static var rightSquare: TokenSpec {
+    return TokenSpec(.rightSquare)
   }
   
   static var semicolon: TokenSpec {

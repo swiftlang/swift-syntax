@@ -813,14 +813,14 @@ extension Parser {
 
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
-      if let lsquare = self.consume(if: TokenSpec(.leftSquareBracket, allowAtStartOfLine: false)) {
+      if let lsquare = self.consume(if: TokenSpec(.leftSquare, allowAtStartOfLine: false)) {
         let args: [RawTupleExprElementSyntax]
-        if self.at(.rightSquareBracket) {
+        if self.at(.rightSquare) {
           args = []
         } else {
           args = self.parseArgumentListElements(pattern: pattern)
         }
-        let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+        let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
@@ -1053,26 +1053,26 @@ extension Parser {
     while loopCondition.evaluate(currentToken) {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
-      if self.at(TokenSpec(.leftSquareBracket, allowAtStartOfLine: false))
-        || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquareBracket)
+      if self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false))
+        || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquare)
       {
         // Consume the '.', if it's allowed here.
         let period: RawTokenSyntax?
-        if !self.at(.leftSquareBracket) {
+        if !self.at(.leftSquare) {
           period = self.consumeAnyToken()
         } else {
           period = nil
         }
 
-        precondition(self.at(.leftSquareBracket))
+        precondition(self.at(.leftSquare))
         let lsquare = self.consumeAnyToken()
         let args: [RawTupleExprElementSyntax]
-        if self.at(.rightSquareBracket) {
+        if self.at(.rightSquare) {
           args = []
         } else {
           args = self.parseArgumentListElements(pattern: pattern)
         }
-        let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+        let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
         components.append(
           RawKeyPathComponentSyntax(
@@ -1335,7 +1335,7 @@ extension Parser {
       // element without label.
       return RawExprSyntax(self.parseTupleExpression(pattern: pattern))
 
-    case (.leftSquareBracket, _)?:
+    case (.leftSquare, _)?:
       return self.parseCollectionLiteral()
 
     case nil:
@@ -1637,17 +1637,17 @@ extension Parser {
       return RawExprSyntax(
         RawArrayExprSyntax(
           remainingTokens,
-          leftSquare: missingToken(.leftSquareBracket),
+          leftSquare: missingToken(.leftSquare),
           elements: RawArrayElementListSyntax(elements: [], arena: self.arena),
-          rightSquare: missingToken(.rightSquareBracket),
+          rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
       )
     }
 
-    let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquareBracket)
+    let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquare)
 
-    if let rsquare = self.consume(if: .rightSquareBracket) {
+    if let rsquare = self.consume(if: .rightSquare) {
       return RawExprSyntax(
         RawArrayExprSyntax(
           unexpectedBeforeLSquare,
@@ -1659,7 +1659,7 @@ extension Parser {
       )
     }
 
-    if let (colon, rsquare) = self.consume(if: .colon, followedBy: .rightSquareBracket) {
+    if let (colon, rsquare) = self.consume(if: .colon, followedBy: .rightSquare) {
       // FIXME: We probably want a separate node for the empty case.
       return RawExprSyntax(
         RawDictionaryExprSyntax(
@@ -1713,12 +1713,12 @@ extension Parser {
         // If we saw a comma, that's a strong indicator we have more elements
         // to process. If that's not the case, we have to do some legwork to
         // determine if we should bail out.
-        guard comma == nil || self.at(.rightSquareBracket, .eof) else {
+        guard comma == nil || self.at(.rightSquare, .eof) else {
           continue
         }
 
         // If we found EOF or the closing square bracket, bailout.
-        if self.at(.rightSquareBracket, .eof) {
+        if self.at(.rightSquare, .eof) {
           break
         }
 
@@ -1732,7 +1732,7 @@ extension Parser {
       }
     }
 
-    let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+    let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
     switch elementKind! {
     case .dictionary:
       return RawExprSyntax(
@@ -1862,7 +1862,7 @@ extension Parser {
   mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
-    guard self.at(.atSign, .leftParen, .leftSquareBracket) || self.at(.wildcard, .identifier) else {
+    guard self.at(.atSign, .leftParen, .leftSquare) || self.at(.wildcard, .identifier) else {
       // No closure signature.
       return nil
     }
@@ -1874,11 +1874,11 @@ extension Parser {
     let attrs = self.parseAttributeList()
 
     let captures: RawClosureCaptureSignatureSyntax?
-    if let lsquare = self.consume(if: .leftSquareBracket) {
+    if let lsquare = self.consume(if: .leftSquare) {
       // At this point, we know we have a closure signature. Parse the capture list
       // and parameters.
       var elements = [RawClosureCaptureItemSyntax]()
-      if !self.at(.rightSquareBracket) {
+      if !self.at(.rightSquare) {
         var keepGoing: RawTokenSyntax? = nil
         var loopProgress = LoopProgressCondition()
         repeat {
@@ -1924,10 +1924,10 @@ extension Parser {
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
-      while !self.at(.eof) && !self.at(.rightSquareBracket) && !self.at(.keyword(.in)) {
+      while !self.at(.eof) && !self.at(.rightSquare) && !self.at(.keyword(.in)) {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
-      let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquareBracket)
+      let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
       unexpectedNodes.append(contentsOf: unexpectedBeforeRSquare?.elements ?? [])
 
       captures = RawClosureCaptureSignatureSyntax(
@@ -2090,7 +2090,7 @@ extension Parser {
       // follows a proper subexpression.
       let expr: RawExprSyntax
       if self.at(.binaryOperator)
-        && (self.peek().rawTokenKind == .comma || self.peek().rawTokenKind == .rightParen || self.peek().rawTokenKind == .rightSquareBracket)
+        && (self.peek().rawTokenKind == .comma || self.peek().rawTokenKind == .rightParen || self.peek().rawTokenKind == .rightSquare)
       {
         let (ident, args) = self.parseDeclNameRef(.operators)
         expr = RawExprSyntax(
@@ -2246,7 +2246,7 @@ extension Parser.Lookahead {
       TokenSpec(.where),
       TokenSpec(.comma):
       return true
-    case TokenSpec(.leftSquareBracket),
+    case TokenSpec(.leftSquare),
       TokenSpec(.leftParen),
       TokenSpec(.period),
       TokenSpec(.is),
@@ -2679,9 +2679,9 @@ extension Parser.Lookahead {
     }
 
     // Skip by a closure capture list if present.
-    if lookahead.consume(if: .leftSquareBracket) != nil {
-      lookahead.skipUntil(.rightSquareBracket, .rightSquareBracket)
-      if lookahead.consume(if: .rightSquareBracket) == nil {
+    if lookahead.consume(if: .leftSquare) != nil {
+      lookahead.skipUntil(.rightSquare, .rightSquare)
+      if lookahead.consume(if: .rightSquare) == nil {
         return false
       }
     }

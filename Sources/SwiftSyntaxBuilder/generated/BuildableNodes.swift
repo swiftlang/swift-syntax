@@ -142,10 +142,10 @@ extension ArrayExprSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, 
-      leftSquare: TokenSyntax = .leftSquareBracketToken(), 
+      leftSquare: TokenSyntax = .leftSquareToken(), 
       unexpectedBetweenLeftSquareAndElements: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenElementsAndRightSquare: UnexpectedNodesSyntax? = nil, 
-      rightSquare: TokenSyntax = .rightSquareBracketToken(), 
+      rightSquare: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
       @ArrayElementListBuilder elementsBuilder: () throws -> ArrayElementListSyntax, 
       trailingTrivia: Trivia? = nil
@@ -243,10 +243,10 @@ extension ClosureCaptureSignatureSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil, 
-      leftSquare: TokenSyntax = .leftSquareBracketToken(), 
+      leftSquare: TokenSyntax = .leftSquareToken(), 
       unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, 
-      rightSquare: TokenSyntax = .rightSquareBracketToken(), 
+      rightSquare: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
       @ClosureCaptureItemListBuilder itemsBuilder: () throws -> ClosureCaptureItemListSyntax?, 
       trailingTrivia: Trivia? = nil
@@ -937,10 +937,10 @@ extension KeyPathSubscriptComponentSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, 
-      leftBracket: TokenSyntax = .leftSquareBracketToken(), 
+      leftBracket: TokenSyntax = .leftSquareToken(), 
       unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, 
-      rightBracket: TokenSyntax = .rightSquareBracketToken(), 
+      rightBracket: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil, 
       @TupleExprElementListBuilder argumentListBuilder: () throws -> TupleExprElementListSyntax, 
       trailingTrivia: Trivia? = nil
@@ -1289,10 +1289,10 @@ extension SubscriptExprSyntax {
       unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, 
       calledExpression: ExprSyntaxProtocol, 
       unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil, 
-      leftBracket: TokenSyntax = .leftSquareBracketToken(), 
+      leftBracket: TokenSyntax = .leftSquareToken(), 
       unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, 
-      rightBracket: TokenSyntax = .rightSquareBracketToken(), 
+      rightBracket: TokenSyntax = .rightSquareToken(), 
       unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
       trailingClosure: ClosureExprSyntax? = nil, 
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 

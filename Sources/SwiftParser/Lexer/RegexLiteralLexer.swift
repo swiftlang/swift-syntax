@@ -606,7 +606,7 @@ extension Lexer.Cursor {
       return false
 
     // Prefix grammar that appears before an expression.
-    case .leftAngle, .leftBrace, .leftParen, .leftSquareBracket, .prefixOperator, .prefixAmpersand:
+    case .leftAngle, .leftBrace, .leftParen, .leftSquare, .prefixOperator, .prefixAmpersand:
       return true
 
     // Binary operators sequence expressions.
@@ -618,7 +618,7 @@ extension Lexer.Cursor {
       return true
 
     // Postfix grammar would expect an binary operator next.
-    case .postfixOperator, .exclamationMark, .postfixQuestionMark, .rightAngle, .rightBrace, .rightParen, .rightSquareBracket:
+    case .postfixOperator, .exclamationMark, .postfixQuestionMark, .rightAngle, .rightBrace, .rightParen, .rightSquare:
       return false
 
     // Punctuation that does not sequence expressions.
@@ -732,7 +732,7 @@ extension Lexer.Cursor {
       // an unapplied operator is legal, and we should prefer to lex as that
       // instead.
       switch previousTokenKind {
-      case .leftParen, .leftSquareBracket, .comma, .colon:
+      case .leftParen, .leftSquare, .comma, .colon:
         break
       default:
         mustBeRegex = true

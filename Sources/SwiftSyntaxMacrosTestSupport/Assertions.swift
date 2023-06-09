@@ -14,6 +14,7 @@ import _SwiftSyntaxTestSupport
 import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftParser
+import SwiftParserDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacros
 import XCTest
@@ -272,10 +273,26 @@ public func assertMacroExpansion(
   let context = BasicMacroExpansionContext(
     sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context).formatted(using: BasicFormat(indentationWidth: indentationWidth))
 
+  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
+  let diags = ParseDiagnosticsGenerator.diagnostics(for: expandedSourceFile)
+  if !diags.isEmpty {
+    XCTFail(
+      """
+      Expanded source should not contain any syntax errors, but contains:
+      \(DiagnosticsFormatter.annotatedSource(tree: expandedSourceFile, diags: diags))
+
+      Expanded syntax tree was:
+      \(expandedSourceFile.debugDescription)
+      """,
+      file: file,
+      line: line
+    )
+  }
+
+  let formattedSourceFile = expandedSourceFile.formatted(using: BasicFormat(indentationWidth: indentationWidth))
   assertStringsEqualWithDiff(
-    expandedSourceFile.description.trimmingCharacters(in: .newlines),
+    formattedSourceFile.description.trimmingCharacters(in: .newlines),
     expandedSource.trimmingCharacters(in: .newlines),
     additionalInfo: """
       Actual expanded source:

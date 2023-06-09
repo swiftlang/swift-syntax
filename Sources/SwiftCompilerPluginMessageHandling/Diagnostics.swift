@@ -16,7 +16,6 @@ import SwiftSyntax
 /// Errors in macro handing.
 enum MacroExpansionError {
   case macroTypeNotFound(PluginMessage.MacroReference)
-  case unmatchedMacroRole
   case freestandingMacroSyntaxIsNotMacro
   case invalidExpansionMessage
   case invalidMacroRole(PluginMessage.MacroRole)
@@ -27,9 +26,6 @@ extension MacroExpansionError: DiagnosticMessage {
     switch self {
     case .macroTypeNotFound(let ref):
       return "macro type '\(ref.moduleName).\(ref.typeName)' not found when expanding macro '\(ref.name)'"
-
-    case .unmatchedMacroRole:
-      return "macro doesn't conform to required macro role"
 
     case .freestandingMacroSyntaxIsNotMacro:
       return "macro syntax couldn't be parsed"

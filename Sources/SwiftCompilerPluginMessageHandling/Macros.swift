@@ -44,7 +44,7 @@ extension CompilerPluginMessageHandler {
         throw MacroExpansionError.freestandingMacroSyntaxIsNotMacro
       }
       guard let macroDefinition = resolveMacro(macro) else {
-        throw MacroExpansionError.macroTypeNotFound
+        throw MacroExpansionError.macroTypeNotFound(macro)
       }
 
       let macroRole: MacroRole
@@ -55,7 +55,7 @@ extension CompilerPluginMessageHandler {
         case .codeItem: macroRole = .codeItem
 
         case .accessor, .conformance, .member, .memberAttribute, .peer:
-          throw MacroExpansionError.invalidMacroRole
+          throw MacroExpansionError.invalidMacroRole(pluginMacroRole)
         }
       } else {
         macroRole = try inferFreestandingMacroRole(definition: macroDefinition)
@@ -105,7 +105,7 @@ extension CompilerPluginMessageHandler {
     let expandedSources: [String]?
     do {
       guard let macroDefinition = resolveMacro(macro) else {
-        throw MacroExpansionError.macroTypeNotFound
+        throw MacroExpansionError.macroTypeNotFound(macro)
       }
 
       expandedSources = SwiftSyntaxMacroExpansion.expandAttachedMacro(

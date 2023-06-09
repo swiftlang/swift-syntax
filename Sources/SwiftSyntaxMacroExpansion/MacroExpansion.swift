@@ -12,13 +12,48 @@ public enum MacroRole {
   case codeItem
 }
 
+extension MacroRole {
+  var protocolName: String {
+    switch self {
+    case .expression: return "ExpressionMacro"
+    case .declaration: return "DeclarationMacro"
+    case .accessor: return "AccessorMacro"
+    case .memberAttribute: return "MemberAttributeMacro"
+    case .member: return "MemberMacro"
+    case .peer: return "PeerMacro"
+    case .conformance: return "ConformanceMacro"
+    case .codeItem: return "CodeItemMacro"
+    }
+  }
+}
+
 /// Simple diagnostic message
-private enum MacroExpansionError: String, Error, CustomStringConvertible {
-  case unmathedMacroRole = "macro doesn't conform to required macro role"
-  case parentDeclGroupNil = "parent decl group is nil"
-  case declarationNotDeclGroup = "declaration is not a decl group syntax"
-  case declarationNotIdentified = "declaration is not a 'Identified' syntax"
-  var description: String { self.rawValue }
+private enum MacroExpansionError: Error, CustomStringConvertible {
+  case unmatchedMacroRole(Macro.Type, MacroRole)
+  case parentDeclGroupNil
+  case declarationNotDeclGroup
+  case declarationNotIdentified
+  case noFreestandingMacroRoles(Macro.Type)
+
+  var description: String {
+    switch self {
+    case .unmatchedMacroRole(let type, let role):
+      return "macro implementation type '\(type)' doesn't conform to required protocol '\(role.protocolName)'"
+
+    case .parentDeclGroupNil:
+      return "parent decl group is nil"
+
+    case .declarationNotDeclGroup:
+      return "declaration is not a decl group syntax"
+
+    case .declarationNotIdentified:
+      return "declaration is not a 'Identified' syntax"
+
+    case .noFreestandingMacroRoles(let type):
+      return "macro implementation type '\(type)' does not conform to any freestanding macro protocol"
+
+    }
+  }
 }
 
 /// Expand `@freestanding(XXX)` macros.
@@ -66,11 +101,9 @@ public func expandFreestandingMacro(
         let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
         expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
-      case (.expression, _), (.declaration, _), (.codeItem, _):
-        throw MacroExpansionError.unmathedMacroRole
-
-      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.codeItem, _):
-        fatalError("macro role \(macroRole) is not a freestanding macro")
+      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.expression, _), (.declaration, _),
+        (.codeItem, _):
+        throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
       }
       return expandedSyntax.formattedExpansion(definition.formatMode)
     }
@@ -91,7 +124,7 @@ public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRo
   case is CodeItemMacro.Type: return .codeItem
 
   default:
-    throw MacroExpansionError.unmathedMacroRole
+    throw MacroExpansionError.noFreestandingMacroRoles(definition)
   }
 }
 
@@ -251,7 +284,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
       }
 
     default:
-      throw MacroExpansionError.unmathedMacroRole
+      throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
   } catch {
     context.addDiagnostics(from: error, node: attributeNode)

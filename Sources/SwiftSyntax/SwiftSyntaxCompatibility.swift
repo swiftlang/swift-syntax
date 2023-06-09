@@ -554,6 +554,13 @@ public extension NamedOpaqueReturnTypeSyntax {
   }
 }
 
+public extension SyntaxProtocol {
+  @available(*, deprecated, message: "Use detached computed property instead.")
+  func detach() -> Self {
+    return detached
+  }
+}
+
 public extension TupleExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
   var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {

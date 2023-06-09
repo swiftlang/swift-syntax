@@ -37,7 +37,7 @@ function(add_swift_host_library name)
   add_custom_command(
       TARGET ${name}
       POST_BUILD
-      COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${name}> $<TARGET_OBJECTS:${name}>
+      COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${name}> $<TARGET_OBJECTS:${name}> "${module_base}"
       COMMAND_EXPAND_LISTS
       COMMENT "Update mtime of library outputs workaround")
 

@@ -14625,9 +14625,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil,
-      higherThanOrLowerThan: TokenSyntax,
-      _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeHigherThanOrLowerThanKeyword: UnexpectedNodesSyntax? = nil,
+      higherThanOrLowerThanKeyword: TokenSyntax,
+      _ unexpectedBetweenHigherThanOrLowerThanKeywordAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
       otherNames: PrecedenceGroupNameListSyntax,
@@ -14638,18 +14638,18 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeHigherThanOrLowerThan, 
-            higherThanOrLowerThan, 
-            unexpectedBetweenHigherThanOrLowerThanAndColon, 
+            unexpectedBeforeHigherThanOrLowerThanKeyword, 
+            higherThanOrLowerThanKeyword, 
+            unexpectedBetweenHigherThanOrLowerThanKeywordAndColon, 
             colon, 
             unexpectedBetweenColonAndOtherNames, 
             otherNames, 
             unexpectedAfterOtherNames
           ))) {(arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeHigherThanOrLowerThan?.raw, 
-          higherThanOrLowerThan.raw, 
-          unexpectedBetweenHigherThanOrLowerThanAndColon?.raw, 
+          unexpectedBeforeHigherThanOrLowerThanKeyword?.raw, 
+          higherThanOrLowerThanKeyword.raw, 
+          unexpectedBetweenHigherThanOrLowerThanKeywordAndColon?.raw, 
           colon.raw, 
           unexpectedBetweenColonAndOtherNames?.raw, 
           otherNames.raw, 
@@ -14668,7 +14668,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeHigherThanOrLowerThanKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14678,7 +14678,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The relation to specified other precedence groups.
-  public var higherThanOrLowerThan: TokenSyntax {
+  public var higherThanOrLowerThanKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -14687,7 +14687,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenHigherThanOrLowerThanKeywordAndColon: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14754,9 +14754,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeHigherThanOrLowerThan, 
-          \Self.higherThanOrLowerThan, 
-          \Self.unexpectedBetweenHigherThanOrLowerThanAndColon, 
+          \Self.unexpectedBeforeHigherThanOrLowerThanKeyword, 
+          \Self.higherThanOrLowerThanKeyword, 
+          \Self.unexpectedBetweenHigherThanOrLowerThanKeywordAndColon, 
           \Self.colon, 
           \Self.unexpectedBetweenColonAndOtherNames, 
           \Self.otherNames, 

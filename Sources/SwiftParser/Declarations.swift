@@ -2013,7 +2013,7 @@ extension Parser {
           elements.append(
             .precedenceGroupRelation(
               RawPrecedenceGroupRelationSyntax(
-                higherThanOrLowerThan: level,
+                higherThanOrLowerThanKeyword: level,
                 unexpectedBeforeColon,
                 colon: colon,
                 otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),

@@ -2643,12 +2643,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \PrecedenceGroupNameElementSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \PrecedenceGroupRelationSyntax.unexpectedBeforeHigherThanOrLowerThan:
-    return "unexpectedBeforeHigherThanOrLowerThan"
-  case \PrecedenceGroupRelationSyntax.higherThanOrLowerThan:
-    return "higherThanOrLowerThan"
-  case \PrecedenceGroupRelationSyntax.unexpectedBetweenHigherThanOrLowerThanAndColon:
-    return "unexpectedBetweenHigherThanOrLowerThanAndColon"
+  case \PrecedenceGroupRelationSyntax.unexpectedBeforeHigherThanOrLowerThanKeyword:
+    return "unexpectedBeforeHigherThanOrLowerThanKeyword"
+  case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanKeyword:
+    return "higherThanOrLowerThanKeyword"
+  case \PrecedenceGroupRelationSyntax.unexpectedBetweenHigherThanOrLowerThanKeywordAndColon:
+    return "unexpectedBetweenHigherThanOrLowerThanKeywordAndColon"
   case \PrecedenceGroupRelationSyntax.colon:
     return "colon"
   case \PrecedenceGroupRelationSyntax.unexpectedBetweenColonAndOtherNames:

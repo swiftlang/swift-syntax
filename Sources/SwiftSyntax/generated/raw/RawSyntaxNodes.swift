@@ -17468,9 +17468,9 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax? = nil, 
-      higherThanOrLowerThan: RawTokenSyntax, 
-      _ unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeHigherThanOrLowerThanKeyword: RawUnexpectedNodesSyntax? = nil, 
+      higherThanOrLowerThanKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenHigherThanOrLowerThanKeywordAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
       _ unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? = nil, 
       otherNames: RawPrecedenceGroupNameListSyntax, 
@@ -17480,9 +17480,9 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .precedenceGroupRelation, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeHigherThanOrLowerThan?.raw
-      layout[1] = higherThanOrLowerThan.raw
-      layout[2] = unexpectedBetweenHigherThanOrLowerThanAndColon?.raw
+      layout[0] = unexpectedBeforeHigherThanOrLowerThanKeyword?.raw
+      layout[1] = higherThanOrLowerThanKeyword.raw
+      layout[2] = unexpectedBetweenHigherThanOrLowerThanKeywordAndColon?.raw
       layout[3] = colon.raw
       layout[4] = unexpectedBetweenColonAndOtherNames?.raw
       layout[5] = otherNames.raw
@@ -17491,15 +17491,15 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeHigherThanOrLowerThan: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeHigherThanOrLowerThanKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var higherThanOrLowerThan: RawTokenSyntax {
+  public var higherThanOrLowerThanKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenHigherThanOrLowerThanAndColon: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenHigherThanOrLowerThanKeywordAndColon: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

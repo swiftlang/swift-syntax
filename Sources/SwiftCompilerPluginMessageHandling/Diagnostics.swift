@@ -14,16 +14,28 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 /// Errors in macro handing.
-enum MacroExpansionError: String {
-  case macroTypeNotFound = "macro expanding type not found"
-  case unmathedMacroRole = "macro doesn't conform to required macro role"
-  case freestandingMacroSyntaxIsNotMacro = "macro syntax couldn't be parsed"
-  case invalidExpansionMessage = "internal message error; please file a bug report"
+enum MacroExpansionError {
+  case macroTypeNotFound(PluginMessage.MacroReference)
+  case freestandingMacroSyntaxIsNotMacro
+  case invalidExpansionMessage
+  case invalidMacroRole(PluginMessage.MacroRole)
 }
 
 extension MacroExpansionError: DiagnosticMessage {
   var message: String {
-    self.rawValue
+    switch self {
+    case .macroTypeNotFound(let ref):
+      return "macro type '\(ref.moduleName).\(ref.typeName)' not found when expanding macro '\(ref.name)'"
+
+    case .freestandingMacroSyntaxIsNotMacro:
+      return "macro syntax couldn't be parsed"
+
+    case .invalidExpansionMessage:
+      return "internal message error; please file a bug report"
+
+    case .invalidMacroRole(let role):
+      return "invalid macro role '\(role)' for expansion"
+    }
   }
   var diagnosticID: SwiftDiagnostics.MessageID {
     .init(domain: "SwiftCompilerPlugin", id: "\(type(of: self)).\(self)")

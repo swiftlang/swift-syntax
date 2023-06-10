@@ -49,14 +49,7 @@ extension CompilerPluginMessageHandler {
 
       let macroRole: MacroRole
       if let pluginMacroRole {
-        switch pluginMacroRole {
-        case .expression: macroRole = .expression
-        case .declaration: macroRole = .declaration
-        case .codeItem: macroRole = .codeItem
-
-        case .accessor, .conformance, .member, .memberAttribute, .peer:
-          throw MacroExpansionError.invalidMacroRole(pluginMacroRole)
-        }
+        macroRole = MacroRole(messageMacroRole: pluginMacroRole)
       } else {
         macroRole = try inferFreestandingMacroRole(definition: macroDefinition)
       }

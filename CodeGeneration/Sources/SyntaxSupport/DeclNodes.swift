@@ -1903,7 +1903,7 @@ public let DECL_NODES: [Node] = [
     documentation: "Specify the new precedence group's relation to existing precedence groups.",
     children: [
       Child(
-        name: "HigherThanOrLowerThan",
+        name: "HigherThanOrLowerThanKeyword",
         kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
         documentation: "The relation to specified other precedence groups.",
         classification: "Keyword"

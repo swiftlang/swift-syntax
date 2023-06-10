@@ -554,6 +554,64 @@ public extension NamedOpaqueReturnTypeSyntax {
   }
 }
 
+public extension PrecedenceGroupRelationSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeHigherThanOrLowerThanKeyword")
+  var unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeHigherThanOrLowerThanKeyword
+    }
+    set(value) {
+      unexpectedBeforeHigherThanOrLowerThanKeyword = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "higherThanOrLowerThanKeyword")
+  var higherThanOrLowerThan: TokenSyntax {
+    get {
+      return higherThanOrLowerThanKeyword
+    }
+    set(value) {
+      higherThanOrLowerThanKeyword = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenHigherThanOrLowerThanKeywordAndColon")
+  var unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenHigherThanOrLowerThanKeywordAndColon
+    }
+    set(value) {
+      unexpectedBetweenHigherThanOrLowerThanKeywordAndColon = value
+    }
+  }
+
+  @available(*, deprecated, message: "Use an initializer with a genericParameterClause argument.")
+  @_disfavoredOverload
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeHigherThanOrLowerThan: UnexpectedNodesSyntax? = nil,
+    higherThanOrLowerThan: TokenSyntax,
+    _ unexpectedBetweenHigherThanOrLowerThanAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
+    otherNames: PrecedenceGroupNameListSyntax,
+    _ unexpectedAfterOtherNames: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeHigherThanOrLowerThan,
+      higherThanOrLowerThanKeyword: higherThanOrLowerThan,
+      unexpectedBetweenHigherThanOrLowerThanAndColon,
+      colon: colon,
+      unexpectedBetweenColonAndOtherNames,
+      otherNames: otherNames,
+      unexpectedAfterOtherNames,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {

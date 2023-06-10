@@ -23,7 +23,7 @@ extension PrecedenceGroup {
       switch attr {
       // Relation (lowerThan, higherThan)
       case .precedenceGroupRelation(let relation):
-        let isLowerThan = relation.higherThanOrLowerThan.text == "lowerThan"
+        let isLowerThan = relation.higherThanOrLowerThanKeyword.text == "lowerThan"
         for otherGroup in relation.otherNames {
           let otherGroupName = otherGroup.name.text
           let relationKind: PrecedenceRelation.Kind =

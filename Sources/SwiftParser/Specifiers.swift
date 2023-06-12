@@ -137,7 +137,7 @@ public enum EffectSpecifier: TokenSpecSet {
 protocol RawEffectSpecifiersTrait {
   /// The token kinds that should be consumed as misspelled `asyncSpecifier`.
   /// Should be a subset of ``AsyncEffectSpecifier``.
-  associatedtype MisspelledAsyncSpecifiers: TokenSpecSet
+  associatedtype MisspelledAsyncTokenKinds: TokenSpecSet
 
   /// The token kinds that we can consume as a correct `asyncSpecifier`.
   /// Should be a subset of ``AsyncEffectSpecifier``.
@@ -181,7 +181,7 @@ extension RawEffectSpecifiersTrait {
 }
 
 extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
-  enum MisspelledAsyncSpecifiers: TokenSpecSet {
+  enum MisspelledAsyncTokenKinds: TokenSpecSet {
     case await
 
     init?(lexeme: Lexer.Lexeme) {
@@ -260,7 +260,7 @@ extension RawFunctionEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 }
 
 extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
-  enum MisspelledAsyncSpecifiers: TokenSpecSet {
+  enum MisspelledAsyncTokenKinds: TokenSpecSet {
     case await
     case reasync
 
@@ -339,7 +339,7 @@ extension RawTypeEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
 }
 
 extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
-  enum MisspelledAsyncSpecifiers: TokenSpecSet {
+  enum MisspelledAsyncTokenKinds: TokenSpecSet {
     case await
     case reasync
 
@@ -442,7 +442,7 @@ extension Parser {
     var unexpectedBeforeThrows: [RawSyntax] = []
     var throwsKeyword: RawTokenSyntax?
     var unexpectedAfterThrows: [RawSyntax] = []
-    while let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) {
+    while let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncTokenKinds.self) {
       unexpectedBeforeAsync.append(RawSyntax(misspelledAsync))
       if asyncKeyword == nil {
         // Let's synthesize a missing 'async'. If we find a real async specifier
@@ -458,7 +458,7 @@ extension Parser {
 
     var unexpectedBeforeThrowsLoopProgress = LoopProgressCondition()
     while unexpectedBeforeThrowsLoopProgress.evaluate(self.currentToken) {
-      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncSpecifiers.self) {
+      if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncTokenKinds.self) {
         unexpectedBeforeThrows.append(RawSyntax(misspelledAsync))
       } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) {
         unexpectedBeforeThrows.append(RawSyntax(misspelledThrows))
@@ -480,7 +480,7 @@ extension Parser {
 
     var unexpectedAfterThrowsLoopProgress = LoopProgressCondition()
     while unexpectedAfterThrowsLoopProgress.evaluate(self.currentToken) {
-      if let (_, handle, _) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (_, handle, _) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledAsync))
         if asyncKeyword == nil {
@@ -531,7 +531,7 @@ extension Parser {
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
     while loopProgress.evaluate(self.currentToken) {
-      if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledAsyncSpecifiers.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)
         if effectSpecifiers?.asyncSpecifier == nil {

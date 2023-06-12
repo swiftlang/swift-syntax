@@ -536,11 +536,10 @@ final class AttributeTests: XCTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and string literal in @_unavailableFromAsync argument", fixIts: ["insert ':' and string literal"]),
-        DiagnosticSpec(message: #"unexpected code '= "abc"' in attribute"#),
+        DiagnosticSpec(message: "expected ':' in @_unavailableFromAsync argument", fixIts: ["replace '=' with ':'"])
       ],
       fixedSource: """
-        @_unavailableFromAsync(message: ""= "abc")
+        @_unavailableFromAsync(message: "abc")
         func foo() {}
         """
     )

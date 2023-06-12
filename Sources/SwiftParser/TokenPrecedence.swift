@@ -27,6 +27,8 @@ enum TokenPrecedence: Comparable {
   case weakBracketed(closingDelimiter: RawTokenKind)
   /// A punctuator that can occur inside a statement
   case weakPunctuator
+  /// A punctuator that is a fairly strong indicator of separating two distinct parts of a statement.
+  case mediumPunctuator
   /// The closing delimiter of `weakBracketed`
   case weakBracketClose
   /// Keywords that start a new statement.
@@ -71,22 +73,24 @@ enum TokenPrecedence: Comparable {
         return 3
       case .weakPunctuator:
         return 4
-      case .weakBracketClose:
+      case .mediumPunctuator:
         return 5
-      case .stmtKeyword:
+      case .weakBracketClose:
         return 6
-      case .strongPunctuator:
+      case .stmtKeyword:
         return 7
-      case .openingBrace:
+      case .strongPunctuator:
         return 8
-      case .closingBrace:
+      case .openingBrace:
         return 9
-      case .declKeyword:
+      case .closingBrace:
         return 10
-      case .openingPoundIf:
+      case .declKeyword:
         return 11
-      case .closingPoundIf:
+      case .openingPoundIf:
         return 12
+      case .closingPoundIf:
+        return 13
       }
     }
 
@@ -143,8 +147,11 @@ enum TokenPrecedence: Comparable {
     case  // Chaining punctuators
     .infixQuestionMark, .period, .postfixQuestionMark, .exclamationMark,
       // Misc
-      .atSign, .backslash, .backtick, .colon, .comma, .ellipsis, .equal, .prefixAmpersand:
+      .backslash, .backtick, .ellipsis, .equal, .prefixAmpersand:
       self = .weakPunctuator
+
+    case .atSign, .colon, .comma:
+      self = .mediumPunctuator
 
     // MARK: Weak bracket close
     case  // Weak brackets

@@ -87,6 +87,21 @@ public class Node {
     }
   }
 
+  public var grammar: String {
+    guard !children.isEmpty else {
+      return ""
+    }
+
+    return """
+    ### Children
+
+    \(GrammarGenerator.childrenList(for: children))
+    """
+    .split(separator: "\n", omittingEmptySubsequences: false)
+    .map { "/// \($0)" }
+    .joined(separator: "\n")
+  }
+
   init(
     name: String,
     nameForDiagnostics: String?,

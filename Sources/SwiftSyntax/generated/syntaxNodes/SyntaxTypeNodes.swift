@@ -15,6 +15,12 @@
 // MARK: - ArrayTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftSquare`: `'['`
+///  - `elementType`: ``TypeSyntax``
+///  - `rightSquare`: `']'`
 public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -157,6 +163,12 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - AttributedTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `specifier`: (`'inout'` | `'__shared'` | `'__owned'` | `'isolated'` | `'_const'` | `'borrowing'` | `'consuming'`)?
+///  - `attributes`: ``AttributeListSyntax``
+///  - `baseType`: ``TypeSyntax``
 public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -323,6 +335,10 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - ClassRestrictionTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `classKeyword`: `'class'`
 public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -401,6 +417,10 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - CompositionTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `elements`: ``CompositionTypeElementListSyntax``
 public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -503,6 +523,11 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - ConstrainedSugarTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `someOrAnySpecifier`: (`'some'` | `'any'`)
+///  - `baseType`: ``TypeSyntax``
 public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -619,6 +644,14 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - DictionaryTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftSquare`: `'['`
+///  - `keyType`: ``TypeSyntax``
+///  - `colon`: `':'`
+///  - `valueType`: ``TypeSyntax``
+///  - `rightSquare`: `']'`
 public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -813,6 +846,14 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - FunctionTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftParen`: `'('`
+///  - `parameters`: ``TupleTypeElementListSyntax``
+///  - `rightParen`: `')'`
+///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
+///  - `output`: ``ReturnClauseSyntax``
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1031,6 +1072,11 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `wrappedType`: ``TypeSyntax``
+///  - `exclamationMark`: `'!'`
 public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1147,6 +1193,13 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 // MARK: - MemberTypeIdentifierSyntax
 
 
+
+/// ### Children
+/// 
+///  - `baseType`: ``TypeSyntax``
+///  - `period`: `'.'`
+///  - `name`: (`<identifier>` | `'self'` | `'Self'`)
+///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1315,6 +1368,12 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - MetatypeTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `baseType`: ``TypeSyntax``
+///  - `period`: `'.'`
+///  - `typeOrProtocol`: (`'Type'` | `'Protocol'`)
 public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1457,6 +1516,10 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - MissingTypeSyntax
 
 /// In case the source code is missing a type, this node stands in place of the missing type.
+///
+/// ### Children
+/// 
+///  - `placeholder`: `<identifier>`
 public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1536,6 +1599,11 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - NamedOpaqueReturnTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``
+///  - `baseType`: ``TypeSyntax``
 public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1652,6 +1720,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - OptionalTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `wrappedType`: ``TypeSyntax``
+///  - `questionMark`: `'?'`
 public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1768,6 +1841,11 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - PackExpansionTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `repeatKeyword`: `'repeat'`
+///  - `patternType`: ``TypeSyntax``
 public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1884,6 +1962,11 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - PackReferenceTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `eachKeyword`: `'each'`
+///  - `packType`: ``TypeSyntax``
 public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2000,6 +2083,11 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - SimpleTypeIdentifierSyntax
 
 
+
+/// ### Children
+/// 
+///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'Any'` | `'_'`)
+///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2116,6 +2204,11 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - SuppressedTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `withoutTilde`: `<prefixOperator>`
+///  - `patternType`: ``TypeSyntax``
 public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2232,6 +2325,12 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 // MARK: - TupleTypeSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftParen`: `'('`
+///  - `elements`: ``TupleTypeElementListSyntax``
+///  - `rightParen`: `')'`
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

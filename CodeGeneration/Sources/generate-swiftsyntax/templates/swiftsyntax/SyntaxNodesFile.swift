@@ -40,6 +40,8 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         // MARK: - \(raw: node.kind.syntaxType)
 
         \(raw: node.documentation)
+        \(raw: node.documentation.isEmpty ? "" : "///")
+        \(raw: node.grammar)
         public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {

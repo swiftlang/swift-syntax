@@ -43,11 +43,11 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery7a() {
+  func testRecovery7() {
     assertParse(
       """
       func useContainer() -> () {
-        var a : Containerℹ️<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
+        var a : Containerℹ️<not 1️⃣2️⃣a type [skip 3️⃣this greater: >] >4️⃣, b : Int
         b = 5 // no-warning
         a.exists()
       }
@@ -61,8 +61,8 @@ final class RecoveryTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -78,57 +78,10 @@ final class RecoveryTests: XCTestCase {
           message: "unexpected code in function"
         ),
       ],
-      applyFixIts: ["insert '>'", "insert newline", "insert expression"],
+      applyFixIts: ["insert '>'", "insert expression"],
       fixedSource: """
         func useContainer() -> () {
-          var a : Container<not>a
-          type [skip this greater: >] > <#expression#>, b : Int
-          b = 5 // no-warning
-          a.exists()
-        }
-        """
-    )
-  }
-
-  func testRecovery7b() {
-    assertParse(
-      """
-      func useContainer() -> () {
-        var a : Containerℹ️<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
-        b = 5 // no-warning
-        a.exists()
-      }
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "expected '>' to end generic argument clause",
-          notes: [NoteSpec(message: "to match this opening '<'")],
-          fixIts: ["insert '>'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "unexpected code 'this greater: >' in subscript"
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "expected expression after operator",
-          fixIts: ["insert expression"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "unexpected code in function"
-        ),
-      ],
-      applyFixIts: ["insert '>'", "insert ';'", "insert expression"],
-      fixedSource: """
-        func useContainer() -> () {
-          var a : Container<not>a; type [skip this greater: >] > <#expression#>, b : Int
+          var a : Container<not> a type [skip this greater: >] > <#expression#>, b : Int
           b = 5 // no-warning
           a.exists()
         }

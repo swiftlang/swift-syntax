@@ -964,15 +964,16 @@ final class ForwardSlashRegexTests: XCTestCase {
     assertParse(
       """
       do {
-        let 1️⃣/x/ 
+        let 1️⃣/x/
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern in variable", fixIts: ["insert pattern"])
+        DiagnosticSpec(message: "expected pattern in variable", fixIts: ["insert pattern"]),
+        DiagnosticSpec(message: "expected '=' in variable", fixIts: ["insert '='"]),
       ],
       fixedSource: """
         do {
-          let <#pattern#>/x/
+          let <#pattern#> = /x/
         }
         """
     )

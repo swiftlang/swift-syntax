@@ -1405,6 +1405,14 @@ extension Parser {
             value: initExpr,
             arena: self.arena
           )
+        } else if self.atStartOfExpression(), !self.at(.leftBrace), !self.currentToken.flags.contains(.isAtStartOfLine) {
+          let missingEqual = RawTokenSyntax(missing: .equal, arena: self.arena)
+          let expr = self.parseExpression()
+          initializer = RawInitializerClauseSyntax(
+            equal: missingEqual,
+            value: expr,
+            arena: self.arena
+          )
         } else {
           initializer = nil
         }

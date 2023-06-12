@@ -553,7 +553,7 @@ extension Parser {
 
   mutating func parseTransposeAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeTranspose, transpose) = self.expect(.keyword(.transpose))
+    let (unexpectedBeforeTranspose, transpose) = self.expect(TokenSpec(.transpose, remapping: .identifier))
 
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let argument = self.parseDerivativeAttributeArguments()

@@ -38,6 +38,7 @@ add_swift_host_library(SwiftParser
 
   generated/IsLexerClassified.swift
   generated/Parser+Entry.swift
+  generated/Parser+TokenSpecSet.swift
   generated/TokenSpecStaticMembers.swift
 
   Lexer/Cursor.swift

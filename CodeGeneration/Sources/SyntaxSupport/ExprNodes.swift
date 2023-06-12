@@ -48,6 +48,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
+        deprecatedName: "LeftSquareBracket",
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
@@ -57,6 +58,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
+        deprecatedName: "RightSquareBracket",
         kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
@@ -1777,6 +1779,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
+        deprecatedName: "ElementList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element"),
         isIndented: true
       ),

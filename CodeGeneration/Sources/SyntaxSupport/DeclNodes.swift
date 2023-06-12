@@ -649,6 +649,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Placeholder",
+        deprecatedName: "Identifier",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
         documentation: """
           The actual editor placeholder that starts with `<#` and ends with `#>`.
@@ -863,6 +864,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "GenericParameterClause",
+        deprecatedName: "GenericParameters",
         kind: .node(kind: .genericParameterClause),
         nameForDiagnostics: "generic parameter clause",
         documentation: "The generic parameters, if any, for this enum declaration.",
@@ -1205,6 +1207,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "ImportKeyword",
+        deprecatedName: "ImportTok",
         kind: .token(choices: [.keyword(text: "import")]),
         documentation: "The `import` keyword for this declaration."
       ),
@@ -1909,6 +1912,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "HigherThanOrLowerThanKeyword",
+        deprecatedName: "HigherThanOrLowerThan",
         kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
         documentation: "The relation to specified other precedence groups.",
         classification: "Keyword"

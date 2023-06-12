@@ -45,7 +45,8 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "Parameters",
-        kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter")
+        deprecatedName: "GenericParameterList",
+        kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter", deprecatedCollectionElementName: "GenericParameter")
       ),
       Child(
         name: "GenericWhereClause",

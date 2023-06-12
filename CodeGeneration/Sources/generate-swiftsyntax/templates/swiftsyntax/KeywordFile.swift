@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareBracketToken(trailingTrivia: .newline)) {
+let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareToken(trailingTrivia: .newline)) {
   for keyword in KEYWORDS {
     ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"), trailingComma: .commaToken())
   }

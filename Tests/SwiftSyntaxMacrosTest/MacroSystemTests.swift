@@ -807,7 +807,6 @@ final class MacroSystemTests: XCTestCase {
       }
       """,
       expandedSource: """
-
         struct X {
           func f() {
           }
@@ -831,7 +830,6 @@ final class MacroSystemTests: XCTestCase {
       #bitwidthNumberedStructs("MyInt")
       """,
       expandedSource: """
-
         struct MyInt8 {
         }
         struct MyInt16 {
@@ -853,7 +851,6 @@ final class MacroSystemTests: XCTestCase {
       var x: Int
       """,
       expandedSource: """
-
         var x: Int {
           get {
             _x.wrappedValue
@@ -876,7 +873,6 @@ final class MacroSystemTests: XCTestCase {
       func f(a: Int, for b: String, _ value: Double) async -> String { }
       """,
       expandedSource: """
-
         func f(a: Int, for b: String, _ value: Double) async -> String {
         }
 
@@ -900,7 +896,6 @@ final class MacroSystemTests: XCTestCase {
       }
       """,
       expandedSource: """
-
         struct S {
           var value: Int
           var _storage: Storage<Self>
@@ -928,7 +923,6 @@ final class MacroSystemTests: XCTestCase {
       }
       """,
       expandedSource: """
-
         struct Point {
           @Wrapper
           var x: Int
@@ -973,7 +967,6 @@ final class MacroSystemTests: XCTestCase {
       }
       """,
       expandedSource: """
-
         struct Point {
           @Wrapper
           var x: Int

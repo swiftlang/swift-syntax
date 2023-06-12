@@ -102,7 +102,7 @@ final class ForeachTests: XCTestCase {
       fixedSource: """
         func for_each(r: Range<Int>, iir: IntRange<Int>) {
           var sum = 0
-          for i in r {sum = sum + i;
+          for i in r { sum = sum + i;
         }
         }
         """

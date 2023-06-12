@@ -59,7 +59,7 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPropertyListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAccessesKeyword?.raw, 
           accessesKeyword.raw, 
@@ -242,7 +242,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAccessorsAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -399,7 +399,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -515,7 +515,7 @@ public struct AccessorInitEffectsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitializesEffectAndAccessesEffect, 
             accessesEffect, 
             unexpectedAfterAccessesEffect
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInitializesEffect?.raw, 
           initializesEffect?.raw, 
@@ -635,7 +635,7 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -773,7 +773,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -1162,7 +1162,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAtSignToken?.raw, 
           atSignToken.raw, 
@@ -1402,7 +1402,7 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEntryAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEntry?.raw, 
           entry.raw, 
@@ -1528,7 +1528,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAvailabilityArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAvailabilityKeyword?.raw, 
           availabilityKeyword.raw, 
@@ -1715,7 +1715,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAvailabilityArgumentsAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -1942,7 +1942,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenColonAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -2083,7 +2083,7 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
             unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAvailabilityVersionRestriction?.raw, 
           availabilityVersionRestriction.raw, 
@@ -2200,7 +2200,7 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenPlatformAndVersion, 
             version, 
             unexpectedAfterVersion
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePlatform?.raw, 
           platform.raw, 
@@ -2321,7 +2321,7 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndPlatforms, 
             platforms, 
             unexpectedAfterPlatforms
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBeforeLabel?.raw, 
           beforeLabel.raw, 
@@ -2485,7 +2485,7 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern.raw, 
@@ -2627,7 +2627,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCatchItemsAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCatchKeyword?.raw, 
           catchKeyword.raw, 
@@ -2788,7 +2788,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern?.raw, 
@@ -2934,7 +2934,7 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenDetailAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSpecifier?.raw, 
           specifier.raw, 
@@ -3106,7 +3106,7 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSpecifier?.raw, 
           specifier?.raw, 
@@ -3292,7 +3292,7 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenItemsAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -3449,7 +3449,7 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -3569,7 +3569,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -3753,7 +3753,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEllipsisAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4103,7 +4103,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenOutputAndInTok, 
             inTok, 
             unexpectedAfterInTok
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4379,7 +4379,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenItemAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeItem?.raw, 
           item.raw, 
@@ -4501,7 +4501,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenStatementsAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -4658,7 +4658,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAndAmpersand, 
             ampersand, 
             unexpectedAfterAmpersand
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
           type.raw, 
@@ -4843,7 +4843,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCondition?.raw, 
           condition.raw, 
@@ -4963,7 +4963,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndRightTypeIdentifier, 
             rightTypeIdentifier, 
             unexpectedAfterRightTypeIdentifier
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftTypeIdentifier?.raw, 
           leftTypeIdentifier.raw, 
@@ -5113,7 +5113,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenColonAndCTypeString, 
             cTypeString, 
             unexpectedAfterCTypeString
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeConventionLabel?.raw, 
           conventionLabel.raw, 
@@ -5300,7 +5300,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
             unexpectedBetweenColonAndProtocolName, 
             protocolName, 
             unexpectedAfterProtocolName
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWitnessMethodLabel?.raw, 
           witnessMethodLabel.raw, 
@@ -5442,7 +5442,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDetailAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -5580,7 +5580,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndDetail, 
             detail, 
             unexpectedAfterDetail
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -5696,7 +5696,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -5816,7 +5816,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -5973,7 +5973,7 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDeclBaseName?.raw, 
           declBaseName.raw, 
@@ -6111,7 +6111,7 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
             unexpectedBetweenCommaAndDiffParams, 
             diffParams, 
             unexpectedAfterDiffParams
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOfLabel?.raw, 
           ofLabel.raw, 
@@ -6342,7 +6342,7 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLeadingCommaAndName, 
             name, 
             unexpectedAfterName
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeadingComma?.raw, 
           leadingComma.raw, 
@@ -6466,7 +6466,7 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenValueExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeKeyExpression?.raw, 
           keyExpression.raw, 
@@ -6626,7 +6626,7 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeParameter?.raw, 
           parameter.raw, 
@@ -6788,7 +6788,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndParameters, 
             parameters, 
             unexpectedAfterParameters
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWrtLabel?.raw, 
           wrtLabel.raw, 
@@ -6932,7 +6932,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDiffParamsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -7102,7 +7102,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
             unexpectedBetweenDiffParamsCommaAndWhereClause, 
             whereClause, 
             unexpectedAfterWhereClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDiffKind?.raw, 
           diffKind?.raw, 
@@ -7336,7 +7336,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -7501,7 +7501,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenColonAndDeclname, 
             declname, 
             unexpectedAfterDeclname
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForLabel?.raw, 
           forLabel.raw, 
@@ -7647,7 +7647,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenRawValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIdentifier?.raw, 
           identifier.raw, 
@@ -7815,7 +7815,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -7995,7 +7995,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultArgumentAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModifiers?.raw, 
           modifiers?.raw, 
@@ -8248,7 +8248,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCommaAndCxxName, 
             cxxName, 
             unexpectedAfterCxxName
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLanguage?.raw, 
           language.raw, 
@@ -8398,7 +8398,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBackslash?.raw, 
           backslash.raw, 
@@ -8599,7 +8599,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -8743,7 +8743,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultArgumentAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -9055,7 +9055,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEffectSpecifiersAndOutput, 
             output, 
             unexpectedAfterOutput
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInput?.raw, 
           input.raw, 
@@ -9197,7 +9197,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentsAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -9354,7 +9354,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentTypeAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeArgumentType?.raw, 
           argumentType.raw, 
@@ -9478,7 +9478,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -9673,7 +9673,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInheritedTypeAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -9949,7 +9949,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBodyAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBody?.raw, 
           body.raw, 
@@ -10065,7 +10065,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereKeywordAndRequirementList, 
             requirementList, 
             unexpectedAfterRequirementList
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhereKeyword?.raw, 
           whereKeyword.raw, 
@@ -10285,7 +10285,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionAndElements, 
             elements, 
             unexpectedAfterElements
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePoundKeyword?.raw, 
           poundKeyword.raw, 
@@ -10431,7 +10431,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
           type.raw, 
@@ -10595,7 +10595,7 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingDot, 
             trailingDot, 
             unexpectedAfterTrailingDot
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -10711,7 +10711,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeTypeName?.raw, 
           typeName.raw, 
@@ -10827,7 +10827,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEqual?.raw, 
           equal.raw, 
@@ -10951,7 +10951,7 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPropertyListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInitializesKeyword?.raw, 
           initializesKeyword.raw, 
@@ -11183,7 +11183,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPeriodAndComponent, 
             component, 
             unexpectedAfterComponent
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePeriod?.raw, 
           period?.raw, 
@@ -11291,7 +11291,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark, unexpectedAfterQuestionOrExclamationMark))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark, unexpectedAfterQuestionOrExclamationMark))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeQuestionOrExclamationMark?.raw, questionOrExclamationMark.raw, unexpectedAfterQuestionOrExclamationMark?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.keyPathOptionalComponent,
@@ -11381,7 +11381,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIdentifier?.raw, 
           identifier.raw, 
@@ -11523,7 +11523,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgumentListAndRightBracket, 
             rightBracket, 
             unexpectedAfterRightBracket
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBracket?.raw, 
           leftBracket.raw, 
@@ -11688,7 +11688,7 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenValueAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -11876,7 +11876,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAlignmentAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeTypeIdentifier?.raw, 
           typeIdentifier.raw, 
@@ -12132,7 +12132,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
             unexpectedAfterInitializer
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCaseKeyword?.raw, 
           caseKeyword.raw, 
@@ -12296,7 +12296,7 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenMembersAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -12453,7 +12453,7 @@ public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclAndSemicolon, 
             semicolon, 
             unexpectedAfterSemicolon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDecl?.raw, 
           decl.raw, 
@@ -12563,7 +12563,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missing,
@@ -12654,7 +12654,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
             unexpectedBetweenColonAndClosure, 
             closure, 
             unexpectedAfterClosure
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -12792,7 +12792,7 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name?.raw, 
@@ -12912,7 +12912,7 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
             unexpectedBetweenCommaAndOrdinal, 
             ordinal, 
             unexpectedAfterOrdinal
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMangledName?.raw, 
           mangledName.raw, 
@@ -13056,7 +13056,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPrecedenceGroupAndDesignatedTypes, 
             designatedTypes, 
             unexpectedAfterDesignatedTypes
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -13223,7 +13223,7 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
             unexpectedAfterInitializer
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBindingKeyword?.raw, 
           bindingKeyword.raw, 
@@ -13395,7 +13395,7 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenCommaAndPlatforms, 
             platforms, 
             unexpectedAfterPlatforms
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModuleLabel?.raw, 
           moduleLabel.raw, 
@@ -13600,7 +13600,7 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenParameterListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -13811,7 +13811,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAccessorAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePattern?.raw, 
           pattern.raw, 
@@ -14013,7 +14013,7 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLineArgColonAndLineNumber, 
             lineNumber, 
             unexpectedAfterLineNumber
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeFileArgLabel?.raw, 
           fileArgLabel.raw, 
@@ -14243,7 +14243,7 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndFlag, 
             flag, 
             unexpectedAfterFlag
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAssignmentKeyword?.raw, 
           assignmentKeyword.raw, 
@@ -14386,7 +14386,7 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
             unexpectedBetweenColonAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAssociativityKeyword?.raw, 
           associativityKeyword.raw, 
@@ -14525,7 +14525,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -14645,7 +14645,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndOtherNames, 
             otherNames, 
             unexpectedAfterOtherNames
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeHigherThanOrLowerThanKeyword?.raw, 
           higherThanOrLowerThanKeyword.raw, 
@@ -14808,7 +14808,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
             unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, 
             rightAngleBracket, 
             unexpectedAfterRightAngleBracket
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftAngleBracket?.raw, 
           leftAngleBracket.raw, 
@@ -14965,7 +14965,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeName?.raw, 
           name.raw, 
@@ -15089,7 +15089,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndArguments, 
             arguments, 
             unexpectedAfterArguments
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType?.raw, 
@@ -15252,7 +15252,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArrowAndReturnType, 
             returnType, 
             unexpectedAfterReturnType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeArrow?.raw, 
           arrow.raw, 
@@ -15372,7 +15372,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
             rightTypeIdentifier, 
             unexpectedAfterRightTypeIdentifier
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftTypeIdentifier?.raw, 
           leftTypeIdentifier.raw, 
@@ -15510,7 +15510,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenStatementsAndEOFToken, 
             eofToken, 
             unexpectedAfterEOFToken
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeStatements?.raw, 
           statements.raw, 
@@ -15637,7 +15637,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeContent, content, unexpectedAfterContent))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeContent, content, unexpectedAfterContent))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeContent?.raw, content.raw, unexpectedAfterContent?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.stringSegment,
@@ -15727,7 +15727,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCaseItemsAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCaseKeyword?.raw, 
           caseKeyword.raw, 
@@ -15930,7 +15930,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLabelAndStatements, 
             statements, 
             unexpectedAfterStatements
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeUnknownAttr?.raw, 
           unknownAttr?.raw, 
@@ -16087,7 +16087,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefaultKeywordAndColon, 
             colon, 
             unexpectedAfterColon
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDefaultKeyword?.raw, 
           defaultKeyword.raw, 
@@ -16211,7 +16211,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeclnameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label.raw, 
@@ -16383,7 +16383,7 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
           label?.raw, 
@@ -16551,7 +16551,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPatternAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabelName?.raw, 
           labelName?.raw, 
@@ -16735,7 +16735,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitializerAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeInOut?.raw, 
           inOut?.raw, 
@@ -16983,7 +16983,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndType, 
             type, 
             unexpectedAfterType
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -17099,7 +17099,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
             unexpectedAfterThrowsSpecifier
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
@@ -17215,7 +17215,7 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndInheritedTypeCollection, 
             inheritedTypeCollection, 
             unexpectedAfterInheritedTypeCollection
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeColon?.raw, 
           colon.raw, 
@@ -17350,7 +17350,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEqualAndValue, 
             value, 
             unexpectedAfterValue
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEqual?.raw, 
           equal.raw, 
@@ -17470,7 +17470,7 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
             unexpectedBetweenColonAndMessage, 
             message, 
             unexpectedAfterMessage
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMessageLabel?.raw, 
           messageLabel.raw, 
@@ -17612,7 +17612,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
             unexpectedBetweenColonAndFilename, 
             filename, 
             unexpectedAfterFilename
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSourceFileLabel?.raw, 
           sourceFileLabel.raw, 
@@ -17750,7 +17750,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenPeriodAndNumber, 
             number, 
             unexpectedAfterNumber
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePeriod?.raw, 
           period.raw, 
@@ -17868,7 +17868,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenMajorAndComponents, 
             components, 
             unexpectedAfterComponents
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMajor?.raw, 
           major.raw, 
@@ -18005,7 +18005,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereKeywordAndGuardResult, 
             guardResult, 
             unexpectedAfterGuardResult
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhereKeyword?.raw, 
           whereKeyword.raw, 
@@ -18121,7 +18121,7 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndComma, 
             comma, 
             unexpectedAfterComma
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -18241,7 +18241,7 @@ public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementListAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 

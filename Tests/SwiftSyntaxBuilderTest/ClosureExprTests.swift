@@ -29,7 +29,7 @@ final class ClosureExprTests: XCTestCase {
     assertBuildResult(
       buildable,
       """
-      {area in
+      { area in
       }
       """
     )
@@ -52,7 +52,7 @@ final class ClosureExprTests: XCTestCase {
     assertBuildResult(
       buildable,
       """
-      {area async throws in
+      { area async throws in
       }
       """
     )

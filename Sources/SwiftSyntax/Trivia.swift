@@ -59,7 +59,11 @@ public struct Trivia {
 
   /// Creates a new ``Trivia`` by merging in the given trivia. Only includes one
   /// copy of a common prefix of `self` and `trivia`.
-  public func merging(_ trivia: Trivia) -> Trivia {
+  public func merging(_ trivia: Trivia?) -> Trivia {
+    guard let trivia else {
+      return self
+    }
+
     let lhs = self.decomposed
     let rhs = trivia.decomposed
     for infixLength in (0...Swift.min(lhs.count, rhs.count)).reversed() {
@@ -73,7 +77,10 @@ public struct Trivia {
   /// Creates a new ``Trivia`` by merging the leading and trailing ``Trivia``
   /// of `triviaOf` into the end of `self`. Only includes one copy of any
   /// common prefixes.
-  public func merging(triviaOf node: some SyntaxProtocol) -> Trivia {
+  public func merging(triviaOf node: (some SyntaxProtocol)?) -> Trivia {
+    guard let node else {
+      return self
+    }
     return merging(node.leadingTrivia).merging(node.trailingTrivia)
   }
 

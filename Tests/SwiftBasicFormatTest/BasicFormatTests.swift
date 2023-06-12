@@ -327,4 +327,18 @@ final class BasicFormatTest: XCTestCase {
       using: BasicFormat(indentationWidth: .spaces(2))
     )
   }
+
+  func testClosureExprParam() {
+    let source = """
+      _ = {foo in}
+      """
+
+    assertFormatted(
+      source: source,
+      expected: """
+        _ = { foo in
+        }
+        """
+    )
+  }
 }

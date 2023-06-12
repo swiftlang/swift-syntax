@@ -51,7 +51,7 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBreakKeywordAndLabel, 
             label, 
             unexpectedAfterLabel
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBreakKeyword?.raw, 
           breakKeyword.raw, 
@@ -167,7 +167,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenContinueKeywordAndLabel, 
             label, 
             unexpectedAfterLabel
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeContinueKeyword?.raw, 
           continueKeyword.raw, 
@@ -283,7 +283,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeferKeywordAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDeferKeyword?.raw, 
           deferKeyword.raw, 
@@ -399,7 +399,7 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDiscardKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDiscardKeyword?.raw, 
           discardKeyword.raw, 
@@ -519,7 +519,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBodyAndCatchClauses, 
             catchClauses, 
             unexpectedAfterCatchClauses
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDoKeyword?.raw, 
           doKeyword.raw, 
@@ -668,7 +668,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeExpression?.raw, expression.raw, unexpectedAfterExpression?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.expressionStmt,
@@ -746,7 +746,7 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeFallthroughKeyword?.raw, fallthroughKeyword.raw, unexpectedAfterFallthroughKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.fallthroughStmt,
@@ -864,7 +864,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhereClauseAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForKeyword?.raw, 
           forKeyword.raw, 
@@ -1164,7 +1164,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElseKeywordAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeGuardKeyword?.raw, 
           guardKeyword.raw, 
@@ -1347,7 +1347,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenLabelColonAndStatement, 
             statement, 
             unexpectedAfterStatement
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabelName?.raw, 
           labelName.raw, 
@@ -1477,7 +1477,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingStmt,
@@ -1572,7 +1572,7 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenWhileKeywordAndCondition, 
             condition, 
             unexpectedAfterCondition
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeRepeatKeyword?.raw, 
           repeatKeyword.raw, 
@@ -1732,7 +1732,7 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenReturnKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeReturnKeyword?.raw, 
           returnKeyword.raw, 
@@ -1848,7 +1848,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenThrowKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeThrowKeyword?.raw, 
           throwKeyword.raw, 
@@ -1968,7 +1968,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenConditionsAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhileKeyword?.raw, 
           whileKeyword.raw, 
@@ -2167,7 +2167,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenYieldKeywordAndYields, 
             yields, 
             unexpectedAfterYields
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeYieldKeyword?.raw, 
           yieldKeyword.raw, 

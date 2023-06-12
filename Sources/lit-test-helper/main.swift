@@ -89,11 +89,11 @@ func printHelp() {
 }
 
 extension CommandLineArguments {
-  func getIncrementalEdits() throws -> [IncrementalEdit] {
+  func getIncrementalEdits() throws -> [IncrementalEditSpec] {
     let regex = try NSRegularExpression(
       pattern: "([0-9]+):([0-9]+)-([0-9]+):([0-9]+)=(.*)"
     )
-    var parsedEdits = [IncrementalEdit]()
+    var parsedEdits = [IncrementalEditSpec]()
     let editArgs = try self.getValues("-incremental-edit")
     for edit in editArgs {
       guard
@@ -111,7 +111,7 @@ extension CommandLineArguments {
       let region = getSourceRegion(match, text: edit)
       let replacement = match.match(at: 5, text: edit)
       parsedEdits.append(
-        IncrementalEdit(
+        IncrementalEditSpec(
           region: region,
           replacement: replacement
         )
@@ -232,7 +232,7 @@ struct SourceRegion {
   let endColumn: Int
 }
 
-struct IncrementalEdit {
+struct IncrementalEditSpec {
   let region: SourceRegion
   let replacement: String
 }
@@ -312,8 +312,8 @@ func getByteRange(
 
 func parseIncrementalEditArguments(
   args: CommandLineArguments
-) throws -> [SourceEdit] {
-  var edits = [SourceEdit]()
+) throws -> [IncrementalEdit] {
+  var edits = [IncrementalEdit]()
   let argEdits = try args.getIncrementalEdits()
   let preEditURL =
     URL(fileURLWithPath: try args.getRequired("-old-source-file"))
@@ -326,7 +326,7 @@ func parseIncrementalEditArguments(
       argName: "-incremental-edit"
     )
     let replacementLength = argEdit.replacement.utf8.count
-    edits.append(SourceEdit(range: range, replacementLength: replacementLength))
+    edits.append(IncrementalEdit(range: range, replacementLength: replacementLength))
   }
   return edits
 }

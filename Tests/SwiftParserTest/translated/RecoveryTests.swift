@@ -2348,7 +2348,7 @@ final class RecoveryTests: XCTestCase {
         ),
       ],
       fixedSource: """
-        func F() { init< >()} )}
+        func F() { init< >() } )}
         struct InitializerWithName {
           init() {}
         }

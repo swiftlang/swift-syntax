@@ -26,7 +26,7 @@ import SwiftSyntax
 /// 123456789
 /// 0xFFFFFFFFF
 /// ```
-public struct RemoveSeparatorsFromIntegerLiteral: RefactoringProvider {
+public struct RemoveSeparatorsFromIntegerLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: IntegerLiteralExprSyntax, in context: Void) -> IntegerLiteralExprSyntax? {
     guard lit.digits.text.contains("_") else {
       return lit

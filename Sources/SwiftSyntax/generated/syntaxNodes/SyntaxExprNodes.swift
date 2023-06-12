@@ -55,7 +55,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementsAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -212,7 +212,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEffectSpecifiersAndArrowToken, 
             arrowToken, 
             unexpectedAfterArrowToken
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEffectSpecifiers?.raw, 
           effectSpecifiers?.raw, 
@@ -336,7 +336,7 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenQuestionOrExclamationMarkAndTypeName, 
             typeName, 
             unexpectedAfterTypeName
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -488,7 +488,7 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAssignToken, assignToken, unexpectedAfterAssignToken))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeAssignToken, assignToken, unexpectedAfterAssignToken))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeAssignToken?.raw, assignToken.raw, unexpectedAfterAssignToken?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.assignmentExpr,
@@ -574,7 +574,7 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAwaitKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAwaitKeyword?.raw, 
           awaitKeyword.raw, 
@@ -682,7 +682,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeOperatorToken, operatorToken, unexpectedAfterOperatorToken))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeOperatorToken, operatorToken, unexpectedAfterOperatorToken))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeOperatorToken?.raw, operatorToken.raw, unexpectedAfterOperatorToken?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.binaryOperatorExpr,
@@ -760,7 +760,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeBooleanLiteral, booleanLiteral, unexpectedAfterBooleanLiteral))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeBooleanLiteral, booleanLiteral, unexpectedAfterBooleanLiteral))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeBooleanLiteral?.raw, booleanLiteral.raw, unexpectedAfterBooleanLiteral?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.booleanLiteralExpr,
@@ -846,7 +846,7 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBorrowKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBorrowKeyword?.raw, 
           borrowKeyword.raw, 
@@ -974,7 +974,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenVersionInfoAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCanImportKeyword?.raw, 
           canImportKeyword.raw, 
@@ -1164,7 +1164,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonAndVersionTuple, 
             versionTuple, 
             unexpectedAfterVersionTuple
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeComma?.raw, 
           comma.raw, 
@@ -1332,7 +1332,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenStatementsAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
           leftBrace.raw, 
@@ -1511,7 +1511,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCopyKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCopyKeyword?.raw, 
           copyKeyword.raw, 
@@ -1673,7 +1673,7 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenContentAndRightSquare, 
             rightSquare, 
             unexpectedAfterRightSquare
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
@@ -1803,7 +1803,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeWildcard, wildcard, unexpectedAfterWildcard))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeWildcard, wildcard, unexpectedAfterWildcard))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeWildcard?.raw, wildcard.raw, unexpectedAfterWildcard?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.discardAssignmentExpr,
@@ -1881,7 +1881,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeIdentifier?.raw, identifier.raw, unexpectedAfterIdentifier?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.editorPlaceholderExpr,
@@ -1959,7 +1959,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFloatingDigits, floatingDigits, unexpectedAfterFloatingDigits))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFloatingDigits, floatingDigits, unexpectedAfterFloatingDigits))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeFloatingDigits?.raw, floatingDigits.raw, unexpectedAfterFloatingDigits?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.floatLiteralExpr,
@@ -2045,7 +2045,7 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndExclamationMark, 
             exclamationMark, 
             unexpectedAfterExclamationMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -2177,7 +2177,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
             additionalTrailingClosures, 
             unexpectedAfterAdditionalTrailingClosures
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCalledExpression?.raw, 
           calledExpression.raw, 
@@ -2419,7 +2419,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenIdentifierAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIdentifier?.raw, 
           identifier.raw, 
@@ -2589,7 +2589,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElseKeywordAndElseBody, 
             elseBody, 
             unexpectedAfterElseBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeIfKeyword?.raw, 
           ifKeyword.raw, 
@@ -2790,7 +2790,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAmpersandAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAmpersand?.raw, 
           ampersand.raw, 
@@ -2910,7 +2910,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenOperatorOperandAndRightOperand, 
             rightOperand, 
             unexpectedAfterRightOperand
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftOperand?.raw, 
           leftOperand.raw, 
@@ -3040,7 +3040,7 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeDigits, digits, unexpectedAfterDigits))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeDigits, digits, unexpectedAfterDigits))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeDigits?.raw, digits.raw, unexpectedAfterDigits?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.integerLiteralExpr,
@@ -3136,7 +3136,7 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenIsTokAndTypeName, 
             typeName, 
             unexpectedAfterTypeName
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -3281,7 +3281,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenRootAndComponents, 
             components, 
             unexpectedAfterComponents
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBackslash?.raw, 
           backslash.raw, 
@@ -3462,7 +3462,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
             additionalTrailingClosures, 
             unexpectedAfterAdditionalTrailingClosures
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePoundToken?.raw, 
           poundToken.raw, 
@@ -3757,7 +3757,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenNameAndDeclNameArguments, 
             declNameArguments, 
             unexpectedAfterDeclNameArguments
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBase?.raw, 
           base?.raw, 
@@ -3909,7 +3909,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingExpr,
@@ -3996,7 +3996,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenMoveKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeMoveKeyword?.raw, 
           moveKeyword.raw, 
@@ -4104,7 +4104,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeNilKeyword, nilKeyword, unexpectedAfterNilKeyword))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeNilKeyword, nilKeyword, unexpectedAfterNilKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeNilKeyword?.raw, nilKeyword.raw, unexpectedAfterNilKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.nilLiteralExpr,
@@ -4190,7 +4190,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndQuestionMark, 
             questionMark, 
             unexpectedAfterQuestionMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -4306,7 +4306,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenEachKeywordAndPackRefExpr, 
             packRefExpr, 
             unexpectedAfterPackRefExpr
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEachKeyword?.raw, 
           eachKeyword.raw, 
@@ -4422,7 +4422,7 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenRepeatKeywordAndPatternExpr, 
             patternExpr, 
             unexpectedAfterPatternExpr
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeRepeatKeyword?.raw, 
           repeatKeyword.raw, 
@@ -4538,7 +4538,7 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBaseAndConfig, 
             config, 
             unexpectedAfterConfig
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBase?.raw, 
           base?.raw, 
@@ -4654,7 +4654,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndOperatorToken, 
             operatorToken, 
             unexpectedAfterOperatorToken
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -4770,7 +4770,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenOperatorTokenAndPostfixExpression, 
             postfixExpression, 
             unexpectedAfterPostfixExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOperatorToken?.raw, 
           operatorToken?.raw, 
@@ -4898,7 +4898,7 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCloseSlashAndClosingPounds, 
             closingPounds, 
             unexpectedAfterClosingPounds
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOpeningPounds?.raw, 
           openingPounds?.raw, 
@@ -5072,7 +5072,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeElements, elements, unexpectedAfterElements))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeElements, elements, unexpectedAfterElements))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeElements?.raw, elements.raw, unexpectedAfterElements?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.sequenceExpr,
@@ -5177,7 +5177,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenExpressionAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeExpression?.raw, 
           expression.raw, 
@@ -5305,7 +5305,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCloseQuoteAndCloseDelimiter, 
             closeDelimiter, 
             unexpectedAfterCloseDelimiter
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOpenDelimiter?.raw, 
           openDelimiter?.raw, 
@@ -5522,7 +5522,7 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
             additionalTrailingClosures, 
             unexpectedAfterAdditionalTrailingClosures
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCalledExpression?.raw, 
           calledExpression.raw, 
@@ -5756,7 +5756,7 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSuperKeyword, superKeyword, unexpectedAfterSuperKeyword))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeSuperKeyword, superKeyword, unexpectedAfterSuperKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeSuperKeyword?.raw, superKeyword.raw, unexpectedAfterSuperKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.superRefExpr,
@@ -5854,7 +5854,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCasesAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeSwitchKeyword?.raw, 
           switchKeyword.raw, 
@@ -6067,7 +6067,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenColonMarkAndSecondChoice, 
             secondChoice, 
             unexpectedAfterSecondChoice
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeConditionExpression?.raw, 
           conditionExpression.raw, 
@@ -6253,7 +6253,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenQuestionOrExclamationMarkAndExpression, 
             expression, 
             unexpectedAfterExpression
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeTryKeyword?.raw, 
           tryKeyword.raw, 
@@ -6395,7 +6395,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenElementsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
@@ -6544,7 +6544,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeType, type, unexpectedAfterType))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeType, type, unexpectedAfterType))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeType?.raw, type.raw, unexpectedAfterType?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.typeExpr,
@@ -6630,7 +6630,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenAsTokAndQuestionOrExclamationMark, 
             questionOrExclamationMark, 
             unexpectedAfterQuestionOrExclamationMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsTok?.raw, 
           asTok.raw, 
@@ -6738,7 +6738,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIsTok, isTok, unexpectedAfterIsTok))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIsTok, isTok, unexpectedAfterIsTok))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeIsTok?.raw, isTok.raw, unexpectedAfterIsTok?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.unresolvedIsExpr,
@@ -6816,7 +6816,7 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePattern, pattern, unexpectedAfterPattern))) {(arena, _) in
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePattern, pattern, unexpectedAfterPattern))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePattern?.raw, pattern.raw, unexpectedAfterPattern?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.unresolvedPatternExpr,
@@ -6906,7 +6906,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenFirstChoiceAndColonMark, 
             colonMark, 
             unexpectedAfterColonMark
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeQuestionMark?.raw, 
           questionMark.raw, 

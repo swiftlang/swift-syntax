@@ -795,7 +795,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case integerLiteral
   case leftBrace
   case leftParen
-  case leftSquareBracket
+  case leftSquare
   case `nil`
   case period
   case pound
@@ -825,7 +825,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.integerLiteral): self = .integerLiteral
     case TokenSpec(.leftBrace): self = .leftBrace
     case TokenSpec(.leftParen): self = .leftParen
-    case TokenSpec(.leftSquareBracket): self = .leftSquareBracket
+    case TokenSpec(.leftSquare): self = .leftSquare
     case TokenSpec(.nil): self = .nil
     case TokenSpec(.period): self = .period
     case TokenSpec(.pound): self = .pound
@@ -858,7 +858,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .integerLiteral: return .integerLiteral
     case .leftBrace: return .leftBrace
     case .leftParen: return .leftParen
-    case .leftSquareBracket: return .leftSquareBracket
+    case .leftSquare: return .leftSquare
     case .nil: return .keyword(.nil)
     case .period: return .period
     case .pound: return .pound

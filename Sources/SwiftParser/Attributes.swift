@@ -1170,7 +1170,7 @@ extension Parser.Lookahead {
       TokenSpec(.rethrows),
       TokenSpec(.rightParen),
       TokenSpec(.rightBrace),
-      TokenSpec(.rightSquareBracket),
+      TokenSpec(.rightSquare),
       TokenSpec(.rightAngle):
       return false
     case _ where lookahead.at(.keyword(.async)):

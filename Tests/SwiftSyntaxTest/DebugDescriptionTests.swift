@@ -45,9 +45,9 @@ public class DebugDescriptionTests: XCTestCase {
           """
       ),
       #line: {
-        let leftToken = TokenSyntax.leftSquareBracketToken()
+        let leftToken = TokenSyntax.leftSquareToken()
         let elements = ArrayElementListSyntax([])
-        let rightToken = TokenSyntax.rightSquareBracketToken()
+        let rightToken = TokenSyntax.rightSquareToken()
         let expr = ArrayExprSyntax(
           leftSquare: leftToken,
           elements: elements,
@@ -57,28 +57,28 @@ public class DebugDescriptionTests: XCTestCase {
           syntax: expr.tokens(viewMode: .sourceAccurate),
           expectedDumped: """
             ▿ SwiftSyntax.TokenSequence
-              ▿ leftSquareBracket
+              ▿ leftSquare
                 - text: "["
                 ▿ leadingTrivia: []
                   - pieces: 0 elements
                 ▿ trailingTrivia: []
                   - pieces: 0 elements
-                - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
-              ▿ rightSquareBracket
+                - tokenKind: SwiftSyntax.TokenKind.leftSquare
+              ▿ rightSquare
                 - text: "]"
                 ▿ leadingTrivia: []
                   - pieces: 0 elements
                 ▿ trailingTrivia: []
                   - pieces: 0 elements
-                - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
+                - tokenKind: SwiftSyntax.TokenKind.rightSquare
 
             """
         )
       }(),
       #line: {
-        let leftToken = TokenSyntax.leftSquareBracketToken()
+        let leftToken = TokenSyntax.leftSquareToken()
         let elements = ArrayElementListSyntax([])
-        let rightToken = TokenSyntax.rightSquareBracketToken()
+        let rightToken = TokenSyntax.rightSquareToken()
         let expr = ArrayExprSyntax(
           leftSquare: leftToken,
           elements: elements,
@@ -88,20 +88,20 @@ public class DebugDescriptionTests: XCTestCase {
           syntax: expr.tokens(viewMode: .sourceAccurate).reversed(),
           expectedDumped: """
             ▿ SwiftSyntax.ReversedTokenSequence
-              ▿ rightSquareBracket
+              ▿ rightSquare
                 - text: "]"
                 ▿ leadingTrivia: []
                   - pieces: 0 elements
                 ▿ trailingTrivia: []
                   - pieces: 0 elements
-                - tokenKind: SwiftSyntax.TokenKind.rightSquareBracket
-              ▿ leftSquareBracket
+                - tokenKind: SwiftSyntax.TokenKind.rightSquare
+              ▿ leftSquare
                 - text: "["
                 ▿ leadingTrivia: []
                   - pieces: 0 elements
                 ▿ trailingTrivia: []
                   - pieces: 0 elements
-                - tokenKind: SwiftSyntax.TokenKind.leftSquareBracket
+                - tokenKind: SwiftSyntax.TokenKind.leftSquare
 
             """
         )

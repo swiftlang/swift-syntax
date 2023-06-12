@@ -163,13 +163,13 @@ final class SuperTests: XCTestCase {
       """#,
       substructure: Syntax(
         ArrayExprSyntax(
-          leftSquare: .leftSquareBracketToken(),
+          leftSquare: .leftSquareToken(),
           elements: ArrayElementListSyntax([
             ArrayElementSyntax(
               expression: IntegerLiteralExprSyntax(digits: .integerLiteral("1"))
             )
           ]),
-          rightSquare: .rightSquareBracketToken()
+          rightSquare: .rightSquareToken()
         )
       )
     )

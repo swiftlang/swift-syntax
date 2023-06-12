@@ -295,13 +295,13 @@ extension Bool: ExpressibleByLiteralSyntax {
 extension ArraySlice: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> ArrayExprSyntax {
     ArrayExprSyntax(
-      leftSquare: .leftSquareBracketToken(),
+      leftSquare: .leftSquareToken(),
       elements: ArrayElementListSyntax {
         for elem in self {
           ArrayElementSyntax(expression: elem.makeLiteralSyntax())
         }
       },
-      rightSquare: .rightSquareBracketToken()
+      rightSquare: .rightSquareToken()
     )
   }
 }
@@ -322,20 +322,20 @@ extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyn
     }
 
     return ArrayExprSyntax(
-      leftSquare: .leftSquareBracketToken(),
+      leftSquare: .leftSquareToken(),
       elements: ArrayElementListSyntax {
         for elemSyntax in elemSyntaxes {
           ArrayElementSyntax(expression: elemSyntax)
         }
       },
-      rightSquare: .rightSquareBracketToken()
+      rightSquare: .rightSquareToken()
     )
   }
 }
 
 extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> DictionaryExprSyntax {
-    DictionaryExprSyntax(leftSquare: .leftSquareBracketToken(), rightSquare: .rightSquareBracketToken()) {
+    DictionaryExprSyntax(leftSquare: .leftSquareToken(), rightSquare: .rightSquareToken()) {
       for elem in self {
         DictionaryElementSyntax(
           keyExpression: elem.key.makeLiteralSyntax(),
@@ -356,7 +356,7 @@ extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteral
       $0.key.syntaxTextBytes.lexicographicallyPrecedes($1.key.syntaxTextBytes)
     }
 
-    return DictionaryExprSyntax(leftSquare: .leftSquareBracketToken(), rightSquare: .rightSquareBracketToken()) {
+    return DictionaryExprSyntax(leftSquare: .leftSquareToken(), rightSquare: .rightSquareToken()) {
       for elemSyntax in elemSyntaxes {
         DictionaryElementSyntax(
           keyExpression: elemSyntax.key,

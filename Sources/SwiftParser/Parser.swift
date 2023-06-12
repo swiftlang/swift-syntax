@@ -193,9 +193,9 @@ public struct Parser {
 
   private mutating func adjustNestingLevel(for tokenKind: RawTokenKind) {
     switch tokenKind {
-    case .leftAngle, .leftBrace, .leftParen, .leftSquareBracket, .poundIfKeyword:
+    case .leftAngle, .leftBrace, .leftParen, .leftSquare, .poundIfKeyword:
       nestingLevel += 1
-    case .rightAngle, .rightBrace, .rightParen, .rightSquareBracket, .poundEndifKeyword:
+    case .rightAngle, .rightBrace, .rightParen, .rightSquare, .poundEndifKeyword:
       nestingLevel -= 1
     default:
       break

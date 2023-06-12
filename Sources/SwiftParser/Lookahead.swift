@@ -310,7 +310,7 @@ extension Parser.Lookahead {
   private enum BracketedTokens: TokenSpecSet {
     case leftParen
     case leftBrace
-    case leftSquareBracket
+    case leftSquare
     case poundIfKeyword
     case poundElseKeyword
     case poundElseifKeyword
@@ -319,7 +319,7 @@ extension Parser.Lookahead {
       switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
-      case .leftSquareBracket: self = .leftSquareBracket
+      case .leftSquare: self = .leftSquare
       case .poundIfKeyword: self = .poundIfKeyword
       case .poundElseKeyword: self = .poundElseKeyword
       case .poundElseifKeyword: self = .poundElseifKeyword
@@ -331,7 +331,7 @@ extension Parser.Lookahead {
       switch self {
       case .leftParen: return .leftParen
       case .leftBrace: return .leftBrace
-      case .leftSquareBracket: return .leftSquareBracket
+      case .leftSquare: return .leftSquare
       case .poundIfKeyword: return .poundIfKeyword
       case .poundElseKeyword: return .poundElseKeyword
       case .poundElseifKeyword: return .poundElseifKeyword
@@ -364,9 +364,9 @@ extension Parser.Lookahead {
         case (.leftBrace, let handle)?:
           self.eat(handle)
           stack += [.skipSinglePost(start: .leftBrace), .skipUntil(.rightBrace, .rightBrace)]
-        case (.leftSquareBracket, let handle)?:
+        case (.leftSquare, let handle)?:
           self.eat(handle)
-          stack += [.skipSinglePost(start: .leftSquareBracket), .skipUntil(.rightSquareBracket, .rightSquareBracket)]
+          stack += [.skipSinglePost(start: .leftSquare), .skipUntil(.rightSquare, .rightSquare)]
         case (.poundIfKeyword, let handle)?,
           (.poundElseKeyword, let handle)?,
           (.poundElseifKeyword, let handle)?:
@@ -382,8 +382,8 @@ extension Parser.Lookahead {
           self.consume(if: .rightParen)
         case .leftBrace:
           self.consume(if: .rightBrace)
-        case .leftSquareBracket:
-          self.consume(if: .rightSquareBracket)
+        case .leftSquare:
+          self.consume(if: .rightSquare)
         case .poundIfKeyword, .poundElseKeyword, .poundElseifKeyword:
           if self.at(.poundElseKeyword, .poundElseifKeyword) {
             stack += [.skipSingle]

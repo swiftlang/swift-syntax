@@ -174,7 +174,7 @@ func nodesDescriptionAndCommonParent(_ nodes: [some SyntaxProtocol], format: Boo
 fileprivate extension TokenKind {
   var isStartMarker: Bool {
     switch self {
-    case .leftBrace, .leftAngle, .leftParen, .leftSquareBracket:
+    case .leftBrace, .leftAngle, .leftParen, .leftSquare:
       return true
     default:
       return false
@@ -193,8 +193,8 @@ fileprivate extension TokenKind {
       return .leftAngle
     case .rightParen:
       return .leftParen
-    case .rightSquareBracket:
-      return .leftSquareBracket
+    case .rightSquare:
+      return .leftSquare
     case .stringQuote, .multilineStringQuote, .rawStringDelimiter:
       return self
     case .regexSlash, .extendedRegexDelimiter:

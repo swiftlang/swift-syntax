@@ -18,16 +18,16 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: "array type",
     children: [
       Child(
-        name: "LeftSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        name: "LeftSquare",
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "ElementType",
         kind: .node(kind: .type)
       ),
       Child(
-        name: "RightSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        name: "RightSquare",
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),
@@ -143,8 +143,8 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: "dictionary type",
     children: [
       Child(
-        name: "LeftSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareBracketToken")])
+        name: "LeftSquare",
+        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
         name: "KeyType",
@@ -161,8 +161,8 @@ public let TYPE_NODES: [Node] = [
         nameForDiagnostics: "value type"
       ),
       Child(
-        name: "RightSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareBracketToken")])
+        name: "RightSquare",
+        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
   ),

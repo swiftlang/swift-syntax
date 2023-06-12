@@ -307,13 +307,13 @@ extension TokenSyntax {
     )
   }
   
-  public static func leftSquareBracketToken(
+  public static func leftSquareToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .leftSquareBracket,
+      .leftSquare,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -609,13 +609,13 @@ extension TokenSyntax {
     )
   }
   
-  public static func rightSquareBracketToken(
+  public static func rightSquareToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .rightSquareBracket,
+      .rightSquare,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

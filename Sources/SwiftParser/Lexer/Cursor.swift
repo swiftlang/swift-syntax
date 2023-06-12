@@ -893,10 +893,10 @@ extension Lexer.Cursor {
     switch self.peek() {
     case UInt8(ascii: "@"): _ = self.advance(); return Lexer.Result(.atSign)
     case UInt8(ascii: "{"): _ = self.advance(); return Lexer.Result(.leftBrace)
-    case UInt8(ascii: "["): _ = self.advance(); return Lexer.Result(.leftSquareBracket)
+    case UInt8(ascii: "["): _ = self.advance(); return Lexer.Result(.leftSquare)
     case UInt8(ascii: "("): _ = self.advance(); return Lexer.Result(.leftParen)
     case UInt8(ascii: "}"): _ = self.advance(); return Lexer.Result(.rightBrace)
-    case UInt8(ascii: "]"): _ = self.advance(); return Lexer.Result(.rightSquareBracket)
+    case UInt8(ascii: "]"): _ = self.advance(); return Lexer.Result(.rightSquare)
     case UInt8(ascii: ")"): _ = self.advance(); return Lexer.Result(.rightParen)
 
     case UInt8(ascii: ","): _ = self.advance(); return Lexer.Result(.comma)

@@ -510,12 +510,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if node.leftSquareBracket.isMissing && node.rightSquareBracket.isPresent {
+    if node.leftSquare.isMissing && node.rightSquare.isPresent {
       addDiagnostic(
-        node.rightSquareBracket,
+        node.rightSquare,
         .extraRightBracket,
-        fixIts: [.init(message: InsertFixIt(tokenToBeInserted: node.leftSquareBracket), changes: .makePresent(node.leftSquareBracket))],
-        handledNodes: [node.leftSquareBracket.id]
+        fixIts: [.init(message: InsertFixIt(tokenToBeInserted: node.leftSquare), changes: .makePresent(node.leftSquare))],
+        handledNodes: [node.leftSquare.id]
       )
     }
 

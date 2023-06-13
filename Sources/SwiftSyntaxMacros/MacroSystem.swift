@@ -402,11 +402,11 @@ extension MacroApplication {
   // refer to conformance macros, expand them and return the resulting
   // set of extension declarations.
   private func expandConformances(of decl: DeclGroupSyntax) -> [DeclSyntax] {
-    let identifier: String
+    let extendedType: Syntax
     if let identified = decl.asProtocol(IdentifiedDeclSyntax.self) {
-      identifier = identified.identifier.text
+      extendedType = Syntax(identified.identifier.trimmed)
     } else if let ext = decl.as(ExtensionDeclSyntax.self) {
-      identifier = ext.extendedType.trimmedDescription
+      extendedType = Syntax(ext.extendedType.trimmed)
     } else {
       return []
     }
@@ -419,10 +419,10 @@ extension MacroApplication {
 
         for (type, whereClause) in newConformances {
           var ext: DeclSyntax = """
-            extension \(raw: identifier): \(type) { }
+            extension \(extendedType): \(type) { }
             """
           if let whereClause {
-            ext = DeclSyntax((ext.as(ExtensionDeclSyntax.self))!.with(\.genericWhereClause, whereClause))
+            ext = DeclSyntax((ext.cast(ExtensionDeclSyntax.self)).with(\.genericWhereClause, whereClause))
           }
 
           extensions.append(DeclSyntax(ext))

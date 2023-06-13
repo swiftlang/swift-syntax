@@ -55,6 +55,10 @@ struct TestingBuildConfiguration : BuildConfiguration {
   var targetPointerBitWidth: Int? { 64 }
 
   var endianness: SwiftIfConfig.Endianness? { .little }
+
+  var languageVersion: VersionTuple? { VersionTuple(5, 5) }
+
+  var compilerVersion: VersionTuple? { VersionTuple(5, 9) }
 }
 
 public class EvaluateTests: XCTestCase {
@@ -151,5 +155,20 @@ public class EvaluateTests: XCTestCase {
     XCTAssertEqual(try ifConfigState("_ptrauth(none)"), .inactive)
     XCTAssertEqual(try ifConfigState("_pointerBitWidth(_64)"), .active)
     XCTAssertEqual(try ifConfigState("_pointerBitWidth(_32)"), .inactive)
+  }
+
+  func testVersions() throws {
+    let buildConfig = TestingBuildConfiguration()
+
+    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
+      try IfConfigState(condition: condition, configuration: buildConfig)
+    }
+
+    XCTAssertEqual(try ifConfigState("swift(>=5.5"), .active)
+    XCTAssertEqual(try ifConfigState("swift(<6"), .active)
+    XCTAssertEqual(try ifConfigState("swift(>=6"), .inactive)
+    XCTAssertEqual(try ifConfigState("compiler(>=5.8"), .active)
+    XCTAssertEqual(try ifConfigState("compiler(>=5.9"), .active)
+    XCTAssertEqual(try ifConfigState("compiler(>=5.10"), .inactive)
   }
 }

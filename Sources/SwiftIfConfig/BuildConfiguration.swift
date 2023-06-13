@@ -66,4 +66,10 @@ public protocol BuildConfiguration {
 
   /// The endianness of the target architecture.
   var endianness: Endianness? { get }
+
+  /// The effective language version, which can be set by the user (e.g., 5.0).
+  var languageVersion: VersionTuple? { get }
+
+  /// The version of the compiler (e.g., 5.9).
+  var compilerVersion: VersionTuple? { get }
 }

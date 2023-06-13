@@ -16,6 +16,8 @@ enum IfConfigError: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
   case unhandledCustomCondition(name: String, syntax: TokenSyntax)
   case unhandledFunction(name: String, syntax: ExprSyntax)
+  case unsupportedVersionOperator(name: String, operator: TokenSyntax)
+  case invalidVersionOperand(name: String, syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -27,6 +29,12 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .unhandledFunction(name: let name, syntax: _):
       return "build configuration cannot handle '\(name)'"
+
+    case .unsupportedVersionOperator(name: let name, operator: let op):
+      return "'\(name)' version check does not support operator '\(op.trimmedDescription)'"
+
+    case .invalidVersionOperand(name: let name, syntax: let version):
+      return "'\(name)' version check has invalid version '\(version.trimmedDescription)'"
     }
   }
 }
@@ -106,6 +114,34 @@ private func evaluateIfConfig(
       return result
     }
 
+    /// Perform a check for a version constraint as used in the "swift" or "compiler" version checks.
+    func doVersionComparisonCheck(_ actualVersion: VersionTuple?) throws -> Bool? {
+      // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
+      // operator applied to a version.
+      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+            let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
+            let opToken = unaryArg.operatorToken else {
+        return nil
+      }
+
+      guard let version = VersionTuple(parsing: unaryArg.postfixExpression.trimmedDescription) else {
+        throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.postfixExpression)
+      }
+
+      guard let actualVersion else {
+        throw IfConfigError.unhandledFunction(name: fnName, syntax: argExpr)
+      }
+
+      switch opToken.text {
+      case ">=":
+        return actualVersion >= version
+      case "<":
+        return actualVersion < version
+      default:
+        throw IfConfigError.unsupportedVersionOperator(name: fnName, operator: opToken)
+      }
+    }
+
     let result: Bool?
     switch fn {
     case .hasAttribute:
@@ -164,6 +200,12 @@ private func evaluateIfConfig(
       }
 
       result = targetPointerBitWidth == expectedPointerBitWidth
+
+    case .swift:
+      result = try doVersionComparisonCheck(configuration.languageVersion)
+
+    case .compiler:
+      result = try doVersionComparisonCheck(configuration.compilerVersion)
 
     default:
       // FIXME: Deal with all of the other kinds of checks we can perform.

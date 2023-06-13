@@ -25,12 +25,9 @@ public protocol ConformanceMacro: AttachedMacro {
   /// - Returns: the set of `(type, where-clause?)` pairs that each provide the
   ///   protocol type to which the declared type conforms, along with
   ///   an optional where clause.
-  static func expansion<
-    Declaration: DeclGroupSyntax,
-    Context: MacroExpansionContext
-  >(
+  static func expansion(
     of node: AttributeSyntax,
-    providingConformancesOf declaration: Declaration,
-    in context: Context
+    providingConformancesOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)]
 }

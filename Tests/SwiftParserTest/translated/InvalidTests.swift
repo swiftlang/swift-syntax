@@ -213,7 +213,11 @@ final class InvalidTests: XCTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
       fixedSource: #"""
         func testNotCoveredCase(x: Int) {
@@ -222,7 +226,8 @@ final class InvalidTests: XCTestCase {
             let y = "foo"
             switch y {
               case "bar":
-                blah; blah // ignored
+                blah
+                blah // ignored
             }
           case "baz":
             break

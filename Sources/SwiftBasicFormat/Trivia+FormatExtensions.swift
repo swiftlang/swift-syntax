@@ -45,7 +45,9 @@ extension Trivia {
 
   /// Returns the indentation of the last trivia piece in this trivia that is
   /// not a whitespace.
-  func indentation(isOnNewline: Bool) -> Trivia? {
+  /// - Parameter isOnNewline: Specifies if the character before this trivia is a newline character, i.e. if this trivia already starts on a new line.
+  /// - Returns: An optional ``Trivia`` with indentation of the last trivia piece.
+  public func indentation(isOnNewline: Bool) -> Trivia? {
     let lastNonWhitespaceTriviaPieceIndex = self.pieces.lastIndex(where: { !$0.isWhitespace }) ?? self.pieces.endIndex
     let piecesBeforeLastNonWhitespace = self.pieces[..<lastNonWhitespaceTriviaPieceIndex]
     let indentation: ArraySlice<TriviaPiece>

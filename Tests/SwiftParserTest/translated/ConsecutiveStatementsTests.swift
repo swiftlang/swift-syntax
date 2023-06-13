@@ -15,12 +15,27 @@
 import XCTest
 
 final class ConsecutiveStatementsTests: XCTestCase {
-  func testSimple() {
+  func testSimple1() {
     assertParse(
       "let x = 21️⃣ let y = 3",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        let x = 2
+        let y = 3
+        """
+    )
+  }
+
+  func testSimple2() {
+    assertParse(
+      "let x = 21️⃣ let y = 3",
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: "let x = 2; let y = 3"
     )
   }
@@ -45,7 +60,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements2() {
+  func testConsecutiveStatements2a() {
     assertParse(
       """
       // Within a function
@@ -61,10 +76,75 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        // Within a function
+        func test(i: inout Int, j: inout Int) {
+          // Okay
+          let q : Int; i = j; j = i; _ = q
+          if i != j { i = j }
+          // Errors
+          i = j
+          j = i
+          let r : Int
+          i = j
+          let s : Int
+          let t : Int
+          _ = r; _ = s; _ = t
+        }
+        """
+    )
+  }
+
+  func testConsecutiveStatements2b() {
+    assertParse(
+      """
+      // Within a function
+      func test(i: inout Int, j: inout Int) {
+        // Okay
+        let q : Int; i = j; j = i; _ = q
+        if i != j { i = j }
+        // Errors
+        i = j1️⃣ j = i
+        let r : Int2️⃣ i = j
+        let s : Int3️⃣ let t : Int
+        _ = r; _ = s; _ = t
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         // Within a function
         func test(i: inout Int, j: inout Int) {
@@ -81,7 +161,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements3() {
+  func testConsecutiveStatements3a() {
     assertParse(
       """
       struct X {
@@ -102,12 +182,107 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        struct X {
+          // In a sequence of declarations.
+          var a, b : Int
+          func d() -> Int {}
+          var prop : Int { return 4
+          }
+          var other : Float
+          // Within property accessors
+          subscript(i: Int) -> Float {
+            get {
+              var x = i
+              x = i + x
+              return Float(x)
+            }
+            set {
+              var x = i
+              x = i + 1
+              _ = x
+            }
+          }
+        }
+        """
+    )
+  }
+
+  func testConsecutiveStatements3b() {
+    assertParse(
+      """
+      struct X {
+        // In a sequence of declarations.
+        var a, b : Int1️⃣ func d() -> Int {}
+        var prop : Int { return 4
+        }2️⃣ var other : Float
+        // Within property accessors
+        subscript(i: Int) -> Float {
+          get {
+            var x = i3️⃣ x = i + x4️⃣ return Float(x)
+          }
+          set {
+            var x = i5️⃣ x = i + 1
+            _ = x
+          }
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         struct X {
           // In a sequence of declarations.
@@ -129,7 +304,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements4() {
+  func testConsecutiveStatements4a() {
     assertParse(
       """
       class C {
@@ -142,8 +317,39 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        class C {
+          // In a sequence of declarations.
+          var a, b : Int
+          func d() -> Int {}
+          init() {
+            a = 0
+            b = 0
+          }
+        }
+        """
+    )
+  }
+
+  func testConsecutiveStatements4b() {
+    assertParse(
+      """
+      class C {
+        // In a sequence of declarations.
+        var a, b : Int1️⃣ func d() -> Int {}
+        init() {
+          a = 0
+          b = 0
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         class C {
           // In a sequence of declarations.
@@ -157,7 +363,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements5() {
+  func testConsecutiveStatements5a() {
     assertParse(
       """
       protocol P {
@@ -165,8 +371,29 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        protocol P {
+          func a()
+          func b()
+        }
+        """
+    )
+  }
+
+  func testConsecutiveStatements5b() {
+    assertParse(
+      """
+      protocol P {
+        func a()1️⃣ func b()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         protocol P {
           func a(); func b()
@@ -175,7 +402,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
     )
   }
 
-  func testConsecutiveStatements6() {
+  func testConsecutiveStatements6a() {
     assertParse(
       """
       enum Color {
@@ -184,14 +411,83 @@ final class ConsecutiveStatementsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        enum Color {
+          case Red
+          case Blue
+          func a() {}
+          func b() {}
+        }
+        """
+    )
+  }
+
+  func testConsecutiveStatements6b() {
+    assertParse(
+      """
+      enum Color {
+        case Red1️⃣ case Blue
+        func a() {}2️⃣ func b() {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         enum Color {
           case Red; case Blue
           func a() {}; func b() {}
         }
+        """
+    )
+  }
+
+  func testConsecutiveStatements7a() {
+    assertParse(
+      """
+      // At the top level
+      var i, j : Int1️⃣ i = j2️⃣ j = i
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        // At the top level
+        var i, j : Int
+        i = j
+        j = i
         """
     )
   }
@@ -203,12 +499,45 @@ final class ConsecutiveStatementsTests: XCTestCase {
       var i, j : Int1️⃣ i = j2️⃣ j = i
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         // At the top level
         var i, j : Int; i = j; j = i
+        """
+    )
+  }
+
+  func testConsecutiveStatements8() {
+    assertParse(
+      """
+      class Foo {
+        func a() {}1️⃣/* some comment */ func b() {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        class Foo {
+          func a() {}/* some comment */
+          func b() {}
+        }
         """
     )
   }

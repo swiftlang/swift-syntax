@@ -43,7 +43,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery7() {
+  func testRecovery7a() {
     assertParse(
       """
       func useContainer() -> () {
@@ -61,8 +61,8 @@ final class RecoveryTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -78,6 +78,54 @@ final class RecoveryTests: XCTestCase {
           message: "unexpected code in function"
         ),
       ],
+      applyFixIts: ["insert '>'", "insert newline", "insert expression"],
+      fixedSource: """
+        func useContainer() -> () {
+          var a : Container<not>a
+          type [skip this greater: >] > <#expression#>, b : Int
+          b = 5 // no-warning
+          a.exists()
+        }
+        """
+    )
+  }
+
+  func testRecovery7b() {
+    assertParse(
+      """
+      func useContainer() -> () {
+        var a : Containerℹ️<not 1️⃣a2️⃣ type [skip 3️⃣this greater: >] >4️⃣, b : Int
+        b = 5 // no-warning
+        a.exists()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '>' to end generic argument clause",
+          notes: [NoteSpec(message: "to match this opening '<'")],
+          fixIts: ["insert '>'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "unexpected code 'this greater: >' in subscript"
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected expression after operator",
+          fixIts: ["insert expression"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "unexpected code in function"
+        ),
+      ],
+      applyFixIts: ["insert '>'", "insert ';'", "insert expression"],
       fixedSource: """
         func useContainer() -> () {
           var a : Container<not>a; type [skip this greater: >] > <#expression#>, b : Int
@@ -108,7 +156,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery10() {
+  func testRecovery10a() {
     assertParse(
       """
       // Here is an extra random close-brace!
@@ -119,9 +167,51 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected brace before function"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        // Here is an extra random close-brace!
+        }
+        //===--- Recovery for braced blocks.
+        func braceStmt1() {
+          { braceStmt1(); }
+          a
+        }
+        """
+    )
+  }
+
+  func testRecovery10b() {
+    assertParse(
+      """
+      // Here is an extra random close-brace!
+      1️⃣}
+      //===--- Recovery for braced blocks.
+      func braceStmt1() {
+        { braceStmt1(); }2️⃣a
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected brace before function"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         // Here is an extra random close-brace!
         }
@@ -785,7 +875,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery51() {
+  func testRecovery51a() {
     assertParse(
       """
       switch 1️⃣{ 2️⃣42 }()3️⃣ {
@@ -793,11 +883,64 @@ final class RecoveryTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression in 'switch' statement"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+        ),
       ],
+      applyFixIts: ["insert label", "insert newline"],
+      fixedSource: """
+        switch {
+        case <#identifier#>: 42 }()
+        {
+          case _: return
+        }
+        """
+    )
+  }
+
+  func testRecovery51b() {
+    assertParse(
+      """
+      switch 1️⃣{ 2️⃣42 }()3️⃣ {
+        4️⃣case _: return
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression in 'switch' statement"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+        ),
+      ],
+      applyFixIts: ["insert label", "insert ';'"],
       fixedSource: """
         switch {
         case <#identifier#>: 42 }(); {
@@ -938,7 +1081,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery62() {
+  func testRecovery62a() {
     assertParse(
       """
       enum EE 1️⃣EE<T> where T : Multi {
@@ -954,11 +1097,44 @@ final class RecoveryTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive declarations on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
       ],
+      applyFixIts: ["join the identifiers together", "insert newline"],
+      fixedSource: """
+        enum EEEE<T> where T : Multi {
+          case a
+          a
+          case b
+        }
+        """
+    )
+  }
+
+  func testRecovery62b() {
+    assertParse(
+      """
+      enum EE 1️⃣EE<T> where T : Multi {
+        case a2️⃣ 3️⃣a
+        case b
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "found an unexpected second identifier in enum; is there an accidental break?",
+          fixIts: ["join the identifiers together"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
+      ],
+      applyFixIts: ["join the identifiers together", "insert ';'"],
       fixedSource: """
         enum EEEE<T> where T : Multi {
           case a;a
@@ -1565,8 +1741,8 @@ final class RecoveryTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive declarations on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -1605,7 +1781,8 @@ final class RecoveryTests: XCTestCase {
       ],
       fixedSource: """
         struct ErrorTypeInVarDeclDictionaryType {
-          let a1: String;:
+          let a1: String
+          :
           let a2: [String: Int]
           let a3: [String: [Int]]
           let a4: [String: Int]
@@ -2708,7 +2885,7 @@ final class RecoveryTests: XCTestCase {
     )
   }
 
-  func testRecovery170() {
+  func testRecovery170a() {
     // <rdar://problem/19911096> QoI: terrible recovery when using '·' for an operator
     assertParse(
       """
@@ -2717,11 +2894,63 @@ final class RecoveryTests: XCTestCase {
       4️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'·' is considered an identifier and must not appear within an operator name"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "extraneous brace at top level"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'·' is considered an identifier and must not appear within an operator name"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "operator should not be declared with body",
+          fixIts: ["remove operator body"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "extraneous brace at top level"
+        ),
       ],
+      applyFixIts: ["remove operator body", "insert newline"],
+      fixedSource: """
+        infix operator · precedence
+          150
+        }
+        """
+    )
+  }
+
+  func testRecovery170b() {
+    // <rdar://problem/19911096> QoI: terrible recovery when using '·' for an operator
+    assertParse(
+      """
+      infix operator 1️⃣· 2️⃣{
+        associativity none precedence3️⃣ 150
+      4️⃣}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'·' is considered an identifier and must not appear within an operator name"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "operator should not be declared with body",
+          fixIts: ["remove operator body"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "extraneous brace at top level"
+        ),
+      ],
+      applyFixIts: ["remove operator body", "insert ';'"],
       fixedSource: """
         infix operator · precedence; 150
         }

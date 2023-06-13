@@ -106,10 +106,10 @@ extension DiagnosticMessage where Self == StaticParserError {
     .init("'class' constraint can only appear on protocol declarations")
   }
   public static var consecutiveDeclarationsOnSameLine: Self {
-    .init("consecutive declarations on a line must be separated by ';'")
+    .init("consecutive declarations on a line must be separated by newline or ';'")
   }
   public static var consecutiveStatementsOnSameLine: Self {
-    .init("consecutive statements on a line must be separated by ';'")
+    .init("consecutive statements on a line must be separated by newline or ';'")
   }
   public static var cStyleForLoop: Self {
     .init("C-style for statement has been removed in Swift 3")

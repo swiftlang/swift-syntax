@@ -405,7 +405,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     )
   }
 
-  func testForwardSlashRegex45() {
+  func testForwardSlashRegex45a() {
     // This is parsed as /x /...
     assertParse(
       """
@@ -414,10 +414,42 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in operator", fixIts: ["insert expression"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '...' in 'do' statement"),
       ],
+      applyFixIts: ["insert newline", "insert expression"],
+      fixedSource: """
+        do {
+          _ = /x
+          /<#expression#>...
+        }
+        """
+    )
+  }
+
+  func testForwardSlashRegex45b() {
+    // This is parsed as /x /...
+    assertParse(
+      """
+      do {
+        _ = /x1️⃣ /2️⃣...
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression in operator", fixIts: ["insert expression"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '...' in 'do' statement"),
+      ],
+      applyFixIts: ["insert ';'", "insert expression"],
       fixedSource: """
         do {
           _ = /x; /<#expression#>...
@@ -1469,7 +1501,7 @@ final class ForwardSlashRegexTests: XCTestCase {
     )
   }
 
-  func testForwardSlashRegex150() {
+  func testForwardSlashRegex150a() {
     assertParse(
       #"""
       _ = ^/"/1️⃣"2️⃣
@@ -1477,8 +1509,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1487,13 +1519,40 @@ final class ForwardSlashRegexTests: XCTestCase {
           fixIts: [#"insert '"'"#]
         ),
       ],
+      applyFixIts: ["insert newline", #"insert '"'"#],
+      fixedSource: #"""
+        _ = ^/"/
+        ""
+        """#
+    )
+  }
+
+  func testForwardSlashRegex150b() {
+    assertParse(
+      #"""
+      _ = ^/"/1️⃣"2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      applyFixIts: ["insert ';'", #"insert '"'"#],
       fixedSource: #"""
         _ = ^/"/; ""
         """#
     )
   }
 
-  func testForwardSlashRegex151() {
+  func testForwardSlashRegex151a() {
     assertParse(
       #"""
       _ = ^/"[/1️⃣"2️⃣
@@ -1501,17 +1560,43 @@ final class ForwardSlashRegexTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by ';'",
-          fixIts: ["insert ';'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: #"expected '"' to end string literal"#,
           notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
-
           fixIts: [#"insert '"'"#]
         ),
       ],
+      applyFixIts: ["insert newline", #"insert '"'"#],
+      fixedSource: #"""
+        _ = ^/"[/
+        ""
+        """#
+    )
+  }
+
+  func testForwardSlashRegex151b() {
+    assertParse(
+      #"""
+      _ = ^/"[/1️⃣"2️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      applyFixIts: ["insert ';'", #"insert '"'"#],
       fixedSource: #"""
         _ = ^/"[/; ""
         """#

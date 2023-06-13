@@ -1208,15 +1208,49 @@ final class RegexLiteralTests: XCTestCase {
     )
   }
 
-  func testPrefixOpSplitting2() {
+  func testPrefixOpSplitting2a() {
     assertParse(
       """
       let x1️⃣ .2️⃣/abc/
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in member access", fixIts: ["insert name"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected name in member access",
+          fixIts: ["insert name"]
+        ),
       ],
+      applyFixIts: ["insert newline", "insert name"],
+      fixedSource: """
+        let x
+        .<#identifier#>/abc/
+        """
+    )
+  }
+
+  func testPrefixOpSplitting2b() {
+    assertParse(
+      """
+      let x1️⃣ .2️⃣/abc/
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected name in member access",
+          fixIts: ["insert name"]
+        ),
+      ],
+      applyFixIts: ["insert ';'", "insert name"],
       fixedSource: """
         let x; .<#identifier#>/abc/
         """

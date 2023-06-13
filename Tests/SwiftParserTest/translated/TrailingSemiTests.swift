@@ -56,7 +56,7 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testTrailingSemi3() {
+  func testTrailingSemi3a() {
     assertParse(
       """
       class C {
@@ -73,11 +73,28 @@ final class TrailingSemiTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
       ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         class C {
           var a : Int = 10; func aa() {};
@@ -95,7 +112,67 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testTrailingSemi4() {
+  func testTrailingSemi3b() {
+    assertParse(
+      """
+      class C {
+        var a : Int = 101️⃣ func aa() {};
+      #if FLAG1
+        var aaa: Int = 422️⃣ func aaaa() {};
+      #elseif FLAG2
+        var aaa: Int = 423️⃣ func aaaa() {}
+      #else
+        var aaa: Int = 424️⃣ func aaaa() {}
+      #endif
+        func b () {};
+        class func c () {};
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        class C {
+          var a : Int = 10
+          func aa() {};
+        #if FLAG1
+          var aaa: Int = 42
+          func aaaa() {};
+        #elseif FLAG2
+          var aaa: Int = 42
+          func aaaa() {}
+        #else
+          var aaa: Int = 42
+          func aaaa() {}
+        #endif
+          func b () {};
+          class func c () {};
+        }
+        """
+    )
+  }
+
+  func testTrailingSemi4a() {
     assertParse(
       """
       extension S {
@@ -106,14 +183,41 @@ final class TrailingSemiTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         extension S {
           //var a : Int ;
           func bb () {};
           static func cc () {};
           func dd() {}; subscript(i: Int) -> Int { return 1 }
+        }
+        """
+    )
+  }
+
+  func testTrailingSemi4b() {
+    assertParse(
+      """
+      extension S {
+        //var a : Int ;
+        func bb () {};
+        static func cc () {};
+        func dd() {}1️⃣ subscript(i: Int) -> Int { return 1 }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        extension S {
+          //var a : Int ;
+          func bb () {};
+          static func cc () {};
+          func dd() {}
+          subscript(i: Int) -> Int { return 1 }
         }
         """
     )
@@ -183,8 +287,9 @@ final class TrailingSemiTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
       ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         struct X {
         #if FLAG1
@@ -195,7 +300,31 @@ final class TrailingSemiTests: XCTestCase {
     )
   }
 
-  func testMissingSemiInIfConfigOfStmts() {
+  func testMissingNewlineInIfConfigOfDecls() {
+    assertParse(
+      """
+      struct X {
+      #if FLAG1
+        func foo() {}1️⃣ func bar() {}
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        struct X {
+        #if FLAG1
+          func foo() {}
+          func bar() {}
+        #endif
+        }
+        """
+    )
+  }
+
+  func testMissingSemiInIfConfigOfStmts1() {
     assertParse(
       """
       func foo() {
@@ -205,8 +334,39 @@ final class TrailingSemiTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        func foo() {
+        #if FLAG1
+          let a = 1
+          let b = 2
+        #endif
+        }
+        """
+    )
+  }
+
+  func testMissingSemiInIfConfigOfStmts2() {
+    assertParse(
+      """
+      func foo() {
+      #if FLAG1
+        let a = 11️⃣ let b = 2
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         func foo() {
         #if FLAG1

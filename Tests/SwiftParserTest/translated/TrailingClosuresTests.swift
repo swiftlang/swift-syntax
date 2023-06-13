@@ -199,7 +199,7 @@ final class TrailingClosuresTests: XCTestCase {
     )
   }
 
-  func testTrailingClosures14() {
+  func testTrailingClosures14a() {
     // TODO: The diagnostics here are perhaps a little overboard.
     assertParse(
       """
@@ -210,9 +210,44 @@ final class TrailingClosuresTests: XCTestCase {
       _ = produce { 2 } `default`: { 3 }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "consecutive statements on a line must be separated by ';'", fixIts: ["insert ';'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
       ],
+      applyFixIts: ["insert newline"],
+      fixedSource: """
+        func produce(fn: () -> Int?, default d: () -> Int) -> Int {
+          return fn() ?? d()
+        }
+        _ = produce { 0 }
+        default: { 1 }
+        _ = produce { 2 } `default`: { 3 }
+        """
+    )
+  }
+
+  func testTrailingClosures14b() {
+    // TODO: The diagnostics here are perhaps a little overboard.
+    assertParse(
+      """
+      func produce(fn: () -> Int?, default d: () -> Int) -> Int {
+        return fn() ?? d()
+      }
+      _ = produce { 0 }1️⃣ 2️⃣default: { 1 }
+      _ = produce { 2 } `default`: { 3 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
+      ],
+      applyFixIts: ["insert ';'"],
       fixedSource: """
         func produce(fn: () -> Int?, default d: () -> Int) -> Int {
           return fn() ?? d()

@@ -275,15 +275,13 @@ class FixItApplier: SyntaxRewriter {
   var changes: [FixIt.Change]
 
   init(diagnostics: [Diagnostic], withMessages messages: [String]?) {
+    let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
+
     self.changes =
       diagnostics
       .flatMap { $0.fixIts }
       .filter {
-        if let messages {
-          return messages.contains($0.message.message)
-        } else {
-          return true
-        }
+        return messages.contains($0.message.message)
       }
       .flatMap { $0.changes }
   }

@@ -168,12 +168,10 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         public init(_ children: [Element]) {
-          let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-            let raw = RawSyntax.makeLayout(kind: SyntaxKind.\(node.varOrCaseName),
-                                           from: children.map { $0.raw }, arena: arena)
-            return SyntaxData.forRoot(raw)
-          }
-          self.init(data)
+          let arena = SyntaxArena()
+          let raw = RawSyntax.makeLayout(kind: SyntaxKind.\(node.varOrCaseName),
+                                         from: children.map { $0.raw }, arena: arena)
+          self.init(SyntaxData.forRoot(raw, arena: arena))
         }
         """
       )

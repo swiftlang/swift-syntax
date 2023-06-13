@@ -97,7 +97,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -368,7 +368,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -694,7 +694,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1011,7 +1011,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1310,7 +1310,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1514,7 +1514,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1703,7 +1703,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -1956,7 +1956,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2268,7 +2268,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2558,7 +2558,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2832,7 +2832,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -2989,7 +2989,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3270,7 +3270,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3588,7 +3588,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -3910,7 +3910,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4269,7 +4269,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4458,7 +4458,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4628,7 +4628,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -4814,7 +4814,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5133,7 +5133,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5505,7 +5505,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -5865,7 +5865,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6169,7 +6169,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -6435,7 +6435,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }

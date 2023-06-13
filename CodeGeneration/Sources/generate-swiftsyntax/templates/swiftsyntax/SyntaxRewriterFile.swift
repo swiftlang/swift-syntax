@@ -326,7 +326,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
           // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
           return withExtendedLifetime((arena, rewrittens)) {
-            Syntax(raw: newRaw).cast(SyntaxType.self)
+            Syntax(raw: newRaw, arena: arena).cast(SyntaxType.self)
           }
         } else {
           // No child node was rewritten. So no need to change this node as well.
@@ -342,8 +342,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// a parent if `node` had one.
       public func rewrite(_ node: Syntax) -> Syntax {
         let rewritten = self.visit(node)
-        let arena = SyntaxArena()
-        return Syntax(node.data.replacingSelf(rewritten.raw, arena: arena))
+        return withExtendedLifetime(rewritten) {
+          return Syntax(node.data.replacingSelf(rewritten.raw, arena: rewritten.raw.arena))
+        }
       }
       """
     )

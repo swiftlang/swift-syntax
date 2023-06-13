@@ -53,7 +53,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -131,7 +131,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -223,7 +223,7 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -325,7 +325,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -424,7 +424,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -579,7 +579,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }
@@ -695,7 +695,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
         trailingTrivia: trailingTrivia
         
       )
-      return SyntaxData.forRoot(raw)
+      return SyntaxData.forRoot(raw, arena: arena)
     }
     self.init(data)
   }

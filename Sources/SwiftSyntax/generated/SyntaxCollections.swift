@@ -57,14 +57,12 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -266,14 +264,12 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -517,14 +513,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -726,14 +720,12 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -935,14 +927,12 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1144,14 +1134,12 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1353,14 +1341,12 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1562,14 +1548,12 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1771,14 +1755,12 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -1980,14 +1962,12 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2189,14 +2169,12 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2398,14 +2376,12 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2607,14 +2583,12 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -2816,14 +2790,12 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3025,14 +2997,12 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3234,14 +3204,12 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3443,14 +3411,12 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3652,14 +3618,12 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -3858,14 +3822,12 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4064,14 +4026,12 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4270,14 +4230,12 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4479,14 +4437,12 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4685,14 +4641,12 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -4894,14 +4848,12 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5103,14 +5055,12 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5312,14 +5262,12 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5521,14 +5469,12 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5730,14 +5676,12 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -5939,14 +5883,12 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.importPath,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.importPath,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6148,14 +6090,12 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6357,14 +6297,12 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6566,14 +6504,12 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6775,14 +6711,12 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -6984,14 +6918,12 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7193,14 +7125,12 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7402,14 +7332,12 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7665,14 +7593,12 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -7874,14 +7800,12 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8083,14 +8007,12 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8356,14 +8278,12 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8607,14 +8527,12 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -8858,14 +8776,12 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9067,14 +8983,12 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9276,14 +9190,12 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9485,14 +9397,12 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9691,14 +9601,12 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -9900,14 +9808,12 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.versionComponentList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.versionComponentList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.
@@ -10109,14 +10015,12 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
-                                     from: children.map {
-          $0.raw
-        }, arena: arena)
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
+                                   from: children.map {
+        $0.raw
+      }, arena: arena)
+    self.init(SyntaxData.forRoot(raw, arena: arena))
   }
   
   /// The number of elements, `present` or `missing`, in this collection.

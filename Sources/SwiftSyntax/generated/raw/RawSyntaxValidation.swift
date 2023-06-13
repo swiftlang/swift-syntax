@@ -2277,7 +2277,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("self"), 
             .keyword("Self"), 
             .keyword("Any"), 
-            .tokenKind(.keyword), 
             .tokenKind(.wildcard)
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))

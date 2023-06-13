@@ -421,7 +421,6 @@ public let TYPE_NODES: [Node] = [
           .keyword(text: "self"),
           .keyword(text: "Self"),
           .keyword(text: "Any"),
-          .token(tokenKind: "KeywordToken"),
           .token(tokenKind: "WildcardToken"),
         ]),
         classification: "TypeIdentifier"

@@ -295,15 +295,13 @@ extension Parser {
         continue
       }
 
-      if !self.currentToken.isAtStartOfLine {
-        if self.at(.postfixQuestionMark) {
-          base = RawTypeSyntax(self.parseOptionalType(base))
-          continue
-        }
-        if self.at(.exclamationMark) {
-          base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
-          continue
-        }
+      if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
+        base = RawTypeSyntax(self.parseOptionalType(base))
+        continue
+      }
+      if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
+        base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
+        continue
       }
 
       break
@@ -780,11 +778,9 @@ extension Parser.Lookahead {
         return false
       }
 
-      if !self.currentToken.isAtStartOfLine {
-        if self.at(.postfixQuestionMark) || self.at(.exclamationMark) {
-          self.consumeAnyToken()
-          continue
-        }
+      if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) || self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
+        self.consumeAnyToken()
+        continue
       }
 
       break

@@ -603,7 +603,7 @@ extension Parser {
 
     let beforePeriodWhitespace = previousNode?.raw.trailingTriviaByteLength ?? 0 > 0 || self.currentToken.leadingTriviaByteLength > 0
     let afterPeriodWhitespace = self.currentToken.trailingTriviaByteLength > 0 || self.peek().leadingTriviaByteLength > 0
-    let afterContainsAnyNewline = self.peek().flags.contains(.isAtStartOfLine)
+    let afterContainsAnyNewline = self.peek().isAtStartOfLine
 
     let period = self.consumeAnyToken()
 

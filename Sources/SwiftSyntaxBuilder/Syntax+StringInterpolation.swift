@@ -106,7 +106,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
 
   /// Interpolates a literal or similar expression syntax equivalent to `value`.
   ///
-  /// - SeeAlso: ``Expr/init(literal:)``
+  /// - SeeAlso: ``SwiftSyntax/ExprSyntax/init(literal:)``
   public mutating func appendInterpolation(
     literal value: some ExpressibleByLiteralSyntax,
     format: BasicFormat = BasicFormat()
@@ -118,7 +118,7 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   // it silences a warning about interpolating Optionals.
   /// Interpolates a literal or similar expression syntax equivalent to `value`.
   ///
-  /// - SeeAlso: ``Expr/init(literal:)``
+  /// - SeeAlso: ``SwiftSyntax/ExprSyntax/init(literal:)``
   public mutating func appendInterpolation<Literal: ExpressibleByLiteralSyntax>(
     literal value: Literal?,
     format: BasicFormat = BasicFormat()
@@ -161,10 +161,10 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
 /// Conforming types do not *contain* Swift source code; rather, they can be
 /// *expressed* in Swift source code, and this protocol can be used to get
 /// whatever source code would do that. For example, `String` is
-/// `ExpressibleByLiteralSyntax` but ``StringLiteralExprSyntax`` is not.
+/// `ExpressibleByLiteralSyntax` but ``SwiftSyntax/StringLiteralExprSyntax`` is not.
 ///
 /// This protocol is usually not used directly. Instead, conforming types can
-/// be turned into syntax trees using ``Expr/init(literal:)``:
+/// be turned into syntax trees using ``SwiftSyntax/ExprSyntax/init(literal:)``:
 ///
 ///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
 ///     // `expr2` is a syntax tree for `[1, 2, 3]`.
@@ -195,7 +195,7 @@ public protocol ExpressibleByLiteralSyntax {
   /// Returns a syntax tree that represents the value of this instance.
   ///
   /// This method is usually not called directly. Instead, conforming types can
-  /// be turned into syntax trees using ``Expr/init(literal:)``:
+  /// be turned into syntax trees using ``SwiftSyntax/ExprSyntax/init(literal:)``:
   ///
   ///     let expr2 = Expr(literal: [0+1, 1+1, 2+1])
   ///     // `expr2` is a syntax tree for `[1, 2, 3]`.

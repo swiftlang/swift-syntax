@@ -82,4 +82,3 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/SyntaxEnum>
 - <doc:SwiftSyntax/SyntaxHashable>
 - <doc:SwiftSyntax/SyntaxIdentifier>
-- <doc:SwiftSyntax/RawTokenKind>

@@ -634,7 +634,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDecl`` will contain these.",
+        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these.",
         isOptional: true
       ),
       Child(

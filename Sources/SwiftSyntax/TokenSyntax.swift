@@ -139,7 +139,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// empty layout node.
   ///
   /// Every syntax node that contains a token will have a
-  /// ``SyntaxNodeStructure.SyntaxChoices.choices`` case for the token and those
+  /// ``SyntaxNodeStructure/SyntaxChoice/token(_:)`` case for the token and those
   /// choices represent the token kinds the token might have.
   public static var structure: SyntaxNodeStructure {
     return .layout([])

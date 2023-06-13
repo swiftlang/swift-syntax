@@ -29,8 +29,8 @@
 /// from a bad parse should be left `nonmutating` to indicate that they do not
 /// consume tokens.
 ///
-/// Token consumption is generally either unconditional via ``TokenConsumer/consumeAnyToken()``
-/// or conditional via a combination of ``TokenConsumer/at(_:where:)``
+/// Token consumption is generally either unconditional via `TokenConsumer.consumeAnyToken()`
+/// or conditional via a combination of `TokenConsumer/at(_:where:)`
 /// and `TokenConsumer.eat(_:)`. When parsing conditionally, `at` returns a
 /// handle that is passed to `eat`. This ensures that any structure that is
 /// checked for is actually parsed by the parser at that position. If the parser
@@ -46,7 +46,7 @@
 ///     /*  */
 ///     let rbrace = self.expect(.rightBrace)
 ///
-/// Unlike ``TokenConsumer/eat(_:)``, ``Parser/expect(_:remapping:)`` returns
+/// Unlike `TokenConsumer.eat(_:)`, `Parser.expect(_:remapping:)` returns
 /// a `missing` token of the given kind. This allows the tree to remain
 /// well-formed even when the input text is not, all without affecting
 /// source fidelity.
@@ -72,8 +72,8 @@
 ///
 /// This parser provides at most one token worth of lookahead via
 /// `peek()`. If more tokens are required to disambiguate a parse, a
-/// ``Parser/Lookahead`` instance should be constructed instead with
-/// ``Parser/lookahead()``.
+/// `Parser.Lookahead` instance should be constructed instead with
+/// `Parser.lookahead()`.
 ///
 /// Source Fidelity
 /// ===============

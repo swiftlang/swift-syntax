@@ -33,7 +33,7 @@ with these diagnostics.
 
 When the parser expects a token but can’t find it, it looks ahead to see if it 
 can find the expected token by using a token precedence model. Tokens are 
-divided in precedence groups (see ``TokenPrecedence``), 
+divided in precedence groups (see `TokenPrecedence`), 
 dependening on how strongly they mark the structure of the source code. For 
 example, keywords that start a declaration, like `func`, have a higher 
 precedence than expression keywords, like `self`.

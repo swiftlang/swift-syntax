@@ -184,6 +184,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: "version",
     documentation: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
+    traits: ["WithTrailingComma"],
     children: [
       Child(
         name: "AvailabilityVersionRestriction",

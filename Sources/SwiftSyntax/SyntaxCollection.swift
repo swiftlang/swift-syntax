@@ -35,11 +35,15 @@ extension SyntaxCollection {
 
   public init(_ children: [Element]) {
     let arena = SyntaxArena()
-    let raw = RawSyntax.makeLayout(
-      kind: Self.syntaxKind,
-      from: children.map { $0.raw },
-      arena: arena
-    )
+    // Extend the lifetime of children so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let raw = withExtendedLifetime(children) {
+      RawSyntax.makeLayout(
+        kind: Self.syntaxKind,
+        from: children.map { $0.raw },
+        arena: arena
+      )
+    }
     self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
   }
 

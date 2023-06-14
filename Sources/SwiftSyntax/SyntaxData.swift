@@ -273,11 +273,13 @@ struct SyntaxData {
     self.init(absoluteRaw.raw, parent: parent.data, absoluteInfo: absoluteRaw.info)
   }
 
-  /// Creates a `SyntaxData` for a root raw node.
+  /// Creates a ``SyntaxData`` for a root raw node.
   ///
-  /// `arena` must be the arena in which `raw` is allocated. It is passed to
-  /// make sure the arena doesn’t get de-allocated before the ``SyntaxData`` has
-  /// a chance to retain it.
+  /// - Parameters:
+  ///   - raw: The raw node that will be the root of the the tree
+  ///   - rawNodeArena: The arena in which `raw` is allocated. It is passed to
+  ///     make sure the arena doesn’t get de-allocated before the ``SyntaxData``
+  ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> SyntaxData {
     precondition(rawNodeArena === raw.arena)
     return SyntaxData(raw, info: .root(.init(arena: rawNodeArena)))
@@ -307,7 +309,7 @@ struct SyntaxData {
   /// - Parameters:
   ///   - newRaw: The node that should replace `self`
   ///   - rawNodeArena: The arena in which `newRaw` resides
-  ///   - arena: The arena in which  new nodes should be allocated
+  ///   - allocationArena: The arena in which  new nodes should be allocated
   /// - Returns: A syntax tree with all parents where this node has been
   ///            replaced by `newRaw`
   func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: SyntaxArena, allocationArena: SyntaxArena) -> SyntaxData {

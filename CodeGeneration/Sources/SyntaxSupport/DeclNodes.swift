@@ -1779,6 +1779,7 @@ public let DECL_NODES: [Node] = [
     name: "PrecedenceGroupNameElement",
     nameForDiagnostics: nil,
     kind: "Syntax",
+    traits: ["WithTrailingComma"],
     children: [
       Child(
         name: "Name",
@@ -2095,6 +2096,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "IdentifiedDecl",
       "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(

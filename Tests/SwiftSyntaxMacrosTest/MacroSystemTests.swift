@@ -1112,7 +1112,7 @@ final class MacroSystemTests: XCTestCase {
       expandedSource: #"""
         struct S {
           @attr static var value1 = 1
-          @attr typealias A = B
+          @attr static typealias A = B
         }
         """#,
       macros: ["decls": DeclsFromStringsMacro.self],

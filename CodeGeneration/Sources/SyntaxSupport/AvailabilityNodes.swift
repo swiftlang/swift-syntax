@@ -21,6 +21,7 @@ public let AVAILABILITY_NODES: [Node] = [
     nameForDiagnostics: "availability argument",
     description: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
     kind: "Syntax",
+    traits: ["WithTrailingComma"],
     children: [
       Child(
         name: "Entry",

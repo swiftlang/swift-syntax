@@ -13,11 +13,8 @@ import SwiftSyntax
 public protocol CodeItemMacro: FreestandingMacro {
   /// Expand a macro described by the given freestanding macro expansion
   /// declaration within the given context to produce a set of declarations.
-  static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of node: Node,
-    in context: Context
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
 }

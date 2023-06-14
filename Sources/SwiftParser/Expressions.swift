@@ -1420,7 +1420,7 @@ extension Parser {
     var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     var macro: RawTokenSyntax
     if !self.currentToken.isAtStartOfLine {
-      (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+      (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
       if macro.leadingTriviaByteLength != 0 {
         // If there're whitespaces after '#' diagnose.
         unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)

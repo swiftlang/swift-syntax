@@ -339,48 +339,7 @@ extension Parser {
   }
 
   mutating func parseImportKind() -> RawTokenSyntax? {
-    enum ImportKind: TokenSpecSet {
-      case `typealias`
-      case `struct`
-      case `class`
-      case `enum`
-      case `protocol`
-      case `var`
-      case `let`
-      case `func`
-      case `inout`
-
-      var spec: TokenSpec {
-        switch self {
-        case .typealias: return .keyword(.typealias)
-        case .struct: return .keyword(.struct)
-        case .class: return .keyword(.class)
-        case .enum: return .keyword(.enum)
-        case .protocol: return .keyword(.protocol)
-        case .var: return .keyword(.var)
-        case .let: return .keyword(.let)
-        case .func: return .keyword(.func)
-        case .inout: return .keyword(.inout)
-        }
-      }
-
-      init?(lexeme: Lexer.Lexeme) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.typealias): self = .typealias
-        case TokenSpec(.struct): self = .struct
-        case TokenSpec(.class): self = .class
-        case TokenSpec(.enum): self = .enum
-        case TokenSpec(.protocol): self = .protocol
-        case TokenSpec(.var): self = .var
-        case TokenSpec(.let): self = .let
-        case TokenSpec(.func): self = .func
-        case TokenSpec(.inout): self = .inout
-        default: return nil
-        }
-      }
-    }
-
-    return self.consume(ifAnyIn: ImportKind.self)
+    return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindOptions.self)
   }
 
   mutating func parseImportPath() -> RawImportPathSyntax {
@@ -581,56 +540,6 @@ extension Parser {
     )
   }
 
-  enum LayoutConstraint: TokenSpecSet {
-    case _Trivial
-    case _TrivialAtMost
-    case _UnknownLayout
-    case _RefCountedObjectLayout
-    case _NativeRefCountedObjectLayout
-    case _Class
-    case _NativeClass
-
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._Trivial): self = ._Trivial
-      case TokenSpec(._TrivialAtMost): self = ._TrivialAtMost
-      case TokenSpec(._UnknownLayout): self = ._UnknownLayout
-      case TokenSpec(._RefCountedObject): self = ._RefCountedObjectLayout
-      case TokenSpec(._NativeRefCountedObject): self = ._NativeRefCountedObjectLayout
-      case TokenSpec(._Class): self = ._Class
-      case TokenSpec(._NativeClass): self = ._NativeClass
-      default: return nil
-      }
-    }
-
-    var spec: TokenSpec {
-      switch self {
-      case ._Trivial: return .keyword(._Trivial)
-      case ._TrivialAtMost: return .keyword(._TrivialAtMost)
-      case ._UnknownLayout: return .keyword(._UnknownLayout)
-      case ._RefCountedObjectLayout: return .keyword(._RefCountedObject)
-      case ._NativeRefCountedObjectLayout: return .keyword(._NativeRefCountedObject)
-      case ._Class: return .keyword(._Class)
-      case ._NativeClass: return .keyword(._NativeClass)
-      }
-    }
-
-    var hasArguments: Bool {
-      switch self {
-      case ._Trivial,
-        ._TrivialAtMost:
-        return true
-
-      case ._UnknownLayout,
-        ._RefCountedObjectLayout,
-        ._NativeRefCountedObjectLayout,
-        ._Class,
-        ._NativeClass:
-        return false
-      }
-    }
-  }
-
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
     let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
@@ -690,7 +599,7 @@ extension Parser {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
           // A conformance-requirement.
-          if let (layoutConstraint, handle) = self.at(anyIn: LayoutConstraint.self) {
+          if let (layoutConstraint, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutConstraintOptions.self) {
             // Parse a layout constraint.
             let constraint = self.eat(handle)
 
@@ -701,9 +610,25 @@ extension Parser {
             let alignment: RawTokenSyntax?
             let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
             let rightParen: RawTokenSyntax?
+
+            var hasArguments: Bool {
+              switch layoutConstraint {
+              case ._Trivial,
+                ._TrivialAtMost:
+                return true
+
+              case ._UnknownLayout,
+                ._RefCountedObject,
+                ._NativeRefCountedObject,
+                ._Class,
+                ._NativeClass:
+                return false
+              }
+            }
+
             // Unlike the other layout constraints, _Trivial's argument list
             // is optional.
-            if layoutConstraint.hasArguments && (layoutConstraint != ._Trivial || self.at(.leftParen)) {
+            if hasArguments && (layoutConstraint != ._Trivial || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
               size = self.expectWithoutRecovery(.integerLiteral)
               comma = self.consume(if: .comma)
@@ -1296,7 +1221,7 @@ extension Parser {
 
     // Parse getter and setter.
     let accessor: RawSubscriptDeclSyntax.Accessor?
-    if self.at(.leftBrace) || self.at(anyIn: AccessorKind.self) != nil {
+    if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil {
       accessor = self.parseGetSet()
     } else {
       accessor = nil
@@ -1418,7 +1343,7 @@ extension Parser {
         }
 
         let accessor: RawPatternBindingSyntax.Accessor?
-        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorKind.self) != nil && !self.at(.keyword(.`init`))) {
+        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil && !self.at(.keyword(.`init`))) {
           switch self.parseGetSet() {
           case .accessors(let accessors):
             accessor = .accessors(accessors)
@@ -1456,19 +1381,19 @@ extension Parser {
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax?
     var modifier: RawDeclModifierSyntax?
-    var kind: AccessorKind
+    var kind: AccessorDeclSyntax.AccessorKindOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
   }
 
   mutating func parseAccessorIntroducer(
-    forcedKind: (AccessorKind, TokenConsumptionHandle)? = nil
+    forcedKind: (AccessorDeclSyntax.AccessorKindOptions, TokenConsumptionHandle)? = nil
   ) -> AccessorIntroducer? {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(if: .keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)) != nil
-    guard let (kind, _) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
+    guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) ?? forcedKind else {
       return nil
     }
 
@@ -1530,7 +1455,7 @@ extension Parser {
     //
     //     set-name    ::= '(' identifier ')'
     let parameter: RawAccessorParameterSyntax?
-    if [AccessorKind.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
+    if [AccessorDeclSyntax.AccessorKindOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       parameter = RawAccessorParameterSyntax(
@@ -1575,7 +1500,7 @@ extension Parser {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
-    if self.at(anyIn: AccessorKind.self) != nil {
+    if self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil {
       unexpectedBeforeLBrace = nil
       lbrace = missingToken(.leftBrace)
     } else {
@@ -1976,7 +1901,7 @@ extension Parser {
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeFlag, flag) = self.expect(.keyword(.true), .keyword(.false), default: .keyword(.true))
+          let (unexpectedBeforeFlag, flag) = self.expect(anyIn: PrecedenceGroupAssignmentSyntax.FlagOptions.self, default: .true)
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
           if flag.isMissing, let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)

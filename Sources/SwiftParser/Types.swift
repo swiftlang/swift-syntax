@@ -944,43 +944,8 @@ extension Parser {
     }
     var extraneousSpecifiers: [RawTokenSyntax] = []
 
-    enum ExtraneousSpecifier: TokenSpecSet {
-      case `inout`
-      case __shared
-      case __owned
-      case isolated
-      case _const
-      case consuming
-      case borrowing
-
-      var spec: TokenSpec {
-        switch self {
-        case .inout: return .keyword(.inout)
-        case .__shared: return .keyword(.__shared)
-        case .__owned: return .keyword(.__owned)
-        case .isolated: return .keyword(.isolated)
-        case ._const: return .keyword(._const)
-        case .consuming: return .keyword(.consuming)
-        case .borrowing: return .keyword(.borrowing)
-        }
-      }
-
-      init?(lexeme: Lexer.Lexeme) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.inout): self = .inout
-        case TokenSpec(.__shared): self = .__shared
-        case TokenSpec(.__owned): self = .__owned
-        case TokenSpec(.isolated): self = .isolated
-        case TokenSpec(._const): self = ._const
-        case TokenSpec(.consuming): self = .consuming
-        case TokenSpec(.borrowing): self = .borrowing
-        default: return nil
-        }
-      }
-    }
-
     while canHaveParameterSpecifier,
-      let extraSpecifier = self.consume(ifAnyIn: ExtraneousSpecifier.self)
+      let extraSpecifier = self.consume(ifAnyIn: AttributedTypeSyntax.SpecifierOptions.self)
     {
       if specifier == nil {
         specifier = extraSpecifier

@@ -2620,7 +2620,7 @@ extension Parser {
     var versionInfo: RawCanImportVersionInfoSyntax?
 
     if let comma = self.consume(if: .comma) {
-      let (unexpectedBeforeLabel, label) = self.expect(.keyword(._version), .keyword(._underlyingVersion), default: .keyword(._version))
+      let (unexpectedBeforeLabel, label) = self.expect(anyIn: CanImportVersionInfoSyntax.LabelOptions.self, default: ._version)
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
       let version = self.parseVersionTuple(maxComponentCount: 4)

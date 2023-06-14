@@ -1122,7 +1122,7 @@ extension Parser {
     let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
     var unexpectedNameAndSignature: [RawSyntax?] = []
     unexpectedNameAndSignature.append(self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)).map(RawSyntax.init))
-    if self.at(.leftParen) && !self.currentToken.isAtStartOfLine {
+    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
       unexpectedNameAndSignature.append(RawSyntax(parseFunctionSignature()))
     }
     let items = self.parseOptionalCodeBlock()
@@ -1374,7 +1374,7 @@ extension Parser {
             value: value,
             arena: self.arena
           )
-        } else if self.at(.leftParen), !self.currentToken.isAtStartOfLine,
+        } else if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)),
           let typeAnnotationUnwrapped = typeAnnotation
         {
           // If we have a '(' after the type in the annotation, the type annotation

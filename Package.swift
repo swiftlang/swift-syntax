@@ -36,7 +36,7 @@ if ProcessInfo.processInfo.environment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTRO
 }
 
 let package = Package(
-  name: "SwiftSyntax",
+  name: "swift-syntax",
   platforms: [
     .macOS(.v10_15),
     .iOS(.v13),

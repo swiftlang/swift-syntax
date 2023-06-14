@@ -1378,7 +1378,7 @@ extension Parser {
       )
     }
     let poundKeyword = self.consumeAnyToken()
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?

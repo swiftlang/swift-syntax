@@ -46,7 +46,6 @@ let nodesSections: String = {
     types: [
       "SyntaxChildren",
       "SyntaxChildrenIndex",
-      "SyntaxChildrenIndexData",
     ]
       + SYNTAX_NODES.flatMap({ (node: Node) -> [String] in
         guard let node = node.collectionNode else {
@@ -62,7 +61,7 @@ let nodesSections: String = {
 
   addSection(heading: "Miscellaneous Syntax", types: SYNTAX_NODES.map(\.kind.syntaxType.description).filter({ !handledSyntaxTypes.contains($0) }))
 
-  addSection(heading: "Traits", types: TRAITS.map(\.traitName))
+  addSection(heading: "Traits", types: TRAITS.map { "\($0.traitName)Syntax" })
 
   return result
 }()

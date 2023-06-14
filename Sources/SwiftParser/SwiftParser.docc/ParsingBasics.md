@@ -108,7 +108,7 @@ extension Parser {
 ```
 
 This simple function introduces many of the basic concepts that form the
-backbone of the parser's implementation. The ``Parser/eat(_:)`` method
+backbone of the parser's implementation. The `Parser.eat(_:)` method
 provides a function to examine the input stream and advance one step if the
 provided token kind is present. To form the node, a call to the initializer
 is made, which acts to wire up all of the sub-nodes into a single 
@@ -116,7 +116,7 @@ is made, which acts to wire up all of the sub-nodes into a single
 
 ### Unconditional Parsing
 
-The ``Parser/eat(_:)`` method unconditionally consumes a token of the given
+The `Parser.eat(_:)` method unconditionally consumes a token of the given
 type, and an assertion is raised if the input token's kind does not match.
 This function is most appropriate for encoding structural invariants during
 the parse. For example, the decision to parse a `FunctionDeclSyntax` node is
@@ -128,7 +128,7 @@ calling the function parsing method.
 ### Conditional Parsing
 
 To model conditional productions, the syntax tree uses `Optional`-typed
-syntax nodes, and the parser uses the ``Parser/consume(if:)`` method. 
+syntax nodes, and the parser uses the `Parser.consume(if:)` method. 
 For a Swift declaration item, a trailing semicolon is optional:
 
 ```swift
@@ -146,7 +146,7 @@ extension Parser {
 }
 ```
 
-Unlike ``Parser/eat(_:)``, if the parser does not encounter a token of the
+Unlike `Parser.eat(_:)`, if the parser does not encounter a token of the
 given type, a `nil` token is returned and the input is left unconsumed.
 
 ### Sequence Parsing

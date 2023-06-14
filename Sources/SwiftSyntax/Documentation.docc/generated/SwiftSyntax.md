@@ -203,7 +203,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 - <doc:SwiftSyntax/SyntaxChildren>
 - <doc:SwiftSyntax/SyntaxChildrenIndex>
-- <doc:SwiftSyntax/SyntaxChildrenIndexData>
 - <doc:SwiftSyntax/AccessorListSyntax>
 - <doc:SwiftSyntax/ArrayElementListSyntax>
 - <doc:SwiftSyntax/ArrayElementSyntax>
@@ -371,17 +370,17 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 ### Traits
 
-- <doc:SwiftSyntax/Braced>
-- <doc:SwiftSyntax/DeclGroup>
-- <doc:SwiftSyntax/EffectSpecifiers>
-- <doc:SwiftSyntax/FreestandingMacroExpansion>
-- <doc:SwiftSyntax/IdentifiedDecl>
-- <doc:SwiftSyntax/Parenthesized>
-- <doc:SwiftSyntax/WithAttributes>
-- <doc:SwiftSyntax/WithCodeBlock>
-- <doc:SwiftSyntax/WithModifiers>
-- <doc:SwiftSyntax/WithStatements>
-- <doc:SwiftSyntax/WithTrailingComma>
+- <doc:SwiftSyntax/BracedSyntax>
+- <doc:SwiftSyntax/DeclGroupSyntax>
+- <doc:SwiftSyntax/EffectSpecifiersSyntax>
+- <doc:SwiftSyntax/FreestandingMacroExpansionSyntax>
+- <doc:SwiftSyntax/IdentifiedDeclSyntax>
+- <doc:SwiftSyntax/ParenthesizedSyntax>
+- <doc:SwiftSyntax/WithAttributesSyntax>
+- <doc:SwiftSyntax/WithCodeBlockSyntax>
+- <doc:SwiftSyntax/WithModifiersSyntax>
+- <doc:SwiftSyntax/WithStatementsSyntax>
+- <doc:SwiftSyntax/WithTrailingCommaSyntax>
 
 
 
@@ -410,4 +409,3 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/SyntaxEnum>
 - <doc:SwiftSyntax/SyntaxHashable>
 - <doc:SwiftSyntax/SyntaxIdentifier>
-- <doc:SwiftSyntax/RawTokenKind>

@@ -178,7 +178,7 @@ of high-level APIs for expressing these modifications. In general, data in
 syntax nodes can be accessed via a getter and updated with a corresponding
 `with*` method. For example, the name of a class can be retrieved with the
 ``ClassDeclSyntax/identifier`` accessor, and replaced with the 
-``ClassDeclSyntax/withIdentifier(_:)`` update function. This method returns
+``ClassDeclSyntax/with(_:_:)-3exln`` update function. This method returns
 a new ``ClassDeclSyntax`` value.
 
 ## Building Syntax Trees

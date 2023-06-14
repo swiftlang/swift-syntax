@@ -46,19 +46,6 @@ There are several design principles that govern the parser:
 - **Minimal context**: The parser requires minimal context to parse Swift code, which consists of only those things required to handle a suitable Swift dialect, e.g., whether [regex literals](https://github.com/apple/swift-evolution/blob/main/proposals/0354-regex-literals.md) are supported. The parser can be invoked on any input source code, starting at any major production in the grammar (e.g., full source file, an individual type, an individual expression).
 - **Incremental**: A parse tree produced for a source file can be incrementally updated for a new version of that source file, reusing syntax nodes where possible to reduce computation overhead and memory.
 
-### Lexical Analysis
-
-- <doc:SwiftParser/Lexer>
-- <doc:SwiftParser/Lexer/Lexeme>
-- <doc:SwiftParser/Lexer/Cursor>
-- <doc:SwiftParser/Lexer/LexemeSequence>
-
-### Parsing
-
-- <doc:SwiftParser/TokenConsumer>
-- <doc:SwiftParser/Parser>
-- <doc:SwiftParser/Parser/Lookahead>
-
 ### Development
 
 - <doc:SwiftParser/FilingBugReports>

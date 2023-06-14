@@ -13,7 +13,7 @@
 /// A syntax arena owns the memory for all syntax nodes within it.
 ///
 /// The following is only relevant if you are accessing the raw syntax tree using
-/// ``RawSyntax`` nodes. When working with syntax trees using SwiftSyntax’s API,
+/// `RawSyntax` nodes. When working with syntax trees using SwiftSyntax’s API,
 /// the usage of a ``SyntaxArena`` is transparent.
 ///
 /// Contrary to Swift’s usual memory model, syntax node's are not individually
@@ -26,15 +26,15 @@
 /// As a consequence, syntax nodes cannot be freed individually but the memory
 /// will get freed once the owning ``SyntaxArena`` gets freed. Thus, it needs to
 /// be manually ensured that the ``SyntaxArena`` is not deallocated while any
-/// of its nodes are being accessed. The ``SyntaxData`` type ensures this as
+/// of its nodes are being accessed. The `SyntaxData` type ensures this as
 /// follows:
 /// - The root node has a strong reference to its ``SyntaxArena``
-/// - Each node retains its parent ``SyntaxData``, thus keeping it alive.
+/// - Each node retains its parent `SyntaxData`, thus keeping it alive.
 /// - If any node is allocated within a different ``SyntaxArena``,  that arena
 ///   is added to the root's `childRefs` property and thus kept a live as long
 ///   as the parent tree is alive.
 ///
-/// As an added benefit of the ``SyntaxArena``, ``RawSyntax`` nodes don’t need to
+/// As an added benefit of the ``SyntaxArena``, `RawSyntax` nodes don’t need to
 /// be reference-counted, further improving the performance of ``SwiftSyntax``
 /// when worked with at that level.
 public class SyntaxArena {

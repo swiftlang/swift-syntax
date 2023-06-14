@@ -1528,7 +1528,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// If there were attributes before the editor placeholder, the ``EditorPlaceholderDecl`` will contain these.
+  /// If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these.
   public var attributes: AttributeListSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)

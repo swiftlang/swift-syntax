@@ -109,8 +109,8 @@ stateless. It is not a hard and fast rule that the parse be stateless, but
 engineering it with that mindset has enabled a relatively clean, testable 
 parser design to emerge. Swift is not a context-free language, so there will
 inevitably need to be some state involved during the parse. The parser is
-designed to sequester those stateful decisions 
-(e.g. <doc:SwiftParser/Parser/Lookahead>) away from the main parse productions.
+designed to sequester those stateful decisions (e.g. `Parser.Lookahead`) 
+away from the main parse productions.
 
 What ambient state is present occurs as arguments to certain productions that
 are required to enable or disable their child productions in response to some 

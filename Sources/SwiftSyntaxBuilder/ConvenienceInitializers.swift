@@ -43,7 +43,7 @@ extension ArrayExprSyntax {
 extension AttributeSyntax {
   /// A convenience initializer that allows passing in arguments using a result builder
   /// and automatically adds parentheses as needed, similar to the convenience
-  /// initializer for ``FunctionCallExpr``.
+  /// initializer for ``FunctionCallExprSyntax``.
   public init(
     _ attributeName: TypeSyntax,
     @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }

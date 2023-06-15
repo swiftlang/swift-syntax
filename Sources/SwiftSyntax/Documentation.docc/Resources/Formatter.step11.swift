@@ -58,7 +58,7 @@ import Foundation
     }
     return
       sourceFile
-      .with(\.statements, CodeBlockItemSyntax(formattedStatements))
+      .with(\.statements, CodeBlockItemListSyntax(formattedStatements))
   }
 
   enum Item {

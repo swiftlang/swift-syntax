@@ -13,6 +13,7 @@ add_swift_host_library(SwiftParser
   Declarations.swift
   Directives.swift
   Expressions.swift
+  IncrementalParseTransition.swift
   Lookahead.swift
   LoopProgressCondition.swift
   Modifiers.swift

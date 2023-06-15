@@ -12,6 +12,7 @@
 
 import XCTest
 import SwiftSyntax
+import SwiftParser
 import _SwiftSyntaxTestSupport
 
 let longString = """

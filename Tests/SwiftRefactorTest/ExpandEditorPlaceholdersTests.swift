@@ -109,7 +109,8 @@ fileprivate func assertRefactorPlaceholderCall(
   file: StaticString = #file,
   line: UInt = #line
 ) throws {
-  let call = try XCTUnwrap(ExprSyntax("\(raw: expr)").as(FunctionCallExprSyntax.self), file: file, line: line)
+  var parser = Parser(expr)
+  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = try XCTUnwrap(call.argumentList[placeholder].as(TupleExprElementSyntax.self), file: file, line: line)
   let token: TokenSyntax = try XCTUnwrap(arg.expression.as(EditorPlaceholderExprSyntax.self), file: file, line: line).identifier
 
@@ -123,7 +124,8 @@ fileprivate func assertRefactorPlaceholderToken(
   file: StaticString = #file,
   line: UInt = #line
 ) throws {
-  let call = try XCTUnwrap(ExprSyntax("\(raw: expr)").as(FunctionCallExprSyntax.self), file: file, line: line)
+  var parser = Parser(expr)
+  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = try XCTUnwrap(call.argumentList[placeholder].as(TupleExprElementSyntax.self), file: file, line: line)
   let token: TokenSyntax = try XCTUnwrap(arg.expression.as(EditorPlaceholderExprSyntax.self), file: file, line: line).identifier
 

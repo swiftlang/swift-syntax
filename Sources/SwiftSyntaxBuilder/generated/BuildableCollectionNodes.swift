@@ -173,7 +173,7 @@ extension ExprListSyntax: ExpressibleByArrayLiteral {
   public init(_ elements: [ExprSyntaxProtocol]) {
     self = ExprListSyntax(elements.map {
       ExprSyntax(fromProtocol: $0)
-    })
+    } as [ExprSyntax])
   }
   
   public init(arrayLiteral elements: ExprSyntaxProtocol...) {
@@ -340,7 +340,7 @@ extension UnexpectedNodesSyntax: ExpressibleByArrayLiteral {
   public init(_ elements: [SyntaxProtocol]) {
     self = UnexpectedNodesSyntax(elements.map {
       Syntax(fromProtocol: $0)
-    })
+    } as [Syntax])
   }
   
   public init(arrayLiteral elements: SyntaxProtocol...) {

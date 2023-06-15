@@ -254,7 +254,7 @@ extension Parser.Lookahead {
     // If we have a 'didSet' or a 'willSet' label, disambiguate immediately as
     // an accessor block.
     let nextToken = self.peek()
-    if TokenSpec(.didSet) ~= nextToken || TokenSpec(.willSet) ~= nextToken {
+    if TokenSpec(.didSet) ~= nextToken || TokenSpec(.willSet) ~= nextToken || TokenSpec(.`init`) ~= nextToken {
       return true
     }
 
@@ -278,8 +278,8 @@ extension Parser.Lookahead {
       }
     }
 
-    // Check if we have 'didSet'/'willSet' after attributes.
-    return lookahead.at(.keyword(.didSet), .keyword(.willSet))
+    // Check if we have 'didSet'/'willSet' or 'init' after attributes.
+    return lookahead.at(.keyword(.didSet), .keyword(.willSet), .keyword(.`init`))
   }
 }
 

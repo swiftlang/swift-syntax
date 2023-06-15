@@ -293,6 +293,7 @@ open class BasicFormat: SyntaxRewriter {
     defer {
       self.previousToken = token
     }
+    let isInitialToken = self.previousToken == nil
     let previousToken = self.previousToken ?? token.previousToken(viewMode: viewMode)
     let nextToken = token.nextToken(viewMode: viewMode)
 
@@ -393,7 +394,7 @@ open class BasicFormat: SyntaxRewriter {
       }
     }
 
-    if leadingTrivia.indentation(isOnNewline: previousTokenWillEndWithNewline) == [] {
+    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] {
       // If the token starts on a new line and does not have indentation, this
       // is the last non-indented token. Store its indentation level
       anchorPoints[token] = currentIndentationLevel

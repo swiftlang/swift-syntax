@@ -35,6 +35,8 @@ swift_syntax_library(
         ":SwiftDiagnostics",
         ":SwiftOperators",
         ":SwiftParser",
+        ":SwiftSyntaxMacroExpansion",
+        ":SwiftSyntaxMacros",
     ],
 )
 
@@ -106,6 +108,7 @@ swift_syntax_library(
     deps = [
         ":SwiftParser",
         ":SwiftSyntax",
+        ":SwiftSyntaxBuilder",
     ],
 )
 

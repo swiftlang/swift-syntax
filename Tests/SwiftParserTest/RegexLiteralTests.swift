@@ -1211,13 +1211,13 @@ final class RegexLiteralTests: XCTestCase {
   func testPrefixOpSplitting2a() {
     assertParse(
       """
-      let x1️⃣ .2️⃣/abc/
+      let x 1️⃣.2️⃣/abc/
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1225,10 +1225,9 @@ final class RegexLiteralTests: XCTestCase {
           fixIts: ["insert name"]
         ),
       ],
-      applyFixIts: ["insert newline", "insert name"],
+      applyFixIts: ["insert '='", "insert name"],
       fixedSource: """
-        let x
-        .<#identifier#>/abc/
+        let x = .<#identifier#>/abc/
         """
     )
   }
@@ -1236,13 +1235,13 @@ final class RegexLiteralTests: XCTestCase {
   func testPrefixOpSplitting2b() {
     assertParse(
       """
-      let x1️⃣ .2️⃣/abc/
+      let x 1️⃣.2️⃣/abc/
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1250,9 +1249,9 @@ final class RegexLiteralTests: XCTestCase {
           fixIts: ["insert name"]
         ),
       ],
-      applyFixIts: ["insert ';'", "insert name"],
+      applyFixIts: ["insert '='", "insert name"],
       fixedSource: """
-        let x; .<#identifier#>/abc/
+        let x = .<#identifier#>/abc/
         """
     )
   }

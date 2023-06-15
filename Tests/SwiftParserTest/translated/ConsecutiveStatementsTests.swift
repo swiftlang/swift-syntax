@@ -70,7 +70,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         if i != j { i = j }
         // Errors
         i = j1️⃣ j = i
-        let r : Int2️⃣ i = j
+        let r : Int 2️⃣i = j
         let s : Int3️⃣ let t : Int
         _ = r; _ = s; _ = t
       }
@@ -83,8 +83,8 @@ final class ConsecutiveStatementsTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -92,7 +92,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
           fixIts: ["insert newline", "insert ';'"]
         ),
       ],
-      applyFixIts: ["insert newline"],
+      applyFixIts: ["insert newline", "insert '='"],
       fixedSource: """
         // Within a function
         func test(i: inout Int, j: inout Int) {
@@ -102,8 +102,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
           // Errors
           i = j
           j = i
-          let r : Int
-          i = j
+          let r : Int = i = j
           let s : Int
           let t : Int
           _ = r; _ = s; _ = t
@@ -122,7 +121,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         if i != j { i = j }
         // Errors
         i = j1️⃣ j = i
-        let r : Int2️⃣ i = j
+        let r : Int 2️⃣i = j
         let s : Int3️⃣ let t : Int
         _ = r; _ = s; _ = t
       }
@@ -135,8 +134,8 @@ final class ConsecutiveStatementsTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -153,7 +152,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
           if i != j { i = j }
           // Errors
           i = j; j = i
-          let r : Int; i = j
+          let r : Int i = j
           let s : Int; let t : Int
           _ = r; _ = s; _ = t
         }
@@ -468,26 +467,18 @@ final class ConsecutiveStatementsTests: XCTestCase {
     assertParse(
       """
       // At the top level
-      var i, j : Int1️⃣ i = j2️⃣ j = i
+      var i, j : Int 1️⃣i = j2️⃣ j = i
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
+        )
       ],
-      applyFixIts: ["insert newline"],
       fixedSource: """
         // At the top level
-        var i, j : Int
-        i = j
-        j = i
+        var i, j : Int = i = j j = i
         """
     )
   }
@@ -496,24 +487,18 @@ final class ConsecutiveStatementsTests: XCTestCase {
     assertParse(
       """
       // At the top level
-      var i, j : Int1️⃣ i = j2️⃣ j = i
+      var i, j : Int 1️⃣i = j j = i
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
+        )
       ],
-      applyFixIts: ["insert ';'"],
       fixedSource: """
         // At the top level
-        var i, j : Int; i = j; j = i
+        var i, j : Int = i = j j = i
         """
     )
   }

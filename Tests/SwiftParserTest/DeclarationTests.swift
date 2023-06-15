@@ -2530,4 +2530,14 @@ final class DeclarationTests: XCTestCase {
         """
     )
   }
+
+  func testMissingEqualInVariableDeclaration() {
+    assertParse(
+      "let foo: [Int] 1️⃣[]",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in variable", fixIts: ["insert '='"])
+      ],
+      fixedSource: "let foo: [Int] = []"
+    )
+  }
 }

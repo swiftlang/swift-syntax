@@ -169,9 +169,9 @@ extension FunctionTypeSyntax {
   /// ```
   fileprivate var closureExpansion: ClosureExprSyntax {
     let closureSignature: ClosureSignatureSyntax?
-    if !arguments.isEmpty {
+    if !parameters.isEmpty {
       let args = ClosureParamListSyntax {
-        for arg in arguments {
+        for arg in parameters {
           ClosureParamSyntax(name: arg.expansionNameToken())
         }
       }
@@ -261,13 +261,13 @@ extension FunctionCallExprSyntax {
       var parser = Parser(edit.replacement)
       let expr = ExprSyntax.parse(from: &parser)
       expandedArgs.append(
-        arg.detach().with(\.expression, expr)
+        arg.detached.with(\.expression, expr)
       )
     }
 
     let originalArgs = argumentList.dropLast(argsToExpand)
     return (
-      detach().with(\.argumentList, TupleExprElementListSyntax(originalArgs + expandedArgs)),
+      detached.with(\.argumentList, TupleExprElementListSyntax(originalArgs + expandedArgs)),
       expandedArgs.count
     )
   }

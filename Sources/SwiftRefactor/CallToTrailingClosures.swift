@@ -95,7 +95,7 @@ extension FunctionCallExprSyntax {
       )
     }
 
-    var converted = self.detach()
+    var converted = self.detached
 
     // Remove parens if there's no non-closure arguments left and remove the
     // last comma otherwise. Makes sure to keep the trivia of any removed node.

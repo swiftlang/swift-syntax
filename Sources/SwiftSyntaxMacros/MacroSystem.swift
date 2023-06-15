@@ -173,7 +173,8 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let newItem = visit(item.item)
       newItems.append(item.with(\.item, newItem))
 
-      // Expand any peer declarations triggered by macros used as attributes.
+      // Expand any peer declarations or conformances triggered by macros used
+      // as attributes.
       if case let .decl(decl) = item.item {
         let peers = expandPeers(of: decl)
         newItems.append(
@@ -181,6 +182,14 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             newDecl in CodeBlockItemSyntax(item: .decl(newDecl))
           }
         )
+
+        if let declGroup = decl.asProtocol(DeclGroupSyntax.self) {
+          newItems.append(
+            contentsOf: expandConformances(of: declGroup).map {
+              newDecl in CodeBlockItemSyntax(item: .decl(newDecl))
+            }
+          )
+        }
       }
     }
 
@@ -387,6 +396,43 @@ extension MacroApplication {
     }
 
     return peers
+  }
+
+  // If any of the custom attributes associated with the given declaration
+  // refer to conformance macros, expand them and return the resulting
+  // set of extension declarations.
+  private func expandConformances(of decl: DeclGroupSyntax) -> [DeclSyntax] {
+    let extendedType: Syntax
+    if let identified = decl.asProtocol(IdentifiedDeclSyntax.self) {
+      extendedType = Syntax(identified.identifier.trimmed)
+    } else if let ext = decl.as(ExtensionDeclSyntax.self) {
+      extendedType = Syntax(ext.extendedType.trimmed)
+    } else {
+      return []
+    }
+
+    var extensions: [DeclSyntax] = []
+    let macroAttributes = getMacroAttributes(attachedTo: decl.as(DeclSyntax.self)!, ofType: ConformanceMacro.Type.self)
+    for (attribute, conformanceMacro) in macroAttributes {
+      do {
+        let newConformances = try conformanceMacro.expansion(of: attribute, providingConformancesOf: decl, in: context)
+
+        for (type, whereClause) in newConformances {
+          var ext: DeclSyntax = """
+            extension \(extendedType): \(type) { }
+            """
+          if let whereClause {
+            ext = DeclSyntax((ext.cast(ExtensionDeclSyntax.self)).with(\.genericWhereClause, whereClause))
+          }
+
+          extensions.append(DeclSyntax(ext))
+        }
+      } catch {
+        context.addDiagnostics(from: error, node: attribute)
+      }
+    }
+
+    return extensions
   }
 
   /// Expands any attached custom attributes that refer to member declaration macros,

@@ -446,10 +446,11 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testInvalidSyntax() {
-    let invalid = DeclSyntax("return 1")
+    var parser = Parser("return 1")
+    let invalid = DeclSyntax.parse(from: &parser)
     XCTAssert(invalid.hasError)
 
-    XCTAssertThrowsError(try DeclSyntax(validating: "return 1")) { error in
+    XCTAssertThrowsError(try DeclSyntax(validating: invalid)) { error in
       assertStringsEqualWithDiff(
         String(describing: error),
         """
@@ -464,10 +465,11 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testInvalidSyntax2() {
-    let invalid = StmtSyntax("struct Foo {}")
+    var parser = Parser("struct Foo {}")
+    let invalid = StmtSyntax.parse(from: &parser)
     XCTAssert(invalid.hasError)
 
-    XCTAssertThrowsError(try StmtSyntax(validating: "struct Foo {}")) { error in
+    XCTAssertThrowsError(try StmtSyntax(validating: invalid)) { error in
       assertStringsEqualWithDiff(
         String(describing: error),
         """
@@ -482,10 +484,11 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testInvalidSyntax3() {
-    let invalid: CodeBlockItemSyntax = " "
+    var parser = Parser(" ")
+    let invalid = CodeBlockItemSyntax.parse(from: &parser)
 
     XCTAssert(invalid.hasError)
-    XCTAssertThrowsError(try CodeBlockItemSyntax(validating: " ")) { error in
+    XCTAssertThrowsError(try CodeBlockItemSyntax(validating: invalid)) { error in
       assertStringsEqualWithDiff(
         String(describing: error),
         """

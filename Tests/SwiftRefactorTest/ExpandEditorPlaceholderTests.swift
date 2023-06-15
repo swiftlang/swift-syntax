@@ -12,6 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftRefactor
+import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
@@ -100,7 +101,8 @@ fileprivate func assertRefactorPlaceholder(
   if wrap {
     token = "\(raw: ExpandEditorPlaceholder.wrapInPlaceholder(placeholder))"
   } else {
-    let expr: ExprSyntax = "\(raw: placeholder)"
+    var parser = Parser(placeholder)
+    let expr = ExprSyntax.parse(from: &parser)
     token = try XCTUnwrap(expr.as(EditorPlaceholderExprSyntax.self)?.identifier, file: file, line: line)
   }
 

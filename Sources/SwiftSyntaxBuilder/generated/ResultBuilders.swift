@@ -339,7 +339,10 @@ public struct AvailabilitySpecListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
@@ -419,7 +422,10 @@ public struct AvailabilityVersionRestrictionListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
@@ -3128,7 +3134,10 @@ public struct PrecedenceGroupNameListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 

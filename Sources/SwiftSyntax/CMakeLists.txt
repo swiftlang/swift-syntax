@@ -21,6 +21,7 @@ add_swift_host_library(SwiftSyntax
   Syntax.swift
   SyntaxArena.swift
   SyntaxChildren.swift
+  SyntaxCollection.swift
   SyntaxData.swift
   SyntaxText.swift
   SyntaxTreeViewMode.swift

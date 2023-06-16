@@ -25,6 +25,7 @@
   "Syntax nodes": [
     "Syntax.swift",
     "SyntaxBaseNodes.swift",
+    "SyntaxCollection.swift",
     "SyntaxCollections.swift",
     "SyntaxDeclNodes.swift",
     "SyntaxExprNodes.swift",

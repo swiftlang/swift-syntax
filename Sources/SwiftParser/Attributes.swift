@@ -363,33 +363,10 @@ extension Parser {
     )
   }
 
-  enum DifferentiabilityKind: TokenSpecSet {
-    case reverse
-    case _linear
-    case _forward
-
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.reverse): self = .reverse
-      case TokenSpec(._linear): self = ._linear
-      case TokenSpec(._forward): self = ._forward
-      default: return nil
-      }
-    }
-
-    var spec: TokenSpec {
-      switch self {
-      case .reverse: return .keyword(.reverse)
-      case ._linear: return .keyword(._linear)
-      case ._forward: return .keyword(._forward)
-      }
-    }
-  }
-
   mutating func parseDifferentiableAttributeArguments() -> RawDifferentiableAttributeArgumentsSyntax {
     let diffKind: RawTokenSyntax?
     let diffKindComma: RawTokenSyntax?
-    if let (_, handle) = self.at(anyIn: DifferentiabilityKind.self) {
+    if let (_, handle) = self.at(anyIn: DifferentiableAttributeArgumentsSyntax.DiffKindOptions.self) {
       diffKind = self.eat(handle)
       diffKindComma = self.consume(if: .comma)
     } else {
@@ -474,30 +451,7 @@ extension Parser {
   }
 
   mutating func parseDifferentiabilityParameter() -> RawDifferentiabilityParamSyntax? {
-    enum ExpectedTokenKind: TokenSpecSet {
-      case identifier
-      case integerLiteral
-      case `self`
-
-      init?(lexeme: Lexer.Lexeme) {
-        switch PrepareForKeywordMatch(lexeme) {
-        case TokenSpec(.identifier): self = .identifier
-        case TokenSpec(.integerLiteral): self = .integerLiteral
-        case TokenSpec(.self): self = .self
-        default: return nil
-        }
-      }
-
-      var spec: TokenSpec {
-        switch self {
-        case .identifier: return .identifier
-        case .integerLiteral: return .integerLiteral
-        case .self: return .keyword(.self)
-        }
-      }
-    }
-
-    switch self.at(anyIn: ExpectedTokenKind.self) {
+    switch self.at(anyIn: DifferentiabilityParamSyntax.ParameterOptions.self) {
     case (.identifier, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)

@@ -499,6 +499,10 @@ extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, 
 
 extension AttributedTypeSyntax: WithAttributesSyntax {}
 
+extension AvailabilityArgumentSyntax: WithTrailingCommaSyntax {}
+
+extension AvailabilityVersionRestrictionListEntrySyntax: WithTrailingCommaSyntax {}
+
 extension CaseItemSyntax: WithTrailingCommaSyntax {}
 
 extension CatchClauseSyntax: WithCodeBlockSyntax {}
@@ -603,6 +607,8 @@ extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 
 extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
+extension PrecedenceGroupNameElementSyntax: WithTrailingCommaSyntax {}
+
 extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {}
 
 extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
@@ -635,7 +641,7 @@ extension TupleTypeSyntax: ParenthesizedSyntax {}
 
 extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
-extension TypealiasDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax {}
+extension TypealiasDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension VariableDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 

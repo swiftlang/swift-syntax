@@ -123,7 +123,8 @@ def realpath(path: Optional[str]) -> Optional[str]:
 def run_code_generation(
     source_dir: str,
     toolchain: str,
-    verbose: bool
+    verbose: bool,
+    use_remote_deps: bool
 ) -> None:
     print("** Running code generation **")
 
@@ -141,7 +142,8 @@ def run_code_generation(
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
     env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
-    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    if not use_remote_deps:
+        env['SWIFTCI_USE_LOCAL_DEPS'] = "1"
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 
@@ -178,6 +180,7 @@ class Builder(object):
     enable_rawsyntax_validation: bool
     enable_test_fuzzing: bool
     disable_sandbox: bool
+    use_remote_deps: bool
 
     def __init__(
         self,
@@ -188,6 +191,7 @@ class Builder(object):
         enable_rawsyntax_validation: bool,
         enable_test_fuzzing: bool,
         verbose: bool,
+        use_remote_deps: bool,
         disable_sandbox: bool = False,
     ) -> None:
         self.build_dir = build_dir
@@ -198,6 +202,7 @@ class Builder(object):
         self.disable_sandbox = disable_sandbox
         self.verbose = verbose
         self.toolchain = toolchain
+        self.use_remote_deps = use_remote_deps
 
     def __get_swiftpm_invocation(self, package_dir: str) -> List[str]:
         invocation = get_swiftpm_invocation(
@@ -236,8 +241,8 @@ class Builder(object):
             env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
         if self.enable_test_fuzzing:
             env["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
-        # Tell other projects in the unified build to use local dependencies
-        env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+        if not self.use_remote_deps:
+            env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
         env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
             os.path.join(self.toolchain, "lib", "swift", "macosx")
         check_call(command, env=env, verbose=self.verbose)
@@ -248,7 +253,7 @@ class Builder(object):
 
 
 def verify_code_generated_files(
-    toolchain: str, verbose: bool
+    toolchain: str, verbose: bool, use_remote_deps: bool
 ) -> None:
     self_temp_dir = tempfile.mkdtemp()
 
@@ -256,7 +261,8 @@ def verify_code_generated_files(
         run_code_generation(
             source_dir=self_temp_dir,
             toolchain=toolchain,
-            verbose=verbose
+            verbose=verbose,
+            use_remote_deps=use_remote_deps
         )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error(
@@ -296,7 +302,8 @@ def run_tests(
     enable_test_fuzzing: bool,
     filecheck_exec: Optional[str], 
     skip_lit_tests: bool, 
-    verbose: bool
+    verbose: bool,
+    use_remote_deps: bool
 ) -> None:
     print("** Running SwiftSyntax Tests **")
 
@@ -317,6 +324,7 @@ def run_tests(
         enable_rawsyntax_validation=enable_rawsyntax_validation,
         enable_test_fuzzing=enable_test_fuzzing,
         verbose=verbose,
+        use_remote_deps=use_remote_deps
     )
 
 # -----------------------------------------------------------------------------
@@ -425,7 +433,8 @@ def run_xctests(
     release: bool,
     enable_rawsyntax_validation: bool,
     enable_test_fuzzing: bool,
-    verbose: bool
+    verbose: bool,
+    use_remote_deps: bool
 ) -> None:
     print("** Running XCTests **")
     swiftpm_call = get_swiftpm_invocation(
@@ -448,8 +457,8 @@ def run_xctests(
         env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
     if enable_test_fuzzing:
         env["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
-    # Tell other projects in the unified build to use local dependencies
-    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    if not use_remote_deps:
+        env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
     check_call(swiftpm_call, env=env, verbose=verbose)
@@ -467,7 +476,8 @@ def generate_source_code_command(args: argparse.Namespace) -> None:
         run_code_generation(
             source_dir=SOURCES_DIR,
             toolchain=args.toolchain,
-            verbose=args.verbose
+            verbose=args.verbose,
+            use_remote_deps=args.use_remote_deps
         )
     except subprocess.CalledProcessError as e:
         fail_for_called_process_error(
@@ -479,6 +489,7 @@ def verify_source_code_command(args: argparse.Namespace) -> None:
         verify_code_generated_files(
             toolchain=args.toolchain,
             verbose=args.verbose,
+            use_remote_deps=args.use_remote_deps
         )
     except subprocess.CalledProcessError:
         printerr(
@@ -502,6 +513,7 @@ def build_command(args: argparse.Namespace) -> None:
             enable_rawsyntax_validation=args.enable_rawsyntax_validation,
             enable_test_fuzzing=args.enable_test_fuzzing,
             verbose=args.verbose,
+            use_remote_deps=args.use_remote_deps,
             disable_sandbox=args.disable_sandbox,
         )
         builder.buildTarget(PACKAGE_DIR, "SwiftSyntax-all")
@@ -520,6 +532,7 @@ def test_command(args: argparse.Namespace) -> None:
             enable_rawsyntax_validation=args.enable_rawsyntax_validation,
             enable_test_fuzzing=args.enable_test_fuzzing,
             verbose=args.verbose,
+            use_remote_deps=args.use_remote_deps,
             disable_sandbox=args.disable_sandbox,
         )
 
@@ -536,6 +549,7 @@ def test_command(args: argparse.Namespace) -> None:
             filecheck_exec=realpath(args.filecheck_exec),
             skip_lit_tests=args.skip_lit_tests,
             verbose=args.verbose,
+            use_remote_deps=args.use_remote_deps
         )
         print("** All tests passed **")
     except subprocess.CalledProcessError as e:
@@ -613,6 +627,14 @@ def parse_args() -> argparse.Namespace:
 
         parser.add_argument(
             "-v", "--verbose", action="store_true", help="Enable verbose logging."
+        )
+
+        parser.add_argument(
+            "--use-remote-deps",
+            action="store_true",
+            help="""
+            Depend on remote versions of dependencies instead of using local versions
+            """
         )
 
     def add_generate_source_code_args(parser: argparse.ArgumentParser) -> None:

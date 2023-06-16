@@ -7,18 +7,22 @@ If you are seeing issues, it is generally a good idea to re-try with the latest 
 
 The easiest option to build SwiftSyntax it to open it in Xcode. 
 
-Alternatively you can also build it from the command line using `build-script.py`. To do this, perform the following steps
+Alternatively you can also build it from the command line using `build-script.py`. To do this, execute the following command
 
-1. Check `swift-syntax` and `swift-argument-parser` out side by side:
-     ```
-     - (enclosing directory)
-       - swift-argument-parser
-       - swift-syntax
-     ```
-2. Execute the following command
-    ```bash
-    swift-syntax/build-script.py build --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr
-    ```
+```bash
+swift-syntax/build-script.py build --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr --use-remote-deps
+```
+
+If you have local `swift-argument-parser` located in the same directory as `swift-syntax`, i.e.
+```
+- (enclosing directory)
+  - swift-argument-parser
+  - swift-syntax
+```
+you could also run
+```bash
+swift-syntax/build-script.py build --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr
+```
 
 ## Formatting
 

@@ -84,7 +84,7 @@ When testing finds one of these failures, it will show you the syntax tree that 
 A few tests are based LLVM’s `lit` and `FileCheck` tools.
 To run these, build `FileCheck`, e.g. by building the Swift compiler and run the tests using the following command:
 ```bash
-./build-script.py test --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr --skip-lit-tests --filecheck-exec /path/to/build/Release+Asserts/llvm-macosx-x86_64/bin/FileCheck
+./build-script.py test --toolchain /Library/Developer/Toolchains/swift-DEVELOPMENT-SNAPSHOT-<recent date>.xctoolchain/usr --filecheck-exec /path/to/build/Release+Asserts/llvm-macosx-x86_64/bin/FileCheck
 ```
 
 ## Generating Source Code

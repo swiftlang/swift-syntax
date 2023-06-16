@@ -2529,4 +2529,82 @@ final class DeclarationTests: XCTestCase {
       fixedSource: "let foo: [Int] = []"
     )
   }
+
+  func testInitAccessorsWithDefaultValues() {
+    assertParse(
+      """
+      struct Test {
+        var pair: (Int, Int) = (42, 0) {
+          init(initialValue) {}
+
+          get { (0, 42) }
+          set { }
+        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct Test {
+        var pair: (Int, Int) = (42, 0) {
+          init initializes(a) {}
+
+          get { (0, 42) }
+          set { }
+        }
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct Test {
+        var pair: (Int, Int) = (42, 0) {
+          get { (0, 42) }
+          set { }
+
+          init(initialValue1️⃣) {}
+        }
+      }
+      """,
+      substructure: Syntax(
+        InitializerDeclSyntax(
+          initKeyword: .keyword(.`init`),
+          signature: FunctionSignatureSyntax(
+            input: ParameterClauseSyntax(
+              leftParen: .leftParenToken(),
+              parameterList: FunctionParameterListSyntax([
+                FunctionParameterSyntax(
+                  firstName: .identifier("initialValue"),
+                  colon: .colonToken(presence: .missing),
+                  type: TypeSyntax(MissingTypeSyntax(placeholder: .identifier("<#type#>", presence: .missing)))
+                )
+              ]),
+              rightParen: .rightParenToken(trailingTrivia: .space)
+            )
+          ),
+          body: CodeBlockSyntax(
+            leftBrace: .leftBraceToken(),
+            statements: CodeBlockItemListSyntax([]),
+            rightBrace: .rightBraceToken()
+          )
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"])
+      ],
+      fixedSource:
+        """
+        struct Test {
+          var pair: (Int, Int) = (42, 0) {
+            get { (0, 42) }
+            set { }
+
+            init(initialValue: <#type#>) {}
+          }
+        }
+        """
+    )
+  }
 }

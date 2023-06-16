@@ -2040,7 +2040,7 @@ extension Parser {
     var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     var macro: RawTokenSyntax
     if !self.currentToken.isAtStartOfLine {
-      (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+      (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
       if macro.leadingTriviaByteLength != 0 {
         unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)
         pound = self.missingToken(.identifier, text: macro.tokenText)

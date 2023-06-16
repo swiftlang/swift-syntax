@@ -431,23 +431,31 @@ extension Parser {
     )
   }
 
-  /// If `keywordRecovery` is set to `true` and the parser is currently
-  /// positioned at a keyword instead of an identifier, this method recovers by
-  /// eating the keyword in place of an identifier, recovering if the developer
-  /// incorrectly used a keyword as an identifier.
-  /// This should be set if keywords aren't strong recovery marker at this
-  /// position, e.g. because the parser expects a punctuator next.
-  ///
-  /// If `allowSelfOrCapitalSelfAsIdentifier` is `true`, then `self` and `Self`
-  /// are also accepted and remapped to identifiers. This is exclusively used
-  /// to maintain compatibility with the C++ parser. No new uses of this should
-  /// be introduced.
+  /// - Parameters:
+  ///   - keywordRecovery: If set to `true` and the parser is currently
+  ///     positioned at a keyword instead of an identifier, this method recovers
+  ///     by eating the keyword in place of an identifier, recovering if the
+  ///     developer incorrectly used a keyword as an identifier. This should be
+  ///     set if keywords aren't strong recovery marker at this position, e.g.
+  ///     because the parser expects a punctuator next
+  ///   - allowSelfOrCapitalSelfAsIdentifier: If set to `true`, then `self` and
+  ///     `Self` are also accepted and remapped to identifiers. This is
+  ///     exclusively used to maintain compatibility with the C++ parser. No new
+  ///     uses of this should be introduced.
+  ///   - allowKeywordsAsIdentifier: If set to `true` and the parser is
+  ///     currently positioned at a keyword, consume that keyword and remap it
+  ///     to and identifier.
+  /// - Returns: The consumed token and any unexpected tokens that were skipped.
   mutating func expectIdentifier(
     keywordRecovery: Bool = false,
-    allowSelfOrCapitalSelfAsIdentifier: Bool = false
+    allowSelfOrCapitalSelfAsIdentifier: Bool = false,
+    allowKeywordsAsIdentifier: Bool = false
   ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
     if let identifier = self.consume(if: .identifier) {
       return (nil, identifier)
+    }
+    if allowKeywordsAsIdentifier, self.currentToken.isLexerClassifiedKeyword {
+      return (nil, self.consumeAnyToken(remapping: .identifier))
     }
     if allowSelfOrCapitalSelfAsIdentifier,
       let selfOrCapitalSelf = self.consume(if: TokenSpec(.self, remapping: .identifier), TokenSpec(.Self, remapping: .identifier))

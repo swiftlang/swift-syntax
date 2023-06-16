@@ -1151,6 +1151,19 @@ final class ExpressionTests: XCTestCase {
     )
   }
 
+  func testMacroExpansionExpressionWithKeywordName() {
+    assertParse(
+      "#case",
+      substructure: Syntax(
+        MacroExpansionExprSyntax(
+          poundToken: .poundToken(),
+          macro: .identifier("case"),
+          argumentList: TupleExprElementListSyntax([])
+        )
+      )
+    )
+  }
+
   func testNewlineInInterpolationOfSingleLineString() {
     assertParse(
       #"""

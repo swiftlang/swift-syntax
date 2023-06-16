@@ -16,11 +16,8 @@ import SwiftSyntax
 public protocol ExpressionMacro: FreestandingMacro {
   /// Expand a macro described by the given freestanding macro expansion
   /// within the given context to produce a replacement expression.
-  static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of node: Node,
-    in context: Context
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> ExprSyntax
 }

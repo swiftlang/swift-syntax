@@ -23,12 +23,9 @@ public protocol MemberMacro: AttachedMacro {
   ///
   /// - Returns: the set of member declarations introduced by this macro, which
   /// are nested inside the `attachedTo` declaration.
-  static func expansion<
-    Declaration: DeclGroupSyntax,
-    Context: MacroExpansionContext
-  >(
+  static func expansion(
     of node: AttributeSyntax,
-    providingMembersOf declaration: Declaration,
-    in context: Context
+    providingMembersOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [DeclSyntax]
 }

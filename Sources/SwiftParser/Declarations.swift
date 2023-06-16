@@ -1045,11 +1045,36 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawDeinitializerDeclSyntax {
     let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
+
     var unexpectedNameAndSignature: [RawSyntax?] = []
-    unexpectedNameAndSignature.append(self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)).map(RawSyntax.init))
-    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
-      unexpectedNameAndSignature.append(RawSyntax(parseFunctionSignature()))
+
+    // async is a contextual keyword
+    // must be parsed before attempting to parse identifier
+    var effectSpecifiers = parseDeinitEffectSpecifiers()
+
+    if effectSpecifiers == nil {
+      if let identifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)).map(RawSyntax.init) {
+        unexpectedNameAndSignature.append(identifier)
+      }
+      effectSpecifiers = parseDeinitEffectSpecifiers()
     }
+    if effectSpecifiers == nil && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+      let input = parseParameterClause(RawParameterClauseSyntax.self) { parser in
+        parser.parseFunctionParameter()
+      }
+      unexpectedNameAndSignature.append(RawSyntax(input))
+
+      effectSpecifiers = parseDeinitEffectSpecifiers()
+    }
+
+    var unexpectedAfterAsync: [RawSyntax?] = []
+    /// Only allow recovery to the arrow with exprKeyword precedence so we only
+    /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
+    if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
+      let output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
+      unexpectedAfterAsync.append(RawSyntax(output))
+    }
+
     let items = self.parseOptionalCodeBlock()
     return RawDeinitializerDeclSyntax(
       attributes: attrs.attributes,
@@ -1057,6 +1082,8 @@ extension Parser {
       unexpectedBeforeDeinitKeyword,
       deinitKeyword: deinitKeyword,
       RawUnexpectedNodesSyntax(unexpectedNameAndSignature, arena: self.arena),
+      effectSpecifiers: effectSpecifiers,
+      RawUnexpectedNodesSyntax(unexpectedAfterAsync, arena: arena),
       body: items,
       arena: self.arena
     )
@@ -1065,7 +1092,9 @@ extension Parser {
 
 extension Parser {
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
-  mutating func parseFunctionReturnClause(effectSpecifiers: inout (some RawEffectSpecifiersTrait)?, allowNamedOpaqueResultType: Bool) -> RawReturnClauseSyntax {
+  mutating func parseFunctionReturnClause(effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?, allowNamedOpaqueResultType: Bool)
+    -> RawReturnClauseSyntax
+  {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let result: RawTypeSyntax
@@ -1149,7 +1178,7 @@ extension Parser {
 
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
-    if self.at(.arrow) || self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
+    if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
       output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
     } else {
       output = nil

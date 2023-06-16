@@ -121,6 +121,8 @@ extension SyntaxKind {
       return "declaration name"
     case .deferStmt:
       return "'defer' statement"
+    case .deinitEffectSpecifiers:
+      return "effect specifiers"
     case .deinitializerDecl:
       return "deinitializer"
     case .derivativeRegistrationAttributeArguments:

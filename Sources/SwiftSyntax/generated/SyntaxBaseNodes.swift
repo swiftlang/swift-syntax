@@ -762,6 +762,7 @@ extension Syntax {
           .node(DeclNameArgumentsSyntax.self),
           .node(DeclNameSyntax.self),
           .node(DeferStmtSyntax.self),
+          .node(DeinitEffectSpecifiersSyntax.self),
           .node(DeinitializerDeclSyntax.self),
           .node(DerivativeRegistrationAttributeArgumentsSyntax.self),
           .node(DesignatedTypeElementSyntax.self),

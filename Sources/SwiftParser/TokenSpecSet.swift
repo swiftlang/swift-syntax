@@ -866,3 +866,38 @@ enum ExpressionStart: TokenSpecSet {
     }
   }
 }
+
+enum EffectSpecifiers: TokenSpecSet {
+  case async
+  case await
+  case reasync
+  case `rethrows`
+  case `throw`
+  case `throws`
+  case `try`
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.async): self = .async
+    case TokenSpec(.await, allowAtStartOfLine: false): self = .await
+    case TokenSpec(.reasync): self = .reasync
+    case TokenSpec(.rethrows): self = .rethrows
+    case TokenSpec(.throw, allowAtStartOfLine: false): self = .throw
+    case TokenSpec(.throws): self = .throws
+    case TokenSpec(.try, allowAtStartOfLine: false): self = .try
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .async: return .keyword(.async)
+    case .await: return TokenSpec(.await, allowAtStartOfLine: false)
+    case .reasync: return .keyword(.reasync)
+    case .rethrows: return .keyword(.rethrows)
+    case .throw: return TokenSpec(.throw, allowAtStartOfLine: false)
+    case .throws: return .keyword(.throws)
+    case .try: return TokenSpec(.try, allowAtStartOfLine: false)
+    }
+  }
+}

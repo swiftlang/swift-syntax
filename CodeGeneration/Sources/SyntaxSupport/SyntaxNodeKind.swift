@@ -96,6 +96,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case declName
   case decl
   case deferStmt
+  case deinitEffectSpecifiers
   case deinitializerDecl
   case derivativeRegistrationAttributeArguments
   case designatedTypeElement

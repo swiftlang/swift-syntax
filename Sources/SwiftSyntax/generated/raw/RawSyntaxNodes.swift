@@ -6221,6 +6221,64 @@ public struct RawDeferStmtSyntax: RawStmtSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
+public struct RawDeinitEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .deinitEffectSpecifiers
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(
+      _ unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax? = nil, 
+      asyncSpecifier: RawTokenSyntax?, 
+      _ unexpectedAfterAsyncSpecifier: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .deinitEffectSpecifiers, uninitializedCount: 3, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeAsyncSpecifier?.raw
+      layout[1] = asyncSpecifier?.raw
+      layout[2] = unexpectedAfterAsyncSpecifier?.raw
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var asyncSpecifier: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+  }
+  
+  public var unexpectedAfterAsyncSpecifier: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6256,13 +6314,15 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       modifiers: RawModifierListSyntax?, 
       _ unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? = nil, 
       deinitKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenDeinitKeywordAndEffectSpecifiers: RawUnexpectedNodesSyntax? = nil, 
+      effectSpecifiers: RawDeinitEffectSpecifiersSyntax?, 
+      _ unexpectedBetweenEffectSpecifiersAndBody: RawUnexpectedNodesSyntax? = nil, 
       body: RawCodeBlockSyntax?, 
       _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .deinitializerDecl, uninitializedCount: 9, arena: arena) { layout in
+      kind: .deinitializerDecl, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
@@ -6270,9 +6330,11 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[3] = modifiers?.raw
       layout[4] = unexpectedBetweenModifiersAndDeinitKeyword?.raw
       layout[5] = deinitKeyword.raw
-      layout[6] = unexpectedBetweenDeinitKeywordAndBody?.raw
-      layout[7] = body?.raw
-      layout[8] = unexpectedAfterBody?.raw
+      layout[6] = unexpectedBetweenDeinitKeywordAndEffectSpecifiers?.raw
+      layout[7] = effectSpecifiers?.raw
+      layout[8] = unexpectedBetweenEffectSpecifiersAndBody?.raw
+      layout[9] = body?.raw
+      layout[10] = unexpectedAfterBody?.raw
     }
     self.init(unchecked: raw)
   }
@@ -6301,16 +6363,24 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenDeinitKeywordAndBody: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenDeinitKeywordAndEffectSpecifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
+  public var effectSpecifiers: RawDeinitEffectSpecifiersSyntax? {
+    layoutView.children[7].map(RawDeinitEffectSpecifiersSyntax.init(raw:))
+  }
+  
+  public var unexpectedBetweenEffectSpecifiersAndBody: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
   public var body: RawCodeBlockSyntax? {
-    layoutView.children[7].map(RawCodeBlockSyntax.init(raw:))
+    layoutView.children[9].map(RawCodeBlockSyntax.init(raw:))
   }
   
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

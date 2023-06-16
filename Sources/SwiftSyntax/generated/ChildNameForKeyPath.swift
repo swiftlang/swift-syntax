@@ -897,6 +897,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \DeferStmtSyntax.unexpectedAfterBody:
     return "unexpectedAfterBody"
+  case \DeinitEffectSpecifiersSyntax.unexpectedBeforeAsyncSpecifier:
+    return "unexpectedBeforeAsyncSpecifier"
+  case \DeinitEffectSpecifiersSyntax.asyncSpecifier:
+    return "asyncSpecifier"
+  case \DeinitEffectSpecifiersSyntax.unexpectedAfterAsyncSpecifier:
+    return "unexpectedAfterAsyncSpecifier"
   case \DeinitializerDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \DeinitializerDeclSyntax.attributes:
@@ -909,8 +915,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndDeinitKeyword"
   case \DeinitializerDeclSyntax.deinitKeyword:
     return "deinitKeyword"
-  case \DeinitializerDeclSyntax.unexpectedBetweenDeinitKeywordAndBody:
-    return "unexpectedBetweenDeinitKeywordAndBody"
+  case \DeinitializerDeclSyntax.unexpectedBetweenDeinitKeywordAndEffectSpecifiers:
+    return "unexpectedBetweenDeinitKeywordAndEffectSpecifiers"
+  case \DeinitializerDeclSyntax.effectSpecifiers:
+    return "effectSpecifiers"
+  case \DeinitializerDeclSyntax.unexpectedBetweenEffectSpecifiersAndBody:
+    return "unexpectedBetweenEffectSpecifiersAndBody"
   case \DeinitializerDeclSyntax.body:
     return "body"
   case \DeinitializerDeclSyntax.unexpectedAfterBody:

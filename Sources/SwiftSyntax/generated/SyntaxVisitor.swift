@@ -934,6 +934,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DeferStmtSyntax) {
   }
   
+  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DeinitEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``DeinitEffectSpecifiersSyntax`` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DeinitEffectSpecifiersSyntax) {
+  }
+  
   /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4196,6 +4208,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeinitEffectSpecifiersSyntax(_ data: SyntaxData) {
+    let node = DeinitEffectSpecifiersSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) {
     let node = DeinitializerDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6574,6 +6597,8 @@ open class SyntaxVisitor {
       visitImplDeclNameSyntax(data)
     case .deferStmt:
       visitImplDeferStmtSyntax(data)
+    case .deinitEffectSpecifiers:
+      visitImplDeinitEffectSpecifiersSyntax(data)
     case .deinitializerDecl:
       visitImplDeinitializerDeclSyntax(data)
     case .derivativeRegistrationAttributeArguments:

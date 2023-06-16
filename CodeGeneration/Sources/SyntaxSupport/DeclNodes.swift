@@ -585,6 +585,11 @@ public let DECL_NODES: [Node] = [
         documentation: "The deinit keyword."
       ),
       Child(
+        name: "EffectSpecifiers",
+        kind: .node(kind: .deinitEffectSpecifiers),
+        isOptional: true
+      ),
+      Child(
         name: "Body",
         kind: .node(kind: .codeBlock),
         documentation: "The deinitializer's body.",

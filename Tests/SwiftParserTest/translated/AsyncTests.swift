@@ -137,9 +137,9 @@ final class AsyncTests: XCTestCase {
       """
       class X {
         init() async { }
-        deinit 1️⃣async { }
+        deinit async { }
         func f() async { }
-        subscript(x: Int) 2️⃣async -> Int {
+        subscript(x: Int) 1️⃣async -> Int {
           get {
             return 0
           }
@@ -149,27 +149,8 @@ final class AsyncTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "deinitializers cannot have a name",
-          fixIts: ["remove 'async'"]
-        ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'async' in subscript"),
-      ],
-      fixedSource: """
-        class X {
-          init() async { }
-          deinit { }
-          func f() async { }
-          subscript(x: Int) async -> Int {
-            get {
-              return 0
-            }
-            set async {
-            }
-          }
-        }
-        """
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'async' in subscript")
+      ]
     )
   }
 

@@ -130,7 +130,10 @@ extension Parser.Lookahead {
     #endif
     let initialTokensConsumed = self.tokensConsumed
 
-    precondition(!specSet.allCases.isEmpty, "SpecSet must have at least one case")
+    if specSet.allCases.isEmpty {
+      return nil
+    }
+
     let recoveryPrecedence =
       overrideRecoveryPrecedence ?? specSet.allCases.map({
         return $0.spec.recoveryPrecedence

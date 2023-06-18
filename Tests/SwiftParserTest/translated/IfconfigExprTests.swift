@@ -388,7 +388,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "cannot parse version \"\"")
+        DiagnosticSpec(message: #"cannot parse version component code '""'"#)
       ]
     )
   }
@@ -401,7 +401,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "cannot parse version >=2.2")
+        DiagnosticSpec(message: "cannot parse version component code '>=2.2'")
       ]
     )
   }
@@ -414,7 +414,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "cannot parse version 20A301")
+        DiagnosticSpec(message: "cannot parse version component code '20A301'")
       ]
     )
   }
@@ -427,7 +427,7 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "cannot parse version \"20A301\"")
+        DiagnosticSpec(message: #"cannot parse version component code '"20A301"'"#)
       ]
     )
   }

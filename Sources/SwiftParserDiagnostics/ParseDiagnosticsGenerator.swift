@@ -1893,14 +1893,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let trailingComponents = node.unexpectedAfterComponents,
-      let components = node.components
-    {
-      addDiagnostic(
-        trailingComponents,
-        TrailingVersionAreIgnored(major: node.major, components: components),
-        handledNodes: [trailingComponents.id]
-      )
+    if let unexpectedAfterComponents = node.unexpectedAfterComponents {
+      if let components = node.components,
+        unexpectedAfterComponents.allSatisfy({ $0.is(VersionComponentSyntax.self) })
+      {
+        addDiagnostic(
+          unexpectedAfterComponents,
+          TrailingVersionAreIgnored(major: node.major, components: components),
+          handledNodes: [unexpectedAfterComponents.id]
+        )
+      } else {
+        addDiagnostic(
+          unexpectedAfterComponents,
+          CannotParseVersionTuple(versionTuple: unexpectedAfterComponents),
+          handledNodes: [node.major.id, node.components?.id, unexpectedAfterComponents.id].compactMap { $0 }
+        )
+      }
     }
 
     return .visitChildren

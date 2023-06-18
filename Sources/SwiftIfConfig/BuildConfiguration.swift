@@ -16,6 +16,19 @@ public enum Endianness: String {
   case big
 }
 
+/// Describes the requested version of a module
+public enum CanImportVersion {
+  /// Any version of the module will suffice.
+  case unversioned
+
+  /// Only modules with the given version or higher will match.
+  case version(VersionTuple)
+
+  /// Only modules where the underlying Clang module has the given version or
+  /// higher will match.
+  case underlyingVersion(VersionTuple)
+}
+
 /// Captures information about the build configuration that can be
 /// queried in a `#if` expression, including OS, compiler version,
 /// enabled language features, and available modules.
@@ -45,6 +58,10 @@ public protocol BuildConfiguration {
   ///
   /// Attributes are determined by the Swift compiler.
   func hasAttribute(name: String, syntax: ExprSyntax) -> Bool?
+
+  /// Determine whether a module with the given import path can be imported,
+  /// with additional version information.
+  func canImport(importPath: [String], version: CanImportVersion, syntax: ExprSyntax) -> Bool?
 
   /// Determine whether the given name is the active target OS (e.g., Linux, iOS).
   func isActiveTargetOS(name: String, syntax: ExprSyntax) -> Bool?

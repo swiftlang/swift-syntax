@@ -32,6 +32,29 @@ struct TestingBuildConfiguration : BuildConfiguration {
     attributes.contains(name)
   }
 
+  func canImport(
+    importPath: [String],
+    version: CanImportVersion,
+    syntax: ExprSyntax
+  ) -> Bool? {
+    guard let moduleName = importPath.first else {
+      return false
+    }
+
+    guard moduleName == "SwiftSyntax" else { return false }
+
+    switch version {
+    case .unversioned:
+      return true
+
+    case .version(let expectedVersion):
+      return expectedVersion <= VersionTuple(5, 9, 2)
+
+    case .underlyingVersion(let expectedVersion):
+      return expectedVersion <= VersionTuple(5009, 2)
+    }
+  }
+
   func isActiveTargetOS(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
     name == "Linux"
   }
@@ -173,5 +196,23 @@ public class EvaluateTests: XCTestCase {
     XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.1")"#), .active)
     XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.3.2.3")"#), .inactive)
     XCTAssertEqual(try ifConfigState(#"_compiler_version("5010.*.0")"#), .inactive)
+  }
+
+  func testCanImport() throws {
+    let buildConfig = TestingBuildConfiguration()
+
+    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
+      try IfConfigState(condition: condition, configuration: buildConfig)
+    }
+
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax)"), .active)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax.Sub)"), .active)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftParser)"), .inactive)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _version: 5.9)"), .active)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _version: 5.10)"), .inactive)
+    XCTAssertEqual(try ifConfigState(#"canImport(SwiftSyntax, _version: "5.9")"#), .active)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _underlyingVersion: 5009)"), .active)
+    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _underlyingVersion: 5009.10)"), .inactive)
+
   }
 }

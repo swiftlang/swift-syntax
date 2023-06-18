@@ -22,6 +22,9 @@ enum IfConfigError: Error, CustomStringConvertible {
   case compilerVersionOutOfRange(value: Int, upperLimit: Int, syntax: ExprSyntax)
   case compilerVersionSecondComponentNotWildcard(syntax: ExprSyntax)
   case compilerVersionTooManyComponents(syntax: ExprSyntax)
+  case canImportMissingModule(syntax: ExprSyntax)
+  case canImportLabel(syntax: ExprSyntax)
+  case canImportTwoParameters(syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -53,6 +56,15 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .compilerVersionTooManyComponents(syntax: _):
       return "compiler version must not have more than five components"
+
+    case .canImportMissingModule(syntax: _):
+      return "canImport requires a module name"
+
+    case .canImportLabel(syntax: _):
+      return "2nd parameter of canImport should be labeled as _version or _underlyingVersion"
+
+    case .canImportTwoParameters(syntax: _):
+      return "canImport can take only two parameters"
     }
   }
 }
@@ -336,10 +348,60 @@ private func evaluateIfConfig(
 
       return actualVersion >= expectedVersion
 
-    default:
-      // FIXME: Deal with all of the other kinds of checks we can perform.
-      result = nil
-      break
+    case .canImport:
+      // Retrieve the first argument, which must not have a label. This is
+      // the module import path.
+      guard let firstArg = call.argumentList.first,
+            firstArg.label == nil else {
+        throw IfConfigError.canImportMissingModule(syntax: ExprSyntax(call))
+      }
+
+      let importPath = firstArg.expression.trimmedDescription.split(separator: ".")
+      // FIXME: Check to make sure we have all identifiers here.
+
+      // If there is a second argument, it shall have the label _version or
+      // _underlyingVersion.
+      let version: CanImportVersion
+      if let secondArg = call.argumentList.dropFirst().first {
+        if secondArg.label?.text != "_version" &&
+            secondArg.label?.text != "_underlyingVersion" {
+          throw IfConfigError.canImportLabel(syntax: secondArg.expression)
+        }
+
+        let versionText: String
+        if let stringLiteral = secondArg.expression.as(StringLiteralExprSyntax.self),
+           stringLiteral.segments.count == 1,
+           let firstSegment = stringLiteral.segments.first,
+           case .stringSegment(let stringSegment) = firstSegment {
+          versionText = stringSegment.content.text
+        } else {
+          versionText = secondArg.expression.trimmedDescription
+        }
+
+        guard let versionTuple = VersionTuple(parsing: versionText) else {
+          throw IfConfigError.invalidVersionOperand(name: "canImport", syntax: secondArg.expression)
+        }
+
+        // FIXME: Warning that the version can only have at most 4 components.
+
+        if secondArg.label?.text == "_version" {
+          version = .version(versionTuple)
+         } else {
+          assert(secondArg.label?.text == "_underlyingVersion")
+          version = .underlyingVersion(versionTuple)
+        }
+
+        if call.argumentList.count > 2 {
+          throw IfConfigError.canImportTwoParameters(syntax: ExprSyntax(call))
+        }
+      } else {
+        version = .unversioned
+      }
+
+      result = configuration.canImport(
+        importPath: importPath.map { String($0) },
+        version: version, syntax: ExprSyntax(call)
+      )
     }
 
     // If we found a result, return it.

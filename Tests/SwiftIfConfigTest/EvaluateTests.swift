@@ -20,7 +20,7 @@ struct TestingBuildConfiguration : BuildConfiguration {
   var features: Set<String> = []
   var attributes: Set<String> = []
 
-  func isCustomConditionSet(name: String, syntax: TokenSyntax) -> Bool? {
+  func isCustomConditionSet(name: String, syntax: ExprSyntax) -> Bool? {
     customConditions.contains(name)
   }
 
@@ -58,7 +58,7 @@ struct TestingBuildConfiguration : BuildConfiguration {
 
   var languageVersion: VersionTuple? { VersionTuple(5, 5) }
 
-  var compilerVersion: VersionTuple? { VersionTuple(5, 9) }
+  var compilerVersion: VersionTuple? { VersionTuple(5, 9, 1) }
 }
 
 public class EvaluateTests: XCTestCase {
@@ -170,5 +170,8 @@ public class EvaluateTests: XCTestCase {
     XCTAssertEqual(try ifConfigState("compiler(>=5.8"), .active)
     XCTAssertEqual(try ifConfigState("compiler(>=5.9"), .active)
     XCTAssertEqual(try ifConfigState("compiler(>=5.10"), .inactive)
+    XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.1")"#), .active)
+    XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.3.2.3")"#), .inactive)
+    XCTAssertEqual(try ifConfigState(#"_compiler_version("5010.*.0")"#), .inactive)
   }
 }

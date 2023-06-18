@@ -33,7 +33,7 @@ public protocol BuildConfiguration {
   /// Custom build conditions can be set by the `-D` command line option to
   /// the Swift compiler. For example, `-DDEBUG` sets the custom condition
   /// named `DEBUG`.
-  func isCustomConditionSet(name: String, syntax: TokenSyntax) -> Bool?
+  func isCustomConditionSet(name: String, syntax: ExprSyntax) -> Bool?
 
   /// Determine whether the given feature is enabled.
   ///

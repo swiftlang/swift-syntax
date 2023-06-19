@@ -141,7 +141,7 @@ final class RawSyntaxTests: XCTestCase {
       XCTAssertEqual(ident.trailingTriviaPieces, [.unexpectedText(" ")])
       XCTAssertEqual(ident.description, "\nfoo ")
 
-      let identSyntax = Syntax(raw: ident.raw).as(TokenSyntax.self)!
+      let identSyntax = Syntax(raw: ident.raw, rawNodeArena: arena).as(TokenSyntax.self)!
       let barIdentSyntax = identSyntax.with(\.tokenKind, .keyword(.open))
       let barIdent = barIdentSyntax.raw.as(RawTokenSyntax.self)!
 

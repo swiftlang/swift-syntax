@@ -69,8 +69,8 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   @_spi(RawSyntax)
-  public init(raw: RawSyntax) {
-    self.init(.forRoot(raw))
+  public init(raw: RawSyntax, rawNodeArena: __shared SyntaxArena) {
+    self.init(.forRoot(raw, rawNodeArena: rawNodeArena))
   }
 
   /// Create a ``Syntax`` node from a specialized syntax node.
@@ -226,7 +226,11 @@ extension SyntaxProtocol {
   /// Return this subtree with this node as the root, ie. detach this node
   /// from its parent.
   public var detached: Self {
-    return Syntax(raw: self.raw).cast(Self.self)
+    // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
+    // before the detached node can be created.
+    return withExtendedLifetime(self) {
+      return Syntax(raw: self.raw, rawNodeArena: self.raw.arena).cast(Self.self)
+    }
   }
 
   /// The kind of the syntax node, e.g. if it is a `functionDecl`.

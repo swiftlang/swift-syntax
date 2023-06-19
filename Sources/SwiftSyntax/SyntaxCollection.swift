@@ -34,15 +34,17 @@ extension SyntaxCollection {
   }
 
   public init(_ children: [Element]) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeLayout(
+    let arena = SyntaxArena()
+    // Extend the lifetime of children so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let raw = withExtendedLifetime(children) {
+      RawSyntax.makeLayout(
         kind: Self.syntaxKind,
         from: children.map { $0.raw },
         arena: arena
       )
-      return SyntaxData.forRoot(raw)
     }
-    self.init(data)
+    self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
   }
 
   /// The number of elements, `present` or `missing`, in this collection.
@@ -59,7 +61,7 @@ extension SyntaxCollection {
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-    let newData = data.replacingSelf(newRaw, arena: arena)
+    let newData = data.replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena)
     return Syntax(newData).cast(Self.self)
   }
 

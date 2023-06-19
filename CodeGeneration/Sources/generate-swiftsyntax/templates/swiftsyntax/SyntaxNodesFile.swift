@@ -129,7 +129,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                   """
                 )
               }
-              StmtSyntax("return SyntaxData.forRoot(raw)")
+              StmtSyntax("return SyntaxData.forRoot(raw, rawNodeArena: arena)")
             }
           )
 
@@ -173,7 +173,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             AccessorDeclSyntax(
               """
               set(value) {
-                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").raw, arena: SyntaxArena()))
+                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").data, arena: SyntaxArena()))
               }
               """
             )
@@ -207,7 +207,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: childNode.varOrCaseName),
                                                     from: [element.raw], arena: arena)
                 }
-                let newData = data.replacingChild(at: \(raw: index), with: collection, arena: arena)
+                let newData = data.replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
                 return \(node.kind.syntaxType)(newData)
               }
               """

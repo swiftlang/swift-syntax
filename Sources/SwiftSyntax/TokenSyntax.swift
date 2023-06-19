@@ -49,18 +49,16 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     trailingTrivia: Trivia = [],
     presence: SourcePresence
   ) {
-    let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
-      let raw = RawSyntax.makeMaterializedToken(
-        kind: kind,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia,
-        presence: presence,
-        tokenDiagnostic: nil,
-        arena: arena
-      )
-      return SyntaxData.forRoot(raw)
-    }
-    self.init(data)
+    let arena = SyntaxArena()
+    let raw = RawSyntax.makeMaterializedToken(
+      kind: kind,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence,
+      tokenDiagnostic: nil,
+      arena: arena
+    )
+    self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
   }
 
   /// Whether the token is present or missing.
@@ -109,7 +107,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       }
       let arena = SyntaxArena()
       let newRaw = tokenView.withKind(newValue, arena: arena)
-      let newData = data.replacingSelf(newRaw, arena: arena)
+      let newData = data.replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena)
       self = TokenSyntax(newData)
     }
   }

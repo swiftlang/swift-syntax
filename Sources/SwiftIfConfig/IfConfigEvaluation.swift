@@ -472,7 +472,7 @@ extension SyntaxProtocol {
   ///    func f()
   ///  #elseif B
   ///    func g()
-  /// #endif
+  ///   #endif
   /// #endif
   ///
   /// a call to `isActive` on the syntax node for the function `g` would return `true` when the

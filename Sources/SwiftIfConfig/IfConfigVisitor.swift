@@ -38,7 +38,7 @@ import SwiftSyntax
 /// `node.isActive(in: configuration)` will evaluate to `.active` or will
 /// throw.
 ///
-/// TBD: This visitor currently swallows errors uncovered while checking `#if`
+/// TODO: This visitor currently swallows errors uncovered while checking `#if`
 /// conditions, which is deeply unfortunate. We need a better answer here.
 open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
@@ -88,7 +88,7 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisito
 /// `node.isActive(in: configuration)` will evaluate to `.active` or will
 /// throw.
 ///
-/// TBD: This visitor currently swallows errors uncovered while checking `#if`
+/// TODO: This visitor currently swallows errors uncovered while checking `#if`
 /// conditions, which is deeply unfortunate. We need a better answer here.
 open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration> : SyntaxAnyVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.

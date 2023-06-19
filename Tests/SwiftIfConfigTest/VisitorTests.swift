@@ -45,29 +45,40 @@ public class VisitorTests: XCTestCase {
 
   let inputSource: SourceFileSyntax = """
     #if DEBUG
-      #if os(Linux)
-      #if hasAttribute(attribute)
-      @available(*, deprecated, message: "use something else")
-      #else
-      @MainActor
-      #endif
-      func f() {
-      }
-      #elseif os(iOS)
-      func g() {
-        let a = foo
-          #if hasFeature(ParameterPacks)
-          .b
-          #endif
-          .c
-      }
-      #endif
+    #if os(Linux)
+    #if hasAttribute(available)
+    @available(*, deprecated, message: "use something else")
+    #else
+    @MainActor
+    #endif
+    func f() {
+    }
+    #elseif os(iOS)
+    func g() {
+      let a = foo
+        #if hasFeature(ParameterPacks)
+        .b
+        #endif
+        .c
+    }
+    #endif
 
-      struct S {
-        #if DEBUG
-        var generationCount = 0
+    struct S {
+      #if DEBUG
+      var generationCount = 0
+      #endif
+    }
+
+    func h() {
+      switch result {
+        case .success(let value):
+          break
+        #if os(iOS)
+        case .failure(let error):
+          break
         #endif
       }
+    }
     #endif
     """
 
@@ -119,12 +130,34 @@ public class VisitorTests: XCTestCase {
     // Check that the right set of names is visited.
     NameCheckingVisitor(
       configuration: linuxBuildConfig,
-      expectedNames: ["f", "S", "generationCount"]
+      expectedNames: ["f", "h", "S", "generationCount", "value"]
     ).walk(inputSource)
 
     NameCheckingVisitor(
       configuration: iosBuildConfig,
-      expectedNames: ["g", "a", "S", "generationCount"]
+      expectedNames: ["g", "h", "a", "S", "generationCount", "value", "error"]
     ).walk(inputSource)
+  }
+
+  func testRemoveInactive() {
+    assertStringsEqualWithDiff(
+      inputSource.removingInactive(in: linuxBuildConfig).description,
+      """
+
+      @available(*, deprecated, message: "use something else")
+      func f() {
+      }
+
+      struct S {
+        var generationCount = 0
+      }
+
+      func h() {
+        switch result {
+          case .success(let value):
+            break
+        }
+      }
+      """)
   }
 }

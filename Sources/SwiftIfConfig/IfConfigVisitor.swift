@@ -42,9 +42,9 @@ import SwiftSyntax
 /// conditions, which is deeply unfortunate. We need a better answer here.
 open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
-  public let configuration: BuildConfiguration
+  public let configuration: Configuration
 
-  public init(viewMode: SyntaxTreeViewMode, configuration: BuildConfiguration) {
+  public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: viewMode)
   }
@@ -92,9 +92,9 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisito
 /// conditions, which is deeply unfortunate. We need a better answer here.
 open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration> : SyntaxAnyVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
-  public let configuration: BuildConfiguration
+  public let configuration: Configuration
 
-  public init(viewMode: SyntaxTreeViewMode, configuration: BuildConfiguration) {
+  public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: viewMode)
   }

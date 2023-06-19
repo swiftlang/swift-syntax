@@ -71,6 +71,24 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
     )
   }
 
+  func testEscapePoundsAfterConsecutiveQuotes() {
+    assertBuildResult(
+      StringLiteralExprSyntax(content: ##"foobar""#"##),
+      """
+      ##"foobar""#"##
+      """
+    )
+  }
+
+  func testEscapePoundsAfterConsecutiveBackslashes() {
+    assertBuildResult(
+      StringLiteralExprSyntax(content: ##"foobar\\#"##),
+      ##"""
+      ##"foobar\\#"##
+      """##
+    )
+  }
+
   func testEscapePoundEmojis() {
     assertBuildResult(
       StringLiteralExprSyntax(content: ##"foo"#️⃣"bar"##),

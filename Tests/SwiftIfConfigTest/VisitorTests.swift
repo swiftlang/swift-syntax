@@ -79,6 +79,19 @@ public class VisitorTests: XCTestCase {
         #endif
       }
     }
+
+    func i() {
+      a.b
+      #if DEBUG
+        .c
+      #endif
+      #if hasAttribute(available)
+        .d()
+      #endif
+      #if os(iOS)
+        .e[]
+      #endif
+    }
     #endif
     """
 
@@ -130,12 +143,12 @@ public class VisitorTests: XCTestCase {
     // Check that the right set of names is visited.
     NameCheckingVisitor(
       configuration: linuxBuildConfig,
-      expectedNames: ["f", "h", "S", "generationCount", "value"]
+      expectedNames: ["f", "h", "i", "S", "generationCount", "value"]
     ).walk(inputSource)
 
     NameCheckingVisitor(
       configuration: iosBuildConfig,
-      expectedNames: ["g", "h", "a", "S", "generationCount", "value", "error"]
+      expectedNames: ["g", "h", "i", "a", "S", "generationCount", "value", "error"]
     ).walk(inputSource)
   }
 
@@ -157,6 +170,12 @@ public class VisitorTests: XCTestCase {
           case .success(let value):
             break
         }
+      }
+
+      func i() {
+        a.b
+          .c
+          .d()
       }
       """)
   }

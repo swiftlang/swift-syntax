@@ -146,6 +146,122 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
 
     return super.visit(rewrittenNode)
   }
+
+  /// Apply the given base to the postfix expression.
+  private func applyBaseToPostfixExpression(
+    base: ExprSyntax, postfix: ExprSyntax
+  ) -> ExprSyntax {
+    /// Try to apply the base to the postfix expression using the given
+    /// keypath into a specific node type.
+    ///
+    /// Returns the new expression node on success, `nil` when the node kind
+    /// didn't match.
+    func tryApply<Node: ExprSyntaxProtocol>(
+      _ keyPath: WritableKeyPath<Node, ExprSyntax>
+    ) -> ExprSyntax? {
+      guard let node = postfix.as(Node.self) else {
+        return nil
+      }
+
+      let newExpr = applyBaseToPostfixExpression(base: base, postfix: node[keyPath: keyPath])
+      return ExprSyntax(node.with(keyPath, newExpr))
+    }
+
+    // Member access
+    if let memberAccess = postfix.as(MemberAccessExprSyntax.self) {
+      guard let memberBase = memberAccess.base else {
+        // If this member access has no base, this is the base we are
+        // replacing, terminating the recursion. Do so now.
+        return ExprSyntax(memberAccess.with(\.base, base))
+      }
+
+      let newBase = applyBaseToPostfixExpression(base: base, postfix: memberBase)
+      return ExprSyntax(memberAccess.with(\.base, newBase))
+    }
+
+    // Generic arguments <...>
+    if let result = tryApply(\SpecializeExprSyntax.expression) {
+      return result
+    }
+
+    // Call (...)
+    if let result = tryApply(\FunctionCallExprSyntax.calledExpression) {
+      return result
+    }
+
+    // Subscript [...]
+    if let result = tryApply(\SubscriptExprSyntax.calledExpression) {
+      return result
+    }
+
+    // Optional chaining ?
+    if let result = tryApply(\OptionalChainingExprSyntax.expression) {
+      return result
+    }
+
+    // Forced optional value !
+    if let result = tryApply(\ForcedValueExprSyntax.expression) {
+      return result
+    }
+
+    // Postfix unary operator.
+    if let result = tryApply(\PostfixUnaryExprSyntax.expression) {
+      return result
+    }
+
+    // #if
+    if let postfixIfConfig = postfix.as(PostfixIfConfigExprSyntax.self) {
+      return dropInactive(outerBase: base, postfixIfConfig: postfixIfConfig)
+    }
+
+    assert(false, "Unhandled postfix expression in #if elimination")
+    return base
+  }
+
+  /// Drop inactive regions from a postfix `#if` configuration, applying the
+  /// outer "base" expression to the rewritten node.
+  private func dropInactive(
+    outerBase: ExprSyntax?,
+    postfixIfConfig: PostfixIfConfigExprSyntax
+  ) -> ExprSyntax {
+    // Determine the active clause within this syntax node.
+    // TODO: Swallows errors
+    guard let activeClause = try? postfixIfConfig.config.activeClause(in: configuration),
+          case .`postfixExpression`(let postfixExpr) = activeClause.elements else {
+      // If there is no active clause, return the base.
+
+      // Prefer the base we have and, if not, use the outer base.
+      // TODO: Can we have both? If so, then what?
+      if let base = postfixIfConfig.base ?? outerBase {
+        return base
+      }
+
+      // If there was no base, we're in an erroneous syntax tree that would
+      // never be produced by the parser. Synthesize a missing expression
+      // syntax node so clients can recover more gracefully.
+      return ExprSyntax(
+        MissingExprSyntax(
+          placeholder: .init(.identifier("_"), presence: .missing)
+        )
+      )
+    }
+
+    // If there is no base, return the postfix expression.
+    guard let base = postfixIfConfig.base ?? outerBase else {
+      return postfixExpr
+    }
+
+    // Apply the base to the postfix expression.
+    return applyBaseToPostfixExpression(base: base, postfix: postfixExpr)
+  }
+
+  // TODO: PostfixIfConfigExprSyntax has a different form that doesn't work
+  // well with the way dropInactive is written. We essentially need to
+  // thread a the "base" into the active clause.
+  override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
+    let rewrittenNode = dropInactive(outerBase: nil, postfixIfConfig: node)
+    return visit(rewrittenNode)
+  }
 }
 
 

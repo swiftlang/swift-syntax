@@ -343,7 +343,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       public func rewrite(_ node: Syntax) -> Syntax {
         let rewritten = self.visit(node)
         return withExtendedLifetime(rewritten) {
-          return Syntax(node.data.replacingSelf(rewritten.raw, arena: rewritten.raw.arena))
+          return Syntax(node.data.replacingSelf(rewritten.raw, arena: SyntaxArena()))
         }
       }
       """

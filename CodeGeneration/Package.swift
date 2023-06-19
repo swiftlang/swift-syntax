@@ -45,6 +45,12 @@ let package = Package(
         "SyntaxSupport",
       ]
     ),
+    .testTarget(
+      name: "ValidateSyntaxNodes",
+      dependencies: [
+        "SyntaxSupport"
+      ]
+    ),
   ]
 )
 

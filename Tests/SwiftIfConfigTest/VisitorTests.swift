@@ -177,6 +177,7 @@ public class VisitorTests: XCTestCase {
           .c
           .d()
       }
-      """)
+      """
+    )
   }
 }

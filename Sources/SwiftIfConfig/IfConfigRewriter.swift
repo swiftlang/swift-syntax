@@ -50,13 +50,13 @@ import SwiftSyntax
 ///
 /// For any other target platforms, the resulting tree will be empty (other
 /// than trivia).
-class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
+class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   let configuration: Configuration
-  
+
   init(configuration: Configuration) {
     self.configuration = configuration
   }
-  
+
   private func dropInactive<List: Collection & SyntaxCollection>(
     _ node: List,
     elementAsIfConfig: (List.Element) -> IfConfigDeclSyntax?
@@ -65,7 +65,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
     var anyChanged = false
     for elementIndex in node.indices {
       let element = node[elementIndex]
-      
+
       // Find #ifs within the list.
       if let ifConfigDecl = elementAsIfConfig(element) {
         // If this is the first element that changed, note that we have
@@ -74,64 +74,64 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
           anyChanged = true
           newElements.append(contentsOf: node[..<elementIndex])
         }
-        
+
         // FIXME: Swallowing errors
         guard let activeClause = try? ifConfigDecl.activeClause(in: configuration) else {
           continue
         }
-        
+
         guard let elements = activeClause.elements else {
           continue
         }
-        
+
         let innerElements = Syntax(elements).cast(List.self)
         let newInnerElements = dropInactive(innerElements, elementAsIfConfig: elementAsIfConfig)
         newElements.append(contentsOf: newInnerElements)
-        
+
         continue
       }
-      
+
       if anyChanged {
         newElements.append(element)
       }
     }
-    
+
     if !anyChanged {
       return node
     }
-    
+
     return List(newElements)
   }
-  
+
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
     let rewrittenNode = dropInactive(node) { element in
       guard case .decl(let declElement) = element.item else {
         return nil
       }
-      
+
       return declElement.as(IfConfigDeclSyntax.self)
     }
-    
+
     return super.visit(rewrittenNode)
   }
-  
+
   override func visit(_ node: MemberDeclListSyntax) -> MemberDeclListSyntax {
     let rewrittenNode = dropInactive(node) { element in
       return element.decl.as(IfConfigDeclSyntax.self)
     }
-    
+
     return super.visit(rewrittenNode)
   }
-  
+
   override func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
     let rewrittenNode = dropInactive(node) { element in
       if case .ifConfigDecl(let ifConfigDecl) = element {
         return ifConfigDecl
       }
-      
+
       return nil
     }
-    
+
     return super.visit(rewrittenNode)
   }
 
@@ -149,7 +149,8 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
 
   /// Apply the given base to the postfix expression.
   private func applyBaseToPostfixExpression(
-    base: ExprSyntax, postfix: ExprSyntax
+    base: ExprSyntax,
+    postfix: ExprSyntax
   ) -> ExprSyntax {
     /// Try to apply the base to the postfix expression using the given
     /// keypath into a specific node type.
@@ -227,7 +228,8 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
     // Determine the active clause within this syntax node.
     // TODO: Swallows errors
     guard let activeClause = try? postfixIfConfig.config.activeClause(in: configuration),
-          case .`postfixExpression`(let postfixExpr) = activeClause.elements else {
+      case .`postfixExpression`(let postfixExpr) = activeClause.elements
+    else {
       // If there is no active clause, return the base.
 
       // Prefer the base we have and, if not, use the outer base.
@@ -263,7 +265,6 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration> : SyntaxRewriter {
     return visit(rewrittenNode)
   }
 }
-
 
 extension SyntaxProtocol {
   /// Produce a copy of this syntax node that removes all syntax regions that

@@ -37,7 +37,7 @@ extension ExprSyntax {
   /// Whether this is a simple identifier expression and, if so, what the identifier string is.
   var simpleIdentifierExpr: String? {
     guard let identExpr = self.as(IdentifierExprSyntax.self),
-          identExpr.declNameArguments == nil
+      identExpr.declNameArguments == nil
     else {
       return nil
     }

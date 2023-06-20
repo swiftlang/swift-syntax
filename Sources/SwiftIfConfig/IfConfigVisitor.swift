@@ -40,7 +40,7 @@ import SwiftSyntax
 ///
 /// TODO: This visitor currently swallows errors uncovered while checking `#if`
 /// conditions, which is deeply unfortunate. We need a better answer here.
-open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisitor {
+open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
 
@@ -53,7 +53,8 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisito
     // If there is an active clause, visit it's children.
     // FIXME: try? suppresses errors here. How shall we report them?
     if let activeClause = try? node.activeClause(in: configuration),
-       let elements = activeClause.elements {
+      let elements = activeClause.elements
+    {
       walk(Syntax(elements))
     }
 
@@ -90,7 +91,7 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration> : SyntaxVisito
 ///
 /// TODO: This visitor currently swallows errors uncovered while checking `#if`
 /// conditions, which is deeply unfortunate. We need a better answer here.
-open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration> : SyntaxAnyVisitor {
+open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
 
@@ -103,7 +104,8 @@ open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration> : SyntaxAny
     // If there is an active clause, visit it's children.
     // FIXME: try? suppresses errors here. How shall we report them?
     if let activeClause = try? node.activeClause(in: configuration),
-       let elements = activeClause.elements {
+      let elements = activeClause.elements
+    {
       walk(Syntax(elements))
     }
 

@@ -49,10 +49,10 @@ extension VersionTuple {
   }
 }
 
-extension VersionTuple: Equatable, Hashable { }
+extension VersionTuple: Equatable, Hashable {}
 
 extension VersionTuple: Comparable {
-  public static func <(lhs: VersionTuple, rhs: VersionTuple) -> Bool {
+  public static func < (lhs: VersionTuple, rhs: VersionTuple) -> Bool {
     return lhs.normalized.components.lexicographicallyPrecedes(rhs.normalized.components)
   }
 }

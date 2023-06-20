@@ -12,7 +12,7 @@
 import SwiftIfConfig
 import SwiftSyntax
 
-struct TestingBuildConfiguration : BuildConfiguration {
+struct TestingBuildConfiguration: BuildConfiguration {
   var platformName: String = "Linux"
   var customConditions: Set<String> = []
   var features: Set<String> = []

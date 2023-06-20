@@ -158,7 +158,6 @@ extension VersionTuple {
   }
 }
 
-
 /// Evaluate the condition of an `#if`.
 private func evaluateIfConfig(
   condition: ExprSyntax,
@@ -188,14 +187,16 @@ private func evaluateIfConfig(
 
   // Logical '!'.
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-      prefixOp.operatorToken?.text == "!" {
+    prefixOp.operatorToken?.text == "!"
+  {
     return try !evaluateIfConfig(condition: prefixOp.postfixExpression, configuration: configuration)
   }
 
   // Logical '&&' and '||'.
   if let binOp = condition.as(InfixOperatorExprSyntax.self),
-      let op = binOp.operatorOperand.as(BinaryOperatorExprSyntax.self),
-      (op.operatorToken.text == "&&" || op.operatorToken.text == "||") {
+    let op = binOp.operatorOperand.as(BinaryOperatorExprSyntax.self),
+    (op.operatorToken.text == "&&" || op.operatorToken.text == "||")
+  {
     // Evaluate the left-hand side.
     let lhsResult = try evaluateIfConfig(condition: binOp.leftOperand, configuration: configuration)
 
@@ -212,20 +213,23 @@ private func evaluateIfConfig(
 
   // Look through parentheses.
   if let tuple = condition.as(TupleExprSyntax.self), tuple.isParentheses,
-     let element = tuple.elements.first {
+    let element = tuple.elements.first
+  {
     return try evaluateIfConfig(condition: element.expression, configuration: configuration)
   }
 
   // Calls syntax is for operations.
   if let call = condition.as(FunctionCallExprSyntax.self),
-     let fnName = call.calledExpression.simpleIdentifierExpr,
-     let fn = IfConfigFunctions(rawValue: fnName) {
+    let fnName = call.calledExpression.simpleIdentifierExpr,
+    let fn = IfConfigFunctions(rawValue: fnName)
+  {
 
     /// Perform a check for an operation that takes a single identifier argument.
     func doSingleIdentifierArgumentCheck(_ body: (String, ExprSyntax) -> Bool?) throws -> Bool? {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
-            let arg = argExpr.simpleIdentifierExpr else { return nil }
+        let arg = argExpr.simpleIdentifierExpr
+      else { return nil }
 
       guard let result = body(arg, ExprSyntax(argExpr)) else {
         throw IfConfigError.unhandledFunction(name: fnName, syntax: ExprSyntax(call))
@@ -239,8 +243,9 @@ private func evaluateIfConfig(
       // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
       // operator applied to a version.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
-            let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
-            let opToken = unaryArg.operatorToken else {
+        let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
+        let opToken = unaryArg.operatorToken
+      else {
         return nil
       }
 
@@ -289,8 +294,9 @@ private func evaluateIfConfig(
       // Ensure that we have a single argument that is a simple identifier,
       // either "little" or "big".
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
-            let arg = argExpr.simpleIdentifierExpr,
-            let expectedEndianness = Endianness(rawValue: arg) else {
+        let arg = argExpr.simpleIdentifierExpr,
+        let expectedEndianness = Endianness(rawValue: arg)
+      else {
         result = nil
         break
       }
@@ -306,10 +312,11 @@ private func evaluateIfConfig(
       // Ensure that we have a single argument that is a simple identifier, which
       // is an underscore followed by an integer.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
-            let arg = argExpr.simpleIdentifierExpr,
-            let argFirst = arg.first,
-            argFirst == "_",
-            let expectedPointerBitWidth = Int(arg.dropFirst()) else {
+        let arg = argExpr.simpleIdentifierExpr,
+        let argFirst = arg.first,
+        argFirst == "_",
+        let expectedPointerBitWidth = Int(arg.dropFirst())
+      else {
         result = nil
         break
       }
@@ -331,10 +338,11 @@ private func evaluateIfConfig(
       // Argument is a single unlabeled argument containing a string
       // literal.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
-            let stringLiteral = argExpr.as(StringLiteralExprSyntax.self),
-            stringLiteral.segments.count == 1,
-            let segment = stringLiteral.segments.first,
-            case .stringSegment(let stringSegment) = segment else {
+        let stringLiteral = argExpr.as(StringLiteralExprSyntax.self),
+        stringLiteral.segments.count == 1,
+        let segment = stringLiteral.segments.first,
+        case .stringSegment(let stringSegment) = segment
+      else {
         // FIXME: better diagnostic here
         throw IfConfigError.unknownExpression(condition)
       }
@@ -352,7 +360,8 @@ private func evaluateIfConfig(
       // Retrieve the first argument, which must not have a label. This is
       // the module import path.
       guard let firstArg = call.argumentList.first,
-            firstArg.label == nil else {
+        firstArg.label == nil
+      else {
         throw IfConfigError.canImportMissingModule(syntax: ExprSyntax(call))
       }
 
@@ -363,16 +372,16 @@ private func evaluateIfConfig(
       // _underlyingVersion.
       let version: CanImportVersion
       if let secondArg = call.argumentList.dropFirst().first {
-        if secondArg.label?.text != "_version" &&
-            secondArg.label?.text != "_underlyingVersion" {
+        if secondArg.label?.text != "_version" && secondArg.label?.text != "_underlyingVersion" {
           throw IfConfigError.canImportLabel(syntax: secondArg.expression)
         }
 
         let versionText: String
         if let stringLiteral = secondArg.expression.as(StringLiteralExprSyntax.self),
-           stringLiteral.segments.count == 1,
-           let firstSegment = stringLiteral.segments.first,
-           case .stringSegment(let stringSegment) = firstSegment {
+          stringLiteral.segments.count == 1,
+          let firstSegment = stringLiteral.segments.first,
+          case .stringSegment(let stringSegment) = firstSegment
+        {
           versionText = stringSegment.content.text
         } else {
           versionText = secondArg.expression.trimmedDescription
@@ -386,7 +395,7 @@ private func evaluateIfConfig(
 
         if secondArg.label?.text == "_version" {
           version = .version(versionTuple)
-         } else {
+        } else {
           assert(secondArg.label?.text == "_underlyingVersion")
           version = .underlyingVersion(versionTuple)
         }
@@ -400,7 +409,8 @@ private func evaluateIfConfig(
 
       result = configuration.canImport(
         importPath: importPath.map { String($0) },
-        version: version, syntax: ExprSyntax(call)
+        version: version,
+        syntax: ExprSyntax(call)
       )
     }
 

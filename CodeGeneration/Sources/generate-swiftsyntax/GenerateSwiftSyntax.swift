@@ -124,6 +124,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
           swiftSyntaxBuilderGeneratedDir + ["SyntaxExpressibleByStringInterpolationConformances.swift"],
           syntaxExpressibleByStringInterpolationConformancesFile
         ),
+        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"], renamedChildrenBuilderCompatibilityFile),
       ]
       + BASE_KIND_FILES.map { baseKind in
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["syntaxNodes", baseKind.value], syntaxNode(emitKind: baseKind.key))

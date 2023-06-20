@@ -18,29 +18,7 @@ import SwiftSyntax
 @available(*, deprecated, renamed: "ImportPathBuilder")
 public typealias AccessPathBuilder = ImportPathBuilder
 
-extension TupleExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with a elements argument")
-  public init(
-    leadingTrivia: Trivia? = nil,
-    unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax = .leftParenToken(),
-    unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-    unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax = .rightParenToken(),
-    unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-    @TupleExprElementListBuilder elementListBuilder: () throws -> TupleExprElementListSyntax,
-    trailingTrivia: Trivia? = nil
-  ) rethrows {
-    try self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeLeftParen,
-      leftParen: leftParen,
-      unexpectedBetweenLeftParenAndElementList,
-      elements: elementListBuilder(),
-      unexpectedBetweenElementListAndRightParen,
-      rightParen: rightParen,
-      unexpectedAfterRightParen,
-      trailingTrivia: trailingTrivia
-    )
-  }
-}
+//==========================================================================//
+// IMPORTANT: If you are tempted to add a compatiblity layer code here      //
+// please insert it in alphabetical order above                             //
+//==========================================================================//

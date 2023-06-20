@@ -73,4 +73,103 @@ extension LayoutNode {
       )
       """
   }
+
+  /// Create a builder-based convenience initializer, if needed.
+  func createConvenienceBuilerInitializer(useDeprecatedChildName: Bool = false) throws -> InitializerDeclSyntax? {
+    // Only create the convenience initializer if at least one parameter
+    // is different than in the default initializer generated above.
+    var shouldCreateInitializer = false
+
+    // Keep track of init parameters and result builder parameters in different
+    // lists to make sure result builder params occur at the end, so that
+    // they can use trailing closure syntax.
+    var normalParameters: [FunctionParameterSyntax] = []
+    var builderParameters: [FunctionParameterSyntax] = []
+    var delegatedInitArgs: [TupleExprElementSyntax] = []
+
+    for child in children {
+      /// The expression that is used to call the default initializer defined above.
+      let produceExpr: ExprSyntax
+      let childName: String
+
+      if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
+        childName = deprecatedVarName
+      } else {
+        childName = child.varName
+      }
+
+      if child.type.isBuilderInitializable {
+        // Allow initializing certain syntax collections with result builders
+        shouldCreateInitializer = true
+        let builderInitializableType = child.type.builderInitializableType
+        if child.type.builderInitializableType != child.type {
+          let param = Node.from(type: child.type).layoutNode!.singleNonDefaultedChild
+          if child.isOptional {
+            produceExpr = ExprSyntax("\(raw: childName)Builder().map { \(raw: child.type.syntaxBaseName)(\(raw: param.varName): $0) }")
+          } else {
+            produceExpr = ExprSyntax("\(raw: child.type.syntaxBaseName)(\(raw: param.varName): \(raw: childName)Builder())")
+          }
+        } else {
+          produceExpr = ExprSyntax("\(raw: childName)Builder()")
+        }
+        builderParameters.append(
+          FunctionParameterSyntax(
+            "@\(builderInitializableType.resultBuilderType) \(raw: childName)Builder: () throws-> \(raw: builderInitializableType.syntax)"
+          )
+        )
+      } else {
+        produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child, useDeprecatedChildName: useDeprecatedChildName)
+        normalParameters.append(
+          FunctionParameterSyntax(
+            firstName: .identifier(childName),
+            colon: .colonToken(),
+            type: child.parameterType,
+            defaultArgument: child.defaultInitialization
+          )
+        )
+      }
+      delegatedInitArgs.append(TupleExprElementSyntax(label: child.isUnexpectedNodes ? nil : child.varName, expression: produceExpr))
+    }
+
+    guard shouldCreateInitializer else {
+      return nil
+    }
+
+    let params = ParameterClauseSyntax {
+      FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
+      for param in normalParameters + builderParameters {
+        param
+      }
+      FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
+    }
+
+    return try InitializerDeclSyntax(
+      """
+      /// A convenience initializer that allows initializing syntax collections using result builders
+      public init\(params) rethrows
+      """
+    ) {
+      FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
+        TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
+        for arg in delegatedInitArgs {
+          arg
+        }
+        TupleExprElementSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
+      }
+    }
+  }
+}
+
+fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecatedChildName: Bool = false) -> ExprSyntax {
+  let childName: String
+  if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
+    childName = deprecatedVarName
+  } else {
+    childName = child.varName
+  }
+
+  if child.type.isBaseType && !child.kind.isNodeChoices {
+    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: childName))")
+  }
+  return ExprSyntax("\(raw: childName)")
 }

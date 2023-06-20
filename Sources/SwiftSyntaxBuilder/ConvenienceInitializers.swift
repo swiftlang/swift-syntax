@@ -288,8 +288,7 @@ extension StringLiteralExprSyntax {
         consecutivePounds += 1
         maxPounds = max(maxPounds, consecutivePounds)
       case (true, "\""), (true, "\\"):
-        countingPounds = true
-        requiresEscaping = true
+        continue
       case (true, _):
         countingPounds = false
         consecutivePounds = 0

@@ -29,6 +29,7 @@ class SwiftParserCli: ParsableCommand {
   static var configuration = CommandConfiguration(
     abstract: "Utility to test SwiftSyntax syntax tree creation.",
     subcommands: [
+      BasicFormat.self,
       PerformanceTest.self,
       PrintDiags.self,
       PrintTree.self,

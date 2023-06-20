@@ -15,14 +15,16 @@ import SwiftOperators
 import SwiftSyntax
 
 /// Fold all of the sequences in the given source file.
-func foldAllSequences(_ tree: SourceFileSyntax) -> (Syntax, [Diagnostic]) {
+func foldAllSequences(_ tree: some SyntaxProtocol) -> (Syntax, [Diagnostic]) {
   var diags: [Diagnostic] = []
 
   let recordOperatorError: (OperatorError) -> Void = { error in
     diags.append(error.asDiagnostic)
   }
   var operatorTable = OperatorTable.standardOperators
-  operatorTable.addSourceFile(tree, errorHandler: recordOperatorError)
+  if let sourceFile = tree as? SourceFileSyntax {
+    operatorTable.addSourceFile(sourceFile, errorHandler: recordOperatorError)
+  }
   let resultTree = operatorTable.foldAll(tree, errorHandler: recordOperatorError)
   return (resultTree, diags)
 }

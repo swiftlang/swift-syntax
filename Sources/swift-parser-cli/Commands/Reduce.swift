@@ -16,11 +16,6 @@ import Foundation
 import WinSDK
 #endif
 
-/// Print the given message to stderr
-fileprivate func printerr(_ message: String, terminator: String = "\n") {
-  FileHandle.standardError.write((message + terminator).data(using: .utf8)!)
-}
-
 fileprivate func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) throws -> T {
   var tempFileURL = FileManager.default.temporaryDirectory
   tempFileURL.appendPathComponent("swift-parser-cli-\(UUID().uuidString).swift")

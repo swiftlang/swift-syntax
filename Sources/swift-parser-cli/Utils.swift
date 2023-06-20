@@ -22,3 +22,8 @@ func getContentsOfSourceFile(at path: String?) throws -> [UInt8] {
   }
   return [UInt8](source)
 }
+
+/// Print the given message to stderr
+func printerr(_ message: String, terminator: String = "\n") {
+  FileHandle.standardError.write((message + terminator).data(using: .utf8)!)
+}

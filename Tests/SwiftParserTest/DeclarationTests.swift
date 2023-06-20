@@ -1300,6 +1300,23 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
+  func testMacroExpansionDeclarationWithKeywordName() {
+    assertParse(
+      """
+      struct X {
+        #case
+      }
+      """,
+      substructure: Syntax(
+        MacroExpansionDeclSyntax(
+          poundToken: .poundToken(),
+          macro: .identifier("case"),
+          argumentList: TupleExprElementListSyntax([])
+        )
+      )
+    )
+  }
+
   func testAttributedMacroExpansionDeclaration() {
     assertParse(
       """
@@ -1452,8 +1469,8 @@ final class DeclarationTests: XCTestCase {
     assertParse(
       """
       struct S {
-        @attrib #1️⃣class
-        #2️⃣struct
+        @attrib #class
+        #struct
       }
       """,
       substructure: Syntax(
@@ -1462,43 +1479,19 @@ final class DeclarationTests: XCTestCase {
             decl: MacroExpansionDeclSyntax(
               attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
               poundToken: .poundToken(),
-              /*unexpectedBetweenPoundTokenAndMacro:*/ [
-                TokenSyntax.keyword(.class)
-              ],
-              macro: .identifier("", presence: .missing),
+              macro: .identifier("class"),
               argumentList: []
             )
           ),
           MemberDeclListItemSyntax(
             decl: MacroExpansionDeclSyntax(
               poundToken: .poundToken(),
-              /*unexpectedBetweenPoundTokenAndMacro:*/ [
-                TokenSyntax.keyword(.struct)
-              ],
-              macro: .identifier("", presence: .missing),
+              macro: .identifier("struct"),
               argumentList: []
             )
           ),
         ])
-      ),
-      diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "keyword 'class' cannot be used as an identifier here",
-          fixIts: ["if this name is unavoidable, use backticks to escape it"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "keyword 'struct' cannot be used as an identifier here",
-          fixIts: ["if this name is unavoidable, use backticks to escape it"]
-        ),
-      ],
-      fixedSource: """
-        struct S {
-          @attrib #`class`
-          #`struct`
-        }
-        """
+      )
     )
   }
 

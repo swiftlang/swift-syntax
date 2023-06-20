@@ -2048,7 +2048,7 @@ extension Parser {
         arena: self.arena
       )
     }
-    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(keywordRecovery: true)
+    let (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
 
     // Parse the optional generic argument list.
     let generics: RawGenericArgumentClauseSyntax?

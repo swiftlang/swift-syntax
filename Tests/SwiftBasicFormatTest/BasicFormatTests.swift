@@ -374,7 +374,7 @@ final class BasicFormatTest: XCTestCase {
     assertFormatted(
       tree: body,
       expected: """
-        {
+            {
                 print(1)
             }
         """

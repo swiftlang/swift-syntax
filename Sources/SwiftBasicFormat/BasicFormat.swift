@@ -150,6 +150,18 @@ open class BasicFormat: SyntaxRewriter {
 
   // MARK: - Customization points
 
+  /// If we are formatting a subtree and the line that the initial token occurs on is indented,
+  /// use that line indentation for the first token in the subtree to format.
+  ///
+  /// For example, when formatting only the code block in the following,
+  /// then the opening `{` should be indented by four spaces.
+  /// ```
+  ///     func test() {
+  ///         print(1)
+  ///     }
+  /// ```
+  open var inferInitialTokenIndentaiton: Bool { true }
+
   /// Whether a leading newline on `token` should be added.
   open func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
     return node.requiresIndent
@@ -411,6 +423,16 @@ open class BasicFormat: SyntaxRewriter {
       // If the token starts on a new line and does not have indentation, this
       // is the last non-indented token. Store its indentation level
       anchorPoints[token] = currentIndentationLevel
+    }
+
+    if inferInitialTokenIndentaiton
+      && isInitialToken
+      && token.presence == .present
+    {
+      let indentationOfLine = token.indentationOfLine
+      if token.leadingTrivia.pieces.suffix(indentationOfLine.pieces.count) != indentationOfLine.pieces {
+        leadingTrivia += indentationOfLine
+      }
     }
 
     // Add a trailing space to the token unless

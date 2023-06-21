@@ -15,8 +15,18 @@ public enum TriviaPosition {
   case trailing
 }
 
-/// A collection of leading or trailing trivia. This is the main data structure
-/// for thinking about trivia.
+/// Trivia represent pieces of the source code that are not relevant to represent
+/// its semantic structure.
+///
+/// The standard examples of trivia are spaces, newlines and comments.
+///
+/// The SwiftSyntax tree retains trivia to maintain round-tripness of the source
+/// code, ensuring that printing the entire syntax tree be rendered back into
+/// text that is byte-for-byte identical to the original source.
+///
+/// Each ``TokenSyntax`` can have multiple ``TriviaPiece``s as either leading or
+/// trailing trivia, which occur before or after the token’s content, respectively.
+/// ``Trivia`` represents a collection of these ``TriviaPiece``s
 public struct Trivia {
   /// The pieces this trivia consists of. Each ``TriviaPiece`` can represent
   /// multiple characters, such as an entire comment or 4 spaces.

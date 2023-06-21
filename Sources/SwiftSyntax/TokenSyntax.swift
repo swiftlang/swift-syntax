@@ -13,6 +13,13 @@
 // MARK: TokenSyntax
 
 /// A Syntax node representing a single token.
+///
+/// All source code of a syntax tree is represented by tokens – layout nodes
+/// never contain any source code by themselves.
+///
+/// A token consists of leading ``Trivia``, i.e. whitespaces before the actual
+/// token contents, the token’s `text` and trailing ``Trivia`` after the token’s
+/// content.
 public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The ``Syntax`` node that provides the underlying data.
   ///

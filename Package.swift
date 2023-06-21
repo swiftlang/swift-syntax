@@ -144,7 +144,7 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntax"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntax", "SwiftSyntaxBuilder"]
     ),
 
     // MARK: SwiftSyntaxBuilder

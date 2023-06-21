@@ -1900,7 +1900,7 @@ final class StatementExpressionTests: XCTestCase {
   }
 
   func testInitCallInPoundIf() {
-    // Make sure we parse 'init()' as an expr, not a decl.
+    // MaSources/SwiftSyntax/generated/syntaxNodes/SyntaxTypeNodes.swiftke sure we parse 'init()' as an expr, not a decl.
     assertParse(
       """
       class C {

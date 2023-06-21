@@ -97,11 +97,11 @@ public struct ConcurrentEdits {
 
   /// The raw concurrent edits. Are guaranteed to satisfy the requirements
   /// stated above.
-  public let edits: [SourceEdit]
+  public let edits: [IncrementalEdit]
 
   /// Initialize this struct from edits that are already in a concurrent form
   /// and are guaranteed to satisfy the requirements posed above.
-  public init(concurrent: [SourceEdit]) throws {
+  public init(concurrent: [IncrementalEdit]) throws {
     if !Self.isValidConcurrentEditArray(concurrent) {
       throw ConcurrentEditsError.editsNotConcurrent
     }
@@ -117,7 +117,7 @@ public struct ConcurrentEdits {
   ///  - insert 'z' at offset 2
   ///  to '012345' results in 'xyz012345'.
 
-  public init(fromSequential sequentialEdits: [SourceEdit]) {
+  public init(fromSequential sequentialEdits: [IncrementalEdit]) {
     do {
       try self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
     } catch {
@@ -128,7 +128,7 @@ public struct ConcurrentEdits {
   /// Construct a concurrent edits struct from a single edit. For a single edit,
   /// there is no differentiation between being it being applied concurrently
   /// or sequentially.
-  public init(_ single: SourceEdit) {
+  public init(_ single: IncrementalEdit) {
     do {
       try self.init(concurrent: [single])
     } catch {
@@ -137,9 +137,9 @@ public struct ConcurrentEdits {
   }
 
   private static func translateSequentialEditsToConcurrentEdits(
-    _ edits: [SourceEdit]
-  ) -> [SourceEdit] {
-    var concurrentEdits: [SourceEdit] = []
+    _ edits: [IncrementalEdit]
+  ) -> [IncrementalEdit] {
+    var concurrentEdits: [IncrementalEdit] = []
     for editToAdd in edits {
       var editToAdd = editToAdd
       var editIndiciesMergedWithNewEdit: [Int] = []
@@ -147,14 +147,14 @@ public struct ConcurrentEdits {
         if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
           let intersectionLength =
             existingEdit.replacementRange.intersected(editToAdd.range).length
-          editToAdd = SourceEdit(
+          editToAdd = IncrementalEdit(
             offset: Swift.min(existingEdit.offset, editToAdd.offset),
             length: existingEdit.length + editToAdd.length - intersectionLength,
             replacementLength: existingEdit.replacementLength + editToAdd.replacementLength - intersectionLength
           )
           editIndiciesMergedWithNewEdit.append(index)
         } else if existingEdit.offset < editToAdd.endOffset {
-          editToAdd = SourceEdit(
+          editToAdd = IncrementalEdit(
             offset: editToAdd.offset - existingEdit.replacementLength + existingEdit.length,
             length: editToAdd.length,
             replacementLength: editToAdd.replacementLength
@@ -175,7 +175,7 @@ public struct ConcurrentEdits {
     return concurrentEdits
   }
 
-  private static func isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
+  private static func isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
     // Not quite sure if we should disallow creating an `IncrementalParseTransition`
     // object without edits but there doesn't seem to be much benefit if we do,
     // and there are 'lit' tests that want to test incremental re-parsing without edits.
@@ -195,7 +195,7 @@ public struct ConcurrentEdits {
   }
 
   /// **Public for testing purposes only**
-  public static func _isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
+  public static func _isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
     return isValidConcurrentEditArray(edits)
   }
 }

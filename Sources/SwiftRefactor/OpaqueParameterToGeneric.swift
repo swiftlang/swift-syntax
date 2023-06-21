@@ -115,7 +115,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
 /// ```swift
 /// func someFunction<T1: Value>(_ input: T1) {}
 /// ```
-public struct OpaqueParameterToGeneric: RefactoringProvider {
+public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
   /// Replace all of the "some" parameters in the given parameter clause with
   /// freshly-created generic parameters.
   ///

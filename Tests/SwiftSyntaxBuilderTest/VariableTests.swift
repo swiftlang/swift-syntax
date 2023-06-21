@@ -371,4 +371,17 @@ final class VariableTests: XCTestCase {
       assertBuildResult(builder, expected, line: line)
     }
   }
+
+  // https://github.com/apple/swift-syntax/issues/1815
+  func testSpacingInDictionaryType() throws {
+    let buildable = try VariableDeclSyntax("static var mirror: Dictionary<String, Any.Type>") {}
+
+    assertBuildResult(
+      buildable,
+      """
+      static var mirror: Dictionary<String, Any.Type> {
+      }
+      """
+    )
+  }
 }

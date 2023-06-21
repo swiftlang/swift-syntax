@@ -1210,10 +1210,10 @@ extension Parser {
         )
       )
     case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
-      // If we have "case let x." or "case let x(", we parse x as a normal
-      // name, not a binding, because it is the start of an enum pattern or
-      // call pattern.
-      if pattern.admitsBinding && !self.lookahead().isNextTokenCallPattern() {
+      // If we have "case let x" followed by ".", "(", "[", or a generic
+      // argument list, we parse x as a normal name, not a binding, because it
+      // is the start of an enum or expr pattern.
+      if pattern.admitsBinding && self.lookahead().isInBindingPatternPosition() {
         let identifier = self.eat(handle)
         let pattern = RawPatternSyntax(
           RawIdentifierPatternSyntax(
@@ -2658,13 +2658,21 @@ extension Parser.Lookahead {
     return self.peek().isLexerClassifiedKeyword || TokenSpec(.identifier) ~= self.peek()
   }
 
-  fileprivate func isNextTokenCallPattern() -> Bool {
+  fileprivate func isInBindingPatternPosition() -> Bool {
+    // Cannot form a binding pattern if a generic argument list follows, this
+    // is something like 'case let E<Int>.foo(x)'.
+    if self.peek().isContextualPunctuator("<") {
+      var lookahead = self.lookahead()
+      lookahead.consumeAnyToken()
+      return !lookahead.canParseAsGenericArgumentList()
+    }
     switch self.peek().rawTokenKind {
-    case .period,
-      .leftParen:
-      return true
-    default:
+    // A '.' indicates a member access, '(' and '[' indicate a function call or
+    // subscript. We can't form a binding pattern as the base of these.
+    case .period, .leftParen, .leftSquareBracket:
       return false
+    default:
+      return true
     }
   }
 }

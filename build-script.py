@@ -31,10 +31,6 @@ SYNTAXSUPPORT_DIR = \
 LLVM_DIR = os.path.join(WORKSPACE_DIR, "llvm-project", "llvm")
 SWIFT_DIR = os.path.join(WORKSPACE_DIR, "swift")
 
-INCR_TRANSFER_ROUNDTRIP_EXEC = os.path.join(
-    PACKAGE_DIR, "utils", "incrparse", "incr_transfer_round_trip.py"
-)
-
 LIT_EXEC = os.path.join(LLVM_DIR, "utils", "lit", "lit.py")
 
 GROUP_INFO_PATH = os.path.join(PACKAGE_DIR, "utils", "group.json")
@@ -337,19 +333,6 @@ Refer to README.md for more information.
         )
 
 
-def check_incr_transfer_roundtrip_exec() -> None:
-    if not os.path.exists(INCR_TRANSFER_ROUNDTRIP_EXEC):
-        fatal_error(
-            """
-Error: Could not find incr_transfer_round_trip.py.
-
-Make sure you have the main swift repo checked out next to the swift-syntax
-repo.
-Refer to README.md for more information.
-"""
-        )
-
-
 def find_swiftpm_bin_path(
     package_dir: str, toolchain: str, build_dir: Optional[str], release: bool
 ) -> str:
@@ -384,7 +367,6 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
     print("** Running lit-based tests **")
 
     check_lit_exec()
-    check_incr_transfer_roundtrip_exec()
 
     product_bin_path = find_product_bin_path(
         toolchain=toolchain, build_dir=build_dir, release=release)
@@ -400,9 +382,6 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
         lit_call.extend(["--param", "FILECHECK=" + filecheck_exec])
     if lit_test_helper_exec:
         lit_call.extend(["--param", "LIT_TEST_HELPER=" + lit_test_helper_exec])
-    lit_call.extend(
-        ["--param", "INCR_TRANSFER_ROUND_TRIP.PY=" + INCR_TRANSFER_ROUNDTRIP_EXEC]
-    )
     lit_call.extend(["--param", "EXAMPLES_BIN_PATH=" + examples_bin_path])
     lit_call.extend(["--param", "TOOLCHAIN=" + toolchain])
 

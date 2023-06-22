@@ -1339,6 +1339,58 @@ extension LabeledExprSyntax {
   }
 }
 
+extension LabeledSpecializeArgumentSyntax {
+  enum LabelOptions: TokenSpecSet {
+    case target
+    case availability
+    case exported
+    case kind
+    case spi
+    case spiModule
+    case available
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.target):
+        self = .target
+      case TokenSpec(.availability):
+        self = .availability
+      case TokenSpec(.exported):
+        self = .exported
+      case TokenSpec(.kind):
+        self = .kind
+      case TokenSpec(.spi):
+        self = .spi
+      case TokenSpec(.spiModule):
+        self = .spiModule
+      case TokenSpec(.available):
+        self = .available
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .target:
+        return .keyword(.target)
+      case .availability:
+        return .keyword(.availability)
+      case .exported:
+        return .keyword(.exported)
+      case .kind:
+        return .keyword(.kind)
+      case .spi:
+        return .keyword(.spi)
+      case .spiModule:
+        return .keyword(.spiModule)
+      case .available:
+        return .keyword(.available)
+      }
+    }
+  }
+}
+
 extension LayoutRequirementSyntax {
   enum LayoutSpecifierOptions: TokenSpecSet {
     case _Trivial

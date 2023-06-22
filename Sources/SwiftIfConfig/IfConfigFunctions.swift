@@ -12,42 +12,44 @@
 
 /// Enum capturing all of the functions that can be used in an `#if` condition.
 enum IfConfigFunctions: String {
-  /// A check for a specific attribute.
+  /// A check for a specific attribute via `hasAttribute(<name>)`.
   case hasAttribute
 
-  /// A check for a specific named feature.
+  /// A check for a specific named feature via `hasFeature(<name>)`.
   case hasFeature
 
-  /// A check for the Swift language version.
+  /// A check for the Swift language version via `swift(>=version).`
   case swift
 
-  /// A check for the Swift compiler version.
+  /// A check for the Swift compiler version via `compiler(>=version)`.
   case compiler
 
-  /// A check to determine whether a given module can be imported.
+  /// A check to determine whether a given module can be imported via `canImport(<import path>)`.
   case canImport
 
-  /// A check for the target Operating System kind (e.g., Linux, iOS).
+  /// A check for the target Operating System kind (e.g., Linux, iOS) via `os(<name>)`
   case os
 
-  /// A check for the target architecture (e.g., arm64, x86_64).
+  /// A check for the target architecture (e.g., arm64, x86_64) via `arch(<name>)`.
   case arch
 
-  /// A check for the target environment (e.g., simulator).
+  /// A check for the target environment (e.g., simulator) via `targetEnvironment(<environment>)`.
   case targetEnvironment
 
-  /// A historical check against a specific compiler build version.
+  /// A historical check against a specific compiler build version via `_compiler_version("<version>")`.
   case _compiler_version
 
-  /// A check for the target endianness (e.g., big or little)
+  /// A check for the target endianness (e.g., big or little) via `_endian(big|little)`.
   case _endian
 
   /// A check for the target bit width of a pointer (e.g., _64)
   case _pointerBitWidth
 
-  /// A check for the target runtime paired with the Swift runtime (e.g., _ObjC).
+  /// A check for the target runtime paired with the Swift runtime (e.g., _ObjC)
+  /// via `_runtime(<name>)`.
   case _runtime
 
-  /// A check for the target's pointer authentication scheme (e.g., _arm64e).
+  /// A check for the target's pointer authentication scheme (e.g., _arm64e)
+  /// via `_ptrauth(<name>)`.
   case _ptrauth
 }

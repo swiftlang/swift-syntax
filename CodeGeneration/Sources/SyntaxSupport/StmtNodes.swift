@@ -27,6 +27,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "AvailabilityArguments",
+        deprecatedName: "AvailabilitySpec",
         kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument")
       ),
       Child(

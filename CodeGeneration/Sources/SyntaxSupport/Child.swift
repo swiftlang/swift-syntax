@@ -30,7 +30,7 @@ public enum ChildKind {
   /// The child always contains a node that matches one of the `choices`.
   case nodeChoices(choices: [Child])
   /// The child is a collection of `kind`.
-  case collection(kind: SyntaxNodeKind, collectionElementName: String)
+  case collection(kind: SyntaxNodeKind, collectionElementName: String, deprecatedCollectionElementName: String? = nil)
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
@@ -57,6 +57,7 @@ public enum ChildKind {
 /// restricted subset of acceptable kinds or texts.
 public class Child {
   public let name: String
+  public let deprecatedName: String?
   public let kind: ChildKind
   public let nameForDiagnostics: String?
   public let documentation: String?
@@ -71,7 +72,7 @@ public class Child {
       return kind
     case .nodeChoices:
       return .syntax
-    case .collection(kind: let kind, collectionElementName: _):
+    case .collection(kind: let kind, _, _):
       return kind
     case .token:
       return .token
@@ -81,6 +82,14 @@ public class Child {
   /// A name of this child that's suitable to be used for variable or enum case names.
   public var varName: String {
     return lowercaseFirstWord(name: name)
+  }
+
+  /// The deprecated name of this child that's suitable to be used for variable or enum case names.
+  public var deprecatedVarName: String? {
+    guard let deprecatedName = deprecatedName else {
+      return nil
+    }
+    return lowercaseFirstWord(name: deprecatedName)
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.
@@ -118,7 +127,7 @@ public class Child {
   /// Whether this child has syntax kind `UnexpectedNodes`.
   public var isUnexpectedNodes: Bool {
     switch kind {
-    case .collection(kind: .unexpectedNodes, collectionElementName: _):
+    case .collection(kind: .unexpectedNodes, _, _):
       return true
     default:
       return false
@@ -133,7 +142,7 @@ public class Child {
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
-    case .collection(kind: let kind, collectionElementName: _):
+    case .collection(let kind, _, _):
       return kind.isBase
     case .token:
       return false
@@ -153,6 +162,7 @@ public class Child {
   /// identifiers) inherit the syntax classification.
   init(
     name: String,
+    deprecatedName: String? = nil,
     kind: ChildKind,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
@@ -165,6 +175,7 @@ public class Child {
       precondition(firstCharInName.isUppercase == true, "The first letter of a child’s name should be uppercase")
     }
     self.name = name
+    self.deprecatedName = deprecatedName
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = documentation

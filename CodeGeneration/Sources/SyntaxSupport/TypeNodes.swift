@@ -19,6 +19,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
+        deprecatedName: "LeftSquareBracket",
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
@@ -27,6 +28,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
+        deprecatedName: "RightSquareBracket",
         kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
@@ -144,6 +146,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
+        deprecatedName: "LeftSquareBracket",
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
@@ -162,6 +165,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
+        deprecatedName: "RightSquareBracket",
         kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
@@ -184,7 +188,8 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Parameters",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter"),
+        deprecatedName: "arguments",
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument"),
         isIndented: true
       ),
       Child(
@@ -331,6 +336,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "GenericParameterClause",
+        deprecatedName: "GenericParameters",
         kind: .node(kind: .genericParameterClause)
       ),
       Child(

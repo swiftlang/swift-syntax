@@ -10,25 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-import SwiftSyntaxBuilder
 import SyntaxSupport
-import Utils
 
-let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
-
-  for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-    let type = node.type
-
-    if let convenienceInit = try! node.createConvenienceBuilerInitializer() {
-      DeclSyntax(
-        """
-        extension \(raw: type.syntaxBaseName) {
-        \(convenienceInit)
-        }
-        """
-      )
-    }
+extension Array where Element == Child {
+  var hasDeprecatedChild: Bool {
+    return self.contains(where: { $0.deprecatedName != nil })
   }
 }

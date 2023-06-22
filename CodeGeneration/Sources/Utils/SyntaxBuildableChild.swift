@@ -33,7 +33,7 @@ public extension Child {
       buildableKind = .node(kind: kind)
     case .nodeChoices:
       buildableKind = .node(kind: .syntax)
-    case .collection(kind: let kind, collectionElementName: _):
+    case .collection(let kind, _, _):
       buildableKind = .node(kind: kind)
     case .token:
       buildableKind = .token(tokenKind: self.tokenKind!)

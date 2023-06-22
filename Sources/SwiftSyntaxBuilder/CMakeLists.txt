@@ -10,6 +10,7 @@ add_swift_host_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
   Indenter.swift
   ResultBuilderExtensions.swift
+  SwiftSyntaxBuilderCompatibility.swift
   Syntax+StringInterpolation.swift
   SyntaxNodeWithBody.swift
   ValidatingSyntaxNodes.swift
@@ -19,6 +20,7 @@ add_swift_host_library(SwiftSyntaxBuilder
   generated/BuildableCollectionNodes.swift
   generated/BuildableNodes.swift
   generated/ResultBuilders.swift
+  generated/RenamedChildrenBuilderCompatibility.swift
   generated/SyntaxExpressibleByStringInterpolationConformances.swift
 )
 

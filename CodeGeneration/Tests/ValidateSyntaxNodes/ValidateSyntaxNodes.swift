@@ -56,13 +56,13 @@ fileprivate extension ChildKind {
       return kind == otherKind
     case (.nodeChoices(let choices), .nodeChoices(let otherChoices)):
       return choices.count == otherChoices.count && zip(choices, otherChoices).allSatisfy { $0.hasSameType(as: $1) }
-    case (.collection(let kind, _), .collection(let otherKind, _)):
+    case (.collection(let kind, _, _), .collection(let otherKind, _, _)):
       return kind == otherKind
     case (.token(let choices, _, _), .token(let otherChoices, _, _)):
       return choices == otherChoices
-    case (.node(let kind), .collection(let otherKind, _)):
+    case (.node(let kind), .collection(let otherKind, _, _)):
       return kind == otherKind
-    case (.collection(let kind, _), .node(let otherKind)):
+    case (.collection(let kind, _, _), .node(let otherKind)):
       return kind == otherKind
     default:
       return false

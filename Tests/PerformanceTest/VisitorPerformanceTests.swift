@@ -48,7 +48,7 @@ public class VisitorPerformanceTests: XCTestCase {
       try {
         let parsed = Parser.parse(source: try String(contentsOf: inputFile))
 
-        let emptyRewriter = EmptyRewriter()
+        let emptyRewriter = EmptyRewriter(viewMode: .sourceAccurate)
 
         measure {
           _ = emptyRewriter.visit(parsed)

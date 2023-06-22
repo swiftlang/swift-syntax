@@ -235,7 +235,7 @@ final class StringInterpolationTests: XCTestCase {
         return DeclSyntax(newFunc)
       }
     }
-    let rewrittenSourceFile = Rewriter().visit(sourceFile)
+    let rewrittenSourceFile = Rewriter(viewMode: .sourceAccurate).visit(sourceFile)
     XCTAssertEqual(
       rewrittenSourceFile.description,
       """

@@ -30,6 +30,7 @@ class Indenter: SyntaxRewriter {
 
   init(indentation: Trivia) {
     self.indentation = indentation
+    super.init(viewMode: .sourceAccurate)
   }
 
   /// Adds `indentation` after all newlines in the syntax tree.
@@ -37,7 +38,7 @@ class Indenter: SyntaxRewriter {
     _ node: SyntaxType,
     indentation: Trivia
   ) -> SyntaxType {
-    return Indenter(indentation: indentation).visit(Syntax(node)).as(SyntaxType.self)!
+    return Indenter(indentation: indentation).rewrite(node).as(SyntaxType.self)!
   }
 
   public override func visit(_ token: TokenSyntax) -> TokenSyntax {

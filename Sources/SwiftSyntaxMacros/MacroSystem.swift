@@ -74,6 +74,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   ) {
     self.macroSystem = macroSystem
     self.context = context
+    super.init(viewMode: .sourceAccurate)
   }
 
   override func visitAny(_ node: Syntax) -> Syntax? {
@@ -582,6 +583,6 @@ extension SyntaxProtocol {
       context: context
     )
 
-    return applier.visit(Syntax(self))
+    return applier.rewrite(self)
   }
 }

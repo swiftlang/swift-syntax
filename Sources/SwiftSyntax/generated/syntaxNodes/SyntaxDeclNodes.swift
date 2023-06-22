@@ -71,7 +71,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitEffectsAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -340,7 +340,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -646,7 +646,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitializerAndGenericWhereClause, 
             genericWhereClause, 
             unexpectedAfterGenericWhereClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -934,7 +934,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -1228,7 +1228,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDeinitKeywordAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -1430,7 +1430,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenModifiersAndPlaceholder, 
             placeholder, 
             unexpectedAfterPlaceholder
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -1617,7 +1617,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenCaseKeywordAndElements, 
             elements, 
             unexpectedAfterElements
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -1862,7 +1862,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -2176,7 +2176,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -2464,7 +2464,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -2750,7 +2750,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenClausesAndPoundEndif, 
             poundEndif, 
             unexpectedAfterPoundEndif
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeClauses?.raw, 
           clauses.raw, 
@@ -2897,7 +2897,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenImportKindAndPath, 
             path, 
             unexpectedAfterPath
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -3167,7 +3167,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndBody, 
             body, 
             unexpectedAfterBody
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -3485,7 +3485,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenDefinitionAndGenericWhereClause, 
             genericWhereClause, 
             unexpectedAfterGenericWhereClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -3803,7 +3803,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
             additionalTrailingClosures, 
             unexpectedAfterAdditionalTrailingClosures
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4176,7 +4176,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenModifiersAndPlaceholder, 
             placeholder, 
             unexpectedAfterPlaceholder
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4367,7 +4367,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, 
             operatorPrecedenceAndTypes, 
             unexpectedAfterOperatorPrecedenceAndTypes
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -4598,7 +4598,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenArgsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePoundSourceLocation?.raw, 
           poundSourceLocation.raw, 
@@ -4778,7 +4778,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGroupAttributesAndRightBrace, 
             rightBrace, 
             unexpectedAfterRightBrace
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -5089,7 +5089,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -5399,7 +5399,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndMemberBlock, 
             memberBlock, 
             unexpectedAfterMemberBlock
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -5751,7 +5751,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenGenericWhereClauseAndAccessor, 
             accessor, 
             unexpectedAfterAccessor
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -6057,7 +6057,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenInitializerAndGenericWhereClause, 
             genericWhereClause, 
             unexpectedAfterGenericWhereClause
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
@@ -6329,7 +6329,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             unexpectedBetweenBindingKeywordAndBindings, 
             bindings, 
             unexpectedAfterBindings
-          ))) {(arena, _) in
+          ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 

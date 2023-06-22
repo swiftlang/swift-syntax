@@ -205,6 +205,7 @@ open class BasicFormat: SyntaxRewriter {
       (.identifier, .leftSquareBracket),  // myArray[1]
       (.identifier, .period),  // a.b
       (.integerLiteral, .period),  // macOS 11.2.1
+      (.keyword(.Any), .period),  // Any.Type
       (.keyword(.`init`), .leftAngle),  // init<T>()
       (.keyword(.`init`), .leftParen),  // init()
       (.keyword(.self), .period),  // self.someProperty

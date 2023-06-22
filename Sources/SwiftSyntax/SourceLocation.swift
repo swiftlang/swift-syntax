@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
+public struct SourceLocation: Hashable, Codable {
 
   /// The line in the file where this location resides. 1-based.
   ///
@@ -45,13 +45,6 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
   /// is the file mentioned in the last `#sourceLocation` directive before this
   /// location, otherwise this is the same as `file`.
   public let presumedFile: String
-
-  /// Returns the location as `<line>:<column>` for debugging purposes.
-  /// Do not rely on this output being stable.
-  public var debugDescription: String {
-    // Print file name?
-    return "\(line):\(column)"
-  }
 
   /// Create a new source location at the specified `line` and `column` in `file`.
   ///
@@ -91,7 +84,7 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
 }
 
 /// Represents a half-open range in a Swift file.
-public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
+public struct SourceRange: Hashable, Codable {
 
   /// The beginning location of the source range.
   ///
@@ -103,12 +96,6 @@ public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
   /// The location of the character after the end of the range,
   /// ie. this location is not included in the range.
   public let end: SourceLocation
-
-  /// A description describing this range for debugging purposes, don't rely on
-  /// it being stable
-  public var debugDescription: String {
-    return "(\(start.debugDescription),\(end.debugDescription))"
-  }
 
   /// Construct a new source range, starting at `start` (inclusive) and ending
   /// at `end` (exclusive).

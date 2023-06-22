@@ -163,10 +163,21 @@ extension Parser {
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)
+    var unexpectedAfterPoundEndif: RawUnexpectedNodesSyntax?
+    if !self.currentToken.isAtStartOfLine {
+      var unexpectedTokens = [RawTokenSyntax]()
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+        unexpectedTokens += [self.consumeAnyToken()]
+      }
+
+      unexpectedAfterPoundEndif = RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
+    }
     return RawIfConfigDeclSyntax(
       clauses: RawIfConfigClauseListSyntax(elements: clauses, arena: self.arena),
       unexpectedBeforePoundEndIf,
       poundEndif: poundEndIf,
+      unexpectedAfterPoundEndif,
       arena: self.arena
     )
   }

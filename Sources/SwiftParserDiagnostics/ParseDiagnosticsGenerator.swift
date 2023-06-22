@@ -1136,6 +1136,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         }
       }
     }
+
+    if let unexpectedAfterPoundEndif = node.unexpectedAfterPoundEndif {
+      addDiagnostic(
+        unexpectedAfterPoundEndif,
+        .extraTokensFollowingConditionalCompilationDirective,
+        handledNodes: [unexpectedAfterPoundEndif.id]
+      )
+    }
+
     return .visitChildren
   }
 

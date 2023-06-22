@@ -108,7 +108,7 @@ public class CodeGenerationFormat: BasicFormat {
   private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
     increaseIndentationLevel()
     var formattedChildren = children.map {
-      self.visit($0).as(SyntaxType.self)!
+      self.rewrite($0.cast(SyntaxType.self)).cast(SyntaxType.self)
     }
     formattedChildren = formattedChildren.map {
       if $0.leadingTrivia.first?.isNewline == true {

@@ -60,9 +60,9 @@ class ExplicitParenFolder: SyntaxRewriter {
     }
 
     return OperatorTable.makeBinaryOperationExpr(
-      lhs: visit(Syntax(leftOperand)).as(ExprSyntax.self)!,
-      op: visit(Syntax(middleExpr)).as(ExprSyntax.self)!,
-      rhs: visit(Syntax(rightOperand)).as(ExprSyntax.self)!
+      lhs: visit(leftOperand),
+      op: visit(middleExpr),
+      rhs: visit(rightOperand)
     )
   }
 }
@@ -86,7 +86,7 @@ extension OperatorTable {
 
     // Parse and "fold" the parenthesized version.
     let parenthesizedParsed = Parser.parse(source: fullyParenthesizedSource)
-    let parenthesizedSyntax = ExplicitParenFolder().visit(parenthesizedParsed)
+    let parenthesizedSyntax = ExplicitParenFolder(viewMode: .sourceAccurate).visit(parenthesizedParsed)
     XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
 
     // Make sure the two have the same structure.

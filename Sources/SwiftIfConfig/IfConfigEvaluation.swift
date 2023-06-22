@@ -72,9 +72,14 @@ enum IfConfigError: Error, CustomStringConvertible {
 extension VersionTuple {
   /// Parse a compiler build version of the form "5007.*.1.2.3*", which is
   /// used by an older if configuration form `_compiler_version("...")`.
+  /// - Parameters:
+  ///   - versionString: The version string for the compiler build version that
+  ///   we are parsing.
+  ///   - versionSyntax: The syntax node that contains the version string, used
+  ///   only for diagnostic purposes.
   fileprivate init(
     parsingCompilerBuildVersion versionString: String,
-    _ syntax: ExprSyntax
+    _ versionSyntax: ExprSyntax
   ) throws {
     components = []
 
@@ -86,7 +91,7 @@ extension VersionTuple {
       let limit = components.isEmpty ? 9223371 : 999
       if value < 0 || value > limit {
         // FIXME: Can we provide a more precise location here?
-        throw IfConfigError.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: syntax)
+        throw IfConfigError.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: versionSyntax)
       }
 
       components.append(value)
@@ -96,13 +101,13 @@ extension VersionTuple {
     for (index, componentString) in componentStrings.enumerated() {
       // Check ahead of time for empty version components
       if componentString.isEmpty {
-        throw IfConfigError.emptyVersionComponent(syntax: syntax)
+        throw IfConfigError.emptyVersionComponent(syntax: versionSyntax)
       }
 
       // The second component is always "*", and is never used for comparison.
       if index == 1 {
         if componentString != "*" {
-          throw IfConfigError.compilerVersionSecondComponentNotWildcard(syntax: syntax)
+          throw IfConfigError.compilerVersionSecondComponentNotWildcard(syntax: versionSyntax)
         }
         try recordComponent(0)
         continue
@@ -110,7 +115,7 @@ extension VersionTuple {
 
       // Every other component must be an integer value.
       guard let component = Int(componentString) else {
-        throw IfConfigError.invalidVersionOperand(name: "_compiler_version", syntax: syntax)
+        throw IfConfigError.invalidVersionOperand(name: "_compiler_version", syntax: versionSyntax)
       }
 
       try recordComponent(component)
@@ -118,7 +123,7 @@ extension VersionTuple {
 
     // Only allowed to specify up to 5 version components.
     if components.count > 5 {
-      throw IfConfigError.compilerVersionTooManyComponents(syntax: syntax)
+      throw IfConfigError.compilerVersionTooManyComponents(syntax: versionSyntax)
     }
 
     // In the beginning, '_compiler_version(string-literal)' was designed for a
@@ -159,6 +164,13 @@ extension VersionTuple {
 }
 
 /// Evaluate the condition of an `#if`.
+/// - Parameters:
+///   - condition: The condition to evaluate, which we assume has already been
+///     folded according to the logical operators table.
+///   - configuration: The configuration against which the condition will be
+///     evaluated.
+/// - Throws: Throws if an errors occur during evaluation.
+/// - Returns: Whether the condition holds with the given build configuration.
 private func evaluateIfConfig(
   condition: ExprSyntax,
   configuration: some BuildConfiguration
@@ -223,7 +235,6 @@ private func evaluateIfConfig(
     let fnName = call.calledExpression.simpleIdentifierExpr,
     let fn = IfConfigFunctions(rawValue: fnName)
   {
-
     /// Perform a check for an operation that takes a single identifier argument.
     func doSingleIdentifierArgumentCheck(_ body: (String, ExprSyntax) -> Bool?) throws -> Bool? {
       // Ensure that we have a single argument that is a simple identifier.
@@ -297,6 +308,8 @@ private func evaluateIfConfig(
         let arg = argExpr.simpleIdentifierExpr,
         let expectedEndianness = Endianness(rawValue: arg)
       else {
+        // FIXME: Custom error message when the endianness doesn't match any
+        // case.
         result = nil
         break
       }
@@ -365,8 +378,9 @@ private func evaluateIfConfig(
         throw IfConfigError.canImportMissingModule(syntax: ExprSyntax(call))
       }
 
+      // FIXME: This is a gross hack. Actually look at the sequence of
+      // `MemberAccessExprSyntax` nodes and pull out the identifiers.
       let importPath = firstArg.expression.trimmedDescription.split(separator: ".")
-      // FIXME: Check to make sure we have all identifiers here.
 
       // If there is a second argument, it shall have the label _version or
       // _underlyingVersion.
@@ -428,7 +442,7 @@ extension IfConfigState {
   /// insufficient information to make a determination.
   public init(condition: some ExprSyntaxProtocol, configuration: some BuildConfiguration) throws {
     // Apply operator folding for !/&&/||.
-    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition).as(ExprSyntax.self)!
+    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition).cast(ExprSyntax.self)
 
     let result = try evaluateIfConfig(condition: foldedCondition, configuration: configuration)
     self = result ? .active : .inactive

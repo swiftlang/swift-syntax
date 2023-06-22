@@ -20,8 +20,7 @@ extension BooleanLiteralExprSyntax {
 extension TupleExprSyntax {
   /// Whether this tuple is a parenthesized expression, e.g., (x).
   var isParentheses: Bool {
-    guard elements.count == 1, let element = elements.first else { return false }
-    return element.label == nil
+    return elements.singleUnlabeledExpression != nil
   }
 }
 

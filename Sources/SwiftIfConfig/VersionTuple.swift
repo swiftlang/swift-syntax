@@ -14,12 +14,18 @@
 public struct VersionTuple {
   /// The components of the version tuple, start with the major version.
   public var components: [Int]
-}
 
-extension VersionTuple {
-  /// Create a version tuple from its components.
-  public init(_ components: Int...) {
+  /// Create a version tuple from a non-empty array of components.
+  public init(components: [Int]) {
+    precondition(!components.isEmpty)
     self.components = components
+  }
+
+  /// Create a version tuple from its components.
+  public init(_ firstComponent: Int, _ remainingComponents: Int...) {
+    self.components = []
+    self.components.append(firstComponent)
+    self.components.append(contentsOf: remainingComponents)
   }
 
   /// Parse a string into a version tuple, returning `nil` if any errors were
@@ -34,10 +40,10 @@ extension VersionTuple {
 
       components.append(component)
     }
-  }
-}
 
-extension VersionTuple {
+    if components.isEmpty { return nil }
+  }
+
   /// Normalize the version tuple by removing trailing zeroes.
   var normalized: VersionTuple {
     var newComponents = components

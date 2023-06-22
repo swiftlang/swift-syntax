@@ -60,8 +60,8 @@ public struct AccessPathSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessPath,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -229,7 +229,7 @@ extension AccessPathSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -269,8 +269,8 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.accessorList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -438,7 +438,7 @@ extension AccessorListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -478,8 +478,8 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.arrayElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -647,7 +647,7 @@ extension ArrayElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -730,8 +730,8 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -899,7 +899,7 @@ extension AttributeListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -939,8 +939,8 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilitySpecList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1108,7 +1108,7 @@ extension AvailabilitySpecListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -1148,8 +1148,8 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.availabilityVersionRestrictionList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1317,7 +1317,7 @@ extension AvailabilityVersionRestrictionListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -1357,8 +1357,8 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.caseItemList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1526,7 +1526,7 @@ extension CaseItemListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -1566,8 +1566,8 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1735,7 +1735,7 @@ extension CatchClauseListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -1775,8 +1775,8 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -1944,7 +1944,7 @@ extension CatchItemListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -1984,8 +1984,8 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureItemList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2153,7 +2153,7 @@ extension ClosureCaptureItemListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -2193,8 +2193,8 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParamList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2362,7 +2362,7 @@ extension ClosureParamListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -2402,8 +2402,8 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2571,7 +2571,7 @@ extension ClosureParameterListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -2611,8 +2611,8 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2780,7 +2780,7 @@ extension CodeBlockItemListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -2820,8 +2820,8 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -2989,7 +2989,7 @@ extension CompositionTypeElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -3029,8 +3029,8 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.conditionElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3198,7 +3198,7 @@ extension ConditionElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -3238,8 +3238,8 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3407,7 +3407,7 @@ extension DeclNameArgumentListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -3447,8 +3447,8 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3616,7 +3616,7 @@ extension DesignatedTypeListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -3656,8 +3656,8 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.dictionaryElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -3825,7 +3825,7 @@ extension DictionaryElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -3865,8 +3865,8 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParamList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4034,7 +4034,7 @@ extension DifferentiabilityParamListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -4071,8 +4071,8 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.documentationAttributeArguments,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4240,7 +4240,7 @@ extension DocumentationAttributeArgumentsSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -4277,8 +4277,8 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.effectsArguments,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4446,7 +4446,7 @@ extension EffectsArgumentsSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -4483,8 +4483,8 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4652,7 +4652,7 @@ extension EnumCaseElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -4692,8 +4692,8 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -4861,7 +4861,7 @@ extension EnumCaseParameterListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -4898,8 +4898,8 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.exprList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5067,7 +5067,7 @@ extension ExprListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -5107,8 +5107,8 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5276,7 +5276,7 @@ extension FunctionParameterListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -5316,8 +5316,8 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericArgumentList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5485,7 +5485,7 @@ extension GenericArgumentListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -5525,8 +5525,8 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericParameterList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5694,7 +5694,7 @@ extension GenericParameterListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -5734,8 +5734,8 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.genericRequirementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -5903,7 +5903,7 @@ extension GenericRequirementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -5943,8 +5943,8 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.ifConfigClauseList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6112,7 +6112,7 @@ extension IfConfigClauseListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -6152,8 +6152,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.inheritedTypeList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6321,7 +6321,7 @@ extension InheritedTypeListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -6361,8 +6361,8 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.keyPathComponentList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6530,7 +6530,7 @@ extension KeyPathComponentListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -6570,8 +6570,8 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.memberDeclList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6739,7 +6739,7 @@ extension MemberDeclListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -6779,8 +6779,8 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.modifierList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -6948,7 +6948,7 @@ extension ModifierListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -6988,8 +6988,8 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7157,7 +7157,7 @@ extension MultipleTrailingClosureElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -7197,8 +7197,8 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.objCSelector,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7366,7 +7366,7 @@ extension ObjCSelectorSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -7406,8 +7406,8 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.patternBindingList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7575,7 +7575,7 @@ extension PatternBindingListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -7670,8 +7670,8 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -7839,7 +7839,7 @@ extension PrecedenceGroupAttributeListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -7879,8 +7879,8 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8048,7 +8048,7 @@ extension PrecedenceGroupNameListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -8088,8 +8088,8 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8257,7 +8257,7 @@ extension PrimaryAssociatedTypeListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -8362,8 +8362,8 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.specializeAttributeSpecList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8531,7 +8531,7 @@ extension SpecializeAttributeSpecListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -8614,8 +8614,8 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -8783,7 +8783,7 @@ extension StringLiteralSegmentsSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -8866,8 +8866,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.switchCaseList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9035,7 +9035,7 @@ extension SwitchCaseListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -9075,8 +9075,8 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9244,7 +9244,7 @@ extension TupleExprElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -9284,8 +9284,8 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.tuplePatternElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9453,7 +9453,7 @@ extension TuplePatternElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -9493,8 +9493,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9662,7 +9662,7 @@ extension TupleTypeElementListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -9699,8 +9699,8 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.unexpectedNodes,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -9868,7 +9868,7 @@ extension UnexpectedNodesSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))
@@ -9908,8 +9908,8 @@ public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime(SyntaxArena()) { arena in
       let raw = RawSyntax.makeLayout(kind: SyntaxKind.yieldExprList,
                                      from: children.map {
-            $0.raw
-          }, arena: arena)
+          $0.raw
+        }, arena: arena)
       return SyntaxData.forRoot(raw)
     }
     self.init(data)
@@ -10077,7 +10077,7 @@ extension YieldExprListSyntax: BidirectionalCollection {
     return rawChildren.distance(from: start, to: end)
   }
   
-  public subscript (position: SyntaxChildrenIndex) -> Element {
+  public subscript(position: SyntaxChildrenIndex) -> Element {
     let (raw, info) = rawChildren[position]
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: Syntax(self))

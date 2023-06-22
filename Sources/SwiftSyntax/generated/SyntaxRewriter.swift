@@ -37,7 +37,7 @@ open class SyntaxRewriter {
     }
   }
   
-  /// Visit a ``TokenSyntax``.
+  /// Visit a `TokenSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ token: TokenSyntax) -> TokenSyntax {

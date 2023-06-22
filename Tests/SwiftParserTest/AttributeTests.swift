@@ -73,25 +73,29 @@ final class AttributeTests: XCTestCase {
   func testMissingClosingParenToAttribute() {
     assertParse(
       """
-      @_specializeℹ️(e1️⃣
+      @_specializeℹ️(1️⃣e
+      func foo() {}
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected ':' in attribute argument",
-          fixIts: ["insert ':'"]
+          locationMarker: "1️⃣",
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
         ),
         DiagnosticSpec(
+          locationMarker: "1️⃣",
           message: "expected ')' to end attribute",
           notes: [NoteSpec(message: "to match this opening '('")],
           fixIts: ["insert ')'"]
         ),
         DiagnosticSpec(
-          message: "expected declaration after attribute",
-          fixIts: ["insert declaration"]
+          locationMarker: "1️⃣",
+          message: "unexpected code 'e' in function"
         ),
       ],
       fixedSource: """
-        @_specialize(e:) <#declaration#>
+        @_specialize()e
+        func foo() {}
         """
     )
   }
@@ -99,15 +103,23 @@ final class AttributeTests: XCTestCase {
   func testMultipleInvalidSpecializeParams() {
     assertParse(
       """
-      @_specialize(e1️⃣, exported2️⃣)3️⃣
+      @_specialize(1️⃣e, exported)2️⃣
+      func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in attribute argument", fixIts: ["insert ':'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ': false' in attribute argument", fixIts: ["insert ': false'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute", fixIts: ["insert declaration"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected argument for '@_specialize' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code 'e, exported' in attribute"
+        ),
       ],
       fixedSource: """
-        @_specialize(e:, exported: false) <#declaration#>
+        @_specialize(e, exported)
+        func foo() {}
         """
     )
   }

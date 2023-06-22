@@ -15,6 +15,8 @@
 @_implementationOnly import Darwin
 #elseif canImport(Glibc)
 @_implementationOnly import Glibc
+#elseif canImport(Musl)
+@_implementationOnly import Musl
 #endif
 #endif
 

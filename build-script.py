@@ -283,6 +283,29 @@ def check_generated_files_match(self_generated_dir: str,
     check_call(command)
 
 
+def run_code_generation_tests(
+    toolchain: str,
+    verbose: bool
+) -> None:
+    print("** Running CodeGeneration tests **")
+
+    swift_exec = os.path.join(toolchain, "bin", "swift")
+
+    swiftpm_call = [
+        swift_exec, 'test',
+        "--package-path", CODE_GENERATION_DIR
+    ]
+    
+    if verbose:
+        swiftpm_call.extend(["--verbose"])
+
+    env = dict(os.environ)
+    env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
+    env["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
+    env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    check_call(swiftpm_call, env=env, verbose=verbose)
+
+
 def run_tests(
     toolchain: str,
     build_dir: Optional[str],
@@ -306,12 +329,19 @@ def run_tests(
         )
 
     run_xctests(
+        package_dir=PACKAGE_DIR,
+        test_product="swift-syntaxPackageTests",
         toolchain=toolchain,
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
         enable_rawsyntax_validation=enable_rawsyntax_validation,
         enable_test_fuzzing=enable_test_fuzzing,
+        verbose=verbose,
+    )
+
+    run_code_generation_tests(
+        toolchain=toolchain,
         verbose=verbose,
     )
 
@@ -398,6 +428,8 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
 
 
 def run_xctests(
+    package_dir: str,
+    test_product: str,
     toolchain: str, 
     build_dir: Optional[str],
     multiroot_data_file: Optional[str], 
@@ -410,7 +442,7 @@ def run_xctests(
     swiftpm_call = get_swiftpm_invocation(
         toolchain=toolchain,
         action="test",
-        package_dir=PACKAGE_DIR,
+        package_dir=package_dir,
         build_dir=build_dir,
         multiroot_data_file=multiroot_data_file,
         release=release,
@@ -419,7 +451,7 @@ def run_xctests(
     if verbose:
         swiftpm_call.extend(["--verbose"])
 
-    swiftpm_call.extend(["--test-product", "swift-syntaxPackageTests"])
+    swiftpm_call.extend(["--test-product", test_product])
 
     env = dict(os.environ)
     env["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"

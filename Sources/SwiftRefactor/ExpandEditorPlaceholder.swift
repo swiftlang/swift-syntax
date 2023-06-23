@@ -175,14 +175,14 @@ extension FunctionTypeSyntax {
           ClosureParamSyntax(name: arg.expansionNameToken())
         }
       }
-      closureSignature = ClosureSignatureSyntax(input: .simpleInput(args))
+      closureSignature = ClosureSignatureSyntax(parameterClause: .simpleInput(args))
     } else {
       closureSignature = nil
     }
 
     // Single statement for the body - the placeholder-ed type if non-void and
     // 'code' otherwise.
-    let ret = output.returnType.description
+    let ret = returnClause.returnType.description
     let placeholder: String
     if ret == "Void" || ret == "()" {
       placeholder = ExpandEditorPlaceholder.wrapInTypePlaceholder("code", type: "Void")

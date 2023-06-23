@@ -1468,7 +1468,7 @@ extension Parser {
       pound: pound,
       unexpectedBeforeMacro,
       macro: macro,
-      genericArguments: generics,
+      genericArgumentClause: generics,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(
         elements: args,
@@ -1941,16 +1941,16 @@ extension Parser {
       captures = nil
     }
 
-    var input: RawClosureSignatureSyntax.Input?
+    var parameterClause: RawClosureSignatureSyntax.ParameterClause?
     var effectSpecifiers: RawTypeEffectSpecifiersSyntax?
-    var output: RawReturnClauseSyntax? = nil
+    var returnClause: RawReturnClauseSyntax? = nil
     if !self.at(.keyword(.in)) {
       if self.at(.leftParen) {
         // Parse the closure arguments.
         let params = self.parseParameterClause(RawClosureParameterClauseSyntax.self) { parser in
           parser.parseClosureParameter()
         }
-        input = .input(params)
+        parameterClause = .parameterClause(params)
       } else {
         var params = [RawClosureParamSyntax]()
         var loopProgress = LoopProgressCondition()
@@ -1978,13 +1978,13 @@ extension Parser {
           } while keepGoing != nil && loopProgress.evaluate(currentToken)
         }
 
-        input = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
+        parameterClause = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
       }
 
       effectSpecifiers = self.parseTypeEffectSpecifiers()
 
       if self.at(.arrow) {
-        output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
+        returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
       }
     }
 
@@ -1993,9 +1993,9 @@ extension Parser {
     return RawClosureSignatureSyntax(
       attributes: attrs,
       capture: captures,
-      input: input,
+      parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
-      output: output,
+      returnClause: returnClause,
       unexpectedBeforeInKeyword,
       inKeyword: inKeyword,
       arena: self.arena
@@ -2631,7 +2631,7 @@ extension Parser {
         label: label,
         unexpectedBeforeColon,
         colon: colon,
-        versionTuple: version,
+        version: version,
         arena: self.arena
       )
     }

@@ -116,7 +116,7 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
     let identifier = node.identifier
     let signature = macro.signature
 
-    let matchedParameter = signature.input.parameterList.enumerated().first { (index, parameter) in
+    let matchedParameter = signature.parameterClause.parameterList.enumerated().first { (index, parameter) in
       if identifier.text == "_" {
         return false
       }

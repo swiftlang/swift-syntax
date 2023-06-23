@@ -423,7 +423,7 @@ extension Parser {
       kindSpecifierComma: kindSpecifierComma,
       parameters: parameters,
       parametersComma: parametersComma,
-      whereClause: whereClause,
+      genericWhereClause: whereClause,
       arena: self.arena
     )
   }
@@ -683,8 +683,8 @@ extension Parser {
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (targetFunction, args) = self.parseDeclNameRef([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
         let declName = RawDeclNameSyntax(
-          declBaseName: targetFunction,
-          declNameArguments: args,
+          baseName: targetFunction,
+          arguments: args,
           arena: self.arena
         )
         let comma = self.consume(if: .comma)
@@ -1031,7 +1031,7 @@ extension Parser {
         .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
       ])
     }
-    let method = RawDeclNameSyntax(declBaseName: base, declNameArguments: args, arena: self.arena)
+    let method = RawDeclNameSyntax(baseName: base, arguments: args, arena: self.arena)
     return RawDynamicReplacementArgumentsSyntax(
       unexpectedBeforeLabel,
       forLabel: label,

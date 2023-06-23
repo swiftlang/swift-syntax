@@ -828,6 +828,69 @@ extension BooleanLiteralExprSyntax {
   }
 }
 
+extension CanImportVersionInfoSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndVersion")
+  public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndVersion
+    }
+    set {
+      unexpectedBetweenColonAndVersion = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "version")
+  public var versionTuple: VersionTupleSyntax {
+    get {
+      return version
+    }
+    set {
+      version = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterVersion")
+  public var unexpectedAfterVersionTuple: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterVersion
+    }
+    set {
+      unexpectedAfterVersion = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with version argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
+      versionTuple: VersionTupleSyntax,
+      _ unexpectedAfterVersionTuple: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeComma, 
+        comma: comma, 
+        unexpectedBetweenCommaAndLabel, 
+        label: label, 
+        unexpectedBetweenLabelAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndVersionTuple, 
+        version: versionTuple, 
+        unexpectedAfterVersionTuple, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ClosureCaptureItemSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenNameAndEqual")
   public var unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? {
@@ -896,13 +959,63 @@ extension ClosureCaptureItemSyntax {
 }
 
 extension ClosureSignatureSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenOutputAndInKeyword")
-  public var unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenCaptureAndParameterClause")
+  public var unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenOutputAndInKeyword
+      return unexpectedBetweenCaptureAndParameterClause
     }
     set {
-      unexpectedBetweenOutputAndInKeyword = newValue
+      unexpectedBetweenCaptureAndParameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameterClause")
+  public var input: ParameterClause? {
+    get {
+      return parameterClause
+    }
+    set {
+      parameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndEffectSpecifiers")
+  public var unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParameterClauseAndEffectSpecifiers
+    }
+    set {
+      unexpectedBetweenParameterClauseAndEffectSpecifiers = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
+  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEffectSpecifiersAndReturnClause
+    }
+    set {
+      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "returnClause")
+  public var output: ReturnClauseSyntax? {
+    get {
+      return returnClause
+    }
+    set {
+      returnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenReturnClauseAndInKeyword")
+  public var unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenReturnClauseAndInKeyword
+    }
+    set {
+      unexpectedBetweenReturnClauseAndInKeyword = newValue
     }
   }
   
@@ -926,7 +1039,7 @@ extension ClosureSignatureSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with inKeyword argument(s).")
+  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, inKeyword argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -935,7 +1048,7 @@ extension ClosureSignatureSyntax {
       _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
       capture: ClosureCaptureSignatureSyntax? = nil,
       _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
-      input: Input? = nil,
+      input: ParameterClause? = nil,
       _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
       _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
@@ -953,14 +1066,89 @@ extension ClosureSignatureSyntax {
         unexpectedBetweenAttributesAndCapture, 
         capture: capture, 
         unexpectedBetweenCaptureAndInput, 
-        input: input, 
+        parameterClause: input, 
         unexpectedBetweenInputAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
         unexpectedBetweenEffectSpecifiersAndOutput, 
-        output: output, 
+        returnClause: output, 
         unexpectedBetweenOutputAndInTok, 
         inKeyword: inTok, 
         unexpectedAfterInTok, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension DeclNameSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
+  public var unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeBaseName
+    }
+    set {
+      unexpectedBeforeBaseName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "baseName")
+  public var declBaseName: TokenSyntax {
+    get {
+      return baseName
+    }
+    set {
+      baseName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenBaseNameAndArguments")
+  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenBaseNameAndArguments
+    }
+    set {
+      unexpectedBetweenBaseNameAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var declNameArguments: DeclNameArgumentsSyntax? {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterArguments")
+  public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterArguments
+    }
+    set {
+      unexpectedAfterArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with baseName, arguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? = nil,
+      declBaseName: TokenSyntax,
+      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      declNameArguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeDeclBaseName, 
+        baseName: declBaseName, 
+        unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
+        arguments: declNameArguments, 
+        unexpectedAfterDeclNameArguments, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -1249,17 +1437,37 @@ extension DifferentiableAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenParametersCommaAndWhereClause")
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersCommaAndGenericWhereClause")
   public var unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenParametersCommaAndWhereClause
+      return unexpectedBetweenParametersCommaAndGenericWhereClause
     }
     set {
-      unexpectedBetweenParametersCommaAndWhereClause = newValue
+      unexpectedBetweenParametersCommaAndGenericWhereClause = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with kindSpecifier, kindSpecifierComma, parameters, parametersComma argument(s).")
+  @available(*, deprecated, renamed: "genericWhereClause")
+  public var whereClause: GenericWhereClauseSyntax? {
+    get {
+      return genericWhereClause
+    }
+    set {
+      genericWhereClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterGenericWhereClause")
+  public var unexpectedAfterWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterGenericWhereClause
+    }
+    set {
+      unexpectedAfterGenericWhereClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with kindSpecifier, kindSpecifierComma, parameters, parametersComma, genericWhereClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1288,7 +1496,7 @@ extension DifferentiableAttributeArgumentsSyntax {
         unexpectedBetweenDiffParamsAndDiffParamsComma, 
         parametersComma: diffParamsComma, 
         unexpectedBetweenDiffParamsCommaAndWhereClause, 
-        whereClause: whereClause, 
+        genericWhereClause: whereClause, 
         unexpectedAfterWhereClause, 
         trailingTrivia: trailingTrivia
       )
@@ -1551,6 +1759,95 @@ extension FloatLiteralExprSyntax {
   }
 }
 
+extension FunctionSignatureSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeParameterClause")
+  public var unexpectedBeforeInput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeParameterClause
+    }
+    set {
+      unexpectedBeforeParameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameterClause")
+  public var input: ParameterClauseSyntax {
+    get {
+      return parameterClause
+    }
+    set {
+      parameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndEffectSpecifiers")
+  public var unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParameterClauseAndEffectSpecifiers
+    }
+    set {
+      unexpectedBetweenParameterClauseAndEffectSpecifiers = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
+  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEffectSpecifiersAndReturnClause
+    }
+    set {
+      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "returnClause")
+  public var output: ReturnClauseSyntax? {
+    get {
+      return returnClause
+    }
+    set {
+      returnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterReturnClause")
+  public var unexpectedAfterOutput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterReturnClause
+    }
+    set {
+      unexpectedAfterReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil,
+      input: ParameterClauseSyntax,
+      _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+      output: ReturnClauseSyntax? = nil,
+      _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeInput, 
+        parameterClause: input, 
+        unexpectedBetweenInputAndEffectSpecifiers, 
+        effectSpecifiers: effectSpecifiers, 
+        unexpectedBetweenEffectSpecifiersAndOutput, 
+        returnClause: output, 
+        unexpectedAfterOutput, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension FunctionTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
   public var unexpectedBetweenLeftParenAndarguments: UnexpectedNodesSyntax? {
@@ -1587,7 +1884,37 @@ extension FunctionTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
+  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEffectSpecifiersAndReturnClause
+    }
+    set {
+      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "returnClause")
+  public var output: ReturnClauseSyntax {
+    get {
+      return returnClause
+    }
+    set {
+      returnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterReturnClause")
+  public var unexpectedAfterOutput: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterReturnClause
+    }
+    set {
+      unexpectedAfterReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameters, returnClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1616,7 +1943,7 @@ extension FunctionTypeSyntax {
         unexpectedBetweenRightParenAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
         unexpectedBetweenEffectSpecifiersAndOutput, 
-        output: output, 
+        returnClause: output, 
         unexpectedAfterOutput, 
         trailingTrivia: trailingTrivia
       )
@@ -2301,7 +2628,37 @@ extension MacroExpansionDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenMacroAndGenericArgumentClause")
+  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenMacroAndGenericArgumentClause
+    }
+    set {
+      unexpectedBetweenMacroAndGenericArgumentClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "genericArgumentClause")
+  public var genericArguments: GenericArgumentClauseSyntax? {
+    get {
+      return genericArgumentClause
+    }
+    set {
+      genericArgumentClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericArgumentClauseAndLeftParen")
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericArgumentClauseAndLeftParen
+    }
+    set {
+      unexpectedBetweenGenericArgumentClauseAndLeftParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2340,7 +2697,7 @@ extension MacroExpansionDeclSyntax {
         unexpectedBetweenPoundTokenAndMacro, 
         macro: macro, 
         unexpectedBetweenMacroAndGenericArguments, 
-        genericArguments: genericArguments, 
+        genericArgumentClause: genericArguments, 
         unexpectedBetweenGenericArgumentsAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndArgumentList, 
@@ -2388,7 +2745,37 @@ extension MacroExpansionExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenMacroAndGenericArgumentClause")
+  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenMacroAndGenericArgumentClause
+    }
+    set {
+      unexpectedBetweenMacroAndGenericArgumentClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "genericArgumentClause")
+  public var genericArguments: GenericArgumentClauseSyntax? {
+    get {
+      return genericArgumentClause
+    }
+    set {
+      genericArgumentClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericArgumentClauseAndLeftParen")
+  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericArgumentClauseAndLeftParen
+    }
+    set {
+      unexpectedBetweenGenericArgumentClauseAndLeftParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2419,7 +2806,7 @@ extension MacroExpansionExprSyntax {
         unexpectedBetweenPoundTokenAndMacro, 
         macro: macro, 
         unexpectedBetweenMacroAndGenericArguments, 
-        genericArguments: genericArguments, 
+        genericArgumentClause: genericArguments, 
         unexpectedBetweenGenericArgumentsAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndArgumentList, 
@@ -3458,6 +3845,105 @@ extension SourceFileSyntax {
         unexpectedBetweenStatementsAndEOFToken, 
         endOfFileToken: eofToken, 
         unexpectedAfterEOFToken, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension SubscriptDeclSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndParameterClause")
+  public var unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericParameterClauseAndParameterClause
+    }
+    set {
+      unexpectedBetweenGenericParameterClauseAndParameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameterClause")
+  public var indices: ParameterClauseSyntax {
+    get {
+      return parameterClause
+    }
+    set {
+      parameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndReturnClause")
+  public var unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParameterClauseAndReturnClause
+    }
+    set {
+      unexpectedBetweenParameterClauseAndReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "returnClause")
+  public var result: ReturnClauseSyntax {
+    get {
+      return returnClause
+    }
+    set {
+      returnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenReturnClauseAndGenericWhereClause")
+  public var unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenReturnClauseAndGenericWhereClause
+    }
+    set {
+      unexpectedBetweenReturnClauseAndGenericWhereClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: ModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
+      subscriptKeyword: TokenSyntax = .keyword(.subscript),
+      _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      genericParameterClause: GenericParameterClauseSyntax? = nil,
+      _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil,
+      indices: ParameterClauseSyntax,
+      _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil,
+      result: ReturnClauseSyntax,
+      _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+      genericWhereClause: GenericWhereClauseSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
+      accessor: Accessor? = nil,
+      _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndSubscriptKeyword, 
+        subscriptKeyword: subscriptKeyword, 
+        unexpectedBetweenSubscriptKeywordAndGenericParameterClause, 
+        genericParameterClause: genericParameterClause, 
+        unexpectedBetweenGenericParameterClauseAndIndices, 
+        parameterClause: indices, 
+        unexpectedBetweenIndicesAndResult, 
+        returnClause: result, 
+        unexpectedBetweenResultAndGenericWhereClause, 
+        genericWhereClause: genericWhereClause, 
+        unexpectedBetweenGenericWhereClauseAndAccessor, 
+        accessor: accessor, 
+        unexpectedAfterAccessor, 
         trailingTrivia: trailingTrivia
       )
   }

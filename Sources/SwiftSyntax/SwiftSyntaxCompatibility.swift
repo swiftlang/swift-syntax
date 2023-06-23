@@ -22,6 +22,18 @@ public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
+extension ClosureSignatureSyntax {
+  @available(*, deprecated, renamed: "ParameterClause")
+  public typealias Input = ParameterClause
+}
+
+extension ClosureSignatureSyntax.ParameterClause {
+  @available(*, deprecated, renamed: "parameterClause")
+  public static func input(_ parameterClause: ClosureParameterClauseSyntax) -> Self {
+    return .parameterClause(parameterClause)
+  }
+}
+
 public extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
   var members: MemberDeclBlockSyntax {
@@ -30,6 +42,18 @@ public extension DeclGroupSyntax {
     }
     set(value) {
       memberBlock = value
+    }
+  }
+}
+
+public extension FreestandingMacroExpansionSyntax {
+  @available(*, deprecated, renamed: "genericArgumentClause")
+  var genericArguments: GenericArgumentClauseSyntax? {
+    get {
+      return genericArgumentClause
+    }
+    set {
+      genericArgumentClause = newValue
     }
   }
 }

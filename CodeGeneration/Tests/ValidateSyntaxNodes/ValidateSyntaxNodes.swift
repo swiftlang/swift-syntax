@@ -90,6 +90,22 @@ fileprivate extension Child {
   }
 }
 
+fileprivate extension Array where Element: Hashable, Element: Comparable {
+  /// Returns the element that occurs most frequently in the array.
+  ///
+  /// If there is a tie, returns the lexicographically first element.
+  ///
+  /// Returns `nil` if the array is empty.
+  var mostCommon: Element? {
+    var elementCounts: [Element: Int] = [:]
+    for element in self {
+      elementCounts[element, default: 0] += 1
+    }
+    let maxCount = elementCounts.values.max()
+    return elementCounts.filter({ $0.value == maxCount }).map(\.key).sorted().first
+  }
+}
+
 class ValidateSyntaxNodes: XCTestCase {
   /// All nodes with base kind e.g. `ExprSyntax` should end with `ExprSyntax`.
   func testBaseKindSuffix() {
@@ -395,17 +411,18 @@ class ValidateSyntaxNodes: XCTestCase {
       }
     }
 
-    for (kind, children) in childrenByNodeKind where !kind.isBase && kind != .token {
+    for (kind, children) in childrenByNodeKind where !kind.isBase && kind != .token && kind != .stringLiteralExpr {
       let childNames = children.map(\.child.name)
-      let firstChildName = childNames.first!
+      let mostCommonChildName = childNames.mostCommon!
+      let mostCommonChild = children.first(where: { $0.child.name == mostCommonChildName })!
 
-      for (node, child) in children.dropFirst() {
-        if child.name != firstChildName {
+      for (node, child) in children {
+        if child.name != mostCommonChildName {
           failures.append(
             ValidationFailure(
               node: node.kind,
               message:
-                "child '\(child.name)' is named inconsistently with '\(children.first!.node.kind.syntaxType).\(children.first!.child.name)', which has the same type ('\(kind.syntaxType)')"
+                "child '\(child.name)' is named inconsistently with '\(mostCommonChild.node.kind.syntaxType).\(mostCommonChildName)', which has the same type ('\(kind.syntaxType)')"
             )
           )
         }
@@ -415,98 +432,44 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(
-          node: .differentiableAttributeArguments,
-          message: "child 'WhereClause' is named inconsistently with 'ActorDeclSyntax.GenericWhereClause', which has the same type ('GenericWhereClauseSyntax')"
-        ),
-        ValidationFailure(
-          node: .subscriptDecl,
-          message: "child 'Indices' is named inconsistently with 'FunctionSignatureSyntax.Input', which has the same type ('ParameterClauseSyntax')"
-        ),
+        // MARK: DeclNameArguments
+        // FIXME: IdentifierExprSyntax etc. should probably use DeclName as child instead of Name and Arguments
         ValidationFailure(
           node: .qualifiedDeclName,
-          message: "child 'Arguments' is named inconsistently with 'DeclNameSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
+          message:
+            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
         ),
         ValidationFailure(
-          node: .macroExpansionDecl,
+          node: .declName,
           message:
-            "child 'GenericArguments' is named inconsistently with 'KeyPathPropertyComponentSyntax.GenericArgumentClause', which has the same type ('GenericArgumentClauseSyntax')"
+            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
         ),
+        // MARK: Alternate names for InitializerClauseSyntax
+        // The cases below don’t have intializers but just a syntactic element that happens to be spelled the same
         ValidationFailure(
-          node: .macroExpansionExpr,
+          node: .enumCaseElement,
           message:
-            "child 'GenericArguments' is named inconsistently with 'KeyPathPropertyComponentSyntax.GenericArgumentClause', which has the same type ('GenericArgumentClauseSyntax')"
+            "child 'RawValue' is named inconsistently with 'MatchingPatternConditionSyntax.Initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .enumCaseParameter,
-          message: "child 'DefaultArgument' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
+          message:
+            "child 'DefaultArgument' is named inconsistently with 'MatchingPatternConditionSyntax.Initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .functionParameter,
-          message: "child 'DefaultArgument' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
+          message:
+            "child 'DefaultArgument' is named inconsistently with 'MatchingPatternConditionSyntax.Initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .macroDecl,
-          message: "child 'Definition' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
+          message:
+            "child 'Definition' is named inconsistently with 'MatchingPatternConditionSyntax.Initializer', which has the same type ('InitializerClauseSyntax')"
         ),
-        ValidationFailure(
-          node: .matchingPatternCondition,
-          message: "child 'Initializer' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
-        ),
-        ValidationFailure(
-          node: .optionalBindingCondition,
-          message: "child 'Initializer' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
-        ),
-        ValidationFailure(
-          node: .patternBinding,
-          message: "child 'Initializer' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
-        ),
-        ValidationFailure(
-          node: .tupleTypeElement,
-          message: "child 'Initializer' is named inconsistently with 'EnumCaseElementSyntax.RawValue', which has the same type ('InitializerClauseSyntax')"
-        ),
+        // MARK: Miscellaneous
         ValidationFailure(
           node: .multipleTrailingClosureElement,
           message: "child 'Closure' is named inconsistently with 'FunctionCallExprSyntax.TrailingClosure', which has the same type ('ClosureExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .subscriptDecl,
-          message: "child 'Result' is named inconsistently with 'ClosureSignatureSyntax.Output', which has the same type ('ReturnClauseSyntax')"
-        ),
-        ValidationFailure(
-          node: .canImportVersionInfo,
-          message:
-            "child 'VersionTuple' is named inconsistently with 'AvailabilityVersionRestrictionSyntax.Version', which has the same type ('VersionTupleSyntax')"
-        ),
-        ValidationFailure(
-          node: .exposeAttributeArguments,
-          message:
-            "child 'CxxName' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .opaqueReturnTypeOfAttributeArguments,
-          message:
-            "child 'MangledName' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .originallyDefinedInArguments,
-          message:
-            "child 'ModuleName' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .poundSourceLocationArgs,
-          message:
-            "child 'FileName' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .unavailableFromAsyncArguments,
-          message:
-            "child 'Message' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
-        ),
-        ValidationFailure(
-          node: .underscorePrivateAttributeArguments,
-          message:
-            "child 'Filename' is named inconsistently with 'ConventionAttributeArgumentsSyntax.CTypeString', which has the same type ('StringLiteralExprSyntax')"
         ),
       ]
     )

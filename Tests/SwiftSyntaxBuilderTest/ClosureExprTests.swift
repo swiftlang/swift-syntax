@@ -18,7 +18,7 @@ final class ClosureExprTests: XCTestCase {
   func testClosureExpr() {
     let buildable = ClosureExprSyntax(
       signature: ClosureSignatureSyntax(
-        input: .simpleInput(
+        parameterClause: .simpleInput(
           ClosureParamListSyntax {
             ClosureParamSyntax(name: .identifier("area"))
           }
@@ -37,7 +37,7 @@ final class ClosureExprTests: XCTestCase {
   func testClosureExprWithAsync() {
     let buildable = ClosureExprSyntax(
       signature: ClosureSignatureSyntax(
-        input: .simpleInput(
+        parameterClause: .simpleInput(
           ClosureParamListSyntax {
             ClosureParamSyntax(name: .identifier("area"))
           }

@@ -1206,7 +1206,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `comma`: `','`
 ///  - `label`: (`'_version'` | `'_underlyingVersion'`)
 ///  - `colon`: `':'`
-///  - `versionTuple`: ``VersionTupleSyntax``
+///  - `version`: ``VersionTupleSyntax``
 public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1236,9 +1236,9 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
       label: TokenSyntax,
       _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
-      versionTuple: VersionTupleSyntax,
-      _ unexpectedAfterVersionTuple: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? = nil,
+      version: VersionTupleSyntax,
+      _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1251,9 +1251,9 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
             label, 
             unexpectedBetweenLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndVersionTuple, 
-            versionTuple, 
-            unexpectedAfterVersionTuple
+            unexpectedBetweenColonAndVersion, 
+            version, 
+            unexpectedAfterVersion
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeComma?.raw, 
@@ -1262,9 +1262,9 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
           label.raw, 
           unexpectedBetweenLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndVersionTuple?.raw, 
-          versionTuple.raw, 
-          unexpectedAfterVersionTuple?.raw
+          unexpectedBetweenColonAndVersion?.raw, 
+          version.raw, 
+          unexpectedAfterVersion?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.canImportVersionInfo,
@@ -1333,7 +1333,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1342,7 +1342,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var versionTuple: VersionTupleSyntax {
+  public var version: VersionTupleSyntax {
     get {
       return VersionTupleSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -1351,7 +1351,7 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterVersionTuple: UnexpectedNodesSyntax? {
+  public var unexpectedAfterVersion: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1368,9 +1368,9 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.label, 
           \Self.unexpectedBetweenLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndVersionTuple, 
-          \Self.versionTuple, 
-          \Self.unexpectedAfterVersionTuple
+          \Self.unexpectedBetweenColonAndVersion, 
+          \Self.version, 
+          \Self.unexpectedAfterVersion
         ])
   }
 }
@@ -3654,7 +3654,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `pound`: `'#'`
 ///  - `macro`: `<identifier>`
-///  - `genericArguments`: ``GenericArgumentClauseSyntax``?
+///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
 ///  - `argumentList`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`?
@@ -3688,9 +3688,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       pound: TokenSyntax = .poundToken(),
       _ unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? = nil,
       macro: TokenSyntax,
-      _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil,
-      genericArguments: GenericArgumentClauseSyntax? = nil,
-      _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+      _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
       argumentList: TupleExprElementListSyntax,
@@ -3711,9 +3711,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             pound, 
             unexpectedBetweenPoundAndMacro, 
             macro, 
-            unexpectedBetweenMacroAndGenericArguments, 
-            genericArguments, 
-            unexpectedBetweenGenericArgumentsAndLeftParen, 
+            unexpectedBetweenMacroAndGenericArgumentClause, 
+            genericArgumentClause, 
+            unexpectedBetweenGenericArgumentClauseAndLeftParen, 
             leftParen, 
             unexpectedBetweenLeftParenAndArgumentList, 
             argumentList, 
@@ -3730,9 +3730,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           pound.raw, 
           unexpectedBetweenPoundAndMacro?.raw, 
           macro.raw, 
-          unexpectedBetweenMacroAndGenericArguments?.raw, 
-          genericArguments?.raw, 
-          unexpectedBetweenGenericArgumentsAndLeftParen?.raw, 
+          unexpectedBetweenMacroAndGenericArgumentClause?.raw, 
+          genericArgumentClause?.raw, 
+          unexpectedBetweenGenericArgumentClauseAndLeftParen?.raw, 
           leftParen?.raw, 
           unexpectedBetweenLeftParenAndArgumentList?.raw, 
           argumentList.raw, 
@@ -3794,7 +3794,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3803,7 +3803,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var genericArguments: GenericArgumentClauseSyntax? {
+  public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
@@ -3812,7 +3812,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3965,9 +3965,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.pound, 
           \Self.unexpectedBetweenPoundAndMacro, 
           \Self.macro, 
-          \Self.unexpectedBetweenMacroAndGenericArguments, 
-          \Self.genericArguments, 
-          \Self.unexpectedBetweenGenericArgumentsAndLeftParen, 
+          \Self.unexpectedBetweenMacroAndGenericArgumentClause, 
+          \Self.genericArgumentClause, 
+          \Self.unexpectedBetweenGenericArgumentClauseAndLeftParen, 
           \Self.leftParen, 
           \Self.unexpectedBetweenLeftParenAndArgumentList, 
           \Self.argumentList, 

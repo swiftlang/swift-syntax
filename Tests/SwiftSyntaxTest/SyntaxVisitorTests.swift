@@ -58,7 +58,7 @@ public class SyntaxVisitorTests: XCTestCase {
               funcKeyword: .keyword(.func, trailingTrivia: .space),
               identifier: .identifier("foo"),
               signature: FunctionSignatureSyntax(
-                input: ParameterClauseSyntax(
+                parameterClause: ParameterClauseSyntax(
                   leftParen: .leftParenToken(),
                   parameterList: FunctionParameterListSyntax([]),
                   rightParen: .rightParenToken(trailingTrivia: .space)
@@ -76,7 +76,7 @@ public class SyntaxVisitorTests: XCTestCase {
                         funcKeyword: .keyword(.func, trailingTrivia: .space),
                         identifier: .identifier("foo"),
                         signature: FunctionSignatureSyntax(
-                          input: ParameterClauseSyntax(
+                          parameterClause: ParameterClauseSyntax(
                             leftParen: .leftParenToken(),
                             parameterList: FunctionParameterListSyntax([]),
                             rightParen: .rightParenToken(trailingTrivia: .space)
@@ -91,7 +91,7 @@ public class SyntaxVisitorTests: XCTestCase {
                                   funcKeyword: .keyword(.func, leadingTrivia: [.newlines(1), .spaces(4)], trailingTrivia: .space),
                                   identifier: .identifier("foo"),
                                   signature: FunctionSignatureSyntax(
-                                    input: ParameterClauseSyntax(
+                                    parameterClause: ParameterClauseSyntax(
                                       leftParen: .leftParenToken(),
                                       parameterList: FunctionParameterListSyntax([]),
                                       rightParen: .rightParenToken(trailingTrivia: .space)

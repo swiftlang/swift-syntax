@@ -26,14 +26,14 @@ public class SyntaxTests: XCTestCase {
       FunctionDeclSyntax(
         funcKeyword: TokenSyntax.keyword(.func, presence: .missing),
         identifier: .identifier("foo"),
-        signature: FunctionSignatureSyntax(input: ParameterClauseSyntax(parameterList: []))
+        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameterList: []))
       ).hasError
     )
     XCTAssertFalse(
       FunctionDeclSyntax(
         funcKeyword: TokenSyntax.keyword(.func, presence: .present),
         identifier: .identifier("foo"),
-        signature: FunctionSignatureSyntax(input: ParameterClauseSyntax(parameterList: []))
+        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameterList: []))
       ).hasError
     )
   }

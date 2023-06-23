@@ -178,7 +178,7 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
   
-  var genericArguments: GenericArgumentClauseSyntax? {
+  var genericArgumentClause: GenericArgumentClauseSyntax? {
     get
     set
   }

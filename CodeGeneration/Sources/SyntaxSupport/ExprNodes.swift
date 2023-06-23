@@ -240,7 +240,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "VersionTuple",
+        name: "Version",
+        deprecatedName: "VersionTuple",
         kind: .node(kind: .versionTuple)
       ),
     ]
@@ -536,14 +537,16 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Input",
+        name: "ParameterClause",
+        deprecatedName: "Input",
         kind: .nodeChoices(choices: [
           Child(
             name: "SimpleInput",
             kind: .node(kind: .closureParamList)
           ),
           Child(
-            name: "Input",
+            name: "ParameterClause",
+            deprecatedName: "Input",
             kind: .node(kind: .closureParameterClause)
           ),
         ]),
@@ -555,7 +558,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Output",
+        name: "ReturnClause",
+        deprecatedName: "Output",
         kind: .node(kind: .returnClause),
         isOptional: true
       ),
@@ -1154,7 +1158,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(
-        name: "GenericArguments",
+        name: "GenericArgumentClause",
+        deprecatedName: "GenericArguments",
         kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),

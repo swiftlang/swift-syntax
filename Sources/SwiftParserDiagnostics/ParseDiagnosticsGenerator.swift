@@ -640,7 +640,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let versionTuple = node.versionInfo?.versionTuple,
+    if let versionTuple = node.versionInfo?.version,
       let unexpectedVersionTuple = node.unexpectedBetweenVersionInfoAndRightParen
     {
       if versionTuple.major.isMissing {
@@ -673,7 +673,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [node.label.id]
       )
 
-      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.versionTuple.id].compactMap { $0 })
+      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.version.id].compactMap { $0 })
     }
 
     return .visitChildren
@@ -711,7 +711,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
     return .visitChildren
   }
 
@@ -1005,7 +1005,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
     return .visitChildren
   }
 
@@ -1013,7 +1013,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.output)
+    handleMisplacedEffectSpecifiers(effectSpecifiers: node.effectSpecifiers, output: node.returnClause)
     return .visitChildren
   }
 
@@ -1196,7 +1196,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let unexpectedName = node.signature.input.unexpectedBeforeLeftParen,
+    if let unexpectedName = node.signature.parameterClause.unexpectedBeforeLeftParen,
       let previous = unexpectedName.previousToken(viewMode: .sourceAccurate)
     {
       addDiagnostic(
@@ -1215,7 +1215,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     }
 
-    if let unexpectedOutput = node.signature.unexpectedAfterOutput {
+    if let unexpectedOutput = node.signature.unexpectedAfterReturnClause {
       addDiagnostic(
         unexpectedOutput,
         .initializerCannotHaveResultType,
@@ -1580,7 +1580,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [unexpected.id]
       )
     }
-    if let unexpected = node.indices.unexpectedBeforeLeftParen,
+    if let unexpected = node.parameterClause.unexpectedBeforeLeftParen,
       let nameTokens = unexpected.onlyPresentTokens(satisfying: { !$0.tokenKind.isLexerClassifiedKeyword })
     {
       addDiagnostic(

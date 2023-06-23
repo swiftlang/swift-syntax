@@ -337,7 +337,7 @@ public struct AddCompletionHandler: PeerMacro {
     }
 
     // Form the completion handler parameter.
-    let resultType: TypeSyntax? = funcDecl.signature.output?.returnType.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+    let resultType: TypeSyntax? = funcDecl.signature.returnClause?.returnType.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
 
     let completionHandlerParam =
       FunctionParameterSyntax(
@@ -347,7 +347,7 @@ public struct AddCompletionHandler: PeerMacro {
       )
 
     // Add the completion handler parameter to the parameter list.
-    let parameterList = funcDecl.signature.input.parameterList
+    let parameterList = funcDecl.signature.parameterClause.parameterList
     let newParameterList: FunctionParameterListSyntax
     if let lastParam = parameterList.last {
       // We need to add a trailing comma to the preceding list.
@@ -411,10 +411,10 @@ public struct AddCompletionHandler: PeerMacro {
             \.effectSpecifiers,
             funcDecl.signature.effectSpecifiers?.with(\.asyncSpecifier, nil)  // drop async
           )
-          .with(\.output, nil)  // drop result type
+          .with(\.returnClause, nil)  // drop result type
           .with(
-            \.input,  // add completion handler parameter
-            funcDecl.signature.input.with(\.parameterList, newParameterList)
+            \.parameterClause,  // add completion handler parameter
+            funcDecl.signature.parameterClause.with(\.parameterList, newParameterList)
               .with(\.trailingTrivia, [])
           )
       )

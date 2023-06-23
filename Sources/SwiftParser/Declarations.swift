@@ -1168,35 +1168,35 @@ extension Parser {
   }
 
   mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
-    let input = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+    let parameterClause = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
 
     var effectSpecifiers = self.parseFunctionEffectSpecifiers()
 
-    var output: RawReturnClauseSyntax?
+    var returnClause: RawReturnClauseSyntax?
 
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
     if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
-      output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
+      returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
     } else {
-      output = nil
+      returnClause = nil
     }
 
-    var unexpectedAfterOutput: RawUnexpectedNodesSyntax?
+    var unexpectedAfterReturnClause: RawUnexpectedNodesSyntax?
     if !allowOutput,
-      let unexpectedOutput = output
+      let unexpectedOutput = returnClause
     {
-      output = nil
-      unexpectedAfterOutput = RawUnexpectedNodesSyntax([unexpectedOutput], arena: self.arena)
+      returnClause = nil
+      unexpectedAfterReturnClause = RawUnexpectedNodesSyntax([unexpectedOutput], arena: self.arena)
     }
 
     return RawFunctionSignatureSyntax(
-      input: input,
+      parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
-      output: output,
-      unexpectedAfterOutput,
+      returnClause: returnClause,
+      unexpectedAfterReturnClause,
       arena: self.arena
     )
   }
@@ -1233,12 +1233,12 @@ extension Parser {
       genericParameterClause = nil
     }
 
-    let indices = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+    let parameterClause = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
 
     var misplacedEffectSpecifiers: RawFunctionEffectSpecifiersSyntax?
-    let result = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)
+    let returnClause = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
@@ -1263,8 +1263,8 @@ extension Parser {
       subscriptKeyword: subscriptKeyword,
       RawUnexpectedNodesSyntax([unexpectedName], arena: self.arena),
       genericParameterClause: genericParameterClause,
-      indices: indices,
-      result: result,
+      parameterClause: parameterClause,
+      returnClause: returnClause,
       genericWhereClause: genericWhereClause,
       accessor: accessor,
       arena: self.arena
@@ -2121,7 +2121,7 @@ extension Parser {
       pound: pound,
       unexpectedBeforeMacro,
       macro: macro,
-      genericArguments: generics,
+      genericArgumentClause: generics,
       leftParen: leftParen,
       argumentList: RawTupleExprElementListSyntax(
         elements: args,

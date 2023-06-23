@@ -1087,7 +1087,8 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "function signature",
     children: [
       Child(
-        name: "Input",
+        name: "ParameterClause",
+        deprecatedName: "Input",
         kind: .node(kind: .parameterClause)
       ),
       Child(
@@ -1096,7 +1097,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Output",
+        name: "ReturnClause",
+        deprecatedName: "Output",
         kind: .node(kind: .returnClause),
         isOptional: true
       ),
@@ -1449,7 +1451,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(
-        name: "GenericArguments",
+        name: "GenericArgumentClause",
+        deprecatedName: "GenericArguments",
         kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
@@ -2214,11 +2217,13 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Indices",
+        name: "ParameterClause",
+        deprecatedName: "Indices",
         kind: .node(kind: .parameterClause)
       ),
       Child(
-        name: "Result",
+        name: "ReturnClause",
+        deprecatedName: "Result",
         kind: .node(kind: .returnClause)
       ),
       Child(

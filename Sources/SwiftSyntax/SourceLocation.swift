@@ -11,27 +11,40 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
-
-  /// The UTF-8 byte offset into the file where this location resides.
-  public let offset: Int
+public struct SourceLocation: Hashable, Codable {
 
   /// The line in the file where this location resides. 1-based.
+  ///
+  /// ### See also
+  /// ``SourceLocation/presumedLine``
   public var line: Int
 
   /// The UTF-8 byte offset from the beginning of the line where this location
   /// resides. 1-based.
   public let column: Int
 
+  /// The UTF-8 byte offset into the file where this location resides.
+  public let offset: Int
+
   /// The file in which this location resides.
+  ///
+  /// ### See also
+  /// ``SourceLocation/presumedFile``
   public let file: String
 
-  /// Returns the location as `<line>:<column>` for debugging purposes.
-  /// Do not rely on this output being stable.
-  public var debugDescription: String {
-    // Print file name?
-    return "\(line):\(column)"
-  }
+  /// The line of this location when respecting `#sourceLocation` directives.
+  ///
+  /// If the location hasn’t been adjusted using `#sourceLocation` directives,
+  /// this is the same as `line`.
+  public let presumedLine: Int
+
+  /// The file in which the the location resides when respecting `#sourceLocation`
+  /// directives.
+  ///
+  /// If the location has been adjusted using `#sourceLocation` directives, this
+  /// is the file mentioned in the last `#sourceLocation` directive before this
+  /// location, otherwise this is the same as `file`.
+  public let presumedFile: String
 
   /// Create a new source location at the specified `line` and `column` in `file`.
   ///
@@ -47,16 +60,31 @@ public struct SourceLocation: Hashable, Codable, CustomDebugStringConvertible {
   ///             location in the source file has `offset` 0.
   ///   - file: A string describing the name of the file in which this location
   ///           is contained.
-  public init(line: Int, column: Int, offset: Int, file: String) {
+  ///   - presumedLine: If the location has been adjusted using `#sourceLocation`
+  ///                   directives, the adjusted line. If `nil`, this defaults to
+  ///                   `line`.
+  ///   - presumedFile: If the location has been adjusted using `#sourceLocation`
+  ///                   directives, the adjusted file. If `nil`, this defaults to
+  ///                   `file`.
+  public init(
+    line: Int,
+    column: Int,
+    offset: Int,
+    file: String,
+    presumedLine: Int? = nil,
+    presumedFile: String? = nil
+  ) {
     self.line = line
     self.offset = offset
     self.column = column
     self.file = file
+    self.presumedLine = presumedLine ?? line
+    self.presumedFile = presumedFile ?? file
   }
 }
 
 /// Represents a half-open range in a Swift file.
-public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
+public struct SourceRange: Hashable, Codable {
 
   /// The beginning location of the source range.
   ///
@@ -69,12 +97,6 @@ public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
   /// ie. this location is not included in the range.
   public let end: SourceLocation
 
-  /// A description describing this range for debugging purposes, don't rely on
-  /// it being stable
-  public var debugDescription: String {
-    return "(\(start.debugDescription),\(end.debugDescription))"
-  }
-
   /// Construct a new source range, starting at `start` (inclusive) and ending
   /// at `end` (exclusive).
   public init(start: SourceLocation, end: SourceLocation) {
@@ -83,18 +105,85 @@ public struct SourceRange: Hashable, Codable, CustomDebugStringConvertible {
   }
 }
 
+/// Collects all `PoundSourceLocationSyntax` directives in a file.
+fileprivate class SourceLocationCollector: SyntaxVisitor {
+  private var sourceLocationDirectives: [PoundSourceLocationSyntax] = []
+
+  override func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    sourceLocationDirectives.append(node)
+    return .skipChildren
+  }
+
+  static func collectSourceLocations(in tree: some SyntaxProtocol) -> [PoundSourceLocationSyntax] {
+    let collector = SourceLocationCollector(viewMode: .sourceAccurate)
+    collector.walk(tree)
+    return collector.sourceLocationDirectives
+  }
+}
+
+fileprivate struct SourceLocationDirectiveArguments {
+  enum Error: Swift.Error, CustomStringConvertible {
+    case nonDecimalLineNumber(TokenSyntax)
+    case stringInterpolationInFileName(StringLiteralExprSyntax)
+
+    var description: String {
+      switch self {
+      case .nonDecimalLineNumber(let token):
+        return "'\(token.text)' is not a decimal integer"
+      case .stringInterpolationInFileName(let stringLiteral):
+        return "The string literal '\(stringLiteral)' contains string interpolation, which is not allowed"
+      }
+    }
+  }
+
+  /// The `file` argument of the `#sourceLocation` directive.
+  let file: String
+
+  /// The `line` argument of the `#sourceLocation` directive.
+  let line: Int
+
+  init(_ args: PoundSourceLocationArgsSyntax) throws {
+    guard args.fileName.segments.count == 1,
+      case .stringSegment(let segment) = args.fileName.segments.first!
+    else {
+      throw Error.stringInterpolationInFileName(args.fileName)
+    }
+    self.file = segment.content.text
+    guard let line = Int(args.lineNumber.text) else {
+      throw Error.nonDecimalLineNumber(args.lineNumber)
+    }
+    self.line = line
+  }
+}
+
 /// Converts ``AbsolutePosition``s of syntax nodes to ``SourceLocation``s, and
 /// vice-versa. The ``AbsolutePosition``s must be originating from nodes that are
 /// part of the same tree that was used to initialize this class.
 public final class SourceLocationConverter {
-  let file: String
+  private let file: String
   /// The source of the file, modelled as data so it can contain invalid UTF-8.
-  let source: [UInt8]
+  private let source: [UInt8]
   /// Array of lines and the position at the start of the line.
-  let lines: [AbsolutePosition]
+  private let lines: [AbsolutePosition]
   /// Position at end of file.
-  let endOfFile: AbsolutePosition
+  private let endOfFile: AbsolutePosition
 
+  /// The information from all `#sourceLocation` directives in the file
+  /// necessary to compute presumed locations.
+  ///
+  /// - `sourceLine` is the line at which the `#sourceLocation` statement occurs
+  ///   within the current file.
+  /// - `arguments` are the `file` and `line` arguments of the directive or `nil`
+  ///   if spelled as `#sourceLocation()` to reset the source location directive.
+  private var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
+
+  /// Create a new ``SourceLocationConverter`` to convert betwen ``AbsolutePosition``
+  /// and ``SourceLocation`` in a syntax tree.
+  ///
+  /// This converter ignores any malformed `#sourceLocation` directives, e.g.
+  /// `#sourceLocation` directives with a non-decimal line number or with a file
+  /// name that contains string interpolation.
+  ///
   /// - Parameters:
   ///   - file: The file path associated with the syntax tree.
   ///   - tree: The root of the syntax tree to convert positions to line/columns for.
@@ -104,11 +193,29 @@ public final class SourceLocationConverter {
     self.source = tree.syntaxTextBytes
     (self.lines, endOfFile) = computeLines(tree: Syntax(tree))
     precondition(tree.byteSize == endOfFile.utf8Offset)
+
+    for directive in SourceLocationCollector.collectSourceLocations(in: tree) {
+      let location = self.physicalLocation(for: directive.positionAfterSkippingLeadingTrivia)
+      if let args = directive.args {
+        if let parsedArgs = try? SourceLocationDirectiveArguments(args) {
+          // Ignore any malformed `#sourceLocation` directives.
+          sourceLocationDirectives.append((sourceLine: location.line, arguments: parsedArgs))
+        }
+      } else {
+        // `#sourceLocation()` without any arguments resets the `#sourceLocation` directive.
+        sourceLocationDirectives.append((sourceLine: location.line, arguments: nil))
+      }
+    }
   }
 
+  /// - Important: This initializer does not take `#sourceLocation` directives
+  ///              into account and doesn’t produce `presumedFile` and
+  ///              `presumedLine`.
+  ///
   /// - Parameters:
   ///   - file: The file path associated with the syntax tree.
   ///   - source: The source code to convert positions to line/columns for.
+  @available(*, deprecated, message: "Use init(file:tree:) instead")
   public init(file: String, source: String) {
     self.file = file
     self.source = Array(source.utf8)
@@ -145,13 +252,40 @@ public final class SourceLocationConverter {
     }
   }
 
-  /// Convert a ``AbsolutePosition`` to a ``SourceLocation``. If the position is
+  /// Convert a ``AbsolutePosition`` to a ``SourceLocation``.
+  ///
+  /// If the position is exceeding the file length then the ``SourceLocation``
+  /// for the end of file is returned. If position is negative the location for
+  /// start of file is returned.
+  public func location(for position: AbsolutePosition) -> SourceLocation {
+    let physicalLocation = physicalLocation(for: position)
+    if let lastSourceLocationDirective = sourceLocationDirectives.last(where: { $0.sourceLine < physicalLocation.line }),
+      let arguments = lastSourceLocationDirective.arguments
+    {
+      let presumedLine = arguments.line + physicalLocation.line - lastSourceLocationDirective.sourceLine - 1
+      return SourceLocation(
+        line: physicalLocation.line,
+        column: physicalLocation.column,
+        offset: physicalLocation.offset,
+        file: physicalLocation.file,
+        presumedLine: presumedLine,
+        presumedFile: arguments.file
+      )
+    }
+
+    return physicalLocation
+  }
+
+  /// Compute the location of `position` without taking `#sourceLocation`
+  /// directives into account.
+  ///
+  /// If the position is
   /// exceeding the file length then the ``SourceLocation`` for the end of file
   /// is returned. If position is negative the location for start of file is
   /// returned.
-  public func location(for origpos: AbsolutePosition) -> SourceLocation {
+  private func physicalLocation(for position: AbsolutePosition) -> SourceLocation {
     // Clamp the given position to the end of file if needed.
-    let pos = min(origpos, endOfFile)
+    let pos = min(position, endOfFile)
     if pos.utf8Offset < 0 {
       return SourceLocation(line: 1, column: 1, offset: 0, file: self.file)
     }

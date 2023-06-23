@@ -111,6 +111,19 @@ final class DirectiveTests: XCTestCase {
       }
       """
     )
+
+    assertParse(
+      """
+      #sourceLocation(file: "f.swift", line: 1️⃣-1)
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected line number in '#sourceLocation' arguments", fixIts: ["insert line number"]),
+        DiagnosticSpec(message: "unexpected code '-1' in '#sourceLocation' directive"),
+      ],
+      fixedSource: """
+        #sourceLocation(file: "f.swift", line: <#integer literal#>-1)
+        """
+    )
   }
 
   public func testUnterminatedPoundIf() {

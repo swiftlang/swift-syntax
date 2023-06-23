@@ -65,7 +65,7 @@ func assertNote(
   expected spec: NoteSpec
 ) {
   assertStringsEqualWithDiff(note.message, spec.message, "message of note does not match", file: spec.originatorFile, line: spec.originatorLine)
-  let location = note.location(converter: SourceLocationConverter(file: "", source: tree.description))
+  let location = note.location(converter: SourceLocationConverter(file: "", tree: tree))
   XCTAssertEqual(location.line, spec.line, "line of note does not match", file: spec.originatorFile, line: spec.originatorLine)
   XCTAssertEqual(location.column, spec.column, "column of note does not match", file: spec.originatorFile, line: spec.originatorLine)
 }
@@ -187,7 +187,7 @@ func assertDiagnostic(
     XCTAssertEqual(diag.diagnosticID, id, "diagnostic ID does not match", file: spec.originatorFile, line: spec.originatorLine)
   }
   assertStringsEqualWithDiff(diag.message, spec.message, "message does not match", file: spec.originatorFile, line: spec.originatorLine)
-  let location = diag.location(converter: SourceLocationConverter(file: "", source: tree.description))
+  let location = diag.location(converter: SourceLocationConverter(file: "", tree: tree))
   XCTAssertEqual(location.line, spec.line, "line does not match", file: spec.originatorFile, line: spec.originatorLine)
   XCTAssertEqual(location.column, spec.column, "column does not match", file: spec.originatorFile, line: spec.originatorLine)
 

@@ -250,6 +250,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case specializeAvailabilityArgument
   case specializeTargetFunctionArgument
   case stmt
+  case simpleStringLiteralExpr
+  case simpleStringLiteralSegmentList
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment

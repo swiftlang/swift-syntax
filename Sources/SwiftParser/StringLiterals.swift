@@ -147,7 +147,7 @@ extension Parser {
     return RawTokenSyntax(
       kind: token.tokenKind,
       text: SyntaxText(rebasing: token.tokenText.dropFirst(reclassifyLeading.count).dropLast(reclassifyTrailing.count)),
-      leadingTriviaPieces: token.leadingTriviaPieces + TriviaParser.parseTrivia(reclassifyLeading, position: .trailing),
+      leadingTriviaPieces: token.leadingTriviaPieces + TriviaParser.parseTrivia(reclassifyLeading, position: .leading),
       trailingTriviaPieces: TriviaParser.parseTrivia(reclassifyTrailing, position: .trailing) + token.trailingTriviaPieces,
       presence: token.presence,
       tokenDiagnostic: token.tokenView.tokenDiagnostic ?? tokenDiagnostic,
@@ -595,9 +595,109 @@ extension Parser {
       )
     }
   }
+
+  mutating func parseSimpleString() -> RawSimpleStringLiteralExprSyntax {
+    let openDelimiter = self.consume(if: .rawStringPoundDelimiter)
+    let (unexpectedBeforeOpenQuote, openQuote) = self.expect(anyIn: SimpleStringLiteralExprSyntax.OpeningQuoteOptions.self, default: .stringQuote)
+
+    /// Parse segments.
+    var segments: [RawStringSegmentSyntax] = []
+    var loopProgress = LoopProgressCondition()
+    while hasProgressed(&loopProgress) {
+      // If we encounter a token with leading trivia, we're no longer in the
+      // string literal.
+      guard currentToken.leadingTriviaText.isEmpty else { break }
+
+      if let stringSegment = self.consume(if: .stringSegment, TokenSpec(.identifier, remapping: .stringSegment)) {
+        var unexpectedAfterContent: RawUnexpectedNodesSyntax?
+
+        if let (backslash, leftParen) = self.consume(if: .backslash, followedBy: .leftParen) {
+          var unexpectedTokens: [RawSyntax] = [RawSyntax(backslash), RawSyntax(leftParen)]
+
+          let (unexpectedBeforeRightParen, rightParen) = self.expect(TokenSpec(.rightParen, allowAtStartOfLine: false))
+          unexpectedTokens += unexpectedBeforeRightParen?.elements ?? []
+          unexpectedTokens.append(RawSyntax(rightParen))
+
+          unexpectedAfterContent = RawUnexpectedNodesSyntax(
+            unexpectedTokens,
+            arena: self.arena
+          )
+        }
+
+        segments.append(RawStringSegmentSyntax(content: stringSegment, unexpectedAfterContent, arena: self.arena))
+      } else {
+        break
+      }
+    }
+
+    let (unexpectedBetweenSegmentAndCloseQuote, closeQuote) = self.expect(
+      anyIn: SimpleStringLiteralExprSyntax.ClosingQuoteOptions.self,
+      default: openQuote.closeTokenKind
+    )
+    let closeDelimiter = self.consume(if: .rawStringPoundDelimiter)
+
+    if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
+      let postProcessed = postProcessMultilineStringLiteral(
+        rawStringDelimitersToken: openDelimiter,
+        openQuote: openQuote,
+        segments: segments.compactMap { RawStringLiteralSegmentListSyntax.Element.stringSegment($0) },
+        closeQuote: closeQuote
+      )
+
+      return RawSimpleStringLiteralExprSyntax(
+        RawUnexpectedNodesSyntax(
+          combining: openDelimiter,
+          unexpectedBeforeOpenQuote,
+          postProcessed.unexpectedBeforeOpeningQuote,
+          arena: self.arena
+        ),
+        openingQuote: postProcessed.openingQuote,
+        segments: RawSimpleStringLiteralSegmentListSyntax(
+          // `RawSimpleStringLiteralSegmentListSyntax` only accepts `RawStringSegmentSyntax`.
+          // So we can safely cast.
+          elements: postProcessed.segments.map { $0.cast(RawStringSegmentSyntax.self) },
+          arena: self.arena
+        ),
+        RawUnexpectedNodesSyntax(
+          combining: unexpectedBetweenSegmentAndCloseQuote,
+          postProcessed.unexpectedBeforeClosingQuote,
+          arena: self.arena
+        ),
+        closingQuote: postProcessed.closingQuote,
+        RawUnexpectedNodesSyntax(
+          [closeDelimiter],
+          arena: self.arena
+        ),
+        arena: self.arena
+      )
+    } else {
+      return RawSimpleStringLiteralExprSyntax(
+        RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, openDelimiter, arena: self.arena),
+        openingQuote: openQuote,
+        segments: RawSimpleStringLiteralSegmentListSyntax(elements: segments, arena: self.arena),
+        unexpectedBetweenSegmentAndCloseQuote,
+        closingQuote: closeQuote,
+        RawUnexpectedNodesSyntax([closeDelimiter], arena: self.arena),
+        arena: self.arena
+      )
+    }
+  }
 }
 
 // MARK: - Utilities
+
+fileprivate extension RawTokenSyntax {
+  var closeTokenKind: SimpleStringLiteralExprSyntax.ClosingQuoteOptions {
+    switch self {
+    case .multilineStringQuote:
+      return .multilineStringQuote
+    case .stringQuote:
+      return .stringQuote
+    default:
+      return .stringQuote
+    }
+  }
+}
 
 fileprivate extension SyntaxText {
   private func hasSuffix(_ other: String) -> Bool {

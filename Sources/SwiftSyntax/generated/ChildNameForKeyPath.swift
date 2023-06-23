@@ -2769,6 +2769,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "elements"
   case \SequenceExprSyntax.unexpectedAfterElements:
     return "unexpectedAfterElements"
+  case \SimpleStringLiteralExprSyntax.unexpectedBeforeOpeningQuote:
+    return "unexpectedBeforeOpeningQuote"
+  case \SimpleStringLiteralExprSyntax.openingQuote:
+    return "openingQuote"
+  case \SimpleStringLiteralExprSyntax.unexpectedBetweenOpeningQuoteAndSegments:
+    return "unexpectedBetweenOpeningQuoteAndSegments"
+  case \SimpleStringLiteralExprSyntax.segments:
+    return "segments"
+  case \SimpleStringLiteralExprSyntax.unexpectedBetweenSegmentsAndClosingQuote:
+    return "unexpectedBetweenSegmentsAndClosingQuote"
+  case \SimpleStringLiteralExprSyntax.closingQuote:
+    return "closingQuote"
+  case \SimpleStringLiteralExprSyntax.unexpectedAfterClosingQuote:
+    return "unexpectedAfterClosingQuote"
   case \SomeOrAnyTypeSyntax.unexpectedBeforeSomeOrAnySpecifier:
     return "unexpectedBeforeSomeOrAnySpecifier"
   case \SomeOrAnyTypeSyntax.someOrAnySpecifier:

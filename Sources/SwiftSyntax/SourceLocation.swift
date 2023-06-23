@@ -122,7 +122,7 @@ fileprivate class SourceLocationCollector: SyntaxVisitor {
 fileprivate struct SourceLocationDirectiveArguments {
   enum Error: Swift.Error, CustomStringConvertible {
     case nonDecimalLineNumber(TokenSyntax)
-    case stringInterpolationInFileName(StringLiteralExprSyntax)
+    case stringInterpolationInFileName(SimpleStringLiteralExprSyntax)
 
     var description: String {
       switch self {
@@ -142,7 +142,7 @@ fileprivate struct SourceLocationDirectiveArguments {
 
   init(_ args: PoundSourceLocationArgumentsSyntax) throws {
     guard args.fileName.segments.count == 1,
-      case .stringSegment(let segment) = args.fileName.segments.first!
+      let segment = args.fileName.segments.first
     else {
       throw Error.stringInterpolationInFileName(args.fileName)
     }

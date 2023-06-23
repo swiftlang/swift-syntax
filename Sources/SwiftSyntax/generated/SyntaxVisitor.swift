@@ -2686,6 +2686,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SequenceExprSyntax) {
   }
   
+  /// Visiting ``SimpleStringLiteralExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SimpleStringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SimpleStringLiteralExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SimpleStringLiteralExprSyntax) {
+  }
+  
+  /// Visiting ``SimpleStringLiteralSegmentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SimpleStringLiteralSegmentListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SimpleStringLiteralSegmentListSyntax) {
+  }
+  
   /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5766,6 +5790,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSimpleStringLiteralExprSyntax(_ data: SyntaxData) {
+    let node = SimpleStringLiteralExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSimpleStringLiteralSegmentListSyntax(_ data: SyntaxData) {
+    let node = SimpleStringLiteralSegmentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSomeOrAnyTypeSyntax(_ data: SyntaxData) {
     let node = SomeOrAnyTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6797,6 +6843,10 @@ open class SyntaxVisitor {
       visitImplSameTypeRequirementSyntax(data)
     case .sequenceExpr:
       visitImplSequenceExprSyntax(data)
+    case .simpleStringLiteralExpr:
+      visitImplSimpleStringLiteralExprSyntax(data)
+    case .simpleStringLiteralSegmentList:
+      visitImplSimpleStringLiteralSegmentListSyntax(data)
     case .someOrAnyType:
       visitImplSomeOrAnyTypeSyntax(data)
     case .sourceFile:

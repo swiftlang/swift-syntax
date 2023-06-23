@@ -732,7 +732,7 @@ class TriviaRemover: SyntaxRewriter {
     var ancestor = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if ancestor.is(StringLiteralExprSyntax.self) || ancestor.is(RegexLiteralExprSyntax.self) {
+      if ancestor.is(StringLiteralExprSyntax.self) || ancestor.is(RegexLiteralExprSyntax.self) || ancestor.is(SimpleStringLiteralExprSyntax.self) {
         // Don't mess with indentation inside string or regex literals.
         // BasicFormat doesn't know where to re-apply newlines and how much to indent the string literal contents.
         return token

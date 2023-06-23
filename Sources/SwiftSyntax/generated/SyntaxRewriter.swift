@@ -1627,6 +1627,20 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a ``SimpleStringLiteralExprSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SimpleStringLiteralExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
+  /// Visit a ``SimpleStringLiteralSegmentListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> SimpleStringLiteralSegmentListSyntax {
+    return Syntax(visitChildren(node)).cast(SimpleStringLiteralSegmentListSyntax.self)
+  }
+  
   /// Visit a ``SomeOrAnyTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -5128,6 +5142,34 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSimpleStringLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SimpleStringLiteralExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplSimpleStringLiteralSegmentListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SimpleStringLiteralSegmentListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplSomeOrAnyTypeSyntax(_ data: SyntaxData) -> Syntax {
     let node = SomeOrAnyTypeSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6353,6 +6395,10 @@ open class SyntaxRewriter {
       return visitImplSameTypeRequirementSyntax
     case .sequenceExpr:
       return visitImplSequenceExprSyntax
+    case .simpleStringLiteralExpr:
+      return visitImplSimpleStringLiteralExprSyntax
+    case .simpleStringLiteralSegmentList:
+      return visitImplSimpleStringLiteralSegmentListSyntax
     case .someOrAnyType:
       return visitImplSomeOrAnyTypeSyntax
     case .sourceFile:
@@ -6911,6 +6957,10 @@ open class SyntaxRewriter {
       return visitImplSameTypeRequirementSyntax(data)
     case .sequenceExpr:
       return visitImplSequenceExprSyntax(data)
+    case .simpleStringLiteralExpr:
+      return visitImplSimpleStringLiteralExprSyntax(data)
+    case .simpleStringLiteralSegmentList:
+      return visitImplSimpleStringLiteralSegmentListSyntax(data)
     case .someOrAnyType:
       return visitImplSomeOrAnyTypeSyntax(data)
     case .sourceFile:

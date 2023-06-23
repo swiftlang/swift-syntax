@@ -1915,11 +1915,11 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Value: RawSyntaxNodeProtocol {
-    case `string`(RawStringLiteralExprSyntax)
+    case `string`(RawSimpleStringLiteralExprSyntax)
     case `version`(RawVersionTupleSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawStringLiteralExprSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)
+      return RawSimpleStringLiteralExprSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1932,7 +1932,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     }
     
     public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawStringLiteralExprSyntax(other) {
+      if let node = RawSimpleStringLiteralExprSyntax(other) {
         self = .string(node)
         return
       }
@@ -8343,7 +8343,7 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       return true
     default:
       return false
@@ -16558,7 +16558,7 @@ public struct RawPoundSourceLocationArgumentsSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenFileLabelAndFileColon: RawUnexpectedNodesSyntax? = nil, 
       fileColon: RawTokenSyntax, 
       _ unexpectedBetweenFileColonAndFileName: RawUnexpectedNodesSyntax? = nil, 
-      fileName: RawStringLiteralExprSyntax, 
+      fileName: RawSimpleStringLiteralExprSyntax, 
       _ unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax? = nil, 
       comma: RawTokenSyntax, 
       _ unexpectedBetweenCommaAndLineLabel: RawUnexpectedNodesSyntax? = nil, 
@@ -16612,8 +16612,8 @@ public struct RawPoundSourceLocationArgumentsSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var fileName: RawStringLiteralExprSyntax {
-    layoutView.children[5].map(RawStringLiteralExprSyntax.init(raw:))!
+  public var fileName: RawSimpleStringLiteralExprSyntax {
+    layoutView.children[5].map(RawSimpleStringLiteralExprSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenFileNameAndComma: RawUnexpectedNodesSyntax? {
@@ -18303,6 +18303,138 @@ public struct RawSequenceExprSyntax: RawExprSyntaxNodeProtocol {
   
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawSimpleStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .simpleStringLiteralExpr
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(
+      _ unexpectedBeforeOpeningQuote: RawUnexpectedNodesSyntax? = nil, 
+      openingQuote: RawTokenSyntax, 
+      _ unexpectedBetweenOpeningQuoteAndSegments: RawUnexpectedNodesSyntax? = nil, 
+      segments: RawSimpleStringLiteralSegmentListSyntax, 
+      _ unexpectedBetweenSegmentsAndClosingQuote: RawUnexpectedNodesSyntax? = nil, 
+      closingQuote: RawTokenSyntax, 
+      _ unexpectedAfterClosingQuote: RawUnexpectedNodesSyntax? = nil, 
+      arena: __shared SyntaxArena
+    ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .simpleStringLiteralExpr, uninitializedCount: 7, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeOpeningQuote?.raw
+      layout[1] = openingQuote.raw
+      layout[2] = unexpectedBetweenOpeningQuoteAndSegments?.raw
+      layout[3] = segments.raw
+      layout[4] = unexpectedBetweenSegmentsAndClosingQuote?.raw
+      layout[5] = closingQuote.raw
+      layout[6] = unexpectedAfterClosingQuote?.raw
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var unexpectedBeforeOpeningQuote: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var openingQuote: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenOpeningQuoteAndSegments: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var segments: RawSimpleStringLiteralSegmentListSyntax {
+    layoutView.children[3].map(RawSimpleStringLiteralSegmentListSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenSegmentsAndClosingQuote: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
+  public var closingQuote: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+  
+  public var unexpectedAfterClosingQuote: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawSimpleStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .simpleStringLiteralSegmentList
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(elements: [RawStringSegmentSyntax], arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .simpleStringLiteralSegmentList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+          return
+        }
+        for elem in elements {
+          ptr.initialize(to: elem.raw)
+          ptr += 1
+        }
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var elements: [RawStringSegmentSyntax] {
+    layoutView.children.map {
+      RawStringSegmentSyntax(raw: $0!)
+    }
   }
 }
 

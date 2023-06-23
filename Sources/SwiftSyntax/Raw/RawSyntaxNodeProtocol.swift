@@ -35,6 +35,10 @@ public extension RawSyntaxNodeProtocol {
     Node.isKindOf(self.raw)
   }
 
+  func cast<S: RawSyntaxNodeProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+
   var description: String {
     raw.description
   }

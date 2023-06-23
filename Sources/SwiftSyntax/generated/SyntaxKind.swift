@@ -236,6 +236,8 @@ public enum SyntaxKind: CaseIterable {
   case returnStmt
   case sameTypeRequirement
   case sequenceExpr
+  case simpleStringLiteralExpr
+  case simpleStringLiteralSegmentList
   case someOrAnyType
   case sourceFile
   case specializeAttributeArgumentList
@@ -369,6 +371,8 @@ public enum SyntaxKind: CaseIterable {
     case .precedenceGroupNameList:
       return true
     case .primaryAssociatedTypeList:
+      return true
+    case .simpleStringLiteralSegmentList:
       return true
     case .specializeAttributeArgumentList:
       return true
@@ -858,6 +862,10 @@ public enum SyntaxKind: CaseIterable {
       return SameTypeRequirementSyntax.self
     case .sequenceExpr:
       return SequenceExprSyntax.self
+    case .simpleStringLiteralExpr:
+      return SimpleStringLiteralExprSyntax.self
+    case .simpleStringLiteralSegmentList:
+      return SimpleStringLiteralSegmentListSyntax.self
     case .someOrAnyType:
       return SomeOrAnyTypeSyntax.self
     case .sourceFile:

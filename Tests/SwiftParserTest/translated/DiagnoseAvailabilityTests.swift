@@ -78,16 +78,9 @@ final class DiagnoseAvailabilityTests: XCTestCase {
     )
   }
 
-  func testDiagnoseAvailability8() {
-    assertParse(
-      """
-      // https://github.com/apple/swift/issues/51114
-      // Missing/wrong warning message for '*' or 'swift' platform.
-      """
-    )
-  }
-
   func testDiagnoseAvailability9() {
+    // https://github.com/apple/swift/issues/51114
+    // Missing/wrong warning message for '*' or 'swift' platform.
     assertParse(
       """
       @available(*, deprecated: 4.2)
@@ -159,14 +152,26 @@ final class DiagnoseAvailabilityTests: XCTestCase {
     )
   }
 
-  func testDiagnoseAvailability17() {
+  func testDiagnoseAvailability17a() {
     assertParse(
       #"""
-      @available(*, unavailable, message: "\("message")")
+      @available(*, unavailable, message: "1️⃣\("message")")
       func interpolatedMessage() {}
       """#,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'message' cannot be an interpolated string literal
+        DiagnosticSpec(message: "argument cannot be an interpolated string literal")
+      ]
+    )
+  }
+
+  func testDiagnoseAvailability17b() {
+    assertParse(
+      #"""
+      @available(*, unavailable, message: "1️⃣\(someCall())")
+      func interpolatedMessage() {}
+      """#,
+      diagnostics: [
+        DiagnosticSpec(message: "argument cannot be an interpolated string literal")
       ]
     )
   }
@@ -178,7 +183,6 @@ final class DiagnoseAvailabilityTests: XCTestCase {
         foobar message.
         """)
       func multilineMessage() {}
-      multilineMessage()
       """#
     )
   }
@@ -196,27 +200,42 @@ final class DiagnoseAvailabilityTests: XCTestCase {
   func testDiagnoseAvailability20() {
     assertParse(
       ##"""
-      @available(*, unavailable, message: #"""
+      @available(*, unavailable, message: 1️⃣#"""
         foobar message.
         """#)
       func extendedEscapedMultilineMessage() {}
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'message' cannot be an extended escaping string literal
-      ]
+        DiagnosticSpec(
+          message: "argument cannot be an extended escaping string literal",
+          fixIts: ["remove '#' and '#'"]
+        )
+      ],
+      fixedSource: ##"""
+        @available(*, unavailable, message: """
+          foobar message.
+          """)
+        func extendedEscapedMultilineMessage() {}
+        """##
     )
   }
 
   func testDiagnoseAvailability21() {
     assertParse(
       ##"""
-      @available(*, unavailable, renamed: #"available()"#)
+      @available(*, unavailable, renamed: 1️⃣#"available()"#)
       func extendedEscapedRenamed() {}
       """##,
       diagnostics: [
-        // TODO: Old parser expected error on line 1: 'renamed' cannot be an extended escaping string literal
-      ]
+        DiagnosticSpec(
+          message: "argument cannot be an extended escaping string literal",
+          fixIts: ["remove '#' and '#'"]
+        )
+      ],
+      fixedSource: #"""
+        @available(*, unavailable, renamed: "available()")
+        func extendedEscapedRenamed() {}
+        """#
     )
   }
-
 }

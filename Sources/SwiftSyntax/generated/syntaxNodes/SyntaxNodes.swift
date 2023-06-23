@@ -1495,14 +1495,14 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `label`: (`'message'` | `'renamed'` | `'introduced'` | `'obsoleted'` | `'deprecated'`)
 ///  - `colon`: `':'`
-///  - `value`: (``StringLiteralExprSyntax`` | ``VersionTupleSyntax``)
+///  - `value`: (``SimpleStringLiteralExprSyntax`` | ``VersionTupleSyntax``)
 ///
 /// ### Contained in
 /// 
 ///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/argument``
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Value: SyntaxChildChoices, SyntaxHashable {
-    case `string`(StringLiteralExprSyntax)
+    case `string`(SimpleStringLiteralExprSyntax)
     case `version`(VersionTupleSyntax)
     
     public var _syntaxNode: Syntax {
@@ -1518,7 +1518,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
       self.init(Syntax(data))!
     }
     
-    public init(_ node: StringLiteralExprSyntax) {
+    public init(_ node: SimpleStringLiteralExprSyntax) {
       self = .string(node)
     }
     
@@ -1527,7 +1527,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     }
     
     public init?(_ node: some SyntaxProtocol) {
-      if let node = node.as(StringLiteralExprSyntax.self) {
+      if let node = node.as(SimpleStringLiteralExprSyntax.self) {
         self = .string(node)
         return
       }
@@ -1539,7 +1539,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([.node(StringLiteralExprSyntax.self), .node(VersionTupleSyntax.self)])
+      return .choices([.node(SimpleStringLiteralExprSyntax.self), .node(VersionTupleSyntax.self)])
     }
   }
   
@@ -14615,7 +14615,7 @@ public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `fileLabel`: `'file'`
 ///  - `fileColon`: `':'`
-///  - `fileName`: ``StringLiteralExprSyntax``
+///  - `fileName`: ``SimpleStringLiteralExprSyntax``
 ///  - `comma`: `','`
 ///  - `lineLabel`: `'line'`
 ///  - `lineColon`: `':'`
@@ -14652,7 +14652,7 @@ public struct PoundSourceLocationArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       _ unexpectedBetweenFileLabelAndFileColon: UnexpectedNodesSyntax? = nil,
       fileColon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenFileColonAndFileName: UnexpectedNodesSyntax? = nil,
-      fileName: StringLiteralExprSyntax,
+      fileName: SimpleStringLiteralExprSyntax,
       _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax = .commaToken(),
       _ unexpectedBetweenCommaAndLineLabel: UnexpectedNodesSyntax? = nil,
@@ -14759,9 +14759,9 @@ public struct PoundSourceLocationArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public var fileName: StringLiteralExprSyntax {
+  public var fileName: SimpleStringLiteralExprSyntax {
     get {
-      return StringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return SimpleStringLiteralExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = PoundSourceLocationArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -16795,6 +16795,7 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
 ///
 /// ### Contained in
 /// 
+///  - ``SimpleStringLiteralSegmentListSyntax``
 ///  - ``StringLiteralSegmentListSyntax``
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

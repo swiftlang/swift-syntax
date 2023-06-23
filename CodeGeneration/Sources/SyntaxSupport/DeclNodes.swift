@@ -1696,7 +1696,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "FileName",
-        kind: .node(kind: .stringLiteralExpr),
+        kind: .node(kind: .simpleStringLiteralExpr),
         nameForDiagnostics: "file name"
       ),
       Child(

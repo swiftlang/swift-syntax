@@ -163,6 +163,15 @@ extension TokenKind {
       return false
     }
   }
+
+  var isRawStringDelimiter: Bool {
+    switch self {
+    case .rawStringPoundDelimiter:
+      return true
+    default:
+      return false
+    }
+  }
 }
 
 public extension TriviaPiece {

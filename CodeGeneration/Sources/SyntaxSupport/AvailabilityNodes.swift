@@ -85,7 +85,7 @@ public let AVAILABILITY_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "String",
-            kind: .node(kind: .stringLiteralExpr)
+            kind: .node(kind: .simpleStringLiteralExpr)
           ),
           Child(
             name: "Version",

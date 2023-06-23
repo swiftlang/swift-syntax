@@ -1056,6 +1056,30 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
   public static let syntaxKind = SyntaxKind.primaryAssociatedTypeList
 }
 
+/// String literal segments that only can contain non string interpolated or extended escaped strings
+///
+/// ### Children
+/// 
+/// ``StringSegmentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``SimpleStringLiteralExprSyntax``.``SimpleStringLiteralExprSyntax/segments``
+public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = StringSegmentSyntax
+  
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .simpleStringLiteralSegmentList else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  public static let syntaxKind = SyntaxKind.simpleStringLiteralSegmentList
+}
+
 /// A collection of arguments for the `@_specialize` attribute
 ///
 /// ### Children

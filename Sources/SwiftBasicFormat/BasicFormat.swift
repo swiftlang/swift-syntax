@@ -347,6 +347,7 @@ open class BasicFormat: SyntaxRewriter {
     case \ExpressionSegmentSyntax.backslash,
       \ExpressionSegmentSyntax.rightParen,
       \DeclNameArgumentSyntax.colon,
+      \SimpleStringLiteralExprSyntax.openingQuote,
       \StringLiteralExprSyntax.openingQuote,
       \RegexLiteralExprSyntax.openingSlash:
       return false

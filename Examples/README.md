@@ -6,6 +6,8 @@ Each example can be executed by navigating into this folder and running `swift r
 - [CodeGenerationUsingSwiftSyntaxBuilder](Sources/CodeGenerationUsingSwiftSyntaxBuilder/CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
 - [ExamplePlugin](Sources/ExamplePlugin): Compiler plugin executable using [`SwiftCompilerPlugin`](../Sources/SwiftCompilerPlugin)
 
+Furthermore, SwiftSyntax uses [`SwiftSyntaxBuilder`](../Sources/SwiftSyntaxBuilder) extensively to generate its own code. That code can be found in the [CodeGeneration](../CodeGeneration) package.
+
 ## Some Example Usages
 
 [**BartyCrouch**](https://github.com/Flinesoft/BartyCrouch): A tool to incrementally update strings files to help with localization.

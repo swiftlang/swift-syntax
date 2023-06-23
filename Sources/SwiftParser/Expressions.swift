@@ -219,7 +219,7 @@ extension Parser {
     let asKeyword = self.eat(handle)
     let failable = self.consume(if: .postfixQuestionMark, .exclamationMark)
     let op = RawUnresolvedAsExprSyntax(
-      asTok: asKeyword,
+      asKeyword: asKeyword,
       questionOrExclamationMark: failable,
       arena: self.arena
     )
@@ -297,7 +297,7 @@ extension Parser {
     case (.binaryOperator, let handle)?:
       // Parse the operator.
       let operatorToken = self.eat(handle)
-      let op = RawBinaryOperatorExprSyntax(operatorToken: operatorToken, arena: arena)
+      let op = RawBinaryOperatorExprSyntax(operator: operatorToken, arena: arena)
       return (RawExprSyntax(op), nil)
 
     case (.infixQuestionMark, let handle)?:
@@ -311,7 +311,7 @@ extension Parser {
         questionMark: question,
         firstChoice: firstChoice,
         unexpectedBeforeColon,
-        colonMark: colon,
+        colon: colon,
         arena: self.arena
       )
 
@@ -330,7 +330,7 @@ extension Parser {
       case .none:
         let eq = self.eat(handle)
         let op = RawAssignmentExprSyntax(
-          assignToken: eq,
+          equal: eq,
           arena: self.arena
         )
         return (RawExprSyntax(op), nil)
@@ -339,7 +339,7 @@ extension Parser {
     case (.is, let handle)?:
       let isKeyword = self.eat(handle)
       let op = RawUnresolvedIsExprSyntax(
-        isTok: isKeyword,
+        isKeyword: isKeyword,
         arena: self.arena
       )
 
@@ -368,7 +368,7 @@ extension Parser {
       let op = RawArrowExprSyntax(
         effectSpecifiers: effectSpecifiers,
         unexpectedBeforeArrow,
-        arrowToken: arrow,
+        arrow: arrow,
         unexpectedAfterArrow,
         arena: self.arena
       )
@@ -589,7 +589,7 @@ extension Parser {
       let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
       return RawExprSyntax(
         RawPrefixOperatorExprSyntax(
-          operatorToken: op,
+          operator: op,
           postfixExpression: postfix,
           arena: self.arena
         )
@@ -683,7 +683,7 @@ extension Parser {
     let memberAccess = RawMemberAccessExprSyntax(
       base: start,
       unexpectedPeriod,
-      dot: period,
+      period: period,
       name: name,
       declNameArguments: declNameArgs,
       arena: self.arena
@@ -835,10 +835,10 @@ extension Parser {
         leadingExpr = RawExprSyntax(
           RawSubscriptExprSyntax(
             calledExpression: leadingExpr,
-            leftBracket: lsquare,
+            leftSquare: lsquare,
             argumentList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
             unexpectedBeforeRSquare,
-            rightBracket: rsquare,
+            rightSquare: rsquare,
             trailingClosure: trailingClosure,
             additionalTrailingClosures: additionalTrailingClosures,
             arena: self.arena
@@ -903,7 +903,7 @@ extension Parser {
         leadingExpr = RawExprSyntax(
           RawPostfixUnaryExprSyntax(
             expression: leadingExpr,
-            operatorToken: op,
+            operator: op,
             arena: self.arena
           )
         )
@@ -1079,13 +1079,13 @@ extension Parser {
             period: period,
             component: .subscript(
               RawKeyPathSubscriptComponentSyntax(
-                leftBracket: lsquare,
+                leftSquare: lsquare,
                 argumentList: RawTupleExprElementListSyntax(
                   elements: args,
                   arena: self.arena
                 ),
                 unexpectedBeforeRSquare,
-                rightBracket: rsquare,
+                rightSquare: rsquare,
                 arena: self.arena
               )
             ),
@@ -1192,7 +1192,7 @@ extension Parser {
       let digits = self.eat(handle)
       return RawExprSyntax(
         RawFloatLiteralExprSyntax(
-          floatingDigits: digits,
+          digits: digits,
           arena: self.arena
         )
       )
@@ -1288,23 +1288,23 @@ extension Parser {
     case (.leftBrace, _)?:  // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, let handle)?:  // .foo
-      let dot = self.eat(handle)
+      let period = self.eat(handle)
 
       // Special case ".<integer_literal>" like ".4".  This isn't valid, but the
       // developer almost certainly meant to use "0.4".  Diagnose this, and
       // recover as if they wrote that.
       if let integerLiteral = self.consume(if: .integerLiteral) {
-        let text = arena.intern("0" + String(syntaxText: dot.tokenText) + String(syntaxText: integerLiteral.tokenText))
+        let text = arena.intern("0" + String(syntaxText: period.tokenText) + String(syntaxText: integerLiteral.tokenText))
         return RawExprSyntax(
           RawFloatLiteralExprSyntax(
-            floatingDigits: RawTokenSyntax(
+            digits: RawTokenSyntax(
               missing: .floatingLiteral,
               text: text,
               arena: self.arena
             ),
             RawUnexpectedNodesSyntax(
               elements: [
-                RawSyntax(dot),
+                RawSyntax(period),
                 RawSyntax(integerLiteral),
               ],
               arena: self.arena
@@ -1318,7 +1318,7 @@ extension Parser {
       return RawExprSyntax(
         RawMemberAccessExprSyntax(
           base: nil,
-          dot: dot,
+          period: period,
           name: name,
           declNameArguments: args,
           arena: self.arena
@@ -1465,7 +1465,7 @@ extension Parser {
 
     return RawMacroExpansionExprSyntax(
       unexpectedBeforePound,
-      poundToken: pound,
+      pound: pound,
       unexpectedBeforeMacro,
       macro: macro,
       genericArguments: generics,
@@ -1889,21 +1889,21 @@ extension Parser {
           // followed by an expression.
           let unexpectedBeforeName: RawUnexpectedNodesSyntax?
           let name: RawTokenSyntax?
-          let unexpectedBeforeAssignToken: RawUnexpectedNodesSyntax?
-          let assignToken: RawTokenSyntax?
+          let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
+          let equal: RawTokenSyntax?
           let expression: RawExprSyntax
           if self.peek().rawTokenKind == .equal {
             // The name is a new declaration.
             (unexpectedBeforeName, name) = self.expect(.identifier, TokenSpec(.self, remapping: .identifier), default: .identifier)
-            (unexpectedBeforeAssignToken, assignToken) = self.expect(.equal)
+            (unexpectedBeforeEqual, equal) = self.expect(.equal)
             expression = self.parseExpression()
           } else {
             // This is the simple case - the identifier is both the name and
             // the expression to capture.
             unexpectedBeforeName = nil
             name = nil
-            unexpectedBeforeAssignToken = nil
-            assignToken = nil
+            unexpectedBeforeEqual = nil
+            equal = nil
             expression = RawExprSyntax(self.parseIdentifierExpression())
           }
 
@@ -1913,8 +1913,8 @@ extension Parser {
               specifier: specifier,
               unexpectedBeforeName,
               name: name,
-              unexpectedBeforeAssignToken,
-              assignToken: assignToken,
+              unexpectedBeforeEqual,
+              equal: equal,
               expression: expression,
               trailingComma: keepGoing,
               arena: self.arena
@@ -1989,15 +1989,15 @@ extension Parser {
     }
 
     // Parse the 'in'.
-    let (unexpectedBeforeInTok, inTok) = self.expect(.keyword(.in))
+    let (unexpectedBeforeInKeyword, inKeyword) = self.expect(.keyword(.in))
     return RawClosureSignatureSyntax(
       attributes: attrs,
       capture: captures,
       input: input,
       effectSpecifiers: effectSpecifiers,
       output: output,
-      unexpectedBeforeInTok,
-      inTok: inTok,
+      unexpectedBeforeInKeyword,
+      inKeyword: inKeyword,
       arena: self.arena
     )
   }
@@ -2472,7 +2472,7 @@ extension Parser {
       let (unexpectedBeforeIdent, ident) = self.expectIdentifier()
 
       unknownAttr = RawAttributeSyntax(
-        atSignToken: at,
+        atSign: at,
         unexpectedBeforeIdent,
         attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: ident, genericArgumentClause: nil, arena: self.arena)),
         leftParen: nil,

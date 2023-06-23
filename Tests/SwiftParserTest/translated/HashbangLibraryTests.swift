@@ -49,7 +49,7 @@ final class HashbangLibraryTests: XCTestCase {
               )
             )
           ]),
-          eofToken: .eof()
+          endOfFileToken: .eof()
         )
       ),
       options: [.substructureCheckTrivia]

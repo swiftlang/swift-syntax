@@ -27,7 +27,8 @@ public let DECL_NODES: [Node] = [
         nameForDiagnostics: "name"
       ),
       Child(
-        name: "TrailingDot",
+        name: "TrailingPeriod",
+        deprecatedName: "TrailingDot",
         kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
         isOptional: true
       ),
@@ -1436,7 +1437,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "PoundToken",
+        name: "Pound",
+        deprecatedName: "PoundToken",
         kind: .token(choices: [.token(tokenKind: "PoundToken")]),
         documentation: "The `#` sign."
       ),
@@ -1700,11 +1702,13 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "'#sourceLocation' arguments",
     children: [
       Child(
-        name: "FileArgLabel",
+        name: "FileLabel",
+        deprecatedName: "FileArgLabel",
         kind: .token(choices: [.keyword(text: "file")])
       ),
       Child(
-        name: "FileArgColon",
+        name: "FileColon",
+        deprecatedName: "FileArgColon",
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
@@ -1717,11 +1721,13 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "CommaToken")])
       ),
       Child(
-        name: "LineArgLabel",
+        name: "LineLabel",
+        deprecatedName: "LineArgLabel",
         kind: .token(choices: [.keyword(text: "line")])
       ),
       Child(
-        name: "LineArgColon",
+        name: "LineColon",
+        deprecatedName: "LineArgColon",
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
@@ -1770,7 +1776,8 @@ public let DECL_NODES: [Node] = [
     documentation: "Specifies the precedence of an operator when used in an operation that includes optional chaining.",
     children: [
       Child(
-        name: "AssignmentKeyword",
+        name: "AssignmentLabel",
+        deprecatedName: "AssignmentKeyword",
         kind: .token(choices: [.keyword(text: "assignment")])
       ),
       Child(
@@ -1795,7 +1802,8 @@ public let DECL_NODES: [Node] = [
     documentation: "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
     children: [
       Child(
-        name: "AssociativityKeyword",
+        name: "AssociativityLabel",
+        deprecatedName: "AssociativityKeyword",
         kind: .token(choices: [.keyword(text: "associativity")]),
         classification: "Keyword"
       ),
@@ -2034,7 +2042,8 @@ public let DECL_NODES: [Node] = [
         kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
       ),
       Child(
-        name: "EOFToken",
+        name: "EndOfFileToken",
+        deprecatedName: "EOFToken",
         kind: .token(choices: [.token(tokenKind: "EOFToken")])
       ),
     ]

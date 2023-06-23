@@ -352,7 +352,7 @@ extension Parser {
       elements.append(
         RawImportPathComponentSyntax(
           name: name,
-          trailingDot: keepGoing,
+          trailingPeriod: keepGoing,
           arena: self.arena
         )
       )
@@ -427,10 +427,10 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawGenericParameterClauseSyntax(
         remainingTokens,
-        leftAngleBracket: missingToken(.leftAngle),
+        leftAngle: missingToken(.leftAngle),
         parameters: RawGenericParameterListSyntax(elements: [], arena: self.arena),
         genericWhereClause: nil,
-        rightAngleBracket: missingToken(.rightAngle),
+        rightAngle: missingToken(.rightAngle),
         arena: self.arena
       )
     }
@@ -497,7 +497,7 @@ extension Parser {
         elements.append(
           RawGenericParameterSyntax(
             attributes: attributes,
-            each: each,
+            eachKeyword: each,
             unexpectedBetweenEachAndName,
             name: name,
             unexpectedBetweenNameAndColon,
@@ -532,10 +532,10 @@ extension Parser {
       parameters = RawGenericParameterListSyntax(elements: elements, arena: self.arena)
     }
     return RawGenericParameterClauseSyntax(
-      leftAngleBracket: langle,
+      leftAngle: langle,
       parameters: parameters,
       genericWhereClause: whereClause,
-      rightAngleBracket: rangle,
+      rightAngle: rangle,
       arena: self.arena
     )
   }
@@ -1918,7 +1918,7 @@ extension Parser {
           elements.append(
             .precedenceGroupAssociativity(
               RawPrecedenceGroupAssociativitySyntax(
-                associativityKeyword: associativity,
+                associativityLabel: associativity,
                 unexpectedBeforeColon,
                 colon: colon,
                 unexpectedBeforeValue,
@@ -1940,7 +1940,7 @@ extension Parser {
           elements.append(
             .precedenceGroupAssignment(
               RawPrecedenceGroupAssignmentSyntax(
-                assignmentKeyword: assignmentKeyword,
+                assignmentLabel: assignmentKeyword,
                 unexpectedBeforeColon,
                 colon: colon,
                 unexpectedBeforeFlag,
@@ -2118,7 +2118,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforePound,
-      poundToken: pound,
+      pound: pound,
       unexpectedBeforeMacro,
       macro: macro,
       genericArguments: generics,

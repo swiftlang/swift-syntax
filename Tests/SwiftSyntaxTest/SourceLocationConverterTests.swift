@@ -54,7 +54,7 @@ final class SourceLocationConverterTests: XCTestCase {
       return Syntax(raw: nodeWithInvalidUtf8.raw, rawNodeArena: arena).cast(TokenSyntax.self)
     }
 
-    let tree = SourceFileSyntax(statements: [], eofToken: eofToken)
+    let tree = SourceFileSyntax(statements: [], endOfFileToken: eofToken)
 
     // This used to violate the following assertion in the SourceLocationConverter's
     // initializer, because we were using `String` which was lossy when handling the

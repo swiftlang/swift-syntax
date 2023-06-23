@@ -51,7 +51,7 @@ extension Parser {
     return .init(
       statements: items,
       RawUnexpectedNodesSyntax(unexpectedBeforeEof, arena: self.arena),
-      eofToken: eof,
+      endOfFileToken: eof,
       arena: self.arena
     )
   }

@@ -77,7 +77,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "ArrowToken",
+        name: "Arrow",
+        deprecatedName: "ArrowToken",
         kind: .token(choices: [.token(tokenKind: "ArrowToken")])
       ),
     ]
@@ -97,7 +98,8 @@ public let EXPR_NODES: [Node] = [
         kind: .node(kind: .expr)
       ),
       Child(
-        name: "AsTok",
+        name: "AsKeyword",
+        deprecatedName: "AsTok",
         kind: .token(choices: [.keyword(text: "as")])
       ),
       Child(
@@ -119,7 +121,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: nil,
     children: [
       Child(
-        name: "AssignToken",
+        name: "Equal",
+        deprecatedName: "AssignToken",
         kind: .token(choices: [.token(tokenKind: "EqualToken")])
       )
     ]
@@ -151,7 +154,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "operator",
     children: [
       Child(
-        name: "OperatorToken",
+        name: "Operator",
+        deprecatedName: "OperatorToken",
         kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken")])
       )
     ]
@@ -320,7 +324,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "AssignToken",
+        name: "Equal",
+        deprecatedName: "AssignToken",
         kind: .token(choices: [.token(tokenKind: "EqualToken")]),
         isOptional: true
       ),
@@ -554,7 +559,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "InTok",
+        name: "InKeyword",
+        deprecatedName: "InTok",
         kind: .token(choices: [.keyword(text: "in")])
       ),
     ]
@@ -727,7 +733,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "BackslashToken")])
       ),
       Child(
-        name: "Delimiter",
+        name: "RawStringDelimiter",
+        deprecatedName: "Delimiter",
         kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
         isOptional: true
       ),
@@ -760,7 +767,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "floating literal",
     children: [
       Child(
-        name: "FloatingDigits",
+        name: "Digits",
+        deprecatedName: "FloatingDigits",
         kind: .token(choices: [.token(tokenKind: "FloatingLiteralToken")])
       )
     ]
@@ -982,7 +990,8 @@ public let EXPR_NODES: [Node] = [
         documentation: "The expression which will be checked to determine whether it can be cast to a specific type."
       ),
       Child(
-        name: "IsTok",
+        name: "IsKeyword",
+        deprecatedName: "IsTok",
         kind: .token(choices: [.keyword(text: "is")]),
         documentation: "The `is` keyword for this expression."
       ),
@@ -1107,7 +1116,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "key path subscript component",
     children: [
       Child(
-        name: "LeftBracket",
+        name: "LeftSquare",
+        deprecatedName: "LeftBracket",
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
@@ -1116,7 +1126,8 @@ public let EXPR_NODES: [Node] = [
         nameForDiagnostics: "arguments"
       ),
       Child(
-        name: "RightBracket",
+        name: "RightSquare",
+        deprecatedName: "RightBracket",
         kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
     ]
@@ -1132,7 +1143,8 @@ public let EXPR_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "PoundToken",
+        name: "Pound",
+        deprecatedName: "PoundToken",
         kind: .token(choices: [.token(tokenKind: "PoundToken")]),
         documentation: "The `#` sign."
       ),
@@ -1185,7 +1197,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Dot",
+        name: "Period",
+        deprecatedName: "Dot",
         kind: .token(choices: [.token(tokenKind: "PeriodToken")])
       ),
       Child(
@@ -1356,7 +1369,8 @@ public let EXPR_NODES: [Node] = [
         kind: .node(kind: .expr)
       ),
       Child(
-        name: "OperatorToken",
+        name: "Operator",
+        deprecatedName: "OperatorToken",
         kind: .token(choices: [.token(tokenKind: "PostfixOperatorToken")])
       ),
     ]
@@ -1371,7 +1385,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "operator",
     children: [
       Child(
-        name: "OperatorToken",
+        name: "Operator",
+        deprecatedName: "OperatorToken",
         kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")]),
         isOptional: true
       ),
@@ -1507,7 +1522,8 @@ public let EXPR_NODES: [Node] = [
         nameForDiagnostics: "called expression"
       ),
       Child(
-        name: "LeftBracket",
+        name: "LeftSquare",
+        deprecatedName: "LeftBracket",
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
@@ -1516,7 +1532,8 @@ public let EXPR_NODES: [Node] = [
         nameForDiagnostics: "arguments"
       ),
       Child(
-        name: "RightBracket",
+        name: "RightSquare",
+        deprecatedName: "RightBracket",
         kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
       ),
       Child(
@@ -1689,7 +1706,8 @@ public let EXPR_NODES: [Node] = [
         nameForDiagnostics: "first choice"
       ),
       Child(
-        name: "ColonMark",
+        name: "Colon",
+        deprecatedName: "ColonMark",
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
@@ -1812,7 +1830,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "'as'",
     children: [
       Child(
-        name: "AsTok",
+        name: "AsKeyword",
+        deprecatedName: "AsTok",
         kind: .token(choices: [.keyword(text: "as")])
       ),
       Child(
@@ -1832,7 +1851,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "'is'",
     children: [
       Child(
-        name: "IsTok",
+        name: "IsKeyword",
+        deprecatedName: "IsTok",
         kind: .token(choices: [.keyword(text: "is")])
       )
     ]
@@ -1867,7 +1887,8 @@ public let EXPR_NODES: [Node] = [
         kind: .node(kind: .expr)
       ),
       Child(
-        name: "ColonMark",
+        name: "Colon",
+        deprecatedName: "ColonMark",
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
     ]

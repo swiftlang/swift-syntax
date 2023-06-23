@@ -149,7 +149,7 @@ extension Parser {
     return .attribute(
       RawAttributeSyntax(
         unexpectedBeforeAtSign,
-        atSignToken: atSign,
+        atSign: atSign,
         attributeName: attributeName,
         leftParen: nil,
         argument: nil,
@@ -187,7 +187,7 @@ extension Parser {
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
-          atSignToken: atSign,
+          atSign: atSign,
           attributeName: attributeName,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
@@ -201,7 +201,7 @@ extension Parser {
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
-          atSignToken: atSign,
+          atSign: atSign,
           attributeName: attributeName,
           leftParen: nil,
           argument: nil,
@@ -322,7 +322,7 @@ extension Parser {
       return .attribute(
         RawAttributeSyntax(
           unexpectedBeforeAtSign,
-          atSignToken: atSign,
+          atSign: atSign,
           unexpectedBeforeAttributeName,
           attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena)),
           leftParen: nil,
@@ -351,7 +351,7 @@ extension Parser {
 
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
-      atSignToken: atSign,
+      atSign: atSign,
       unexpectedBeforeDifferentiable,
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
@@ -493,7 +493,7 @@ extension Parser {
 
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
-      atSignToken: atSign,
+      atSign: atSign,
       unexpectedBeforeDerivative,
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
@@ -515,7 +515,7 @@ extension Parser {
 
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
-      atSignToken: atSign,
+      atSign: atSign,
       unexpectedBeforeTranspose,
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
@@ -663,7 +663,7 @@ extension Parser {
         elements.append(
           .targetFunctionEntry(
             RawTargetFunctionEntrySyntax(
-              label: ident,
+              targetLabel: ident,
               unexpectedBeforeColon,
               colon: colon,
               declname: declName,
@@ -680,7 +680,7 @@ extension Parser {
         elements.append(
           .availabilityEntry(
             RawAvailabilityEntrySyntax(
-              label: ident,
+              availabilityLabel: ident,
               unexpectedBeforeColon,
               colon: colon,
               availabilityArguments: availability,

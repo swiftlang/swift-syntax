@@ -40,7 +40,8 @@ public let GENERIC_NODES: [Node] = [
     parserFunction: "parseGenericParameters",
     children: [
       Child(
-        name: "LeftAngleBracket",
+        name: "LeftAngle",
+        deprecatedName: "LeftAngleBracket",
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
@@ -54,7 +55,8 @@ public let GENERIC_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "RightAngleBracket",
+        name: "RightAngle",
+        deprecatedName: "RightAngleBracket",
         kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
       ),
     ]
@@ -85,7 +87,8 @@ public let GENERIC_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Each",
+        name: "EachKeyword",
+        deprecatedName: "Each",
         kind: .token(choices: [.keyword(text: "each")]),
         nameForDiagnostics: "parameter pack specifier",
         isOptional: true
@@ -238,7 +241,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "primary associated type clause",
     children: [
       Child(
-        name: "LeftAngleBracket",
+        name: "LeftAngle",
+        deprecatedName: "LeftAngleBracket",
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
@@ -246,7 +250,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(
-        name: "RightAngleBracket",
+        name: "RightAngle",
+        deprecatedName: "RightAngleBracket",
         kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
       ),
     ]

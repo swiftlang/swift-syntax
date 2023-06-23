@@ -239,16 +239,16 @@ extension Parser {
 
       args = RawPoundSourceLocationArgsSyntax(
         unexpectedBeforeFile,
-        fileArgLabel: file,
+        fileLabel: file,
         unexpectedBeforeFileColon,
-        fileArgColon: fileColon,
+        fileColon: fileColon,
         fileName: fileName,
         unexpectedBeforeComma,
         comma: comma,
         unexpectedBeforeLine,
-        lineArgLabel: line,
+        lineLabel: line,
         unexpectedBeforeLineColon,
-        lineArgColon: lineColon,
+        lineColon: lineColon,
         lineNumber: lineNumber,
         arena: self.arena
       )

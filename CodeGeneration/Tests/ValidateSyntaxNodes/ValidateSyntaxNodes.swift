@@ -99,6 +99,48 @@ class ValidateSyntaxNodes: XCTestCase {
     )
   }
 
+  /// Implementation detail of `testSingleTokenChoiceChildNaming`, validating a single child.
+  ///
+  /// - Returns: A failure message if validation failed, otherwise `nil`
+  private func validateSingleTokenChoiceChild(child: Child, childIndex: Int, in node: LayoutNode) -> String? {
+    guard case .token(choices: let tokenChoices, _, _) = child.kind, let choice = tokenChoices.only else {
+      return nil
+    }
+    switch choice {
+    case .keyword(text: let keyword):
+      if childIndex + 2 < node.children.count, case .token(choices: [.token(tokenKind: "ColonToken")], _, _) = node.children[childIndex + 2].kind {
+        if child.name != "\(keyword.withFirstCharacterUppercased)Label" {
+          return
+            "child '\(child.name)' has a single keyword as its only token choice and is followed by a colon. It should thus be named '\(keyword.withFirstCharacterUppercased)Label'"
+        }
+      } else {
+        if child.name != "\(keyword.withFirstCharacterUppercased)Keyword" {
+          return "child '\(child.name)' has a single keyword as its only token choice and should thus be named '\(keyword.withFirstCharacterUppercased)Keyword'"
+        }
+      }
+
+    case .token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatingLiteralToken"):
+      // We allow arbitrary naming of identifiers and literals
+      break
+    case .token(tokenKind: "CommaToken"):
+      if child.name != "TrailingComma" && child.name != "Comma" {
+        return "child '\(child.name)' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
+      }
+    case .token(tokenKind: let tokenKind):
+      let expectedChildName =
+        tokenKind
+        .dropSuffix("Token")
+        .dropPrefix("Prefix")
+        .dropPrefix("Infix")
+        .dropPrefix("Postfix")
+        .dropPrefix("Binary")
+      if child.name != expectedChildName {
+        return "child '\(child.name)' has a token as its only token choice and should thus be named '\(expectedChildName)'"
+      }
+    }
+    return nil
+  }
+
   /// Checks standardized naming of children with a single token choice
   ///
   /// - If a child has a single keyword as its choice, it should be named `*Keyword` (e.g. `ImportKeyword`)
@@ -106,157 +148,45 @@ class ValidateSyntaxNodes: XCTestCase {
   func testSingleTokenChoiceChildNaming() {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-      for child in node.children {
-        if case .token(choices: let tokenChoices, _, _) = child.kind,
-          let choice = tokenChoices.only
-        {
-          switch choice {
-          case .keyword(text: let keyword):
-            if child.name != "\(keyword.withFirstCharacterUppercased)Keyword" {
-              failures.append(
-                ValidationFailure(
-                  node: node.kind,
-                  message:
-                    "child '\(child.name)' has a single keyword as its only token choice and should thus be named '\(keyword.withFirstCharacterUppercased)Keyword'"
-                )
-              )
-            }
-          case .token(tokenKind: let tokenKind):
-            switch tokenKind {
-            case "IdentifierToken":
-              // We allow arbitrary naming of identifiers
-              break
-            case "CommaToken":
-              if child.name != "TrailingComma" && child.name != "Comma" {
-                failures.append(
-                  ValidationFailure(
-                    node: node.kind,
-                    message: "child '\(child.name)' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
-                  )
-                )
-              }
-            default:
-              if child.name != tokenKind.dropSuffix("Token") {
-                failures.append(
-                  ValidationFailure(
-                    node: node.kind,
-                    message: "child '\(child.name)' has a token as its only token choice and should thus be named '\(tokenKind.dropSuffix("Token"))'"
-                  )
-                )
-              }
-            }
-          }
+      for (childIndex, child) in node.children.enumerated() {
+        if let failureMessage = validateSingleTokenChoiceChild(child: child, childIndex: childIndex, in: node) {
+          failures.append(ValidationFailure(node: node.kind, message: failureMessage))
         }
       }
     }
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        // MARK: Naming failures of children with a single keyword choice
+        // MARK: Naming of 'AsyncSpecifier' and 'ThrowsSpecifier'
+        // Even though these nodes only accept e.g. 'async' name them consistently with properties that accept 'async' and 'reasync'
         ValidationFailure(
           node: .accessorEffectSpecifiers,
           message: "child 'AsyncSpecifier' has a single keyword as its only token choice and should thus be named 'AsyncKeyword'"
+            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
         ValidationFailure(
           node: .accessorEffectSpecifiers,
           message: "child 'ThrowsSpecifier' has a single keyword as its only token choice and should thus be named 'ThrowsKeyword'"
-        ),
-        ValidationFailure(node: .asExpr, message: "child 'AsTok' has a single keyword as its only token choice and should thus be named 'AsKeyword'"),
-        ValidationFailure(
-          node: .availabilityEntry,
-          message: "child 'Label' has a single keyword as its only token choice and should thus be named 'AvailabilityKeyword'"
-        ),
-        ValidationFailure(
-          node: .backDeployedAttributeSpecList,
-          message: "child 'BeforeLabel' has a single keyword as its only token choice and should thus be named 'BeforeKeyword'"
-        ),
-        ValidationFailure(
-          node: .borrowExpr,
-          message: "child 'BorrowKeyword' has a single keyword as its only token choice and should thus be named '_borrowKeyword'"
-        ),
-        ValidationFailure(node: .closureSignature, message: "child 'InTok' has a single keyword as its only token choice and should thus be named 'InKeyword'"),
-        ValidationFailure(
-          node: .conventionAttributeArguments,
-          message: "child 'CTypeLabel' has a single keyword as its only token choice and should thus be named 'CTypeKeyword'"
-        ),
-        ValidationFailure(
-          node: .conventionWitnessMethodAttributeArguments,
-          message: "child 'WitnessMethodLabel' has a single keyword as its only token choice and should thus be named 'Witness_methodKeyword'"
+            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
         ValidationFailure(
           node: .deinitEffectSpecifiers,
           message: "child 'AsyncSpecifier' has a single keyword as its only token choice and should thus be named 'AsyncKeyword'"
-        ),
-        ValidationFailure(
-          node: .derivativeRegistrationAttributeArguments,
-          message: "child 'OfLabel' has a single keyword as its only token choice and should thus be named 'OfKeyword'"
-        ),
-        ValidationFailure(
-          node: .differentiabilityParamsClause,
-          message: "child 'WrtLabel' has a single keyword as its only token choice and should thus be named 'WrtKeyword'"
-        ),
-        ValidationFailure(
-          node: .dynamicReplacementArguments,
-          message: "child 'ForLabel' has a single keyword as its only token choice and should thus be named 'ForKeyword'"
-        ),
-        ValidationFailure(
-          node: .genericParameter,
-          message: "child 'Each' has a single keyword as its only token choice and should thus be named 'EachKeyword'"
-        ),
-        ValidationFailure(node: .isExpr, message: "child 'IsTok' has a single keyword as its only token choice and should thus be named 'IsKeyword'"),
-        ValidationFailure(
-          node: .originallyDefinedInArguments,
-          message: "child 'ModuleLabel' has a single keyword as its only token choice and should thus be named 'ModuleKeyword'"
-        ),
-        ValidationFailure(
-          node: .poundSourceLocationArgs,
-          message: "child 'FileArgLabel' has a single keyword as its only token choice and should thus be named 'FileKeyword'"
-        ),
-        ValidationFailure(
-          node: .poundSourceLocationArgs,
-          message: "child 'LineArgLabel' has a single keyword as its only token choice and should thus be named 'LineKeyword'"
-        ),
-        ValidationFailure(
-          node: .targetFunctionEntry,
-          message: "child 'Label' has a single keyword as its only token choice and should thus be named 'TargetKeyword'"
-        ),
-        ValidationFailure(
-          node: .tupleTypeElement,
-          message: "child 'InOut' has a single keyword as its only token choice and should thus be named 'InoutKeyword'"
+            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
         ValidationFailure(
           node: .typeEffectSpecifiers,
           message: "child 'AsyncSpecifier' has a single keyword as its only token choice and should thus be named 'AsyncKeyword'"
+            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
         ValidationFailure(
           node: .typeEffectSpecifiers,
           message: "child 'ThrowsSpecifier' has a single keyword as its only token choice and should thus be named 'ThrowsKeyword'"
+            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
-        ValidationFailure(
-          node: .unavailableFromAsyncArguments,
-          message: "child 'MessageLabel' has a single keyword as its only token choice and should thus be named 'MessageKeyword'"
-        ),
-        ValidationFailure(
-          node: .underscorePrivateAttributeArguments,
-          message: "child 'SourceFileLabel' has a single keyword as its only token choice and should thus be named 'SourceFileKeyword'"
-        ),
-        ValidationFailure(node: .unresolvedAsExpr, message: "child 'AsTok' has a single keyword as its only token choice and should thus be named 'AsKeyword'"),
-        ValidationFailure(node: .unresolvedIsExpr, message: "child 'IsTok' has a single keyword as its only token choice and should thus be named 'IsKeyword'"),
 
-        ValidationFailure(node: .arrowExpr, message: "child 'ArrowToken' has a token as its only token choice and should thus be named 'Arrow'"),
-        ValidationFailure(node: .assignmentExpr, message: "child 'AssignToken' has a token as its only token choice and should thus be named 'Equal'"),
-        ValidationFailure(node: .attribute, message: "child 'AtSignToken' has a token as its only token choice and should thus be named 'AtSign'"),
-
-        // MARK: Naming failures of children with a single token choice
-        ValidationFailure(
-          node: .binaryOperatorExpr,
-          message: "child 'OperatorToken' has a token as its only token choice and should thus be named 'BinaryOperator'"
-        ),
-        ValidationFailure(node: .closureCaptureItem, message: "child 'AssignToken' has a token as its only token choice and should thus be named 'Equal'"),
-        ValidationFailure(
-          node: .designatedTypeElement,
-          message: "child 'LeadingComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
-        ),
+        // MARK: Two tokens with same kind in a node
+        // If there are two tokens of the same kind in a node, we can't follow the naming rule without conflict
         ValidationFailure(
           node: .differentiableAttributeArguments,
           message: "child 'DiffKindComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
@@ -266,105 +196,32 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'DiffParamsComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
         ),
         ValidationFailure(
-          node: .expressionSegment,
-          message: "child 'Delimiter' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
-        ),
-        ValidationFailure(
-          node: .floatLiteralExpr,
-          message: "child 'FloatingDigits' has a token as its only token choice and should thus be named 'FloatingLiteral'"
-        ),
-        ValidationFailure(
-          node: .genericArgumentClause,
-          message: "child 'LeftAngleBracket' has a token as its only token choice and should thus be named 'LeftAngle'"
-        ),
-        ValidationFailure(
-          node: .genericArgumentClause,
-          message: "child 'RightAngleBracket' has a token as its only token choice and should thus be named 'RightAngle'"
-        ),
-        ValidationFailure(
-          node: .genericParameterClause,
-          message: "child 'LeftAngleBracket' has a token as its only token choice and should thus be named 'LeftAngle'"
-        ),
-        ValidationFailure(
-          node: .genericParameterClause,
-          message: "child 'RightAngleBracket' has a token as its only token choice and should thus be named 'RightAngle'"
-        ),
-        ValidationFailure(node: .importPathComponent, message: "child 'TrailingDot' has a token as its only token choice and should thus be named 'Period'"),
-        ValidationFailure(node: .inOutExpr, message: "child 'Ampersand' has a token as its only token choice and should thus be named 'PrefixAmpersand'"),
-        ValidationFailure(node: .integerLiteralExpr, message: "child 'Digits' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
-        ValidationFailure(
-          node: .keyPathSubscriptComponent,
-          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquare'"
-        ),
-        ValidationFailure(
-          node: .keyPathSubscriptComponent,
-          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquare'"
-        ),
-        ValidationFailure(node: .labeledStmt, message: "child 'LabelColon' has a token as its only token choice and should thus be named 'Colon'"),
-        ValidationFailure(node: .layoutRequirement, message: "child 'Size' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
-        ValidationFailure(
-          node: .layoutRequirement,
-          message: "child 'Alignment' has a token as its only token choice and should thus be named 'IntegerLiteral'"
-        ),
-        ValidationFailure(node: .macroExpansionDecl, message: "child 'PoundToken' has a token as its only token choice and should thus be named 'Pound'"),
-        ValidationFailure(node: .macroExpansionExpr, message: "child 'PoundToken' has a token as its only token choice and should thus be named 'Pound'"),
-        ValidationFailure(node: .memberAccessExpr, message: "child 'Dot' has a token as its only token choice and should thus be named 'Period'"),
-        ValidationFailure(
-          node: .opaqueReturnTypeOfAttributeArguments,
-          message: "child 'Ordinal' has a token as its only token choice and should thus be named 'IntegerLiteral'"
-        ),
-        ValidationFailure(
-          node: .optionalChainingExpr,
-          message: "child 'QuestionMark' has a token as its only token choice and should thus be named 'PostfixQuestionMark'"
-        ),
-        ValidationFailure(
-          node: .optionalType,
-          message: "child 'QuestionMark' has a token as its only token choice and should thus be named 'PostfixQuestionMark'"
-        ),
-        ValidationFailure(
-          node: .postfixUnaryExpr,
-          message: "child 'OperatorToken' has a token as its only token choice and should thus be named 'PostfixOperator'"
+          node: .poundSourceLocationArgs,
+          message: "child 'FileColon' has a token as its only token choice and should thus be named 'Colon'"
+            // There are two colons in the node
         ),
         ValidationFailure(
           node: .poundSourceLocationArgs,
-          message: "child 'FileArgColon' has a token as its only token choice and should thus be named 'Colon'"
+          message: "child 'LineColon' has a token as its only token choice and should thus be named 'Colon'"
         ),
-        ValidationFailure(
-          node: .poundSourceLocationArgs,
-          message: "child 'LineArgColon' has a token as its only token choice and should thus be named 'Colon'"
-        ),
-        ValidationFailure(
-          node: .poundSourceLocationArgs,
-          message: "child 'LineNumber' has a token as its only token choice and should thus be named 'IntegerLiteral'"
-        ),
-        ValidationFailure(
-          node: .prefixOperatorExpr,
-          message: "child 'OperatorToken' has a token as its only token choice and should thus be named 'PrefixOperator'"
-        ),
-        ValidationFailure(
-          node: .primaryAssociatedTypeClause,
-          message: "child 'LeftAngleBracket' has a token as its only token choice and should thus be named 'LeftAngle'"
-        ),
-        ValidationFailure(
-          node: .primaryAssociatedTypeClause,
-          message: "child 'RightAngleBracket' has a token as its only token choice and should thus be named 'RightAngle'"
-        ),
-        ValidationFailure(node: .qualifiedDeclName, message: "child 'Dot' has a token as its only token choice and should thus be named 'Period'"),
         ValidationFailure(
           node: .regexLiteralExpr,
           message: "child 'OpeningPounds' has a token as its only token choice and should thus be named 'ExtendedRegexDelimiter'"
         ),
-        ValidationFailure(node: .regexLiteralExpr, message: "child 'OpenSlash' has a token as its only token choice and should thus be named 'RegexSlash'"),
         ValidationFailure(
           node: .regexLiteralExpr,
-          message: "child 'RegexPattern' has a token as its only token choice and should thus be named 'RegexLiteralPattern'"
+          message: "child 'OpenSlash' has a token as its only token choice and should thus be named 'RegexSlash'"
         ),
-        ValidationFailure(node: .regexLiteralExpr, message: "child 'CloseSlash' has a token as its only token choice and should thus be named 'RegexSlash'"),
+        ValidationFailure(
+          node: .regexLiteralExpr,
+          message: "child 'CloseSlash' has a token as its only token choice and should thus be named 'RegexSlash'"
+            // There are the opening and closing slashes in the node
+        ),
         ValidationFailure(
           node: .regexLiteralExpr,
           message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'ExtendedRegexDelimiter'"
+            // There are the opening and closing ExtendedRegexDelimiter in the node
         ),
-        ValidationFailure(node: .sourceFile, message: "child 'EOFToken' has a token as its only token choice and should thus be named 'EOF'"),
         ValidationFailure(
           node: .stringLiteralExpr,
           message: "child 'OpenDelimiter' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
@@ -373,32 +230,59 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .stringLiteralExpr,
           message: "child 'CloseDelimiter' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
         ),
-        ValidationFailure(node: .stringSegment, message: "child 'Content' has a token as its only token choice and should thus be named 'StringSegment'"),
+
+        // MARK: Tokens that contain underscores
         ValidationFailure(
-          node: .subscriptExpr,
-          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquare'"
+          node: .borrowExpr,
+          message: "child 'BorrowKeyword' has a single keyword as its only token choice and should thus be named '_borrowKeyword'"
+            // _borrow is underscored and thus BorrowKeyword is the correct spelling
         ),
         ValidationFailure(
-          node: .subscriptExpr,
-          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquare'"
+          node: .conventionWitnessMethodAttributeArguments,
+          message:
+            "child 'WitnessMethodLabel' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'Witness_methodLabel'"
+            // Witness_method has an underscore and thus WitnessMethod is the correct spelling
         ),
+
+        // MARK: Repeat node type name
+        // If the node is named the same as the token, we don't need to repeat the entire token name
+        ValidationFailure(
+          node: .regexLiteralExpr,
+          message: "child 'RegexPattern' has a token as its only token choice and should thus be named 'RegexLiteralPattern'"
+            // No point repeating the `Literal` because the node name alredy contains it
+        ),
+        ValidationFailure(
+          node: .stringSegment,
+          message: "child 'Content' has a token as its only token choice and should thus be named 'StringSegment'"
+            // The node is already named `StringSegment`
+        ),
+
+        // MARK: Miscellaneous
+        // This is the only place where we use LeadingComma, similar to 'TrailingComma'
+        ValidationFailure(
+          node: .designatedTypeElement,
+          message: "child 'LeadingComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
+        ),
+        // This is similar to `TrailingComma`
+        ValidationFailure(
+          node: .importPathComponent,
+          message: "child 'TrailingPeriod' has a token as its only token choice and should thus be named 'Period'"
+        ),
+        // We should explicitly mention token here because it’s not obvious that the end of a file is represented by a token
+        ValidationFailure(
+          node: .sourceFile,
+          message: "child 'EndOfFileToken' has a token as its only token choice and should thus be named 'EOF'"
+        ),
+        // `~` is the only operator that’s allowed here
         ValidationFailure(
           node: .suppressedType,
-          message: "child 'WithoutTilde' has a token as its only token choice and should thus be named 'PrefixOperator'"
+          message: "child 'WithoutTilde' has a token as its only token choice and should thus be named 'Operator'"
         ),
+        // default is not a function argument label here but a proper keyword
         ValidationFailure(
-          node: .ternaryExpr,
-          message: "child 'QuestionMark' has a token as its only token choice and should thus be named 'InfixQuestionMark'"
+          node: .switchDefaultLabel,
+          message: "child 'DefaultKeyword' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'DefaultLabel'"
         ),
-        ValidationFailure(node: .ternaryExpr, message: "child 'ColonMark' has a token as its only token choice and should thus be named 'Colon'"),
-        ValidationFailure(node: .tuplePatternElement, message: "child 'LabelColon' has a token as its only token choice and should thus be named 'Colon'"),
-        ValidationFailure(
-          node: .unresolvedTernaryExpr,
-          message: "child 'QuestionMark' has a token as its only token choice and should thus be named 'InfixQuestionMark'"
-        ),
-        ValidationFailure(node: .unresolvedTernaryExpr, message: "child 'ColonMark' has a token as its only token choice and should thus be named 'Colon'"),
-        ValidationFailure(node: .versionComponent, message: "child 'Number' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
-        ValidationFailure(node: .versionTuple, message: "child 'Major' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
       ]
     )
   }

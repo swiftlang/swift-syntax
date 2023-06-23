@@ -265,8 +265,8 @@ open class BasicFormat: SyntaxRewriter {
       (nil, _):
       return false
     case (_, .colon):
-      if second?.keyPathInParent != \TernaryExprSyntax.colonMark
-        && second?.keyPathInParent != \UnresolvedTernaryExprSyntax.colonMark
+      if second?.keyPathInParent != \TernaryExprSyntax.colon
+        && second?.keyPathInParent != \UnresolvedTernaryExprSyntax.colon
       {
         return false
       }

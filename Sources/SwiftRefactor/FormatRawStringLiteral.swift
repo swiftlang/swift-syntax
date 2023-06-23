@@ -36,9 +36,9 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
     for segment in lit.segments {
       switch segment {
       case .expressionSegment(let expr):
-        if let delimiter = expr.delimiter {
+        if let rawStringDelimiter = expr.rawStringDelimiter {
           // Pick up any delimiters in interpolation segments \#...#(...)
-          maximumHashes = max(maximumHashes, delimiter.text.longestRun(of: "#"))
+          maximumHashes = max(maximumHashes, rawStringDelimiter.text.longestRun(of: "#"))
         }
       case .stringSegment(let string):
         // Find the longest run of # characters in the content of the literal.

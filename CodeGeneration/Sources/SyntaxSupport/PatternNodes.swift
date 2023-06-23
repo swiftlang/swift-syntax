@@ -72,13 +72,15 @@ public let PATTERN_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "LabelName",
+        name: "Label",
+        deprecatedName: "LabelName",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
       Child(
-        name: "LabelColon",
+        name: "Colon",
+        deprecatedName: "LabelColon",
         kind: .token(choices: [.token(tokenKind: "ColonToken")]),
         isOptional: true
       ),

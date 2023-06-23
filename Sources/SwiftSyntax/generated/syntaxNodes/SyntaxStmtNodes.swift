@@ -1374,8 +1374,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `labelName`: `<identifier>`
-///  - `labelColon`: `':'`
+///  - `label`: `<identifier>`
+///  - `colon`: `':'`
 ///  - `statement`: ``StmtSyntax``
 public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -1397,11 +1397,11 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLabelName: UnexpectedNodesSyntax? = nil,
-      labelName: TokenSyntax,
-      _ unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? = nil,
-      labelColon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndStatement: UnexpectedNodesSyntax? = nil,
       statement: some StmtSyntaxProtocol,
       _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -1410,20 +1410,20 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabelName, 
-            labelName, 
-            unexpectedBetweenLabelNameAndLabelColon, 
-            labelColon, 
-            unexpectedBetweenLabelColonAndStatement, 
+            unexpectedBeforeLabel, 
+            label, 
+            unexpectedBetweenLabelAndColon, 
+            colon, 
+            unexpectedBetweenColonAndStatement, 
             statement, 
             unexpectedAfterStatement
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLabelName?.raw, 
-          labelName.raw, 
-          unexpectedBetweenLabelNameAndLabelColon?.raw, 
-          labelColon.raw, 
-          unexpectedBetweenLabelColonAndStatement?.raw, 
+          unexpectedBeforeLabel?.raw, 
+          label.raw, 
+          unexpectedBetweenLabelAndColon?.raw, 
+          colon.raw, 
+          unexpectedBetweenColonAndStatement?.raw, 
           statement.raw, 
           unexpectedAfterStatement?.raw
         ]
@@ -1440,7 +1440,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeLabelName: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1449,7 +1449,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var labelName: TokenSyntax {
+  public var label: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -1458,7 +1458,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLabelNameAndLabelColon: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1467,7 +1467,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var labelColon: TokenSyntax {
+  public var colon: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -1476,7 +1476,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndStatement: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1505,11 +1505,11 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLabelName, 
-          \Self.labelName, 
-          \Self.unexpectedBetweenLabelNameAndLabelColon, 
-          \Self.labelColon, 
-          \Self.unexpectedBetweenLabelColonAndStatement, 
+          \Self.unexpectedBeforeLabel, 
+          \Self.label, 
+          \Self.unexpectedBetweenLabelAndColon, 
+          \Self.colon, 
+          \Self.unexpectedBetweenColonAndStatement, 
           \Self.statement, 
           \Self.unexpectedAfterStatement
         ])

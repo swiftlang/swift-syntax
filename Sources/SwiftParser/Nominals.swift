@@ -361,10 +361,10 @@ extension Parser {
       (unexpectedBeforeRangle, rangle) = self.expect(.rightAngle)
     }
     return RawPrimaryAssociatedTypeClauseSyntax(
-      leftAngleBracket: langle,
+      leftAngle: langle,
       primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
       unexpectedBeforeRangle,
-      rightAngleBracket: rangle,
+      rightAngle: rangle,
       arena: self.arena
     )
   }

@@ -22,6 +22,14 @@ extension Collection {
 }
 
 extension String {
+  func dropPrefix(_ suffix: String) -> String {
+    if hasPrefix(suffix) {
+      return String(self.dropFirst(suffix.count))
+    } else {
+      return self
+    }
+  }
+
   func dropSuffix(_ suffix: String) -> String {
     if hasSuffix(suffix) {
       return String(self.dropLast(suffix.count))

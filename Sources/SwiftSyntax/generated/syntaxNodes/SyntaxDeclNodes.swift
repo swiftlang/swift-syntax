@@ -4111,7 +4111,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
-///  - `poundToken`: `'#'`
+///  - `pound`: `'#'`
 ///  - `macro`: `<identifier>`
 ///  - `genericArguments`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
@@ -4143,9 +4143,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: ModifierListSyntax? = nil,
-      _ unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil,
-      poundToken: TokenSyntax = .poundToken(),
-      _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
+      pound: TokenSyntax = .poundToken(),
+      _ unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? = nil,
       macro: TokenSyntax,
       _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil,
       genericArguments: GenericArgumentClauseSyntax? = nil,
@@ -4170,9 +4170,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             attributes, 
             unexpectedBetweenAttributesAndModifiers, 
             modifiers, 
-            unexpectedBetweenModifiersAndPoundToken, 
-            poundToken, 
-            unexpectedBetweenPoundTokenAndMacro, 
+            unexpectedBetweenModifiersAndPound, 
+            pound, 
+            unexpectedBetweenPoundAndMacro, 
             macro, 
             unexpectedBetweenMacroAndGenericArguments, 
             genericArguments, 
@@ -4193,9 +4193,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers?.raw, 
-          unexpectedBetweenModifiersAndPoundToken?.raw, 
-          poundToken.raw, 
-          unexpectedBetweenPoundTokenAndMacro?.raw, 
+          unexpectedBetweenModifiersAndPound?.raw, 
+          pound.raw, 
+          unexpectedBetweenPoundAndMacro?.raw, 
           macro.raw, 
           unexpectedBetweenMacroAndGenericArguments?.raw, 
           genericArguments?.raw, 
@@ -4308,7 +4308,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MacroExpansionDeclSyntax(newData)
   }
   
-  public var unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4318,7 +4318,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The `#` sign.
-  public var poundToken: TokenSyntax {
+  public var pound: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -4327,7 +4327,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4516,9 +4516,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.attributes, 
           \Self.unexpectedBetweenAttributesAndModifiers, 
           \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndPoundToken, 
-          \Self.poundToken, 
-          \Self.unexpectedBetweenPoundTokenAndMacro, 
+          \Self.unexpectedBetweenModifiersAndPound, 
+          \Self.pound, 
+          \Self.unexpectedBetweenPoundAndMacro, 
           \Self.macro, 
           \Self.unexpectedBetweenMacroAndGenericArguments, 
           \Self.genericArguments, 

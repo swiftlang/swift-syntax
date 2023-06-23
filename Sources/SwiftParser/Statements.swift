@@ -84,8 +84,8 @@ extension Parser {
       }
       return RawStmtSyntax(
         RawLabeledStmtSyntax(
-          labelName: label.label,
-          labelColon: label.colon,
+          label: label.label,
+          colon: label.colon,
           statement: RawStmtSyntax(stmt),
           arena: self.arena
         )

@@ -660,8 +660,8 @@ final class IfconfigExprTests: XCTestCase {
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: PrefixOperatorExprSyntax(
-                operatorToken: .prefixOperator("<"),
-                postfixExpression: FloatLiteralExprSyntax(floatingDigits: .floatingLiteral("10.0"))
+                operator: .prefixOperator("<"),
+                postfixExpression: FloatLiteralExprSyntax(digits: .floatingLiteral("10.0"))
               )
             )
           ]),

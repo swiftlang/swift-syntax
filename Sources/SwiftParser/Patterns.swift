@@ -201,8 +201,8 @@ extension Parser {
         elements: [
           RawTuplePatternElementSyntax(
             remainingTokens,
-            labelName: nil,
-            labelColon: nil,
+            label: nil,
+            colon: nil,
             pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
@@ -237,8 +237,8 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(
           RawTuplePatternElementSyntax(
-            labelName: label,
-            labelColon: colon,
+            label: label,
+            colon: colon,
             pattern: pattern,
             trailingComma: trailingComma,
             arena: self.arena

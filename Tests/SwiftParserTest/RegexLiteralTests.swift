@@ -1261,7 +1261,7 @@ final class RegexLiteralTests: XCTestCase {
       """
       let x = true?/abc/1️⃣:/def/
       """,
-      substructure: Syntax(BinaryOperatorExprSyntax(operatorToken: .binaryOperator("/"))),
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/"))),
       diagnostics: [
         DiagnosticSpec(message: "extraneous code ':/def/' at top level")
       ]

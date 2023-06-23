@@ -61,10 +61,10 @@ extension OperatorTable {
   ) rethrows -> PrecedenceGroupName? {
     // A binary operator.
     if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
-      let operatorName = binaryExpr.operatorToken.text
+      let operatorName = binaryExpr.operator.text
       return try lookupOperatorPrecedenceGroupName(
         operatorName,
-        referencedFrom: Syntax(binaryExpr.operatorToken),
+        referencedFrom: Syntax(binaryExpr.operator),
         errorHandler: errorHandler
       )
     }
@@ -156,8 +156,8 @@ extension OperatorTable {
           questionMark: ternaryExpr.questionMark,
           ternaryExpr.unexpectedBetweenQuestionMarkAndFirstChoice,
           firstChoice: ternaryExpr.firstChoice,
-          ternaryExpr.unexpectedBetweenFirstChoiceAndColonMark,
-          colonMark: ternaryExpr.colonMark,
+          ternaryExpr.unexpectedBetweenFirstChoiceAndColon,
+          colon: ternaryExpr.colon,
           secondChoice: rhs
         )
       )
@@ -181,8 +181,8 @@ extension OperatorTable {
       return ExprSyntax(
         IsExprSyntax(
           expression: lhs,
-          isExpr.unexpectedBeforeIsTok,
-          isTok: isExpr.isTok,
+          isExpr.unexpectedBeforeIsKeyword,
+          isKeyword: isExpr.isKeyword,
           typeName: rhs.as(TypeExprSyntax.self)!.type
         )
       )
@@ -195,9 +195,9 @@ extension OperatorTable {
       return ExprSyntax(
         AsExprSyntax(
           expression: lhs,
-          asExpr.unexpectedBeforeAsTok,
-          asTok: asExpr.asTok,
-          asExpr.unexpectedBetweenAsTokAndQuestionOrExclamationMark,
+          asExpr.unexpectedBeforeAsKeyword,
+          asKeyword: asExpr.asKeyword,
+          asExpr.unexpectedBetweenAsKeywordAndQuestionOrExclamationMark,
           questionOrExclamationMark: asExpr.questionOrExclamationMark,
           typeName: rhs.as(TypeExprSyntax.self)!.type
         )

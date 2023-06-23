@@ -183,7 +183,7 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
-      let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingKeyword)
+      let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingSpecifier)
       var unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax? = nil
       keepGoing = self.consume(if: .comma)
       if keepGoing == nil, let token = self.consumeIfContextualPunctuator("&&") ?? self.consume(if: .keyword(.where)) {
@@ -296,11 +296,11 @@ extension Parser {
     }
 
     switch kind {
-    case let .optional(unexpectedBeforeBindingKeyword, bindingKeyword, pattern):
+    case let .optional(unexpectedBeforeBindingKeyword, bindingSpecifier, pattern):
       return .optionalBinding(
         RawOptionalBindingConditionSyntax(
           unexpectedBeforeBindingKeyword,
-          bindingKeyword: bindingKeyword,
+          bindingSpecifier: bindingSpecifier,
           pattern: pattern,
           typeAnnotation: annotation,
           initializer: initializer,

@@ -332,14 +332,14 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeImportKeyword,
       importKeyword: importKeyword,
-      importKind: kind,
+      importKindSpecifier: kind,
       path: path,
       arena: self.arena
     )
   }
 
   mutating func parseImportKind() -> RawTokenSyntax? {
-    return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindOptions.self)
+    return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindSpecifierOptions.self)
   }
 
   mutating func parseImportPath() -> RawImportPathSyntax {
@@ -1250,7 +1250,7 @@ extension Parser {
 
     // Parse getter and setter.
     let accessor: RawSubscriptDeclSyntax.Accessor?
-    if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil {
+    if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
       accessor = self.parseGetSet()
     } else {
       accessor = nil
@@ -1372,7 +1372,7 @@ extension Parser {
         }
 
         let accessor: RawPatternBindingSyntax.Accessor?
-        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil && !self.at(.keyword(.`init`))) {
+        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil && !self.at(.keyword(.`init`))) {
           switch self.parseGetSet() {
           case .accessors(let accessors):
             accessor = .accessors(accessors)
@@ -1401,7 +1401,7 @@ extension Parser {
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeIntroducer,
-      bindingKeyword: introducer,
+      bindingSpecifier: introducer,
       bindings: RawPatternBindingListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
@@ -1410,19 +1410,19 @@ extension Parser {
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax?
     var modifier: RawDeclModifierSyntax?
-    var kind: AccessorDeclSyntax.AccessorKindOptions
+    var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
   }
 
   mutating func parseAccessorIntroducer(
-    forcedKind: (AccessorDeclSyntax.AccessorKindOptions, TokenConsumptionHandle)? = nil
+    forcedKind: (AccessorDeclSyntax.AccessorSpecifierOptions, TokenConsumptionHandle)? = nil
   ) -> AccessorIntroducer? {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(if: .keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)) != nil
-    guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) ?? forcedKind else {
+    guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
       return nil
     }
 
@@ -1484,7 +1484,7 @@ extension Parser {
     //
     //     set-name    ::= '(' identifier ')'
     let parameter: RawAccessorParameterSyntax?
-    if [AccessorDeclSyntax.AccessorKindOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
+    if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       parameter = RawAccessorParameterSyntax(
@@ -1507,7 +1507,7 @@ extension Parser {
       attributes: introducer.attributes,
       modifier: introducer.modifier,
       introducer.unexpectedBeforeToken,
-      accessorKind: introducer.token,
+      accessorSpecifier: introducer.token,
       parameter: parameter,
       effectSpecifiers: effectSpecifiers,
       initEffects: initEffects,
@@ -1529,7 +1529,7 @@ extension Parser {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
-    if self.at(anyIn: AccessorDeclSyntax.AccessorKindOptions.self) != nil {
+    if self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
       unexpectedBeforeLBrace = nil
       lbrace = missingToken(.leftBrace)
     } else {
@@ -1814,7 +1814,7 @@ extension Parser {
     }
     return RawOperatorDeclSyntax(
       introducer.unexpectedBeforeFixity,
-      fixity: introducer.fixity,
+      fixitySpecifier: introducer.fixity,
       introducer.unexpectedBeforeOperatorKeyword,
       operatorKeyword: introducer.operatorKeyword,
       unexpectedBeforeName,
@@ -1930,9 +1930,9 @@ extension Parser {
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeFlag, flag) = self.expect(anyIn: PrecedenceGroupAssignmentSyntax.FlagOptions.self, default: .true)
+          let (unexpectedBeforeValue, value) = self.expect(anyIn: PrecedenceGroupAssignmentSyntax.ValueOptions.self, default: .true)
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
-          if flag.isMissing, let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) {
+          if value.isMissing, let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
           } else {
             unexpectedAfterFlag = nil
@@ -1943,8 +1943,8 @@ extension Parser {
                 assignmentLabel: assignmentKeyword,
                 unexpectedBeforeColon,
                 colon: colon,
-                unexpectedBeforeFlag,
-                flag: flag,
+                unexpectedBeforeValue,
+                value: value,
                 unexpectedAfterFlag,
                 arena: self.arena
               )
@@ -1975,7 +1975,7 @@ extension Parser {
           elements.append(
             .precedenceGroupRelation(
               RawPrecedenceGroupRelationSyntax(
-                higherThanOrLowerThanKeyword: level,
+                higherThanOrLowerThanLabel: level,
                 unexpectedBeforeColon,
                 colon: colon,
                 otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),

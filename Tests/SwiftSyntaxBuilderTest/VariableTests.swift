@@ -18,7 +18,7 @@ final class VariableTests: XCTestCase {
   func testVariableDecl() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingKeyword: .keyword(.let)) {
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
     }
 
@@ -28,7 +28,7 @@ final class VariableTests: XCTestCase {
   func testInoutBindingDecl() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingKeyword: .keyword(.inout)) {
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.inout)) {
       PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
     }
 
@@ -158,7 +158,7 @@ final class VariableTests: XCTestCase {
   func testVariableDeclWithValue() {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
-    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingKeyword: .keyword(.var)) {
+    let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.var)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("d"),
         typeAnnotation: TypeAnnotationSyntax(type: DictionaryTypeSyntax(keyType: TypeSyntax("String"), valueType: TypeSyntax("Int"))),
@@ -171,7 +171,7 @@ final class VariableTests: XCTestCase {
 
   func testVariableDeclWithExplicitTrailingCommas() {
     let buildable = VariableDeclSyntax(
-      bindingKeyword: .keyword(.let),
+      bindingSpecifier: .keyword(.let),
       bindings: [
         PatternBindingSyntax(
           pattern: PatternSyntax("a"),
@@ -197,7 +197,7 @@ final class VariableTests: XCTestCase {
   }
 
   func testMultiPatternVariableDecl() {
-    let buildable = VariableDeclSyntax(bindingKeyword: .keyword(.let)) {
+    let buildable = VariableDeclSyntax(bindingSpecifier: .keyword(.let)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("a"),
         initializer: InitializerClauseSyntax(
@@ -226,7 +226,7 @@ final class VariableTests: XCTestCase {
 
   func testClosureTypeVariableDecl() {
     let type = FunctionTypeSyntax(parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
-    let buildable = VariableDeclSyntax(bindingKeyword: .keyword(.let)) {
+    let buildable = VariableDeclSyntax(bindingSpecifier: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))
     }
     assertBuildResult(buildable, "let c: (Int) -> Bool")
@@ -268,7 +268,7 @@ final class VariableTests: XCTestCase {
 
   func testAccessorList() throws {
     let buildable = try VariableDeclSyntax("var test: Int") {
-      AccessorDeclSyntax(accessorKind: .keyword(.get)) {
+      AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
         SequenceExprSyntax {
           IntegerLiteralExprSyntax(4)
           BinaryOperatorExprSyntax(text: "+")
@@ -276,7 +276,7 @@ final class VariableTests: XCTestCase {
         }
       }
 
-      AccessorDeclSyntax(accessorKind: .keyword(.willSet)) {}
+      AccessorDeclSyntax(accessorSpecifier: .keyword(.willSet)) {}
     }
 
     assertBuildResult(
@@ -296,7 +296,7 @@ final class VariableTests: XCTestCase {
   func testAccessorWithEffectSpecifier() throws {
     let buildable = try VariableDeclSyntax("var test: Int") {
       AccessorDeclSyntax(
-        accessorKind: .keyword(.get),
+        accessorSpecifier: .keyword(.get),
         effectSpecifiers: AccessorEffectSpecifiersSyntax(
           asyncSpecifier: .keyword(.async),
           throwsSpecifier: .keyword(.throws)

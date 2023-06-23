@@ -437,7 +437,8 @@ public let STMT_NODES: [Node] = [
     nameForDiagnostics: "optional binding",
     children: [
       Child(
-        name: "BindingKeyword",
+        name: "BindingSpecifier",
+        deprecatedName: "BindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(

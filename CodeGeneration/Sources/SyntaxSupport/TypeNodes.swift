@@ -324,7 +324,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "PeriodToken")])
       ),
       Child(
-        name: "TypeOrProtocol",
+        name: "MetatypeSpecifier",
+        deprecatedName: "TypeOrProtocol",
         kind: .token(choices: [.keyword(text: "Type"), .keyword(text: "Protocol")])
       ),
     ]

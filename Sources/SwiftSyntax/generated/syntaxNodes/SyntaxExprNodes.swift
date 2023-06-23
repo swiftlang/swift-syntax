@@ -771,7 +771,7 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `booleanLiteral`: (`'true'` | `'false'`)
+///  - `literal`: (`'true'` | `'false'`)
 public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -792,16 +792,16 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? = nil,
-      booleanLiteral: TokenSyntax,
-      _ unexpectedAfterBooleanLiteral: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeLiteral: UnexpectedNodesSyntax? = nil,
+      literal: TokenSyntax,
+      _ unexpectedAfterLiteral: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeBooleanLiteral, booleanLiteral, unexpectedAfterBooleanLiteral))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeBooleanLiteral?.raw, booleanLiteral.raw, unexpectedAfterBooleanLiteral?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLiteral, literal, unexpectedAfterLiteral))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeLiteral?.raw, literal.raw, unexpectedAfterLiteral?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.booleanLiteralExpr,
         from: layout,
@@ -815,7 +815,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeLiteral: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -824,7 +824,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var booleanLiteral: TokenSyntax {
+  public var literal: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -833,7 +833,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterBooleanLiteral: UnexpectedNodesSyntax? {
+  public var unexpectedAfterLiteral: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -843,7 +843,7 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
   
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeBooleanLiteral, \Self.booleanLiteral, \Self.unexpectedAfterBooleanLiteral])
+    return .layout([\Self.unexpectedBeforeLiteral, \Self.literal, \Self.unexpectedAfterLiteral])
   }
 }
 
@@ -4164,7 +4164,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `moveKeyword`: (`'_move'` | `'consume'`)
+///  - `consumeKeyword`: (`'_move'` | `'consume'`)
 ///  - `expression`: ``ExprSyntax``
 public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -4186,9 +4186,9 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
-      moveKeyword: TokenSyntax,
-      _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeConsumeKeyword: UnexpectedNodesSyntax? = nil,
+      consumeKeyword: TokenSyntax,
+      _ unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -4197,16 +4197,16 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeMoveKeyword, 
-            moveKeyword, 
-            unexpectedBetweenMoveKeywordAndExpression, 
+            unexpectedBeforeConsumeKeyword, 
+            consumeKeyword, 
+            unexpectedBetweenConsumeKeywordAndExpression, 
             expression, 
             unexpectedAfterExpression
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeMoveKeyword?.raw, 
-          moveKeyword.raw, 
-          unexpectedBetweenMoveKeywordAndExpression?.raw, 
+          unexpectedBeforeConsumeKeyword?.raw, 
+          consumeKeyword.raw, 
+          unexpectedBetweenConsumeKeywordAndExpression?.raw, 
           expression.raw, 
           unexpectedAfterExpression?.raw
         ]
@@ -4223,7 +4223,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeConsumeKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4232,7 +4232,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var moveKeyword: TokenSyntax {
+  public var consumeKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -4241,7 +4241,7 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4270,9 +4270,9 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeMoveKeyword, 
-          \Self.moveKeyword, 
-          \Self.unexpectedBetweenMoveKeywordAndExpression, 
+          \Self.unexpectedBeforeConsumeKeyword, 
+          \Self.consumeKeyword, 
+          \Self.unexpectedBetweenConsumeKeywordAndExpression, 
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])

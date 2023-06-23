@@ -23,7 +23,7 @@ extension PrecedenceGroup {
       switch attr {
       // Relation (lowerThan, higherThan)
       case .precedenceGroupRelation(let relation):
-        let isLowerThan = relation.higherThanOrLowerThanKeyword.text == "lowerThan"
+        let isLowerThan = relation.higherThanOrLowerThanLabel.text == "lowerThan"
         for otherGroup in relation.otherNames {
           let otherGroupName = otherGroup.name.text
           let relationKind: PrecedenceRelation.Kind =
@@ -40,7 +40,7 @@ extension PrecedenceGroup {
 
       // Assignment
       case .precedenceGroupAssignment(let assignment):
-        self.assignment = assignment.flag.text == "true"
+        self.assignment = assignment.value.text == "true"
 
       // Associativity
       case .precedenceGroupAssociativity(let associativity):
@@ -68,7 +68,7 @@ extension Operator {
   /// TODO: This ignores all semantic errors.
   init(from syntax: OperatorDeclSyntax) {
     self.syntax = syntax
-    kind = OperatorKind(rawValue: syntax.fixity.text) ?? .infix
+    kind = OperatorKind(rawValue: syntax.fixitySpecifier.text) ?? .infix
 
     name = syntax.identifier.text
 

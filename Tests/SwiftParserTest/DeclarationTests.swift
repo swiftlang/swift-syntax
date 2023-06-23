@@ -1055,7 +1055,7 @@ final class DeclarationTests: XCTestCase {
         AccessorBlockSyntax(
           accessors: AccessorListSyntax([
             AccessorDeclSyntax(
-              accessorKind: .keyword(.get)
+              accessorSpecifier: .keyword(.get)
             )
           ]),
           UnexpectedNodesSyntax([
@@ -2271,7 +2271,7 @@ final class DeclarationTests: XCTestCase {
           modifiers: ModifierListSyntax([
             DeclModifierSyntax(name: .keyword(.open))
           ]),
-          bindingKeyword: .keyword(.var),
+          bindingSpecifier: .keyword(.var),
           bindings: PatternBindingListSyntax([
             PatternBindingSyntax(
               pattern: IdentifierPatternSyntax(identifier: .identifier("foo")),

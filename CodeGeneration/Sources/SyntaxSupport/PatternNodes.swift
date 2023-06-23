@@ -146,7 +146,8 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "value binding pattern",
     children: [
       Child(
-        name: "BindingKeyword",
+        name: "BindingSpecifier",
+        deprecatedName: "BindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(

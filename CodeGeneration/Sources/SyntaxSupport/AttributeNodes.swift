@@ -358,7 +358,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "AccessorKind",
+        name: "AccessorSpecifier",
+        deprecatedName: "AccessorKind",
         kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set")]),
         documentation: "The accessor name.",
         isOptional: true
@@ -369,7 +370,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "DiffParams",
+        name: "Parameters",
+        deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityParamsClause),
         isOptional: true
       ),
@@ -477,23 +479,27 @@ public let ATTRIBUTE_NODES: [Node] = [
       "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
     children: [
       Child(
-        name: "DiffKind",
+        name: "KindSpecifier",
+        deprecatedName: "DiffKind",
         kind: .token(choices: [.keyword(text: "_forward"), .keyword(text: "reverse"), .keyword(text: "_linear")]),
         isOptional: true
       ),
       Child(
-        name: "DiffKindComma",
+        name: "KindSpecifierComma",
+        deprecatedName: "DiffKindComma",
         kind: .token(choices: [.token(tokenKind: "CommaToken")]),
         documentation: "The comma following the differentiability kind, if it exists.",
         isOptional: true
       ),
       Child(
-        name: "DiffParams",
+        name: "Parameters",
+        deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityParamsClause),
         isOptional: true
       ),
       Child(
-        name: "DiffParamsComma",
+        name: "ParametersComma",
+        deprecatedName: "DiffParamsComma",
         kind: .token(choices: [.token(tokenKind: "CommaToken")]),
         documentation: "The comma following the differentiability parameters clause, if it exists.",
         isOptional: true

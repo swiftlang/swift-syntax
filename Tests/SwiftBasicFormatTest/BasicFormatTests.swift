@@ -277,7 +277,7 @@ final class BasicFormatTest: XCTestCase {
 
   func testDontInsertTrailingWhitespaceIfNextTokenStartsWithLeadingWhitespace() {
     let tree = VariableDeclSyntax(
-      bindingKeyword: .keyword(.var),
+      bindingSpecifier: .keyword(.var),
       bindings: PatternBindingListSyntax([
         PatternBindingSyntax(
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x"))),

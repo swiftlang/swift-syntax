@@ -168,7 +168,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "bool literal",
     children: [
       Child(
-        name: "BooleanLiteral",
+        name: "Literal",
+        deprecatedName: "BooleanLiteral",
         kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")])
       )
     ]
@@ -1221,7 +1222,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "'consume' expression",
     children: [
       Child(
-        name: "MoveKeyword",
+        name: "ConsumeKeyword",
+        deprecatedName: "MoveKeyword",
         kind: .token(choices: [.keyword(text: "_move"), .keyword(text: "consume")])
       ),
       Child(

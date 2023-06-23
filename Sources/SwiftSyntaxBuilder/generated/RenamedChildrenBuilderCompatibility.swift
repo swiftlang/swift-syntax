@@ -14,6 +14,53 @@
 
 import SwiftSyntax
 
+extension AccessorDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with accessorKind argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, 
+      modifier: DeclModifierSyntax? = nil, 
+      unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil, 
+      accessorKind: TokenSyntax, 
+      unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil, 
+      parameter: AccessorParameterSyntax? = nil, 
+      unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
+      effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
+      unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil, 
+      initEffects: AccessorInitEffectsSyntax? = nil, 
+      unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax?, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifier, 
+        modifier: modifier, 
+        unexpectedBetweenModifierAndAccessorKind, 
+        accessorSpecifier: accessorKind, 
+        unexpectedBetweenAccessorKindAndParameter, 
+        parameter: parameter, 
+        unexpectedBetweenParameterAndEffectSpecifiers, 
+        effectSpecifiers: effectSpecifiers, 
+        unexpectedBetweenEffectSpecifiersAndInitEffects, 
+        initEffects: initEffects, 
+        unexpectedBetweenInitEffectsAndBody, 
+        body: bodyBuilder().map {
+          CodeBlockSyntax(statements: $0)
+        }, 
+        unexpectedAfterBody, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ArrayExprSyntax {
   @available(*, deprecated, message: "Use an initializer with leftSquareBracket, rightSquareBracket argument(s).")
   @_disfavoredOverload
@@ -416,6 +463,39 @@ extension TupleExprSyntax {
         unexpectedBetweenElementListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension VariableDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with bindingKeyword argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      unexpectedBetweenModifiersAndBindingKeyword: UnexpectedNodesSyntax? = nil, 
+      bindingKeyword: TokenSyntax, 
+      unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterBindings: UnexpectedNodesSyntax? = nil, 
+      @PatternBindingListBuilder bindingsBuilder: () throws -> PatternBindingListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndBindingKeyword, 
+        bindingSpecifier: bindingKeyword, 
+        unexpectedBetweenBindingKeywordAndBindings, 
+        bindings: bindingsBuilder(), 
+        unexpectedAfterBindings, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -1350,22 +1350,26 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if node.fixity.presence == .missing {
+    if node.fixitySpecifier.presence == .missing {
       addDiagnostic(
-        node.fixity,
+        node.fixitySpecifier,
         .missingFixityInOperatorDeclaration,
         fixIts: [
-          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.prefix)), changes: .makePresent(node.fixity)),
+          FixIt(message: InsertFixIt(tokenToBeInserted: .keyword(.prefix)), changes: .makePresent(node.fixitySpecifier)),
           FixIt(
             message: InsertFixIt(tokenToBeInserted: .keyword(.infix)),
-            changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.infix), presence: .present))))]
+            changes: [
+              FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixitySpecifier), newNode: Syntax(TokenSyntax(.keyword(.infix), presence: .present))))
+            ]
           ),
           FixIt(
             message: InsertFixIt(tokenToBeInserted: .keyword(.postfix)),
-            changes: [FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixity), newNode: Syntax(TokenSyntax(.keyword(.postfix), presence: .present))))]
+            changes: [
+              FixIt.MultiNodeChange(.replace(oldNode: Syntax(node.fixitySpecifier), newNode: Syntax(TokenSyntax(.keyword(.postfix), presence: .present))))
+            ]
           ),
         ],
-        handledNodes: [node.fixity.id]
+        handledNodes: [node.fixitySpecifier.id]
       )
     }
 
@@ -1415,8 +1419,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let unexpected = node.unexpectedBetweenColonAndFlag ?? node.unexpectedAfterFlag, node.flag.isMissing {
-      addDiagnostic(unexpected, .invalidFlagAfterPrecedenceGroupAssignment, handledNodes: [unexpected.id, node.flag.id])
+    if let unexpected = node.unexpectedBetweenColonAndValue ?? node.unexpectedAfterValue, node.value.isMissing {
+      addDiagnostic(unexpected, .invalidFlagAfterPrecedenceGroupAssignment, handledNodes: [unexpected.id, node.value.id])
     }
     return .visitChildren
   }
@@ -1878,7 +1882,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return $0.initializer?.value.as(TryExprSyntax.self)?.tryKeyword
     })
     exchangeTokens(
-      unexpected: node.unexpectedBetweenModifiersAndBindingKeyword,
+      unexpected: node.unexpectedBetweenModifiersAndBindingSpecifier,
       unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
       correctTokens: missingTries,
       message: { _ in .tryOnInitialValueExpression },

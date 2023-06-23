@@ -17,8 +17,8 @@ import SwiftSyntaxBuilder
 final class BooleanLiteralTests: XCTestCase {
   func testBooleanLiteral() {
     let testCases: [UInt: (BooleanLiteralExprSyntax, String)] = [
-      #line: (BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true)), "true"),
-      #line: (BooleanLiteralExprSyntax(booleanLiteral: .keyword(.false)), "false"),
+      #line: (BooleanLiteralExprSyntax(literal: .keyword(.true)), "true"),
+      #line: (BooleanLiteralExprSyntax(literal: .keyword(.false)), "false"),
       #line: (BooleanLiteralExprSyntax(true), "true"),
       #line: (BooleanLiteralExprSyntax(false), "false"),
       #line: (true, "true"),

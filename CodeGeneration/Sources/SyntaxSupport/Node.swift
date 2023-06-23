@@ -220,6 +220,20 @@ public struct LayoutNode {
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
     }
   }
+
+  public var grammar: SwiftSyntax.Trivia {
+    guard !children.isEmpty else {
+      return []
+    }
+
+    return docCommentTrivia(
+      from: """
+        ### Children
+
+        \(GrammarGenerator.childrenList(for: children))
+        """
+    )
+  }
 }
 
 /// Provides a view into a collection node that offers access to the

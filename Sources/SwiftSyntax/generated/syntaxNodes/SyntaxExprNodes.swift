@@ -15,6 +15,12 @@
 // MARK: - ArrayExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftSquare`: `'['`
+///  - `elements`: ``ArrayElementListSyntax``
+///  - `rightSquare`: `']'`
 public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -181,6 +187,11 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - ArrowExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
+///  - `arrowToken`: `'->'`
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -297,6 +308,13 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - AsExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `asTok`: `'as'`
+///  - `questionOrExclamationMark`: (`'?'` | `'!'`)?
+///  - `typeName`: ``TypeSyntax``
 public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -465,6 +483,10 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - AssignmentExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `assignToken`: `'='`
 public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -543,6 +565,11 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - AwaitExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `awaitKeyword`: `'await'`
+///  - `expression`: ``ExprSyntax``
 public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -659,6 +686,10 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - BinaryOperatorExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `operatorToken`: `<binaryOperator>`
 public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -737,6 +768,10 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - BooleanLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `booleanLiteral`: (`'true'` | `'false'`)
 public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -815,6 +850,11 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - BorrowExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `borrowKeyword`: `'_borrow'`
+///  - `expression`: ``ExprSyntax``
 public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -931,6 +971,14 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - CanImportExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `canImportKeyword`: `'canImport'`
+///  - `leftParen`: `'('`
+///  - `importPath`: `<identifier>`
+///  - `versionInfo`: ``CanImportVersionInfoSyntax``?
+///  - `rightParen`: `')'`
 public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1125,6 +1173,13 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - CanImportVersionInfoSyntax
 
 
+
+/// ### Children
+/// 
+///  - `comma`: `','`
+///  - `label`: (`'_version'` | `'_underlyingVersion'`)
+///  - `colon`: `':'`
+///  - `versionTuple`: ``VersionTupleSyntax``
 public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1293,6 +1348,13 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - ClosureExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftBrace`: `'{'`
+///  - `signature`: ``ClosureSignatureSyntax``?
+///  - `statements`: ``CodeBlockItemListSyntax``
+///  - `rightBrace`: `'}'`
 public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1485,6 +1547,11 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - CopyExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `copyKeyword`: `'copy'`
+///  - `expression`: ``ExprSyntax``
 public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1601,6 +1668,12 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - DictionaryExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftSquare`: `'['`
+///  - `content`: (`':'` | ``DictionaryElementListSyntax``)
+///  - `rightSquare`: `']'`
 public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public enum Content: SyntaxChildChoices {
     case `colon`(TokenSyntax)
@@ -1785,6 +1858,10 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - DiscardAssignmentExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `wildcard`: `'_'`
 public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1863,6 +1940,10 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - EditorPlaceholderExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `identifier`: `<identifier>`
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1941,6 +2022,10 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - FloatLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `floatingDigits`: `<floatingLiteral>`
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2019,6 +2104,11 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - ForcedValueExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `exclamationMark`: `'!'`
 public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2135,6 +2225,15 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - FunctionCallExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `calledExpression`: ``ExprSyntax``
+///  - `leftParen`: `'('`?
+///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `rightParen`: `')'`?
+///  - `trailingClosure`: ``ClosureExprSyntax``?
+///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2403,6 +2502,11 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - IdentifierExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `identifier`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>`)
+///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
 public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2519,6 +2623,14 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - IfExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `ifKeyword`: `'if'`
+///  - `conditions`: ``ConditionElementListSyntax``
+///  - `body`: ``CodeBlockSyntax``
+///  - `elseKeyword`: `'else'`?
+///  - `elseBody`: (``IfExprSyntax`` | ``CodeBlockSyntax``)?
 public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public enum ElseBody: SyntaxChildChoices {
     case `ifExpr`(IfExprSyntax)
@@ -2779,6 +2891,11 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - InOutExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `ampersand`: `'&'`
+///  - `expression`: ``ExprSyntax``
 public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2895,6 +3012,12 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - InfixOperatorExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftOperand`: ``ExprSyntax``
+///  - `operatorOperand`: ``ExprSyntax``
+///  - `rightOperand`: ``ExprSyntax``
 public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3037,6 +3160,10 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - IntegerLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `digits`: `<integerLiteral>`
 public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3121,6 +3248,12 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ```
 /// 
 /// This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
+///
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `isTok`: `'is'`
+///  - `typeName`: ``TypeSyntax``
 public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3266,6 +3399,12 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - KeyPathExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `backslash`: `'\'`
+///  - `root`: ``TypeSyntax``?
+///  - `components`: ``KeyPathComponentListSyntax``
 public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3432,6 +3571,17 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - MacroExpansionExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `poundToken`: `'#'`
+///  - `macro`: `<identifier>`
+///  - `genericArguments`: ``GenericArgumentClauseSyntax``?
+///  - `leftParen`: `'('`?
+///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `rightParen`: `')'`?
+///  - `trailingClosure`: ``ClosureExprSyntax``?
+///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
 public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3753,6 +3903,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - MemberAccessExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `base`: ``ExprSyntax``?
+///  - `dot`: `'.'`
+///  - `name`: ``TokenSyntax``
+///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
 public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3921,6 +4078,10 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - MissingExprSyntax
 
 /// In case the source code is missing a expression, this node stands in place of the missing expression.
+///
+/// ### Children
+/// 
+///  - `placeholder`: `<identifier>`
 public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4000,6 +4161,11 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - MoveExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `moveKeyword`: (`'_move'` | `'consume'`)
+///  - `expression`: ``ExprSyntax``
 public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4116,6 +4282,10 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - NilLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `nilKeyword`: `'nil'`
 public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4194,6 +4364,11 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - OptionalChainingExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `questionMark`: `'?'`
 public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4310,6 +4485,11 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - PackElementExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `eachKeyword`: `'each'`
+///  - `packRefExpr`: ``ExprSyntax``
 public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4426,6 +4606,11 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - PackExpansionExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `repeatKeyword`: `'repeat'`
+///  - `patternExpr`: ``ExprSyntax``
 public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4542,6 +4727,11 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - PostfixIfConfigExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `base`: ``ExprSyntax``?
+///  - `config`: ``IfConfigDeclSyntax``
 public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4658,6 +4848,11 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - PostfixUnaryExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `operatorToken`: `<postfixOperator>`
 public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4774,6 +4969,11 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - PrefixOperatorExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `operatorToken`: `<prefixOperator>`?
+///  - `postfixExpression`: ``ExprSyntax``
 public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4890,6 +5090,14 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - RegexLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `openingPounds`: `<extendedRegexDelimiter>`?
+///  - `openSlash`: `'/'`
+///  - `regexPattern`: `<regexLiteralPattern>`
+///  - `closeSlash`: `'/'`
+///  - `closingPounds`: `<extendedRegexDelimiter>`?
 public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5084,6 +5292,10 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - SequenceExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `elements`: ``ExprListSyntax``
 public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5186,6 +5398,11 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - SpecializeExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
+///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``
 public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5302,6 +5519,14 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - StringLiteralExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `openDelimiter`: `<rawStringDelimiter>`?
+///  - `openQuote`: (`'"'` | `'"""'` | `'''`)
+///  - `segments`: ``StringLiteralSegmentsSyntax``
+///  - `closeQuote`: (`'"'` | `'"""'` | `'''`)
+///  - `closeDelimiter`: `<rawStringDelimiter>`?
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5520,6 +5745,15 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - SubscriptExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `calledExpression`: ``ExprSyntax``
+///  - `leftBracket`: `'['`
+///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `rightBracket`: `']'`
+///  - `trailingClosure`: ``ClosureExprSyntax``?
+///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
 public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5788,6 +6022,10 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - SuperRefExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `superKeyword`: `'super'`
 public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5866,6 +6104,14 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - SwitchExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `switchKeyword`: `'switch'`
+///  - `expression`: ``ExprSyntax``
+///  - `leftBrace`: `'{'`
+///  - `cases`: ``SwitchCaseListSyntax``
+///  - `rightBrace`: `'}'`
 public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6084,6 +6330,14 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - TernaryExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `conditionExpression`: ``ExprSyntax``
+///  - `questionMark`: `'?'`
+///  - `firstChoice`: ``ExprSyntax``
+///  - `colonMark`: `':'`
+///  - `secondChoice`: ``ExprSyntax``
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6278,6 +6532,12 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - TryExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `tryKeyword`: `'try'`
+///  - `questionOrExclamationMark`: (`'?'` | `'!'`)?
+///  - `expression`: ``ExprSyntax``
 public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6420,6 +6680,12 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - TupleExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftParen`: `'('`
+///  - `elements`: ``TupleExprElementListSyntax``
+///  - `rightParen`: `')'`
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6586,6 +6852,10 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - TypeExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `type`: ``TypeSyntax``
 public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6664,6 +6934,11 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - UnresolvedAsExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `asTok`: `'as'`
+///  - `questionOrExclamationMark`: (`'?'` | `'!'`)?
 public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6780,6 +7055,10 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - UnresolvedIsExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `isTok`: `'is'`
 public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6858,6 +7137,10 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - UnresolvedPatternExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `pattern`: ``PatternSyntax``
 public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6936,6 +7219,12 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 // MARK: - UnresolvedTernaryExprSyntax
 
 
+
+/// ### Children
+/// 
+///  - `questionMark`: `'?'`
+///  - `firstChoice`: ``ExprSyntax``
+///  - `colonMark`: `':'`
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

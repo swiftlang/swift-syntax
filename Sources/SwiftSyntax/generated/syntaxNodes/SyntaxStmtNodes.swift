@@ -15,6 +15,11 @@
 // MARK: - BreakStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `breakKeyword`: `'break'`
+///  - `label`: `<identifier>`?
 public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -131,6 +136,11 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - ContinueStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `continueKeyword`: `'continue'`
+///  - `label`: `<identifier>`?
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -247,6 +257,11 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - DeferStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `deferKeyword`: `'defer'`
+///  - `body`: ``CodeBlockSyntax``
 public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -363,6 +378,11 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - DiscardStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `discardKeyword`: (`'_forget'` | `'discard'`)
+///  - `expression`: ``ExprSyntax``
 public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -479,6 +499,12 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - DoStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `doKeyword`: `'do'`
+///  - `body`: ``CodeBlockSyntax``
+///  - `catchClauses`: ``CatchClauseListSyntax``
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -645,6 +671,10 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - ExpressionStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
 public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -723,6 +753,10 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - FallthroughStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `fallthroughKeyword`: `'fallthrough'`
 public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -801,6 +835,19 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - ForInStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `forKeyword`: `'for'`
+///  - `tryKeyword`: `'try'`?
+///  - `awaitKeyword`: `'await'`?
+///  - `caseKeyword`: `'case'`?
+///  - `pattern`: ``PatternSyntax``
+///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
+///  - `inKeyword`: `'in'`
+///  - `sequenceExpr`: ``ExprSyntax``
+///  - `whereClause`: ``WhereClauseSyntax``?
+///  - `body`: ``CodeBlockSyntax``
 public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1125,6 +1172,13 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - GuardStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `guardKeyword`: `'guard'`
+///  - `conditions`: ``ConditionElementListSyntax``
+///  - `elseKeyword`: `'else'`
+///  - `body`: ``CodeBlockSyntax``
 public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1317,6 +1371,12 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - LabeledStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `labelName`: `<identifier>`
+///  - `labelColon`: `':'`
+///  - `statement`: ``StmtSyntax``
 public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1459,6 +1519,10 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - MissingStmtSyntax
 
 /// In case the source code is missing a statement, this node stands in place of the missing statement.
+///
+/// ### Children
+/// 
+///  - `placeholder`: `<identifier>`
 public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1538,6 +1602,13 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - RepeatWhileStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `repeatKeyword`: `'repeat'`
+///  - `body`: ``CodeBlockSyntax``
+///  - `whileKeyword`: `'while'`
+///  - `condition`: ``ExprSyntax``
 public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1706,6 +1777,11 @@ public struct RepeatWhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - ReturnStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `returnKeyword`: `'return'`
+///  - `expression`: ``ExprSyntax``?
 public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1822,6 +1898,11 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - ThrowStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `throwKeyword`: `'throw'`
+///  - `expression`: ``ExprSyntax``
 public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1938,6 +2019,12 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - WhileStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `whileKeyword`: `'while'`
+///  - `conditions`: ``ConditionElementListSyntax``
+///  - `body`: ``CodeBlockSyntax``
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2104,6 +2191,11 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 // MARK: - YieldStmtSyntax
 
 
+
+/// ### Children
+/// 
+///  - `yieldKeyword`: `'yield'`
+///  - `yields`: (``YieldListSyntax`` | ``ExprSyntax``)
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public enum Yields: SyntaxChildChoices {
     case `yieldList`(YieldListSyntax)

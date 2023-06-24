@@ -5,6 +5,12 @@ import SwiftSyntaxMacros
 struct ThePlugin: CompilerPlugin {
   var providingMacros: [Macro.Type] = [
     EchoExpressionMacro.self,
+    FuncUniqueMacro.self,
     MetadataMacro.self,
+    PeerValueWithSuffixNameMacro.self,
+    MemberDeprecatedMacro.self,
+    EquatableConformanceMacro.self,
+    DidSetPrintMacro.self,
+    PrintAnyMacro.self,
   ]
 }

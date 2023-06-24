@@ -11,10 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftSyntaxMacros
+import SwiftSyntaxMacroExpansion
 import _SwiftSyntaxTestSupport
 import XCTest
 

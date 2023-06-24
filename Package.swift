@@ -180,8 +180,15 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacroExpansion",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxMacros"],
+      dependencies: ["SwiftSyntax", "SwiftSyntaxMacros", "SwiftDiagnostics"],
       exclude: ["CMakeLists.txt"]
+    ),
+
+    .testTarget(
+      name: "SwiftSyntaxMacroExpansionTest",
+      dependencies: [
+        "SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftSyntaxMacroExpansion", "SwiftSyntaxBuilder",
+      ]
     ),
 
     // MARK: SwiftSyntaxMacrosTestSupport

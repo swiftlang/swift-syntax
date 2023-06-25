@@ -184,6 +184,10 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'WitnessMethodLabel' has a single keyword as its only token choice and should thus be named 'Witness_methodKeyword'"
         ),
         ValidationFailure(
+          node: .deinitEffectSpecifiers,
+          message: "child 'AsyncSpecifier' has a single keyword as its only token choice and should thus be named 'AsyncKeyword'"
+        ),
+        ValidationFailure(
           node: .derivativeRegistrationAttributeArguments,
           message: "child 'OfLabel' has a single keyword as its only token choice and should thus be named 'OfKeyword'"
         ),
@@ -198,10 +202,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .genericParameter,
           message: "child 'Each' has a single keyword as its only token choice and should thus be named 'EachKeyword'"
-        ),
-        ValidationFailure(
-          node: .importDecl,
-          message: "child 'ImportTok' has a single keyword as its only token choice and should thus be named 'ImportKeyword'"
         ),
         ValidationFailure(node: .isExpr, message: "child 'IsTok' has a single keyword as its only token choice and should thus be named 'IsKeyword'"),
         ValidationFailure(
@@ -242,10 +242,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(node: .unresolvedAsExpr, message: "child 'AsTok' has a single keyword as its only token choice and should thus be named 'AsKeyword'"),
         ValidationFailure(node: .unresolvedIsExpr, message: "child 'IsTok' has a single keyword as its only token choice and should thus be named 'IsKeyword'"),
-
-        // MARK:
-        ValidationFailure(node: .arrayExpr, message: "child 'LeftSquare' has a token as its only token choice and should thus be named 'LeftSquareBracket'"),
-        ValidationFailure(node: .arrayExpr, message: "child 'RightSquare' has a token as its only token choice and should thus be named 'RightSquareBracket'"),
         ValidationFailure(node: .arrowExpr, message: "child 'ArrowToken' has a token as its only token choice and should thus be named 'Arrow'"),
         ValidationFailure(node: .assignmentExpr, message: "child 'AssignToken' has a token as its only token choice and should thus be named 'Equal'"),
         ValidationFailure(node: .attribute, message: "child 'AtSignToken' has a token as its only token choice and should thus be named 'AtSign'"),
@@ -257,24 +253,8 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(node: .closureCaptureItem, message: "child 'AssignToken' has a token as its only token choice and should thus be named 'Equal'"),
         ValidationFailure(
-          node: .closureCaptureSignature,
-          message: "child 'LeftSquare' has a token as its only token choice and should thus be named 'LeftSquareBracket'"
-        ),
-        ValidationFailure(
-          node: .closureCaptureSignature,
-          message: "child 'RightSquare' has a token as its only token choice and should thus be named 'RightSquareBracket'"
-        ),
-        ValidationFailure(
           node: .designatedTypeElement,
           message: "child 'LeadingComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
-        ),
-        ValidationFailure(
-          node: .dictionaryExpr,
-          message: "child 'LeftSquare' has a token as its only token choice and should thus be named 'LeftSquareBracket'"
-        ),
-        ValidationFailure(
-          node: .dictionaryExpr,
-          message: "child 'RightSquare' has a token as its only token choice and should thus be named 'RightSquareBracket'"
         ),
         ValidationFailure(
           node: .differentiableAttributeArguments,
@@ -313,11 +293,11 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .integerLiteralExpr, message: "child 'Digits' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
         ValidationFailure(
           node: .keyPathSubscriptComponent,
-          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquareBracket'"
+          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquare'"
         ),
         ValidationFailure(
           node: .keyPathSubscriptComponent,
-          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquareBracket'"
+          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquare'"
         ),
         ValidationFailure(node: .labeledStmt, message: "child 'LabelColon' has a token as its only token choice and should thus be named 'Colon'"),
         ValidationFailure(node: .layoutRequirement, message: "child 'Size' has a token as its only token choice and should thus be named 'IntegerLiteral'"),
@@ -395,11 +375,11 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .stringSegment, message: "child 'Content' has a token as its only token choice and should thus be named 'StringSegment'"),
         ValidationFailure(
           node: .subscriptExpr,
-          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquareBracket'"
+          message: "child 'LeftBracket' has a token as its only token choice and should thus be named 'LeftSquare'"
         ),
         ValidationFailure(
           node: .subscriptExpr,
-          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquareBracket'"
+          message: "child 'RightBracket' has a token as its only token choice and should thus be named 'RightSquare'"
         ),
         ValidationFailure(
           node: .suppressedType,
@@ -500,10 +480,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .precedenceGroupAssociativity,
           message: "child 'Value' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(
-          node: .precedenceGroupRelation,
-          message: "child 'HigherThanOrLowerThan' only has keywords as its token choices and should thus and with 'Keyword'"
         ),
       ]
     )

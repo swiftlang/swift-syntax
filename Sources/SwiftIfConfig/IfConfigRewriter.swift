@@ -243,7 +243,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       // syntax node so clients can recover more gracefully.
       return ExprSyntax(
         MissingExprSyntax(
-          placeholder: .init(.identifier("_"), presence: .missing)
+          placeholder: .init(.identifier("<#expression#>"), presence: .missing)
         )
       )
     }

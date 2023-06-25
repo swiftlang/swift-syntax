@@ -215,7 +215,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       return dropInactive(outerBase: base, postfixIfConfig: postfixIfConfig)
     }
 
-    assert(false, "Unhandled postfix expression in #if elimination")
+    preconditionFailure("Unhandled postfix expression in #if elimination")
     return base
   }
 

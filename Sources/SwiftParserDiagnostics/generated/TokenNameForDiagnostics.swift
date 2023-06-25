@@ -17,8 +17,6 @@
 extension TokenKind {
   var nameForDiagnostics: String {
     switch self {
-    case .eof:
-      return "end of file"
     case .arrow:
       return #"->"#
     case .atSign:
@@ -113,6 +111,8 @@ extension TokenKind {
       return #"token"#
     case .wildcard:
       return #"wildcard"#
+    case .endOfFile:
+      return #"end of file"#
     case .keyword(let keyword):
       return String(syntaxText: keyword.defaultText)
     }

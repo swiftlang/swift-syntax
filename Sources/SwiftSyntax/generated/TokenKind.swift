@@ -14,7 +14,6 @@
 
 /// Enumerates the kinds of tokens in the Swift language.
 public enum TokenKind: Hashable {
-  case eof
   case arrow
   case atSign
   case backslash
@@ -63,6 +62,7 @@ public enum TokenKind: Hashable {
   case stringSegment(String)
   case unknown(String)
   case wildcard
+  case endOfFile
   
   /// The textual representation of this token kind.
   @_spi(Testing)
@@ -164,8 +164,8 @@ public enum TokenKind: Hashable {
       return text
     case .wildcard:
       return #"_"#
-    case .eof:
-      return ""
+    case .endOfFile:
+      return #""#
     }
   }
   
@@ -245,8 +245,8 @@ public enum TokenKind: Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
-    case .eof:
-      return ""
+    case .endOfFile:
+      return #""#
     default:
       return ""
     }
@@ -259,8 +259,6 @@ public enum TokenKind: Hashable {
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
-    case .eof:
-      return false
     case .arrow:
       return true
     case .atSign:
@@ -357,6 +355,8 @@ public enum TokenKind: Hashable {
       return false
     case .wildcard:
       return false
+    case .endOfFile:
+      return false
     }
   }
 }
@@ -364,8 +364,6 @@ public enum TokenKind: Hashable {
 extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
-    case (.eof, .eof):
-      return true
     case (.arrow, .arrow):
       return true
     case (.atSign, .atSign):
@@ -462,6 +460,8 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.wildcard, .wildcard):
       return true
+    case (.endOfFile, .endOfFile):
+      return true
     default:
       return false
     }
@@ -475,7 +475,6 @@ extension TokenKind: Equatable {
 @frozen // FIXME: Not actually stable, works around a miscompile
 @_spi(RawSyntax)
 public enum RawTokenKind: UInt8, Equatable, Hashable {
-  case eof
   case arrow
   case atSign
   case backslash
@@ -524,12 +523,11 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case stringSegment
   case unknown
   case wildcard
+  case endOfFile
   
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
     switch self {
-    case .eof:
-      return ""
     case .arrow:
       return #"->"#
     case .atSign:
@@ -600,6 +598,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
+    case .endOfFile:
+      return #""#
     default:
       return nil
     }
@@ -612,8 +612,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
-    case .eof:
-      return false
     case .arrow:
       return true
     case .atSign:
@@ -710,6 +708,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     case .wildcard:
       return false
+    case .endOfFile:
+      return false
     }
   }
 }
@@ -719,8 +719,6 @@ extension TokenKind {
   @_spi(RawSyntax)
   public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
     switch rawKind {
-    case .eof:
-      return .eof
     case .arrow:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .arrow
@@ -855,6 +853,9 @@ extension TokenKind {
     case .wildcard:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcard
+    case .endOfFile:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .endOfFile
     }
   }
   
@@ -863,8 +864,6 @@ extension TokenKind {
   @_spi(RawSyntax)
   public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
-    case .eof:
-      return (.eof, nil)
     case .arrow:
       return (.arrow, nil)
     case .atSign:
@@ -961,6 +960,8 @@ extension TokenKind {
       return (.unknown, str)
     case .wildcard:
       return (.wildcard, nil)
+    case .endOfFile:
+      return (.endOfFile, nil)
     }
   }
 }

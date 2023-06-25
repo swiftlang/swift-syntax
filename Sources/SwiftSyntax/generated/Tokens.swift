@@ -711,14 +711,15 @@ extension TokenSyntax {
     )
   }
   
-  public static func eof(
+  public static func endOfFileToken(
     leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return TokenSyntax(
-      .eof,
+      .endOfFile,
       leadingTrivia: leadingTrivia,
-      trailingTrivia: [],
+      trailingTrivia: trailingTrivia,
       presence: presence
       
     )

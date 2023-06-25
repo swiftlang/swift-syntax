@@ -15,10 +15,6 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension TokenSpec {
-  static var eof: TokenSpec {
-    return TokenSpec(.eof)
-  }
-  
   static var arrow: TokenSpec {
     return TokenSpec(.arrow)
   }
@@ -205,6 +201,10 @@ extension TokenSpec {
   
   static var wildcard: TokenSpec {
     return TokenSpec(.wildcard)
+  }
+  
+  static var endOfFile: TokenSpec {
+    return TokenSpec(.endOfFile)
   }
   
   static func keyword(_ keyword: Keyword) -> TokenSpec {

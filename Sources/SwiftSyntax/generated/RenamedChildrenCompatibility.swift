@@ -3446,7 +3446,7 @@ extension SourceFileSyntax {
       _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
       _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
-      eofToken: TokenSyntax = .eof(),
+      eofToken: TokenSyntax = .endOfFileToken(),
       _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     

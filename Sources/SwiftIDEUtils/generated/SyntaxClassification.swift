@@ -200,7 +200,7 @@ extension RawTokenKind {
       return .none
     case .wildcard:
       return .none
-    case .eof:
+    case .endOfFile:
       return .none
     }
   }

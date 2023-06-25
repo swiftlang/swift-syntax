@@ -9,7 +9,6 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-import SwiftSyntax
 
 /// Describes the ordering of a sequence of bytes that make up a word of
 /// storage for a particular architecture.
@@ -43,10 +42,9 @@ public enum CanImportVersion {
 /// Providing complete build configuration information effectively requires
 /// a Swift compiler, because (for example) determining whether a module can
 /// be imported is a complicated task only implemented in the Swift compiler.
-/// Therefore, many of the queries return `Bool?`, where `nil` indicates
-/// that the answer is not known. Clients that don't have a lot of context
-/// (such as an IDE that does not have access to the compiler command line)
-/// can return `nil`.
+/// Therefore, queries are permitted to throw an error to report when they
+/// cannot answer a query, in which case this error will be reported to
+/// the caller.
 public protocol BuildConfiguration {
   /// Determine whether a given custom build condition has been set.
   ///
@@ -54,7 +52,7 @@ public protocol BuildConfiguration {
   /// the Swift compiler. For example, `-DDEBUG` sets the custom condition
   /// named `DEBUG`, which could be checked with, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if DEBUG
   /// // ...
   /// #endif
@@ -63,10 +61,8 @@ public protocol BuildConfiguration {
   /// - Parameters:
   ///   - name: The name of the custom build condition being checked (e.g.,
   ///     `DEBUG`.
-  ///   - syntax: The syntax node for the name of the custom build
-  ///     configuration.
   /// - Returns: Whether the custom condition is set.
-  func isCustomConditionSet(name: String, syntax: ExprSyntax) -> Bool?
+  func isCustomConditionSet(name: String) throws -> Bool
 
   /// Determine whether the given feature is enabled.
   ///
@@ -74,7 +70,7 @@ public protocol BuildConfiguration {
   /// options such as `--enable-upcoming-feature`, and can be checked with
   /// the `hasFeature` syntax, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if hasFeature(VariadicGenerics)
   /// // ...
   /// #endif
@@ -82,16 +78,15 @@ public protocol BuildConfiguration {
   ///
   /// - Parameters:
   ///   - name: The name of the feature being checked.
-  ///   - syntax: The syntax node for the `hasFeature(<name>)`.
   /// - Returns: Whether the requested feature is available.
-  func hasFeature(name: String, syntax: ExprSyntax) -> Bool?
+  func hasFeature(name: String) throws -> Bool
 
   /// Determine whether the given attribute is available.
   ///
   /// Attributes are determined by the Swift compiler. They can be checked
   /// with `hasAttribute` syntax, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if hasAttribute(available)
   /// // ...
   /// #endif
@@ -99,9 +94,8 @@ public protocol BuildConfiguration {
   ///
   /// - Parameters:
   ///   - name: The name of the attribute being queried.
-  ///   - syntax: The syntax node for the `hasAttribute(<name>)`.
   /// - Returns: Whether the requested attribute is supported.
-  func hasAttribute(name: String, syntax: ExprSyntax) -> Bool?
+  func hasAttribute(name: String) throws -> Bool
 
   /// Determine whether a module with the given import path can be imported,
   /// with additional version information.
@@ -109,7 +103,7 @@ public protocol BuildConfiguration {
   /// The availability of a module for import can be checked with `canImport`,
   /// e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if canImport(UIKit)
   /// // ...
   /// #endif
@@ -126,80 +120,79 @@ public protocol BuildConfiguration {
   ///   - version: The version restriction on the imported module. For the
   ///     normal `canImport(<import-path>)` syntax, this will always be
   ///     `CanImportVersion.unversioned`.
-  ///   - syntax: The syntax node for the `canImport` expression.
   /// - Returns: Whether the module can be imported.
-  func canImport(importPath: [String], version: CanImportVersion, syntax: ExprSyntax) -> Bool?
+  func canImport(importPath: [String], version: CanImportVersion) throws -> Bool
 
   /// Determine whether the given name is the active target OS (e.g., Linux, iOS).
   ///
   /// The target operating system can be queried with `os(<name>)`, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if os(Linux)
   /// // Linux-specific implementation
   /// #endif
+  /// ```
   ///
   /// - Parameters:
   ///   - name: The name of the operating system being queried, such as `Linux`,
   ///   `Windows`, `macOS`, etc.
-  ///   - syntax: The syntax node for the `os(<name>)` expression.
   /// - Returns: Whether the given operating system name is the target operating
   ///   system, i.e., the operating system for which code is being generated.
-  func isActiveTargetOS(name: String, syntax: ExprSyntax) -> Bool?
+  func isActiveTargetOS(name: String) throws -> Bool
 
   /// Determine whether the given name is the active target architecture
   /// (e.g., x86_64, arm64).
   ///
   /// The target processor architecture can be queried with `arch(<name>)`, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if arch(x86_64)
   /// // 64-bit x86 Intel-specific code
   /// #endif
+  /// ```
   ///
   /// - Parameters:
   ///   - name: The name of the target architecture to check.
-  ///   - syntax: The syntax node for the `arch(<name>)` expression.
   /// - Returns: Whether the given processor architecture is the target
   ///   architecture.
-  func isActiveTargetArchitecture(name: String, syntax: ExprSyntax) -> Bool?
+  func isActiveTargetArchitecture(name: String) throws -> Bool
 
   /// Determine whether the given name is the active target environment (e.g., simulator)
   ///
   /// The target environment can be queried with `targetEnvironment(<name>)`,
   /// e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if targetEnvironment(simulator)
   /// // Simulator-specific code
   /// #endif
+  /// ```
   ///
   /// - Parameters:
   ///   - name: The name of the target environment to check.
-  ///   - syntax: The syntax node for the `targetEnvironment(<name>)`
-  ///     expression.
   /// - Returns: Whether the target platform is for a specific environment,
   ///   such as a simulator or emulator.
-  func isActiveTargetEnvironment(name: String, syntax: ExprSyntax) -> Bool?
+  func isActiveTargetEnvironment(name: String) throws -> Bool
 
   /// Determine whether the given name is the active target runtime (e.g., _ObjC vs. _Native)
   ///
   /// The target runtime can only be queried by an experimental syntax
   /// `_runtime(<name>)`, e.g.,
   ///
+  /// ```swift
   /// #if _runtime(_ObjC)
   /// // Code that depends on Swift being built for use with the Objective-C
   /// // runtime, e.g., on Apple platforms.
   /// #endif
+  /// ```
   ///
   /// The only other runtime is "none", when Swift isn't tying into any other
   /// specific runtime.
   ///
   /// - Parameters:
   ///   - name: The name of the runtime.
-  ///   - syntax: The syntax node for the `_runtime(<name>)` expression.
   /// - Returns: Whether the target runtime matches the given name.
-  func isActiveTargetRuntime(name: String, syntax: ExprSyntax) -> Bool?
+  func isActiveTargetRuntime(name: String) throws -> Bool
 
   /// Determine whether the given name is the active target pointer authentication scheme (e.g., arm64e).
   ///
@@ -207,17 +200,16 @@ public protocol BuildConfiguration {
   /// signed, as a security mitigation. This scheme can only be queried by
   /// an experimental syntax `_ptrath(<name>)`, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if _ptrauth(arm64e)
   /// // Special logic for arm64e pointer signing
   /// #endif
-  ///
+  /// ```
   /// - Parameters:
   ///   - name: The name of the pointer authentication scheme to check.
-  ///   - syntax: The syntax node for the `_ptrauth(<name>)` expression.
   /// - Returns: Whether the code generated for the target will use the given
   /// pointer authentication scheme.
-  func isActiveTargetPointerAuthentication(name: String, syntax: ExprSyntax) -> Bool?
+  func isActiveTargetPointerAuthentication(name: String) throws -> Bool
 
   /// The bit width of a data pointer for the target architecture.
   ///
@@ -225,21 +217,24 @@ public protocol BuildConfiguration {
   /// bits in `Int`/`UInt`) can only be queried with the experimental syntax
   /// `_pointerBitWidth(_<bitwidth>)`, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if _pointerBitWidth(32)
   /// // 32-bit system
   /// #endif
-  var targetPointerBitWidth: Int? { get }
+  /// ```
+  var targetPointerBitWidth: Int { get }
 
   /// The endianness of the target architecture.
   ///
   /// The target's endianness can onyl be queried with the experimental syntax
   /// `_endian(<name>)`, where `<name>` can be either "big" or "little", e.g.,
   ///
+  /// ```swift
   /// #if _endian(little)
   /// // Swap some bytes around for network byte order
   /// #endif
-  var endianness: Endianness? { get }
+  /// ```
+  var endianness: Endianness { get }
 
   /// The effective language version, which can be set by the user (e.g., 5.0).
   ///
@@ -247,11 +242,11 @@ public protocol BuildConfiguration {
   /// how the supported language version compares, as described by
   /// [SE-0212](https://github.com/apple/swift-evolution/blob/main/proposals/0212-compiler-version-directive.md). For example:
   ///
-  /// ```
+  /// ```swift
   /// #if swift(>=5.5)
   /// // Hooray, we can use tasks!
   /// ```
-  var languageVersion: VersionTuple? { get }
+  var languageVersion: VersionTuple { get }
 
   /// The version of the compiler (e.g., 5.9).
   ///
@@ -259,9 +254,9 @@ public protocol BuildConfiguration {
   /// checks the specific version of the compiler being used to process the
   /// code, e.g.,
   ///
-  /// ```
+  /// ```swift
   /// #if compiler(>=5.7)
   /// // Hoorway, we can implicitly open existentials!
   /// #endif
-  var compilerVersion: VersionTuple? { get }
+  var compilerVersion: VersionTuple { get }
 }

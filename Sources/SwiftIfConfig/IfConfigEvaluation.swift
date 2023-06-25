@@ -14,8 +14,8 @@ import SwiftOperators
 
 enum IfConfigError: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
-  case unhandledCustomCondition(name: String, syntax: TokenSyntax)
   case unhandledFunction(name: String, syntax: ExprSyntax)
+  case requiresUnlabeledArgument(name: String, role: String)
   case unsupportedVersionOperator(name: String, operator: TokenSyntax)
   case invalidVersionOperand(name: String, syntax: ExprSyntax)
   case emptyVersionComponent(syntax: ExprSyntax)
@@ -31,11 +31,11 @@ enum IfConfigError: Error, CustomStringConvertible {
     case .unknownExpression:
       return "invalid conditional compilation expression"
 
-    case .unhandledCustomCondition(name: let name, syntax: _):
-      return "build configuration cannot handle custom condition '\(name)'"
-
     case .unhandledFunction(name: let name, syntax: _):
       return "build configuration cannot handle '\(name)'"
+
+    case .requiresUnlabeledArgument(name: let name, role: let role):
+      return "\(name) requires a single unlabeled argument for the \(role)"
 
     case .unsupportedVersionOperator(name: let name, operator: let op):
       return "'\(name)' version check does not support operator '\(op.trimmedDescription)'"
@@ -191,10 +191,7 @@ private func evaluateIfConfig(
     let ident = identExpr.identifier.text
 
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
-    guard let result = configuration.isCustomConditionSet(name: ident, syntax: ExprSyntax(identExpr)) else {
-      throw IfConfigError.unhandledCustomCondition(name: ident, syntax: identExpr.identifier)
-    }
-    return result
+    return try configuration.isCustomConditionSet(name: ident)
   }
 
   // Logical '!'.
@@ -236,36 +233,31 @@ private func evaluateIfConfig(
     let fn = IfConfigFunctions(rawValue: fnName)
   {
     /// Perform a check for an operation that takes a single identifier argument.
-    func doSingleIdentifierArgumentCheck(_ body: (String, ExprSyntax) -> Bool?) throws -> Bool? {
+    func doSingleIdentifierArgumentCheck(_ body: (String) throws -> Bool, role: String) throws -> Bool {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr
-      else { return nil }
-
-      guard let result = body(arg, ExprSyntax(argExpr)) else {
-        throw IfConfigError.unhandledFunction(name: fnName, syntax: ExprSyntax(call))
+      else {
+        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: role)
       }
 
-      return result
+      return try body(arg)
     }
 
     /// Perform a check for a version constraint as used in the "swift" or "compiler" version checks.
-    func doVersionComparisonCheck(_ actualVersion: VersionTuple?) throws -> Bool? {
+    func doVersionComparisonCheck(_ actualVersion: VersionTuple) throws -> Bool {
       // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
       // operator applied to a version.
       guard let argExpr = call.argumentList.singleUnlabeledExpression,
         let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
         let opToken = unaryArg.operatorToken
       else {
-        return nil
+        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "version comparison (>= or <= a version)")
       }
 
+      // Parse the version.
       guard let version = VersionTuple(parsing: unaryArg.postfixExpression.trimmedDescription) else {
         throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.postfixExpression)
-      }
-
-      guard let actualVersion else {
-        throw IfConfigError.unhandledFunction(name: fnName, syntax: argExpr)
       }
 
       switch opToken.text {
@@ -278,28 +270,27 @@ private func evaluateIfConfig(
       }
     }
 
-    let result: Bool?
     switch fn {
     case .hasAttribute:
-      result = try doSingleIdentifierArgumentCheck(configuration.hasAttribute)
+      return try doSingleIdentifierArgumentCheck(configuration.hasAttribute, role: "attribute")
 
     case .hasFeature:
-      result = try doSingleIdentifierArgumentCheck(configuration.hasFeature)
+      return try doSingleIdentifierArgumentCheck(configuration.hasFeature, role: "feature")
 
     case .os:
-      result = try doSingleIdentifierArgumentCheck(configuration.isActiveTargetOS)
+      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetOS, role: "operating system")
 
     case .arch:
-      result = try doSingleIdentifierArgumentCheck(configuration.isActiveTargetArchitecture)
+      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetArchitecture, role: "architecture")
 
     case .targetEnvironment:
-      result = try doSingleIdentifierArgumentCheck(configuration.isActiveTargetEnvironment)
+      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetEnvironment, role: "environment")
 
     case ._runtime:
-      result = try doSingleIdentifierArgumentCheck(configuration.isActiveTargetRuntime)
+      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetRuntime, role: "runtime")
 
     case ._ptrauth:
-      result = try doSingleIdentifierArgumentCheck(configuration.isActiveTargetPointerAuthentication)
+      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetPointerAuthentication, role: "pointer authentication scheme")
 
     case ._endian:
       // Ensure that we have a single argument that is a simple identifier,
@@ -308,18 +299,10 @@ private func evaluateIfConfig(
         let arg = argExpr.simpleIdentifierExpr,
         let expectedEndianness = Endianness(rawValue: arg)
       else {
-        // FIXME: Custom error message when the endianness doesn't match any
-        // case.
-        result = nil
-        break
+        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "endiannes ('big' or 'little')")
       }
 
-      // If the build configuration doesn't know the endianness, fail.
-      guard let targetEndianness = configuration.endianness else {
-        throw IfConfigError.unhandledFunction(name: fnName, syntax: ExprSyntax(call))
-      }
-
-      result = targetEndianness == expectedEndianness
+      return configuration.endianness == expectedEndianness
 
     case ._pointerBitWidth:
       // Ensure that we have a single argument that is a simple identifier, which
@@ -330,22 +313,16 @@ private func evaluateIfConfig(
         argFirst == "_",
         let expectedPointerBitWidth = Int(arg.dropFirst())
       else {
-        result = nil
-        break
+        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "pointer bit with ('_' followed by an integer)")
       }
 
-      // If the build configuration doesn't know the pointer bit width, fail.
-      guard let targetPointerBitWidth = configuration.targetPointerBitWidth else {
-        throw IfConfigError.unhandledFunction(name: fnName, syntax: ExprSyntax(call))
-      }
-
-      result = targetPointerBitWidth == expectedPointerBitWidth
+      return configuration.targetPointerBitWidth == expectedPointerBitWidth
 
     case .swift:
-      result = try doVersionComparisonCheck(configuration.languageVersion)
+      return try doVersionComparisonCheck(configuration.languageVersion)
 
     case .compiler:
-      result = try doVersionComparisonCheck(configuration.compilerVersion)
+      return try doVersionComparisonCheck(configuration.compilerVersion)
 
     case ._compiler_version:
       // Argument is a single unlabeled argument containing a string
@@ -363,11 +340,7 @@ private func evaluateIfConfig(
       let versionString = stringSegment.content.text
       let expectedVersion = try VersionTuple(parsingCompilerBuildVersion: versionString, argExpr)
 
-      guard let actualVersion = configuration.compilerVersion else {
-        throw IfConfigError.unhandledFunction(name: fnName, syntax: argExpr)
-      }
-
-      return actualVersion >= expectedVersion
+      return configuration.compilerVersion >= expectedVersion
 
     case .canImport:
       // Retrieve the first argument, which must not have a label. This is
@@ -421,17 +394,11 @@ private func evaluateIfConfig(
         version = .unversioned
       }
 
-      result = configuration.canImport(
+      return try configuration.canImport(
         importPath: importPath.map { String($0) },
-        version: version,
-        syntax: ExprSyntax(call)
+        version: version
       )
     }
-
-    // If we found a result, return it.
-    if let result { return result }
-
-    // Otherwise, fall through to diagnose the error
   }
 
   throw IfConfigError.unknownExpression(condition)

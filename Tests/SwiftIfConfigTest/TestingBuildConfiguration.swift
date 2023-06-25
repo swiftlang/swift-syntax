@@ -18,23 +18,22 @@ struct TestingBuildConfiguration: BuildConfiguration {
   var features: Set<String> = []
   var attributes: Set<String> = []
 
-  func isCustomConditionSet(name: String, syntax: ExprSyntax) -> Bool? {
+  func isCustomConditionSet(name: String) -> Bool {
     customConditions.contains(name)
   }
 
-  func hasFeature(name: String, syntax: ExprSyntax) -> Bool? {
+  func hasFeature(name: String) -> Bool {
     features.contains(name)
   }
 
-  func hasAttribute(name: String, syntax: ExprSyntax) -> Bool? {
+  func hasAttribute(name: String) -> Bool {
     attributes.contains(name)
   }
 
   func canImport(
     importPath: [String],
-    version: CanImportVersion,
-    syntax: ExprSyntax
-  ) -> Bool? {
+    version: CanImportVersion
+  ) -> Bool {
     guard let moduleName = importPath.first else {
       return false
     }
@@ -53,31 +52,31 @@ struct TestingBuildConfiguration: BuildConfiguration {
     }
   }
 
-  func isActiveTargetOS(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
+  func isActiveTargetOS(name: String) -> Bool {
     name == platformName
   }
 
-  func isActiveTargetArchitecture(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
+  func isActiveTargetArchitecture(name: String) -> Bool {
     name == "arm64"
   }
 
-  func isActiveTargetEnvironment(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
+  func isActiveTargetEnvironment(name: String) -> Bool {
     name == "simulator"
   }
 
-  func isActiveTargetRuntime(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
+  func isActiveTargetRuntime(name: String) -> Bool {
     name == "_Native"
   }
 
-  func isActiveTargetPointerAuthentication(name: String, syntax: SwiftSyntax.ExprSyntax) -> Bool? {
+  func isActiveTargetPointerAuthentication(name: String) -> Bool {
     name == "arm64e"
   }
 
-  var targetPointerBitWidth: Int? { 64 }
+  var targetPointerBitWidth: Int { 64 }
 
-  var endianness: SwiftIfConfig.Endianness? { .little }
+  var endianness: SwiftIfConfig.Endianness { .little }
 
-  var languageVersion: VersionTuple? { VersionTuple(5, 5) }
+  var languageVersion: VersionTuple { VersionTuple(5, 5) }
 
-  var compilerVersion: VersionTuple? { VersionTuple(5, 9, 1) }
+  var compilerVersion: VersionTuple { VersionTuple(5, 9, 1) }
 }

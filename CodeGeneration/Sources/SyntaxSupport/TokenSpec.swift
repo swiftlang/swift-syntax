@@ -222,10 +222,9 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
   MiscSpec(name: "Unknown", kind: "unknown", nameForDiagnostics: "token"),
   MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
+  MiscSpec(name: "EndOfFile", kind: "eof", nameForDiagnostics: "end of file", text: "")
 ]
 
-// FIXME: Generate the EOF token as part of the normal SYNTAX_TOKENS and remove the special handling for it.
 public let SYNTAX_TOKEN_MAP = Dictionary(
-  uniqueKeysWithValues: (SYNTAX_TOKENS + [MiscSpec(name: "EOF", kind: "eof", nameForDiagnostics: "end of file", text: "")])
-    .map { ("\($0.name)Token", $0) }
+  uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) }
 )

@@ -68,8 +68,6 @@ public struct SyntaxBuildableType: Hashable {
       } else if token.text != nil {
         return ExprSyntax(".\(raw: lowercaseFirstWord(name: token.name))Token()")
       }
-    } else if case .token("EOFToken") = kind {
-      return ExprSyntax(".eof()")
     }
     return nil
   }

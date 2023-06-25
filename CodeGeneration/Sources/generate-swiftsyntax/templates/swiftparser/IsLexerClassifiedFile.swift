@@ -58,10 +58,6 @@ let isLexerClassifiedFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return false")
-        }
-
         for token in SYNTAX_TOKENS where token.isKeyword {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             StmtSyntax("return true")

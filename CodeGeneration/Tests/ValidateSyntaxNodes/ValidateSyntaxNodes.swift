@@ -236,6 +236,8 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'ExtendedRegexDelimiter'"
             // There are the opening and closing ExtendedRegexDelimiter in the node
         ),
+        // We should explicitly mention token here because it’s not obvious that the end of a file is represented by a token
+        ValidationFailure(node: .sourceFile, message: "child 'EndOfFileToken' has a token as its only token choice and should thus be named 'EndOfFile'"),
         ValidationFailure(
           node: .stringLiteralExpr,
           message: "child 'OpenDelimiter' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
@@ -281,11 +283,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .importPathComponent,
           message: "child 'TrailingPeriod' has a token as its only token choice and should thus be named 'Period'"
-        ),
-        // We should explicitly mention token here because it’s not obvious that the end of a file is represented by a token
-        ValidationFailure(
-          node: .sourceFile,
-          message: "child 'EndOfFileToken' has a token as its only token choice and should thus be named 'EOF'"
         ),
         // `~` is the only operator that’s allowed here
         ValidationFailure(

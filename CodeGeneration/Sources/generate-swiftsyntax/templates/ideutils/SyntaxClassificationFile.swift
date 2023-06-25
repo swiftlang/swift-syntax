@@ -77,12 +77,9 @@ let syntaxClassificationFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
             if let classification = token.classification {
               StmtSyntax("return .\(raw: classification.swiftName)")
             } else {
-              StmtSyntax("return .none)")
+              StmtSyntax("return .none")
             }
           }
-        }
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return .none")
         }
       }
     }

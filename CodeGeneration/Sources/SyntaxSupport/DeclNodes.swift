@@ -2033,7 +2033,7 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // source-file = code-block-item-list eof
+  // source-file = code-block-item-list endOfFile
   Node(
     kind: .sourceFile,
     base: .syntax,
@@ -2048,7 +2048,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "EndOfFileToken",
         deprecatedName: "EOFToken",
-        kind: .token(choices: [.token(tokenKind: "EOFToken")])
+        kind: .token(choices: [.token(tokenKind: "EndOfFileToken")])
       ),
     ]
   ),

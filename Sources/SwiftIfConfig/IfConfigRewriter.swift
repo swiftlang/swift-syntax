@@ -216,7 +216,6 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     }
 
     preconditionFailure("Unhandled postfix expression in #if elimination")
-    return base
   }
 
   /// Drop inactive regions from a postfix `#if` configuration, applying the
@@ -228,7 +227,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     // Determine the active clause within this syntax node.
     // TODO: Swallows errors
     guard let activeClause = try? postfixIfConfig.config.activeClause(in: configuration),
-      case .`postfixExpression`(let postfixExpr) = activeClause.elements
+      case .postfixExpression(let postfixExpr) = activeClause.elements
     else {
       // If there is no active clause, return the base.
 

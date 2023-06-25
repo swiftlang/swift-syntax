@@ -14,7 +14,7 @@
 
 /// Enumerates the kinds of tokens in the Swift language.
 public enum TokenKind: Hashable {
-  case eof
+  case endOfFile
   case arrow
   case atSign
   case backslash
@@ -164,7 +164,7 @@ public enum TokenKind: Hashable {
       return text
     case .wildcard:
       return #"_"#
-    case .eof:
+    case .endOfFile:
       return ""
     }
   }
@@ -245,7 +245,7 @@ public enum TokenKind: Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
-    case .eof:
+    case .endOfFile:
       return ""
     default:
       return ""
@@ -259,7 +259,7 @@ public enum TokenKind: Hashable {
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
-    case .eof:
+    case .endOfFile:
       return false
     case .arrow:
       return true
@@ -364,7 +364,7 @@ public enum TokenKind: Hashable {
 extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
-    case (.eof, .eof):
+    case (.endOfFile, .endOfFile):
       return true
     case (.arrow, .arrow):
       return true
@@ -720,7 +720,7 @@ extension TokenKind {
   public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
     switch rawKind {
     case .eof:
-      return .eof
+      return .endOfFile
     case .arrow:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .arrow
@@ -863,7 +863,7 @@ extension TokenKind {
   @_spi(RawSyntax)
   public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
-    case .eof:
+    case .endOfFile:
       return (.eof, nil)
     case .arrow:
       return (.arrow, nil)

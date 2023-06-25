@@ -17,7 +17,7 @@
 extension TokenKind {
   var nameForDiagnostics: String {
     switch self {
-    case .eof:
+    case .endOfFile:
       return "end of file"
     case .arrow:
       return #"->"#

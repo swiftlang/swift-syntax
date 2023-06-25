@@ -16327,7 +16327,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
       _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
-      eofToken: TokenSyntax = .eof(),
+      eofToken: TokenSyntax = .endOfFile(),
       _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     

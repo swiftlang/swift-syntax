@@ -208,7 +208,7 @@ open class BasicFormat: SyntaxRewriter {
       (.backslash, _),
       (.backtick, _),
       (.dollarIdentifier, .period),  // a.b
-      (.eof, _),
+      (.endOfFile, _),
       (.exclamationMark, .leftParen),  // myOptionalClosure!()
       (.exclamationMark, .period),  // myOptionalBar!.foo()
       (.extendedRegexDelimiter, .leftParen),  // opening extended regex delimiter should never be separate by a space
@@ -254,7 +254,7 @@ open class BasicFormat: SyntaxRewriter {
       (.stringSegment, _),
       (_, .comma),
       (_, .ellipsis),
-      (_, .eof),
+      (_, .endOfFile),
       (_, .exclamationMark),
       (_, .postfixOperator),
       (_, .postfixQuestionMark),

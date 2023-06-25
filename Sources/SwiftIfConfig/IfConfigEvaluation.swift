@@ -470,22 +470,15 @@ extension SyntaxProtocol {
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
   public func isActive(in configuration: some BuildConfiguration) throws -> Bool {
     var currentNode: Syntax = Syntax(self)
-    var currentClause = currentNode.as(IfConfigClauseSyntax.self)
-
     while let parent = currentNode.parent {
       // If the parent is an `#if` configuration, check whether our current
       // clause is active. If not, we're in an inactive region.
-      if let parentIfConfig = parent.as(IfConfigDeclSyntax.self) {
-        if try currentClause != nil && parentIfConfig.activeClause(in: configuration) != currentClause {
+      if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
+        let ifConfigDecl = ifConfigClause.parent?.as(IfConfigDeclSyntax.self)
+      {
+        if try ifConfigDecl.activeClause(in: configuration) != ifConfigClause {
           return false
         }
-
-        currentClause = nil
-      }
-
-      // If the parent node is an if configuration clause, store it.
-      if let parentClause = parent.as(IfConfigClauseSyntax.self) {
-        currentClause = parentClause
       }
 
       currentNode = parent

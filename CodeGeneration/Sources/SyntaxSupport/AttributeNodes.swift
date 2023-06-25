@@ -70,12 +70,12 @@ public let ATTRIBUTE_NODES: [Node] = [
             kind: .node(kind: .stringLiteralExpr)
           ),
           Child(
-            name: "Availability",
-            kind: .node(kind: .availabilitySpecList)
+            name: "AvailabilityArguments",
+            kind: .node(kind: .availabilityArgumentList)
           ),
           Child(
             name: "SpecializeArguments",
-            kind: .node(kind: .specializeAttributeSpecList)
+            kind: .node(kind: .specializeAttributeArgumentList)
           ),
           Child(
             name: "ObjCName",
@@ -95,7 +95,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "BackDeployedArguments",
-            kind: .node(kind: .backDeployedAttributeSpecList)
+            kind: .node(kind: .backDeployedAttributeArgumentList)
           ),
           Child(
             name: "ConventionArguments",
@@ -170,7 +170,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "AvailabilityArguments",
         deprecatedName: "AvailabilityList",
-        kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument", deprecatedCollectionElementName: "Availability")
+        kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument", deprecatedCollectionElementName: "Availability")
       ),
       Child(
         name: "Semicolon",
@@ -213,7 +213,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   // The arguments of '@backDeployed(...)'
   // back-deployed-attr-spec-list -> 'before' ':' back-deployed-version-list
   Node(
-    kind: .backDeployedAttributeSpecList,
+    kind: .backDeployedAttributeArgumentList,
     base: .syntax,
     nameForDiagnostics: "'@backDeployed' arguments",
     documentation: "A collection of arguments for the `@backDeployed` attribute",
@@ -821,7 +821,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   //                            | generic-where-clause
   //                                  specialize-spec-attr-list?
   Node(
-    kind: .specializeAttributeSpecList,
+    kind: .specializeAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "argument to '@_specialize",
     documentation: "A collection of arguments for the `@_specialize` attribute",

@@ -19,7 +19,7 @@ extension Parser {
   /// =======
   ///
   ///     availability-arguments → availability-argument | availability-argument , availability-arguments
-  mutating func parseAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilityArgumentList() -> RawAvailabilityArgumentListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -29,7 +29,7 @@ extension Parser {
         if self.at(.identifier) {
           entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
         } else {
-          entry = self.parseAvailabilitySpec()
+          entry = self.parseAvailabilityArgument()
         }
 
         let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
@@ -51,7 +51,7 @@ extension Parser {
       } while keepGoing != nil && availablityArgumentProgress.evaluate(currentToken)
     }
 
-    return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
   }
 
   enum AvailabilityArgumentKind: TokenSpecSet {
@@ -95,7 +95,7 @@ extension Parser {
     }
   }
 
-  mutating func parseAvailabilityArgumentSpecList() -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilityArguments() -> RawAvailabilityArgumentListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
 
@@ -155,14 +155,14 @@ extension Parser {
         // 'labeled' argument part optional?
         entry = .token(argument)
       case (.star, _)?:
-        entry = self.parseAvailabilitySpec()
+        entry = self.parseAvailabilityArgument()
       case (.identifier, let handle)?:
         if self.peek().rawTokenKind == .comma {
           // An argument like `_iOS13Aligned` that isn't followed by a version.
           let version = self.eat(handle)
           entry = .token(version)
         } else {
-          entry = self.parseAvailabilitySpec()
+          entry = self.parseAvailabilityArgument()
         }
       case nil:
         break LOOP
@@ -177,7 +177,7 @@ extension Parser {
         )
       )
     } while keepGoing != nil && loopProgressCondition.evaluate(currentToken)
-    return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
   }
 
   /// Parse an availability argument.
@@ -187,7 +187,7 @@ extension Parser {
   ///
   ///     availability-argument → platform-name platform-version
   ///     availability-argument → *
-  mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Entry {
+  mutating func parseAvailabilityArgument() -> RawAvailabilityArgumentSyntax.Entry {
     if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.

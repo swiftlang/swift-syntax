@@ -99,7 +99,7 @@ public let AVAILABILITY_NODES: [Node] = [
 
   // availability-spec-list -> availability-entry availability-spec-list?
   Node(
-    kind: .availabilitySpecList,
+    kind: .availabilityArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "'@availability' arguments",
     elementChoices: [.availabilityArgument]

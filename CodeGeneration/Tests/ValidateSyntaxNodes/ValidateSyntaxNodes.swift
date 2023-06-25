@@ -167,7 +167,7 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'Label' has a single keyword as its only token choice and should thus be named 'AvailabilityKeyword'"
         ),
         ValidationFailure(
-          node: .backDeployedAttributeSpecList,
+          node: .backDeployedAttributeArgumentList,
           message: "child 'BeforeLabel' has a single keyword as its only token choice and should thus be named 'BeforeKeyword'"
         ),
         ValidationFailure(

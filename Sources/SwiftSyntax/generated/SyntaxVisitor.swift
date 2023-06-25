@@ -262,6 +262,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AttributedTypeSyntax) {
   }
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AvailabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``AvailabilityArgumentListSyntax`` and its descendents.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AvailabilityArgumentListSyntax) {
+  }
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -308,18 +320,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
-  }
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilitySpecListSyntax`` and its descendents.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilitySpecListSyntax) {
   }
   
   /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
@@ -370,16 +370,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AwaitExprSyntax) {
   }
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: BackDeployedAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BackDeployedAttributeSpecListSyntax`` and its descendents.
+  /// The function called after visiting ``BackDeployedAttributeArgumentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
+  open func visitPost(_ node: BackDeployedAttributeArgumentListSyntax) {
   }
   
   /// Visiting ``BinaryOperatorExprSyntax`` specifically.
@@ -2734,16 +2734,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SourceFileSyntax) {
   }
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: SpecializeAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SpecializeAttributeSpecListSyntax`` and its descendents.
+  /// The function called after visiting ``SpecializeAttributeArgumentListSyntax`` and its descendents.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
+  open func visitPost(_ node: SpecializeAttributeArgumentListSyntax) {
   }
   
   /// Visiting ``SpecializeExprSyntax`` specifically.
@@ -3592,6 +3592,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityArgumentListSyntax(_ data: SyntaxData) {
+    let node = AvailabilityArgumentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) {
     let node = AvailabilityArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3627,17 +3638,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) {
     let node = AvailabilityLabeledArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) {
-    let node = AvailabilitySpecListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3691,8 +3691,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = BackDeployedAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeArgumentListSyntax(_ data: SyntaxData) {
+    let node = BackDeployedAttributeArgumentListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5858,8 +5858,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = SpecializeAttributeSpecListSyntax(data)
+  private func visitImplSpecializeAttributeArgumentListSyntax(_ data: SyntaxData) {
+    let node = SpecializeAttributeArgumentListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6485,6 +6485,8 @@ open class SyntaxVisitor {
       visitImplAttributeSyntax(data)
     case .attributedType:
       visitImplAttributedTypeSyntax(data)
+    case .availabilityArgumentList:
+      visitImplAvailabilityArgumentListSyntax(data)
     case .availabilityArgument:
       visitImplAvailabilityArgumentSyntax(data)
     case .availabilityCondition:
@@ -6493,8 +6495,6 @@ open class SyntaxVisitor {
       visitImplAvailabilityEntrySyntax(data)
     case .availabilityLabeledArgument:
       visitImplAvailabilityLabeledArgumentSyntax(data)
-    case .availabilitySpecList:
-      visitImplAvailabilitySpecListSyntax(data)
     case .availabilityVersionRestrictionListEntry:
       visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
     case .availabilityVersionRestrictionList:
@@ -6503,8 +6503,8 @@ open class SyntaxVisitor {
       visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr:
       visitImplAwaitExprSyntax(data)
-    case .backDeployedAttributeSpecList:
-      visitImplBackDeployedAttributeSpecListSyntax(data)
+    case .backDeployedAttributeArgumentList:
+      visitImplBackDeployedAttributeArgumentListSyntax(data)
     case .binaryOperatorExpr:
       visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr:
@@ -6897,8 +6897,8 @@ open class SyntaxVisitor {
       visitImplSimpleTypeIdentifierSyntax(data)
     case .sourceFile:
       visitImplSourceFileSyntax(data)
-    case .specializeAttributeSpecList:
-      visitImplSpecializeAttributeSpecListSyntax(data)
+    case .specializeAttributeArgumentList:
+      visitImplSpecializeAttributeArgumentListSyntax(data)
     case .specializeExpr:
       visitImplSpecializeExprSyntax(data)
     case .stringLiteralExpr:

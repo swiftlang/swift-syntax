@@ -114,6 +114,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AttributedTypeSyntax) -> ResultType
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AvailabilityArgumentListSyntax) -> ResultType
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -133,11 +138,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilitySpecListSyntax) -> ResultType
   
   /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -159,10 +159,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AwaitExprSyntax) -> ResultType
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType
+  func visit(_ node: BackDeployedAttributeArgumentListSyntax) -> ResultType
   
   /// Visiting ``BinaryOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1144,10 +1144,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SourceFileSyntax) -> ResultType
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType
+  func visit(_ node: SpecializeAttributeArgumentListSyntax) -> ResultType
   
   /// Visiting ``SpecializeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1548,6 +1548,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AvailabilityArgumentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1573,13 +1580,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilitySpecListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1611,10 +1611,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType {
+  public func visit(_ node: BackDeployedAttributeArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2990,10 +2990,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType {
+  public func visit(_ node: SpecializeAttributeArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3403,6 +3403,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .attributedType(let derived):
       return visit(derived)
+    case .availabilityArgumentList(let derived):
+      return visit(derived)
     case .availabilityArgument(let derived):
       return visit(derived)
     case .availabilityCondition(let derived):
@@ -3410,8 +3412,6 @@ extension SyntaxTransformVisitor {
     case .availabilityEntry(let derived):
       return visit(derived)
     case .availabilityLabeledArgument(let derived):
-      return visit(derived)
-    case .availabilitySpecList(let derived):
       return visit(derived)
     case .availabilityVersionRestrictionListEntry(let derived):
       return visit(derived)
@@ -3421,7 +3421,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .awaitExpr(let derived):
       return visit(derived)
-    case .backDeployedAttributeSpecList(let derived):
+    case .backDeployedAttributeArgumentList(let derived):
       return visit(derived)
     case .binaryOperatorExpr(let derived):
       return visit(derived)
@@ -3815,7 +3815,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .sourceFile(let derived):
       return visit(derived)
-    case .specializeAttributeSpecList(let derived):
+    case .specializeAttributeArgumentList(let derived):
       return visit(derived)
     case .specializeExpr(let derived):
       return visit(derived)

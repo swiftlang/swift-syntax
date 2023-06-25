@@ -202,7 +202,7 @@ extension AvailabilityConditionSyntax {
   }
   
   @available(*, deprecated, renamed: "availabilityArguments")
-  public var availabilitySpec: AvailabilitySpecListSyntax {
+  public var availabilitySpec: AvailabilityArgumentListSyntax {
     get {
       return availabilityArguments
     }
@@ -230,7 +230,7 @@ extension AvailabilityConditionSyntax {
       _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
-      availabilitySpec: AvailabilitySpecListSyntax,
+      availabilitySpec: AvailabilityArgumentListSyntax,
       _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -265,7 +265,7 @@ extension AvailabilityEntrySyntax {
   }
   
   @available(*, deprecated, renamed: "availabilityArguments")
-  public var availabilityList: AvailabilitySpecListSyntax {
+  public var availabilityList: AvailabilityArgumentListSyntax {
     get {
       return availabilityArguments
     }
@@ -298,7 +298,7 @@ extension AvailabilityEntrySyntax {
       _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
-      availabilityList: AvailabilitySpecListSyntax,
+      availabilityList: AvailabilityArgumentListSyntax,
       _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
       semicolon: TokenSyntax = .semicolonToken(),
       _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
@@ -321,7 +321,7 @@ extension AvailabilityEntrySyntax {
   }
 }
 
-extension BackDeployedAttributeSpecListSyntax {
+extension BackDeployedAttributeArgumentListSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenColonAndPlatforms")
   public var unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? {
     get {
@@ -343,7 +343,7 @@ extension BackDeployedAttributeSpecListSyntax {
   }
   
   @available(*, deprecated, renamed: "addPlatform")
-  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeSpecListSyntax {
+  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeArgumentListSyntax {
     return addPlatform(element)
   }
   

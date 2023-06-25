@@ -34,16 +34,16 @@ public enum SyntaxKind: CaseIterable {
   case attributeList
   case attribute
   case attributedType
+  case availabilityArgumentList
   case availabilityArgument
   case availabilityCondition
   case availabilityEntry
   case availabilityLabeledArgument
-  case availabilitySpecList
   case availabilityVersionRestrictionListEntry
   case availabilityVersionRestrictionList
   case availabilityVersionRestriction
   case awaitExpr
-  case backDeployedAttributeSpecList
+  case backDeployedAttributeArgumentList
   case binaryOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
@@ -240,7 +240,7 @@ public enum SyntaxKind: CaseIterable {
   case sequenceExpr
   case simpleTypeIdentifier
   case sourceFile
-  case specializeAttributeSpecList
+  case specializeAttributeArgumentList
   case specializeExpr
   case stringLiteralExpr
   case stringLiteralSegments
@@ -302,7 +302,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .attributeList:
       return true
-    case .availabilitySpecList:
+    case .availabilityArgumentList:
       return true
     case .availabilityVersionRestrictionList:
       return true
@@ -374,7 +374,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .primaryAssociatedTypeList:
       return true
-    case .specializeAttributeSpecList:
+    case .specializeAttributeArgumentList:
       return true
     case .stringLiteralSegments:
       return true
@@ -458,6 +458,8 @@ public enum SyntaxKind: CaseIterable {
       return AttributeSyntax.self
     case .attributedType:
       return AttributedTypeSyntax.self
+    case .availabilityArgumentList:
+      return AvailabilityArgumentListSyntax.self
     case .availabilityArgument:
       return AvailabilityArgumentSyntax.self
     case .availabilityCondition:
@@ -466,8 +468,6 @@ public enum SyntaxKind: CaseIterable {
       return AvailabilityEntrySyntax.self
     case .availabilityLabeledArgument:
       return AvailabilityLabeledArgumentSyntax.self
-    case .availabilitySpecList:
-      return AvailabilitySpecListSyntax.self
     case .availabilityVersionRestrictionListEntry:
       return AvailabilityVersionRestrictionListEntrySyntax.self
     case .availabilityVersionRestrictionList:
@@ -476,8 +476,8 @@ public enum SyntaxKind: CaseIterable {
       return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr:
       return AwaitExprSyntax.self
-    case .backDeployedAttributeSpecList:
-      return BackDeployedAttributeSpecListSyntax.self
+    case .backDeployedAttributeArgumentList:
+      return BackDeployedAttributeArgumentListSyntax.self
     case .binaryOperatorExpr:
       return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr:
@@ -870,8 +870,8 @@ public enum SyntaxKind: CaseIterable {
       return SimpleTypeIdentifierSyntax.self
     case .sourceFile:
       return SourceFileSyntax.self
-    case .specializeAttributeSpecList:
-      return SpecializeAttributeSpecListSyntax.self
+    case .specializeAttributeArgumentList:
+      return SpecializeAttributeArgumentListSyntax.self
     case .specializeExpr:
       return SpecializeExprSyntax.self
     case .stringLiteralExpr:

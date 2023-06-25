@@ -209,7 +209,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ArrayElementSyntax>
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
-- <doc:SwiftSyntax/AvailabilitySpecListSyntax>
+- <doc:SwiftSyntax/AvailabilityArgumentListSyntax>
 - <doc:SwiftSyntax/AvailabilityArgumentSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionListEntrySyntax>
@@ -281,7 +281,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PrecedenceGroupNameElementSyntax>
 - <doc:SwiftSyntax/PrimaryAssociatedTypeListSyntax>
 - <doc:SwiftSyntax/PrimaryAssociatedTypeSyntax>
-- <doc:SwiftSyntax/SpecializeAttributeSpecListSyntax>
+- <doc:SwiftSyntax/SpecializeAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/LabeledSpecializeEntrySyntax>
 - <doc:SwiftSyntax/AvailabilityEntrySyntax>
 - <doc:SwiftSyntax/TargetFunctionEntrySyntax>
@@ -313,7 +313,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
 - <doc:SwiftSyntax/AvailabilityLabeledArgumentSyntax>
 - <doc:SwiftSyntax/AvailabilityVersionRestrictionSyntax>
-- <doc:SwiftSyntax/BackDeployedAttributeSpecListSyntax>
+- <doc:SwiftSyntax/BackDeployedAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/ClosureCaptureItemSpecifierSyntax>
 - <doc:SwiftSyntax/ClosureCaptureSignatureSyntax>
 - <doc:SwiftSyntax/ClosureParameterClauseSyntax>

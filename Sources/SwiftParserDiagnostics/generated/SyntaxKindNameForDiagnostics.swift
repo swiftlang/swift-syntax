@@ -45,6 +45,8 @@ extension SyntaxKind {
       return "attribute"
     case .attributedType:
       return "type"
+    case .availabilityArgumentList:
+      return "'@availability' arguments"
     case .availabilityArgument:
       return "availability argument"
     case .availabilityCondition:
@@ -53,8 +55,6 @@ extension SyntaxKind {
       return "availability entry"
     case .availabilityLabeledArgument:
       return "availability argument"
-    case .availabilitySpecList:
-      return "'@availability' arguments"
     case .availabilityVersionRestrictionListEntry:
       return "version"
     case .availabilityVersionRestrictionList:
@@ -63,7 +63,7 @@ extension SyntaxKind {
       return "version restriction"
     case .awaitExpr:
       return "'await' expression"
-    case .backDeployedAttributeSpecList:
+    case .backDeployedAttributeArgumentList:
       return "'@backDeployed' arguments"
     case .binaryOperatorExpr:
       return "operator"
@@ -343,7 +343,7 @@ extension SyntaxKind {
       return "type"
     case .sourceFile:
       return "source file"
-    case .specializeAttributeSpecList:
+    case .specializeAttributeArgumentList:
       return "argument to '@_specialize"
     case .stringLiteralExpr:
       return "string literal"

@@ -35,8 +35,8 @@ extension AttributeListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `AvailabilitySpecListSyntax` represents a collection of `AvailabilityArgumentSyntax`
-extension AvailabilitySpecListSyntax: ExpressibleByArrayLiteral {
+/// `AvailabilityArgumentListSyntax` represents a collection of `AvailabilityArgumentSyntax`
+extension AvailabilityArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -294,7 +294,7 @@ extension PrimaryAssociatedTypeListSyntax: ExpressibleByArrayLiteral {
 }
 
 /// A collection of arguments for the `@_specialize` attribute
-extension SpecializeAttributeSpecListSyntax: ExpressibleByArrayLiteral {
+extension SpecializeAttributeArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

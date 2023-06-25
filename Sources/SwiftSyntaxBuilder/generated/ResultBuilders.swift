@@ -270,7 +270,7 @@ public extension AttributeListSyntax {
 }
 
 @resultBuilder
-public struct AvailabilitySpecListBuilder {
+public struct AvailabilityArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = AvailabilityArgumentSyntax
@@ -281,7 +281,7 @@ public struct AvailabilitySpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AvailabilitySpecListSyntax
+  public typealias FinalResult = AvailabilityArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -346,8 +346,8 @@ public struct AvailabilitySpecListBuilder {
   }
 }
 
-public extension AvailabilitySpecListSyntax {
-  init(@AvailabilitySpecListBuilder itemsBuilder: () throws -> AvailabilitySpecListSyntax) rethrows {
+public extension AvailabilityArgumentListSyntax {
+  init(@AvailabilityArgumentListBuilder itemsBuilder: () throws -> AvailabilityArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -3231,10 +3231,10 @@ public extension PrimaryAssociatedTypeListSyntax {
 }
 
 @resultBuilder
-public struct SpecializeAttributeSpecListBuilder {
+public struct SpecializeAttributeArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SpecializeAttributeSpecListSyntax.Element
+  public typealias Expression = SpecializeAttributeArgumentListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3242,7 +3242,7 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = SpecializeAttributeSpecListSyntax
+  public typealias FinalResult = SpecializeAttributeArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3328,8 +3328,8 @@ public struct SpecializeAttributeSpecListBuilder {
   }
 }
 
-public extension SpecializeAttributeSpecListSyntax {
-  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () throws -> SpecializeAttributeSpecListSyntax) rethrows {
+public extension SpecializeAttributeArgumentListSyntax {
+  init(@SpecializeAttributeArgumentListBuilder itemsBuilder: () throws -> SpecializeAttributeArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }

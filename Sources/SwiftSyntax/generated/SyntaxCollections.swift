@@ -100,19 +100,19 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.attributeList
 }
 
-public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
+public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AvailabilityArgumentSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .availabilitySpecList else {
+    guard node.raw.kind == .availabilityArgumentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.availabilitySpecList
+  public static let syntaxKind = SyntaxKind.availabilityArgumentList
 }
 
 public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
@@ -699,7 +699,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 }
 
 /// A collection of arguments for the `@_specialize` attribute
-public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
+public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `labeledSpecializeEntry`(LabeledSpecializeEntrySyntax)
     case `availabilityEntry`(AvailabilityEntrySyntax)
@@ -772,13 +772,13 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .specializeAttributeSpecList else {
+    guard node.raw.kind == .specializeAttributeArgumentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.specializeAttributeSpecList
+  public static let syntaxKind = SyntaxKind.specializeAttributeArgumentList
 }
 
 public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {

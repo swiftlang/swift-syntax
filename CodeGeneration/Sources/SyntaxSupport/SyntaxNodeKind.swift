@@ -43,12 +43,12 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case availabilityCondition
   case availabilityEntry
   case availabilityLabeledArgument
-  case availabilitySpecList
+  case availabilityArgumentList
   case availabilityVersionRestrictionListEntry
   case availabilityVersionRestrictionList
   case availabilityVersionRestriction
   case awaitExpr
-  case backDeployedAttributeSpecList
+  case backDeployedAttributeArgumentList
   case binaryOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
@@ -248,7 +248,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case sequenceExpr
   case simpleTypeIdentifier
   case sourceFile
-  case specializeAttributeSpecList
+  case specializeAttributeArgumentList
   case specializeExpr
   case stmt
   case stringLiteralExpr

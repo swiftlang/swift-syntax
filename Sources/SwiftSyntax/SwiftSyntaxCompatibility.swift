@@ -22,6 +22,12 @@ public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
+@available(*, deprecated, renamed: "AvailabilityArgumentListSyntax")
+public typealias AvailabilitySpecListSyntax = AvailabilityArgumentListSyntax
+
+@available(*, deprecated, renamed: "BackDeployedAttributeArgumentListSyntax")
+public typealias BackDeployedAttributeSpecListSyntax = BackDeployedAttributeArgumentListSyntax
+
 public extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
   var members: MemberDeclBlockSyntax {
@@ -31,6 +37,26 @@ public extension DeclGroupSyntax {
     set(value) {
       memberBlock = value
     }
+  }
+}
+
+@available(*, deprecated, renamed: "SpecializeAttributeArgumentListSyntax")
+public typealias SpecializeAttributeSpecListSyntax = SpecializeAttributeArgumentListSyntax
+
+public extension SyntaxKind {
+  @available(*, deprecated, renamed: "availabilityArgumentList")
+  static var availabilitySpecList: SyntaxKind {
+    return .availabilityArgumentList
+  }
+
+  @available(*, deprecated, renamed: "backDeployedAttributeArgumentList")
+  static var backDeployedAttributeSpecList: SyntaxKind {
+    return .backDeployedAttributeArgumentList
+  }
+
+  @available(*, deprecated, renamed: "specializeAttributeArgumentList")
+  static var specializeAttributeSpecList: SyntaxKind {
+    return .specializeAttributeArgumentList
   }
 }
 

@@ -210,6 +210,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
   
+  /// Visit a ``AvailabilityArgumentListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: AvailabilityArgumentListSyntax) -> AvailabilityArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(AvailabilityArgumentListSyntax.self)
+  }
+  
   /// Visit a ``AvailabilityArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -236,13 +243,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
     return Syntax(visitChildren(node)).cast(AvailabilityLabeledArgumentSyntax.self)
-  }
-  
-  /// Visit a ``AvailabilitySpecListSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AvailabilitySpecListSyntax) -> AvailabilitySpecListSyntax {
-    return Syntax(visitChildren(node)).cast(AvailabilitySpecListSyntax.self)
   }
   
   /// Visit a ``AvailabilityVersionRestrictionListEntrySyntax``.
@@ -273,11 +273,11 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``BackDeployedAttributeSpecListSyntax``.
+  /// Visit a ``BackDeployedAttributeArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> BackDeployedAttributeSpecListSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployedAttributeSpecListSyntax.self)
+  open func visit(_ node: BackDeployedAttributeArgumentListSyntax) -> BackDeployedAttributeArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(BackDeployedAttributeArgumentListSyntax.self)
   }
   
   /// Visit a ``BinaryOperatorExprSyntax``.
@@ -1652,11 +1652,11 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(SourceFileSyntax.self)
   }
   
-  /// Visit a ``SpecializeAttributeSpecListSyntax``.
+  /// Visit a ``SpecializeAttributeArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SpecializeAttributeSpecListSyntax {
-    return Syntax(visitChildren(node)).cast(SpecializeAttributeSpecListSyntax.self)
+  open func visit(_ node: SpecializeAttributeArgumentListSyntax) -> SpecializeAttributeArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(SpecializeAttributeArgumentListSyntax.self)
   }
   
   /// Visit a ``SpecializeExprSyntax``.
@@ -2325,6 +2325,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplAvailabilityArgumentListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = AvailabilityArgumentListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
     let node = AvailabilityArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2369,20 +2383,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) -> Syntax {
     let node = AvailabilityLabeledArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AvailabilitySpecListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -2451,8 +2451,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployedAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeArgumentListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = BackDeployedAttributeArgumentListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -5209,8 +5209,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SpecializeAttributeSpecListSyntax(data)
+  private func visitImplSpecializeAttributeArgumentListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = SpecializeAttributeArgumentListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6030,6 +6030,8 @@ open class SyntaxRewriter {
       return visitImplAttributeSyntax
     case .attributedType:
       return visitImplAttributedTypeSyntax
+    case .availabilityArgumentList:
+      return visitImplAvailabilityArgumentListSyntax
     case .availabilityArgument:
       return visitImplAvailabilityArgumentSyntax
     case .availabilityCondition:
@@ -6038,8 +6040,6 @@ open class SyntaxRewriter {
       return visitImplAvailabilityEntrySyntax
     case .availabilityLabeledArgument:
       return visitImplAvailabilityLabeledArgumentSyntax
-    case .availabilitySpecList:
-      return visitImplAvailabilitySpecListSyntax
     case .availabilityVersionRestrictionListEntry:
       return visitImplAvailabilityVersionRestrictionListEntrySyntax
     case .availabilityVersionRestrictionList:
@@ -6048,8 +6048,8 @@ open class SyntaxRewriter {
       return visitImplAvailabilityVersionRestrictionSyntax
     case .awaitExpr:
       return visitImplAwaitExprSyntax
-    case .backDeployedAttributeSpecList:
-      return visitImplBackDeployedAttributeSpecListSyntax
+    case .backDeployedAttributeArgumentList:
+      return visitImplBackDeployedAttributeArgumentListSyntax
     case .binaryOperatorExpr:
       return visitImplBinaryOperatorExprSyntax
     case .booleanLiteralExpr:
@@ -6442,8 +6442,8 @@ open class SyntaxRewriter {
       return visitImplSimpleTypeIdentifierSyntax
     case .sourceFile:
       return visitImplSourceFileSyntax
-    case .specializeAttributeSpecList:
-      return visitImplSpecializeAttributeSpecListSyntax
+    case .specializeAttributeArgumentList:
+      return visitImplSpecializeAttributeArgumentListSyntax
     case .specializeExpr:
       return visitImplSpecializeExprSyntax
     case .stringLiteralExpr:
@@ -6596,6 +6596,8 @@ open class SyntaxRewriter {
       return visitImplAttributeSyntax(data)
     case .attributedType:
       return visitImplAttributedTypeSyntax(data)
+    case .availabilityArgumentList:
+      return visitImplAvailabilityArgumentListSyntax(data)
     case .availabilityArgument:
       return visitImplAvailabilityArgumentSyntax(data)
     case .availabilityCondition:
@@ -6604,8 +6606,6 @@ open class SyntaxRewriter {
       return visitImplAvailabilityEntrySyntax(data)
     case .availabilityLabeledArgument:
       return visitImplAvailabilityLabeledArgumentSyntax(data)
-    case .availabilitySpecList:
-      return visitImplAvailabilitySpecListSyntax(data)
     case .availabilityVersionRestrictionListEntry:
       return visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
     case .availabilityVersionRestrictionList:
@@ -6614,8 +6614,8 @@ open class SyntaxRewriter {
       return visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr:
       return visitImplAwaitExprSyntax(data)
-    case .backDeployedAttributeSpecList:
-      return visitImplBackDeployedAttributeSpecListSyntax(data)
+    case .backDeployedAttributeArgumentList:
+      return visitImplBackDeployedAttributeArgumentListSyntax(data)
     case .binaryOperatorExpr:
       return visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr:
@@ -7008,8 +7008,8 @@ open class SyntaxRewriter {
       return visitImplSimpleTypeIdentifierSyntax(data)
     case .sourceFile:
       return visitImplSourceFileSyntax(data)
-    case .specializeAttributeSpecList:
-      return visitImplSpecializeAttributeSpecListSyntax(data)
+    case .specializeAttributeArgumentList:
+      return visitImplSpecializeAttributeArgumentListSyntax(data)
     case .specializeExpr:
       return visitImplSpecializeExprSyntax(data)
     case .stringLiteralExpr:

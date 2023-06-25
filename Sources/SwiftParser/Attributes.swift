@@ -226,7 +226,7 @@ extension Parser {
     switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
-        return .availability(parser.parseAvailabilityArgumentSpecList())
+        return .availabilityArguments(parser.parseAvailabilityArguments())
       }
     case .backDeployed, ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
@@ -246,7 +246,7 @@ extension Parser {
       }
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
-        return .specializeArguments(parser.parseSpecializeAttributeSpecList())
+        return .specializeArguments(parser.parseSpecializeAttributeArguments())
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in
@@ -644,8 +644,8 @@ extension Parser {
       }
     }
   }
-  mutating func parseSpecializeAttributeSpecList() -> RawSpecializeAttributeSpecListSyntax {
-    var elements = [RawSpecializeAttributeSpecListSyntax.Element]()
+  mutating func parseSpecializeAttributeArguments() -> RawSpecializeAttributeArgumentListSyntax {
+    var elements = [RawSpecializeAttributeArgumentListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
     while !self.at(.eof, .rightParen, .keyword(.where)) && loopProgress.evaluate(currentToken) {
@@ -675,7 +675,7 @@ extension Parser {
       case (.availability, let handle)?:
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let availability = self.parseAvailabilitySpecList()
+        let availability = self.parseAvailabilityArgumentList()
         let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
         elements.append(
           .availabilityEntry(
@@ -787,7 +787,7 @@ extension Parser {
       let whereClause = self.parseGenericWhereClause()
       elements.append(.genericWhereClause(whereClause))
     }
-    return RawSpecializeAttributeSpecListSyntax(elements: elements, arena: self.arena)
+    return RawSpecializeAttributeArgumentListSyntax(elements: elements, arena: self.arena)
   }
 }
 
@@ -882,7 +882,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseBackDeployedArguments() -> RawBackDeployedAttributeSpecListSyntax {
+  mutating func parseBackDeployedArguments() -> RawBackDeployedAttributeArgumentListSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements: [RawAvailabilityVersionRestrictionListEntrySyntax] = []
@@ -898,7 +898,7 @@ extension Parser {
         )
       )
     } while keepGoing != nil
-    return RawBackDeployedAttributeSpecListSyntax(
+    return RawBackDeployedAttributeArgumentListSyntax(
       unexpectedBeforeLabel,
       beforeLabel: label,
       unexpectedBeforeColon,

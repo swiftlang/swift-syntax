@@ -34,16 +34,16 @@ public enum SyntaxEnum {
   case attributeList(AttributeListSyntax)
   case attribute(AttributeSyntax)
   case attributedType(AttributedTypeSyntax)
+  case availabilityArgumentList(AvailabilityArgumentListSyntax)
   case availabilityArgument(AvailabilityArgumentSyntax)
   case availabilityCondition(AvailabilityConditionSyntax)
   case availabilityEntry(AvailabilityEntrySyntax)
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
-  case availabilitySpecList(AvailabilitySpecListSyntax)
   case availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax)
   case availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax)
   case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
   case awaitExpr(AwaitExprSyntax)
-  case backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax)
+  case backDeployedAttributeArgumentList(BackDeployedAttributeArgumentListSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
@@ -240,7 +240,7 @@ public enum SyntaxEnum {
   case sequenceExpr(SequenceExprSyntax)
   case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
   case sourceFile(SourceFileSyntax)
-  case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
+  case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
   case specializeExpr(SpecializeExprSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
   case stringLiteralSegments(StringLiteralSegmentsSyntax)
@@ -339,6 +339,8 @@ public extension Syntax {
       return .attribute(AttributeSyntax(self)!)
     case .attributedType:
       return .attributedType(AttributedTypeSyntax(self)!)
+    case .availabilityArgumentList:
+      return .availabilityArgumentList(AvailabilityArgumentListSyntax(self)!)
     case .availabilityArgument:
       return .availabilityArgument(AvailabilityArgumentSyntax(self)!)
     case .availabilityCondition:
@@ -347,8 +349,6 @@ public extension Syntax {
       return .availabilityEntry(AvailabilityEntrySyntax(self)!)
     case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
-    case .availabilitySpecList:
-      return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
     case .availabilityVersionRestrictionListEntry:
       return .availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax(self)!)
     case .availabilityVersionRestrictionList:
@@ -357,8 +357,8 @@ public extension Syntax {
       return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
-    case .backDeployedAttributeSpecList:
-      return .backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax(self)!)
+    case .backDeployedAttributeArgumentList:
+      return .backDeployedAttributeArgumentList(BackDeployedAttributeArgumentListSyntax(self)!)
     case .binaryOperatorExpr:
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr:
@@ -751,8 +751,8 @@ public extension Syntax {
       return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
     case .sourceFile:
       return .sourceFile(SourceFileSyntax(self)!)
-    case .specializeAttributeSpecList:
-      return .specializeAttributeSpecList(SpecializeAttributeSpecListSyntax(self)!)
+    case .specializeAttributeArgumentList:
+      return .specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax(self)!)
     case .specializeExpr:
       return .specializeExpr(SpecializeExprSyntax(self)!)
     case .stringLiteralExpr:

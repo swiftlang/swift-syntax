@@ -375,19 +375,19 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \AwaitExprSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedBeforeBeforeLabel:
+  case \BackDeployedAttributeArgumentListSyntax.unexpectedBeforeBeforeLabel:
     return "unexpectedBeforeBeforeLabel"
-  case \BackDeployedAttributeSpecListSyntax.beforeLabel:
+  case \BackDeployedAttributeArgumentListSyntax.beforeLabel:
     return "beforeLabel"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedBetweenBeforeLabelAndColon:
+  case \BackDeployedAttributeArgumentListSyntax.unexpectedBetweenBeforeLabelAndColon:
     return "unexpectedBetweenBeforeLabelAndColon"
-  case \BackDeployedAttributeSpecListSyntax.colon:
+  case \BackDeployedAttributeArgumentListSyntax.colon:
     return "colon"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedBetweenColonAndPlatforms:
+  case \BackDeployedAttributeArgumentListSyntax.unexpectedBetweenColonAndPlatforms:
     return "unexpectedBetweenColonAndPlatforms"
-  case \BackDeployedAttributeSpecListSyntax.platforms:
+  case \BackDeployedAttributeArgumentListSyntax.platforms:
     return "platforms"
-  case \BackDeployedAttributeSpecListSyntax.unexpectedAfterPlatforms:
+  case \BackDeployedAttributeArgumentListSyntax.unexpectedAfterPlatforms:
     return "unexpectedAfterPlatforms"
   case \BinaryOperatorExprSyntax.unexpectedBeforeOperatorToken:
     return "unexpectedBeforeOperatorToken"

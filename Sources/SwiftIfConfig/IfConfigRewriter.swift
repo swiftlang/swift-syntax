@@ -25,7 +25,8 @@ import SwiftSyntax
 /// to a particular build configuration build configuration.
 ///
 /// Given an example such as
-/// ```
+///
+/// ```swift
 /// #if os(Linux)
 /// func f() { }
 /// #elseif os(iOS)
@@ -37,14 +38,14 @@ import SwiftSyntax
 /// those nodes that are in active clauses. When rewriting the above given
 /// a build configuration for Linux, the resulting tree will be
 ///
-/// ```
+/// ```swift
 /// func f() { }
 /// ```
 ///
 /// When rewriting the above given a build configuration for iOS, the resulting
 /// tree will be
 ///
-/// ```
+/// ```swift
 /// func g() { }
 /// ```
 ///
@@ -84,9 +85,14 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
           continue
         }
 
-        let innerElements = Syntax(elements).cast(List.self)
-        let newInnerElements = dropInactive(innerElements, elementAsIfConfig: elementAsIfConfig)
-        newElements.append(contentsOf: newInnerElements)
+        // In a well-formed syntax tree, the element list is always the
+        // same type as List. However, handle a manually-constructed,
+        // ill-formed syntax tree gracefully by dropping the inner elements
+        // as well.
+        if let innerElements = Syntax(elements).as(List.self) {
+          let newInnerElements = dropInactive(innerElements, elementAsIfConfig: elementAsIfConfig)
+          newElements.append(contentsOf: newInnerElements)
+        }
 
         continue
       }
@@ -231,8 +237,9 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     else {
       // If there is no active clause, return the base.
 
-      // Prefer the base we have and, if not, use the outer base.
-      // TODO: Can we have both? If so, then what?
+      // Prefer the base we have and, if not, use the outer base. We can
+      // only have both in an ill-formed syntax tree that was manually
+      // created.
       if let base = postfixIfConfig.base ?? outerBase {
         return base
       }

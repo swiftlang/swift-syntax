@@ -284,7 +284,7 @@ extension Parser {
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightParen)
+      while !self.at(.endOfFile, .rightParen)
         && keepGoing
         && loopProgress.evaluate(currentToken)
       {

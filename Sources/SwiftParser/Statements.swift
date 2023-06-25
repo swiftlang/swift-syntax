@@ -694,7 +694,7 @@ extension Parser {
       case poundEndifKeyword
       case poundElseKeyword
       case poundElseifKeyword
-      case eof
+      case endOfFile
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
@@ -706,7 +706,7 @@ extension Parser {
         case TokenSpec(.poundEndifKeyword): self = .poundEndifKeyword
         case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
         case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
-        case TokenSpec(.eof): self = .eof
+        case TokenSpec(.endOfFile): self = .endOfFile
         default: return nil
         }
       }
@@ -721,7 +721,7 @@ extension Parser {
         case .poundEndifKeyword: return .poundEndifKeyword
         case .poundElseKeyword: return .poundElseKeyword
         case .poundElseifKeyword: return .poundElseifKeyword
-        case .eof: return .eof
+        case .endOfFile: return .endOfFile
         }
       }
     }
@@ -798,7 +798,7 @@ extension Parser {
         var keepGoing = true
         var elementList = [RawYieldExprListElementSyntax]()
         var loopProgress = LoopProgressCondition()
-        while !self.at(.eof, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
+        while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(

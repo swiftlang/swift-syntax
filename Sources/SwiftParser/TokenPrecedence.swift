@@ -170,7 +170,7 @@ enum TokenPrecedence: Comparable {
       // Arrow is a strong indicator in a function type that we are now in the return type
       .arrow,
       // EOF is here because it is a very strong marker and doesn't belong anywhere else
-      .eof:
+      .endOfFile:
       self = .strongPunctuator
 
     // MARK: Strong bracket close

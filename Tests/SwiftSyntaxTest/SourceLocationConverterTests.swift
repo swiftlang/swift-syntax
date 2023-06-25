@@ -42,7 +42,7 @@ final class SourceLocationConverterTests: XCTestCase {
       }
 
       let nodeWithInvalidUtf8 = RawTokenSyntax(
-        kind: .eof,
+        kind: .endOfFile,
         text: "",
         leadingTriviaPieces: [
           .unexpectedText(leadingTriviaText)

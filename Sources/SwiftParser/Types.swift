@@ -494,7 +494,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
         let unexpectedBeforeFirst: RawUnexpectedNodesSyntax?
         let first: RawTokenSyntax?
         let unexpectedBeforeSecond: RawUnexpectedNodesSyntax?
@@ -825,7 +825,7 @@ extension Parser.Lookahead {
         // better if we skip over them.
         if self.consume(if: .equal) != nil {
           var skipProgress = LoopProgressCondition()
-          while !self.at(.eof)
+          while !self.at(.endOfFile)
             && !self.at(.rightParen, .rightBrace, .comma)
             && !self.atContextualPunctuator("...")
             && !self.atStartOfDeclaration()
@@ -1089,7 +1089,7 @@ extension Lexer.Lexeme {
       .period,
       .comma,
       .semicolon,
-      .eof,
+      .endOfFile,
       .exclamationMark,
       .postfixQuestionMark,
       .colon:

@@ -924,7 +924,7 @@ extension Parser {
           var loopProgress = LoopProgressCondition()
           repeat {
             backtrack.eat(.poundIfKeyword)
-            while !backtrack.at(.eof) && !backtrack.currentToken.isAtStartOfLine {
+            while !backtrack.at(.endOfFile) && !backtrack.currentToken.isAtStartOfLine {
               backtrack.skipSingle()
             }
           } while backtrack.at(.poundIfKeyword) && loopProgress.evaluate(backtrack.currentToken)
@@ -1713,12 +1713,12 @@ extension Parser {
         // If we saw a comma, that's a strong indicator we have more elements
         // to process. If that's not the case, we have to do some legwork to
         // determine if we should bail out.
-        guard comma == nil || self.at(.rightSquare, .eof) else {
+        guard comma == nil || self.at(.rightSquare, .endOfFile) else {
           continue
         }
 
         // If we found EOF or the closing square bracket, bailout.
-        if self.at(.rightSquare, .eof) {
+        if self.at(.rightSquare, .endOfFile) {
           break
         }
 
@@ -1924,7 +1924,7 @@ extension Parser {
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
-      while !self.at(.eof) && !self.at(.rightSquare) && !self.at(.keyword(.in)) {
+      while !self.at(.endOfFile) && !self.at(.rightSquare) && !self.at(.keyword(.in)) {
         unexpectedNodes.append(RawSyntax(self.consumeAnyToken()))
       }
       let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
@@ -2230,7 +2230,7 @@ extension Parser.Lookahead {
     var backtrack = self.lookahead()
     backtrack.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
-    while !backtrack.at(.eof, .rightBrace)
+    while !backtrack.at(.endOfFile, .rightBrace)
       && !backtrack.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword)
       && loopProgress.evaluate(backtrack.currentToken)
     {
@@ -2383,7 +2383,7 @@ extension Parser {
   mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.eof, .rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
+    while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
       && elementsProgress.evaluate(currentToken)
     {
       if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
@@ -2691,7 +2691,7 @@ extension Parser.Lookahead {
 
       // While we don't have '->' or ')', eat balanced tokens.
       var skipProgress = LoopProgressCondition()
-      while !lookahead.at(.eof, .rightParen) && skipProgress.evaluate(lookahead.currentToken) {
+      while !lookahead.at(.endOfFile, .rightParen) && skipProgress.evaluate(lookahead.currentToken) {
         lookahead.skipSingle()
       }
 

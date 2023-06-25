@@ -184,15 +184,15 @@ func assertLexemes(
   var (markerLocations, source) = extractMarkers(markedSource)
   markerLocations["START"] = 0
   var expectedLexemes = expectedLexemes
-  if expectedLexemes.last?.rawTokenKind != .eof {
-    expectedLexemes.append(LexemeSpec(.eof, text: ""))
+  if expectedLexemes.last?.rawTokenKind != .endOfFile {
+    expectedLexemes.append(LexemeSpec(.endOfFile, text: ""))
   }
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
     for token in Lexer.tokenize(buf, from: 0) {
       lexemes.append(token)
 
-      if token.rawTokenKind == .eof {
+      if token.rawTokenKind == .endOfFile {
         break
       }
     }

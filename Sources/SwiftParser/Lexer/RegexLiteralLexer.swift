@@ -602,7 +602,7 @@ extension Lexer.Cursor {
       return true
 
     // Cannot lex at the end of the buffer.
-    case .eof:
+    case .endOfFile:
       return false
 
     // Prefix grammar that appears before an expression.

@@ -376,7 +376,7 @@ extension Parser {
     return self.withLookahead {
       $0.consume(if: .leftParen)
       guard $0.canParseType() else { return false }
-      return $0.at(.rightParen, .keyword(.where), .leftBrace) || $0.at(.eof)
+      return $0.at(.rightParen, .keyword(.where), .leftBrace) || $0.at(.endOfFile)
     }
   }
 }

@@ -66,6 +66,16 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set
   }
   
+  var inheritanceClause: TypeInheritanceClauseSyntax? {
+    get
+    set
+  }
+  
+  var genericWhereClause: GenericWhereClauseSyntax? {
+    get
+    set
+  }
+  
   var memberBlock: MemberDeclBlockSyntax {
     get
     set

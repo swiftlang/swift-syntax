@@ -317,8 +317,17 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion")
-      ]
+        DiagnosticSpec(
+          message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion",
+          fixIts: ["replace 'unknown' with '_version' and ':'", "replace 'unknown' with '_underlyingVersion' and ':'"]
+        )
+      ],
+      fixedSource:
+        """
+        #if canImport(A, _version: 2.2)
+          let a = 1
+        #endif
+        """
     )
   }
 
@@ -330,8 +339,21 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion")
-      ]
+        DiagnosticSpec(
+          message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion",
+          fixIts: ["insert '_version'", "insert '_underlyingVersion'"]
+        ),
+        DiagnosticSpec(
+          message: "expected version tuple in 'canImport' expression",
+          fixIts: ["insert version tuple"]
+        ),
+      ],
+      fixedSource:
+        """
+        #if canImport(A, _version: <#integer literal#>)
+          let a = 1
+        #endif
+        """
     )
   }
 
@@ -343,8 +365,17 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion")
-      ]
+        DiagnosticSpec(
+          message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion",
+          fixIts: ["insert '_version'", "insert '_underlyingVersion'"]
+        )
+      ],
+      fixedSource:
+        """
+        #if canImport(A, _version: 2.2)
+          let a = 1
+        #endif
+        """
     )
   }
 
@@ -356,9 +387,19 @@ final class IfconfigExprTests: XCTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion",
+          fixIts: ["insert '_version'", "insert '_underlyingVersion'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "canImport can take only two parameters"),
-      ]
+      ],
+      fixedSource:
+        """
+        #if canImport(A, _version: 2.2, 1.1)
+          let a = 1
+        #endif
+        """
     )
   }
 

@@ -645,13 +645,51 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     if node.label.isMissing {
+      let replaceTokens: [TokenSyntax] = [node.unexpectedBetweenLabelAndColon].compactMap { $0?.tokens(viewMode: .sourceAccurate) }.flatMap { $0 }
+
+      let versionMessage: ParserFixIt =
+        node.unexpectedBetweenLabelAndColon == nil
+        ? InsertFixIt(tokenToBeInserted: .keyword(._version))
+        : ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [.keyword(._version), .colonToken()])
+
+      let underlyingVersionMessage: ParserFixIt =
+        node.unexpectedBetweenLabelAndColon == nil
+        ? InsertFixIt(tokenToBeInserted: .keyword(._underlyingVersion))
+        : ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [.keyword(._underlyingVersion), .colonToken()])
+
+      let fixIts = [
+        FixIt(
+          message: versionMessage,
+          changes: [
+            .makeReplacingPresentWithTrivia(
+              oldNode: node.label,
+              newNode: TokenSyntax(.keyword(._version), presence: .present)
+            ),
+            .makeMissing(node.unexpectedBetweenLabelAndColon),
+            .makePresent(node.colon),
+          ]
+        ),
+        FixIt(
+          message: underlyingVersionMessage,
+          changes: [
+            .makeReplacingPresentWithTrivia(
+              oldNode: Syntax(node.label),
+              newNode: Syntax(TokenSyntax(.keyword(._underlyingVersion), presence: .present))
+            ),
+            .makeMissing(node.unexpectedBetweenLabelAndColon),
+            .makePresent(node.colon),
+          ]
+        ),
+      ]
+
       addDiagnostic(
         node.label,
         .canImportWrongSecondParameterLabel,
+        fixIts: fixIts,
         handledNodes: [node.label.id]
       )
 
-      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.versionTuple.id].compactMap { $0 })
+      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id].compactMap { $0 })
     }
 
     return .visitChildren

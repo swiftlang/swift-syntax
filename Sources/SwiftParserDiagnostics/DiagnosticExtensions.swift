@@ -173,4 +173,15 @@ extension FixIt.MultiNodeChange {
 
     return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
+
+  /// Make `oldNode` replaced by `newNode` but maintain `oldNode`'s trivia, where `oldNode` should be a missing node
+  static func makeReplacingPresentWithTrivia(oldNode: some SyntaxProtocol, newNode: some SyntaxProtocol) -> Self {
+    var formattedOldNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(oldNode))
+    formattedOldNode = PresentMaker().rewrite(formattedOldNode)
+
+    var presentNode = Syntax(newNode)
+    presentNode = presentNode.with(\.leadingTrivia, formattedOldNode.leadingTrivia)
+    presentNode = presentNode.with(\.trailingTrivia, formattedOldNode.trailingTrivia)
+    return FixIt.MultiNodeChange(primitiveChanges: [.replace(oldNode: Syntax(oldNode), newNode: presentNode)])
+  }
 }

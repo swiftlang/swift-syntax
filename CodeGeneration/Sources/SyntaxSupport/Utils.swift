@@ -40,7 +40,7 @@ public func lowercaseFirstWord(name: String) -> String {
 
 /// Give a (possibly multi-line) string, prepends `///` to each line and creates
 /// a `.docLineComment` trivia piece for each line.
-func docCommentTrivia(from string: String?) -> SwiftSyntax.Trivia {
+public func docCommentTrivia(from string: String?) -> SwiftSyntax.Trivia {
   guard let string else {
     return []
   }

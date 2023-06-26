@@ -13,6 +13,7 @@
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SyntaxSupport
+import Utils
 
 extension LayoutNode {
   func generateInitializerDeclHeader(useDeprecatedChildName: Bool = false) -> PartialSyntaxNodeString {
@@ -72,6 +73,31 @@ extension LayoutNode {
       \(params)
       )
       """
+  }
+
+  func generateInitializerDocComment() -> SwiftSyntax.Trivia {
+    func generateParamDocComment(for child: Child) -> String? {
+      guard let documentation = child.documentation,
+        let firstLine = documentation.split(whereSeparator: \.isNewline).first
+      else {
+        return nil
+      }
+
+      return "  - \(child.varName): \(firstLine)"
+    }
+
+    let formattedParams = removedEmptyLines(
+      string: """
+        - Parameters:
+          - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. \
+        If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+        \(children.compactMap(generateParamDocComment).joined(separator: "\n"))
+          - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. \
+        If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+        """
+    )
+
+    return docCommentTrivia(from: formattedParams)
   }
 
   /// Create a builder-based convenience initializer, if needed.

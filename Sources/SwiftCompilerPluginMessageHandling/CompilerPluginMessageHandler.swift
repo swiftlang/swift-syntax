@@ -40,6 +40,23 @@ public protocol MessageConnection {
   func waitForNextMessage<RX: Decodable>(_ type: RX.Type) throws -> RX?
 }
 
+/// Represent the capability of the plugin host (i.e. compiler).
+struct HostCapability {
+  var protocolVersion: Int
+
+  // Create an "oldest" capability.
+  init() {
+    self.protocolVersion = 0
+  }
+
+  init(_ message: PluginMessage.HostCapability) {
+    self.protocolVersion = message.protocolVersion
+  }
+
+  /// Compiler accept 'expandMacroResult' response message.
+  var hasExpandMacroResult: Bool { protocolVersion >= 5 }
+}
+
 /// 'CompilerPluginMessageHandler' is a type that listens to the message
 /// connection and dispatches them to the actual plugin provider, then send back
 /// the response.
@@ -52,9 +69,13 @@ public class CompilerPluginMessageHandler<Connection: MessageConnection, Provide
   /// Object to provide actual plugin functions.
   let provider: Provider
 
+  /// Plugin host capability
+  var hostCapability: HostCapability
+
   public init(connection: Connection, provider: Provider) {
     self.connection = connection
     self.provider = provider
+    self.hostCapability = HostCapability()
   }
 }
 
@@ -80,7 +101,13 @@ extension CompilerPluginMessageHandler {
   /// Handles a single message received from the plugin host.
   fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
     switch message {
-    case .getCapability:
+    case .getCapability(let hostCapability):
+      // Remember the peer capability if provided.
+      if let hostCapability = hostCapability {
+        self.hostCapability = .init(hostCapability)
+      }
+
+      // Return the plugin capability.
       let capability = PluginMessage.PluginCapability(
         protocolVersion: PluginMessage.PROTOCOL_VERSION_NUMBER,
         features: provider.features.map({ $0.rawValue })

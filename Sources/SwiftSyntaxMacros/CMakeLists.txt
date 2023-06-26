@@ -22,9 +22,7 @@ add_swift_host_library(SwiftSyntaxMacros
 
   AbstractSourceLocation.swift
   BasicMacroExpansionContext.swift
-  FunctionParameterUtils.swift
   MacroExpansionContext.swift
-  MacroReplacement.swift
   MacroSystem.swift
   Syntax+MacroEvaluation.swift
 )

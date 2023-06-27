@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2023 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftSyntax
 @_spi(MacroExpansion) import SwiftSyntaxMacros
 
@@ -160,7 +172,7 @@ public func expandFreestandingMacro(
 /// - Returns: A list of expanded source text. Upon failure (i.e.
 ///   `defintion.expansion()` throws) returns `nil`, and the diagnostics
 ///   representing the `Error` are guaranteed to be added to context.
-public func expandAttachedMacro<Context: MacroExpansionContext>(
+public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
   attributeNode: AttributeSyntax,
@@ -292,6 +304,40 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   }
 }
 
+/// Expand `@attached(XXX)` macros.
+///
+/// - Parameters:
+///   - definition: a type that conforms to one or more attached `Macro` protocols.
+///   - macroRole: indicates which `Macro` protocol expansion should be performed
+///   - attributeNode: attribute syntax node (e.g. `@macroName(argument)`).
+///   - declarationNode: target declaration syntax node to apply the expansion.
+///   - parentDeclNode: Only used for `MacroRole.memberAttribute`. The parent
+///     context node of `declarationNode`.
+///   - in: context of the expansion.
+/// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
+///   throws) returns `nil`, and the diagnostics representing the `Error` are
+///   guaranteed to be added to context.
+public func expandAttachedMacro<Context: MacroExpansionContext>(
+  definition: Macro.Type,
+  macroRole: MacroRole,
+  attributeNode: AttributeSyntax,
+  declarationNode: DeclSyntax,
+  parentDeclNode: DeclSyntax?,
+  in context: Context
+) -> String? {
+  let expandedSources = expandAttachedMacroWithoutCollapsing(
+    definition: definition,
+    macroRole: macroRole,
+    attributeNode: attributeNode,
+    declarationNode: declarationNode,
+    parentDeclNode: parentDeclNode,
+    in: context
+  )
+  return expandedSources.map {
+    collapse(expansions: $0, for: macroRole, attachedTo: declarationNode)
+  }
+}
+
 fileprivate extension SyntaxProtocol {
   /// Perform a format if required and then trim any leading/trailing
   /// whitespace.
@@ -305,4 +351,57 @@ fileprivate extension SyntaxProtocol {
     }
     return formatted.trimmedDescription(matching: { $0.isWhitespace })
   }
+}
+
+/// Join `expansions`
+public func collapse<Node: SyntaxProtocol>(
+  expansions: [String],
+  for role: MacroRole,
+  attachedTo declarationNode: Node
+) -> String {
+  if expansions.isEmpty {
+    return ""
+  }
+
+  var expansions = expansions
+  var separator: String = "\n\n"
+
+  if role == .accessor,
+    let varDecl = declarationNode.as(VariableDeclSyntax.self),
+    let binding = varDecl.bindings.first,
+    binding.accessor == nil
+  {
+    let indentation = String(repeating: " ", count: 4)
+
+    expansions = expansions.map({ indent($0, with: indentation) })
+    expansions[0] = "{\n" + expansions[0]
+    expansions[expansions.count - 1] += "\n}"
+  } else if role == .memberAttribute {
+    separator = " "
+  }
+
+  return expansions.joined(separator: separator)
+}
+
+fileprivate func indent(_ source: String, with indentation: String) -> String {
+  if source.isEmpty || indentation.isEmpty {
+    return source
+  }
+
+  var indented = ""
+  var remaining = source[...]
+  while let nextNewline = remaining.firstIndex(where: { $0.isNewline }) {
+    if nextNewline != remaining.startIndex {
+      indented += indentation
+    }
+    indented += remaining[...nextNewline]
+    remaining = remaining[remaining.index(after: nextNewline)...]
+  }
+
+  if !remaining.isEmpty {
+    indented += indentation
+    indented += remaining
+  }
+
+  return indented
 }

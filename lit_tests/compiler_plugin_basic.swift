@@ -59,11 +59,6 @@ struct MyStruct {
 // CHECK-NEXT: }
 // CHECK-NEXT: ------------------------------
 
-// CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMc_.swift
-// CHECK-NEXT: ------------------------------
-// CHECK-NEXT: extension MyStruct : Equatable  {}
-// CHECK-NEXT: ------------------------------
-
 // CHECK: @__swiftmacro_7TestApp8MyStruct8MetadatafMm_.swift
 // CHECK-NEXT: ------------------------------
 // CHECK-NEXT: static var __metadata__: [String: String] {
@@ -79,6 +74,11 @@ struct MyStruct {
 // CHECK: @__swiftmacro_7TestApp8MyStructV5_test16MemberDeprecatedfMr0_.swift
 // CHECK-NEXT: ------------------------------
 // CHECK-NEXT: @available(*, deprecated)
+// CHECK-NEXT: ------------------------------
+
+// CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMc_.swift
+// CHECK-NEXT: ------------------------------
+// CHECK-NEXT: extension MyStruct : Equatable  {}
 // CHECK-NEXT: ------------------------------
 
 // CHECK: @__swiftmacro_7TestApp8MyStructV5value11DidSetPrintfMa_.swift

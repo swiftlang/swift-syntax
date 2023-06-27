@@ -15,6 +15,10 @@
 // MARK: - ExpressionPatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `expression`: ``ExprSyntax``
 public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -93,6 +97,10 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - IdentifierPatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `identifier`: (`<identifier>` | `<keyword>`)
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -171,6 +179,11 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - IsTypePatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `isKeyword`: `'is'`
+///  - `type`: ``TypeSyntax``
 public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -287,6 +300,10 @@ public struct IsTypePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - MissingPatternSyntax
 
 /// In case the source code is missing a pattern, this node stands in place of the missing pattern.
+///
+/// ### Children
+/// 
+///  - `placeholder`: `<identifier>`
 public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -366,6 +383,12 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - TuplePatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `leftParen`: `'('`
+///  - `elements`: ``TuplePatternElementListSyntax``
+///  - `rightParen`: `')'`
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -527,6 +550,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - ValueBindingPatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `bindingKeyword`: (`'let'` | `'var'` | `'inout'`)
+///  - `valuePattern`: ``PatternSyntax``
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -643,6 +671,11 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 // MARK: - WildcardPatternSyntax
 
 
+
+/// ### Children
+/// 
+///  - `wildcard`: `'_'`
+///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

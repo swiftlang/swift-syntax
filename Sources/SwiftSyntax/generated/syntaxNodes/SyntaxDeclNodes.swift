@@ -15,6 +15,16 @@
 // MARK: - AccessorDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifier`: ``DeclModifierSyntax``?
+///  - `accessorKind`: (`'get'` | `'set'` | `'didSet'` | `'willSet'` | `'unsafeAddress'` | `'addressWithOwner'` | `'addressWithNativeOwner'` | `'unsafeMutableAddress'` | `'mutableAddressWithOwner'` | `'mutableAddressWithNativeOwner'` | `'_read'` | `'_modify'` | `'init'`)
+///  - `parameter`: ``AccessorParameterSyntax``?
+///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
+///  - `initEffects`: ``AccessorInitEffectsSyntax``?
+///  - `body`: ``CodeBlockSyntax``?
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -280,6 +290,17 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - ActorDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `actorKeyword`: `'actor'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -590,6 +611,16 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - AssociatedtypeDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `associatedtypeKeyword`: `'associatedtype'`
+///  - `identifier`: `<identifier>`
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `initializer`: ``TypeInitializerClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -874,6 +905,17 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - ClassDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `classKeyword`: `'class'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1184,6 +1226,13 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - DeinitializerDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `deinitKeyword`: `'deinit'`
+///  - `body`: ``CodeBlockSyntax``?
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1390,6 +1439,12 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - EditorPlaceholderDeclSyntax
 
 /// An editor placeholder, e.g. `<#declaration#>` that is used in a position that expects a declaration.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `placeholder`: `<identifier>`
 public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1573,6 +1628,13 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - EnumCaseDeclSyntax
 
 /// A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `caseKeyword`: `'case'`
+///  - `elements`: ``EnumCaseElementListSyntax``
 public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1802,6 +1864,17 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - EnumDeclSyntax
 
 /// A Swift `enum` declaration.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `enumKeyword`: `'enum'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameters`: ``GenericParameterClauseSyntax``?
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2120,6 +2193,16 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - ExtensionDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `extensionKeyword`: `'extension'`
+///  - `extendedType`: ``TypeSyntax``
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2404,6 +2487,17 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - FunctionDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `funcKeyword`: `'func'`
+///  - `identifier`: (`<identifier>` | `<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `signature`: ``FunctionSignatureSyntax``
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `body`: ``CodeBlockSyntax``?
 public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2714,6 +2808,11 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - IfConfigDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `clauses`: ``IfConfigClauseListSyntax``
+///  - `poundEndif`: `'#endif'`
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2849,6 +2948,14 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - ImportDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `importTok`: `'import'`
+///  - `importKind`: (`'typealias'` | `'struct'` | `'class'` | `'enum'` | `'protocol'` | `'var'` | `'let'` | `'func'` | `'inout'`)?
+///  - `path`: ``AccessPathSyntax``
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3107,6 +3214,17 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ```
 /// 
 /// The body is optional because this node also represents initializer requirements inside protocols.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `initKeyword`: `'init'`
+///  - `optionalMark`: (`'?'` | `'?'` | `'!'`)?
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `signature`: ``FunctionSignatureSyntax``
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `body`: ``CodeBlockSyntax``?
 public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3425,6 +3543,17 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - MacroDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `macroKeyword`: `'macro'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `signature`: ``FunctionSignatureSyntax``
+///  - `definition`: ``InitializerClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3735,6 +3864,19 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - MacroExpansionDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `poundToken`: `'#'`
+///  - `macro`: `<identifier>`
+///  - `genericArguments`: ``GenericArgumentClauseSyntax``?
+///  - `leftParen`: `'('`?
+///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `rightParen`: `')'`?
+///  - `trailingClosure`: ``ClosureExprSyntax``?
+///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
 public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4136,6 +4278,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - MissingDeclSyntax
 
 /// In case the source code is missing a declaration, this node stands in place of the missing declaration.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `placeholder`: `<identifier>`
 public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4319,6 +4467,14 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - OperatorDeclSyntax
 
 /// A Swift `operator` declaration.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `operatorKeyword`: `'operator'`
+///  - `identifier`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
+///  - `operatorPrecedenceAndTypes`: ``OperatorPrecedenceAndTypesSyntax``?
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4554,6 +4710,13 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - PoundSourceLocationSyntax
 
 
+
+/// ### Children
+/// 
+///  - `poundSourceLocation`: `'#sourceLocation'`
+///  - `leftParen`: `'('`
+///  - `args`: ``PoundSourceLocationArgsSyntax``?
+///  - `rightParen`: `')'`
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4722,6 +4885,16 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - PrecedenceGroupDeclSyntax
 
 /// A Swift `precedencegroup` declaration.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `precedencegroupKeyword`: `'precedencegroup'`
+///  - `identifier`: `<identifier>`
+///  - `leftBrace`: `'{'`
+///  - `groupAttributes`: ``PrecedenceGroupAttributeListSyntax``
+///  - `rightBrace`: `'}'`
 public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5029,6 +5202,17 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - ProtocolDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `protocolKeyword`: `'protocol'`
+///  - `identifier`: `<identifier>`
+///  - `primaryAssociatedTypeClause`: ``PrimaryAssociatedTypeClauseSyntax``?
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5339,6 +5523,17 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - StructDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `structKeyword`: `'struct'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `memberBlock`: ``MemberDeclBlockSyntax``
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5649,6 +5844,17 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - SubscriptDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `subscriptKeyword`: `'subscript'`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `indices`: ``ParameterClauseSyntax``
+///  - `result`: ``ReturnClauseSyntax``
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `accessor`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public enum Accessor: SyntaxChildChoices {
     case `accessors`(AccessorBlockSyntax)
@@ -6001,6 +6207,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - TypealiasDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `typealiasKeyword`: `'typealias'`
+///  - `identifier`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `initializer`: ``TypeInitializerClauseSyntax``
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6285,6 +6501,13 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 // MARK: - VariableDeclSyntax
 
 
+
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``ModifierListSyntax``
+///  - `bindingKeyword`: (`'let'` | `'var'` | `'inout'`)
+///  - `bindings`: ``PatternBindingListSyntax``
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

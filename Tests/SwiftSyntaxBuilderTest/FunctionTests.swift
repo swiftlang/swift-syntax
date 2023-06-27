@@ -225,7 +225,7 @@ final class FunctionTests: XCTestCase {
                 expression: SequenceExprSyntax(
                   elements: ExprListSyntax {
                     IdentifierExprSyntax(identifier: .identifier("lhs"))
-                    BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
+                    BinaryOperatorExprSyntax(operator: .binaryOperator("<"))
                     IdentifierExprSyntax(identifier: .identifier("rhs"))
                   }
                 )
@@ -262,7 +262,7 @@ final class FunctionTests: XCTestCase {
                 expression: SequenceExprSyntax(
                   elements: ExprListSyntax {
                     ExprSyntax("(lhs1, lhs2)")
-                    BinaryOperatorExprSyntax(operatorToken: .binaryOperator("<"))
+                    BinaryOperatorExprSyntax(operator: .binaryOperator("<"))
                     ExprSyntax("(rhs1, rhs2)")
                   }
                 )

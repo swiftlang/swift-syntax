@@ -28,10 +28,10 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
             @available(*, deprecated, renamed: "\(raw: child.varName)")
             public var \(raw: deprecatedVarName): \(raw: type) {
               get {
-                return \(raw: child.varName)
+                return \(raw: child.varName.backtickedIfNeeded)
               }
               set {
-                \(raw: child.varName) = newValue
+                \(raw: child.varName.backtickedIfNeeded) = newValue
               }
             }
             """
@@ -56,8 +56,8 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
       }
 
       let deprecatedNames = layoutNode.children
-        .filter { !$0.isUnexpectedNodes }
-        .compactMap { $0.deprecatedName?.withFirstCharacterLowercased }
+        .filter { !$0.isUnexpectedNodes && $0.deprecatedName != nil }
+        .map { $0.varName }
         .joined(separator: ", ")
 
       try! InitializerDeclSyntax(

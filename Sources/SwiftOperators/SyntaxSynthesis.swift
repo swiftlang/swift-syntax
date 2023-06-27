@@ -100,7 +100,7 @@ extension PrecedenceGroup {
       groupAttributes.append(
         .init(
           PrecedenceGroupAssociativitySyntax(
-            associativityKeyword:
+            associativityLabel:
               .keyword(
                 .associativity,
                 leadingTrivia: [.newlines(1), .spaces(indentation)]
@@ -120,7 +120,7 @@ extension PrecedenceGroup {
       groupAttributes.append(
         .init(
           PrecedenceGroupAssignmentSyntax(
-            assignmentKeyword:
+            assignmentLabel:
               .keyword(
                 .assignment,
                 leadingTrivia: [.newlines(1), .spaces(indentation)]

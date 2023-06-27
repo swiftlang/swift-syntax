@@ -215,7 +215,8 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: "generic argument clause",
     children: [
       Child(
-        name: "LeftAngleBracket",
+        name: "LeftAngle",
+        deprecatedName: "LeftAngleBracket",
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
@@ -223,7 +224,8 @@ public let TYPE_NODES: [Node] = [
         kind: .collection(kind: .genericArgumentList, collectionElementName: "Argument")
       ),
       Child(
-        name: "RightAngleBracket",
+        name: "RightAngle",
+        deprecatedName: "RightAngleBracket",
         kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
       ),
     ]
@@ -457,7 +459,8 @@ public let TYPE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "InOut",
+        name: "InoutKeyword",
+        deprecatedName: "InOut",
         kind: .token(choices: [.keyword(text: "inout")]),
         isOptional: true
       ),

@@ -80,11 +80,11 @@ final class PatternTests: XCTestCase {
               .init(
                 expression: SubscriptExprSyntax(
                   calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
-                  leftBracket: .leftSquareToken(),
+                  leftSquare: .leftSquareToken(),
                   argumentList: TupleExprElementListSyntax([
                     .init(expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0")))
                   ]),
-                  rightBracket: .rightSquareToken()
+                  rightSquare: .rightSquareToken()
                 ),
                 trailingComma: .commaToken()
               ),

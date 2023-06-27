@@ -265,7 +265,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
     case .negativeInfinity, .negativeZero:
       return ExprSyntax(
         PrefixOperatorExprSyntax(
-          operatorToken: .prefixOperator("-"),
+          operator: .prefixOperator("-"),
           postfixExpression: (-self).makeLiteralSyntax()
         )
       )
@@ -273,7 +273,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
       let digits = String(self)
-      return ExprSyntax(FloatLiteralExprSyntax(floatingDigits: .floatingLiteral(digits)))
+      return ExprSyntax(FloatLiteralExprSyntax(digits: .floatingLiteral(digits)))
     }
 
   }

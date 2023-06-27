@@ -145,13 +145,13 @@ extension Parser {
 extension Parser {
   mutating func parseQualifiedDeclarationName() -> RawQualifiedDeclNameSyntax {
     let type: RawTypeSyntax?
-    let dot: RawTokenSyntax?
+    let period: RawTokenSyntax?
     if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
       type = self.parseQualifiedTypeIdentifier()
-      dot = self.consumePrefix(".", as: .period)
+      period = self.consumePrefix(".", as: .period)
     } else {
       type = nil
-      dot = nil
+      period = nil
     }
 
     let (name, args) = self.parseDeclNameRef([
@@ -161,7 +161,7 @@ extension Parser {
     ])
     return RawQualifiedDeclNameSyntax(
       baseType: type,
-      dot: dot,
+      period: period,
       name: name,
       arguments: args,
       arena: self.arena

@@ -533,7 +533,7 @@ extension Parser {
             RawExpressionSegmentSyntax(
               backslash: backslash,
               unexpectedBeforeDelimiter,
-              delimiter: delimiter,
+              rawStringDelimiter: delimiter,
               leftParen: leftParen,
               expressions: expressions,
               RawUnexpectedNodesSyntax(unexpectedBeforeRightParen, arena: self.arena),

@@ -37,7 +37,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     parserFunction: "parseAttribute",
     children: [
       Child(
-        name: "AtSignToken",
+        name: "AtSign",
+        deprecatedName: "AtSignToken",
         kind: .token(choices: [.token(tokenKind: "AtSignToken")]),
         documentation: "The `@` sign."
       ),
@@ -157,7 +158,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The availability argument for the _specialize attribute",
     children: [
       Child(
-        name: "Label",
+        name: "AvailabilityLabel",
+        deprecatedName: "Label",
         kind: .token(choices: [.keyword(text: "availability")]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
@@ -789,7 +791,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Dot",
+        name: "Period",
+        deprecatedName: "Dot",
         kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
         isOptional: true
       ),
@@ -840,7 +843,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Label",
+        name: "TargetLabel",
+        deprecatedName: "Label",
         kind: .token(choices: [.keyword(text: "target")]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"

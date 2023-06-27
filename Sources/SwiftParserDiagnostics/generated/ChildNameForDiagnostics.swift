@@ -48,7 +48,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \AttributeSyntax.attributeName:
     return "name"
-  case \AvailabilityEntrySyntax.label:
+  case \AvailabilityEntrySyntax.availabilityLabel:
     return "label"
   case \AvailabilityLabeledArgumentSyntax.label:
     return "label"
@@ -172,7 +172,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \FunctionParameterSyntax.defaultArgument:
     return "default argument"
-  case \GenericParameterSyntax.each:
+  case \GenericParameterSyntax.eachKeyword:
     return "parameter pack specifier"
   case \GenericParameterSyntax.name:
     return "name"
@@ -220,7 +220,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \LabeledSpecializeEntrySyntax.value:
     return "value"
-  case \LabeledStmtSyntax.labelName:
+  case \LabeledStmtSyntax.label:
     return "label name"
   case \LayoutRequirementSyntax.typeIdentifier:
     return "constrained type"
@@ -334,7 +334,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "trailing closures"
   case \SwitchCaseSyntax.label:
     return "label"
-  case \TargetFunctionEntrySyntax.label:
+  case \TargetFunctionEntrySyntax.targetLabel:
     return "label"
   case \TargetFunctionEntrySyntax.declname:
     return "declaration name"
@@ -348,7 +348,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \TupleExprElementSyntax.expression:
     return "value"
-  case \TuplePatternElementSyntax.labelName:
+  case \TuplePatternElementSyntax.label:
     return "label"
   case \TupleTypeElementSyntax.name:
     return "name"

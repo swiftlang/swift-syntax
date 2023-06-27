@@ -89,7 +89,7 @@ extension SyntaxClassification {
       return (.typeIdentifier, false)
     case \OperatorDeclSyntax.identifier:
       return (.operatorIdentifier, false)
-    case \PrecedenceGroupAssociativitySyntax.associativityKeyword:
+    case \PrecedenceGroupAssociativitySyntax.associativityLabel:
       return (.keyword, false)
     case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanKeyword:
       return (.keyword, false)

@@ -56,7 +56,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
 
     let genericParam = GenericParameterSyntax(
       attributes: nil,
-      each: nil,
+      eachKeyword: nil,
       name: paramNameSyntax,
       colon: colon,
       inheritedType: inheritedType,
@@ -159,10 +159,10 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
       )
     } else {
       newGenericParamClause = GenericParameterClauseSyntax(
-        leftAngleBracket: .leftAngleToken(),
+        leftAngle: .leftAngleToken(),
         parameters: newGenericParamSyntax,
         genericWhereClause: nil,
-        rightAngleBracket: .rightAngleToken()
+        rightAngle: .rightAngleToken()
       )
     }
 

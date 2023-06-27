@@ -497,7 +497,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: node.effectSpecifiers, misplacedSpecifiers: node.unexpectedAfterArrowToken)
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: node.effectSpecifiers, misplacedSpecifiers: node.unexpectedAfterArrow)
 
     return .visitChildren
   }
@@ -914,8 +914,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.floatingDigits.isMissing,
-      let (period, integerLiteral) = node.unexpectedAfterFloatingDigits?.twoPresentTokens(
+    if node.digits.isMissing,
+      let (period, integerLiteral) = node.unexpectedAfterDigits?.twoPresentTokens(
         firstSatisfying: { $0.tokenKind == .period },
         secondSatisfying: { $0.tokenKind.isIntegerLiteral }
       )
@@ -927,13 +927,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: InsertFixIt(tokenToBeInserted: .integerLiteral("0")),
             changes: [
-              .makePresent(node.floatingDigits),
+              .makePresent(node.digits),
               .makeMissing(period),
               .makeMissing(integerLiteral),
             ]
           )
         ],
-        handledNodes: [node.floatingDigits.id, period.id, integerLiteral.id]
+        handledNodes: [node.digits.id, period.id, integerLiteral.id]
       )
     }
     return .visitChildren
@@ -1022,7 +1022,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     // Emit a custom diagnostic for an unexpected '...' after the type name.
-    if node.each?.isPresent ?? false {
+    if node.eachKeyword?.isPresent ?? false {
       removeToken(
         node.unexpectedBetweenNameAndColon,
         where: { $0.tokenKind == .ellipsis },
@@ -1030,7 +1030,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     } else if let unexpected = node.unexpectedBetweenNameAndColon,
       let unexpectedEllipsis = unexpected.onlyPresentToken(where: { $0.tokenKind == .ellipsis }),
-      let each = node.each
+      let each = node.eachKeyword
     {
       addDiagnostic(
         unexpected,
@@ -1068,7 +1068,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
       } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
         if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
-          let operatorToken = prefixOperatorExpr.operatorToken,
+          let operatorToken = prefixOperatorExpr.operator,
           operatorToken.text == "!",
           let conditionElement = prefixOperatorExpr.parent?.as(ConditionElementSyntax.self)
         {
@@ -1232,8 +1232,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     handleExtraneousWhitespaceError(
-      unexpectedBefore: node.unexpectedBetweenModifiersAndPoundToken,
-      token: node.poundToken
+      unexpectedBefore: node.unexpectedBetweenModifiersAndPound,
+      token: node.pound
     )
 
     return .visitChildren
@@ -1245,8 +1245,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     handleExtraneousWhitespaceError(
-      unexpectedBefore: node.unexpectedBeforePoundToken,
-      token: node.poundToken
+      unexpectedBefore: node.unexpectedBeforePound,
+      token: node.pound
     )
 
     return .visitChildren
@@ -1469,7 +1469,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let extraneous = node.unexpectedBetweenStatementsAndEOFToken, !extraneous.isEmpty {
+    if let extraneous = node.unexpectedBetweenStatementsAndEndOfFileToken, !extraneous.isEmpty {
       addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous), handledNodes: [extraneous.id])
     }
     return .visitChildren
@@ -1666,7 +1666,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     exchangeTokens(
-      unexpected: node.unexpectedBetweenInOutAndName,
+      unexpected: node.unexpectedBetweenInoutKeywordAndName,
       unexpectedTokenCondition: { TypeSpecifier(token: $0) != nil },
       correctTokens: [node.type.as(AttributedTypeSyntax.self)?.specifier],
       message: { SpecifierOnParameterName(misplacedSpecifiers: $0) },
@@ -1796,33 +1796,33 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.colonMark.isMissing {
+    if node.colon.isMissing {
       if let siblings = node.parent?.children(viewMode: .all),
         let nextSibling = siblings[siblings.index(after: node.index)...].first,
         nextSibling.is(MissingExprSyntax.self)
       {
         addDiagnostic(
-          node.colonMark,
+          node.colon,
           .missingColonAndExprInTernaryExpr,
           fixIts: [
             FixIt(
-              message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark), Syntax(nextSibling)]),
+              message: InsertTokenFixIt(missingNodes: [Syntax(node.colon), Syntax(nextSibling)]),
               changes: [
-                .makePresent(node.colonMark),
+                .makePresent(node.colon),
                 .makePresent(nextSibling),
               ]
             )
           ],
-          handledNodes: [node.colonMark.id, nextSibling.id]
+          handledNodes: [node.colon.id, nextSibling.id]
         )
       } else {
         addDiagnostic(
-          node.colonMark,
+          node.colon,
           .missingColonInTernaryExpr,
           fixIts: [
-            FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colonMark)]), changes: .makePresent(node.colonMark))
+            FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.colon)]), changes: .makePresent(node.colon))
           ],
-          handledNodes: [node.colonMark.id]
+          handledNodes: [node.colon.id]
         )
       }
     }

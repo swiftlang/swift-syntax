@@ -370,7 +370,7 @@ final class StatementTests: XCTestCase {
           period: .periodToken(),
           name: .identifier("Optional"),
           genericArgumentClause: GenericArgumentClauseSyntax(
-            leftAngleBracket: .leftAngleToken(),
+            leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
                 argumentType: OptionalTypeSyntax(
@@ -379,7 +379,7 @@ final class StatementTests: XCTestCase {
                 )
               )
             ]),
-            rightAngleBracket: .rightAngleToken()
+            rightAngle: .rightAngleToken()
           )
         )
       ),
@@ -394,13 +394,13 @@ final class StatementTests: XCTestCase {
         SpecializeExprSyntax(
           expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
           genericArgumentClause: GenericArgumentClauseSyntax(
-            leftAngleBracket: .leftAngleToken(),
+            leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
                 argumentType: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
               )
             ]),
-            rightAngleBracket: .rightAngleToken()
+            rightAngle: .rightAngleToken()
           )
         )
       ),
@@ -563,7 +563,7 @@ final class StatementTests: XCTestCase {
         SequenceExprSyntax(
           elements: ExprListSyntax([
             IdentifierExprSyntax(identifier: .identifier("yield")),
-            BinaryOperatorExprSyntax(operatorToken: .binaryOperator("&")),
+            BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
         )
@@ -581,7 +581,7 @@ final class StatementTests: XCTestCase {
         SequenceExprSyntax(
           elements: ExprListSyntax([
             IdentifierExprSyntax(identifier: .identifier("yield")),
-            BinaryOperatorExprSyntax(operatorToken: .binaryOperator("&")),
+            BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
         )

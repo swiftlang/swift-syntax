@@ -269,7 +269,7 @@ final class VariadicGenericsTests: XCTestCase {
               ),
               ExprSyntax(
                 BinaryOperatorExprSyntax(
-                  operatorToken: .binaryOperator("+")
+                  operator: .binaryOperator("+")
                 )
               ),
               ExprSyntax(
@@ -282,7 +282,7 @@ final class VariadicGenericsTests: XCTestCase {
               ),
               ExprSyntax(
                 BinaryOperatorExprSyntax(
-                  operatorToken: .binaryOperator("+")
+                  operator: .binaryOperator("+")
                 )
               ),
               ExprSyntax(

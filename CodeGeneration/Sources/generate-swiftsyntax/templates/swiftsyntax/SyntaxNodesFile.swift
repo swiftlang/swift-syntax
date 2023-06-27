@@ -81,7 +81,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader())") {
           let parameters = ClosureParameterListSyntax {
             for child in node.children {
-              ClosureParameterSyntax(firstName: .identifier(child.varName))
+              ClosureParameterSyntax(firstName: .identifier(child.varName.backtickedIfNeeded))
             }
           }
 
@@ -99,7 +99,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             for child in node.children {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.varName)")),
+                  base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.varName.backtickedIfNeeded)")),
                   dot: .periodToken(),
                   name: "raw"
                 )
@@ -161,7 +161,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           try! VariableDeclSyntax(
             """
             \(raw: child.docComment)
-            public var \(raw: child.varName): \(type)
+            public var \(raw: child.varName.backtickedIfNeeded): \(type)
             """
           ) {
             AccessorDeclSyntax(accessorKind: .keyword(.get)) {

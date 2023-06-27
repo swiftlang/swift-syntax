@@ -78,7 +78,7 @@ extension Parser {
         parameters = RawTupleTypeElementListSyntax(
           elements: [
             RawTupleTypeElementSyntax(
-              inOut: nil,
+              inoutKeyword: nil,
               name: nil,
               secondName: nil,
               colon: nil,
@@ -458,9 +458,9 @@ extension Parser {
       args = RawGenericArgumentListSyntax(elements: arguments, arena: self.arena)
     }
     return RawGenericArgumentClauseSyntax(
-      leftAngleBracket: langle,
+      leftAngle: langle,
       arguments: args,
-      rightAngleBracket: rangle,
+      rightAngle: rangle,
       arena: self.arena
     )
   }
@@ -541,7 +541,7 @@ extension Parser {
         {
           elements.append(
             RawTupleTypeElementSyntax(
-              inOut: nil,
+              inoutKeyword: nil,
               name: nil,
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
@@ -567,7 +567,7 @@ extension Parser {
         keepGoing = trailingComma != nil
         elements.append(
           RawTupleTypeElementSyntax(
-            inOut: nil,
+            inoutKeyword: nil,
             RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirst, arena: self.arena),
             name: first,
             unexpectedBeforeSecond,

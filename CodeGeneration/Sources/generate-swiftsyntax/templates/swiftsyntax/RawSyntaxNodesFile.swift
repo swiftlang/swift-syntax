@@ -218,7 +218,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               ExprSyntax("layout.initialize(repeating: nil)")
               for (index, child) in node.children.enumerated() {
                 let optionalMark = child.isOptional ? "?" : ""
-                ExprSyntax("layout[\(raw: index)] = \(raw: child.varName)\(raw: optionalMark).raw")
+                ExprSyntax("layout[\(raw: index)] = \(raw: child.varName.backtickedIfNeeded)\(raw: optionalMark).raw")
                   .with(\.leadingTrivia, .newline)
               }
             }
@@ -238,7 +238,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for (index, child) in node.children.enumerated() {
-          try VariableDeclSyntax("public var \(raw: child.varName): Raw\(raw: child.type.buildable)") {
+          try VariableDeclSyntax("public var \(raw: child.varName.backtickedIfNeeded): Raw\(raw: child.type.buildable)") {
             let iuoMark = child.isOptional ? "" : "!"
 
             if child.syntaxNodeKind == .syntax {

@@ -1662,7 +1662,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         MacroExpansionDeclSyntax(
-          poundToken: .poundToken(),
+          pound: .poundToken(),
           macro: .identifier("case"),
           argumentList: TupleExprElementListSyntax([])
         )
@@ -1829,7 +1829,7 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
-          poundToken: .poundToken(),
+          pound: .poundToken(),
           macro: .identifier("class"),
           argumentList: []
         )
@@ -1844,7 +1844,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         MacroExpansionDeclSyntax(
-          poundToken: .poundToken(),
+          pound: .poundToken(),
           macro: .identifier("struct"),
           argumentList: []
         )

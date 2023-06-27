@@ -389,12 +389,14 @@ public let STMT_NODES: [Node] = [
     nameForDiagnostics: "labeled statement",
     children: [
       Child(
-        name: "LabelName",
+        name: "Label",
+        deprecatedName: "LabelName",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
         nameForDiagnostics: "label name"
       ),
       Child(
-        name: "LabelColon",
+        name: "Colon",
+        deprecatedName: "LabelColon",
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(

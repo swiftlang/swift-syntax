@@ -390,7 +390,7 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         DictionaryElementSyntax.init(
           keyExpression: MacroExpansionExprSyntax(
-            poundToken: .poundToken(),
+            pound: .poundToken(),
             macro: .identifier("line"),
             argumentList: TupleExprElementListSyntax([])
           ),
@@ -403,7 +403,7 @@ final class ExpressionTests: XCTestCase {
                 label: .identifier("identifier"),
                 colon: .colonToken(),
                 expression: MemberAccessExprSyntax(
-                  dot: .periodToken(),
+                  period: .periodToken(),
                   name: .identifier("buddhist")
                 )
               )
@@ -1156,7 +1156,7 @@ final class ExpressionTests: XCTestCase {
       "#case",
       substructure: Syntax(
         MacroExpansionExprSyntax(
-          poundToken: .poundToken(),
+          pound: .poundToken(),
           macro: .identifier("case"),
           argumentList: TupleExprElementListSyntax([])
         )

@@ -92,8 +92,74 @@ extension EnumDeclSyntax {
   }
 }
 
+extension ExpressionSegmentSyntax {
+  @available(*, deprecated, message: "Use an initializer with delimiter argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, 
+      backslash: TokenSyntax = .backslashToken(), 
+      unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? = nil, 
+      delimiter: TokenSyntax? = nil, 
+      unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder expressionsBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeBackslash, 
+        backslash: backslash, 
+        unexpectedBetweenBackslashAndDelimiter, 
+        rawStringDelimiter: delimiter, 
+        unexpectedBetweenDelimiterAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndExpressions, 
+        expressions: expressionsBuilder(), 
+        unexpectedBetweenExpressionsAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension GenericArgumentClauseSyntax {
+  @available(*, deprecated, message: "Use an initializer with leftAngleBracket, rightAngleBracket argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeLeftAngleBracket: UnexpectedNodesSyntax? = nil, 
+      leftAngleBracket: TokenSyntax = .leftAngleToken(), 
+      unexpectedBetweenLeftAngleBracketAndArguments: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil, 
+      rightAngleBracket: TokenSyntax = .rightAngleToken(), 
+      unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil, 
+      @GenericArgumentListBuilder argumentsBuilder: () throws -> GenericArgumentListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftAngleBracket, 
+        leftAngle: leftAngleBracket, 
+        unexpectedBetweenLeftAngleBracketAndArguments, 
+        arguments: argumentsBuilder(), 
+        unexpectedBetweenArgumentsAndRightAngleBracket, 
+        rightAngle: rightAngleBracket, 
+        unexpectedAfterRightAngleBracket, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension GenericParameterClauseSyntax {
-  @available(*, deprecated, message: "Use an initializer with genericParameterList argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftAngleBracket, genericParameterList, rightAngleBracket argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -112,14 +178,215 @@ extension GenericParameterClauseSyntax {
     try self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeLeftAngleBracket, 
-        leftAngleBracket: leftAngleBracket, 
+        leftAngle: leftAngleBracket, 
         unexpectedBetweenLeftAngleBracketAndGenericParameterList, 
         parameters: genericParameterListBuilder(), 
         unexpectedBetweenGenericParameterListAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
-        rightAngleBracket: rightAngleBracket, 
+        rightAngle: rightAngleBracket, 
         unexpectedAfterRightAngleBracket, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension KeyPathSubscriptComponentSyntax {
+  @available(*, deprecated, message: "Use an initializer with leftBracket, rightBracket argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil, 
+      leftBracket: TokenSyntax = .leftSquareToken(), 
+      unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, 
+      rightBracket: TokenSyntax = .rightSquareToken(), 
+      unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder argumentListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftBracket, 
+        leftSquare: leftBracket, 
+        unexpectedBetweenLeftBracketAndArgumentList, 
+        argumentList: argumentListBuilder(), 
+        unexpectedBetweenArgumentListAndRightBracket, 
+        rightSquare: rightBracket, 
+        unexpectedAfterRightBracket, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension MacroExpansionDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with poundToken argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
+      attributes: AttributeListSyntax? = nil, 
+      unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
+      modifiers: ModifierListSyntax? = nil, 
+      unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil, 
+      poundToken: TokenSyntax = .poundToken(), 
+      unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, 
+      macro: TokenSyntax, 
+      unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, 
+      genericArguments: GenericArgumentClauseSyntax? = nil, 
+      unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax? = nil, 
+      unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax? = nil, 
+      unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
+      trailingClosure: ClosureExprSyntax? = nil, 
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder argumentListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndPoundToken, 
+        pound: poundToken, 
+        unexpectedBetweenPoundTokenAndMacro, 
+        macro: macro, 
+        unexpectedBetweenMacroAndGenericArguments, 
+        genericArguments: genericArguments, 
+        unexpectedBetweenGenericArgumentsAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndArgumentList, 
+        argumentList: argumentListBuilder(), 
+        unexpectedBetweenArgumentListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedBetweenRightParenAndTrailingClosure, 
+        trailingClosure: trailingClosure, 
+        unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
+        additionalTrailingClosures: additionalTrailingClosures, 
+        unexpectedAfterAdditionalTrailingClosures, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension MacroExpansionExprSyntax {
+  @available(*, deprecated, message: "Use an initializer with poundToken argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil, 
+      poundToken: TokenSyntax = .poundToken(), 
+      unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil, 
+      macro: TokenSyntax, 
+      unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil, 
+      genericArguments: GenericArgumentClauseSyntax? = nil, 
+      unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax? = nil, 
+      unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax? = nil, 
+      unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
+      trailingClosure: ClosureExprSyntax? = nil, 
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder argumentListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforePoundToken, 
+        pound: poundToken, 
+        unexpectedBetweenPoundTokenAndMacro, 
+        macro: macro, 
+        unexpectedBetweenMacroAndGenericArguments, 
+        genericArguments: genericArguments, 
+        unexpectedBetweenGenericArgumentsAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndArgumentList, 
+        argumentList: argumentListBuilder(), 
+        unexpectedBetweenArgumentListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedBetweenRightParenAndTrailingClosure, 
+        trailingClosure: trailingClosure, 
+        unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
+        additionalTrailingClosures: additionalTrailingClosures, 
+        unexpectedAfterAdditionalTrailingClosures, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension SourceFileSyntax {
+  @available(*, deprecated, message: "Use an initializer with eOFToken argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, 
+      eofToken: TokenSyntax = .eof(), 
+      unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil, 
+      @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeStatements, 
+        statements: statementsBuilder(), 
+        unexpectedBetweenStatementsAndEOFToken, 
+        endOfFileToken: eofToken, 
+        unexpectedAfterEOFToken, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension SubscriptExprSyntax {
+  @available(*, deprecated, message: "Use an initializer with leftBracket, rightBracket argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil, 
+      calledExpression: ExprSyntaxProtocol, 
+      unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil, 
+      leftBracket: TokenSyntax = .leftSquareToken(), 
+      unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil, 
+      rightBracket: TokenSyntax = .rightSquareToken(), 
+      unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
+      trailingClosure: ClosureExprSyntax? = nil, 
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
+      @TupleExprElementListBuilder argumentListBuilder: () throws -> TupleExprElementListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeCalledExpression, 
+        calledExpression: ExprSyntax(fromProtocol: calledExpression), 
+        unexpectedBetweenCalledExpressionAndLeftBracket, 
+        leftSquare: leftBracket, 
+        unexpectedBetweenLeftBracketAndArgumentList, 
+        argumentList: argumentListBuilder(), 
+        unexpectedBetweenArgumentListAndRightBracket, 
+        rightSquare: rightBracket, 
+        unexpectedBetweenRightBracketAndTrailingClosure, 
+        trailingClosure: trailingClosure, 
+        unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
+        additionalTrailingClosures: additionalTrailingClosures, 
+        unexpectedAfterAdditionalTrailingClosures, 
         trailingTrivia: trailingTrivia
       )
   }

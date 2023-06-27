@@ -62,7 +62,7 @@ extension AttributeSyntax {
 
 extension BinaryOperatorExprSyntax {
   public init(text: String) {
-    self.init(operatorToken: .binaryOperator(text))
+    self.init(operator: .binaryOperator(text))
   }
 }
 
@@ -155,7 +155,7 @@ extension ExprSyntax {
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
-    self.init(floatingDigits: .floatingLiteral(String(value)))
+    self.init(digits: .floatingLiteral(String(value)))
   }
 
   public init(floatLiteral value: Float) {

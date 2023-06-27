@@ -13,6 +13,7 @@ add_swift_host_library(SwiftSyntaxMacros
   MacroProtocols/ConformanceMacro.swift
   MacroProtocols/DeclarationMacro.swift
   MacroProtocols/ExpressionMacro.swift
+  MacroProtocols/ExtensionMacro.swift
   MacroProtocols/FreestandingMacro.swift
   MacroProtocols/Macro.swift
   MacroProtocols/Macro+Format.swift

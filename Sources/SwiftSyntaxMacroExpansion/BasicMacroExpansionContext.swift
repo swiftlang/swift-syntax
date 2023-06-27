@@ -12,13 +12,12 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacros
 
 /// An implementation of the `MacroExpansionContext` protocol that is
 /// suitable for testing purposes.
-@available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext instead")
 public class BasicMacroExpansionContext {
   /// A single source file that is known to the macro expansion context.
-  @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext.KnownSourceFile instead")
   public struct KnownSourceFile {
     /// The name of the module in which this source file resides.
     let moduleName: String
@@ -26,8 +25,6 @@ public class BasicMacroExpansionContext {
     /// The full path to the file.
     let fullFilePath: String
 
-    @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext.KnownSourceFile instead")
-    @_disfavoredOverload  // deprecated.
     public init(moduleName: String, fullFilePath: String) {
       self.moduleName = moduleName
       self.fullFilePath = fullFilePath
@@ -35,8 +32,6 @@ public class BasicMacroExpansionContext {
   }
 
   /// Create a new macro evaluation context.
-  @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext instead")
-  @_disfavoredOverload  // deprecated.
   public init(
     expansionDiscriminator: String = "__macro_local_",
     sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]

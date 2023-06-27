@@ -12,6 +12,27 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+@_spi(MacroExpansion) import SwiftSyntaxMacros
+
+private func expandMemberAttributeMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> AttributeListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandMemberMacro(attribute: AttributeSyntax, attachedTo: DeclGroupSyntax) -> MemberDeclListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandPeerMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> CodeBlockItemListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandConformanceMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> CodeBlockItemListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandAccessorMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> AccessorListSyntax {
+  fatalError("unimplemented")
+}
 
 /// Describes the kinds of errors that can occur within a macro system.
 enum MacroSystemError: Error {
@@ -555,8 +576,7 @@ extension DeclSyntax {
   /// node’s attributes and modifiers, respectively. If the node doesn’t contain
   /// attributes or modifiers, `attributes` or `modifiers` are ignored and not
   /// applied.
-  @_spi(MacroExpansion)
-  public func applying(
+  func applying(
     attributes: AttributeListSyntax?,
     modifiers: ModifierListSyntax?
   ) -> DeclSyntax {
@@ -591,8 +611,6 @@ extension DeclSyntax {
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
-  @available(*, deprecated, message: "Use SwiftSyntaxMacroExpansion instead")
-  @_disfavoredOverload  // deprecated.
   public func expand(
     macros: [String: Macro.Type],
     in context: some MacroExpansionContext

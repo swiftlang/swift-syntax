@@ -17,6 +17,7 @@ import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacros
+import SwiftSyntaxMacroExpansion
 import XCTest
 
 // MARK: - Note

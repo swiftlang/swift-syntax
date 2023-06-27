@@ -17,6 +17,9 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
+// Disambiguate between `SwiftRefactor.SourceEdit` and `SwiftSyntax.SourceEdit`
+typealias SourceEdit = SwiftRefactor.SourceEdit
+
 func assertRefactor<R: EditRefactoringProvider>(
   _ input: R.Input,
   context: R.Context,

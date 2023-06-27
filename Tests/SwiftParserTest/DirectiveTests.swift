@@ -213,4 +213,25 @@ final class DirectiveTests: XCTestCase {
       ]
     )
   }
+
+  func testSourcelocationDirectiveFollowedByDeclarations() {
+    assertParse(
+      """
+      var sometName: Int
+      #sourceLocation(file: "other.swift", line: 1)
+      var someName: Int
+      """
+    )
+
+    assertParse(
+      """
+      #sourceLocation(file: "other.swift", line: 1)1️⃣; let x = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following the #sourceLocation directive"
+        )
+      ]
+    )
+  }
 }

@@ -163,16 +163,8 @@ extension Parser {
     }
 
     let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)
-    var unexpectedAfterPoundEndif: RawUnexpectedNodesSyntax?
-    if !self.currentToken.isAtStartOfLine {
-      var unexpectedTokens = [RawTokenSyntax]()
-      var loopProgress = LoopProgressCondition()
-      while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
-        unexpectedTokens += [self.consumeAnyToken()]
-      }
+    let unexpectedAfterPoundEndif = self.consumeRemainingTokenOnLine()
 
-      unexpectedAfterPoundEndif = RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
-    }
     return RawIfConfigDeclSyntax(
       clauses: RawIfConfigClauseListSyntax(elements: clauses, arena: self.arena),
       unexpectedBeforePoundEndIf,
@@ -267,6 +259,8 @@ extension Parser {
       args = nil
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
+    let unexpectedAfterRightParen = self.consumeRemainingTokenOnLine()
+
     return RawPoundSourceLocationSyntax(
       poundSourceLocation: line,
       unexpectedBeforeLParen,
@@ -274,7 +268,24 @@ extension Parser {
       args: args,
       unexpectedBeforeRParen,
       rightParen: rparen,
+      unexpectedAfterRightParen,
       arena: self.arena
     )
+  }
+
+  /// Consumes remaining token on the line and returns a ``RawUnexpectedNodesSyntax``
+  /// if there is any tokens consumed.
+  private mutating func consumeRemainingTokenOnLine() -> RawUnexpectedNodesSyntax? {
+    guard !self.currentToken.isAtStartOfLine else {
+      return nil
+    }
+
+    var unexpectedTokens = [RawTokenSyntax]()
+    var loopProgress = LoopProgressCondition()
+    while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+      unexpectedTokens += [self.consumeAnyToken()]
+    }
+
+    return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
   }
 }

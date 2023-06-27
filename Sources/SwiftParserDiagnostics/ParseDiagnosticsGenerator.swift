@@ -1424,6 +1424,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedAfterRightParen = node.unexpectedAfterRightParen {
+      addDiagnostic(
+        unexpectedAfterRightParen,
+        .extraTokensAtTheEndOfSourceLocationDirective,
+        handledNodes: [unexpectedAfterRightParen.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

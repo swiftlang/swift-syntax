@@ -1076,6 +1076,10 @@ extension Lexer.Lexeme {
       || self.rawTokenKind == .prefixOperator
   }
 
+  var isAttachedKeyword: Bool {
+    return self.rawTokenKind == .identifier && self.tokenText == "attached"
+  }
+
   var isEllipsis: Bool {
     return self.isAnyOperator && self.tokenText == "..."
   }

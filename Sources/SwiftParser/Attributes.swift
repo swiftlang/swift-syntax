@@ -332,11 +332,41 @@ extension Parser {
         )
       )
     case nil:
+      let isAttached = self.peek().isAttachedKeyword
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none)
+        let arguments: [RawTupleExprElementSyntax]
+        if isAttached {
+          arguments = parser.parseAttachedArguments()
+        } else {
+          arguments = parser.parseArgumentListElements(pattern: .none)
+        }
+
         return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
       }
     }
+  }
+}
+
+extension Parser {
+  mutating func parseAttachedArguments() -> [RawTupleExprElementSyntax] {
+    let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
+    let roleTrailingComma = self.consume(if: .comma)
+    let roleElement = RawTupleExprElementSyntax(
+      label: nil,
+      colon: nil,
+      expression: RawExprSyntax(
+        RawIdentifierExprSyntax(
+          unexpectedBeforeRole,
+          identifier: role,
+          declNameArguments: nil,
+          arena: self.arena
+        )
+      ),
+      trailingComma: roleTrailingComma,
+      arena: self.arena
+    )
+    let additionalArgs = self.parseArgumentListElements(pattern: .none)
+    return [roleElement] + additionalArgs
   }
 }
 

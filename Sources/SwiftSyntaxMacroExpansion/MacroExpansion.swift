@@ -22,6 +22,7 @@ public enum MacroRole {
   case peer
   case conformance
   case codeItem
+  case `extension`
 }
 
 extension MacroRole {
@@ -35,6 +36,7 @@ extension MacroRole {
     case .peer: return "PeerMacro"
     case .conformance: return "ConformanceMacro"
     case .codeItem: return "CodeItemMacro"
+    case .extension: return "ExtensionMacro"
     }
   }
 }
@@ -113,7 +115,7 @@ public func expandFreestandingMacro(
         let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
         expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
-      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.expression, _), (.declaration, _),
+      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
         (.codeItem, _):
         throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
       }
@@ -293,6 +295,42 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         let protocolName = typeSyntax.trimmedDescription
         let whereClause = whereClause?.trimmedDescription ?? ""
         return "extension \(typeName) : \(protocolName) \(whereClause) {}"
+      }
+
+    case (let attachedMacro as ExtensionMacro.Type, .extension):
+      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
+        // Compiler error: type mismatch.
+        throw MacroExpansionError.declarationNotDeclGroup
+      }
+      guard let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
+      else {
+        // Compiler error: type mismatch.
+        throw MacroExpansionError.declarationNotIdentified
+      }
+
+      let type: TypeSyntax = "\(identified.identifier)"
+
+      // Local function to expand a extension macro once we've opened up
+      // the existential.
+      func expandExtensionMacro(
+        _ node: some DeclGroupSyntax
+      ) throws -> [ExtensionDeclSyntax] {
+        return try attachedMacro.expansion(
+          of: attributeNode,
+          attachedTo: node,
+          providingExtensionsOf: type,
+          in: context
+        )
+      }
+
+      let extensions = try _openExistential(
+        declGroup,
+        do: expandExtensionMacro
+      )
+
+      // Form a buffer of peer declarations to return to the caller.
+      return extensions.map {
+        $0.formattedExpansion(definition.formatMode)
       }
 
     default:

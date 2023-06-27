@@ -68,15 +68,9 @@ extension CompilerPluginMessageHandler {
     let diagnostics = context.diagnostics.map {
       PluginMessage.Diagnostic(from: $0, in: sourceManager)
     }
-
-    let response: PluginToHostMessage
-    if hostCapability.hasExpandMacroResult {
-      response = .expandMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
-    } else {
-      // TODO: Remove this  when all compilers have 'hasExpandMacroResult'.
-      response = .expandFreestandingMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
-    }
-    try self.sendMessage(response)
+    try self.sendMessage(
+      .expandFreestandingMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
+    )
   }
 
   /// Expand `@attached(XXX)` macros.
@@ -101,34 +95,20 @@ extension CompilerPluginMessageHandler {
     let declarationNode = sourceManager.add(declSyntax).cast(DeclSyntax.self)
     let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
 
-    // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.
     let expandedSources: [String]?
     do {
       guard let macroDefinition = resolveMacro(macro) else {
         throw MacroExpansionError.macroTypeNotFound(macro)
       }
-      let role = MacroRole(messageMacroRole: macroRole)
 
-      let expansions = SwiftSyntaxMacroExpansion.expandAttachedMacroWithoutCollapsing(
+      expandedSources = SwiftSyntaxMacroExpansion.expandAttachedMacro(
         definition: macroDefinition,
-        macroRole: role,
+        macroRole: MacroRole(messageMacroRole: macroRole),
         attributeNode: attributeNode,
         declarationNode: declarationNode,
         parentDeclNode: parentDeclNode,
         in: context
       )
-      if let expansions, hostCapability.hasExpandMacroResult {
-        // Make a single element array by collapsing the results into a string.
-        expandedSources = [
-          SwiftSyntaxMacroExpansion.collapse(
-            expansions: expansions,
-            for: role,
-            attachedTo: declarationNode
-          )
-        ]
-      } else {
-        expandedSources = expansions
-      }
     } catch {
       context.addDiagnostics(from: error, node: attributeNode)
       expandedSources = nil
@@ -137,14 +117,9 @@ extension CompilerPluginMessageHandler {
     let diagnostics = context.diagnostics.map {
       PluginMessage.Diagnostic(from: $0, in: sourceManager)
     }
-
-    let response: PluginToHostMessage
-    if hostCapability.hasExpandMacroResult {
-      response = .expandMacroResult(expandedSource: expandedSources?.first, diagnostics: diagnostics)
-    } else {
-      response = .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
-    }
-    try self.sendMessage(response)
+    try self.sendMessage(
+      .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
+    )
   }
 }
 

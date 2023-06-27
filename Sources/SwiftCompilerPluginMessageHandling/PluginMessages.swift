@@ -14,10 +14,8 @@
 // NOTE: Types in this file should be self-contained and should not depend on any non-stdlib types.
 
 internal enum HostToPluginMessage: Codable {
-  /// Send capability of the host, and get capability of the plugin.
-  case getCapability(
-    capability: PluginMessage.HostCapability?
-  )
+  /// Get capability of this plugin.
+  case getCapability
 
   /// Expand a '@freestanding' macro.
   case expandFreestandingMacro(
@@ -51,19 +49,11 @@ internal enum PluginToHostMessage: Codable {
     capability: PluginMessage.PluginCapability
   )
 
-  /// Unified response for freestanding/attached macro expansion.
-  case expandMacroResult(
-    expandedSource: String?,
-    diagnostics: [PluginMessage.Diagnostic]
-  )
-
-  // @available(*, deprecated: "use expandMacroResult() instead")
   case expandFreestandingMacroResult(
     expandedSource: String?,
     diagnostics: [PluginMessage.Diagnostic]
   )
 
-  // @available(*, deprecated: "use expandMacroResult() instead")
   case expandAttachedMacroResult(
     expandedSources: [String]?,
     diagnostics: [PluginMessage.Diagnostic]
@@ -76,11 +66,7 @@ internal enum PluginToHostMessage: Codable {
 }
 
 /*namespace*/ internal enum PluginMessage {
-  static var PROTOCOL_VERSION_NUMBER: Int { 5 }  // Added 'expandMacroResult'.
-
-  struct HostCapability: Codable {
-    var protocolVersion: Int
-  }
+  static var PROTOCOL_VERSION_NUMBER: Int { 4 }  // Added 'loadPluginLibrary'.
 
   struct PluginCapability: Codable {
     var protocolVersion: Int

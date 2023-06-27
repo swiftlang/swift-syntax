@@ -119,32 +119,32 @@ extension TokenSpec {
     return TokenSpec(.pound)
   }
   
-  static var poundAvailableKeyword: TokenSpec {
-    return TokenSpec(.poundAvailableKeyword)
+  static var poundAvailable: TokenSpec {
+    return TokenSpec(.poundAvailable)
   }
   
-  static var poundElseKeyword: TokenSpec {
-    return TokenSpec(.poundElseKeyword)
+  static var poundElse: TokenSpec {
+    return TokenSpec(.poundElse)
   }
   
-  static var poundElseifKeyword: TokenSpec {
-    return TokenSpec(.poundElseifKeyword)
+  static var poundElseif: TokenSpec {
+    return TokenSpec(.poundElseif)
   }
   
-  static var poundEndifKeyword: TokenSpec {
-    return TokenSpec(.poundEndifKeyword)
+  static var poundEndif: TokenSpec {
+    return TokenSpec(.poundEndif)
   }
   
-  static var poundIfKeyword: TokenSpec {
-    return TokenSpec(.poundIfKeyword)
+  static var poundIf: TokenSpec {
+    return TokenSpec(.poundIf)
   }
   
-  static var poundSourceLocationKeyword: TokenSpec {
-    return TokenSpec(.poundSourceLocationKeyword)
+  static var poundSourceLocation: TokenSpec {
+    return TokenSpec(.poundSourceLocation)
   }
   
-  static var poundUnavailableKeyword: TokenSpec {
-    return TokenSpec(.poundUnavailableKeyword)
+  static var poundUnavailable: TokenSpec {
+    return TokenSpec(.poundUnavailable)
   }
   
   static var prefixAmpersand: TokenSpec {

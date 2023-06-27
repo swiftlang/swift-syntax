@@ -199,7 +199,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """,
       clauses: IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
-          poundKeyword: .poundIfKeyword(),
+          poundKeyword: .poundIfToken(),
           condition: ExprSyntax("DEBUG"),
           elements: .statements(
             try CodeBlockItemListSyntax {
@@ -250,7 +250,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           )
         )
         IfConfigClauseSyntax(
-          poundKeyword: .poundElseKeyword(),
+          poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
               try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {

@@ -239,10 +239,10 @@ open class BasicFormat: SyntaxRewriter {
       (.multilineStringQuote, .stringSegment),  // segment starting a multi-line string literal
       (.stringSegment, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
       (.rightParen, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
-      (.poundEndifKeyword, _),
-      (_, .poundElseKeyword),
-      (_, .poundElseifKeyword),
-      (_, .poundEndifKeyword),
+      (.poundEndif, _),
+      (_, .poundElse),
+      (_, .poundElseif),
+      (_, .poundEndif),
       (_, .rightBrace):
       return true
     default:
@@ -283,7 +283,7 @@ open class BasicFormat: SyntaxRewriter {
       (.postfixQuestionMark, .leftParen),  // init?() or myOptionalClosure?()
       (.postfixQuestionMark, .period),  // someOptional?.someProperty
       (.pound, _),
-      (.poundUnavailableKeyword, .leftParen),  // #unavailable(...)
+      (.poundUnavailable, .leftParen),  // #unavailable(...)
       (.prefixAmpersand, _),
       (.prefixOperator, _),
       (.rawStringDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space

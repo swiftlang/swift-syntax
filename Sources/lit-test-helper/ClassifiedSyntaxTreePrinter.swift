@@ -27,7 +27,7 @@ extension SyntaxClassification {
     case .stringLiteral: return "str"
     case .stringInterpolationAnchor: return "anchor"
     case .regexLiteral: return "regex"
-    case .poundDirectiveKeyword: return "#kw"
+    case .poundDirective: return "#kw"
     case .buildConfigId: return "#id"
     case .attribute: return "attr-builtin"
     case .objectLiteral: return "object-literal"

@@ -784,8 +784,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case `nil`
   case period
   case pound
-  case poundAvailableKeyword  // For recovery
-  case poundUnavailableKeyword  // For recovery
+  case poundAvailable  // For recovery
+  case poundUnavailable  // For recovery
   case regexSlash
   case extendedRegexDelimiter
   case `self`
@@ -814,8 +814,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.nil): self = .nil
     case TokenSpec(.period): self = .period
     case TokenSpec(.pound): self = .pound
-    case TokenSpec(.poundAvailableKeyword): self = .poundAvailableKeyword
-    case TokenSpec(.poundUnavailableKeyword): self = .poundUnavailableKeyword
+    case TokenSpec(.poundAvailable): self = .poundAvailable
+    case TokenSpec(.poundUnavailable): self = .poundUnavailable
     case TokenSpec(.regexSlash): self = .regexSlash
     case TokenSpec(.extendedRegexDelimiter): self = .extendedRegexDelimiter
     case TokenSpec(.self): self = .self
@@ -847,8 +847,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .nil: return .keyword(.nil)
     case .period: return .period
     case .pound: return .pound
-    case .poundAvailableKeyword: return .poundAvailableKeyword
-    case .poundUnavailableKeyword: return .poundUnavailableKeyword
+    case .poundAvailable: return .poundAvailable
+    case .poundUnavailable: return .poundUnavailable
     case .regexSlash: return .regexSlash
     case .extendedRegexDelimiter: return .extendedRegexDelimiter
     case .self: return .keyword(.self)

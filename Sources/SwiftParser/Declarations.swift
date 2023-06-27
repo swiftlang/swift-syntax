@@ -53,7 +53,7 @@ extension TokenConsumer {
     allowInitDecl: Bool = true,
     allowRecovery: Bool = false
   ) -> Bool {
-    if self.at(.poundIfKeyword) {
+    if self.at(.poundIf) {
       return true
     }
 
@@ -85,12 +85,12 @@ extension TokenConsumer {
     }
 
     if hasAttribute {
-      if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndifKeyword) {
+      if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndif) {
         return true
       }
     }
 
-    if subparser.at(.poundIfKeyword) {
+    if subparser.at(.poundIf) {
       var attrLookahead = subparser.lookahead()
       return attrLookahead.consumeIfConfigOfAttributes()
     }
@@ -196,7 +196,7 @@ extension Parser {
   mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
-    if self.at(.poundIfKeyword) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       let directive = self.parsePoundIfDirective { (parser, _) in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
@@ -722,7 +722,7 @@ extension Parser {
     }
 
     let decl: RawDeclSyntax
-    if self.at(.poundSourceLocationKeyword) {
+    if self.at(.poundSourceLocation) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
       decl = self.parseDeclaration(inMemberDeclList: true)

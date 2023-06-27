@@ -18,24 +18,7 @@ import Utils
 let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension TokenSyntax") {
     for token in SYNTAX_TOKENS {
-      if token.isKeyword {
-        DeclSyntax(
-          """
-          public static func \(raw: token.swiftKind)(
-            leadingTrivia: Trivia = [],
-            trailingTrivia: Trivia = [],
-            presence: SourcePresence = .present
-          ) -> TokenSyntax {
-            return TokenSyntax(
-              .\(raw: token.swiftKind),
-              leadingTrivia: leadingTrivia,
-              trailingTrivia: trailingTrivia,
-              presence: presence
-            )
-          }
-          """
-        )
-      } else if let text = token.text {
+      if let text = token.text {
         DeclSyntax(
           """
           public static func \(raw: token.swiftKind)Token(

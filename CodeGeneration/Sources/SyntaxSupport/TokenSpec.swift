@@ -15,35 +15,26 @@ public class TokenSpec {
   public let name: String
   public let nameForDiagnostics: String
   public let text: String?
-  public let isKeyword: Bool
   public let associatedValueClass: String?
 
   public var swiftKind: String {
-    let name = lowercaseFirstWord(name: self.name)
-
-    if isKeyword {
-      return name + "Keyword"
-    } else {
-      return name
-    }
+    return lowercaseFirstWord(name: self.name)
   }
 
   init(
     name: String,
     nameForDiagnostics: String,
     text: String? = nil,
-    isKeyword: Bool = false,
     associatedValueClass: String? = nil
   ) {
     self.name = name
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
-    self.isKeyword = isKeyword
     self.associatedValueClass = associatedValueClass
   }
 }
 
-public class PoundKeywordSpec: TokenSpec {
+public class PoundSpec: TokenSpec {
   init(
     name: String,
     nameForDiagnostics: String? = nil,
@@ -52,13 +43,12 @@ public class PoundKeywordSpec: TokenSpec {
     super.init(
       name: name,
       nameForDiagnostics: nameForDiagnostics ?? text,
-      text: text,
-      isKeyword: true
+      text: text
     )
   }
 }
 
-public class PoundObjectLiteralSpec: PoundKeywordSpec {
+public class PoundObjectLiteralSpec: PoundSpec {
   let `protocol`: String
 
   init(
@@ -76,9 +66,9 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
   }
 }
 
-public class PoundConfigSpec: PoundKeywordSpec {}
+public class PoundConfigSpec: PoundSpec {}
 
-public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
+public class PoundDirectiveSpec: PoundSpec {
   init(
     name: String,
     text: String
@@ -90,7 +80,7 @@ public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
   }
 }
 
-public class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
+public class PoundConditionalDirectiveSpec: PoundDirectiveSpec {
   override init(
     name: String,
     text: String
@@ -110,8 +100,7 @@ public class PunctuatorSpec: TokenSpec {
     super.init(
       name: name,
       nameForDiagnostics: text,
-      text: text,
-      isKeyword: false
+      text: text
     )
   }
 }
@@ -149,11 +138,11 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "PostfixQuestionMark", text: "?"),
   PunctuatorSpec(name: "Pound", text: "#"),
   PoundConfigSpec(name: "PoundAvailable", text: "#available"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundElse", text: "#else"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundElseif", text: "#elseif"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundEndif", text: "#endif"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundIf", text: "#if"),
-  PoundDirectiveKeywordSpec(name: "PoundSourceLocation", text: "#sourceLocation"),
+  PoundConditionalDirectiveSpec(name: "PoundElse", text: "#else"),
+  PoundConditionalDirectiveSpec(name: "PoundElseif", text: "#elseif"),
+  PoundConditionalDirectiveSpec(name: "PoundEndif", text: "#endif"),
+  PoundConditionalDirectiveSpec(name: "PoundIf", text: "#if"),
+  PoundDirectiveSpec(name: "PoundSourceLocation", text: "#sourceLocation"),
   PoundConfigSpec(name: "PoundUnavailable", text: "#unavailable"),
   PunctuatorSpec(name: "PrefixAmpersand", text: "&"),
   MiscSpec(name: "PrefixOperator", nameForDiagnostics: "prefix operator"),

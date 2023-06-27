@@ -1563,13 +1563,13 @@ extension Lexer.Cursor {
 
     let kind: RawTokenKind
     switch literal {
-    case "sourceLocation": kind = .poundSourceLocationKeyword
-    case "if": kind = .poundIfKeyword
-    case "else": kind = .poundElseKeyword
-    case "elseif": kind = .poundElseifKeyword
-    case "endif": kind = .poundEndifKeyword
-    case "available": kind = .poundAvailableKeyword
-    case "unavailable": kind = .poundUnavailableKeyword
+    case "sourceLocation": kind = .poundSourceLocation
+    case "if": kind = .poundIf
+    case "else": kind = .poundElse
+    case "elseif": kind = .poundElseif
+    case "endif": kind = .poundEndif
+    case "available": kind = .poundAvailable
+    case "unavailable": kind = .poundUnavailable
     default:
       // If we didn't find a match, then just return `.pound`.  This is highly
       // dubious in terms of error recovery, but is useful for code completion and

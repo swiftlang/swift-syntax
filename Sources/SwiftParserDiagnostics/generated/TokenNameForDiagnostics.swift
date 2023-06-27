@@ -69,19 +69,19 @@ extension TokenKind {
       return #"?"#
     case .pound:
       return #"#"#
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return #"#available"#
-    case .poundElseKeyword:
+    case .poundElse:
       return #"#else"#
-    case .poundElseifKeyword:
+    case .poundElseif:
       return #"#elseif"#
-    case .poundEndifKeyword:
+    case .poundEndif:
       return #"#endif"#
-    case .poundIfKeyword:
+    case .poundIf:
       return #"#if"#
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return #"#sourceLocation"#
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return #"#unavailable"#
     case .prefixAmpersand:
       return #"&"#

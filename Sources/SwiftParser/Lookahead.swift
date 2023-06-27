@@ -200,7 +200,7 @@ extension Parser.Lookahead {
       } while self.consume(if: .period) != nil
 
       if self.consume(if: .leftParen) != nil {
-        while !self.at(.endOfFile, .rightParen, .poundEndifKeyword) {
+        while !self.at(.endOfFile, .rightParen, .poundEndif) {
           self.skipSingle()
         }
         self.consume(if: .rightParen)
@@ -215,11 +215,11 @@ extension Parser.Lookahead {
   ///  - the directive contained non-attributes
   ///  - the directive did not contain any attributes
   mutating func consumeIfConfigOfAttributes() -> Bool {
-    precondition(self.at(.poundIfKeyword))
+    precondition(self.at(.poundIf))
     var didSeeAnyAttributes = false
     var poundIfLoopProgress = LoopProgressCondition()
     repeat {
-      precondition(self.at(.poundIfKeyword, .poundElseKeyword, .poundElseifKeyword))
+      precondition(self.at(.poundIf, .poundElse, .poundElseif))
       self.consumeAnyToken()
 
       // <expression> after `#if` or `#elseif`
@@ -231,15 +231,15 @@ extension Parser.Lookahead {
         case .atSign:
           didSeeAnyAttributes = true
           _ = self.consumeAttributeList()
-        case .poundIfKeyword:
+        case .poundIf:
           _ = self.consumeIfConfigOfAttributes()
         default:
           break ATTRIBUTE_LOOP
         }
       }
-    } while self.at(.poundElseifKeyword, .poundElseKeyword) && poundIfLoopProgress.evaluate(self.currentToken)
+    } while self.at(.poundElseif, .poundElse) && poundIfLoopProgress.evaluate(self.currentToken)
 
-    return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndifKeyword) != nil
+    return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndif) != nil
   }
 }
 
@@ -315,18 +315,18 @@ extension Parser.Lookahead {
     case leftParen
     case leftBrace
     case leftSquare
-    case poundIfKeyword
-    case poundElseKeyword
-    case poundElseifKeyword
+    case poundIf
+    case poundElse
+    case poundElseif
 
     init?(lexeme: Lexer.Lexeme) {
       switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
       case .leftSquare: self = .leftSquare
-      case .poundIfKeyword: self = .poundIfKeyword
-      case .poundElseKeyword: self = .poundElseKeyword
-      case .poundElseifKeyword: self = .poundElseifKeyword
+      case .poundIf: self = .poundIf
+      case .poundElse: self = .poundElse
+      case .poundElseif: self = .poundElseif
       default: return nil
       }
     }
@@ -336,9 +336,9 @@ extension Parser.Lookahead {
       case .leftParen: return .leftParen
       case .leftBrace: return .leftBrace
       case .leftSquare: return .leftSquare
-      case .poundIfKeyword: return .poundIfKeyword
-      case .poundElseKeyword: return .poundElseKeyword
-      case .poundElseifKeyword: return .poundElseifKeyword
+      case .poundIf: return .poundIf
+      case .poundElse: return .poundElse
+      case .poundElseif: return .poundElseif
       }
     }
   }
@@ -371,12 +371,12 @@ extension Parser.Lookahead {
         case (.leftSquare, let handle)?:
           self.eat(handle)
           stack += [.skipSinglePost(start: .leftSquare), .skipUntil(.rightSquare, .rightSquare)]
-        case (.poundIfKeyword, let handle)?,
-          (.poundElseKeyword, let handle)?,
-          (.poundElseifKeyword, let handle)?:
+        case (.poundIf, let handle)?,
+          (.poundElse, let handle)?,
+          (.poundElseif, let handle)?:
           self.eat(handle)
           // skipUntil also implicitly stops at tok::pound_endif.
-          stack += [.skipSinglePost(start: t!.0), .skipUntil(.poundElseKeyword, .poundElseifKeyword)]
+          stack += [.skipSinglePost(start: t!.0), .skipUntil(.poundElse, .poundElseif)]
         case nil:
           self.consumeAnyToken()
         }
@@ -388,16 +388,16 @@ extension Parser.Lookahead {
           self.consume(if: .rightBrace)
         case .leftSquare:
           self.consume(if: .rightSquare)
-        case .poundIfKeyword, .poundElseKeyword, .poundElseifKeyword:
-          if self.at(.poundElseKeyword, .poundElseifKeyword) {
+        case .poundIf, .poundElse, .poundElseif:
+          if self.at(.poundElse, .poundElseif) {
             stack += [.skipSingle]
           } else {
-            self.consume(if: .poundElseifKeyword)
+            self.consume(if: .poundElseif)
           }
           return
         }
       case .skipUntil(let t1, let t2):
-        if !self.at(.endOfFile, t1, t2) && !self.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) {
+        if !self.at(.endOfFile, t1, t2) && !self.at(.poundEndif, .poundElse, .poundElseif) {
           stack += [.skipUntil(t1, t2), .skipSingle]
         }
       }

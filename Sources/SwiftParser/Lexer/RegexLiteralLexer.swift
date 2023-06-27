@@ -644,11 +644,11 @@ extension Lexer.Cursor {
       return false
 
     // Pound keywords that do not generally sequence expressions.
-    case .poundAvailableKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword:
+    case .poundAvailable, .poundSourceLocation, .poundUnavailable:
       return false
 
     // Pound keywords that generally do sequence expressions.
-    case .poundIfKeyword, .poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword:
+    case .poundIf, .poundElse, .poundElseif, .poundEndif:
       return true
 
     // Bits of string/regex grammar, we can't start lexing a regex literal here.

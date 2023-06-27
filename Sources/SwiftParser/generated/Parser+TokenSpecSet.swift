@@ -177,15 +177,15 @@ extension AttributedTypeSyntax {
 
 extension AvailabilityConditionSyntax {
   enum AvailabilityKeywordOptions: TokenSpecSet {
-    case poundAvailableKeyword
-    case poundUnavailableKeyword
+    case poundAvailable
+    case poundUnavailable
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundAvailableKeyword):
-        self = .poundAvailableKeyword
-      case TokenSpec(.poundUnavailableKeyword):
-        self = .poundUnavailableKeyword
+      case TokenSpec(.poundAvailable):
+        self = .poundAvailable
+      case TokenSpec(.poundUnavailable):
+        self = .poundUnavailable
       default:
         return nil
       }
@@ -193,10 +193,10 @@ extension AvailabilityConditionSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .poundAvailableKeyword:
-        return .poundAvailableKeyword
-      case .poundUnavailableKeyword:
-        return .poundUnavailableKeyword
+      case .poundAvailable:
+        return .poundAvailable
+      case .poundUnavailable:
+        return .poundUnavailable
       }
     }
   }
@@ -1119,18 +1119,18 @@ extension IdentifierPatternSyntax {
 
 extension IfConfigClauseSyntax {
   enum PoundKeywordOptions: TokenSpecSet {
-    case poundIfKeyword
-    case poundElseifKeyword
-    case poundElseKeyword
+    case poundIf
+    case poundElseif
+    case poundElse
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundIfKeyword):
-        self = .poundIfKeyword
-      case TokenSpec(.poundElseifKeyword):
-        self = .poundElseifKeyword
-      case TokenSpec(.poundElseKeyword):
-        self = .poundElseKeyword
+      case TokenSpec(.poundIf):
+        self = .poundIf
+      case TokenSpec(.poundElseif):
+        self = .poundElseif
+      case TokenSpec(.poundElse):
+        self = .poundElse
       default:
         return nil
       }
@@ -1138,12 +1138,12 @@ extension IfConfigClauseSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .poundIfKeyword:
-        return .poundIfKeyword
-      case .poundElseifKeyword:
-        return .poundElseifKeyword
-      case .poundElseKeyword:
-        return .poundElseKeyword
+      case .poundIf:
+        return .poundIf
+      case .poundElseif:
+        return .poundElseif
+      case .poundElse:
+        return .poundElse
       }
     }
   }

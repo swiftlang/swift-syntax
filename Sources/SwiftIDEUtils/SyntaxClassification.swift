@@ -43,8 +43,8 @@ public enum SyntaxClassification {
   case objectLiteral
   /// An identifier referring to an operator.
   case operatorIdentifier
-  /// A `#` keyword like `#warning`.
-  case poundDirectiveKeyword
+  /// A `#` token like `#warning`.
+  case poundDirective
   /// A regex literal, including multiline regex literals.
   case regexLiteral
   /// The opening and closing parenthesis of string interpolation.
@@ -156,20 +156,20 @@ extension RawTokenKind {
       return .none
     case .pound:
       return .none
-    case .poundAvailableKeyword:
-      return .keyword
-    case .poundElseKeyword:
-      return .poundDirectiveKeyword
-    case .poundElseifKeyword:
-      return .poundDirectiveKeyword
-    case .poundEndifKeyword:
-      return .poundDirectiveKeyword
-    case .poundIfKeyword:
-      return .poundDirectiveKeyword
-    case .poundSourceLocationKeyword:
-      return .poundDirectiveKeyword
-    case .poundUnavailableKeyword:
-      return .keyword
+    case .poundAvailable:
+      return .none
+    case .poundElse:
+      return .poundDirective
+    case .poundElseif:
+      return .poundDirective
+    case .poundEndif:
+      return .poundDirective
+    case .poundIf:
+      return .poundDirective
+    case .poundSourceLocation:
+      return .poundDirective
+    case .poundUnavailable:
+      return .none
     case .prefixAmpersand:
       return .none
     case .prefixOperator:

@@ -71,9 +71,6 @@ public extension Child {
     guard let token = token, isToken else {
       return type.defaultValue.map { InitializerClauseSyntax(value: $0) }
     }
-    if token.isKeyword {
-      return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)()"))
-    }
     if token.text != nil {
       return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)Token()"))
     }

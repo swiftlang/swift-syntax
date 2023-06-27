@@ -41,13 +41,13 @@ public enum TokenKind: Hashable {
   case postfixOperator(String)
   case postfixQuestionMark
   case pound
-  case poundAvailableKeyword
-  case poundElseKeyword
-  case poundElseifKeyword
-  case poundEndifKeyword
-  case poundIfKeyword
-  case poundSourceLocationKeyword
-  case poundUnavailableKeyword
+  case poundAvailable
+  case poundElse
+  case poundElseif
+  case poundEndif
+  case poundIf
+  case poundSourceLocation
+  case poundUnavailable
   case prefixAmpersand
   case prefixOperator(String)
   case rawStringDelimiter(String)
@@ -122,19 +122,19 @@ public enum TokenKind: Hashable {
       return #"?"#
     case .pound:
       return #"#"#
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return #"#available"#
-    case .poundElseKeyword:
+    case .poundElse:
       return #"#else"#
-    case .poundElseifKeyword:
+    case .poundElseif:
       return #"#elseif"#
-    case .poundEndifKeyword:
+    case .poundEndif:
       return #"#endif"#
-    case .poundIfKeyword:
+    case .poundIf:
       return #"#if"#
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return #"#sourceLocation"#
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return #"#unavailable"#
     case .prefixAmpersand:
       return #"&"#
@@ -213,19 +213,19 @@ public enum TokenKind: Hashable {
       return #"?"#
     case .pound:
       return #"#"#
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return #"#available"#
-    case .poundElseKeyword:
+    case .poundElse:
       return #"#else"#
-    case .poundElseifKeyword:
+    case .poundElseif:
       return #"#elseif"#
-    case .poundEndifKeyword:
+    case .poundEndif:
       return #"#endif"#
-    case .poundIfKeyword:
+    case .poundIf:
       return #"#if"#
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return #"#sourceLocation"#
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return #"#unavailable"#
     case .prefixAmpersand:
       return #"&"#
@@ -313,19 +313,19 @@ public enum TokenKind: Hashable {
       return true
     case .pound:
       return true
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return false
-    case .poundElseKeyword:
+    case .poundElse:
       return false
-    case .poundElseifKeyword:
+    case .poundElseif:
       return false
-    case .poundEndifKeyword:
+    case .poundEndif:
       return false
-    case .poundIfKeyword:
+    case .poundIf:
       return false
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return false
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return false
     case .prefixAmpersand:
       return true
@@ -418,19 +418,19 @@ extension TokenKind: Equatable {
       return true
     case (.pound, .pound):
       return true
-    case (.poundAvailableKeyword, .poundAvailableKeyword):
+    case (.poundAvailable, .poundAvailable):
       return true
-    case (.poundElseKeyword, .poundElseKeyword):
+    case (.poundElse, .poundElse):
       return true
-    case (.poundElseifKeyword, .poundElseifKeyword):
+    case (.poundElseif, .poundElseif):
       return true
-    case (.poundEndifKeyword, .poundEndifKeyword):
+    case (.poundEndif, .poundEndif):
       return true
-    case (.poundIfKeyword, .poundIfKeyword):
+    case (.poundIf, .poundIf):
       return true
-    case (.poundSourceLocationKeyword, .poundSourceLocationKeyword):
+    case (.poundSourceLocation, .poundSourceLocation):
       return true
-    case (.poundUnavailableKeyword, .poundUnavailableKeyword):
+    case (.poundUnavailable, .poundUnavailable):
       return true
     case (.prefixAmpersand, .prefixAmpersand):
       return true
@@ -502,13 +502,13 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case postfixOperator
   case postfixQuestionMark
   case pound
-  case poundAvailableKeyword
-  case poundElseKeyword
-  case poundElseifKeyword
-  case poundEndifKeyword
-  case poundIfKeyword
-  case poundSourceLocationKeyword
-  case poundUnavailableKeyword
+  case poundAvailable
+  case poundElse
+  case poundElseif
+  case poundEndif
+  case poundIf
+  case poundSourceLocation
+  case poundUnavailable
   case prefixAmpersand
   case prefixOperator
   case rawStringDelimiter
@@ -566,19 +566,19 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #"?"#
     case .pound:
       return #"#"#
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return #"#available"#
-    case .poundElseKeyword:
+    case .poundElse:
       return #"#else"#
-    case .poundElseifKeyword:
+    case .poundElseif:
       return #"#elseif"#
-    case .poundEndifKeyword:
+    case .poundEndif:
       return #"#endif"#
-    case .poundIfKeyword:
+    case .poundIf:
       return #"#if"#
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return #"#sourceLocation"#
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return #"#unavailable"#
     case .prefixAmpersand:
       return #"&"#
@@ -666,19 +666,19 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .pound:
       return true
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       return false
-    case .poundElseKeyword:
+    case .poundElse:
       return false
-    case .poundElseifKeyword:
+    case .poundElseif:
       return false
-    case .poundEndifKeyword:
+    case .poundEndif:
       return false
-    case .poundIfKeyword:
+    case .poundIf:
       return false
-    case .poundSourceLocationKeyword:
+    case .poundSourceLocation:
       return false
-    case .poundUnavailableKeyword:
+    case .poundUnavailable:
       return false
     case .prefixAmpersand:
       return true
@@ -795,27 +795,27 @@ extension TokenKind {
     case .pound:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .pound
-    case .poundAvailableKeyword:
+    case .poundAvailable:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundAvailableKeyword
-    case .poundElseKeyword:
+      return .poundAvailable
+    case .poundElse:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundElseKeyword
-    case .poundElseifKeyword:
+      return .poundElse
+    case .poundElseif:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundElseifKeyword
-    case .poundEndifKeyword:
+      return .poundElseif
+    case .poundEndif:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundEndifKeyword
-    case .poundIfKeyword:
+      return .poundEndif
+    case .poundIf:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundIfKeyword
-    case .poundSourceLocationKeyword:
+      return .poundIf
+    case .poundSourceLocation:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundSourceLocationKeyword
-    case .poundUnavailableKeyword:
+      return .poundSourceLocation
+    case .poundUnavailable:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .poundUnavailableKeyword
+      return .poundUnavailable
     case .prefixAmpersand:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .prefixAmpersand
@@ -918,20 +918,20 @@ extension TokenKind {
       return (.postfixQuestionMark, nil)
     case .pound:
       return (.pound, nil)
-    case .poundAvailableKeyword:
-      return (.poundAvailableKeyword, nil)
-    case .poundElseKeyword:
-      return (.poundElseKeyword, nil)
-    case .poundElseifKeyword:
-      return (.poundElseifKeyword, nil)
-    case .poundEndifKeyword:
-      return (.poundEndifKeyword, nil)
-    case .poundIfKeyword:
-      return (.poundIfKeyword, nil)
-    case .poundSourceLocationKeyword:
-      return (.poundSourceLocationKeyword, nil)
-    case .poundUnavailableKeyword:
-      return (.poundUnavailableKeyword, nil)
+    case .poundAvailable:
+      return (.poundAvailable, nil)
+    case .poundElse:
+      return (.poundElse, nil)
+    case .poundElseif:
+      return (.poundElseif, nil)
+    case .poundEndif:
+      return (.poundEndif, nil)
+    case .poundIf:
+      return (.poundIf, nil)
+    case .poundSourceLocation:
+      return (.poundSourceLocation, nil)
+    case .poundUnavailable:
+      return (.poundUnavailable, nil)
     case .prefixAmpersand:
       return (.prefixAmpersand, nil)
     case .prefixOperator(let str):

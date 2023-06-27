@@ -12,6 +12,27 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+@_spi(MacroExpansion) import SwiftSyntaxMacros
+
+private func expandMemberAttributeMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> AttributeListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandMemberMacro(attribute: AttributeSyntax, attachedTo: DeclGroupSyntax) -> MemberDeclListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandPeerMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> CodeBlockItemListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandConformanceMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> CodeBlockItemListSyntax {
+  fatalError("unimplemented")
+}
+
+private func expandAccessorMacro(attribute: AttributeSyntax, attachedTo: DeclSyntax) -> AccessorListSyntax {
+  fatalError("unimplemented")
+}
 
 /// Describes the kinds of errors that can occur within a macro system.
 enum MacroSystemError: Error {
@@ -65,7 +86,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   var context: Context
   var skipNodes: Set<Syntax> = []
 
-  /// A stack of member attribute macos to expand when iterating over a `MemberDeclListSyntax`.
+  /// A stack of member attribute macos to expand when iterating over a ``MemberDeclListSyntax``.
   var memberAttributeMacros: [([(AttributeSyntax, MemberAttributeMacro.Type)], DeclSyntax)] = []
 
   init(
@@ -110,7 +131,13 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerMacro.Type || macro is MemberMacro.Type || macro is AccessorMacro.Type || macro is MemberAttributeMacro.Type || macro is ConformanceMacro.Type || macro is ExtensionMacro.Type)
+        return
+          !(macro is PeerMacro.Type
+          || macro is MemberMacro.Type
+          || macro is AccessorMacro.Type
+          || macro is MemberAttributeMacro.Type
+          || macro is ConformanceMacro.Type
+          || macro is ExtensionMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -518,7 +545,7 @@ extension MacroApplication {
       do {
         let typedDecl = decl.asProtocol(DeclGroupSyntax.self)!
 
-        func expand<Decl: DeclGroupSyntax>(_ decl: Decl) throws -> [AttributeSyntax] {
+        func expand(_ decl: some DeclGroupSyntax) throws -> [AttributeSyntax] {
           return try attributeMacro.expansion(
             of: attribute,
             attachedTo: decl,
@@ -549,8 +576,7 @@ extension DeclSyntax {
   /// node’s attributes and modifiers, respectively. If the node doesn’t contain
   /// attributes or modifiers, `attributes` or `modifiers` are ignored and not
   /// applied.
-  @_spi(MacroExpansion)
-  public func applying(
+  func applying(
     attributes: AttributeListSyntax?,
     modifiers: ModifierListSyntax?
   ) -> DeclSyntax {
@@ -585,8 +611,6 @@ extension DeclSyntax {
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax
   /// node.
-  @available(*, deprecated, message: "Use SwiftSyntaxMacroExpansion instead")
-  @_disfavoredOverload  // deprecated.
   public func expand(
     macros: [String: Macro.Type],
     in context: some MacroExpansionContext

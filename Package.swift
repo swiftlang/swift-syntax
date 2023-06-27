@@ -3,9 +3,12 @@
 import PackageDescription
 import Foundation
 
+var swiftSyntaxSwiftSettings: [SwiftSetting] = []
+var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] = []
+var swiftParserSwiftSettings: [SwiftSetting] = []
+
 /// If we are in a controlled CI environment, we can use internal compiler flags
 /// to speed up the build or improve it.
-var swiftSyntaxSwiftSettings: [SwiftSetting] = []
 if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
   let groupFile = URL(fileURLWithPath: #file)
     .deletingLastPathComponent()
@@ -21,14 +24,20 @@ if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil 
       "-enforce-exclusivity=unchecked",
     ]),
   ]
+  swiftSyntaxBuilderSwiftSettings += [
+    .define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")
+  ]
+  swiftParserSwiftSettings += [
+    .define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")
+  ]
 }
+
 if ProcessInfo.processInfo.environment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] != nil {
   swiftSyntaxSwiftSettings += [
     .define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
   ]
 }
 
-var swiftParserSwiftSettings: [SwiftSetting] = []
 if ProcessInfo.processInfo.environment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] != nil {
   swiftParserSwiftSettings += [
     .define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
@@ -162,8 +171,9 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxBuilder",
-      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftParserDiagnostics", "SwiftSyntax"],
-      exclude: ["CMakeLists.txt"]
+      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftDiagnostics", "SwiftParserDiagnostics", "SwiftSyntax"],
+      exclude: ["CMakeLists.txt"],
+      swiftSettings: swiftSyntaxBuilderSwiftSettings
     ),
 
     .testTarget(

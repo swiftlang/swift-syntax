@@ -10,6 +10,7 @@ struct ThePlugin: CompilerPlugin {
     PeerValueWithSuffixNameMacro.self,
     MemberDeprecatedMacro.self,
     EquatableConformanceMacro.self,
+    SendableExtensionMacro.self,
     DidSetPrintMacro.self,
     PrintAnyMacro.self,
   ]

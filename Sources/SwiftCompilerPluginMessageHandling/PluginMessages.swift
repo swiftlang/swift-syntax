@@ -77,7 +77,7 @@ internal enum PluginToHostMessage: Codable {
 }
 
 /*namespace*/ internal enum PluginMessage {
-  static var PROTOCOL_VERSION_NUMBER: Int { 5 }  // Added 'expandMacroResult'.
+  static var PROTOCOL_VERSION_NUMBER: Int { 6 }  // Added 'expandMacroResult'.
 
   struct HostCapability: Codable {
     var protocolVersion: Int

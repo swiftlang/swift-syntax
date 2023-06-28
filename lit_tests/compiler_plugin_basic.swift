@@ -33,12 +33,16 @@ macro MemberDeprecated() = #externalMacro(module: "ExamplePlugin", type: "Member
 @attached(conformance)
 macro Equatable() = #externalMacro(module: "ExamplePlugin", type: "EquatableConformanceMacro")
 
+@attached(extension, conformances: Sendable)
+macro AddSendbale() = #externalMacro(module: "ExamplePlugin", type: "SendableExtensionMacro")
+
 @attached(accessor)
 macro DidSetPrint() = #externalMacro(module: "ExamplePlugin", type: "DidSetPrintMacro")
 
 @Metadata
 @MemberDeprecated
 @Equatable
+@AddSendable
 @PeerWithSuffix
 struct MyStruct {
   @DidSetPrint
@@ -79,6 +83,11 @@ struct MyStruct {
 // CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMc_.swift
 // CHECK-NEXT: ------------------------------
 // CHECK-NEXT: extension MyStruct : Equatable  {}
+// CHECK-NEXT: ------------------------------
+
+// CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMe_.swift
+// CHECK-NEXT: ------------------------------
+// CHECK-NEXT: extension MyStruct: Sendable  {}
 // CHECK-NEXT: ------------------------------
 
 // CHECK: @__swiftmacro_7TestApp8MyStructV5value11DidSetPrintfMa_.swift

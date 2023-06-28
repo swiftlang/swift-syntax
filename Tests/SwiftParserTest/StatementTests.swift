@@ -471,7 +471,7 @@ final class StatementTests: XCTestCase {
               ampersand: .prefixAmpersandToken(),
               expression: SubscriptExprSyntax(
                 calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
-                leftBracket: .leftSquareToken(),
+                leftSquare: .leftSquareToken(),
                 argumentList: TupleExprElementListSyntax([
                   TupleExprElementSyntax(
                     expression: IdentifierExprSyntax(identifier: .identifier("key")),
@@ -483,7 +483,7 @@ final class StatementTests: XCTestCase {
                     expression: BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true))
                   ),
                 ]),
-                rightBracket: .rightSquareToken()
+                rightSquare: .rightSquareToken()
               )
             )
           )
@@ -691,7 +691,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         SubscriptExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
-          leftBracket: .leftSquareToken(),
+          leftSquare: .leftSquareToken(),
           argumentList: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("position")),
@@ -703,7 +703,7 @@ final class StatementTests: XCTestCase {
               expression: IntegerLiteralExprSyntax(0)
             ),
           ]),
-          rightBracket: .rightSquareToken()
+          rightSquare: .rightSquareToken()
         )
       )
     )

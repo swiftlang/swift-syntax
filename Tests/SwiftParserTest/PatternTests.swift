@@ -129,7 +129,7 @@ final class PatternTests: XCTestCase {
         valuePattern: ExpressionPatternSyntax(
           expression: SubscriptExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
-            leftBracket: .leftSquareToken(),
+            leftSquare: .leftSquareToken(),
             argumentList: TupleExprElementListSyntax([
               .init(
                 expression: UnresolvedPatternExprSyntax(
@@ -137,7 +137,7 @@ final class PatternTests: XCTestCase {
                 )
               )
             ]),
-            rightBracket: .rightSquareToken()
+            rightSquare: .rightSquareToken()
           )
         )
       )

@@ -49,7 +49,6 @@ public enum Keyword: UInt8, Hashable {
   case _read
   case _RefCountedObject
   case _semantics
-  case _silgen_name
   case _specialize
   case _spi
   case _spi_available
@@ -617,8 +616,6 @@ public enum Keyword: UInt8, Hashable {
         self = ._NativeClass
       case "_nonSendable":
         self = ._nonSendable
-      case "_silgen_name":
-        self = ._silgen_name
       case "availability":
         self = .availability
       case "backDeployed":
@@ -798,7 +795,6 @@ public enum Keyword: UInt8, Hashable {
       "_read", 
       "_RefCountedObject", 
       "_semantics", 
-      "_silgen_name", 
       "_specialize", 
       "_spi", 
       "_spi_available", 

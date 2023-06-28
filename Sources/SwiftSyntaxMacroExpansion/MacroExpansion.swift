@@ -47,6 +47,7 @@ private enum MacroExpansionError: Error, CustomStringConvertible {
   case parentDeclGroupNil
   case declarationNotDeclGroup
   case declarationNotIdentified
+  case noExtendedTypeSyntax
   case noFreestandingMacroRoles(Macro.Type)
 
   var description: String {
@@ -62,6 +63,9 @@ private enum MacroExpansionError: Error, CustomStringConvertible {
 
     case .declarationNotIdentified:
       return "declaration is not a 'Identified' syntax"
+
+    case .noExtendedTypeSyntax:
+      return "no extended type for extension macro"
 
     case .noFreestandingMacroRoles(let type):
       return "macro implementation type '\(type)' does not conform to any freestanding macro protocol"
@@ -180,6 +184,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   attributeNode: AttributeSyntax,
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
   in context: Context
 ) -> [String]? {
   do {
@@ -302,13 +307,10 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         // Compiler error: type mismatch.
         throw MacroExpansionError.declarationNotDeclGroup
       }
-      guard let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
-      else {
-        // Compiler error: type mismatch.
-        throw MacroExpansionError.declarationNotIdentified
-      }
 
-      let type: TypeSyntax = "\(identified.identifier)"
+      guard let extendedType = extendedType else {
+        throw MacroExpansionError.noExtendedTypeSyntax
+      }
 
       // Local function to expand a extension macro once we've opened up
       // the existential.
@@ -318,7 +320,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         return try attachedMacro.expansion(
           of: attributeNode,
           attachedTo: node,
-          providingExtensionsOf: type,
+          providingExtensionsOf: extendedType,
           in: context
         )
       }
@@ -361,6 +363,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   attributeNode: AttributeSyntax,
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
   in context: Context
 ) -> String? {
   let expandedSources = expandAttachedMacroWithoutCollapsing(
@@ -369,6 +372,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     attributeNode: attributeNode,
     declarationNode: declarationNode,
     parentDeclNode: parentDeclNode,
+    extendedType: extendedType,
     in: context
   )
   return expandedSources.map {

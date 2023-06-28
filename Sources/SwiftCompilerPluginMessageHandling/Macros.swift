@@ -86,7 +86,8 @@ extension CompilerPluginMessageHandler {
     discriminator: String,
     attributeSyntax: PluginMessage.Syntax,
     declSyntax: PluginMessage.Syntax,
-    parentDeclSyntax: PluginMessage.Syntax?
+    parentDeclSyntax: PluginMessage.Syntax?,
+    extendedTypeSyntax: PluginMessage.Syntax?
   ) throws {
     let sourceManager = SourceManager()
     let context = PluginMacroExpansionContext(
@@ -100,6 +101,9 @@ extension CompilerPluginMessageHandler {
     ).cast(AttributeSyntax.self)
     let declarationNode = sourceManager.add(declSyntax).cast(DeclSyntax.self)
     let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
+    let extendedType = extendedTypeSyntax.map {
+      sourceManager.add($0).cast(TypeSyntax.self)
+    }
 
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.
     let expandedSources: [String]?
@@ -115,6 +119,7 @@ extension CompilerPluginMessageHandler {
         attributeNode: attributeNode,
         declarationNode: declarationNode,
         parentDeclNode: parentDeclNode,
+        extendedType: extendedType,
         in: context
       )
       if let expansions, hostCapability.hasExpandMacroResult {

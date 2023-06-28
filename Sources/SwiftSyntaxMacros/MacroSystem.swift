@@ -443,10 +443,13 @@ extension MacroApplication {
     let extendedTypeSyntax = TypeSyntax("\(extendedType.trimmed)")
     for (attribute, extensionMacro) in extensionMacroAttrs {
       do {
-        let newExtensions = try extensionMacro.expansion(of: attribute,
-                                                         attachedTo: decl,
-                                                         providingExtensionsOf: extendedTypeSyntax,
-                                                         in: context)
+        let newExtensions = try extensionMacro.expansion(
+          of: attribute,
+          attachedTo: decl,
+          providingExtensionsOf: extendedTypeSyntax,
+          in: context
+        )
+
         extensions.append(contentsOf: newExtensions.map(DeclSyntax.init))
       } catch {
         context.addDiagnostics(from: error, node: attribute)

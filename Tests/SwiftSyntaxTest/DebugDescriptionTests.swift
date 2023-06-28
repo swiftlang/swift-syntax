@@ -195,7 +195,7 @@ public class DebugDescriptionTests: XCTestCase {
                         rightParen: .rightParenToken()
                       )))
               ]),
-          eofToken: .eof()
+          endOfFileToken: .eof()
         )
       """
     )
@@ -218,7 +218,7 @@ public class DebugDescriptionTests: XCTestCase {
                         rightParen: .rightParenToken()
                       )))
               ]),
-          eofToken: .eof()
+          endOfFileToken: .eof()
         )
       """
     )

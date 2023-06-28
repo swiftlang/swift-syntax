@@ -27,50 +27,38 @@ public class VisitorPerformanceTests: XCTestCase {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyVisitor: SyntaxVisitor {}
 
-    XCTAssertNoThrow(
-      try {
-        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
+    let source = try String(contentsOf: inputFile)
+    let parsed = Parser.parse(source: source)
+    let emptyVisitor = EmptyVisitor(viewMode: .sourceAccurate)
 
-        let emptyVisitor = EmptyVisitor(viewMode: .sourceAccurate)
-
-        measure {
-          emptyVisitor.walk(parsed)
-        }
-      }()
-    )
+    try measureInstructions {
+      emptyVisitor.walk(parsed)
+    }
   }
 
   func testEmptyRewriterPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyRewriter: SyntaxRewriter {}
 
-    XCTAssertNoThrow(
-      try {
-        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
+    let source = try String(contentsOf: inputFile)
+    let parsed = Parser.parse(source: source)
+    let emptyRewriter = EmptyRewriter(viewMode: .sourceAccurate)
 
-        let emptyRewriter = EmptyRewriter(viewMode: .sourceAccurate)
-
-        measure {
-          _ = emptyRewriter.visit(parsed)
-        }
-      }()
-    )
+    try measureInstructions {
+      _ = emptyRewriter.visit(parsed)
+    }
   }
 
   func testEmptyAnyVisitorPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyAnyVisitor: SyntaxAnyVisitor {}
 
-    XCTAssertNoThrow(
-      try {
-        let parsed = Parser.parse(source: try String(contentsOf: inputFile))
+    let source = try String(contentsOf: inputFile)
+    let parsed = Parser.parse(source: source)
+    let emptyVisitor = EmptyAnyVisitor(viewMode: .sourceAccurate)
 
-        let emptyVisitor = EmptyAnyVisitor(viewMode: .sourceAccurate)
-
-        measure {
-          emptyVisitor.walk(parsed)
-        }
-      }()
-    )
+    try measureInstructions {
+      emptyVisitor.walk(parsed)
+    }
   }
 }

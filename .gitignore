@@ -18,3 +18,5 @@ Package.resolved
 
 .DS_Store
 *.pyc
+
+Tests/PerformanceTest/baselines.json

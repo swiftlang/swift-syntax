@@ -26,17 +26,14 @@ public class SyntaxClassifierPerformanceTests: XCTestCase {
 
   func testClassifierPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
-    XCTAssertNoThrow(
-      try {
-        let source = try String(contentsOf: inputFile)
-        let parsed = Parser.parse(source: source)
 
-        measure {
-          for _ in 0..<10 {
-            for _ in parsed.classifications {}
-          }
-        }
-      }()
-    )
+    let source = try String(contentsOf: inputFile)
+    let parsed = Parser.parse(source: source)
+
+    try measureInstructions {
+      for _ in 0..<10 {
+        for _ in parsed.classifications {}
+      }
+    }
   }
 }

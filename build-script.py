@@ -16,6 +16,7 @@ PACKAGE_DIR = os.path.dirname(os.path.realpath(__file__))
 WORKSPACE_DIR = os.path.dirname(PACKAGE_DIR)
 EXAMPLES_DIR = os.path.join(PACKAGE_DIR, "Examples")
 SOURCES_DIR = os.path.join(PACKAGE_DIR, "Sources")
+TESTS_DIR = os.path.join(PACKAGE_DIR, "Tests")
 SWIFTIDEUTILS_DIR = os.path.join(SOURCES_DIR, "SwiftIDEUtils")
 SWIFTSYNTAX_DIR = os.path.join(SOURCES_DIR, "SwiftSyntax")
 SWIFTSYNTAX_DOCUMENTATION_DIR = \
@@ -236,6 +237,7 @@ class Builder(object):
         env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
         env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
             os.path.join(self.toolchain, "lib", "swift", "macosx")
+
         check_call(command, env=env, verbose=self.verbose)
 
 
@@ -463,6 +465,8 @@ def run_xctests(
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
+    env["BASELINE_FILE"] = os.path.join(TESTS_DIR, "PerformanceTest", "ci-baselines.json") 
+
     check_call(swiftpm_call, env=env, verbose=verbose)
 
 # -----------------------------------------------------------------------------

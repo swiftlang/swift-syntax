@@ -312,7 +312,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.noExtendedTypeSyntax
       }
 
-      // Local function to expand a extension macro once we've opened up
+      // Local function to expand an extension macro once we've opened up
       // the existential.
       func expandExtensionMacro(
         _ node: some DeclGroupSyntax

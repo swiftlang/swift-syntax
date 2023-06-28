@@ -232,7 +232,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
         ExpressionSegmentSyntax(
           expressions: TupleExprElementListSyntax {
-            TupleExprElementSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#))
+            TupleExprElementSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
           }
         )
       },
@@ -246,7 +246,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
       Error validating child at index \(index) of \(nodeKind):
       Node did not satisfy any node choice requirement.
       Validation failures:
-      \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")))
+      \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))
       """
       """#
     )

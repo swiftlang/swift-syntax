@@ -69,9 +69,27 @@ final class LinkageTest: XCTestCase {
         .library("-lswiftCompatibilityConcurrency"),
         .library("-lswiftCompatibilityPacks", condition: .mayBeAbsent("Only in newer compilers")),
         .library("-lswiftCore"),
+        .library("-lswiftCoreFoundation", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftDarwin", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftDispatch", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftFoundation", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftIOKit", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftOSLog", condition: .when(compilationCondition: .osLogDependency)),
+        .library("-lswiftObjectiveC", condition: .when(compilationCondition: .osLogDependency)),
         .library("-lswiftSwiftOnoneSupport", condition: .when(configuration: .debug)),
+        .library("-lswiftXPC", condition: .when(compilationCondition: .osLogDependency)),
         .library("-lswift_Concurrency"),
         .library("-lswift_StringProcessing", condition: .mayBeAbsent("Starting in Xcode 14 this library is not always autolinked")),
+        .library("-lswiftos", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("CFNetwork", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("Combine", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("CoreFoundation", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("CoreServices", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("DiskArbitration", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("Foundation", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("IOKit", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("OSLog", condition: .when(compilationCondition: .osLogDependency)),
+        .framework("Security", condition: .when(compilationCondition: .osLogDependency)),
       ]
     )
 
@@ -120,7 +138,9 @@ extension LinkageTest {
   private func assertLinkage(
     of library: String,
     in bundle: EnclosingTestBundle,
-    assertions: [Linkage.Assertion]
+    assertions: [Linkage.Assertion],
+    file: StaticString = #file,
+    line: UInt = #line
   ) throws {
     let linkages = try bundle.objectFiles(for: library).reduce(into: []) { acc, next in
       acc += try self.extractAutolinkingHints(in: next)
@@ -175,7 +195,11 @@ extension LinkageTest {
     }
 
     for superfluousLinkage in sortedLinkages[expectedLinkagesIdx..<sortedLinkages.endIndex] {
-      XCTFail("Found unasserted link-time dependency: \(superfluousLinkage.linkage)")
+      XCTFail(
+        "Found unasserted link-time dependency: \(superfluousLinkage.linkage)",
+        file: file,
+        line: line
+      )
     }
   }
 
@@ -314,6 +338,7 @@ extension Linkage.Assertion {
   fileprivate enum Condition {
     case swiftVersionAtLeast(versionBound: SwiftVersion)
     case configuration(ProductConfiguration)
+    case compilationCondition(CompilationCondition)
     case flaky
 
     enum SwiftVersion: Comparable {
@@ -328,12 +353,20 @@ extension Linkage.Assertion {
       case release
     }
 
+    enum CompilationCondition {
+      case osLogDependency
+    }
+
     fileprivate static func when(swiftVersionAtLeast version: SwiftVersion) -> Condition {
       return .swiftVersionAtLeast(versionBound: version)
     }
 
     fileprivate static func when(configuration: ProductConfiguration) -> Condition {
       return .configuration(configuration)
+    }
+
+    fileprivate static func when(compilationCondition: CompilationCondition) -> Condition {
+      return .compilationCondition(compilationCondition)
     }
 
     fileprivate static func mayBeAbsent(_ reason: StaticString) -> Condition {
@@ -360,6 +393,12 @@ extension Linkage.Assertion {
         let config: ProductConfiguration = .release
         #endif
         return config == expectation
+      case .compilationCondition(.osLogDependency):
+        #if SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
+        return false
+        #else
+        return true
+        #endif
       case .flaky:
         return true
       }

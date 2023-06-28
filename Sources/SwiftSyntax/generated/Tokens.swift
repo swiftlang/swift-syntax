@@ -143,6 +143,20 @@ extension TokenSyntax {
     )
   }
   
+  public static func endOfFileToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .endOfFile,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+      
+    )
+  }
+  
   public static func equalToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -704,20 +718,6 @@ extension TokenSyntax {
   ) -> TokenSyntax {
     return TokenSyntax(
       .wildcard,
-      leadingTrivia: leadingTrivia,
-      trailingTrivia: trailingTrivia,
-      presence: presence
-      
-    )
-  }
-  
-  public static func endOfFileToken(
-    leadingTrivia: Trivia = [],
-    trailingTrivia: Trivia = [],
-    presence: SourcePresence = .present
-  ) -> TokenSyntax {
-    return TokenSyntax(
-      .endOfFile,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

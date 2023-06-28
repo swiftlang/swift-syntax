@@ -35,6 +35,8 @@ extension TokenKind {
       return #"dollar identifier"#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #"end of file"#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -111,8 +113,6 @@ extension TokenKind {
       return #"token"#
     case .wildcard:
       return #"wildcard"#
-    case .endOfFile:
-      return #"end of file"#
     case .keyword(let keyword):
       return String(syntaxText: keyword.defaultText)
     }

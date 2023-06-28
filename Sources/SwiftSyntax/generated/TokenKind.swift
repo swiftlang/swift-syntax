@@ -23,6 +23,7 @@ public enum TokenKind: Hashable {
   case comma
   case dollarIdentifier(String)
   case ellipsis
+  case endOfFile
   case equal
   case exclamationMark
   case extendedRegexDelimiter(String)
@@ -62,7 +63,6 @@ public enum TokenKind: Hashable {
   case stringSegment(String)
   case unknown(String)
   case wildcard
-  case endOfFile
   
   /// The textual representation of this token kind.
   @_spi(Testing)
@@ -86,6 +86,8 @@ public enum TokenKind: Hashable {
       return text
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -164,8 +166,6 @@ public enum TokenKind: Hashable {
       return text
     case .wildcard:
       return #"_"#
-    case .endOfFile:
-      return #""#
     }
   }
   
@@ -187,6 +187,8 @@ public enum TokenKind: Hashable {
       return #","#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -245,8 +247,6 @@ public enum TokenKind: Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
-    case .endOfFile:
-      return #""#
     default:
       return ""
     }
@@ -277,6 +277,8 @@ public enum TokenKind: Hashable {
       return false
     case .ellipsis:
       return true
+    case .endOfFile:
+      return false
     case .equal:
       return true
     case .exclamationMark:
@@ -355,8 +357,6 @@ public enum TokenKind: Hashable {
       return false
     case .wildcard:
       return false
-    case .endOfFile:
-      return false
     }
   }
 }
@@ -381,6 +381,8 @@ extension TokenKind: Equatable {
     case (.dollarIdentifier(let lhsText), .dollarIdentifier(let rhsText)):
       return lhsText == rhsText
     case (.ellipsis, .ellipsis):
+      return true
+    case (.endOfFile, .endOfFile):
       return true
     case (.equal, .equal):
       return true
@@ -460,8 +462,6 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.wildcard, .wildcard):
       return true
-    case (.endOfFile, .endOfFile):
-      return true
     default:
       return false
     }
@@ -484,6 +484,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case comma
   case dollarIdentifier
   case ellipsis
+  case endOfFile
   case equal
   case exclamationMark
   case extendedRegexDelimiter
@@ -523,7 +524,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case stringSegment
   case unknown
   case wildcard
-  case endOfFile
   
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
@@ -542,6 +542,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #","#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -598,8 +600,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
-    case .endOfFile:
-      return #""#
     default:
       return nil
     }
@@ -630,6 +630,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     case .ellipsis:
       return true
+    case .endOfFile:
+      return false
     case .equal:
       return true
     case .exclamationMark:
@@ -708,8 +710,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     case .wildcard:
       return false
-    case .endOfFile:
-      return false
     }
   }
 }
@@ -744,6 +744,9 @@ extension TokenKind {
     case .ellipsis:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .ellipsis
+    case .endOfFile:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .endOfFile
     case .equal:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .equal
@@ -853,9 +856,6 @@ extension TokenKind {
     case .wildcard:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .wildcard
-    case .endOfFile:
-      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
-      return .endOfFile
     }
   }
   
@@ -882,6 +882,8 @@ extension TokenKind {
       return (.dollarIdentifier, str)
     case .ellipsis:
       return (.ellipsis, nil)
+    case .endOfFile:
+      return (.endOfFile, nil)
     case .equal:
       return (.equal, nil)
     case .exclamationMark:
@@ -960,8 +962,6 @@ extension TokenKind {
       return (.unknown, str)
     case .wildcard:
       return (.wildcard, nil)
-    case .endOfFile:
-      return (.endOfFile, nil)
     }
   }
 }

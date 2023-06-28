@@ -51,6 +51,10 @@ extension TokenSpec {
     return TokenSpec(.ellipsis)
   }
   
+  static var endOfFile: TokenSpec {
+    return TokenSpec(.endOfFile)
+  }
+  
   static var equal: TokenSpec {
     return TokenSpec(.equal)
   }
@@ -201,10 +205,6 @@ extension TokenSpec {
   
   static var wildcard: TokenSpec {
     return TokenSpec(.wildcard)
-  }
-  
-  static var endOfFile: TokenSpec {
-    return TokenSpec(.endOfFile)
   }
   
   static func keyword(_ keyword: Keyword) -> TokenSpec {

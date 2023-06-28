@@ -42,10 +42,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// Rewrite `node` and anchor, making sure that the rewritten node also has
-      /// a parent if `node` had one.
-      public func rewrite(_ node: some SyntaxProtocol) -> Syntax {
+      /// Rewrite `node`, keeping its parent unless `detach` is `true`.
+      public func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
         let rewritten = self.visit(node.data)
+        if detach {
+          return rewritten
+        }
+
         return withExtendedLifetime(rewritten) {
           return Syntax(node.data.replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena()))
         }
@@ -100,7 +103,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Visit any Syntax node.
       ///   - Parameter node: the node that is being visited
       ///   - Returns: the rewritten node
-      @available(*, deprecated, renamed: "rewrite(_:)")
+      @available(*, deprecated, renamed: "rewrite(_:detach:)")
       public func visit(_ node: Syntax) -> Syntax {
         return visit(node.data)
       }

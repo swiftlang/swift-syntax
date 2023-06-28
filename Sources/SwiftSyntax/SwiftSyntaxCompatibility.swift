@@ -42,3 +42,6 @@ public extension EditorPlaceholderDeclSyntax {
     )
   }
 }
+
+@available(*, deprecated, renamed: "IncrementalEdit")
+public typealias SourceEdit = IncrementalEdit

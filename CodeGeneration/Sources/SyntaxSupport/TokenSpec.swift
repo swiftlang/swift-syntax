@@ -183,6 +183,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Comma", kind: "comma", text: ",", requiresTrailingSpace: true),
   MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
   PunctuatorSpec(name: "Ellipsis", kind: "ellipsis", text: "..."),
+  MiscSpec(name: "EndOfFile", kind: "eof", nameForDiagnostics: "end of file", text: ""),
   PunctuatorSpec(name: "Equal", kind: "equal", text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "ExclamationMark", kind: "exclaim_postfix", text: "!"),
   MiscSpec(name: "ExtendedRegexDelimiter", kind: "extended_regex_delimiter", nameForDiagnostics: "extended delimiter", classification: "RegexLiteral"),
@@ -222,7 +223,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
   MiscSpec(name: "Unknown", kind: "unknown", nameForDiagnostics: "token"),
   MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
-  MiscSpec(name: "EndOfFile", kind: "eof", nameForDiagnostics: "end of file", text: "")
 ]
 
 public let SYNTAX_TOKEN_MAP = Dictionary(

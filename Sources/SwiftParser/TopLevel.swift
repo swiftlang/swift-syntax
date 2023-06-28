@@ -46,12 +46,12 @@ extension Parser {
   ///     source-file → top-level-declaration?
   mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
-    let unexpectedBeforeEof = consumeRemainingTokens()
-    let eof = self.consume(if: .endOfFile)!
+    let unexpectedBeforeEndOfFileToken = consumeRemainingTokens()
+    let endOfFile = self.consume(if: .endOfFile)!
     return .init(
       statements: items,
-      RawUnexpectedNodesSyntax(unexpectedBeforeEof, arena: self.arena),
-      endOfFileToken: eof,
+      RawUnexpectedNodesSyntax(unexpectedBeforeEndOfFileToken, arena: self.arena),
+      endOfFileToken: endOfFile,
       arena: self.arena
     )
   }

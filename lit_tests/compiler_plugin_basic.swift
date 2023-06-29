@@ -4,6 +4,7 @@
 //
 // RUN: %swift-frontend -typecheck -verify -swift-version 5 \
 // RUN:   -enable-experimental-feature CodeItemMacros \
+// RUN:   -enable-experimental-feature ExtensionMacros \
 // RUN:   -dump-macro-expansions \
 // RUN:   -load-plugin-executable %examples_bin_path/ExamplePlugin#ExamplePlugin \
 // RUN:   -parse-as-library \
@@ -34,7 +35,7 @@ macro MemberDeprecated() = #externalMacro(module: "ExamplePlugin", type: "Member
 macro Equatable() = #externalMacro(module: "ExamplePlugin", type: "EquatableConformanceMacro")
 
 @attached(extension, conformances: Sendable)
-macro AddSendbale() = #externalMacro(module: "ExamplePlugin", type: "SendableExtensionMacro")
+macro AddSendable() = #externalMacro(module: "ExamplePlugin", type: "SendableExtensionMacro")
 
 @attached(accessor)
 macro DidSetPrint() = #externalMacro(module: "ExamplePlugin", type: "DidSetPrintMacro")

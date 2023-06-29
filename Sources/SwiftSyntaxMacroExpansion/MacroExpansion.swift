@@ -22,6 +22,7 @@ public enum MacroRole {
   case peer
   case conformance
   case codeItem
+  case `extension`
 }
 
 extension MacroRole {
@@ -35,6 +36,7 @@ extension MacroRole {
     case .peer: return "PeerMacro"
     case .conformance: return "ConformanceMacro"
     case .codeItem: return "CodeItemMacro"
+    case .extension: return "ExtensionMacro"
     }
   }
 }
@@ -45,6 +47,7 @@ private enum MacroExpansionError: Error, CustomStringConvertible {
   case parentDeclGroupNil
   case declarationNotDeclGroup
   case declarationNotIdentified
+  case noExtendedTypeSyntax
   case noFreestandingMacroRoles(Macro.Type)
 
   var description: String {
@@ -60,6 +63,9 @@ private enum MacroExpansionError: Error, CustomStringConvertible {
 
     case .declarationNotIdentified:
       return "declaration is not a 'Identified' syntax"
+
+    case .noExtendedTypeSyntax:
+      return "no extended type for extension macro"
 
     case .noFreestandingMacroRoles(let type):
       return "macro implementation type '\(type)' does not conform to any freestanding macro protocol"
@@ -113,7 +119,7 @@ public func expandFreestandingMacro(
         let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
         expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
-      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.expression, _), (.declaration, _),
+      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
         (.codeItem, _):
         throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
       }
@@ -178,6 +184,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   attributeNode: AttributeSyntax,
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
   in context: Context
 ) -> [String]? {
   do {
@@ -295,6 +302,39 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         return "extension \(typeName) : \(protocolName) \(whereClause) {}"
       }
 
+    case (let attachedMacro as ExtensionMacro.Type, .extension):
+      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
+        // Compiler error: type mismatch.
+        throw MacroExpansionError.declarationNotDeclGroup
+      }
+
+      guard let extendedType = extendedType else {
+        throw MacroExpansionError.noExtendedTypeSyntax
+      }
+
+      // Local function to expand an extension macro once we've opened up
+      // the existential.
+      func expandExtensionMacro(
+        _ node: some DeclGroupSyntax
+      ) throws -> [ExtensionDeclSyntax] {
+        return try attachedMacro.expansion(
+          of: attributeNode,
+          attachedTo: node,
+          providingExtensionsOf: extendedType,
+          in: context
+        )
+      }
+
+      let extensions = try _openExistential(
+        declGroup,
+        do: expandExtensionMacro
+      )
+
+      // Form a buffer of peer declarations to return to the caller.
+      return extensions.map {
+        $0.formattedExpansion(definition.formatMode)
+      }
+
     default:
       throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
@@ -323,6 +363,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   attributeNode: AttributeSyntax,
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
   in context: Context
 ) -> String? {
   let expandedSources = expandAttachedMacroWithoutCollapsing(
@@ -331,6 +372,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     attributeNode: attributeNode,
     declarationNode: declarationNode,
     parentDeclNode: parentDeclNode,
+    extendedType: extendedType,
     in: context
   )
   return expandedSources.map {

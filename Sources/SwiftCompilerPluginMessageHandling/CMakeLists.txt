@@ -11,6 +11,7 @@ add_swift_host_library(SwiftCompilerPluginMessageHandling
   Diagnostics.swift
   Macros.swift
   PluginMacroExpansionContext.swift
+  PluginMessageCompatibility.swift
   PluginMessages.swift
 )
 

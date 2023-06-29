@@ -319,7 +319,7 @@ final class IfconfigExprTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "2nd parameter of canImport should be labeled as _version or _underlyingVersion",
-          fixIts: ["replace 'unknown' with '_version' and ':'", "replace 'unknown' with '_underlyingVersion' and ':'"]
+          fixIts: ["replace 'unknown' with '_version'", "replace 'unknown' with '_underlyingVersion'"]
         )
       ],
       fixedSource:

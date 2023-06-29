@@ -174,14 +174,15 @@ extension FixIt.MultiNodeChange {
     return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 
-  /// Make `oldNode` replaced by `newNode` but maintain `oldNode`'s trivia, where `oldNode` should be a missing node
-  static func makeReplacingPresentWithTrivia(oldNode: some SyntaxProtocol, newNode: some SyntaxProtocol) -> Self {
-    var formattedOldNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(oldNode))
+  /// Make `node` present while changing its content to `tokenKind`.
+  static func makePresent(_ node: TokenSyntax, with tokenKind: TokenKind) -> Self {
+    var formattedOldNode = MissingNodesBasicFormatter(viewMode: .fixedUp).visit(Syntax(node))
     formattedOldNode = PresentMaker().rewrite(formattedOldNode)
 
-    var presentNode = Syntax(newNode)
-    presentNode = presentNode.with(\.leadingTrivia, formattedOldNode.leadingTrivia)
-    presentNode = presentNode.with(\.trailingTrivia, formattedOldNode.trailingTrivia)
-    return FixIt.MultiNodeChange(primitiveChanges: [.replace(oldNode: Syntax(oldNode), newNode: presentNode)])
+    guard let formattedTokenSyntax = formattedOldNode.as(TokenSyntax.self)?.with(\.tokenKind, tokenKind) else {
+      return FixIt.MultiNodeChange(primitiveChanges: [.replace(oldNode: Syntax(node), newNode: formattedOldNode)])
+    }
+
+    return FixIt.MultiNodeChange(primitiveChanges: [.replace(oldNode: Syntax(node), newNode: Syntax(formattedTokenSyntax))])
   }
 }

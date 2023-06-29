@@ -644,42 +644,28 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if node.label.isMissing {
+    func getMissingLabelFixit(for tokenKind: TokenKind) -> FixIt {
       let replaceTokens: [TokenSyntax] = [node.unexpectedBetweenLabelAndColon].compactMap { $0?.tokens(viewMode: .sourceAccurate) }.flatMap { $0 }
 
-      let versionMessage: ParserFixIt =
+      let message: ParserFixIt =
         node.unexpectedBetweenLabelAndColon == nil
-        ? InsertFixIt(tokenToBeInserted: .keyword(._version))
-        : ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [.keyword(._version), .colonToken()])
+        ? InsertFixIt(tokenToBeInserted: TokenSyntax(tokenKind, presence: .present))
+        : ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [TokenSyntax(tokenKind, presence: .present)])
 
-      let underlyingVersionMessage: ParserFixIt =
-        node.unexpectedBetweenLabelAndColon == nil
-        ? InsertFixIt(tokenToBeInserted: .keyword(._underlyingVersion))
-        : ReplaceTokensFixIt(replaceTokens: replaceTokens, replacements: [.keyword(._underlyingVersion), .colonToken()])
+      return FixIt(
+        message: message,
+        changes: [
+          .makePresent(node.label, with: tokenKind),
+          .makeMissing(node.unexpectedBetweenLabelAndColon),
+          .makePresent(node.colon),
+        ]
+      )
+    }
 
+    if node.label.isMissing {
       let fixIts = [
-        FixIt(
-          message: versionMessage,
-          changes: [
-            .makeReplacingPresentWithTrivia(
-              oldNode: node.label,
-              newNode: TokenSyntax(.keyword(._version), presence: .present)
-            ),
-            .makeMissing(node.unexpectedBetweenLabelAndColon),
-            .makePresent(node.colon),
-          ]
-        ),
-        FixIt(
-          message: underlyingVersionMessage,
-          changes: [
-            .makeReplacingPresentWithTrivia(
-              oldNode: Syntax(node.label),
-              newNode: Syntax(TokenSyntax(.keyword(._underlyingVersion), presence: .present))
-            ),
-            .makeMissing(node.unexpectedBetweenLabelAndColon),
-            .makePresent(node.colon),
-          ]
-        ),
+        getMissingLabelFixit(for: .keyword(._version)),
+        getMissingLabelFixit(for: .keyword(._underlyingVersion)),
       ]
 
       addDiagnostic(

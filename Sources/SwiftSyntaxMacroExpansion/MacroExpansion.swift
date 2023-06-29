@@ -266,42 +266,6 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         $0.formattedExpansion(definition.formatMode)
       }
 
-    case (let attachedMacro as ConformanceMacro.Type, .conformance):
-      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
-        // Compiler error: type mismatch.
-        throw MacroExpansionError.declarationNotDeclGroup
-      }
-      guard let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self)
-      else {
-        // Compiler error: type mismatch.
-        throw MacroExpansionError.declarationNotIdentified
-      }
-
-      // Local function to expand a conformance macro once we've opened up
-      // the existential.
-      func expandConformanceMacro(
-        _ node: some DeclGroupSyntax
-      ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] {
-        return try attachedMacro.expansion(
-          of: attributeNode,
-          providingConformancesOf: node,
-          in: context
-        )
-      }
-
-      let conformances = try _openExistential(
-        declGroup,
-        do: expandConformanceMacro
-      )
-
-      // Form a buffer of extension declarations to return to the caller.
-      return conformances.map { typeSyntax, whereClause in
-        let typeName = identified.identifier.trimmedDescription
-        let protocolName = typeSyntax.trimmedDescription
-        let whereClause = whereClause?.trimmedDescription ?? ""
-        return "extension \(typeName) : \(protocolName) \(whereClause) {}"
-      }
-
     case (let attachedMacro as ExtensionMacro.Type, .extension):
       guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
         // Compiler error: type mismatch.

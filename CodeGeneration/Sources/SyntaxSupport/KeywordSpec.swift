@@ -73,7 +73,6 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("_read"),
   KeywordSpec("_RefCountedObject"),
   KeywordSpec("_semantics"),
-  KeywordSpec("_silgen_name"),
   KeywordSpec("_specialize"),
   KeywordSpec("_spi"),
   KeywordSpec("_spi_available"),

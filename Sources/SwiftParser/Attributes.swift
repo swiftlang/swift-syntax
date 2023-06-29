@@ -47,7 +47,6 @@ extension Parser {
     case _private
     case _projectedValueProperty
     case _semantics
-    case _silgen_name
     case _specialize
     case _spi
     case _spi_available
@@ -82,7 +81,6 @@ extension Parser {
       case TokenSpec(._private): self = ._private
       case TokenSpec(._projectedValueProperty): self = ._projectedValueProperty
       case TokenSpec(._semantics): self = ._semantics
-      case TokenSpec(._silgen_name): self = ._silgen_name
       case TokenSpec(._specialize): self = ._specialize
       case TokenSpec(._spi): self = ._spi
       case TokenSpec(._spi_available): self = ._spi_available
@@ -121,7 +119,6 @@ extension Parser {
       case ._private: return .keyword(._private)
       case ._projectedValueProperty: return .keyword(._projectedValueProperty)
       case ._semantics: return .keyword(._semantics)
-      case ._silgen_name: return .keyword(._silgen_name)
       case ._specialize: return .keyword(._specialize)
       case ._spi: return .keyword(._spi)
       case ._spi_available: return .keyword(._spi_available)
@@ -292,7 +289,7 @@ extension Parser {
         }
         return .effectsArguments(RawEffectsArgumentsSyntax(elements: tokens, arena: parser.arena))
       }
-    case ._cdecl, ._silgen_name:
+    case ._cdecl:
       return parseAttribute(argumentMode: .required) { parser in
         return .string(parser.parseStringLiteral())
       }

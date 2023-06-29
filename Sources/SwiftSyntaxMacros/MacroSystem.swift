@@ -115,7 +115,8 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
           || macro is MemberMacro.Type
           || macro is AccessorMacro.Type
           || macro is MemberAttributeMacro.Type
-          || macro is ConformanceMacro.Type)
+          || macro is ConformanceMacro.Type
+          || macro is ExtensionMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -433,6 +434,23 @@ extension MacroApplication {
 
           extensions.append(DeclSyntax(ext))
         }
+      } catch {
+        context.addDiagnostics(from: error, node: attribute)
+      }
+    }
+
+    let extensionMacroAttrs = getMacroAttributes(attachedTo: decl.as(DeclSyntax.self)!, ofType: ExtensionMacro.Type.self)
+    let extendedTypeSyntax = TypeSyntax("\(extendedType.trimmed)")
+    for (attribute, extensionMacro) in extensionMacroAttrs {
+      do {
+        let newExtensions = try extensionMacro.expansion(
+          of: attribute,
+          attachedTo: decl,
+          providingExtensionsOf: extendedTypeSyntax,
+          in: context
+        )
+
+        extensions.append(contentsOf: newExtensions.map(DeclSyntax.init))
       } catch {
         context.addDiagnostics(from: error, node: attribute)
       }

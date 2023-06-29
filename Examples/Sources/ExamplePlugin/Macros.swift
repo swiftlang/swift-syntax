@@ -86,6 +86,26 @@ struct EquatableConformanceMacro: ConformanceMacro {
   }
 }
 
+public struct SendableExtensionMacro: ExtensionMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    attachedTo: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [ExtensionDeclSyntax] {
+    let sendableExtension: DeclSyntax =
+      """
+      extension \(type.trimmed): Sendable {}
+      """
+
+    guard let extensionDecl = sendableExtension.as(ExtensionDeclSyntax.self) else {
+      return []
+    }
+
+    return [extensionDecl]
+  }
+}
+
 /// Add 'didSet' printing the new value.
 struct DidSetPrintMacro: AccessorMacro {
   static func expansion(

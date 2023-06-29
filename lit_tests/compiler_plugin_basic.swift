@@ -4,6 +4,7 @@
 //
 // RUN: %swift-frontend -typecheck -verify -swift-version 5 \
 // RUN:   -enable-experimental-feature CodeItemMacros \
+// RUN:   -enable-experimental-feature ExtensionMacros \
 // RUN:   -dump-macro-expansions \
 // RUN:   -load-plugin-executable %examples_bin_path/ExamplePlugin#ExamplePlugin \
 // RUN:   -parse-as-library \

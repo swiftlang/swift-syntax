@@ -641,4 +641,20 @@ final class AttributeTests: XCTestCase {
       """
     )
   }
+
+  func testAttachedExtensionAttribute() {
+    assertParse(
+      """
+      @attached(extension)
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(extension, names: named(test))
+      macro m()
+      """
+    )
+  }
 }

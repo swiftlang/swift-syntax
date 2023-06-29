@@ -108,6 +108,7 @@ internal enum PluginToHostMessage: Codable {
     case peer
     case conformance
     case codeItem
+    case `extension`
   }
 
   struct SourceLocation: Codable {

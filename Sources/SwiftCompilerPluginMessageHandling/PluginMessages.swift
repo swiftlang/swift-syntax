@@ -34,7 +34,8 @@
     attributeSyntax: PluginMessage.Syntax,
     declSyntax: PluginMessage.Syntax,
     parentDeclSyntax: PluginMessage.Syntax?,
-    extendedTypeSyntax: PluginMessage.Syntax?
+    extendedTypeSyntax: PluginMessage.Syntax?,
+    conformanceListSyntax: PluginMessage.Syntax?
   )
 
   /// Optionally implemented message to load a dynamic link library.

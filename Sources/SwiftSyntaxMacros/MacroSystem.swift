@@ -422,10 +422,14 @@ extension MacroApplication {
     let extensionMacroAttrs = getMacroAttributes(attachedTo: decl.as(DeclSyntax.self)!, ofType: ExtensionMacro.Type.self)
     for (attribute, extensionMacro) in extensionMacroAttrs {
       do {
+        // FIXME: We need a way for unit tests of extension macros to
+        // specify protocols already stated in source (e.g. as arguments
+        // to `assertMacroExpansion`).
         let newExtensions = try extensionMacro.expansion(
           of: attribute,
           attachedTo: decl,
           providingExtensionsOf: extendedType,
+          conformingTo: [],
           in: context
         )
 

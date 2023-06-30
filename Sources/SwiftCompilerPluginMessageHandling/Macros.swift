@@ -87,7 +87,8 @@ extension CompilerPluginMessageHandler {
     attributeSyntax: PluginMessage.Syntax,
     declSyntax: PluginMessage.Syntax,
     parentDeclSyntax: PluginMessage.Syntax?,
-    extendedTypeSyntax: PluginMessage.Syntax?
+    extendedTypeSyntax: PluginMessage.Syntax?,
+    conformanceListSyntax: PluginMessage.Syntax?
   ) throws {
     let sourceManager = SourceManager()
     let context = PluginMacroExpansionContext(
@@ -103,6 +104,10 @@ extension CompilerPluginMessageHandler {
     let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
     let extendedType = extendedTypeSyntax.map {
       sourceManager.add($0).cast(TypeSyntax.self)
+    }
+    let conformanceList = conformanceListSyntax.map {
+      let placeholderStruct = sourceManager.add($0).cast(StructDeclSyntax.self)
+      return placeholderStruct.inheritanceClause!.inheritedTypeCollection
     }
 
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.
@@ -120,6 +125,7 @@ extension CompilerPluginMessageHandler {
         declarationNode: declarationNode,
         parentDeclNode: parentDeclNode,
         extendedType: extendedType,
+        conformanceList: conformanceList,
         in: context
       )
       if let expansions, hostCapability.hasExpandMacroResult {

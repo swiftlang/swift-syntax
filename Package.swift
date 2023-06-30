@@ -204,16 +204,14 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxMacroExpansionTest",
-      dependencies: [
-        "SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftSyntaxMacroExpansion", "SwiftSyntaxBuilder",
-      ]
+      dependencies: ["SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftSyntaxMacroExpansion", "SwiftSyntaxBuilder"]
     ),
 
     // MARK: SwiftSyntaxMacrosTestSupport
 
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
     ),
 
     // MARK: SwiftParser

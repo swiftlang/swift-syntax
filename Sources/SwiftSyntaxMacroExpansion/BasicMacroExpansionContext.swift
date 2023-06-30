@@ -12,13 +12,12 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacros
 
 /// An implementation of the `MacroExpansionContext` protocol that is
 /// suitable for testing purposes.
-@available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext instead")
 public class BasicMacroExpansionContext {
   /// A single source file that is known to the macro expansion context.
-  @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext.KnownSourceFile instead")
   public struct KnownSourceFile {
     /// The name of the module in which this source file resides.
     let moduleName: String
@@ -26,8 +25,6 @@ public class BasicMacroExpansionContext {
     /// The full path to the file.
     let fullFilePath: String
 
-    @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext.KnownSourceFile instead")
-    @_disfavoredOverload  // deprecated.
     public init(moduleName: String, fullFilePath: String) {
       self.moduleName = moduleName
       self.fullFilePath = fullFilePath
@@ -35,8 +32,6 @@ public class BasicMacroExpansionContext {
   }
 
   /// Create a new macro evaluation context.
-  @available(*, deprecated, message: "use SwiftSyntaxMacroExpansion.BasicMacroExpansionContext instead")
-  @_disfavoredOverload  // deprecated.
   public init(
     expansionDiscriminator: String = "__macro_local_",
     sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
@@ -76,8 +71,8 @@ public class BasicMacroExpansionContext {
 extension BasicMacroExpansionContext {
   /// Note that the given node that was at the given position in the provided
   /// source file has been disconnected and is now a new root.
-  private func addDisconnected<Node: SyntaxProtocol>(
-    _ node: Node,
+  private func addDisconnected(
+    _ node: some SyntaxProtocol,
     at offset: AbsolutePosition,
     in sourceFile: SourceFileSyntax
   ) {
@@ -141,8 +136,8 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     diagnostics.append(diagnostic)
   }
 
-  public func location<Node: SyntaxProtocol>(
-    of node: Node,
+  public func location(
+    of node: some SyntaxProtocol,
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation? {

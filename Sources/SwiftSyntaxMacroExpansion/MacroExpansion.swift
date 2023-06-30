@@ -185,6 +185,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
+  conformanceList: InheritedTypeListSyntax?,
   in context: Context
 ) -> [String]? {
   do {
@@ -276,6 +277,8 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.noExtendedTypeSyntax
       }
 
+      let protocols = conformanceList?.map(\.typeName) ?? []
+
       // Local function to expand an extension macro once we've opened up
       // the existential.
       func expandExtensionMacro(
@@ -285,6 +288,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
           of: attributeNode,
           attachedTo: node,
           providingExtensionsOf: extendedType,
+          conformingTo: protocols,
           in: context
         )
       }
@@ -328,6 +332,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   declarationNode: DeclSyntax,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
+  conformanceList: InheritedTypeListSyntax?,
   in context: Context
 ) -> String? {
   let expandedSources = expandAttachedMacroWithoutCollapsing(
@@ -337,6 +342,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     declarationNode: declarationNode,
     parentDeclNode: parentDeclNode,
     extendedType: extendedType,
+    conformanceList: conformanceList,
     in: context
   )
   return expandedSources.map {

@@ -50,9 +50,9 @@ extension ConformanceMacro {
     var extensions: [ExtensionDeclSyntax] = []
     for (proto, whereClause) in newConformances {
       let decl: DeclSyntax =
-      """
-      extension \(type.trimmed): \(proto) {}
-      """
+        """
+        extension \(type.trimmed): \(proto) {}
+        """
 
       var extensionDecl = decl.cast(ExtensionDeclSyntax.self)
 

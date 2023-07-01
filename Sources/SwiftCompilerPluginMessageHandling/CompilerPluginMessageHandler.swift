@@ -122,7 +122,16 @@ extension CompilerPluginMessageHandler {
         expandingSyntax: expandingSyntax
       )
 
-    case .expandAttachedMacro(let macro, let macroRole, let discriminator, let attributeSyntax, let declSyntax, let parentDeclSyntax, let extendedTypeSyntax, let conformanceListSyntax):
+    case .expandAttachedMacro(
+      let macro,
+      let macroRole,
+      let discriminator,
+      let attributeSyntax,
+      let declSyntax,
+      let parentDeclSyntax,
+      let extendedTypeSyntax,
+      let conformanceListSyntax
+    ):
       try expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,

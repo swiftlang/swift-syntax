@@ -9,7 +9,8 @@ extension FunctionParameterSyntax {
   ///
   /// The parameter names for these three parameters are `a`, `b`, and `see`,
   /// respectively.
-  var parameterName: TokenSyntax? {
+  @_spi(Testing)
+  public var parameterName: TokenSyntax? {
     // If there were two names, the second is the parameter name.
     if let secondName {
       if secondName.text == "_" {

@@ -166,6 +166,8 @@ private extension MacroRole {
     case .conformance: self = .extension
     case .codeItem: self = .codeItem
     case .extension: self = .extension
+    case .preamble: self = .preamble
+    case .body: self = .body
     }
   }
 }

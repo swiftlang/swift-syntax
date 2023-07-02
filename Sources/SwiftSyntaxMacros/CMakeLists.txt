@@ -9,6 +9,7 @@
 add_swift_syntax_library(SwiftSyntaxMacros
   MacroProtocols/AccessorMacro.swift
   MacroProtocols/AttachedMacro.swift
+  MacroProtocols/BodyMacro.swift
   MacroProtocols/CodeItemMacro.swift
   MacroProtocols/DeclarationMacro.swift
   MacroProtocols/ExpressionMacro.swift
@@ -19,6 +20,7 @@ add_swift_syntax_library(SwiftSyntaxMacros
   MacroProtocols/MemberAttributeMacro.swift
   MacroProtocols/MemberMacro.swift
   MacroProtocols/PeerMacro.swift
+  MacroProtocols/PreambleMacro.swift
 
   AbstractSourceLocation.swift
   MacroExpansionContext.swift

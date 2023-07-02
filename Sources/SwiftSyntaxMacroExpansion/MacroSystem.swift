@@ -349,6 +349,71 @@ private func expandExtensionMacro(
   return "\(raw: indentedSource)"
 }
 
+/// Expand a preamble macro into a list of code items.
+private func expandPreambleMacro(
+  definition: PreambleMacro.Type,
+  attributeNode: AttributeSyntax,
+  attachedTo decl: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+  in context: some MacroExpansionContext,
+  indentationWidth: Trivia
+) -> CodeBlockItemListSyntax? {
+  guard
+    let expanded = expandAttachedMacro(
+      definition: definition,
+      macroRole: .preamble,
+      attributeNode: attributeNode.detach(
+        in: context,
+        foldingWith: .standardOperators
+      ),
+      declarationNode: DeclSyntax(decl.detach(in: context)),
+      parentDeclNode: nil,
+      extendedType: nil,
+      conformanceList: nil,
+      in: context,
+      indentationWidth: indentationWidth
+    )
+  else {
+    return []
+  }
+
+  // Match the indentation of the statements if we can, and put newlines around
+  // the preamble to separate it from the rest of the body.
+  let indentation = decl.body?.statements.indentationOfFirstLine ?? (decl.indentationOfFirstLine + indentationWidth)
+  let indentedSource = "\n" + expanded.indented(by: indentation) + "\n\n\n"
+  return "\(raw: indentedSource)"
+}
+
+private func expandBodyMacro(
+  definition: BodyMacro.Type,
+  attributeNode: AttributeSyntax,
+  attachedTo decl: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+  in context: some MacroExpansionContext,
+  indentationWidth: Trivia
+) -> CodeBlockSyntax? {
+  guard
+    let expanded = expandAttachedMacro(
+      definition: definition,
+      macroRole: .body,
+      attributeNode: attributeNode.detach(
+        in: context,
+        foldingWith: .standardOperators
+      ),
+      declarationNode: DeclSyntax(decl.detach(in: context)),
+      parentDeclNode: nil,
+      extendedType: nil,
+      conformanceList: nil,
+      in: context,
+      indentationWidth: indentationWidth
+    )
+  else {
+    return nil
+  }
+
+  // Wrap the body in braces.
+  let indentedSource = " {\n" + expanded.indented(by: decl.indentationOfFirstLine + indentationWidth) + "\n}\n"
+  return "\(raw: indentedSource)" as CodeBlockSyntax
+}
+
 // MARK: - MacroSystem
 
 /// Describes the kinds of errors that can occur within a macro system.
@@ -567,14 +632,21 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     case .notAMacro:
       break
     }
-    if let declSyntax = node.as(DeclSyntax.self),
+    if var declSyntax = node.as(DeclSyntax.self),
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
     {
+      // Apply body and preamble macros.
+      if let nodeWithBody = node.asProtocol(WithOptionalCodeBlockSyntax.self),
+        let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax
+      {
+        declSyntax = DeclSyntax(visitBodyAndPreambleMacros(declNodeWithBody))
+      }
+
       // Visit the node, disabling the `visitAny` handling.
-      skipVisitAnyHandling.insert(node)
+      skipVisitAnyHandling.insert(Syntax(declSyntax))
       let visitedNode = self.visit(declSyntax)
-      skipVisitAnyHandling.remove(node)
+      skipVisitAnyHandling.remove(Syntax(declSyntax))
 
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode).map(\.attributeNode)
 
@@ -582,6 +654,68 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     return nil
+  }
+
+  /// Visit for both the body and preamble macros.
+  func visitBodyAndPreambleMacros<Node: DeclSyntaxProtocol & WithOptionalCodeBlockSyntax>(
+    _ node: Node
+  ) -> Node {
+    // Expand preamble macros into a set of code items.
+    let preamble = expandMacros(attachedTo: DeclSyntax(node), ofType: PreambleMacro.Type.self) { attributeNode, definition in
+      expandPreambleMacro(
+        definition: definition,
+        attributeNode: attributeNode,
+        attachedTo: node,
+        in: context,
+        indentationWidth: indentationWidth
+      )
+    }
+
+    // Expand body macro.
+    let expandedBodies = expandMacros(attachedTo: DeclSyntax(node), ofType: BodyMacro.Type.self) { attributeNode, definition in
+      expandBodyMacro(
+        definition: definition,
+        attributeNode: attributeNode,
+        attachedTo: node,
+        in: context,
+        indentationWidth: indentationWidth
+      ).map { [$0] }
+    }
+
+    // Dig out the body.
+    let body: CodeBlockSyntax
+    switch expandedBodies.count {
+    case 0 where preamble.isEmpty:
+      // Nothing changes
+      return node
+
+    case 0:
+      guard let existingBody = node.body else {
+        // Any leftover preamble statements have nowhere to go, complain and
+        // exit.
+        context.addDiagnostics(from: MacroExpansionError.preambleWithoutBody, node: node)
+
+        return node
+      }
+
+      body = existingBody
+
+    case 1:
+      body = expandedBodies[0]
+
+    default:
+      context.addDiagnostics(from: MacroExpansionError.tooManyBodyMacros, node: node)
+      body = expandedBodies[0]
+    }
+
+    // If there's no preamble, swap in the new body.
+    if preamble.isEmpty {
+      return node.with(\.body, body)
+    }
+
+    var statements = body.statements
+    statements.insert(contentsOf: preamble, at: statements.startIndex)
+    return node.with(\.body, body.with(\.statements, statements))
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {

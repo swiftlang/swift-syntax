@@ -110,7 +110,12 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
           return true
         }
 
-        return !(macro is PeerMacro.Type || macro is MemberMacro.Type || macro is AccessorMacro.Type || macro is MemberAttributeMacro.Type || macro is ConformanceMacro.Type || macro is ExtensionMacro.Type)
+        return
+          !(macro is PeerMacro.Type
+          || macro is MemberMacro.Type
+          || macro is AccessorMacro.Type
+          || macro is MemberAttributeMacro.Type
+          || macro is ExtensionMacro.Type)
       }
 
       if newAttributes.isEmpty {
@@ -186,7 +191,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
         if let declGroup = decl.asProtocol(DeclGroupSyntax.self) {
           newItems.append(
-            contentsOf: expandConformances(of: declGroup).map {
+            contentsOf: expandExtensions(of: declGroup).map {
               newDecl in CodeBlockItemSyntax(item: .decl(newDecl))
             }
           )
@@ -402,45 +407,29 @@ extension MacroApplication {
   // If any of the custom attributes associated with the given declaration
   // refer to conformance macros, expand them and return the resulting
   // set of extension declarations.
-  private func expandConformances(of decl: DeclGroupSyntax) -> [DeclSyntax] {
-    let extendedType: Syntax
+  private func expandExtensions(of decl: DeclGroupSyntax) -> [DeclSyntax] {
+    let extendedType: TypeSyntax
     if let identified = decl.asProtocol(IdentifiedDeclSyntax.self) {
-      extendedType = Syntax(identified.identifier.trimmed)
+      extendedType = "\(identified.identifier.trimmed)"
     } else if let ext = decl.as(ExtensionDeclSyntax.self) {
-      extendedType = Syntax(ext.extendedType.trimmed)
+      extendedType = "\(ext.extendedType.trimmed)"
     } else {
       return []
     }
 
     var extensions: [DeclSyntax] = []
-    let macroAttributes = getMacroAttributes(attachedTo: decl.as(DeclSyntax.self)!, ofType: ConformanceMacro.Type.self)
-    for (attribute, conformanceMacro) in macroAttributes {
-      do {
-        let newConformances = try conformanceMacro.expansion(of: attribute, providingConformancesOf: decl, in: context)
-
-        for (type, whereClause) in newConformances {
-          var ext: DeclSyntax = """
-            extension \(extendedType): \(type) { }
-            """
-          if let whereClause {
-            ext = DeclSyntax((ext.cast(ExtensionDeclSyntax.self)).with(\.genericWhereClause, whereClause))
-          }
-
-          extensions.append(DeclSyntax(ext))
-        }
-      } catch {
-        context.addDiagnostics(from: error, node: attribute)
-      }
-    }
 
     let extensionMacroAttrs = getMacroAttributes(attachedTo: decl.as(DeclSyntax.self)!, ofType: ExtensionMacro.Type.self)
-    let extendedTypeSyntax = TypeSyntax("\(extendedType.trimmed)")
     for (attribute, extensionMacro) in extensionMacroAttrs {
       do {
+        // FIXME: We need a way for unit tests of extension macros to
+        // specify protocols already stated in source (e.g. as arguments
+        // to `assertMacroExpansion`).
         let newExtensions = try extensionMacro.expansion(
           of: attribute,
           attachedTo: decl,
-          providingExtensionsOf: extendedTypeSyntax,
+          providingExtensionsOf: extendedType,
+          conformingTo: [],
           in: context
         )
 

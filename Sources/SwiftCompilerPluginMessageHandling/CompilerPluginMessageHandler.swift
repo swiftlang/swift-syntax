@@ -122,7 +122,16 @@ extension CompilerPluginMessageHandler {
         expandingSyntax: expandingSyntax
       )
 
-    case .expandAttachedMacro(let macro, let macroRole, let discriminator, let attributeSyntax, let declSyntax, let parentDeclSyntax, let extendedTypeSyntax):
+    case .expandAttachedMacro(
+      let macro,
+      let macroRole,
+      let discriminator,
+      let attributeSyntax,
+      let declSyntax,
+      let parentDeclSyntax,
+      let extendedTypeSyntax,
+      let conformanceListSyntax
+    ):
       try expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
@@ -130,7 +139,8 @@ extension CompilerPluginMessageHandler {
         attributeSyntax: attributeSyntax,
         declSyntax: declSyntax,
         parentDeclSyntax: parentDeclSyntax,
-        extendedTypeSyntax: extendedTypeSyntax
+        extendedTypeSyntax: extendedTypeSyntax,
+        conformanceListSyntax: conformanceListSyntax
       )
 
     case .loadPluginLibrary(let libraryPath, let moduleName):

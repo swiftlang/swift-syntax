@@ -687,6 +687,7 @@ public struct SendableExtensionMacro: ExtensionMacro {
     of node: AttributeSyntax,
     attachedTo: some DeclGroupSyntax,
     providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [ExtensionDeclSyntax] {
     let sendableExtension: DeclSyntax =

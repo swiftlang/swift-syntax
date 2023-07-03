@@ -91,41 +91,38 @@ public func expandFreestandingMacro(
   in context: some MacroExpansionContext
 ) -> String? {
   do {
-    func _expand(node: some FreestandingMacroExpansionSyntax) throws -> String {
-      let expandedSyntax: Syntax
-      switch (macroRole, definition) {
-      case (.expression, let exprMacroDef as ExpressionMacro.Type):
-        expandedSyntax = try Syntax(exprMacroDef.expansion(of: node, in: context))
+    let expandedSyntax: Syntax
+    switch (macroRole, definition) {
+    case (.expression, let exprMacroDef as ExpressionMacro.Type):
+      expandedSyntax = try Syntax(exprMacroDef.expansion(of: node, in: context))
 
-      case (.declaration, let declMacroDef as DeclarationMacro.Type):
-        var rewritten = try declMacroDef.expansion(of: node, in: context)
-        // Copy attributes and modifiers to the generated decls.
-        if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
-          let attributes = declMacroDef.propagateFreestandingMacroAttributes ? expansionDecl.attributes : nil
-          let modifiers = declMacroDef.propagateFreestandingMacroModifiers ? expansionDecl.modifiers : nil
-          rewritten = rewritten.map {
-            $0.applying(attributes: attributes, modifiers: modifiers)
-          }
+    case (.declaration, let declMacroDef as DeclarationMacro.Type):
+      var rewritten = try declMacroDef.expansion(of: node, in: context)
+      // Copy attributes and modifiers to the generated decls.
+      if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
+        let attributes = declMacroDef.propagateFreestandingMacroAttributes ? expansionDecl.attributes : nil
+        let modifiers = declMacroDef.propagateFreestandingMacroModifiers ? expansionDecl.modifiers : nil
+        rewritten = rewritten.map {
+          $0.applying(attributes: attributes, modifiers: modifiers)
         }
-        expandedSyntax = Syntax(
-          CodeBlockItemListSyntax(
-            rewritten.map {
-              CodeBlockItemSyntax(item: .decl($0))
-            }
-          )
-        )
-
-      case (.codeItem, let codeItemMacroDef as CodeItemMacro.Type):
-        let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
-        expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
-
-      case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
-        (.codeItem, _):
-        throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
       }
-      return expandedSyntax.formattedExpansion(definition.formatMode)
+      expandedSyntax = Syntax(
+        CodeBlockItemListSyntax(
+          rewritten.map {
+            CodeBlockItemSyntax(item: .decl($0))
+          }
+        )
+      )
+
+    case (.codeItem, let codeItemMacroDef as CodeItemMacro.Type):
+      let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
+      expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
+
+    case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
+      (.codeItem, _):
+      throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
-    return try _openExistential(node, do: _expand)
+    return expandedSyntax.formattedExpansion(definition.formatMode)
   } catch {
     context.addDiagnostics(from: error, node: node)
     return nil
@@ -208,22 +205,11 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.parentDeclGroupNil
       }
 
-      // Local function to expand a member attribute macro once we've opened up
-      // the existential.
-      func expandMemberAttributeMacro(
-        _ node: some DeclGroupSyntax
-      ) throws -> [AttributeSyntax] {
-        return try attachedMacro.expansion(
-          of: attributeNode,
-          attachedTo: node,
-          providingAttributesFor: declarationNode,
-          in: context
-        )
-      }
-
-      let attributes = try _openExistential(
-        parentDeclGroup,
-        do: expandMemberAttributeMacro
+      let attributes = try attachedMacro.expansion(
+        of: attributeNode,
+        attachedTo: parentDeclGroup,
+        providingAttributesFor: declarationNode,
+        in: context
       )
 
       // Form a buffer containing an attribute list to return to the caller.
@@ -238,19 +224,11 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.declarationNotDeclGroup
       }
 
-      // Local function to expand a member macro once we've opened up
-      // the existential.
-      func expandMemberMacro(
-        _ node: some DeclGroupSyntax
-      ) throws -> [DeclSyntax] {
-        return try attachedMacro.expansion(
-          of: attributeNode,
-          providingMembersOf: node,
-          in: context
-        )
-      }
-
-      let members = try _openExistential(declGroup, do: expandMemberMacro)
+      let members = try attachedMacro.expansion(
+        of: attributeNode,
+        providingMembersOf: declGroup,
+        in: context
+      )
 
       // Form a buffer of member declarations to return to the caller.
       return members.map { $0.formattedExpansion(definition.formatMode) }
@@ -279,23 +257,12 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       let protocols = conformanceList?.map(\.typeName) ?? []
 
-      // Local function to expand an extension macro once we've opened up
-      // the existential.
-      func expandExtensionMacro(
-        _ node: some DeclGroupSyntax
-      ) throws -> [ExtensionDeclSyntax] {
-        return try attachedMacro.expansion(
-          of: attributeNode,
-          attachedTo: node,
-          providingExtensionsOf: extendedType,
-          conformingTo: protocols,
-          in: context
-        )
-      }
-
-      let extensions = try _openExistential(
-        declGroup,
-        do: expandExtensionMacro
+      let extensions = try attachedMacro.expansion(
+        of: attributeNode,
+        attachedTo: declGroup,
+        providingExtensionsOf: extendedType,
+        conformingTo: protocols,
+        in: context
       )
 
       // Form a buffer of peer declarations to return to the caller.

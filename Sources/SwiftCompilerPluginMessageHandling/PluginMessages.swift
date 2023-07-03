@@ -34,7 +34,8 @@
     attributeSyntax: PluginMessage.Syntax,
     declSyntax: PluginMessage.Syntax,
     parentDeclSyntax: PluginMessage.Syntax?,
-    extendedTypeSyntax: PluginMessage.Syntax?
+    extendedTypeSyntax: PluginMessage.Syntax?,
+    conformanceListSyntax: PluginMessage.Syntax?
   )
 
   /// Optionally implemented message to load a dynamic link library.
@@ -76,7 +77,7 @@
 }
 
 @_spi(PluginMessage) public enum PluginMessage {
-  public static var PROTOCOL_VERSION_NUMBER: Int { 6 }  // Added 'expandMacroResult'.
+  public static var PROTOCOL_VERSION_NUMBER: Int { 7 }  // Pass extension protocol list
 
   public struct HostCapability: Codable {
     var protocolVersion: Int

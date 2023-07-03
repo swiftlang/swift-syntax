@@ -79,7 +79,8 @@ struct MyStruct {
 
 // CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMc_.swift
 // CHECK-NEXT: ------------------------------
-// CHECK-NEXT: extension MyStruct : Equatable  {}
+// CHECK-NEXT: extension MyStruct: Equatable  {
+// CHECK-NEXT: }
 // CHECK-NEXT: ------------------------------
 
 // CHECK: @__swiftmacro_7TestApp8MyStructV5value11DidSetPrintfMa_.swift

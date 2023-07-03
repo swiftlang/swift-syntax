@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// Describes a macro that can add conformances to the declaration it's
 /// attached to.
-public protocol ConformanceMacro: AttachedMacro {
+public protocol ConformanceMacro: ExtensionMacro {
   /// Expand an attached conformance macro to produce a set of conformances.
   ///
   /// - Parameters:
@@ -30,4 +30,39 @@ public protocol ConformanceMacro: AttachedMacro {
     providingConformancesOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)]
+}
+
+extension ConformanceMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
+    in context: some MacroExpansionContext
+  ) throws -> [ExtensionDeclSyntax] {
+
+    let newConformances = try expansion(
+      of: node,
+      providingConformancesOf: declaration,
+      in: context
+    )
+
+    var extensions: [ExtensionDeclSyntax] = []
+    for (proto, whereClause) in newConformances {
+      let decl: DeclSyntax =
+        """
+        extension \(type.trimmed): \(proto) {}
+        """
+
+      var extensionDecl = decl.cast(ExtensionDeclSyntax.self)
+
+      if let whereClause {
+        extensionDecl = extensionDecl.with(\.genericWhereClause, whereClause)
+      }
+
+      extensions.append(extensionDecl)
+    }
+
+    return extensions
+  }
 }

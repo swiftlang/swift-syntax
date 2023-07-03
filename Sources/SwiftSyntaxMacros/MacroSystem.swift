@@ -134,7 +134,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       if let expansion = item.item.asProtocol(FreestandingMacroExpansionSyntax.self),
         let macro = macroSystem.macros[expansion.macro.text]
       {
-        func _expand(expansion: some FreestandingMacroExpansionSyntax) throws {
+        do {
           if let macro = macro as? CodeItemMacro.Type {
             let expandedItemList = try macro.expansion(
               of: expansion,
@@ -165,9 +165,6 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             )
             newItems.append(CodeBlockItemSyntax(item: .init(expandedExpr)))
           }
-        }
-        do {
-          try _openExistential(expansion, do: _expand)
         } catch {
           context.addDiagnostics(from: error, node: node)
         }
@@ -472,27 +469,6 @@ extension MacroApplication {
     )
   }
 
-  private func expandMemberAttribute(
-    attribute: AttributeSyntax,
-    macro: MemberAttributeMacro.Type,
-    decl: DeclGroupSyntax,
-    member: DeclSyntax,
-    in context: MacroExpansionContext
-  ) throws -> [AttributeSyntax] {
-    #if false
-    _openExistential(decl) { d in
-      return try! macro.expansion(
-        of: attribute,
-        attachedTo: d,
-        annotating: member,
-        in: context
-      )
-    }
-    #else
-    return []
-    #endif
-  }
-
   private func expandAttributes(
     for macroAttributes: [(AttributeSyntax, MemberAttributeMacro.Type)],
     attachedTo decl: DeclSyntax,
@@ -506,18 +482,13 @@ extension MacroApplication {
     for (attribute, attributeMacro) in macroAttributes {
       do {
         let typedDecl = decl.asProtocol(DeclGroupSyntax.self)!
-
-        func expand(_ decl: some DeclGroupSyntax) throws -> [AttributeSyntax] {
-          return try attributeMacro.expansion(
+        attributes.append(
+          contentsOf: try attributeMacro.expansion(
             of: attribute,
-            attachedTo: decl,
+            attachedTo: typedDecl,
             providingAttributesFor: member.decl,
             in: context
           )
-        }
-
-        attributes.append(
-          contentsOf: try _openExistential(typedDecl, do: expand)
         )
       } catch {
         context.addDiagnostics(from: error, node: attribute)

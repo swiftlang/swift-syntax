@@ -12,7 +12,7 @@
 
 // NOTE: Types in this file should be self-contained and should not depend on any non-stdlib types.
 
-@_spi(PluginMessage) public enum HostToPluginMessage: Codable {
+public enum HostToPluginMessage: Codable {
   /// Send capability of the host, and get capability of the plugin.
   case getCapability(
     capability: PluginMessage.HostCapability?
@@ -47,7 +47,7 @@
   )
 }
 
-@_spi(PluginMessage) public enum PluginToHostMessage: Codable {
+public enum PluginToHostMessage: Codable {
   case getCapabilityResult(
     capability: PluginMessage.PluginCapability
   )
@@ -76,7 +76,7 @@
   )
 }
 
-@_spi(PluginMessage) public enum PluginMessage {
+public enum PluginMessage {
   public static var PROTOCOL_VERSION_NUMBER: Int { 7 }  // Pass extension protocol list
 
   public struct HostCapability: Codable {

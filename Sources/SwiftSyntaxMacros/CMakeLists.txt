@@ -22,13 +22,9 @@ add_swift_host_library(SwiftSyntaxMacros
   MacroProtocols/PeerMacro.swift
 
   AbstractSourceLocation.swift
-  BasicMacroExpansionContext.swift
   MacroExpansionContext.swift
-  MacroSystem.swift
-  Syntax+MacroEvaluation.swift
 )
 
 target_link_libraries(SwiftSyntaxMacros PUBLIC
-  SwiftParser
   SwiftSyntaxBuilder
   )

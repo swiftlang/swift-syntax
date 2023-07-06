@@ -58,9 +58,9 @@ private func replaceFirstLabel(
     return tuple
   }
 
-  return tuple.replacing(
-    childAt: 0,
-    with: firstElement.with(\.label, .identifier(newLabel))
+  return tuple.with(
+    \.[tuple.startIndex],
+    firstElement.with(\.label, .identifier(newLabel))
   )
 }
 

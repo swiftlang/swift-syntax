@@ -340,9 +340,9 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     return DeclSyntax(
       visitedVarDecl.with(
         \.bindings,
-        visitedVarDecl.bindings.replacing(
-          childAt: 0,
-          with: binding.with(
+        visitedVarDecl.bindings.with(
+          \.[visitedVarDecl.bindings.startIndex],
+          binding.with(
             \.accessor,
             .accessors(
               .init(

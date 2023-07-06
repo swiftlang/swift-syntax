@@ -12,7 +12,6 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-import SwiftSyntaxBuilder
 
 /// Interface to extract information about the context in which a given
 /// macro is expanded.

@@ -52,9 +52,9 @@ class ExplicitParenFolder: SyntaxRewriter {
       let sequenceExpr = firstNode.expression.as(SequenceExprSyntax.self),
       sequenceExpr.elements.count == 3,
       let leftOperand = sequenceExpr.elements.first,
-      let middleExpr = sequenceExpr.elements.removingFirst().first,
+      let middleExpr = sequenceExpr.elements.dropFirst().first,
       let rightOperand =
-        sequenceExpr.elements.removingFirst().removingFirst().first
+        sequenceExpr.elements.dropFirst(2).first
     else {
       return ExprSyntax(node)
     }

@@ -3248,7 +3248,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes attached to the import declaration, for example `@testable`.
   ///   - modifiers: Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.
   ///   - importKeyword: The `import` keyword for this declaration.
-  ///   - importKind: The kind of declaration being imported. For example, a struct can be imported from a specific module.
+  ///   - importKindSpecifier: The kind of declaration being imported. For example, a struct can be imported from a specific module.
   ///   - path: The path to the module, submodule or symbol being imported.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -4865,7 +4865,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - fixity: The fixity applied to the 'operator' declaration.
+  ///   - fixitySpecifier: The fixity applied to the 'operator' declaration.
   ///   - operatorPrecedenceAndTypes: Optionally specify a precedence group and designated types.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(

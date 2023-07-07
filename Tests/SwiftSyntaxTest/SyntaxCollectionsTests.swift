@@ -28,7 +28,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(0)
     ])
 
-    let newArrayElementList = arrayElementList.appending(integerLiteralElement(1))
+    let newArrayElementList = ArrayElementListSyntax(arrayElementList + [integerLiteralElement(1)])
     XCTAssert(newArrayElementList.kind.isSyntaxCollection)
     XCTAssertEqual(newArrayElementList.count, 2)
     XCTAssertNotNil(newArrayElementList.child(at: 1))
@@ -41,13 +41,13 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(1)
     ])
 
-    var newArrayElementList = arrayElementList.inserting(integerLiteralElement(0), at: 0)
+    var newArrayElementList = ArrayElementListSyntax([integerLiteralElement(0)] + arrayElementList)
 
     XCTAssertEqual(newArrayElementList.count, 2)
     XCTAssertNotNil(newArrayElementList.child(at: 0))
     XCTAssertEqual("\(newArrayElementList.child(at: 0)!)", "0")
 
-    newArrayElementList = newArrayElementList.inserting(integerLiteralElement(2), at: 2)
+    newArrayElementList = ArrayElementListSyntax(newArrayElementList + [integerLiteralElement(2)])
 
     XCTAssertEqual(newArrayElementList.count, 3)
     XCTAssertNotNil(newArrayElementList.child(at: 2))
@@ -59,7 +59,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(1)
     ])
 
-    let newArrayElementList = arrayElementList.prepending(integerLiteralElement(0))
+    let newArrayElementList = ArrayElementListSyntax([integerLiteralElement(0)] + arrayElementList)
 
     XCTAssertEqual(newArrayElementList.count, 2)
     XCTAssertNotNil(newArrayElementList.child(at: 0))
@@ -72,7 +72,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(1),
     ])
 
-    let newArrayElementList = arrayElementList.removingFirst()
+    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropFirst())
 
     XCTAssertEqual(newArrayElementList.count, 1)
     XCTAssertNotNil(newArrayElementList.child(at: 0))
@@ -85,7 +85,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(1),
     ])
 
-    let newArrayElementList = arrayElementList.removingLast()
+    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropLast())
 
     XCTAssertEqual(newArrayElementList.count, 1)
     XCTAssertNotNil(newArrayElementList.child(at: 0))
@@ -97,7 +97,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(0)
     ])
 
-    let newArrayElementList = arrayElementList.removing(childAt: 0)
+    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropFirst())
 
     XCTAssertEqual(newArrayElementList.count, 0)
     XCTAssertNil(newArrayElementList.child(at: 0))

@@ -33,7 +33,7 @@ extension SyntaxCollection {
     self.init(Syntax(data))!
   }
 
-  public init(_ children: [Element]) {
+  public init<Children: Sequence>(_ children: Children) where Children.Element == Element {
     let arena = SyntaxArena()
     // Extend the lifetime of children so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -70,6 +70,7 @@ extension SyntaxCollection {
   ///
   /// - Parameter syntax: The element to append.
   /// - Returns: A new collection with that element appended to the end.
+  @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func appending(_ syntax: Element) -> Self {
     var newLayout = layoutView.formLayoutArray()
     newLayout.append(syntax.raw)
@@ -82,6 +83,7 @@ extension SyntaxCollection {
   /// - Parameter syntax: The element to prepend.
   /// - Returns: A new collection with that element prepended to the
   ///            beginning.
+  @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func prepending(_ syntax: Element) -> Self {
     return inserting(syntax, at: 0)
   }
@@ -94,6 +96,7 @@ extension SyntaxCollection {
   ///   - index: The index at which to insert the element in the collection.
   ///
   /// - Returns: A new collection with that element appended to the end.
+  @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func inserting(_ syntax: Element, at index: Int) -> Self {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid insertion index (0 to 1 past the end)
@@ -130,6 +133,7 @@ extension SyntaxCollection {
   /// - Parameter index: The index of the element to remove from the collection.
   /// - Returns: A new collection with the element at the provided index
   ///            removed.
+  @available(*, deprecated, message: "Use filter to remove unwanted elements and construct a new collection type from the filtered elements")
   public func removing(childAt index: Int) -> Self {
     var newLayout = layoutView.formLayoutArray()
     newLayout.remove(at: index)
@@ -139,6 +143,7 @@ extension SyntaxCollection {
   /// Creates a new collection by removing the first element.
   ///
   /// - Returns: A new collection with the first element removed.
+  @available(*, deprecated, message: "Use CollectionType(node.dropFirst())")
   public func removingFirst() -> Self {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeFirst()
@@ -148,6 +153,7 @@ extension SyntaxCollection {
   /// Creates a new collection by removing the last element.
   ///
   /// - Returns: A new collection with the last element removed.
+  @available(*, deprecated, message: "Use CollectionType(node.dropLast())")
   public func removingLast() -> Self {
     var newLayout = layoutView.formLayoutArray()
     newLayout.removeLast()

@@ -497,7 +497,7 @@ extension MacroApplication {
     }
 
     let newAttributes = attributes.reduce(attributedDecl.attributes ?? .init([])) {
-      $0.appending(AttributeListSyntax.Element($1))
+      AttributeListSyntax($0 + [AttributeListSyntax.Element($1)])
     }
 
     let newDecl = attributedDecl.with(\.attributes, newAttributes).as(DeclSyntax.self)!

@@ -351,16 +351,20 @@ public struct AddCompletionHandler: PeerMacro {
     let newParameterList: FunctionParameterListSyntax
     if let lastParam = parameterList.last {
       // We need to add a trailing comma to the preceding list.
-      newParameterList = parameterList.removingLast()
-        .appending(
+      let newParameterListElements =
+        parameterList.dropLast()
+        + [
           lastParam.with(
             \.trailingComma,
             .commaToken(trailingTrivia: .space)
-          )
-        )
-        .appending(completionHandlerParam)
+          ),
+          completionHandlerParam,
+        ]
+      newParameterList = FunctionParameterListSyntax(newParameterListElements)
     } else {
-      newParameterList = parameterList.appending(completionHandlerParam)
+      newParameterList = FunctionParameterListSyntax(
+        parameterList + [completionHandlerParam]
+      )
     }
 
     let callArguments: [String] = parameterList.map { param in

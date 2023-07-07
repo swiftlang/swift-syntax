@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection where Element: SyntaxProtocol {
+public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection, MutableCollection where Element: SyntaxProtocol {
   associatedtype Iterator = SyntaxCollectionIterator<Element>
 
   /// The ``SyntaxKind`` of the syntax node that conforms to ``SyntaxCollection``.
@@ -116,6 +116,7 @@ extension SyntaxCollection {
   ///   - syntax: The element to replace with.
   ///
   /// - Returns: A new collection with the new element at the provided index.
+  @available(*, deprecated, message: "Use .with(\\.[index], newValue) instead")
   public func replacing(childAt index: Int, with syntax: Element) -> Self {
     var newLayout = layoutView.formLayoutArray()
     /// Make sure the index is a valid index for replacing
@@ -217,9 +218,24 @@ extension SyntaxCollection {
   }
 
   public subscript(position: SyntaxChildrenIndex) -> Element {
-    let (raw, info) = rawChildren[position]
-    let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
-    let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-    return Syntax(data).cast(Element.self)
+    get {
+      let (raw, info) = rawChildren[position]
+      let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
+      let data = SyntaxData(absoluteRaw, parent: Syntax(self))
+      return Syntax(data).cast(Element.self)
+    }
+    set {
+      guard let indexToReplace = (position.data?.indexInParent).map(Int.init) else {
+        preconditionFailure("Cannot replace element at the end index")
+      }
+      var newLayout = layoutView.formLayoutArray()
+      /// Make sure the index is a valid index for replacing
+      precondition(
+        (newLayout.startIndex..<newLayout.endIndex).contains(indexToReplace),
+        "replacing node at invalid index \(index)"
+      )
+      newLayout[indexToReplace] = newValue.raw
+      self = replacingLayout(newLayout)
+    }
   }
 }

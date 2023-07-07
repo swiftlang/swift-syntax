@@ -110,9 +110,11 @@ public class SyntaxCollectionsTests: XCTestCase {
       integerLiteralElement(2),
     ])
 
-    let newArrayElementList = arrayElementList.replacing(
-      childAt: 2,
-      with: integerLiteralElement(3)
+    let lastElementIndex = arrayElementList.index(arrayElementList.startIndex, offsetBy: 2)
+
+    let newArrayElementList = arrayElementList.with(
+      \.[lastElementIndex],
+      integerLiteralElement(3)
     )
 
     XCTAssertNotNil(newArrayElementList.child(at: 2))

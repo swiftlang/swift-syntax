@@ -29,6 +29,13 @@ public func flattened(indentedDocumentation: String) -> String {
     .trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
+/// Removes all empty lines from a multi-line string.
+public func removedEmptyLines(string: String) -> String {
+  string.split(whereSeparator: \.isNewline)
+    .filter { !$0.allSatisfy(\.isWhitespace) }
+    .joined(separator: "\n")
+}
+
 public extension Collection {
   /// If the collection contains a single element, return it, otherwise `nil`.
   var only: Element? {

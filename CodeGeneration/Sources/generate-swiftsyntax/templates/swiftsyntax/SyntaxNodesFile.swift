@@ -78,7 +78,12 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           """
         )
 
-        try! InitializerDeclSyntax("\(node.generateInitializerDeclHeader())") {
+        try! InitializerDeclSyntax(
+          """
+          \(raw: node.generateInitializerDocComment())
+          \(node.generateInitializerDeclHeader())
+          """
+        ) {
           let parameters = ClosureParameterListSyntax {
             for child in node.children {
               ClosureParameterSyntax(firstName: .identifier(child.varName.backtickedIfNeeded))

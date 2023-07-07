@@ -39,6 +39,9 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
@@ -210,6 +213,9 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
@@ -333,6 +339,9 @@ public struct AsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -505,6 +514,9 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEqual: UnexpectedNodesSyntax? = nil,
@@ -588,6 +600,9 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAwaitKeyword: UnexpectedNodesSyntax? = nil,
@@ -708,6 +723,9 @@ public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
@@ -790,6 +808,9 @@ public struct BooleanLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? = nil,
@@ -873,6 +894,9 @@ public struct BorrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBorrowKeyword: UnexpectedNodesSyntax? = nil,
@@ -997,6 +1021,9 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? = nil,
@@ -1198,6 +1225,9 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
@@ -1373,6 +1403,9 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
@@ -1570,6 +1603,9 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? = nil,
@@ -1734,6 +1770,9 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
@@ -1880,6 +1919,9 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
@@ -1962,6 +2004,9 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2044,6 +2089,9 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil,
@@ -2127,6 +2175,9 @@ public struct ForcedValueExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -2252,6 +2303,9 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
@@ -2525,6 +2579,9 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2691,6 +2748,9 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIfKeyword: UnexpectedNodesSyntax? = nil,
@@ -2914,6 +2974,9 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAmpersand: UnexpectedNodesSyntax? = nil,
@@ -3036,6 +3099,9 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? = nil,
@@ -3182,6 +3248,9 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil,
@@ -3272,6 +3341,12 @@ public struct IsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - expression: The expression which will be checked to determine whether it can be cast to a specific type.
+  ///   - isKeyword: The `is` keyword for this expression.
+  ///   - typeName: The type against which the expression will be checked to see if the expression can be cast to it.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -3423,6 +3498,9 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil,
@@ -3600,6 +3678,10 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - pound: The `#` sign.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
@@ -3928,6 +4010,9 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil,
@@ -4100,6 +4185,10 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - placeholder: A placeholder, i.e. `<#expression#>` that can be inserted into the source code to represent the missing expression.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
@@ -4184,6 +4273,9 @@ public struct MoveExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
@@ -4304,6 +4396,9 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeNilKeyword: UnexpectedNodesSyntax? = nil,
@@ -4387,6 +4482,9 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -4508,6 +4606,9 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
@@ -4629,6 +4730,9 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
@@ -4750,6 +4854,9 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil,
@@ -4871,6 +4978,9 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -4992,6 +5102,9 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
@@ -5116,6 +5229,9 @@ public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOpeningPounds: UnexpectedNodesSyntax? = nil,
@@ -5314,6 +5430,9 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil,
@@ -5421,6 +5540,9 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeExpression: UnexpectedNodesSyntax? = nil,
@@ -5545,6 +5667,9 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? = nil,
@@ -5772,6 +5897,9 @@ public struct SubscriptExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
@@ -6044,6 +6172,9 @@ public struct SuperRefExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSuperKeyword: UnexpectedNodesSyntax? = nil,
@@ -6130,6 +6261,9 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
@@ -6356,6 +6490,9 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeConditionExpression: UnexpectedNodesSyntax? = nil,
@@ -6556,6 +6693,9 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeTryKeyword: UnexpectedNodesSyntax? = nil,
@@ -6704,6 +6844,9 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
@@ -6874,6 +7017,9 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
@@ -6957,6 +7103,9 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAsKeyword: UnexpectedNodesSyntax? = nil,
@@ -7077,6 +7226,9 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIsKeyword: UnexpectedNodesSyntax? = nil,
@@ -7159,6 +7311,9 @@ public struct UnresolvedPatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
@@ -7243,6 +7398,9 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(data)
   }
   
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeQuestionMark: UnexpectedNodesSyntax? = nil,

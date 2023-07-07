@@ -95,6 +95,7 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("associatedtype", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("associativity"),
   KeywordSpec("async", requiresTrailingSpace: true),
+  KeywordSpec("attached"),
   KeywordSpec("autoclosure"),
   KeywordSpec("availability"),
   KeywordSpec("available"),

@@ -71,6 +71,7 @@ public enum Keyword: UInt8, Hashable {
   case `associatedtype`
   case associativity
   case async
+  case attached
   case autoclosure
   case availability
   case available
@@ -478,6 +479,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._version
       case "accesses":
         self = .accesses
+      case "attached":
+        self = .attached
       case "compiler":
         self = .compiler
       case "continue":
@@ -817,6 +820,7 @@ public enum Keyword: UInt8, Hashable {
       "associatedtype", 
       "associativity", 
       "async", 
+      "attached", 
       "autoclosure", 
       "availability", 
       "available", 

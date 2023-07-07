@@ -54,6 +54,7 @@ extension Parser {
     case _typeEraser
     case _unavailableFromAsync
     case `rethrows`
+    case attached
     case available
     case backDeployed
     case derivative
@@ -88,6 +89,7 @@ extension Parser {
       case TokenSpec(._typeEraser): self = ._typeEraser
       case TokenSpec(._unavailableFromAsync): self = ._unavailableFromAsync
       case TokenSpec(.`rethrows`): self = .rethrows
+      case TokenSpec(.attached): self = .attached
       case TokenSpec(.available): self = .available
       case TokenSpec(.backDeployed): self = .backDeployed
       case TokenSpec(.derivative): self = .derivative
@@ -126,6 +128,7 @@ extension Parser {
       case ._typeEraser: return .keyword(._typeEraser)
       case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
       case .`rethrows`: return .keyword(.rethrows)
+      case .attached: return .keyword(.attached)
       case .available: return .keyword(.available)
       case .backDeployed: return .keyword(.backDeployed)
       case .derivative: return .keyword(.derivative)
@@ -313,6 +316,11 @@ extension Parser {
       return parseAttribute(argumentMode: .optional) { parser in
         return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncArguments())
       }
+    case .attached:
+      return parseAttribute(argumentMode: .customAttribute) { parser in
+        let arguments = parser.parseAttachedArguments()
+        return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
+      }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
       let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.rethrows, remapping: .identifier))
@@ -329,15 +337,8 @@ extension Parser {
         )
       )
     case nil:
-      let isAttached = self.peek().isAttachedKeyword
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments: [RawTupleExprElementSyntax]
-        if isAttached {
-          arguments = parser.parseAttachedArguments()
-        } else {
-          arguments = parser.parseArgumentListElements(pattern: .none)
-        }
-
+        let arguments = parser.parseArgumentListElements(pattern: .none)
         return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
       }
     }

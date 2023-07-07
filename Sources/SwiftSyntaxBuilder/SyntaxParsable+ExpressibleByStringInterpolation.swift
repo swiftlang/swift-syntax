@@ -27,7 +27,7 @@ extension SyntaxParseable {
   /// are on a platform that supports OSLog, otherwise don't do anything.
   private func logStringInterpolationParsingError() {
     #if canImport(OSLog) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
-    if #available(macOS 11.0, *) {
+    if #available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, macCatalyst 14.0, *) {
       let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: self)
       let formattedDiagnostics = DiagnosticsFormatter().annotatedSource(tree: self, diags: diagnostics)
       Logger(subsystem: "SwiftSyntax", category: "ParseError").fault(

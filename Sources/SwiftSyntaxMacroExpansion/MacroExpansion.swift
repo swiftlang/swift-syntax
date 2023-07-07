@@ -273,7 +273,13 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.declarationNotDeclGroup
       }
 
-      guard let extendedType = extendedType else {
+      let extensionOf: TypeSyntax
+      if let extendedType {
+        extensionOf = extendedType
+      } else if let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self) {
+        // Fallback for old compilers with a new plugin, where
+        extensionOf = TypeSyntax(SimpleTypeIdentifierSyntax(name: identified.identifier))
+      } else {
         throw MacroExpansionError.noExtendedTypeSyntax
       }
 
@@ -287,7 +293,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         return try attachedMacro.expansion(
           of: attributeNode,
           attachedTo: node,
-          providingExtensionsOf: extendedType,
+          providingExtensionsOf: extensionOf,
           conformingTo: protocols,
           in: context
         )

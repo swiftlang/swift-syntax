@@ -35,7 +35,7 @@ syntax trees.
 
 Immutability also comes with the benefits of fearless concurrency. It is always
 safe to manipulate a syntax tree across threads. Two threads mutating the same
-tree will recieve two independent copies of their respective modified syntax
+tree will receive two independent copies of their respective modified syntax
 trees that will never interfere with each other. Moreover, modifications to 
 the syntax tree do not involve locks or mutexes.
 

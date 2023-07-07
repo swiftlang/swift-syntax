@@ -112,7 +112,7 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
         guard let node = self.parseCodeBlockItem(isAtTopLevel: false, allowInitDecl: true) else {
-          // The missing item is not neccessary to be a declaration,
+          // The missing item is not necessary to be a declaration,
           // which is just a placeholder here
           return RawCodeBlockItemSyntax(
             item: .decl(RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena))),

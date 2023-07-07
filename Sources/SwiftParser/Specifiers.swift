@@ -710,7 +710,7 @@ extension Parser {
 
   /// Consume any misplaced effect specifiers and return them in as unexpected tokens.
   /// When a misplaced effect specifier is consumed and `effectSpecifiers`
-  /// doesn't have  an effect specifier of that kind, modify `effectSpecifiers`
+  /// doesn't have an effect specifier of that kind, modify `effectSpecifiers`
   /// to have a missing specifier of that kind.
   mutating func parseMisplacedEffectSpecifiers<S: RawMisplacedEffectSpecifiersTrait>(_ effectSpecifiers: inout S?) -> RawUnexpectedNodesSyntax? {
     var synthesizedAsync: RawTokenSyntax? = nil

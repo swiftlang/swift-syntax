@@ -104,7 +104,7 @@ For more information on parser recovery and resilience, see <doc:ParserRecovery>
 
 ## Parsing with Minimal Context
 
-The parser takes another unusal stance in its construction: it is mostly
+The parser takes another unusual stance in its construction: it is mostly
 stateless. It is not a hard and fast rule that the parse be stateless, but 
 engineering it with that mindset has enabled a relatively clean, testable 
 parser design to emerge. Swift is not a context-free language, so there will
@@ -145,7 +145,7 @@ clear a set of stale diagnostics.
 
 The SwiftParser library aims to replace the C++ parser that currently resides
 in the [Swift compiler][Swiftc]. As such, minimizing the latency involved in
-parsing is an extremely important goal. We aim to be competetive with the
+parsing is an extremely important goal. We aim to be competitive with the
 performance of the C++ implementation of the Swift parser _without compromising
 safety_.
 
@@ -156,12 +156,12 @@ exploring or hacking on this codebase.
 
 ### Types are Cheap
 
-The Swift programming langauge provides a rich feature set in its types
+The Swift programming language provides a rich feature set in its types
 including enums with associated values, robust generics, and language facilities
 for lifting raw bits and bytes into proper APIs. Prefer to make domain-specific
 types rather than using e.g. `Bool` and `String`. Domain-specific types can
 help an author maintain a safety contract with the rest of the parser and its
-clients that is far stronger than the underyling value type would otherwise
+clients that is far stronger than the underlying value type would otherwise
 provide. Importantly, custom types also provide an excellent opportunity to 
 shape the way that a particular idea or concept is conveyed to users and 
 developers of this library.

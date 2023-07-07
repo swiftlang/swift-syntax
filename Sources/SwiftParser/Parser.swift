@@ -59,7 +59,7 @@
 ///       // Parse an element
 ///       let element = self.parseElement()
 ///
-///       // Consume the delimeter
+///       // Consume the delimiter
 ///       keepGoing = self.consume(if: .delimiter)
 ///       elements.append(RawElementSyntax(element, ..., keepGoing))
 ///     } while keepGoing != nil
@@ -102,7 +102,7 @@ public struct Parser {
   let maximumNestingLevel: Int
 
   /// A default maximum nesting level that is used if the client didn't
-  /// explicitly specify one. Debug builds of the parser comume a lot more stack
+  /// explicitly specify one. Debug builds of the parser consume a lot more stack
   /// space and thus have a lower default maximum nesting level.
   #if DEBUG
   static let defaultMaximumNestingLevel = 25
@@ -315,7 +315,7 @@ extension Parser {
 
 extension Parser {
   /// If the current token matches the given `spec`, consume it.
-  /// Othwerise, synthesize a missing token of with the `kind` of `spec`.
+  /// Otherwise, synthesize a missing token of with the `kind` of `spec`.
   ///
   /// This method does not try to eat unexpected until it finds the token that
   /// matches `spec`.
@@ -603,7 +603,7 @@ extension Parser {
   ///   - `<no whitespace>.<whitespace>`: if no newlines, return both an
   ///     unexpected period (with the extraneous whitespace) and a missing
   ///     period. If there is a newline also set `skipMember` to inform
-  ///     callers to not parse any futher member names.
+  ///     callers to not parse any further member names.
   mutating func consumeMemberPeriod(
     previousNode: (some RawSyntaxNodeProtocol)?
   ) -> (unexpected: RawUnexpectedNodesSyntax?, period: RawTokenSyntax, skipMemberName: Bool) {

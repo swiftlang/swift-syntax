@@ -110,7 +110,7 @@ extension SyntaxRefactoringProvider {
   }
 }
 
-/// An textual edit to the original source represented by a range and a
+/// A textual edit to the original source represented by a range and a
 /// replacement.
 public struct SourceEdit: Equatable {
   /// The half-open range that this edit applies to.

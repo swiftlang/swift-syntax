@@ -962,7 +962,7 @@ final class ExpressionTests: XCTestCase {
     assertParse(
       "[(Int) -> 1️⃣throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: "[(Int) throws -> Int]()"
     )
@@ -970,7 +970,7 @@ final class ExpressionTests: XCTestCase {
     assertParse(
       "[(Int) -> 1️⃣async throws Int]()",
       diagnostics: [
-        DiagnosticSpec(message: "'async throws' must preceed '->'", fixIts: ["move 'async throws' in front of '->'"])
+        DiagnosticSpec(message: "'async throws' must precede '->'", fixIts: ["move 'async throws' in front of '->'"])
       ],
       fixedSource: "[(Int) async throws -> Int]()"
     )

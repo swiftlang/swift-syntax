@@ -191,7 +191,7 @@ public let COMMON_NODES: [Node] = [
     kind: .missingExpr,
     base: .expr,
     nameForDiagnostics: "expression",
-    documentation: "In case the source code is missing a expression, this node stands in place of the missing expression.",
+    documentation: "In case the source code is missing an expression, this node stands in place of the missing expression.",
     children: [
       Child(
         name: "Placeholder",

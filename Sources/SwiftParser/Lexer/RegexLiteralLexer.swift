@@ -147,7 +147,7 @@ fileprivate struct RegexLiteralLexer {
     return .continue
   }
 
-  /// Attempt to eat a the closing delimiter.
+  /// Attempt to eat the closing delimiter.
   private mutating func tryEatEnding() -> LexResult? {
     let openPoundCount = builder.numOpenPounds
     let slashBegin = cursor
@@ -617,7 +617,7 @@ extension Lexer.Cursor {
     case .semicolon, .comma, .colon, .infixQuestionMark:
       return true
 
-    // Postfix grammar would expect an binary operator next.
+    // Postfix grammar would expect a binary operator next.
     case .postfixOperator, .exclamationMark, .postfixQuestionMark, .rightAngle, .rightBrace, .rightParen, .rightSquare:
       return false
 

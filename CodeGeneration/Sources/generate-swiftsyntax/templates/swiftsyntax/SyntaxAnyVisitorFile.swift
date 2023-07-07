@@ -52,7 +52,7 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// The function called after visiting the node and its descendents.
+      /// The function called after visiting the node and its descendants.
       ///   - node: the node we just finished visiting.
       open func visitAnyPost(_ node: Syntax) {}
       """

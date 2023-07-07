@@ -16,7 +16,7 @@ import SwiftSyntax
 /// The definition of a syntax node that, when generated, conforms to
 /// `SyntaxProtocol`.
 ///
-/// There are two fundemantally different kinds of nodes:
+/// There are two fundamentally different kinds of nodes:
 ///  - Layout nodes contain a fixed number of children of possibly different,
 ///    but fixed types.
 ///  - Collection nodes contains an arbitrary number of children but all those
@@ -253,14 +253,14 @@ public struct CollectionNode {
     self.node = node
   }
 
-  /// Allow transparent accesss to the properties of the underlying `Node`.
+  /// Allow transparent access to the properties of the underlying `Node`.
   public subscript<T>(dynamicMember keyPath: KeyPath<Node, T>) -> T {
     return node[keyPath: keyPath]
   }
 
   /// The kinds the elements can have.
   ///
-  /// This can be more than one in which case each element an have either of
+  /// This can be more than one in which case each element can have either of
   /// these kinds.
   public var elementChoices: [SyntaxNodeKind] {
     switch node.data {

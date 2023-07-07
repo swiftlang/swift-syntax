@@ -276,7 +276,7 @@ struct SyntaxData {
   /// Creates a ``SyntaxData`` for a root raw node.
   ///
   /// - Parameters:
-  ///   - raw: The raw node that will be the root of the the tree
+  ///   - raw: The raw node that will be the root of the tree
   ///   - rawNodeArena: The arena in which `raw` is allocated. It is passed to
   ///     make sure the arena doesn’t get de-allocated before the ``SyntaxData``
   ///     has a chance to retain it.

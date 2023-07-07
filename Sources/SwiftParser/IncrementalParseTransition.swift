@@ -341,7 +341,7 @@ public struct ConcurrentEdits {
     var concurrentEdits: [IncrementalEdit] = []
     for editToAdd in edits {
       var editToAdd = editToAdd
-      var editIndiciesMergedWithNewEdit: [Int] = []
+      var editIndicesMergedWithNewEdit: [Int] = []
       for (index, existingEdit) in concurrentEdits.enumerated() {
         if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
           let intersectionLength =
@@ -351,7 +351,7 @@ public struct ConcurrentEdits {
             length: existingEdit.length + editToAdd.length - intersectionLength,
             replacementLength: existingEdit.replacementLength + editToAdd.replacementLength - intersectionLength
           )
-          editIndiciesMergedWithNewEdit.append(index)
+          editIndicesMergedWithNewEdit.append(index)
         } else if existingEdit.offset < editToAdd.endOffset {
           editToAdd = IncrementalEdit(
             offset: editToAdd.offset - existingEdit.replacementLength + existingEdit.length,
@@ -360,8 +360,8 @@ public struct ConcurrentEdits {
           )
         }
       }
-      precondition(editIndiciesMergedWithNewEdit.isSorted)
-      for indexToRemove in editIndiciesMergedWithNewEdit.reversed() {
+      precondition(editIndicesMergedWithNewEdit.isSorted)
+      for indexToRemove in editIndicesMergedWithNewEdit.reversed() {
         concurrentEdits.remove(at: indexToRemove)
       }
       let insertPos =

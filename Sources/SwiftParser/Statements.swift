@@ -945,7 +945,7 @@ extension Parser.Lookahead {
   /// - Seealso: ``Parser/parseStatement()``
   mutating func isStartOfStatement(allowRecovery: Bool = false) -> Bool {
     if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign)) && withLookahead({ $0.atStartOfSwitchCaseItem() }) {
-      // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expresion.
+      // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
       return true
     }
 
@@ -1037,7 +1037,7 @@ extension Parser.Lookahead {
 
     if hasAttribute && lookahead.at(.rightBrace) {
       // If we are at an attribute that's the last token in the SwitchCase, parse
-      // that as an attribut to a missing 'case'. That way, if the developer writes
+      // that as an attribute to a missing 'case'. That way, if the developer writes
       // @unknown at the end of a switch but forgot to write 'default', we'll emit
       // a diagnostic about a missing label instead of a missing declaration after
       // the attribute.

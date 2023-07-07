@@ -104,7 +104,7 @@ class SourceManager {
   }
 
   /// Get position (file name + UTF-8 offset) of `node` in the known root nodes.
-  /// The root node of `node` must be one of the retured value from `add(_:)`.
+  /// The root node of `node` must be one of the returned value from `add(_:)`.
   func position(
     of node: Syntax,
     at kind: PositionInSyntaxNode
@@ -121,7 +121,7 @@ class SourceManager {
   }
 
   /// Get ``SourceRange`` (file name + UTF-8 offset range) of `node` in the known root nodes.
-  /// The root node of `node` must be one of the retured value from `add(_:)`.
+  /// The root node of `node` must be one of the returned value from `add(_:)`.
   func range(
     of node: Syntax,
     from startKind: PositionInSyntaxNode = .afterLeadingTrivia,
@@ -144,7 +144,7 @@ class SourceManager {
   }
 
   /// Get location of `node` in the known root nodes.
-  /// The root node of `node` must be one of the retured value from `add(_:)`.
+  /// The root node of `node` must be one of the returned value from `add(_:)`.
   func location(of node: Syntax, at kind: PositionInSyntaxNode, filePathMode: SourceLocationFilePathMode) -> SourceLocation? {
     guard let base = self.knownSourceSyntax[node.root.id] else {
       return nil

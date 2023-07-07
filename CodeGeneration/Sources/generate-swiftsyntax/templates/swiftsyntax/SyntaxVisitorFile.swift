@@ -18,12 +18,12 @@ import Utils
 let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
-    /// The enum describes how the SyntaxVistor should continue after visiting
+    /// The enum describes how the ``SyntaxVisitor`` should continue after visiting
     /// the current node.
     public enum SyntaxVisitorContinueKind {
-      /// The visitor should visit the descendents of the current node.
+      /// The visitor should visit the descendants of the current node.
       case visitChildren
-      /// The visitor should avoid visiting the descendents of the current node.
+      /// The visitor should avoid visiting the descendants of the current node.
       case skipChildren
     }
     """
@@ -64,7 +64,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// The function called after visiting ``\(node.kind.syntaxType)`` and its descendents.
+        /// The function called after visiting ``\(node.kind.syntaxType)`` and its descendants.
         ///   - node: the node we just finished visiting.
         open func visitPost(_ node: \(node.kind.syntaxType)) {}
         """
@@ -84,7 +84,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// The function called after visiting the node and its descendents.
+      /// The function called after visiting the node and its descendants.
       ///   - node: the node we just finished visiting.
       open func visitPost(_ node: TokenSyntax) {}
       """

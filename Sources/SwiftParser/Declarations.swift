@@ -134,12 +134,12 @@ extension TokenConsumer {
         return true
       }
 
-      // Otherwise, parse it as a expression.
+      // Otherwise, parse it as an expression.
       // FIXME: C++ parser returns true if this is a top-level non-"script" files.
       // But we don't have "is library" flag.
       return false
     case .some(_):
-      // All other decl start keywords unconditonally start a decl.
+      // All other decl start keywords unconditionally start a decl.
       return true
     case nil:
       if subparser.at(anyIn: ContextualDeclKeyword.self)?.0 != nil {
@@ -192,7 +192,7 @@ extension Parser {
   ///     declarations → declaration declarations?
   ///
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
-  /// declaration and thus start with a keyword. This allows futher recovery.
+  /// declaration and thus start with a keyword. This allows further recovery.
   mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
@@ -230,7 +230,7 @@ extension Parser {
     )
 
     // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
-    // while recoverying to the declaration start.
+    // while recovering to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
     switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
@@ -2048,7 +2048,7 @@ extension Parser {
     )
   }
 
-  /// Parse a macro expansion as an declaration.
+  /// Parse a macro expansion as a declaration.
   ///
   ///
   /// Grammar

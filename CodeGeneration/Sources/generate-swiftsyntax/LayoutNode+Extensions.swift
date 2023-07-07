@@ -101,7 +101,7 @@ extension LayoutNode {
   }
 
   /// Create a builder-based convenience initializer, if needed.
-  func createConvenienceBuilerInitializer(useDeprecatedChildName: Bool = false) throws -> InitializerDeclSyntax? {
+  func createConvenienceBuilderInitializer(useDeprecatedChildName: Bool = false) throws -> InitializerDeclSyntax? {
     // Only create the convenience initializer if at least one parameter
     // is different than in the default initializer generated above.
     var shouldCreateInitializer = false

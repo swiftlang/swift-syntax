@@ -176,7 +176,7 @@ public class BumpPtrAllocator {
   }
 }
 
-// MARK: Compatibilty Shims
+// MARK: Compatibility Shims
 
 extension UnsafeMutableRawPointer {
   /// Obtain the next pointer whose bit pattern is a multiple of alignment.

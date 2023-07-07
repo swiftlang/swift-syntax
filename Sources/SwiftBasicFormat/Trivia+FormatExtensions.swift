@@ -37,10 +37,10 @@ extension Trivia {
 
   /// Returns `true` if this trivia contains indentation.
   func containsIndentation(isOnNewline: Bool) -> Bool {
-    guard let indentaton = indentation(isOnNewline: isOnNewline) else {
+    guard let indentation = indentation(isOnNewline: isOnNewline) else {
       return false
     }
-    return !indentaton.isEmpty
+    return !indentation.isEmpty
   }
 
   /// Returns the indentation of the last trivia piece in this trivia that is

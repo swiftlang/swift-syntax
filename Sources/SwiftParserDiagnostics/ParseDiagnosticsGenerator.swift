@@ -354,7 +354,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       {
         // If the next token is missing, the problem here isn’t actually the
         // space after token but that the missing token should be added after
-        // `token` without a space. Generate a diagnsotic for that.
+        // `token` without a space. Generate a diagnostic for that.
         _ = handleMissingSyntax(
           nextToken,
           overridePosition: unexpected.endPositionBeforeTrailingTrivia,
@@ -948,7 +948,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let unexpectedCondition = node.body.unexpectedBeforeLeftBrace,
       unexpectedCondition.presentTokens(withKind: .semicolon).count == 2
     {
-      // FIXME: This is aweful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
+      // FIXME: This is awful. We should have a way to either get all children between two cursors in a syntax node or highlight a range from one node to another.
       addDiagnostic(
         node,
         .cStyleForLoop,
@@ -1075,18 +1075,18 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           // Diagnose !#available(...) and !#unavailable(...)
 
           let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
-          let negatedCoditionElement = ConditionElementSyntax(
+          let negatedConditionElement = ConditionElementSyntax(
             condition: .availability(availability.with(\.availabilityKeyword, negatedAvailabilityKeyword)),
             trailingComma: conditionElement.trailingComma
           )
           addDiagnostic(
             unexpected,
-            NegatedAvailabilityCondition(avaialabilityCondition: availability, negatedAvailabilityKeyword: negatedAvailabilityKeyword),
+            NegatedAvailabilityCondition(availabilityCondition: availability, negatedAvailabilityKeyword: negatedAvailabilityKeyword),
             fixIts: [
               FixIt(
                 message: ReplaceTokensFixIt(replaceTokens: [operatorToken, availability.availabilityKeyword], replacements: [negatedAvailabilityKeyword]),
                 changes: [
-                  .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedCoditionElement))
+                  .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedConditionElement))
                 ]
               )
             ],
@@ -1474,7 +1474,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let extraneous = node.unexpectedBetweenStatementsAndEndOfFileToken, !extraneous.isEmpty {
-      addDiagnostic(extraneous, ExtaneousCodeAtTopLevel(extraneousCode: extraneous), handledNodes: [extraneous.id])
+      addDiagnostic(extraneous, ExtraneousCodeAtTopLevel(extraneousCode: extraneous), handledNodes: [extraneous.id])
     }
     return .visitChildren
   }
@@ -1540,7 +1540,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     }
 
-    for (diagnostic, handledNodes) in MultiLineStringLiteralIndentatinDiagnosticsGenerator.diagnose(node) {
+    for (diagnostic, handledNodes) in MultiLineStringLiteralIndentationDiagnosticsGenerator.diagnose(node) {
       addDiagnostic(diagnostic, handledNodes: handledNodes)
     }
     if case .stringSegment(let segment) = node.segments.last {
@@ -1555,7 +1555,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         addDiagnostic(
           invalidContent,
           position: invalidContent.endPositionBeforeTrailingTrivia,
-          .escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed,
+          .escapedNewlineAtLastLineOfMultiLineStringLiteralNotAllowed,
           fixIts: [fixIt],
           handledNodes: [segment.id]
         )
@@ -1614,7 +1614,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if node.unknownAttr?.isMissingAllTokens != false && node.label.isMissingAllTokens {
       addDiagnostic(
         node.statements,
-        .allStatmentsInSwitchMustBeCoveredByCase,
+        .allStatementsInSwitchMustBeCoveredByCase,
         fixIts: [
           FixIt(message: InsertTokenFixIt(missingNodes: [Syntax(node.label)]), changes: .makePresent(node.label))
         ],

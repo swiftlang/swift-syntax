@@ -69,7 +69,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// The function called before visiting the node and its descendents.
+      /// The function called before visiting the node and its descendants.
       ///   - node: the node we are about to visit.
       open func visitPre(_ node: Syntax) {}
       """
@@ -92,7 +92,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// The function called after visiting the node and its descendents.
+      /// The function called after visiting the node and its descendants.
       ///   - node: the node we just finished visiting.
       open func visitPost(_ node: Syntax) {}
       """
@@ -220,7 +220,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// To circumvent this problem, make calling the specific visitation function
                 /// a two-step process: First determine the function to call in this function
                 /// and return a reference to it, then call it. This way, the stack frame
-                /// that determines the correct visitiation function will be popped of the
+                /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
                 private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax)
@@ -281,7 +281,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         // rewritten nodes until the first non-`nil` value is encountered. When this
         // happens, retrieve all previous syntax nodes from the parent node to
         // initialize the new layout. Once we know that we have to rewrite the
-        // layout, we need to collect all futher children, regardless of whether
+        // layout, we need to collect all further children, regardless of whether
         // they are rewritten or not.
 
         // newLayout is nil until the first child node is rewritten and rewritten

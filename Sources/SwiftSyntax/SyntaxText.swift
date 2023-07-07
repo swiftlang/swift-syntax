@@ -26,9 +26,9 @@
 /// whose lifetime extends past that of the SyntaxText.
 ///
 /// ``SyntaxText`` is a `Collection` of `UInt8` which is _expected_ to be a UTF8
-/// encoded byte sequence. However, since that is essentialy just a span of a
+/// encoded byte sequence. However, since that is essentially just a span of a
 /// memory buffer, it may contain ill-formed UTF8 sequences. And their
-/// comparision (e.g.`==`, hasPrefix()) are purely based on the byte squences,
+/// comparison (e.g.`==`, hasPrefix()) are purely based on the byte sequences,
 /// without any Unicode normalization or anything.
 ///
 /// Since it's just a byte sequence, ``SyntaxText`` can represent the exact source
@@ -185,7 +185,7 @@ extension SyntaxText: Hashable {
     // extremely rare, and checking it causes extra branch.
     // The most common usage is comparing parsed text with a static text e.g.
     // `token.text == "func"`. In such cases `compareMemory`(`memcmp`) is
-    // optimzed to a `cmp` or similar opcode if either operand is a short static
+    // optimized to a `cmp` or similar opcode if either operand is a short static
     // text. So the same-baseAddress shortcut doesn't give us a huge performance
     // boost even if they actually refer the same memory.
     return compareMemory(lBase, rBase, lhs.count)

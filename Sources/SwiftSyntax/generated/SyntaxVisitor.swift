@@ -12,12 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// The enum describes how the SyntaxVistor should continue after visiting
+/// The enum describes how the ``SyntaxVisitor`` should continue after visiting
 /// the current node.
 public enum SyntaxVisitorContinueKind {
-  /// The visitor should visit the descendents of the current node.
+  /// The visitor should visit the descendants of the current node.
   case visitChildren
-  /// The visitor should avoid visiting the descendents of the current node.
+  /// The visitor should avoid visiting the descendants of the current node.
   case skipChildren
 }
 
@@ -41,7 +41,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessesEffectSyntax`` and its descendents.
+  /// The function called after visiting ``AccessesEffectSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessesEffectSyntax) {
   }
@@ -53,7 +53,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorBlockSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorBlockSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorBlockSyntax) {
   }
@@ -65,7 +65,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorDeclSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorDeclSyntax) {
   }
@@ -77,7 +77,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorEffectSpecifiersSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorEffectSpecifiersSyntax) {
   }
@@ -89,7 +89,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorInitEffectsSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorInitEffectsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorInitEffectsSyntax) {
   }
@@ -101,7 +101,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorListSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorListSyntax) {
   }
@@ -113,7 +113,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorParameterSyntax`` and its descendents.
+  /// The function called after visiting ``AccessorParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorParameterSyntax) {
   }
@@ -125,7 +125,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ActorDeclSyntax`` and its descendents.
+  /// The function called after visiting ``ActorDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ActorDeclSyntax) {
   }
@@ -137,7 +137,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ArrayElementListSyntax`` and its descendents.
+  /// The function called after visiting ``ArrayElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayElementListSyntax) {
   }
@@ -149,7 +149,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ArrayElementSyntax`` and its descendents.
+  /// The function called after visiting ``ArrayElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayElementSyntax) {
   }
@@ -161,7 +161,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ArrayExprSyntax`` and its descendents.
+  /// The function called after visiting ``ArrayExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayExprSyntax) {
   }
@@ -173,7 +173,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ArrayTypeSyntax`` and its descendents.
+  /// The function called after visiting ``ArrayTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrayTypeSyntax) {
   }
@@ -185,7 +185,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ArrowExprSyntax`` and its descendents.
+  /// The function called after visiting ``ArrowExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ArrowExprSyntax) {
   }
@@ -197,7 +197,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AsExprSyntax`` and its descendents.
+  /// The function called after visiting ``AsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AsExprSyntax) {
   }
@@ -209,7 +209,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AssignmentExprSyntax`` and its descendents.
+  /// The function called after visiting ``AssignmentExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AssignmentExprSyntax) {
   }
@@ -221,7 +221,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AssociatedtypeDeclSyntax`` and its descendents.
+  /// The function called after visiting ``AssociatedtypeDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AssociatedtypeDeclSyntax) {
   }
@@ -233,7 +233,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AttributeListSyntax`` and its descendents.
+  /// The function called after visiting ``AttributeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributeListSyntax) {
   }
@@ -245,7 +245,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AttributeSyntax`` and its descendents.
+  /// The function called after visiting ``AttributeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributeSyntax) {
   }
@@ -257,7 +257,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AttributedTypeSyntax`` and its descendents.
+  /// The function called after visiting ``AttributedTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AttributedTypeSyntax) {
   }
@@ -269,7 +269,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityArgumentSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityArgumentSyntax) {
   }
@@ -281,7 +281,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityConditionSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityConditionSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityConditionSyntax) {
   }
@@ -293,7 +293,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityEntrySyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityEntrySyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityEntrySyntax) {
   }
@@ -305,7 +305,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
   }
@@ -317,7 +317,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilitySpecListSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilitySpecListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilitySpecListSyntax) {
   }
@@ -329,7 +329,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityVersionRestrictionListEntrySyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionListEntrySyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionListEntrySyntax) {
   }
@@ -341,7 +341,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityVersionRestrictionListSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionListSyntax) {
   }
@@ -353,7 +353,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AvailabilityVersionRestrictionSyntax`` and its descendents.
+  /// The function called after visiting ``AvailabilityVersionRestrictionSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
   }
@@ -365,7 +365,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AwaitExprSyntax`` and its descendents.
+  /// The function called after visiting ``AwaitExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AwaitExprSyntax) {
   }
@@ -377,7 +377,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BackDeployedAttributeSpecListSyntax`` and its descendents.
+  /// The function called after visiting ``BackDeployedAttributeSpecListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
   }
@@ -389,7 +389,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BinaryOperatorExprSyntax`` and its descendents.
+  /// The function called after visiting ``BinaryOperatorExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BinaryOperatorExprSyntax) {
   }
@@ -401,7 +401,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BooleanLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``BooleanLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BooleanLiteralExprSyntax) {
   }
@@ -413,7 +413,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BorrowExprSyntax`` and its descendents.
+  /// The function called after visiting ``BorrowExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BorrowExprSyntax) {
   }
@@ -425,7 +425,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BreakStmtSyntax`` and its descendents.
+  /// The function called after visiting ``BreakStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BreakStmtSyntax) {
   }
@@ -437,7 +437,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CanImportExprSyntax`` and its descendents.
+  /// The function called after visiting ``CanImportExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CanImportExprSyntax) {
   }
@@ -449,7 +449,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CanImportVersionInfoSyntax`` and its descendents.
+  /// The function called after visiting ``CanImportVersionInfoSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CanImportVersionInfoSyntax) {
   }
@@ -461,7 +461,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CaseItemListSyntax`` and its descendents.
+  /// The function called after visiting ``CaseItemListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemListSyntax) {
   }
@@ -473,7 +473,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CaseItemSyntax`` and its descendents.
+  /// The function called after visiting ``CaseItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CaseItemSyntax) {
   }
@@ -485,7 +485,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CatchClauseListSyntax`` and its descendents.
+  /// The function called after visiting ``CatchClauseListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchClauseListSyntax) {
   }
@@ -497,7 +497,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CatchClauseSyntax`` and its descendents.
+  /// The function called after visiting ``CatchClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchClauseSyntax) {
   }
@@ -509,7 +509,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CatchItemListSyntax`` and its descendents.
+  /// The function called after visiting ``CatchItemListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemListSyntax) {
   }
@@ -521,7 +521,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CatchItemSyntax`` and its descendents.
+  /// The function called after visiting ``CatchItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemSyntax) {
   }
@@ -533,7 +533,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClassDeclSyntax`` and its descendents.
+  /// The function called after visiting ``ClassDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClassDeclSyntax) {
   }
@@ -545,7 +545,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClassRestrictionTypeSyntax`` and its descendents.
+  /// The function called after visiting ``ClassRestrictionTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClassRestrictionTypeSyntax) {
   }
@@ -557,7 +557,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemListSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemListSyntax) {
   }
@@ -569,7 +569,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemSpecifierSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemSpecifierSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
   }
@@ -581,7 +581,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureCaptureItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureItemSyntax) {
   }
@@ -593,7 +593,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureSignatureSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureCaptureSignatureSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureCaptureSignatureSyntax) {
   }
@@ -605,7 +605,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureExprSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureExprSyntax) {
   }
@@ -617,7 +617,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureParamListSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureParamListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParamListSyntax) {
   }
@@ -629,7 +629,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureParamSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureParamSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParamSyntax) {
   }
@@ -641,7 +641,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureParameterClauseSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureParameterClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterClauseSyntax) {
   }
@@ -653,7 +653,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureParameterListSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureParameterListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterListSyntax) {
   }
@@ -665,7 +665,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureParameterSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterSyntax) {
   }
@@ -677,7 +677,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureSignatureSyntax`` and its descendents.
+  /// The function called after visiting ``ClosureSignatureSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureSignatureSyntax) {
   }
@@ -689,7 +689,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CodeBlockItemListSyntax`` and its descendents.
+  /// The function called after visiting ``CodeBlockItemListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockItemListSyntax) {
   }
@@ -701,7 +701,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CodeBlockItemSyntax`` and its descendents.
+  /// The function called after visiting ``CodeBlockItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockItemSyntax) {
   }
@@ -713,7 +713,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CodeBlockSyntax`` and its descendents.
+  /// The function called after visiting ``CodeBlockSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CodeBlockSyntax) {
   }
@@ -725,7 +725,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CompositionTypeElementListSyntax`` and its descendents.
+  /// The function called after visiting ``CompositionTypeElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeElementListSyntax) {
   }
@@ -737,7 +737,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CompositionTypeElementSyntax`` and its descendents.
+  /// The function called after visiting ``CompositionTypeElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeElementSyntax) {
   }
@@ -749,7 +749,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CompositionTypeSyntax`` and its descendents.
+  /// The function called after visiting ``CompositionTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CompositionTypeSyntax) {
   }
@@ -761,7 +761,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConditionElementListSyntax`` and its descendents.
+  /// The function called after visiting ``ConditionElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConditionElementListSyntax) {
   }
@@ -773,7 +773,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConditionElementSyntax`` and its descendents.
+  /// The function called after visiting ``ConditionElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConditionElementSyntax) {
   }
@@ -785,7 +785,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConformanceRequirementSyntax`` and its descendents.
+  /// The function called after visiting ``ConformanceRequirementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConformanceRequirementSyntax) {
   }
@@ -797,7 +797,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConstrainedSugarTypeSyntax`` and its descendents.
+  /// The function called after visiting ``ConstrainedSugarTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConstrainedSugarTypeSyntax) {
   }
@@ -809,7 +809,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ContinueStmtSyntax`` and its descendents.
+  /// The function called after visiting ``ContinueStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ContinueStmtSyntax) {
   }
@@ -821,7 +821,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConventionAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``ConventionAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
   }
@@ -833,7 +833,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
   }
@@ -845,7 +845,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``CopyExprSyntax`` and its descendents.
+  /// The function called after visiting ``CopyExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CopyExprSyntax) {
   }
@@ -857,7 +857,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclModifierDetailSyntax`` and its descendents.
+  /// The function called after visiting ``DeclModifierDetailSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclModifierDetailSyntax) {
   }
@@ -869,7 +869,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclModifierSyntax`` and its descendents.
+  /// The function called after visiting ``DeclModifierSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclModifierSyntax) {
   }
@@ -881,7 +881,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclNameArgumentListSyntax`` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentListSyntax) {
   }
@@ -893,7 +893,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclNameArgumentSyntax`` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentSyntax) {
   }
@@ -905,7 +905,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclNameArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``DeclNameArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameArgumentsSyntax) {
   }
@@ -917,7 +917,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeclNameSyntax`` and its descendents.
+  /// The function called after visiting ``DeclNameSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclNameSyntax) {
   }
@@ -929,7 +929,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeferStmtSyntax`` and its descendents.
+  /// The function called after visiting ``DeferStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeferStmtSyntax) {
   }
@@ -941,7 +941,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeinitEffectSpecifiersSyntax`` and its descendents.
+  /// The function called after visiting ``DeinitEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeinitEffectSpecifiersSyntax) {
   }
@@ -953,7 +953,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DeinitializerDeclSyntax`` and its descendents.
+  /// The function called after visiting ``DeinitializerDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeinitializerDeclSyntax) {
   }
@@ -965,7 +965,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
   }
@@ -977,7 +977,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DesignatedTypeElementSyntax`` and its descendents.
+  /// The function called after visiting ``DesignatedTypeElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DesignatedTypeElementSyntax) {
   }
@@ -989,7 +989,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DesignatedTypeListSyntax`` and its descendents.
+  /// The function called after visiting ``DesignatedTypeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DesignatedTypeListSyntax) {
   }
@@ -1001,7 +1001,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DictionaryElementListSyntax`` and its descendents.
+  /// The function called after visiting ``DictionaryElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryElementListSyntax) {
   }
@@ -1013,7 +1013,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DictionaryElementSyntax`` and its descendents.
+  /// The function called after visiting ``DictionaryElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryElementSyntax) {
   }
@@ -1025,7 +1025,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DictionaryExprSyntax`` and its descendents.
+  /// The function called after visiting ``DictionaryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryExprSyntax) {
   }
@@ -1037,7 +1037,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DictionaryTypeSyntax`` and its descendents.
+  /// The function called after visiting ``DictionaryTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DictionaryTypeSyntax) {
   }
@@ -1049,7 +1049,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamListSyntax`` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamListSyntax) {
   }
@@ -1061,7 +1061,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamSyntax`` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamSyntax) {
   }
@@ -1073,7 +1073,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamsClauseSyntax`` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamsClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {
   }
@@ -1085,7 +1085,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamsSyntax`` and its descendents.
+  /// The function called after visiting ``DifferentiabilityParamsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityParamsSyntax) {
   }
@@ -1097,7 +1097,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiableAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``DifferentiableAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiableAttributeArgumentsSyntax) {
   }
@@ -1109,7 +1109,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DiscardAssignmentExprSyntax`` and its descendents.
+  /// The function called after visiting ``DiscardAssignmentExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DiscardAssignmentExprSyntax) {
   }
@@ -1121,7 +1121,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DiscardStmtSyntax`` and its descendents.
+  /// The function called after visiting ``DiscardStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DiscardStmtSyntax) {
   }
@@ -1133,7 +1133,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DoStmtSyntax`` and its descendents.
+  /// The function called after visiting ``DoStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DoStmtSyntax) {
   }
@@ -1145,7 +1145,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DocumentationAttributeArgumentSyntax`` and its descendents.
+  /// The function called after visiting ``DocumentationAttributeArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
   }
@@ -1157,7 +1157,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DocumentationAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``DocumentationAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DocumentationAttributeArgumentsSyntax) {
   }
@@ -1169,7 +1169,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DynamicReplacementArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``DynamicReplacementArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DynamicReplacementArgumentsSyntax) {
   }
@@ -1181,7 +1181,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EditorPlaceholderDeclSyntax`` and its descendents.
+  /// The function called after visiting ``EditorPlaceholderDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EditorPlaceholderDeclSyntax) {
   }
@@ -1193,7 +1193,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EditorPlaceholderExprSyntax`` and its descendents.
+  /// The function called after visiting ``EditorPlaceholderExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EditorPlaceholderExprSyntax) {
   }
@@ -1205,7 +1205,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EffectsArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``EffectsArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EffectsArgumentsSyntax) {
   }
@@ -1217,7 +1217,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseDeclSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseDeclSyntax) {
   }
@@ -1229,7 +1229,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseElementListSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseElementListSyntax) {
   }
@@ -1241,7 +1241,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseElementSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseElementSyntax) {
   }
@@ -1253,7 +1253,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseParameterClauseSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterClauseSyntax) {
   }
@@ -1265,7 +1265,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseParameterListSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterListSyntax) {
   }
@@ -1277,7 +1277,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumCaseParameterSyntax`` and its descendents.
+  /// The function called after visiting ``EnumCaseParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumCaseParameterSyntax) {
   }
@@ -1289,7 +1289,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EnumDeclSyntax`` and its descendents.
+  /// The function called after visiting ``EnumDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumDeclSyntax) {
   }
@@ -1301,7 +1301,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExposeAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``ExposeAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
   }
@@ -1313,7 +1313,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExprListSyntax`` and its descendents.
+  /// The function called after visiting ``ExprListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExprListSyntax) {
   }
@@ -1325,7 +1325,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExpressionPatternSyntax`` and its descendents.
+  /// The function called after visiting ``ExpressionPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionPatternSyntax) {
   }
@@ -1337,7 +1337,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExpressionSegmentSyntax`` and its descendents.
+  /// The function called after visiting ``ExpressionSegmentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionSegmentSyntax) {
   }
@@ -1349,7 +1349,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExpressionStmtSyntax`` and its descendents.
+  /// The function called after visiting ``ExpressionStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionStmtSyntax) {
   }
@@ -1361,7 +1361,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExtensionDeclSyntax`` and its descendents.
+  /// The function called after visiting ``ExtensionDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExtensionDeclSyntax) {
   }
@@ -1373,7 +1373,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FallthroughStmtSyntax`` and its descendents.
+  /// The function called after visiting ``FallthroughStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FallthroughStmtSyntax) {
   }
@@ -1385,7 +1385,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FloatLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``FloatLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FloatLiteralExprSyntax) {
   }
@@ -1397,7 +1397,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ForInStmtSyntax`` and its descendents.
+  /// The function called after visiting ``ForInStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForInStmtSyntax) {
   }
@@ -1409,7 +1409,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ForcedValueExprSyntax`` and its descendents.
+  /// The function called after visiting ``ForcedValueExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ForcedValueExprSyntax) {
   }
@@ -1421,7 +1421,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionCallExprSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionCallExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionCallExprSyntax) {
   }
@@ -1433,7 +1433,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionDeclSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionDeclSyntax) {
   }
@@ -1445,7 +1445,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionEffectSpecifiersSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionEffectSpecifiersSyntax) {
   }
@@ -1457,7 +1457,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionParameterListSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionParameterListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionParameterListSyntax) {
   }
@@ -1469,7 +1469,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionParameterSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionParameterSyntax) {
   }
@@ -1481,7 +1481,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionSignatureSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionSignatureSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionSignatureSyntax) {
   }
@@ -1493,7 +1493,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FunctionTypeSyntax`` and its descendents.
+  /// The function called after visiting ``FunctionTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionTypeSyntax) {
   }
@@ -1505,7 +1505,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericArgumentClauseSyntax`` and its descendents.
+  /// The function called after visiting ``GenericArgumentClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentClauseSyntax) {
   }
@@ -1517,7 +1517,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericArgumentListSyntax`` and its descendents.
+  /// The function called after visiting ``GenericArgumentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentListSyntax) {
   }
@@ -1529,7 +1529,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericArgumentSyntax`` and its descendents.
+  /// The function called after visiting ``GenericArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericArgumentSyntax) {
   }
@@ -1541,7 +1541,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericParameterClauseSyntax`` and its descendents.
+  /// The function called after visiting ``GenericParameterClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterClauseSyntax) {
   }
@@ -1553,7 +1553,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericParameterListSyntax`` and its descendents.
+  /// The function called after visiting ``GenericParameterListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterListSyntax) {
   }
@@ -1565,7 +1565,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericParameterSyntax`` and its descendents.
+  /// The function called after visiting ``GenericParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericParameterSyntax) {
   }
@@ -1577,7 +1577,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericRequirementListSyntax`` and its descendents.
+  /// The function called after visiting ``GenericRequirementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericRequirementListSyntax) {
   }
@@ -1589,7 +1589,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericRequirementSyntax`` and its descendents.
+  /// The function called after visiting ``GenericRequirementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericRequirementSyntax) {
   }
@@ -1601,7 +1601,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GenericWhereClauseSyntax`` and its descendents.
+  /// The function called after visiting ``GenericWhereClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GenericWhereClauseSyntax) {
   }
@@ -1613,7 +1613,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``GuardStmtSyntax`` and its descendents.
+  /// The function called after visiting ``GuardStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: GuardStmtSyntax) {
   }
@@ -1625,7 +1625,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IdentifierExprSyntax`` and its descendents.
+  /// The function called after visiting ``IdentifierExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IdentifierExprSyntax) {
   }
@@ -1637,7 +1637,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IdentifierPatternSyntax`` and its descendents.
+  /// The function called after visiting ``IdentifierPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IdentifierPatternSyntax) {
   }
@@ -1649,7 +1649,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IfConfigClauseListSyntax`` and its descendents.
+  /// The function called after visiting ``IfConfigClauseListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigClauseListSyntax) {
   }
@@ -1661,7 +1661,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IfConfigClauseSyntax`` and its descendents.
+  /// The function called after visiting ``IfConfigClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigClauseSyntax) {
   }
@@ -1673,7 +1673,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IfConfigDeclSyntax`` and its descendents.
+  /// The function called after visiting ``IfConfigDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfConfigDeclSyntax) {
   }
@@ -1685,7 +1685,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IfExprSyntax`` and its descendents.
+  /// The function called after visiting ``IfExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IfExprSyntax) {
   }
@@ -1697,7 +1697,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ImplementsAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``ImplementsAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImplementsAttributeArgumentsSyntax) {
   }
@@ -1709,7 +1709,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` and its descendents.
+  /// The function called after visiting ``ImplicitlyUnwrappedOptionalTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {
   }
@@ -1721,7 +1721,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ImportDeclSyntax`` and its descendents.
+  /// The function called after visiting ``ImportDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportDeclSyntax) {
   }
@@ -1733,7 +1733,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ImportPathComponentSyntax`` and its descendents.
+  /// The function called after visiting ``ImportPathComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportPathComponentSyntax) {
   }
@@ -1745,7 +1745,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ImportPathSyntax`` and its descendents.
+  /// The function called after visiting ``ImportPathSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ImportPathSyntax) {
   }
@@ -1757,7 +1757,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InOutExprSyntax`` and its descendents.
+  /// The function called after visiting ``InOutExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InOutExprSyntax) {
   }
@@ -1769,7 +1769,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InfixOperatorExprSyntax`` and its descendents.
+  /// The function called after visiting ``InfixOperatorExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InfixOperatorExprSyntax) {
   }
@@ -1781,7 +1781,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InheritedTypeListSyntax`` and its descendents.
+  /// The function called after visiting ``InheritedTypeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InheritedTypeListSyntax) {
   }
@@ -1793,7 +1793,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InheritedTypeSyntax`` and its descendents.
+  /// The function called after visiting ``InheritedTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InheritedTypeSyntax) {
   }
@@ -1805,7 +1805,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InitializerClauseSyntax`` and its descendents.
+  /// The function called after visiting ``InitializerClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InitializerClauseSyntax) {
   }
@@ -1817,7 +1817,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InitializerDeclSyntax`` and its descendents.
+  /// The function called after visiting ``InitializerDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InitializerDeclSyntax) {
   }
@@ -1829,7 +1829,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``InitializesEffectSyntax`` and its descendents.
+  /// The function called after visiting ``InitializesEffectSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InitializesEffectSyntax) {
   }
@@ -1841,7 +1841,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IntegerLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``IntegerLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IntegerLiteralExprSyntax) {
   }
@@ -1853,7 +1853,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IsExprSyntax`` and its descendents.
+  /// The function called after visiting ``IsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IsExprSyntax) {
   }
@@ -1865,7 +1865,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``IsTypePatternSyntax`` and its descendents.
+  /// The function called after visiting ``IsTypePatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IsTypePatternSyntax) {
   }
@@ -1877,7 +1877,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathComponentListSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathComponentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathComponentListSyntax) {
   }
@@ -1889,7 +1889,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathComponentSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathComponentSyntax) {
   }
@@ -1901,7 +1901,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathExprSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathExprSyntax) {
   }
@@ -1913,7 +1913,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathOptionalComponentSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathOptionalComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathOptionalComponentSyntax) {
   }
@@ -1925,7 +1925,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathPropertyComponentSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathPropertyComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathPropertyComponentSyntax) {
   }
@@ -1937,7 +1937,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``KeyPathSubscriptComponentSyntax`` and its descendents.
+  /// The function called after visiting ``KeyPathSubscriptComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
   }
@@ -1949,7 +1949,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LabeledSpecializeEntrySyntax`` and its descendents.
+  /// The function called after visiting ``LabeledSpecializeEntrySyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LabeledSpecializeEntrySyntax) {
   }
@@ -1961,7 +1961,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LabeledStmtSyntax`` and its descendents.
+  /// The function called after visiting ``LabeledStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LabeledStmtSyntax) {
   }
@@ -1973,7 +1973,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LayoutRequirementSyntax`` and its descendents.
+  /// The function called after visiting ``LayoutRequirementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: LayoutRequirementSyntax) {
   }
@@ -1985,7 +1985,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MacroDeclSyntax`` and its descendents.
+  /// The function called after visiting ``MacroDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroDeclSyntax) {
   }
@@ -1997,7 +1997,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MacroExpansionDeclSyntax`` and its descendents.
+  /// The function called after visiting ``MacroExpansionDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroExpansionDeclSyntax) {
   }
@@ -2009,7 +2009,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MacroExpansionExprSyntax`` and its descendents.
+  /// The function called after visiting ``MacroExpansionExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MacroExpansionExprSyntax) {
   }
@@ -2021,7 +2021,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MatchingPatternConditionSyntax`` and its descendents.
+  /// The function called after visiting ``MatchingPatternConditionSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MatchingPatternConditionSyntax) {
   }
@@ -2033,7 +2033,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberAccessExprSyntax`` and its descendents.
+  /// The function called after visiting ``MemberAccessExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberAccessExprSyntax) {
   }
@@ -2045,7 +2045,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclBlockSyntax`` and its descendents.
+  /// The function called after visiting ``MemberDeclBlockSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclBlockSyntax) {
   }
@@ -2057,7 +2057,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclListItemSyntax`` and its descendents.
+  /// The function called after visiting ``MemberDeclListItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclListItemSyntax) {
   }
@@ -2069,7 +2069,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclListSyntax`` and its descendents.
+  /// The function called after visiting ``MemberDeclListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberDeclListSyntax) {
   }
@@ -2081,7 +2081,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberTypeIdentifierSyntax`` and its descendents.
+  /// The function called after visiting ``MemberTypeIdentifierSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MemberTypeIdentifierSyntax) {
   }
@@ -2093,7 +2093,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MetatypeTypeSyntax`` and its descendents.
+  /// The function called after visiting ``MetatypeTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MetatypeTypeSyntax) {
   }
@@ -2105,7 +2105,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingDeclSyntax`` and its descendents.
+  /// The function called after visiting ``MissingDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingDeclSyntax) {
   }
@@ -2117,7 +2117,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingExprSyntax`` and its descendents.
+  /// The function called after visiting ``MissingExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingExprSyntax) {
   }
@@ -2129,7 +2129,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingPatternSyntax`` and its descendents.
+  /// The function called after visiting ``MissingPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingPatternSyntax) {
   }
@@ -2141,7 +2141,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingStmtSyntax`` and its descendents.
+  /// The function called after visiting ``MissingStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingStmtSyntax) {
   }
@@ -2153,7 +2153,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingSyntax`` and its descendents.
+  /// The function called after visiting ``MissingSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingSyntax) {
   }
@@ -2165,7 +2165,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MissingTypeSyntax`` and its descendents.
+  /// The function called after visiting ``MissingTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingTypeSyntax) {
   }
@@ -2177,7 +2177,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ModifierListSyntax`` and its descendents.
+  /// The function called after visiting ``ModifierListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ModifierListSyntax) {
   }
@@ -2189,7 +2189,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MoveExprSyntax`` and its descendents.
+  /// The function called after visiting ``MoveExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MoveExprSyntax) {
   }
@@ -2201,7 +2201,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MultipleTrailingClosureElementListSyntax`` and its descendents.
+  /// The function called after visiting ``MultipleTrailingClosureElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MultipleTrailingClosureElementListSyntax) {
   }
@@ -2213,7 +2213,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MultipleTrailingClosureElementSyntax`` and its descendents.
+  /// The function called after visiting ``MultipleTrailingClosureElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MultipleTrailingClosureElementSyntax) {
   }
@@ -2225,7 +2225,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``NamedOpaqueReturnTypeSyntax`` and its descendents.
+  /// The function called after visiting ``NamedOpaqueReturnTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: NamedOpaqueReturnTypeSyntax) {
   }
@@ -2237,7 +2237,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``NilLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``NilLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: NilLiteralExprSyntax) {
   }
@@ -2249,7 +2249,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ObjCSelectorPieceSyntax`` and its descendents.
+  /// The function called after visiting ``ObjCSelectorPieceSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjCSelectorPieceSyntax) {
   }
@@ -2261,7 +2261,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ObjCSelectorSyntax`` and its descendents.
+  /// The function called after visiting ``ObjCSelectorSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ObjCSelectorSyntax) {
   }
@@ -2273,7 +2273,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
   }
@@ -2285,7 +2285,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OperatorDeclSyntax`` and its descendents.
+  /// The function called after visiting ``OperatorDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OperatorDeclSyntax) {
   }
@@ -2297,7 +2297,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OperatorPrecedenceAndTypesSyntax`` and its descendents.
+  /// The function called after visiting ``OperatorPrecedenceAndTypesSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OperatorPrecedenceAndTypesSyntax) {
   }
@@ -2309,7 +2309,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OptionalBindingConditionSyntax`` and its descendents.
+  /// The function called after visiting ``OptionalBindingConditionSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalBindingConditionSyntax) {
   }
@@ -2321,7 +2321,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OptionalChainingExprSyntax`` and its descendents.
+  /// The function called after visiting ``OptionalChainingExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalChainingExprSyntax) {
   }
@@ -2333,7 +2333,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OptionalTypeSyntax`` and its descendents.
+  /// The function called after visiting ``OptionalTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OptionalTypeSyntax) {
   }
@@ -2345,7 +2345,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OriginallyDefinedInArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``OriginallyDefinedInArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: OriginallyDefinedInArgumentsSyntax) {
   }
@@ -2357,7 +2357,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PackElementExprSyntax`` and its descendents.
+  /// The function called after visiting ``PackElementExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackElementExprSyntax) {
   }
@@ -2369,7 +2369,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PackExpansionExprSyntax`` and its descendents.
+  /// The function called after visiting ``PackExpansionExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackExpansionExprSyntax) {
   }
@@ -2381,7 +2381,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PackExpansionTypeSyntax`` and its descendents.
+  /// The function called after visiting ``PackExpansionTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackExpansionTypeSyntax) {
   }
@@ -2393,7 +2393,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PackReferenceTypeSyntax`` and its descendents.
+  /// The function called after visiting ``PackReferenceTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackReferenceTypeSyntax) {
   }
@@ -2405,7 +2405,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ParameterClauseSyntax`` and its descendents.
+  /// The function called after visiting ``ParameterClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ParameterClauseSyntax) {
   }
@@ -2417,7 +2417,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PatternBindingListSyntax`` and its descendents.
+  /// The function called after visiting ``PatternBindingListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PatternBindingListSyntax) {
   }
@@ -2429,7 +2429,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PatternBindingSyntax`` and its descendents.
+  /// The function called after visiting ``PatternBindingSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PatternBindingSyntax) {
   }
@@ -2441,7 +2441,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PostfixIfConfigExprSyntax`` and its descendents.
+  /// The function called after visiting ``PostfixIfConfigExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PostfixIfConfigExprSyntax) {
   }
@@ -2453,7 +2453,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PostfixUnaryExprSyntax`` and its descendents.
+  /// The function called after visiting ``PostfixUnaryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PostfixUnaryExprSyntax) {
   }
@@ -2465,7 +2465,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PoundSourceLocationArgsSyntax`` and its descendents.
+  /// The function called after visiting ``PoundSourceLocationArgsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundSourceLocationArgsSyntax) {
   }
@@ -2477,7 +2477,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PoundSourceLocationSyntax`` and its descendents.
+  /// The function called after visiting ``PoundSourceLocationSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PoundSourceLocationSyntax) {
   }
@@ -2489,7 +2489,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupAssignmentSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAssignmentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAssignmentSyntax) {
   }
@@ -2501,7 +2501,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupAssociativitySyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAssociativitySyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAssociativitySyntax) {
   }
@@ -2513,7 +2513,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupAttributeListSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupAttributeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupAttributeListSyntax) {
   }
@@ -2525,7 +2525,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupDeclSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupDeclSyntax) {
   }
@@ -2537,7 +2537,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupNameElementSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupNameElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
   }
@@ -2549,7 +2549,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupNameListSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupNameListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupNameListSyntax) {
   }
@@ -2561,7 +2561,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrecedenceGroupRelationSyntax`` and its descendents.
+  /// The function called after visiting ``PrecedenceGroupRelationSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupRelationSyntax) {
   }
@@ -2573,7 +2573,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrefixOperatorExprSyntax`` and its descendents.
+  /// The function called after visiting ``PrefixOperatorExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrefixOperatorExprSyntax) {
   }
@@ -2585,7 +2585,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrimaryAssociatedTypeClauseSyntax`` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeClauseSyntax) {
   }
@@ -2597,7 +2597,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrimaryAssociatedTypeListSyntax`` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeListSyntax) {
   }
@@ -2609,7 +2609,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PrimaryAssociatedTypeSyntax`` and its descendents.
+  /// The function called after visiting ``PrimaryAssociatedTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrimaryAssociatedTypeSyntax) {
   }
@@ -2621,7 +2621,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ProtocolDeclSyntax`` and its descendents.
+  /// The function called after visiting ``ProtocolDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ProtocolDeclSyntax) {
   }
@@ -2633,7 +2633,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``QualifiedDeclNameSyntax`` and its descendents.
+  /// The function called after visiting ``QualifiedDeclNameSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: QualifiedDeclNameSyntax) {
   }
@@ -2645,7 +2645,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``RegexLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``RegexLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: RegexLiteralExprSyntax) {
   }
@@ -2657,7 +2657,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``RepeatWhileStmtSyntax`` and its descendents.
+  /// The function called after visiting ``RepeatWhileStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: RepeatWhileStmtSyntax) {
   }
@@ -2669,7 +2669,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ReturnClauseSyntax`` and its descendents.
+  /// The function called after visiting ``ReturnClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ReturnClauseSyntax) {
   }
@@ -2681,7 +2681,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ReturnStmtSyntax`` and its descendents.
+  /// The function called after visiting ``ReturnStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ReturnStmtSyntax) {
   }
@@ -2693,7 +2693,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SameTypeRequirementSyntax`` and its descendents.
+  /// The function called after visiting ``SameTypeRequirementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SameTypeRequirementSyntax) {
   }
@@ -2705,7 +2705,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SequenceExprSyntax`` and its descendents.
+  /// The function called after visiting ``SequenceExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SequenceExprSyntax) {
   }
@@ -2717,7 +2717,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SimpleTypeIdentifierSyntax`` and its descendents.
+  /// The function called after visiting ``SimpleTypeIdentifierSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
   }
@@ -2729,7 +2729,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SourceFileSyntax`` and its descendents.
+  /// The function called after visiting ``SourceFileSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SourceFileSyntax) {
   }
@@ -2741,7 +2741,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SpecializeAttributeSpecListSyntax`` and its descendents.
+  /// The function called after visiting ``SpecializeAttributeSpecListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
   }
@@ -2753,7 +2753,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SpecializeExprSyntax`` and its descendents.
+  /// The function called after visiting ``SpecializeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SpecializeExprSyntax) {
   }
@@ -2765,7 +2765,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``StringLiteralExprSyntax`` and its descendents.
+  /// The function called after visiting ``StringLiteralExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringLiteralExprSyntax) {
   }
@@ -2777,7 +2777,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``StringLiteralSegmentsSyntax`` and its descendents.
+  /// The function called after visiting ``StringLiteralSegmentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringLiteralSegmentsSyntax) {
   }
@@ -2789,7 +2789,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``StringSegmentSyntax`` and its descendents.
+  /// The function called after visiting ``StringSegmentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringSegmentSyntax) {
   }
@@ -2801,7 +2801,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``StructDeclSyntax`` and its descendents.
+  /// The function called after visiting ``StructDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StructDeclSyntax) {
   }
@@ -2813,7 +2813,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SubscriptDeclSyntax`` and its descendents.
+  /// The function called after visiting ``SubscriptDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SubscriptDeclSyntax) {
   }
@@ -2825,7 +2825,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SubscriptExprSyntax`` and its descendents.
+  /// The function called after visiting ``SubscriptExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SubscriptExprSyntax) {
   }
@@ -2837,7 +2837,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SuperRefExprSyntax`` and its descendents.
+  /// The function called after visiting ``SuperRefExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SuperRefExprSyntax) {
   }
@@ -2849,7 +2849,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SuppressedTypeSyntax`` and its descendents.
+  /// The function called after visiting ``SuppressedTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SuppressedTypeSyntax) {
   }
@@ -2861,7 +2861,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SwitchCaseLabelSyntax`` and its descendents.
+  /// The function called after visiting ``SwitchCaseLabelSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseLabelSyntax) {
   }
@@ -2873,7 +2873,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SwitchCaseListSyntax`` and its descendents.
+  /// The function called after visiting ``SwitchCaseListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseListSyntax) {
   }
@@ -2885,7 +2885,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SwitchCaseSyntax`` and its descendents.
+  /// The function called after visiting ``SwitchCaseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchCaseSyntax) {
   }
@@ -2897,7 +2897,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SwitchDefaultLabelSyntax`` and its descendents.
+  /// The function called after visiting ``SwitchDefaultLabelSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchDefaultLabelSyntax) {
   }
@@ -2909,7 +2909,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SwitchExprSyntax`` and its descendents.
+  /// The function called after visiting ``SwitchExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SwitchExprSyntax) {
   }
@@ -2921,7 +2921,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TargetFunctionEntrySyntax`` and its descendents.
+  /// The function called after visiting ``TargetFunctionEntrySyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TargetFunctionEntrySyntax) {
   }
@@ -2933,7 +2933,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TernaryExprSyntax`` and its descendents.
+  /// The function called after visiting ``TernaryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TernaryExprSyntax) {
   }
@@ -2945,7 +2945,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ThrowStmtSyntax`` and its descendents.
+  /// The function called after visiting ``ThrowStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ThrowStmtSyntax) {
   }
@@ -2957,7 +2957,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TryExprSyntax`` and its descendents.
+  /// The function called after visiting ``TryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TryExprSyntax) {
   }
@@ -2969,7 +2969,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleExprElementListSyntax`` and its descendents.
+  /// The function called after visiting ``TupleExprElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprElementListSyntax) {
   }
@@ -2981,7 +2981,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleExprElementSyntax`` and its descendents.
+  /// The function called after visiting ``TupleExprElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprElementSyntax) {
   }
@@ -2993,7 +2993,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleExprSyntax`` and its descendents.
+  /// The function called after visiting ``TupleExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleExprSyntax) {
   }
@@ -3005,7 +3005,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TuplePatternElementListSyntax`` and its descendents.
+  /// The function called after visiting ``TuplePatternElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternElementListSyntax) {
   }
@@ -3017,7 +3017,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TuplePatternElementSyntax`` and its descendents.
+  /// The function called after visiting ``TuplePatternElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternElementSyntax) {
   }
@@ -3029,7 +3029,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TuplePatternSyntax`` and its descendents.
+  /// The function called after visiting ``TuplePatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TuplePatternSyntax) {
   }
@@ -3041,7 +3041,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleTypeElementListSyntax`` and its descendents.
+  /// The function called after visiting ``TupleTypeElementListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeElementListSyntax) {
   }
@@ -3053,7 +3053,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleTypeElementSyntax`` and its descendents.
+  /// The function called after visiting ``TupleTypeElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeElementSyntax) {
   }
@@ -3065,7 +3065,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TupleTypeSyntax`` and its descendents.
+  /// The function called after visiting ``TupleTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TupleTypeSyntax) {
   }
@@ -3077,7 +3077,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypeAnnotationSyntax`` and its descendents.
+  /// The function called after visiting ``TypeAnnotationSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeAnnotationSyntax) {
   }
@@ -3089,7 +3089,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypeEffectSpecifiersSyntax`` and its descendents.
+  /// The function called after visiting ``TypeEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeEffectSpecifiersSyntax) {
   }
@@ -3101,7 +3101,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypeExprSyntax`` and its descendents.
+  /// The function called after visiting ``TypeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeExprSyntax) {
   }
@@ -3113,7 +3113,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypeInheritanceClauseSyntax`` and its descendents.
+  /// The function called after visiting ``TypeInheritanceClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeInheritanceClauseSyntax) {
   }
@@ -3125,7 +3125,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypeInitializerClauseSyntax`` and its descendents.
+  /// The function called after visiting ``TypeInitializerClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypeInitializerClauseSyntax) {
   }
@@ -3137,7 +3137,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypealiasDeclSyntax`` and its descendents.
+  /// The function called after visiting ``TypealiasDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TypealiasDeclSyntax) {
   }
@@ -3149,7 +3149,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnavailableFromAsyncArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``UnavailableFromAsyncArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnavailableFromAsyncArgumentsSyntax) {
   }
@@ -3161,7 +3161,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnderscorePrivateAttributeArgumentsSyntax`` and its descendents.
+  /// The function called after visiting ``UnderscorePrivateAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
   }
@@ -3173,7 +3173,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnexpectedNodesSyntax`` and its descendents.
+  /// The function called after visiting ``UnexpectedNodesSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnexpectedNodesSyntax) {
   }
@@ -3185,7 +3185,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnresolvedAsExprSyntax`` and its descendents.
+  /// The function called after visiting ``UnresolvedAsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedAsExprSyntax) {
   }
@@ -3197,7 +3197,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnresolvedIsExprSyntax`` and its descendents.
+  /// The function called after visiting ``UnresolvedIsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedIsExprSyntax) {
   }
@@ -3209,7 +3209,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnresolvedPatternExprSyntax`` and its descendents.
+  /// The function called after visiting ``UnresolvedPatternExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedPatternExprSyntax) {
   }
@@ -3221,7 +3221,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``UnresolvedTernaryExprSyntax`` and its descendents.
+  /// The function called after visiting ``UnresolvedTernaryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedTernaryExprSyntax) {
   }
@@ -3233,7 +3233,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ValueBindingPatternSyntax`` and its descendents.
+  /// The function called after visiting ``ValueBindingPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ValueBindingPatternSyntax) {
   }
@@ -3245,7 +3245,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``VariableDeclSyntax`` and its descendents.
+  /// The function called after visiting ``VariableDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VariableDeclSyntax) {
   }
@@ -3257,7 +3257,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``VersionComponentListSyntax`` and its descendents.
+  /// The function called after visiting ``VersionComponentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionComponentListSyntax) {
   }
@@ -3269,7 +3269,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``VersionComponentSyntax`` and its descendents.
+  /// The function called after visiting ``VersionComponentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionComponentSyntax) {
   }
@@ -3281,7 +3281,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``VersionTupleSyntax`` and its descendents.
+  /// The function called after visiting ``VersionTupleSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: VersionTupleSyntax) {
   }
@@ -3293,7 +3293,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``WhereClauseSyntax`` and its descendents.
+  /// The function called after visiting ``WhereClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WhereClauseSyntax) {
   }
@@ -3305,7 +3305,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``WhileStmtSyntax`` and its descendents.
+  /// The function called after visiting ``WhileStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WhileStmtSyntax) {
   }
@@ -3317,7 +3317,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``WildcardPatternSyntax`` and its descendents.
+  /// The function called after visiting ``WildcardPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: WildcardPatternSyntax) {
   }
@@ -3329,7 +3329,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldExprListElementSyntax`` and its descendents.
+  /// The function called after visiting ``YieldExprListElementSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldExprListElementSyntax) {
   }
@@ -3341,7 +3341,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldExprListSyntax`` and its descendents.
+  /// The function called after visiting ``YieldExprListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldExprListSyntax) {
   }
@@ -3353,7 +3353,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldListSyntax`` and its descendents.
+  /// The function called after visiting ``YieldListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldListSyntax) {
   }
@@ -3365,7 +3365,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldStmtSyntax`` and its descendents.
+  /// The function called after visiting ``YieldStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldStmtSyntax) {
   }
@@ -3377,7 +3377,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting the node and its descendents.
+  /// The function called after visiting the node and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TokenSyntax) {
   }

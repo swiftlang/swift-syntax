@@ -313,7 +313,7 @@ extension Lexer {
     /// diagnostic occurred.
     let error: Cursor.LexingDiagnostic?
     let stateTransition: StateTransition?
-    /// If set, overritdes the trailing trivia lexing mode of the current state
+    /// If set, overrides the trailing trivia lexing mode of the current state
     /// for this lexeme.
     let trailingTriviaLexingMode: Lexer.Cursor.TriviaLexingMode?
 
@@ -685,7 +685,7 @@ extension Lexer.Cursor {
     }
   }
 
-  /// Advance the cursor while `predicate` is satsified.
+  /// Advance the cursor while `predicate` is satisfied.
   mutating func advance(while predicate: (Unicode.Scalar) -> Bool) {
     while self.advance(if: predicate) {}
   }
@@ -697,7 +697,7 @@ extension Lexer.Cursor {
     }
   }
 
-  /// Returns `true` if the comment spaned multiple lines and `false` otherwise.
+  /// Returns `true` if the comment spanned multiple lines and `false` otherwise.
   /// Assumes that the curser is currently pointing at the `*` of the opening `/*`.
   mutating func advanceToEndOfSlashStarComment(slashPosition: Lexer.Cursor) -> TriviaResult {
     precondition(self.previous == UInt8(ascii: "/"))
@@ -765,7 +765,7 @@ extension Lexer.Cursor {
   /// Assumes that the lexer is currently pointing at the character after the first `"`.
   /// In other words, the `"` is expected to already be consumed.
   ///
-  /// `openingRawStringDelimiters` are the number of `#` that are preceeding the `"`.
+  /// `openingRawStringDelimiters` are the number of `#` that are preceding the `"`.
   /// This is used to disambiguate e.g. `#"""#` as a single-line string literal.
   /// If we are looking for the closing `"""` of a string literal, this is `nil`.
   mutating func advanceIfMultilineStringDelimiter(
@@ -1285,7 +1285,7 @@ extension Lexer.Cursor {
       // 0o[0-7][0-7_]*
 
       let zeroConsumed = self.advance(matching: "0")  // Consume '0'
-      let oConsumed = self.advance(matching: "o")  // Consome 'o'
+      let oConsumed = self.advance(matching: "o")  // Consume 'o'
       precondition(zeroConsumed && oConsumed)
       if let peeked = self.peek(), peeked < UInt8(ascii: "0") || peeked > UInt8(ascii: "7") {
         let errorPos = self
@@ -1604,7 +1604,7 @@ extension Lexer.Cursor {
   }
 
   /// Lexes a single character in a string literal, handling escape sequences
-  /// like `\n` or `\u{1234}` as a a single character.
+  /// like `\n` or `\u{1234}` as a single character.
   mutating func lexCharacterInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> CharacterLex {
     switch self.peek() {
     case UInt8(ascii: #"""#):
@@ -2303,7 +2303,7 @@ extension Lexer.Cursor {
     case lexemeContents(Lexer.Result)
   }
 
-  /// Assuming the cursor is positioned at neighter a valid identifier nor a
+  /// Assuming the cursor is positioned at neither a valid identifier nor a
   /// valid operator start, advance the cursor by what can be considered a
   /// lexeme.
   mutating func lexUnknown() -> UnknownCharactersClassification {

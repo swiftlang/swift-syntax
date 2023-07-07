@@ -60,7 +60,7 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: .availabilityLabeledArgument,
     base: .syntax,
     nameForDiagnostics: "availability argument",
-    documentation: "A argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
+    documentation: "An argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
     children: [
       Child(
         name: "Label",

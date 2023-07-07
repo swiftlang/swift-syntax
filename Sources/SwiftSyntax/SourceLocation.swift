@@ -38,7 +38,7 @@ public struct SourceLocation: Hashable, Codable {
   /// this is the same as `line`.
   public let presumedLine: Int
 
-  /// The file in which the the location resides when respecting `#sourceLocation`
+  /// The file in which the location resides when respecting `#sourceLocation`
   /// directives.
   ///
   /// If the location has been adjusted using `#sourceLocation` directives, this
@@ -161,7 +161,7 @@ fileprivate struct SourceLocationDirectiveArguments {
 /// part of the same tree that was used to initialize this class.
 public final class SourceLocationConverter {
   private let file: String
-  /// The source of the file, modelled as data so it can contain invalid UTF-8.
+  /// The source of the file, modeled as data so it can contain invalid UTF-8.
   private let source: [UInt8]
   /// Array of lines and the position at the start of the line.
   private let lines: [AbsolutePosition]
@@ -177,7 +177,7 @@ public final class SourceLocationConverter {
   ///   if spelled as `#sourceLocation()` to reset the source location directive.
   private var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
 
-  /// Create a new ``SourceLocationConverter`` to convert betwen ``AbsolutePosition``
+  /// Create a new ``SourceLocationConverter`` to convert between ``AbsolutePosition``
   /// and ``SourceLocation`` in a syntax tree.
   ///
   /// This converter ignores any malformed `#sourceLocation` directives, e.g.

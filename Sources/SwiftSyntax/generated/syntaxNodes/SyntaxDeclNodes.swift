@@ -3547,9 +3547,9 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - initKeyword: The init keyword
   ///   - optionalMark: If the initializer is failable, a question mark to indicate that.
   ///   - genericParameterClause: Generic parameters of the initializer.
-  ///   - signature: The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid.
+  ///   - signature: The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid.
   ///   - genericWhereClause: If the initializer had generic parameters, a where clause that can restrict those
-  ///   - body: The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.
+  ///   - body: The initializer’s body. Missing if the initializer is a requirement of a protocol declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3778,7 +3778,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid.
+  /// The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid.
   public var signature: FunctionSignatureSyntax {
     get {
       return FunctionSignatureSyntax(data.child(at: 11, parent: Syntax(self))!)
@@ -3816,7 +3816,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.
+  /// The initializer’s body. Missing if the initializer is a requirement of a protocol declaration.
   public var body: CodeBlockSyntax? {
     get {
       return data.child(at: 15, parent: Syntax(self)).map(CodeBlockSyntax.init)

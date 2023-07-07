@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// This file provides compatiblity aliases to keep dependents of SwiftSyntax building.
+// This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
 @available(*, deprecated, renamed: "ImportPathSyntax")
@@ -82,6 +82,6 @@ public extension TokenSyntax {
 }
 
 //==========================================================================//
-// IMPORTANT: If you are tempted to add a compatiblity layer code here      //
+// IMPORTANT: If you are tempted to add a compatibility layer code here     //
 // please insert it in alphabetical order above                             //
 //==========================================================================//

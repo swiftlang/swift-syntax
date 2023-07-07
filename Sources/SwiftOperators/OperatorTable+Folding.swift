@@ -462,7 +462,7 @@ extension OperatorTable {
   /// Syntax rewriter that folds all of the sequence expressions it
   /// encounters.
   private class SequenceFolder: SyntaxRewriter {
-    /// The first operator precedecence that caused the error handler to
+    /// The first operator precedence that caused the error handler to
     /// also throw.
     var firstFatalError: OperatorError? = nil
 

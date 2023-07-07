@@ -269,13 +269,13 @@ extension Parser {
           )
           break
         } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
-          let typeOrProtocol = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
+          let metatypeSpecifier = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
               baseType: base,
               unexpectedPeriod,
               period: period,
-              typeOrProtocol: typeOrProtocol,
+              metatypeSpecifier: metatypeSpecifier,
               arena: self.arena
             )
           )

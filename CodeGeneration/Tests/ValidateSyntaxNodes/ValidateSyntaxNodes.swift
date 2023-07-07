@@ -74,6 +74,20 @@ fileprivate extension Child {
   func hasSameType(as other: Child) -> Bool {
     return name == other.name && kind.hasSameType(as: other.kind) && isOptional == other.isOptional
   }
+
+  func isFollowedByColonToken(in node: LayoutNode) -> Bool {
+    guard let childIndex = node.children.firstIndex(where: { $0.name == self.name }) else {
+      preconditionFailure("\(self.name) is not a child of \(node.kind.syntaxType)")
+    }
+    guard childIndex + 2 < node.children.count else {
+      return false
+    }
+    if case .token(choices: [.token(tokenKind: "ColonToken")], _, _) = node.children[childIndex + 2].kind {
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
 class ValidateSyntaxNodes: XCTestCase {
@@ -102,13 +116,13 @@ class ValidateSyntaxNodes: XCTestCase {
   /// Implementation detail of `testSingleTokenChoiceChildNaming`, validating a single child.
   ///
   /// - Returns: A failure message if validation failed, otherwise `nil`
-  private func validateSingleTokenChoiceChild(child: Child, childIndex: Int, in node: LayoutNode) -> String? {
+  private func validateSingleTokenChoiceChild(child: Child, in node: LayoutNode) -> String? {
     guard case .token(choices: let tokenChoices, _, _) = child.kind, let choice = tokenChoices.only else {
       return nil
     }
     switch choice {
     case .keyword(text: let keyword):
-      if childIndex + 2 < node.children.count, case .token(choices: [.token(tokenKind: "ColonToken")], _, _) = node.children[childIndex + 2].kind {
+      if child.isFollowedByColonToken(in: node) {
         if child.name != "\(keyword.withFirstCharacterUppercased)Label" {
           return
             "child '\(child.name)' has a single keyword as its only token choice and is followed by a colon. It should thus be named '\(keyword.withFirstCharacterUppercased)Label'"
@@ -148,8 +162,8 @@ class ValidateSyntaxNodes: XCTestCase {
   func testSingleTokenChoiceChildNaming() {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-      for (childIndex, child) in node.children.enumerated() {
-        if let failureMessage = validateSingleTokenChoiceChild(child: child, childIndex: childIndex, in: node) {
+      for child in node.children {
+        if let failureMessage = validateSingleTokenChoiceChild(child: child, in: node) {
           failures.append(ValidationFailure(node: node.kind, message: failureMessage))
         }
       }
@@ -189,11 +203,11 @@ class ValidateSyntaxNodes: XCTestCase {
         // If there are two tokens of the same kind in a node, we can't follow the naming rule without conflict
         ValidationFailure(
           node: .differentiableAttributeArguments,
-          message: "child 'DiffKindComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
+          message: "child 'KindSpecifierComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
         ),
         ValidationFailure(
           node: .differentiableAttributeArguments,
-          message: "child 'DiffParamsComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
+          message: "child 'ParametersComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
         ),
         ValidationFailure(
           node: .poundSourceLocationArgs,
@@ -292,17 +306,26 @@ class ValidateSyntaxNodes: XCTestCase {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for child in node.children {
-        if case .token(choices: let tokenChoices, _, _) = child.kind,
-          tokenChoices.count > 1,  // single token choices are handled by `validateSingleTokenChoiceChildNaming`
-          tokenChoices.allSatisfy({ $0.isKeyword }),
-          !child.name.hasSuffix("Keyword")
-        {
-          failures.append(
-            ValidationFailure(
-              node: node.kind,
-              message: "child '\(child.name)' only has keywords as its token choices and should thus and with 'Keyword'"
-            )
-          )
+        guard case .token(choices: let tokenChoices, _, _) = child.kind,
+          tokenChoices.count > 1,
+          tokenChoices.allSatisfy({ $0.isKeyword })
+        else {
+          // Not a child with only keyword choices
+          // Single token choices are handled by `validateSingleTokenChoiceChildNaming`
+          continue
+        }
+        var failureMessage: String?
+        if child.isFollowedByColonToken(in: node) {
+          if !child.name.hasSuffix("Label") {
+            failureMessage = "child '\(child.name)' only has keywords as its token choices, is followed by a colon and should thus end with 'Label'"
+          }
+        } else {
+          if !child.name.hasSuffix("Specifier") {
+            failureMessage = "child '\(child.name)' only has keywords as its token choices and should thus end with 'Specifier'"
+          }
+        }
+        if let failureMessage {
+          failures.append(ValidationFailure(node: node.kind, message: failureMessage))
         }
       }
     }
@@ -310,61 +333,48 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(node: .accessorDecl, message: "child 'AccessorKind' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(node: .attributedType, message: "child 'Specifier' only has keywords as its token choices and should thus and with 'Keyword'"),
+        // MARK: Only one non-deprecated keyword
         ValidationFailure(
-          node: .availabilityLabeledArgument,
-          message: "child 'Label' only has keywords as its token choices and should thus and with 'Keyword'"
+          node: .discardStmt,
+          message: "child 'DiscardKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
+            // DiscardKeyword can be 'discard' or '_forget' and '_forget' is deprecated
         ),
+        ValidationFailure(
+          node: .moveExpr,
+          message: "child 'ConsumeKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
+            // ConsumeKeyword can be 'consume' or '_move' and '_move' is deprecated
+        ),
+
+        // MARK: Conceptually a value, not a specifier
         ValidationFailure(
           node: .booleanLiteralExpr,
-          message: "child 'BooleanLiteral' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(node: .canImportVersionInfo, message: "child 'Label' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(
-          node: .closureCaptureItemSpecifier,
-          message: "child 'Specifier' only has keywords as its token choices and should thus and with 'Keyword'"
+          message: "child 'Literal' only has keywords as its token choices and should thus end with 'Specifier'"
+            // TrueOrFalseKeyword would be a stupid name here
         ),
         ValidationFailure(
-          node: .closureCaptureItemSpecifier,
-          message: "child 'Detail' only has keywords as its token choices and should thus and with 'Keyword'"
+          node: .precedenceGroupAssignment,
+          message: "child 'Value' only has keywords as its token choices and should thus end with 'Specifier'"
         ),
-        ValidationFailure(
-          node: .constrainedSugarType,
-          message: "child 'SomeOrAnySpecifier' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(node: .declModifier, message: "child 'Name' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(
-          node: .derivativeRegistrationAttributeArguments,
-          message: "child 'AccessorKind' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(
-          node: .differentiableAttributeArguments,
-          message: "child 'DiffKind' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(
-          node: .documentationAttributeArgument,
-          message: "child 'Label' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(
-          node: .functionEffectSpecifiers,
-          message: "child 'AsyncSpecifier' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(
-          node: .functionEffectSpecifiers,
-          message: "child 'ThrowsSpecifier' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(node: .importDecl, message: "child 'ImportKind' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(
-          node: .layoutRequirement,
-          message: "child 'LayoutConstraint' only has keywords as its token choices and should thus and with 'Keyword'"
-        ),
-        ValidationFailure(node: .metatypeType, message: "child 'TypeOrProtocol' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(node: .operatorDecl, message: "child 'Fixity' only has keywords as its token choices and should thus and with 'Keyword'"),
-        ValidationFailure(node: .precedenceGroupAssignment, message: "child 'Flag' only has keywords as its token choices and should thus and with 'Keyword'"),
         ValidationFailure(
           node: .precedenceGroupAssociativity,
-          message: "child 'Value' only has keywords as its token choices and should thus and with 'Keyword'"
+          message: "child 'Value' only has keywords as its token choices and should thus end with 'Specifier'"
+        ),
+
+        // MARK: Miscellaneous
+        // 'weak' or 'unowned' are already the specifier, this is the detail in parens
+        ValidationFailure(
+          node: .closureCaptureItemSpecifier,
+          message: "child 'Detail' only has keywords as its token choices and should thus end with 'Specifier'"
+        ),
+        // This really is the modifier name and not a specifier
+        ValidationFailure(
+          node: .declModifier,
+          message: "child 'Name' only has keywords as its token choices and should thus end with 'Specifier'"
+        ),
+        // Conceptually, this isn't a specifier, it's more like a type inheritance
+        ValidationFailure(
+          node: .layoutRequirement,
+          message: "child 'LayoutConstraint' only has keywords as its token choices and should thus end with 'Specifier'"
         ),
       ]
     )

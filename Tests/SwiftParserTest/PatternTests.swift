@@ -19,7 +19,7 @@ final class PatternTests: XCTestCase {
     // let E<Int>.e(y)
     Syntax(
       ValueBindingPatternSyntax(
-        bindingKeyword: .keyword(.let),
+        bindingSpecifier: .keyword(.let),
         valuePattern: ExpressionPatternSyntax(
           expression: FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
@@ -73,7 +73,7 @@ final class PatternTests: XCTestCase {
     // let (y[0], z)
     Syntax(
       ValueBindingPatternSyntax(
-        bindingKeyword: .keyword(.let),
+        bindingSpecifier: .keyword(.let),
         valuePattern: ExpressionPatternSyntax(
           expression: TupleExprSyntax(
             elements: .init([
@@ -125,7 +125,7 @@ final class PatternTests: XCTestCase {
     // let y[z]
     Syntax(
       ValueBindingPatternSyntax(
-        bindingKeyword: .keyword(.let),
+        bindingSpecifier: .keyword(.let),
         valuePattern: ExpressionPatternSyntax(
           expression: SubscriptExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),

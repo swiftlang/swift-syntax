@@ -26,7 +26,7 @@ extension Operator {
   /// Synthesize a syntactic representation of this operator based on its
   /// semantic definition.
   public func synthesizedSyntax() -> OperatorDeclSyntax {
-    let fixity = TokenSyntax.keyword(kind.keyword)
+    let fixitySpecifier = TokenSyntax.keyword(kind.keyword)
     let operatorKeyword = TokenSyntax.keyword(.operator, leadingTrivia: .space)
     let identifierSyntax =
       TokenSyntax.binaryOperator(name, leadingTrivia: .space)
@@ -39,7 +39,7 @@ extension Operator {
     }
 
     return OperatorDeclSyntax(
-      fixity: fixity,
+      fixitySpecifier: fixitySpecifier,
       operatorKeyword: operatorKeyword,
       identifier: identifierSyntax,
       operatorPrecedenceAndTypes: precedenceGroupSyntax
@@ -56,7 +56,7 @@ extension PrecedenceRelation {
     indentation: Int = 4
   ) -> PrecedenceGroupRelationSyntax {
     PrecedenceGroupRelationSyntax(
-      higherThanOrLowerThanKeyword: .keyword(
+      higherThanOrLowerThanLabel: .keyword(
         kind.keyword,
         leadingTrivia: [.newlines(1), .spaces(indentation)]
       ),
@@ -126,7 +126,7 @@ extension PrecedenceGroup {
                 leadingTrivia: [.newlines(1), .spaces(indentation)]
               ),
             colon: .colonToken(),
-            flag: .keyword(.true, leadingTrivia: .space)
+            value: .keyword(.true, leadingTrivia: .space)
           )
         )
       )

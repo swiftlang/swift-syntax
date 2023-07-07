@@ -290,7 +290,7 @@ final class ErrorsTests: XCTestCase {
               item: .decl(
                 DeclSyntax(
                   VariableDeclSyntax(
-                    bindingKeyword: .keyword(.let),
+                    bindingSpecifier: .keyword(.let),
                     bindings: PatternBindingListSyntax([
                       PatternBindingSyntax(
                         pattern: WildcardPatternSyntax(),

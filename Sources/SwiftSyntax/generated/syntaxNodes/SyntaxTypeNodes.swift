@@ -1400,7 +1400,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `baseType`: ``TypeSyntax``
 ///  - `period`: `'.'`
-///  - `typeOrProtocol`: (`'Type'` | `'Protocol'`)
+///  - `metatypeSpecifier`: (`'Type'` | `'Protocol'`)
 public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1428,9 +1428,9 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       baseType: some TypeSyntaxProtocol,
       _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax = .periodToken(),
-      _ unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? = nil,
-      typeOrProtocol: TokenSyntax,
-      _ unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPeriodAndMetatypeSpecifier: UnexpectedNodesSyntax? = nil,
+      metatypeSpecifier: TokenSyntax,
+      _ unexpectedAfterMetatypeSpecifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1441,18 +1441,18 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             baseType, 
             unexpectedBetweenBaseTypeAndPeriod, 
             period, 
-            unexpectedBetweenPeriodAndTypeOrProtocol, 
-            typeOrProtocol, 
-            unexpectedAfterTypeOrProtocol
+            unexpectedBetweenPeriodAndMetatypeSpecifier, 
+            metatypeSpecifier, 
+            unexpectedAfterMetatypeSpecifier
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType.raw, 
           unexpectedBetweenBaseTypeAndPeriod?.raw, 
           period.raw, 
-          unexpectedBetweenPeriodAndTypeOrProtocol?.raw, 
-          typeOrProtocol.raw, 
-          unexpectedAfterTypeOrProtocol?.raw
+          unexpectedBetweenPeriodAndMetatypeSpecifier?.raw, 
+          metatypeSpecifier.raw, 
+          unexpectedAfterMetatypeSpecifier?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.metatypeType,
@@ -1503,7 +1503,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndMetatypeSpecifier: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1512,7 +1512,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var typeOrProtocol: TokenSyntax {
+  public var metatypeSpecifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -1521,7 +1521,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMetatypeSpecifier: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1536,9 +1536,9 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.baseType, 
           \Self.unexpectedBetweenBaseTypeAndPeriod, 
           \Self.period, 
-          \Self.unexpectedBetweenPeriodAndTypeOrProtocol, 
-          \Self.typeOrProtocol, 
-          \Self.unexpectedAfterTypeOrProtocol
+          \Self.unexpectedBetweenPeriodAndMetatypeSpecifier, 
+          \Self.metatypeSpecifier, 
+          \Self.unexpectedAfterMetatypeSpecifier
         ])
   }
 }

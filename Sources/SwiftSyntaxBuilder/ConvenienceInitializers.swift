@@ -70,7 +70,7 @@ extension BinaryOperatorExprSyntax {
 
 extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {
   public init(_ value: Bool) {
-    self.init(booleanLiteral: value ? .keyword(.true) : .keyword(.false))
+    self.init(literal: value ? .keyword(.true) : .keyword(.false))
   }
 
   public init(booleanLiteral value: Bool) {
@@ -358,7 +358,7 @@ extension VariableDeclSyntax {
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
     modifiers: ModifierListSyntax? = nil,
-    _ bindingKeyword: Keyword,
+    _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,
     initializer: InitializerClauseSyntax? = nil
@@ -367,7 +367,7 @@ extension VariableDeclSyntax {
       leadingTrivia: leadingTrivia,
       attributes: attributes?.with(\.trailingTrivia, .space),
       modifiers: modifiers,
-      bindingKeyword: .keyword(bindingKeyword)
+      bindingSpecifier: .keyword(bindingSpecifier)
     ) {
       PatternBindingSyntax(
         pattern: name,

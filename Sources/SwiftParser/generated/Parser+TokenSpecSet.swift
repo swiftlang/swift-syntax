@@ -15,7 +15,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension AccessorDeclSyntax {
-  enum AccessorKindOptions: TokenSpecSet {
+  enum AccessorSpecifierOptions: TokenSpecSet {
     case get
     case set
     case didSet
@@ -245,7 +245,7 @@ extension AvailabilityLabeledArgumentSyntax {
 }
 
 extension BooleanLiteralExprSyntax {
-  enum BooleanLiteralOptions: TokenSpecSet {
+  enum LiteralOptions: TokenSpecSet {
     case `true`
     case `false`
     
@@ -695,7 +695,7 @@ extension DeclNameSyntax {
 }
 
 extension DerivativeRegistrationAttributeArgumentsSyntax {
-  enum AccessorKindOptions: TokenSpecSet {
+  enum AccessorSpecifierOptions: TokenSpecSet {
     case get
     case set
     
@@ -754,7 +754,7 @@ extension DifferentiabilityParamSyntax {
 }
 
 extension DifferentiableAttributeArgumentsSyntax {
-  enum DiffKindOptions: TokenSpecSet {
+  enum KindSpecifierOptions: TokenSpecSet {
     case _forward
     case reverse
     case _linear
@@ -1150,7 +1150,7 @@ extension IfConfigClauseSyntax {
 }
 
 extension ImportDeclSyntax {
-  enum ImportKindOptions: TokenSpecSet {
+  enum ImportKindSpecifierOptions: TokenSpecSet {
     case `typealias`
     case `struct`
     case `class`
@@ -1444,7 +1444,7 @@ extension MemberTypeIdentifierSyntax {
 }
 
 extension MetatypeTypeSyntax {
-  enum TypeOrProtocolOptions: TokenSpecSet {
+  enum MetatypeSpecifierOptions: TokenSpecSet {
     case `Type`
     case `Protocol`
     
@@ -1471,7 +1471,7 @@ extension MetatypeTypeSyntax {
 }
 
 extension MoveExprSyntax {
-  enum MoveKeywordOptions: TokenSpecSet {
+  enum ConsumeKeywordOptions: TokenSpecSet {
     case _move
     case consume
     
@@ -1525,7 +1525,7 @@ extension MultipleTrailingClosureElementSyntax {
 }
 
 extension OperatorDeclSyntax {
-  enum FixityOptions: TokenSpecSet {
+  enum FixitySpecifierOptions: TokenSpecSet {
     case prefix
     case postfix
     case infix
@@ -1589,7 +1589,7 @@ extension OperatorDeclSyntax {
 }
 
 extension OptionalBindingConditionSyntax {
-  enum BindingKeywordOptions: TokenSpecSet {
+  enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`
@@ -1621,7 +1621,7 @@ extension OptionalBindingConditionSyntax {
 }
 
 extension PrecedenceGroupAssignmentSyntax {
-  enum FlagOptions: TokenSpecSet {
+  enum ValueOptions: TokenSpecSet {
     case `true`
     case `false`
     
@@ -1680,7 +1680,7 @@ extension PrecedenceGroupAssociativitySyntax {
 }
 
 extension PrecedenceGroupRelationSyntax {
-  enum HigherThanOrLowerThanKeywordOptions: TokenSpecSet {
+  enum HigherThanOrLowerThanLabelOptions: TokenSpecSet {
     case higherThan
     case lowerThan
     
@@ -2022,7 +2022,7 @@ extension UnresolvedAsExprSyntax {
 }
 
 extension ValueBindingPatternSyntax {
-  enum BindingKeywordOptions: TokenSpecSet {
+  enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`
@@ -2054,7 +2054,7 @@ extension ValueBindingPatternSyntax {
 }
 
 extension VariableDeclSyntax {
-  enum BindingKeywordOptions: TokenSpecSet {
+  enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`

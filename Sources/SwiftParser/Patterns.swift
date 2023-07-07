@@ -124,11 +124,11 @@ extension Parser {
     case (.let, let handle)?,
       (.var, let handle)?,
       (.inout, let handle)?:
-      let bindingKeyword = self.eat(handle)
+      let bindingSpecifier = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          bindingKeyword: bindingKeyword,
+          bindingSpecifier: bindingSpecifier,
           valuePattern: value,
           arena: self.arena
         )
@@ -259,11 +259,11 @@ extension Parser {
     case (.var, let handle)?,
       (.let, let handle)?,
       (.inout, let handle)?:
-      let bindingKeyword = self.eat(handle)
+      let bindingSpecifier = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
-          bindingKeyword: bindingKeyword,
+          bindingSpecifier: bindingSpecifier,
           valuePattern: value,
           arena: self.arena
         )

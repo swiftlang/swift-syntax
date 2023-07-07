@@ -502,7 +502,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
       break
     case .accessors(let node):
       for accessor in node.accessors {
-        switch accessor.accessorKind.tokenKind {
+        switch accessor.accessorSpecifier.tokenKind {
         case .keyword(.get), .keyword(.set):
           return []
         default:

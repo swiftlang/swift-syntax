@@ -440,7 +440,7 @@ extension Parser {
         )
       )
     case (._move, let handle)?:
-      let moveTok = self.eat(handle)
+      let moveKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
         forDirective: forDirective,
@@ -448,7 +448,7 @@ extension Parser {
       )
       return RawExprSyntax(
         RawMoveExprSyntax(
-          moveKeyword: moveTok,
+          consumeKeyword: moveKeyword,
           expression: sub,
           arena: self.arena
         )
@@ -512,7 +512,7 @@ extension Parser {
         break EXPR_PREFIX
       }
 
-      let consumeTok = self.eat(handle)
+      let consumeKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
         forDirective: forDirective,
@@ -520,7 +520,7 @@ extension Parser {
       )
       return RawExprSyntax(
         RawMoveExprSyntax(
-          moveKeyword: consumeTok,
+          consumeKeyword: consumeKeyword,
           expression: sub,
           arena: self.arena
         )
@@ -1212,10 +1212,10 @@ extension Parser {
       )
     case (.true, let handle)?,
       (.false, let handle)?:
-      let tok = self.eat(handle)
+      let literal = self.eat(handle)
       return RawExprSyntax(
         RawBooleanLiteralExprSyntax(
-          booleanLiteral: tok,
+          literal: literal,
           arena: self.arena
         )
       )

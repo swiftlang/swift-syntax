@@ -258,7 +258,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \ObjCSelectorPieceSyntax.name:
     return "name"
-  case \OperatorDeclSyntax.fixity:
+  case \OperatorDeclSyntax.fixitySpecifier:
     return "fixity"
   case \OperatorPrecedenceAndTypesSyntax.precedenceGroup:
     return "precedence group"

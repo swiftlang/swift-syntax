@@ -224,7 +224,7 @@ public class SyntaxVisitorTests: XCTestCase {
     }
 
     let source = VariableDeclSyntax(
-      bindingKeyword: .keyword(.let, trailingTrivia: .space),
+      bindingSpecifier: .keyword(.let, trailingTrivia: .space),
       bindings: PatternBindingListSyntax([
         PatternBindingSyntax(
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("a", trailingTrivia: .space))),

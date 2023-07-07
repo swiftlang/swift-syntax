@@ -27,7 +27,7 @@ final class StatementTests: XCTestCase {
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  bindingKeyword: .keyword(.let),
+                  bindingSpecifier: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .identifier("baz"))
                 )
               )
@@ -53,7 +53,7 @@ final class StatementTests: XCTestCase {
             ConditionElementSyntax(
               condition: .init(
                 OptionalBindingConditionSyntax(
-                  bindingKeyword: .keyword(.let),
+                  bindingSpecifier: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .keyword(.self)),
                   initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .keyword(.self)))
                 )
@@ -480,7 +480,7 @@ final class StatementTests: XCTestCase {
                   TupleExprElementSyntax(
                     label: .identifier("isUnique"),
                     colon: .colonToken(),
-                    expression: BooleanLiteralExprSyntax(booleanLiteral: .keyword(.true))
+                    expression: BooleanLiteralExprSyntax(literal: .keyword(.true))
                   ),
                 ]),
                 rightSquare: .rightSquareToken()

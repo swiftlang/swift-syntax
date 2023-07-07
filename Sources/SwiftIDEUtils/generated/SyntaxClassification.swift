@@ -91,7 +91,7 @@ extension SyntaxClassification {
       return (.operatorIdentifier, false)
     case \PrecedenceGroupAssociativitySyntax.associativityLabel:
       return (.keyword, false)
-    case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanKeyword:
+    case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanLabel:
       return (.keyword, false)
     case \SimpleTypeIdentifierSyntax.name:
       return (.typeIdentifier, false)

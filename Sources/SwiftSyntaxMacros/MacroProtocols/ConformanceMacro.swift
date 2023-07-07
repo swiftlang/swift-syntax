@@ -51,13 +51,13 @@ extension ConformanceMacro {
     for (proto, whereClause) in newConformances {
       let decl: DeclSyntax =
         """
-        extension \(type.trimmed): \(proto) {}
+        extension \(type.trimmed): \(proto.trimmed) {}
         """
 
       var extensionDecl = decl.cast(ExtensionDeclSyntax.self)
 
       if let whereClause {
-        extensionDecl = extensionDecl.with(\.genericWhereClause, whereClause)
+        extensionDecl = extensionDecl.with(\.genericWhereClause, whereClause.trimmed)
       }
 
       extensions.append(extensionDecl)

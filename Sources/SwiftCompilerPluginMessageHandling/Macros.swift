@@ -168,7 +168,7 @@ private extension MacroRole {
     case .memberAttribute: self = .memberAttribute
     case .member: self = .member
     case .peer: self = .peer
-    case .conformance: self = .conformance
+    case .conformance: self = .extension
     case .codeItem: self = .codeItem
     case .extension: self = .extension
     }

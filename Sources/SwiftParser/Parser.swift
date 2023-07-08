@@ -257,6 +257,22 @@ extension Parser {
     return self.consumeAnyToken()
   }
 
+  /// Consumes remaining token on the line and returns a ``RawUnexpectedNodesSyntax``
+  /// if there is any tokens consumed.
+  mutating func consumeRemainingTokenOnLine() -> RawUnexpectedNodesSyntax? {
+    guard !self.currentToken.isAtStartOfLine else {
+      return nil
+    }
+
+    var unexpectedTokens = [RawTokenSyntax]()
+    var loopProgress = LoopProgressCondition()
+    while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+      unexpectedTokens += [self.consumeAnyToken()]
+    }
+
+    return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
+  }
+
 }
 
 // MARK: Check if we can recover to a token

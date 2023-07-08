@@ -106,12 +106,14 @@ extension Parser {
     // Parse #if
     let (unexpectedBeforePoundIfKeyword, poundIfKeyword) = self.expect(.poundIfKeyword)
     let condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+    let unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
 
     clauses.append(
       RawIfConfigClauseSyntax(
         unexpectedBeforePoundIfKeyword,
         poundKeyword: poundIfKeyword,
         condition: condition,
+        unexpectedBetweenConditionAndElements,
         elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
         arena: self.arena
       )
@@ -271,21 +273,5 @@ extension Parser {
       unexpectedAfterRightParen,
       arena: self.arena
     )
-  }
-
-  /// Consumes remaining token on the line and returns a ``RawUnexpectedNodesSyntax``
-  /// if there is any tokens consumed.
-  private mutating func consumeRemainingTokenOnLine() -> RawUnexpectedNodesSyntax? {
-    guard !self.currentToken.isAtStartOfLine else {
-      return nil
-    }
-
-    var unexpectedTokens = [RawTokenSyntax]()
-    var loopProgress = LoopProgressCondition()
-    while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
-      unexpectedTokens += [self.consumeAnyToken()]
-    }
-
-    return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
   }
 }

@@ -1100,6 +1100,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedBetweenConditionAndElements = node.unexpectedBetweenConditionAndElements {
+      addDiagnostic(
+        unexpectedBetweenConditionAndElements,
+        .extraTokensFollowingConditionalCompilationDirective,
+        handledNodes: [unexpectedBetweenConditionAndElements.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     for clause in node.clauses where clause.hasError {
       if let unexpectedBeforePoundKeyword = clause.unexpectedBeforePoundKeyword,

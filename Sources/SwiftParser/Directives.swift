@@ -125,11 +125,13 @@ extension Parser {
       var unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax?
       var poundKeyword: RawTokenSyntax
       let condition: RawExprSyntax?
+      let unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax?
 
       switch match {
       case .poundElseifKeyword:
         (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
         condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+        unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
       case .poundElseKeyword:
         (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
         if let ifToken = self.consume(if: .init(.if, allowAtStartOfLine: false)) {
@@ -139,6 +141,7 @@ extension Parser {
         } else {
           condition = nil
         }
+        unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
       case .pound:
         if self.atElifTypo() {
           (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
@@ -148,6 +151,7 @@ extension Parser {
           unexpectedBeforePoundKeyword = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundKeyword, poundKeyword, elif, arena: self.arena)
           poundKeyword = self.missingToken(.poundElseifKeyword)
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
+          unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
         } else {
           break LOOP
         }
@@ -158,6 +162,7 @@ extension Parser {
           unexpectedBeforePoundKeyword,
           poundKeyword: poundKeyword,
           condition: condition,
+          unexpectedBetweenConditionAndElements,
           elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
           arena: self.arena
         )

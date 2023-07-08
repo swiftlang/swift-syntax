@@ -246,6 +246,61 @@ final class DirectiveTests: XCTestCase {
     )
   }
 
+  func testElseIfFollowByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #elseif UAT1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #elseif UAT || UAT1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
+  func testElseFollowByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #else1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
   func testSourcelocationDirectiveFollowedByDeclarations() {
     assertParse(
       """

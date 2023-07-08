@@ -4162,7 +4162,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MissingExprSyntax
 
-/// In case the source code is missing a expression, this node stands in place of the missing expression.
+/// In case the source code is missing an expression, this node stands in place of the missing expression.
 ///
 /// ### Children
 /// 

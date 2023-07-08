@@ -113,7 +113,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         func postThrows() throws -> Int {
@@ -131,7 +131,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         func postThrows2() throws -> Int {
@@ -149,7 +149,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["move 'rethrows' in front of '->'"])
+        DiagnosticSpec(message: "'rethrows' must precede '->'", fixIts: ["move 'rethrows' in front of '->'"])
       ],
       fixedSource: """
         func postRethrows(_ f: () throws -> Int) rethrows -> Int {
@@ -167,7 +167,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'rethrows' must preceed '->'", fixIts: ["move 'rethrows' in front of '->'"])
+        DiagnosticSpec(message: "'rethrows' must precede '->'", fixIts: ["move 'rethrows' in front of '->'"])
       ],
       fixedSource: """
         func postRethrows2(_ f: () throws -> Int) rethrows -> Int {
@@ -185,7 +185,7 @@ final class ErrorsTests: XCTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         func postThrows3() {
@@ -209,12 +209,12 @@ final class ErrorsTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "'throws' must preceed '->'",
+          message: "'throws' must precede '->'",
           fixIts: ["remove redundant 'throws'"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "'throw' must preceed '->'",
+          message: "'throw' must precede '->'",
           fixIts: ["remove redundant 'throw'"]
         ),
       ],
@@ -231,7 +231,7 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'rethrows' must preceed '->'",
+          message: "'rethrows' must precede '->'",
           fixIts: ["remove redundant 'rethrows'"]
         )
       ],
@@ -266,7 +266,7 @@ final class ErrorsTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'throws' must preceed '->'",
+          message: "'throws' must precede '->'",
           fixIts: ["remove redundant 'throws'"]
         )
       ],
@@ -368,7 +368,7 @@ final class ErrorsTests: XCTestCase {
       let fn: () -> 1️⃣throws Void
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         let fn: () throws -> Void

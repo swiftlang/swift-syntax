@@ -1030,7 +1030,7 @@ extension Parser {
         )
       } else if self.at(.colon) {
         var lookahead = self.lookahead()
-        // We only want to continue with a dictionary if we can parse a colon and a simpletype.
+        // We only want to continue with a dictionary if we can parse a colon and a simple type.
         // Otherwise we can get a wrong diagnostic if we get a Python-style function declaration.
         guard lookahead.consume(if: .colon) != nil && lookahead.canParseSimpleType(),
           let colon = self.consume(if: TokenSpec(.colon, allowAtStartOfLine: false))

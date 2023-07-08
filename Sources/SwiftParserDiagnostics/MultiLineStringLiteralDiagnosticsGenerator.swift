@@ -13,7 +13,7 @@
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 
-/// A diagnostic that `MultiLineStringLiteralIndentatinDiagnosticsGenerator` is building.
+/// A diagnostic that `MultiLineStringLiteralIndentationDiagnosticsGenerator` is building.
 /// As indentation errors are found on more lines, this diagnostic is modified
 /// to include more fixIts.
 private struct InProgressDiagnostic {
@@ -25,18 +25,18 @@ private struct InProgressDiagnostic {
   var handledNodes: [SyntaxIdentifier]
 }
 
-final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor {
+final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor {
 
   // MARK: Entry
 
   public static func diagnose(_ node: StringLiteralExprSyntax) -> [(diagnostic: Diagnostic, handledNodes: [SyntaxIdentifier])] {
-    let visitor = MultiLineStringLiteralIndentatinDiagnosticsGenerator(closeQuote: node.closeQuote)
+    let visitor = MultiLineStringLiteralIndentationDiagnosticsGenerator(closeQuote: node.closeQuote)
     visitor.walk(node)
     visitor.finishInProgressDiagnostic()
     return visitor.finishedDiagnostics
   }
 
-  // MARK: Implemenatation
+  // MARK: Implementation
 
   private let closeQuote: TokenSyntax
 
@@ -52,7 +52,7 @@ final class MultiLineStringLiteralIndentatinDiagnosticsGenerator: SyntaxVisitor 
   }
 
   private func addIncorrectlyIndentedToken(token: TokenSyntax) {
-    // Determine kind and position of the diagnonstic
+    // Determine kind and position of the diagnostic
     var kind: InvalidIndentationInMultiLineStringLiteralError.Kind = .insufficientIndentation
     var position = token.positionAfterSkippingLeadingTrivia
 

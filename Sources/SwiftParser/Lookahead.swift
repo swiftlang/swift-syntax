@@ -349,7 +349,7 @@ extension Parser.Lookahead {
     case skipUntil(_ t1: TokenSpec, _ t2: TokenSpec)
   }
 
-  /// A non-recursie function to skip tokens.
+  /// A non-recursive function to skip tokens.
   private mutating func skip(initialState: SkippingState) {
     var stack: [SkippingState] = [initialState]
 

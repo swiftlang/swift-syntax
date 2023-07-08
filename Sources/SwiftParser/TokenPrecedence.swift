@@ -22,7 +22,7 @@ enum TokenPrecedence: Comparable {
   case identifierLike
   /// Keywords and operators that can occur in the middle of an expression
   case exprKeyword
-  /// A token that starts a bracketet expression which typically occurs inside
+  /// A token that starts a bracketed expression which typically occurs inside
   /// a statement.
   case weakBracketed(closingDelimiter: RawTokenKind)
   /// A punctuator that can occur inside a statement
@@ -45,7 +45,7 @@ enum TokenPrecedence: Comparable {
   case openingPoundIf
   case closingPoundIf
 
-  /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimeter of the bracketed group.
+  /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimiter of the bracketed group.
   var closingTokenKind: RawTokenKind? {
     switch self {
     case .weakBracketed(closingDelimiter: let closingDelimiter):
@@ -97,7 +97,7 @@ enum TokenPrecedence: Comparable {
     return precedence(lhs) < precedence(rhs)
   }
 
-  /// When expecting a token with `stmtKeyword` precedence or highter, newlines may be skipped to find that token.
+  /// When expecting a token with `stmtKeyword` precedence or higher, newlines may be skipped to find that token.
   /// For lower precedence groups, we consider newlines the end of the lookahead scope.
   var shouldSkipOverNewlines: Bool {
     return self >= .stmtKeyword
@@ -134,7 +134,7 @@ enum TokenPrecedence: Comparable {
       // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
       self = .exprKeyword
 
-    // MARK: Weak bracketet
+    // MARK: Weak bracketed
     case .leftParen:
       self = .weakBracketed(closingDelimiter: .rightParen)
     case .leftSquare:
@@ -158,7 +158,7 @@ enum TokenPrecedence: Comparable {
     .rightAngle, .rightParen, .rightSquare:
       self = .weakBracketClose
 
-    // MARK: Strong bracketet
+    // MARK: Strong bracketed
     case .leftBrace:
       self = .openingBrace(closingDelimiter: .rightBrace)
     case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
@@ -169,7 +169,7 @@ enum TokenPrecedence: Comparable {
     .semicolon,
       // Arrow is a strong indicator in a function type that we are now in the return type
       .arrow,
-      // EOF is here because it is a very stong marker and doesn't belong anywhere else
+      // EOF is here because it is a very strong marker and doesn't belong anywhere else
       .eof:
       self = .strongPunctuator
 

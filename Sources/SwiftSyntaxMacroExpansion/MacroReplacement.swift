@@ -168,13 +168,13 @@ extension MacroDeclSyntax {
   ///
   /// Macros are defined by an expression, which must itself be a macro
   /// expansion. Check the definition and produce a semantic representation of
-  /// it  or one of the "builtin"
+  /// it or one of the "builtin"
   ///
   /// Compute the sequence of parameter replacements required when expanding
   /// the definition of a non-external macro.
   ///
   /// If there are an errors that prevent expansion, the diagnostics will be
-  /// wrapped into a  an error that prevents expansion, that error is thrown.
+  /// wrapped into an error that prevents expansion, that error is thrown.
   public func checkDefinition() throws -> MacroDefinition {
     // Cannot compute replacements for an undefined macro.
     guard let originalDefinition = definition?.value else {

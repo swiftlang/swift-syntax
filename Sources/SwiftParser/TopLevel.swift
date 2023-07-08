@@ -36,7 +36,7 @@ extension Parser {
 
   /// Parse the top level items in a file into a source file.
   ///
-  /// This function is the true parsing entrypoint that the high-level
+  /// This function is the true parsing entry point that the high-level
   /// ``Parser/parse(source:parseTransition:filenameForDiagnostics:languageVersion:enableBareSlashRegexLiteral:)-7tndx``
   /// API calls.
   ///
@@ -225,7 +225,7 @@ extension Parser {
   /// the top level of the source file. If this is the case, we allow skipping
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
-  /// wrapping declaration instead of being consumed by lookeahead.
+  /// wrapping declaration instead of being consumed by lookahead.
   private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax.Item {
     if self.at(.poundIfKeyword) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       // If config of attributes is parsed as part of declaration parsing as it

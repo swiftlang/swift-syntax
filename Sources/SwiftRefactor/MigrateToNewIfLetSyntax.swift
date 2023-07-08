@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftParser
 
 /// ``MigrateToNewIfLetSyntax`` will visit each if expression in the Syntax tree, and
-/// checks if the there is an if condition which is of the pre Swift 5.7 "if-let-style"
+/// checks if there is an if condition which is of the pre Swift 5.7 "if-let-style"
 /// and rewrites it to the new one.
 ///
 /// - Seealso: https://github.com/apple/swift-evolution/blob/main/proposals/0345-if-let-shorthand.md

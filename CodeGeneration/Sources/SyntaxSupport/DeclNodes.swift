@@ -1341,7 +1341,7 @@ public let DECL_NODES: [Node] = [
         name: "Signature",
         kind: .node(kind: .functionSignature),
         nameForDiagnostics: "function signature",
-        documentation: "The arguments of the initializer. While the function signature allows specifying an return clause, doing so is not semantically valid."
+        documentation: "The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid."
       ),
       Child(
         name: "GenericWhereClause",
@@ -1353,7 +1353,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Body",
         kind: .node(kind: .codeBlock),
-        documentation: "The initializer’s body. Missing if the initialier is a requirement of a protocol declaration.",
+        documentation: "The initializer’s body. Missing if the initializer is a requirement of a protocol declaration.",
         isOptional: true
       ),
     ]

@@ -19,7 +19,7 @@ let renamedChildrenBuilderCompatibilityFile = try! SourceFileSyntax(leadingTrivi
   DeclSyntax("import SwiftSyntax")
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
-    if let convenienceInit = try layoutNode.createConvenienceBuilerInitializer(useDeprecatedChildName: true) {
+    if let convenienceInit = try layoutNode.createConvenienceBuilderInitializer(useDeprecatedChildName: true) {
       let deprecatedNames = layoutNode.children
         .filter { !$0.isUnexpectedNodes }
         .compactMap { $0.deprecatedName?.withFirstCharacterLowercased }

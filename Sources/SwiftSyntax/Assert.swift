@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// How to choose `assert` vs. `precondition`:
-///  - Wherever possible, it is preferrable to emit a diagnostic instead of
+///  - Wherever possible, it is preferable to emit a diagnostic instead of
 ///    using `precondition`. This way the parser won't crash if the condition is
 ///    violated.
 ///  - If you think the diagnostic added above should never be emitted, it is

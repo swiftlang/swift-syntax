@@ -138,8 +138,8 @@ For increased performance, the modelling of the syntax node hierarchy has been s
   ```swift
   let identifierExprSyntax: IdentifierExprSyntax = /* ... */
   let node = Syntax(identifierExprSyntax)
-  node.asProtocol(SyntaxProtocol.self) // returns a IdentifierExprSyntax with static type SyntaxProtocol
-  node.asProtocol(ExprSyntaxProtocol.self) // returns a IdentifierExprSyntax with static type ExprSyntaxProtocol?
+  node.asProtocol(SyntaxProtocol.self) // returns an IdentifierExprSyntax with static type SyntaxProtocol
+  node.asProtocol(ExprSyntaxProtocol.self) // returns an IdentifierExprSyntax with static type ExprSyntaxProtocol?
   ```
 
 

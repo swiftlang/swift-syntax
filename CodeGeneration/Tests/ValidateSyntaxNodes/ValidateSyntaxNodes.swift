@@ -158,7 +158,7 @@ class ValidateSyntaxNodes: XCTestCase {
   /// Checks standardized naming of children with a single token choice
   ///
   /// - If a child has a single keyword as its choice, it should be named `*Keyword` (e.g. `ImportKeyword`)
-  /// - If it’s another token kind, name it the same as the the token choice (e.g. `LeftParen`)
+  /// - If it’s another token kind, name it the same as the token choice (e.g. `LeftParen`)
   func testSingleTokenChoiceChildNaming() {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {

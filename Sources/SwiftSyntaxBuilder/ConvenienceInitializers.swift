@@ -138,9 +138,9 @@ extension ExprSyntax {
   ///
   /// Conformances will generally handle edge cases sensibly: `String` will
   /// use raw literals and escapes as needed, `Optional` will wrap a nested
-  /// `nil` in `.some`, `Double` wil represent special values like infinities
+  /// `nil` in `.some`, `Double` will represent special values like infinities
   /// as code sequences like `.infinity`, etc. `Set` and `Dictionary` sort
-  /// thier elements to improve stability.
+  /// their elements to improve stability.
   ///
   /// Because of that intelligent behavior, this initializer is not guaranteed
   /// to produce a literal as the outermost syntax node, or even to have a

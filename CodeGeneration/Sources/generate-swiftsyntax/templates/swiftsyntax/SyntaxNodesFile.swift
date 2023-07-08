@@ -28,7 +28,7 @@ extension Child {
 }
 
 /// This file generates the syntax nodes for SwiftSyntax. To keep the generated
-/// files at a managable file size, it is to be invoked multiple times with the
+/// files at a manageable file size, it is to be invoked multiple times with the
 /// variable `emitKind` set to a base kind listed in
 /// It then only emits those syntax nodes whose base kind are that specified kind.
 func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {

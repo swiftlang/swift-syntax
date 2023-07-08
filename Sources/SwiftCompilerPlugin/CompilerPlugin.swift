@@ -25,7 +25,7 @@ import SwiftSyntaxMacros
 // A plugin receives messages from the "plugin host" (typically
 // 'swift-frontend'), and sends back messages in return based on its actions.
 //
-// Depending on the platform, plugins are invoked in a sanbox that blocks
+// Depending on the platform, plugins are invoked in a sandbox that blocks
 // network access and prevents any file system changes.
 //
 // The host process and the plugin communicate using messages in the form of
@@ -36,7 +36,7 @@ import SwiftSyntaxMacros
 //
 // Within the plugin process, `stdout` is redirected to `stderr` so that print
 // statements from the plugin are treated as plain-text output, and `stdin` is
-// closed so that any attemps by the plugin logic to read from console result
+// closed so that any attempts by the plugin logic to read from console result
 // in errors instead of blocking the process. The original `stdin` and `stdout`
 // are duplicated for use as messaging pipes, and are not directly used by the
 // plugin logic.

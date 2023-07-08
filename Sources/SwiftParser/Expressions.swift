@@ -194,7 +194,7 @@ extension Parser {
 
     precondition(
       elements.count.isMultiple(of: 2),
-      "elements must have a even number of elements"
+      "elements must have an even number of elements"
     )
 
     elements.append(lastElement)
@@ -234,7 +234,7 @@ extension Parser {
   /// Parse an expression sequence operators.
   ///
   /// Returns `nil` if the current token is not at an operator.
-  /// Returns a tuple of an operator expression and a optional right operand
+  /// Returns a tuple of an operator expression and an optional right operand
   /// expression. The right operand is only returned if it is not a common
   /// sequence element.
   ///
@@ -393,7 +393,7 @@ extension Parser {
     forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    // Try to parse '@' sign or 'inout' as a attributed typerepr.
+    // Try to parse '@' sign or 'inout' as an attributed typerepr.
     if self.at(.atSign, .keyword(.inout)) {
       var backtrack = self.lookahead()
       if backtrack.canParseType() {
@@ -662,7 +662,7 @@ extension Parser {
       name = selfKeyword
       declNameArgs = nil
     } else {
-      // Handle an arbitrary declararion name.
+      // Handle an arbitrary declaration name.
       (name, declNameArgs) = self.parseDeclNameRef([.keywords, .compoundNames])
     }
 
@@ -1040,7 +1040,7 @@ extension Parser {
     // make sure the . is there, but parsing the ? in \.? as .? doesn't make
     // sense. This is all made more complicated by .?. being considered an
     // operator token. Since keypath allows '.!' '.?' and '.[', consume '.'
-    // the token is a operator starts with '.', or the following token is '['.
+    // the token is an operator starts with '.', or the following token is '['.
     let rootType: RawTypeSyntax?
     if !self.currentToken.starts(with: ".") {
       rootType = self.parseSimpleType(stopAtFirstPeriod: true)

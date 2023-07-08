@@ -63,8 +63,8 @@ public struct SyntaxChildrenIndex: Hashable, Comparable, ExpressibleByNilLiteral
 
   /// `nil` represents the end index and `.some` represents a materialized index
   /// that points into a collection.
-  /// It is faster to use `Optional` here rather than making `
-  /// SyntaxChildrenIndex` an enumbecause the optional value can be
+  /// It is faster to use `Optional` here rather than making
+  /// `SyntaxChildrenIndex` an enum because the optional value can be
   /// force-unwrapped when we know that an index is not the end index, saving a
   /// switch case comparison.
   let data: SyntaxChildrenIndexData?
@@ -153,7 +153,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
   /// The rootId of the tree the child nodes belong to
   private let rootId: UInt
-  /// The number of childer in `parent`. Cached to avoid reaching into `parent` for every index
+  /// The number of children in `parent`. Cached to avoid reaching into `parent` for every index
   /// advancement
   // FIXME: Do we need this cached?
   private let numberOfChildren: Int
@@ -392,7 +392,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
 
   subscript(position: SyntaxChildrenIndex) -> AbsoluteRawSyntax {
     let (node, info) = allChildren[position]
-    // Valid indicies always point to present nodes. Thus safe to force unwrap.
+    // Valid indices always point to present nodes. Thus safe to force unwrap.
     return AbsoluteRawSyntax(raw: node!, info: info)
   }
 

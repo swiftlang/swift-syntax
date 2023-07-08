@@ -14,7 +14,7 @@ input stream as possible.
 The Swift parser tries to represent as much structure in the input stream as
 possible. To that end, the parser tries to recover by looking through the 
 minimum amount of tokens. This optimizes for clients like formatters and editors
-that often recieve malformed, partial, and unstructured inputs and must produce
+that often receive malformed, partial, and unstructured inputs and must produce
 sensible outputs in response.
 
 The Swift parser differs from many other language parsers by intentionally
@@ -34,7 +34,7 @@ with these diagnostics.
 When the parser expects a token but can’t find it, it looks ahead to see if it 
 can find the expected token by using a token precedence model. Tokens are 
 divided in precedence groups (see `TokenPrecedence`), 
-dependening on how strongly they mark the structure of the source code. For 
+depending on how strongly they mark the structure of the source code. For 
 example, keywords that start a declaration, like `func`, have a higher 
 precedence than expression keywords, like `self`.
 

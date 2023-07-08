@@ -90,7 +90,7 @@ When adding nodes or removing existing nodes, it is often the case that you
 will need a paired PR to the [Swift Compiler repository][Swiftc] as well. This
 step currently involves some amount of duplication with the SwiftParser library
 and is a much more involved process. [The Swift Forums][CompilerDev] are a 
-great source for guidance on how to extend the C++ compiler to accomodate new 
+great source for guidance on how to extend the C++ compiler to accommodate new 
 syntax and semantics for the Swift programming language.
 
 [LiterateProgramming]: https://en.wikipedia.org/wiki/Literate_programming

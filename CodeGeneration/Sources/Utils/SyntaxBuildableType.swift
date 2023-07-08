@@ -140,7 +140,7 @@ public struct SyntaxBuildableType: Hashable {
     return optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(syntaxBaseName)))
   }
 
-  /// The type that is used for paramters in SwiftSyntaxBuilder that take this
+  /// The type that is used for parameters in SwiftSyntaxBuilder that take this
   /// type of syntax node.
   public var parameterBaseType: String {
     if isBaseType {

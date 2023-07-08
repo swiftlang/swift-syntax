@@ -864,7 +864,7 @@ public let EXPR_NODES: [Node] = [
   //   else-clause ';'?
   //
   // This node represents both an 'if' expression, as well as an 'if' statement
-  // when wrapped in a ExpressionStmt node.
+  // when wrapped in an ExpressionStmt node.
   Node(
     kind: .ifExpr,
     base: .expr,
@@ -1652,7 +1652,7 @@ public let EXPR_NODES: [Node] = [
   //   switch-case-list '}' ';'?
   //
   // This node represents both a 'switch' expression, as well as a 'switch'
-  // statement when wrapped in a ExpressionStmt node.
+  // statement when wrapped in an ExpressionStmt node.
   Node(
     kind: .switchExpr,
     base: .expr,

@@ -304,7 +304,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case yieldList
   case yieldStmt
 
-  // Nodes that have special handling throught the codebase
+  // Nodes that have special handling throughout the codebase
 
   case syntax
   case syntaxCollection

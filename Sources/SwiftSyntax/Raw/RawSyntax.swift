@@ -723,7 +723,7 @@ extension RawSyntax {
   ///   - kind: Syntax kind. This should not be `.token`.
   ///   - layout: Layout buffer of the children.
   ///   - byteLength: Computed total byte length of this node.
-  ///   - descedantCount: Total number of the descendant nodes in `layout`.
+  ///   - descendantCount: Total number of the descendant nodes in `layout`.
   fileprivate static func layout(
     kind: SyntaxKind,
     layout: RawSyntaxBuffer,

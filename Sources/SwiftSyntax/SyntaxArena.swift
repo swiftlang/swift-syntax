@@ -99,12 +99,12 @@ public class SyntaxArena {
   }
 
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
-  /// uninitlialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
+  /// uninitialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
   func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
     return allocator.allocate(RawSyntax?.self, count: count)
   }
 
-  /// Allcates a buffer of ``RawTriviaPiece`` with the given count, then returns
+  /// Allocates a buffer of ``RawTriviaPiece`` with the given count, then returns
   /// the uninitialized memory range as a `UnsafeMutableBufferPointer<RawTriviaPiece>`.
   func allocateRawTriviaPieceBuffer(
     count: Int
@@ -112,14 +112,14 @@ public class SyntaxArena {
     return allocator.allocate(RawTriviaPiece.self, count: count)
   }
 
-  /// Allcates a buffer of `UInt8` with the given count, then returns the
+  /// Allocates a buffer of `UInt8` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<UInt8>`.
   func allocateTextBuffer(count: Int) -> UnsafeMutableBufferPointer<UInt8> {
     return allocator.allocate(UInt8.self, count: count)
   }
 
   /// Copies the contents of a ``SyntaxText`` to the memory this arena manages,
-  /// and return the ``SyntaxText`` in the destiation.
+  /// and return the ``SyntaxText`` in the destination.
   @_spi(RawSyntax)
   public func intern(_ value: SyntaxText) -> SyntaxText {
     // Return the passed-in value if it's already managed by this arena.
@@ -145,7 +145,7 @@ public class SyntaxArena {
     }
   }
 
-  /// Copies a `RawSyntaxData` to the memory this arena manages, and retuns the
+  /// Copies a `RawSyntaxData` to the memory this arena manages, and returns the
   /// pointer to the destination.
   func intern(_ value: RawSyntaxData) -> UnsafePointer<RawSyntaxData> {
     let allocated = allocator.allocate(RawSyntaxData.self, count: 1).baseAddress!

@@ -28,7 +28,7 @@ extension Lexer {
     /// The states will be freed when the lexer is finished, i.e. when this
     /// ``LexemeSequence`` is deallocated.
     ///
-    /// The memory footpring of not freeing past lexer states is neglible. It's
+    /// The memory footprint of not freeing past lexer states is negligible. It's
     /// usually less than 0.1% of the memory allocated by the syntax arena.
     var lexerStateAllocator = BumpPtrAllocator(slabSize: 256)
 

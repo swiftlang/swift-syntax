@@ -56,7 +56,7 @@ final class AsyncTests: XCTestCase {
       "func asyncGlobal4() -> Int 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(
-          message: "'async' must preceed '->'",
+          message: "'async' must precede '->'",
           fixIts: ["move 'async' in front of '->'"]
         )
       ],
@@ -69,7 +69,7 @@ final class AsyncTests: XCTestCase {
       "func asyncGlobal5() -> Int 1️⃣async throws { }",
       diagnostics: [
         DiagnosticSpec(
-          message: "'async throws' must preceed '->'",
+          message: "'async throws' must precede '->'",
           fixIts: ["move 'async throws' in front of '->'"]
         )
       ],
@@ -82,7 +82,7 @@ final class AsyncTests: XCTestCase {
       "func asyncGlobal6() -> Int 1️⃣throws async { }",
       diagnostics: [
         DiagnosticSpec(
-          message: "'throws async' must preceed '->'",
+          message: "'throws async' must precede '->'",
           fixIts: ["move 'throws async' in front of '->'"]
         )
       ],
@@ -95,7 +95,7 @@ final class AsyncTests: XCTestCase {
       "func asyncGlobal7() throws -> Int 1️⃣async { }",
       diagnostics: [
         DiagnosticSpec(
-          message: "'async' must preceed '->'",
+          message: "'async' must precede '->'",
           fixIts: ["move 'async' in front of '->'"]
         )
       ],
@@ -117,12 +117,12 @@ final class AsyncTests: XCTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "'async' must preceed '->'",
+          message: "'async' must precede '->'",
           fixIts: ["remove redundant 'async'"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "'async' must preceed '->'",
+          message: "'async' must precede '->'",
           fixIts: ["remove redundant 'async'"]
         ),
       ],
@@ -219,7 +219,7 @@ final class AsyncTests: XCTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "'async' must preceed '->'",
+          message: "'async' must precede '->'",
           fixIts: ["move 'async' in front of '->'"]
         )
       ],

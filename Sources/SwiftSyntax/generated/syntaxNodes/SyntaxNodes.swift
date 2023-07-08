@@ -1979,7 +1979,7 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - AvailabilityLabeledArgumentSyntax
 
-/// A argument to an `@available` attribute that consists of a label and a value, e.g. `message: "This has been deprecated"`.
+/// An argument to an `@available` attribute that consists of a label and a value, e.g. `message: "This has been deprecated"`.
 ///
 /// ### Children
 /// 

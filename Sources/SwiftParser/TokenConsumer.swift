@@ -62,7 +62,7 @@ struct TokenConsumptionHandle {
 }
 
 extension TokenConsumer {
-  /// Returns whether the the current token matches `spec`
+  /// Returns whether the current token matches `spec`
   @inline(__always)
   mutating func at(_ spec: TokenSpec) -> Bool {
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
@@ -73,7 +73,7 @@ extension TokenConsumer {
     return spec ~= self.currentToken
   }
 
-  /// Returns whether the the current token matches one of the two specs.
+  /// Returns whether the current token matches one of the two specs.
   @inline(__always)
   mutating func at(
     _ spec1: TokenSpec,
@@ -91,7 +91,7 @@ extension TokenConsumer {
     }
   }
 
-  /// Returns whether the the current token matches one of the three specs.
+  /// Returns whether the current token matches one of the three specs.
   @inline(__always)
   mutating func at(
     _ spec1: TokenSpec,

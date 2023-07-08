@@ -48,7 +48,7 @@ public struct TokenDiagnostic: Hashable {
     case sourceConflictMarker
     case spaceAtEndOfRegexLiteral
     case spaceAtStartOfRegexLiteral
-    /// The lexer dicovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
+    /// The lexer discovered an error but was not able to represent the offset of the error because it would overflow `LexerErrorOffset`.
     case tokenDiagnosticOffsetOverflow
     case unexpectedBlockCommentEnd
     case unicodeCurlyQuote

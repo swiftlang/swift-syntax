@@ -23,7 +23,7 @@ extension Parser {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
-      var availablityArgumentProgress = LoopProgressCondition()
+      var availabilityArgumentProgress = LoopProgressCondition()
       repeat {
         let entry: RawAvailabilityArgumentSyntax.Entry
         if self.at(.identifier) {
@@ -48,7 +48,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && availablityArgumentProgress.evaluate(currentToken)
+      } while keepGoing != nil && availabilityArgumentProgress.evaluate(currentToken)
     }
 
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
@@ -260,7 +260,7 @@ extension Parser {
   ///
   ///     version-tuple -> integer-literal version-list?
   ///     version-list -> version-tuple-element version-list?
-  ///     version-tuple-element -> '.' interger-literal
+  ///     version-tuple-element -> '.' integer-literal
   mutating func parseVersionTuple(maxComponentCount: Int) -> RawVersionTupleSyntax {
     if self.at(.floatingLiteral),
       let periodIndex = self.currentToken.tokenText.firstIndex(of: UInt8(ascii: ".")),

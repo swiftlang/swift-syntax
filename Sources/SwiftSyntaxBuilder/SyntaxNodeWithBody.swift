@@ -328,9 +328,9 @@ public extension SwitchExprSyntax {
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
 
 public extension VariableDeclSyntax {
-  /// Construct a variable with a single `get` accessor where `header` builds the text beofre the opening `{` and `accessor` builds the accessor body.
+  /// Construct a variable with a single `get` accessor where `header` builds the text before the opening `{` and `accessor` builds the accessor body.
   ///
-  /// For example, to construt
+  /// For example, to construct
   ///
   /// ```swift
   /// var x: Int {

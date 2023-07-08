@@ -22,7 +22,7 @@ struct LoopProgressCondition {
   /// Check that the loop has made progress since `evaluate` was called the last time.
   /// `currentToken` is the current token of the parser.
   /// In assert builds, this traps if the loop has not made any parser progress in between two iterations,
-  /// ie. it checks if the the parser's `currentToken` has changed in between two calls to `evaluate`.
+  /// ie. it checks if the parser's `currentToken` has changed in between two calls to `evaluate`.
   /// In non-assert builds, `evaluate()` returns `false` if the loop has not made progress, thus aborting the loop.
   mutating func evaluate(_ currentToken: Lexer.Lexeme) -> Bool {
     defer {

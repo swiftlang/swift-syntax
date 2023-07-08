@@ -66,7 +66,7 @@ public struct TokenSpec {
   fileprivate let remapping: RawTokenKind?
 
   /// The recovery precedence that should be used when consuming this token. By
-  /// default this is the token precendece of `rawTokenKind` but it can be
+  /// default this is the token precedence of `rawTokenKind` but it can be
   /// overridden.
   let recoveryPrecedence: TokenPrecedence
 
@@ -195,7 +195,7 @@ extension TokenConsumer {
   }
 
   /// Asserts that the current token matches `spec` and consumes it, performing
-  /// any necessary token kind remappings.
+  /// any necessary token kind remapping.
   ///
   /// This should only be called from parsing primitives like `consume(if:)` and
   /// `eat`. Introduce new users of this very sparingly.

@@ -558,7 +558,7 @@ final class TypeExprTests: XCTestCase {
       let _ = [(Int) -> 1️⃣throws Int]()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'throws' must preceed '->'", fixIts: ["move 'throws' in front of '->'"])
+        DiagnosticSpec(message: "'throws' must precede '->'", fixIts: ["move 'throws' in front of '->'"])
       ],
       fixedSource: """
         let _ = [(Int) throws -> Int]()

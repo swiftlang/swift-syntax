@@ -554,7 +554,7 @@ def test_command(args: argparse.Namespace) -> None:
 
 
 # -----------------------------------------------------------------------------
-# Arugment Parsing
+# Argument Parsing
 
 _DESCRIPTION = """
 Build and test script for SwiftSyntax.

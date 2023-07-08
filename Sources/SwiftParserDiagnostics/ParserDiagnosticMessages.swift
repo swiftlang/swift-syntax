@@ -16,7 +16,7 @@ import SwiftDiagnostics
 
 fileprivate let diagnosticDomain: String = "SwiftParser"
 
-/// A error diagnostic whose ID is determined by the diagnostic's type.
+/// An error diagnostic whose ID is determined by the diagnostic's type.
 public protocol ParserError: DiagnosticMessage {
   var diagnosticID: MessageID { get }
 }
@@ -87,7 +87,7 @@ public struct StaticParserError: DiagnosticMessage {
 
 extension DiagnosticMessage where Self == StaticParserError {
   /// Please order the diagnostics alphabetically by property name.
-  public static var allStatmentsInSwitchMustBeCoveredByCase: Self {
+  public static var allStatementsInSwitchMustBeCoveredByCase: Self {
     .init("all statements inside a switch must be covered by a 'case' or 'default' label")
   }
   public static var associatedTypeCannotUsePack: Self {
@@ -135,7 +135,7 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var editorPlaceholderInSourceFile: Self {
     .init("editor placeholder in source file")
   }
-  public static var escapedNewlineAtLatlineOfMultiLineStringLiteralNotAllowed: Self {
+  public static var escapedNewlineAtLastLineOfMultiLineStringLiteralNotAllowed: Self {
     .init("escaped newline at the last line of a multi-line string literal is not allowed")
   }
   public static var expectedColonClass: Self {
@@ -307,11 +307,11 @@ public struct EffectsSpecifierAfterArrow: ParserError {
   public let effectsSpecifiersAfterArrow: [TokenSyntax]
 
   public var message: String {
-    "\(nodesDescription(effectsSpecifiersAfterArrow, format: false)) must preceed '->'"
+    "\(nodesDescription(effectsSpecifiersAfterArrow, format: false)) must precede '->'"
   }
 }
 
-public struct ExtaneousCodeAtTopLevel: ParserError {
+public struct ExtraneousCodeAtTopLevel: ParserError {
   public let extraneousCode: UnexpectedNodesSyntax
 
   public var message: String {
@@ -433,12 +433,12 @@ public struct MissingExpressionInStatement: ParserError {
 }
 
 public struct NegatedAvailabilityCondition: ParserError {
-  public let avaialabilityCondition: AvailabilityConditionSyntax
+  public let availabilityCondition: AvailabilityConditionSyntax
   public let negatedAvailabilityKeyword: TokenSyntax
 
   public var message: String {
     return
-      "\(nodesDescription([avaialabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
+      "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
   }
 }
 

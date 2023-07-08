@@ -24,8 +24,8 @@ open class BasicFormat: SyntaxRewriter {
   /// How much indentation should be added at a new indentation level.
   public let indentationWidth: Trivia
 
-  /// As we reach a new indendation level, its indentation will be added to the
-  /// stack. As we exit that indentation level, the indendation will be popped.
+  /// As we reach a new indentation level, its indentation will be added to the
+  /// stack. As we exit that indentation level, the indentation will be popped.
   /// `isUserDefined` is `true` if the indentation was inferred from something
   /// the user provided manually instead of being inferred from the nesting
   /// level.

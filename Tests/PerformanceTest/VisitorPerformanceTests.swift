@@ -57,7 +57,7 @@ public class VisitorPerformanceTests: XCTestCase {
     )
   }
 
-  func testEmptyAnyVistorPerformance() throws {
+  func testEmptyAnyVisitorPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
     class EmptyAnyVisitor: SyntaxAnyVisitor {}
 

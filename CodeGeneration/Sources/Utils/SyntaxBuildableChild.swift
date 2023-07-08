@@ -111,7 +111,7 @@ public extension Child {
 
     let choicesTexts: [String]
     if tokenCanContainArbitraryText {
-      // Don't generate an precondition statement if token can contain arbitrary text.
+      // Don't generate a precondition statement if token can contain arbitrary text.
       return nil
     } else if !choices.isEmpty {
       choicesTexts = choices.compactMap {

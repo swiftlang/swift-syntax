@@ -109,7 +109,7 @@ public struct SubtreeMatcher {
     return subtree.findFirstDifference(baseline: baseline, includeTrivia: includeTrivia)
   }
 
-  /// Verifies that the the subtree found from parsing the text passed into
+  /// Verifies that the subtree found from parsing the text passed into
   /// `init(markedText:)` has the same structure as `expected`.
   public func assertSameStructure(
     afterMarker: String? = nil,

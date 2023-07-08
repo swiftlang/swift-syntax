@@ -300,7 +300,7 @@ extension TriviaPiece {
 /// Trivia piece for token RawSyntax.
 ///
 /// In contrast to ``TriviaPiece``, a ``RawTriviaPiece`` does not own the source
-/// text of a the trivia.
+/// text of the trivia.
 @_spi(RawSyntax)
 public enum RawTriviaPiece: Equatable {
   case backslashes(Int)

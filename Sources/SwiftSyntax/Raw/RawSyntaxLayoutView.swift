@@ -141,7 +141,7 @@ public struct RawSyntaxLayoutView {
       if buffer.isEmpty { return }
       var current = buffer.baseAddress!
 
-      // Intialize
+      // Initialize
       current.initialize(from: children.baseAddress!, count: range.lowerBound)
       current = current.advanced(by: range.lowerBound)
       for elem in elements {

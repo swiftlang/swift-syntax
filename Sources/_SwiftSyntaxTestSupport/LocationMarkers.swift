@@ -46,7 +46,7 @@ fileprivate struct Marker {
   let name: Substring
   /// The range of the marker.
   ///
-  /// If the marker contains all the the non-whitepace characters on the line,
+  /// If the marker contains all the non-whitespace characters on the line,
   /// this is the range of the entire line. Otherwise it's the range of the
   /// marker itself.
   let range: Range<String.Index>

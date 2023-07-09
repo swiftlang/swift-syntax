@@ -15,7 +15,7 @@
 import SwiftSyntax
 
 extension AccessorDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with accessorKind argument(s).")
+  @available(*, deprecated, message: "Use an initializer with accessorSpecifier argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -62,7 +62,7 @@ extension AccessorDeclSyntax {
 }
 
 extension ArrayExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with leftSquareBracket, rightSquareBracket argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -91,7 +91,7 @@ extension ArrayExprSyntax {
 }
 
 extension EnumDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with genericParameters argument(s).")
+  @available(*, deprecated, message: "Use an initializer with genericParameterClause argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -140,7 +140,7 @@ extension EnumDeclSyntax {
 }
 
 extension ExpressionSegmentSyntax {
-  @available(*, deprecated, message: "Use an initializer with delimiter argument(s).")
+  @available(*, deprecated, message: "Use an initializer with rawStringDelimiter argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -177,7 +177,7 @@ extension ExpressionSegmentSyntax {
 }
 
 extension GenericArgumentClauseSyntax {
-  @available(*, deprecated, message: "Use an initializer with leftAngleBracket, rightAngleBracket argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftAngle, rightAngle argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -206,7 +206,7 @@ extension GenericArgumentClauseSyntax {
 }
 
 extension GenericParameterClauseSyntax {
-  @available(*, deprecated, message: "Use an initializer with leftAngleBracket, genericParameterList, rightAngleBracket argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftAngle, parameters, rightAngle argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -239,7 +239,7 @@ extension GenericParameterClauseSyntax {
 }
 
 extension KeyPathSubscriptComponentSyntax {
-  @available(*, deprecated, message: "Use an initializer with leftBracket, rightBracket argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -268,7 +268,7 @@ extension KeyPathSubscriptComponentSyntax {
 }
 
 extension MacroExpansionDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with poundToken, genericArguments argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -325,7 +325,7 @@ extension MacroExpansionDeclSyntax {
 }
 
 extension MacroExpansionExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with poundToken, genericArguments argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -374,7 +374,7 @@ extension MacroExpansionExprSyntax {
 }
 
 extension SourceFileSyntax {
-  @available(*, deprecated, message: "Use an initializer with eOFToken argument(s).")
+  @available(*, deprecated, message: "Use an initializer with endOfFileToken argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -399,7 +399,7 @@ extension SourceFileSyntax {
 }
 
 extension SubscriptExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with leftBracket, rightBracket argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -440,7 +440,7 @@ extension SubscriptExprSyntax {
 }
 
 extension TupleExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with elementList argument(s).")
+  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -469,7 +469,7 @@ extension TupleExprSyntax {
 }
 
 extension VariableDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with bindingKeyword argument(s).")
+  @available(*, deprecated, message: "Use an initializer with bindingSpecifier argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

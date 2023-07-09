@@ -91,7 +91,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           }
 
           let closureSignature = ClosureSignatureSyntax(
-            input: .input(
+            parameterClause: .parameterClause(
               ClosureParameterClauseSyntax(
                 parameterList: ClosureParameterListSyntax {
                   ClosureParameterSyntax(firstName: .identifier("arena"))
@@ -105,7 +105,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
                   base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.varName.backtickedIfNeeded)")),
-                  dot: .periodToken(),
+                  period: .periodToken(),
                   name: "raw"
                 )
               )
@@ -169,7 +169,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             public var \(raw: child.varName.backtickedIfNeeded): \(type)
             """
           ) {
-            AccessorDeclSyntax(accessorKind: .keyword(.get)) {
+            AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
               if child.isOptional {
                 StmtSyntax("return data.child(at: \(raw: index), parent: Syntax(self)).map(\(raw: childType).init)")
               } else {

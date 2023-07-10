@@ -10,15 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 public class Trait {
   public let traitName: String
+  public let protocolName: TokenSyntax
+  public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
-  public let description: String?
 
-  init(traitName: String, children: [Child], description: String? = nil) {
+  init(traitName: String, documentation: String? = nil, children: [Child]) {
     self.traitName = traitName
+    self.protocolName = .identifier("\(traitName)Syntax")
+    self.documentation = docCommentTrivia(from: documentation)
     self.children = children
-    self.description = description
   }
 }
 

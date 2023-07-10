@@ -14,6 +14,7 @@
 
 // MARK: - BracedSyntax
 
+
 public protocol BracedSyntax: SyntaxProtocol {
   var leftBrace: TokenSyntax {
     get
@@ -54,6 +55,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - DeclGroupSyntax
+
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? {
@@ -111,6 +113,7 @@ public extension SyntaxProtocol {
 
 // MARK: - EffectSpecifiersSyntax
 
+
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
     get
@@ -166,6 +169,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - FreestandingMacroExpansionSyntax
+
 
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
   var poundToken: TokenSyntax {
@@ -238,6 +242,7 @@ public extension SyntaxProtocol {
 
 // MARK: - IdentifiedDeclSyntax
 
+
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
   var identifier: TokenSyntax {
     get
@@ -273,6 +278,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - ParenthesizedSyntax
+
 
 public protocol ParenthesizedSyntax: SyntaxProtocol {
   var leftParen: TokenSyntax {
@@ -315,6 +321,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithAttributesSyntax
 
+
 public protocol WithAttributesSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? {
     get
@@ -350,6 +357,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithCodeBlockSyntax
+
 
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax {
@@ -387,6 +395,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithModifiersSyntax
 
+
 public protocol WithModifiersSyntax: SyntaxProtocol {
   var modifiers: ModifierListSyntax? {
     get
@@ -423,6 +432,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithStatementsSyntax
 
+
 public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax {
     get
@@ -458,6 +468,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithTrailingCommaSyntax
+
 
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   var trailingComma: TokenSyntax? {

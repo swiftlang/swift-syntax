@@ -266,7 +266,7 @@ extension Parser {
 
     var unexpectedTokens = [RawTokenSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+    while !self.at(.endOfFile), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
       unexpectedTokens += [self.consumeAnyToken()]
     }
 

@@ -79,7 +79,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
         }
-          
+
         SwitchCaseSyntax("default:") {
           StmtSyntax(#"return """#)
         }

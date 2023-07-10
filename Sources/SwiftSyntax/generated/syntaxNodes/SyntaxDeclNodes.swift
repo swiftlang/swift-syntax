@@ -4661,7 +4661,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - attributes: If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
   ///   - modifiers: If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
-  ///   - placeholder: A placeholder, i.e. `<#decl#>` that can be inserted into the source code to represent the missing declaration.
+  ///   - placeholder: A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4803,7 +4803,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// A placeholder, i.e. `<#decl#>` that can be inserted into the source code to represent the missing declaration./// This token should always have `presence = .missing`.
+  /// A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration./// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)

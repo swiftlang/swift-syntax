@@ -4187,7 +4187,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - placeholder: A placeholder, i.e. `<#expression#>` that can be inserted into the source code to represent the missing expression.
+  ///   - placeholder: A placeholder, i.e. `<#expression#>`, that can be inserted into the source code to represent the missing expression.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4223,7 +4223,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// A placeholder, i.e. `<#expression#>` that can be inserted into the source code to represent the missing expression./// This token should always have `presence = .missing`.
+  /// A placeholder, i.e. `<#expression#>`, that can be inserted into the source code to represent the missing expression./// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)

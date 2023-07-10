@@ -180,7 +180,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#decl#>` that can be inserted into the source code to represent the missing declaration.
+          A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
           This token should always have `presence = .missing`.
           """
       ),
@@ -197,7 +197,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#expression#>` that can be inserted into the source code to represent the missing expression.
+          A placeholder, i.e. `<#expression#>`, that can be inserted into the source code to represent the missing expression.
           This token should always have `presence = .missing`.
           """
       )
@@ -214,7 +214,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#pattern#>` that can be inserted into the source code to represent the missing pattern.
+          A placeholder, i.e. `<#pattern#>`, that can be inserted into the source code to represent the missing pattern.
           This token should always have `presence = .missing`.
           """
       )
@@ -231,7 +231,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#statement#>` that can be inserted into the source code to represent the missing pattern.
+          A placeholder, i.e. `<#statement#>`, that can be inserted into the source code to represent the missing pattern.
           This token should always have `presence = .missing`.
           """
       )
@@ -248,7 +248,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#syntax#>` that can be inserted into the source code to represent the missing pattern.
+          A placeholder, i.e. `<#syntax#>`, that can be inserted into the source code to represent the missing pattern.
           This token should always have `presence = .missing`
           """
       )
@@ -265,7 +265,7 @@ public let COMMON_NODES: [Node] = [
         name: "Placeholder",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
-          A placeholder, i.e. `<#type#>` that can be inserted into the source code to represent the missing type. This token should always have `presence = .missing`.
+          A placeholder, i.e. `<#type#>`, that can be inserted into the source code to represent the missing type. This token should always have `presence = .missing`.
           """
       )
     ]

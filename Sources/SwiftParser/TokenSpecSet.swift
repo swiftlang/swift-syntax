@@ -464,6 +464,9 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case `try`
   case consume
   case copy
+  case `repeat`
+  case each
+  case any
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -473,6 +476,9 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(.try): self = .try
     case TokenSpec(.consume): self = .consume
     case TokenSpec(.copy): self = .copy
+    case TokenSpec(.repeat): self = .repeat
+    case TokenSpec(.each): self = .each
+    case TokenSpec(.any): self = .any
     default: return nil
     }
   }
@@ -485,6 +491,9 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .consume: return .keyword(.consume)
     case .copy: return .keyword(.copy)
     case .try: return .keyword(.try)
+    case .repeat: return .keyword(.repeat)
+    case .each: return .keyword(.each)
+    case .any: return .keyword(.any)
     }
   }
 }

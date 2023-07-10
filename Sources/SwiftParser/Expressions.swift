@@ -526,6 +526,46 @@ extension Parser {
           arena: self.arena
         )
       )
+
+    case (.repeat, let handle)?:
+      // 'repeat' is the start of a pack expansion expression.
+      return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor, pattern: pattern))
+
+    case (.each, let handle)?:
+      // `each` is only contextually a keyword, if it's followed by an
+      // identifier or 'self' on the same line. We do this to ensure that we do
+      // not break any 'each' functions defined by users. This is following with
+      // what we have done for the consume keyword.
+      switch self.peek() {
+      case TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
+        break
+      default:
+        // Break out of `outer switch` on failure.
+        break EXPR_PREFIX
+      }
+
+      let each = self.eat(handle)
+      let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+      return RawExprSyntax(
+        RawPackElementExprSyntax(
+          eachKeyword: each,
+          packRefExpr: packRef,
+          arena: self.arena
+        )
+      )
+
+    case (.any, _)?:
+      // `any` is only contextually a keyword if it's followed by an identifier
+      // on the same line.
+      guard case TokenSpec(.identifier, allowAtStartOfLine: false) = self.peek() else {
+        break EXPR_PREFIX
+      }
+      // 'any' is parsed as a part of 'type'.
+      let type = self.parseType()
+      return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
+
     case nil:
       break
     }
@@ -550,10 +590,6 @@ extension Parser {
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
     switch self.currentToken {
-    case TokenSpec(.repeat):
-      // 'repeat' is the start of a pack expansion expression.
-      return RawExprSyntax(parsePackExpansionExpr(flavor, pattern: pattern))
-
     // Try parse an 'if' or 'switch' as an expression. Note we do this here in
     // parseUnaryExpression as we don't allow postfix syntax to hang off such
     // expressions to avoid ambiguities such as postfix '.member', which can
@@ -1224,27 +1260,6 @@ extension Parser {
         return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
 
-      // We might have a contextual keyword followed by an identifier.
-      // 'each <identifier>' is a pack element expr, and 'any <identifier>'
-      // is an existential type expr.
-      if self.peek().rawTokenKind == .identifier, !self.peek().isAtStartOfLine {
-        if self.at(.keyword(.any)) {
-          let ty = self.parseType()
-          return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
-        }
-
-        if let each = self.consume(if: .keyword(.each)) {
-          let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
-          return RawExprSyntax(
-            RawPackElementExprSyntax(
-              eachKeyword: each,
-              packRefExpr: packRef,
-              arena: self.arena
-            )
-          )
-        }
-      }
-
       return RawExprSyntax(self.parseIdentifierExpression())
     case (.Self, _)?:  // Self
       return RawExprSyntax(self.parseIdentifierExpression())
@@ -1441,10 +1456,11 @@ extension Parser {
   /// pack-expansion-expression → 'repeat' pattern-expression
   /// pattern-expression → expression
   mutating func parsePackExpansionExpr(
+    repeatHandle: TokenConsumptionHandle,
     _ flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
-    let repeatKeyword = self.consumeAnyToken()
+    let repeatKeyword = self.eat(repeatHandle)
     let patternExpr = self.parseExpression(flavor, pattern: pattern)
 
     return RawPackExpansionExprSyntax(

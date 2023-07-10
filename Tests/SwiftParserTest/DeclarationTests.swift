@@ -730,7 +730,7 @@ final class DeclarationTests: XCTestCase {
       ],
       fixedSource: """
         struct a {
-          public  <#declaration#>
+          public <#declaration#>
         }
         """
     )

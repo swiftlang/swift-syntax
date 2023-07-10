@@ -160,6 +160,7 @@ public let COMMON_NODES: [Node] = [
     nameForDiagnostics: "declaration",
     documentation: "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
     traits: [
+      "MissingNode",
       "WithAttributes",
       "WithModifiers",
     ],
@@ -192,6 +193,9 @@ public let COMMON_NODES: [Node] = [
     base: .expr,
     nameForDiagnostics: "expression",
     documentation: "In case the source code is missing an expression, this node stands in place of the missing expression.",
+    traits: [
+      "MissingNode"
+    ],
     children: [
       Child(
         name: "Placeholder",
@@ -209,6 +213,9 @@ public let COMMON_NODES: [Node] = [
     base: .pattern,
     nameForDiagnostics: "pattern",
     documentation: "In case the source code is missing a pattern, this node stands in place of the missing pattern.",
+    traits: [
+      "MissingNode"
+    ],
     children: [
       Child(
         name: "Placeholder",
@@ -226,6 +233,9 @@ public let COMMON_NODES: [Node] = [
     base: .stmt,
     nameForDiagnostics: "statement",
     documentation: "In case the source code is missing a statement, this node stands in place of the missing statement.",
+    traits: [
+      "MissingNode"
+    ],
     children: [
       Child(
         name: "Placeholder",
@@ -243,6 +253,9 @@ public let COMMON_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: "In case the source code is missing a syntax node, this node stands in place of the missing node.",
+    traits: [
+      "MissingNode"
+    ],
     children: [
       Child(
         name: "Placeholder",
@@ -260,6 +273,9 @@ public let COMMON_NODES: [Node] = [
     base: .type,
     nameForDiagnostics: "type",
     documentation: "In case the source code is missing a type, this node stands in place of the missing type.",
+    traits: [
+      "MissingNode"
+    ],
     children: [
       Child(
         name: "Placeholder",

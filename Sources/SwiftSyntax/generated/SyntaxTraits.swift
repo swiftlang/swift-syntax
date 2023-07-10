@@ -504,6 +504,46 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - MissingNodeSyntax
+
+/// Represents a layout node that is missing in the source file.
+/// 
+/// See the types conforming to this protocol for examples of where missing nodes can occur.
+public protocol MissingNodeSyntax: SyntaxProtocol {
+  /// A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
+  var placeholder: TokenSyntax {
+    get
+    set
+  }
+}
+
+public extension MissingNodeSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<MissingNodeSyntax, T>, _ newChild: T) -> MissingNodeSyntax {
+    var copy: MissingNodeSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `MissingNodeSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: MissingNodeSyntax.Protocol) -> Bool {
+    return self.asProtocol(MissingNodeSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `MissingNodeSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: MissingNodeSyntax.Protocol) -> MissingNodeSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? MissingNodeSyntax
+  }
+}
+
 extension AccessorBlockSyntax: BracedSyntax {}
 
 extension AccessorDeclSyntax: WithAttributesSyntax {}
@@ -616,7 +656,17 @@ extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {}
 
 extension MemberDeclBlockSyntax: BracedSyntax {}
 
-extension MissingDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+extension MissingDeclSyntax: MissingNodeSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+
+extension MissingExprSyntax: MissingNodeSyntax {}
+
+extension MissingPatternSyntax: MissingNodeSyntax {}
+
+extension MissingStmtSyntax: MissingNodeSyntax {}
+
+extension MissingSyntax: MissingNodeSyntax {}
+
+extension MissingTypeSyntax: MissingNodeSyntax {}
 
 extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
 

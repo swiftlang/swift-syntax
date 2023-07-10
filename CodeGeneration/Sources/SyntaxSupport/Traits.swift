@@ -110,4 +110,21 @@ public let TRAITS: [Trait] = [
       Child(name: "TrailingComma", kind: .token(choices: [.token(tokenKind: "CommaToken")]), isOptional: true)
     ]
   ),
+  Trait(
+    traitName: "MissingNode",
+    documentation: """
+      Represents a layout node that is missing in the source file.
+
+      See the types conforming to this protocol for examples of where missing nodes can occur.
+      """,
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        documentation: """
+          A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
+          """
+      )
+    ]
+  ),
 ]

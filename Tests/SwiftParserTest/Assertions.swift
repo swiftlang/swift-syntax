@@ -187,9 +187,14 @@ func assertLexemes(
   if expectedLexemes.last?.rawTokenKind != .eof {
     expectedLexemes.append(LexemeSpec(.eof, text: ""))
   }
+  let lookaheadTracker = UnsafeMutablePointer<LookaheadTracker>.allocate(capacity: 1)
+  defer {
+    lookaheadTracker.deallocate()
+  }
+  lookaheadTracker.initialize(to: LookaheadTracker())
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(buf, from: 0) {
+    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker) {
       lexemes.append(token)
 
       if token.rawTokenKind == .eof {

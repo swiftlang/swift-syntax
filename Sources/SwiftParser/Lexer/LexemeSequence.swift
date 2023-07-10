@@ -32,10 +32,23 @@ extension Lexer {
     /// usually less than 0.1% of the memory allocated by the syntax arena.
     var lexerStateAllocator = BumpPtrAllocator(slabSize: 256)
 
-    fileprivate init(sourceBufferStart: Lexer.Cursor, cursor: Lexer.Cursor) {
+    /// The offset of the trailing trivia end of `nextToken` relative to the source buffer’s start.
+    var offsetToNextTokenEnd: Int {
+      self.getOffsetToStart(self.nextToken) + self.nextToken.byteLength
+    }
+
+    /// See doc comments in ``LookaheadTracker``
+    ///
+    /// This is an `UnsafeMutablePointer` for two reasons
+    ///  - When `LexemeSequence` gets copied (e.g. when a ``Lookahead`` gets created), it should still reference the same ``LookaheadTracker`` so that any lookahead performed in the ``Lookahead`` also affects the original ``Parser``. It thus needs to be a reference type
+    ///  - ``LookaheadTracker`` is not a class to avoid reference counting it. The ``Parser`` that creates the ``LexemeSequence`` will always outlive any ``Lookahead`` created for it.
+    let lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
+
+    fileprivate init(sourceBufferStart: Lexer.Cursor, cursor: Lexer.Cursor, lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>) {
       self.sourceBufferStart = sourceBufferStart
       self.cursor = cursor
       self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
+      self.lookaheadTracker = lookaheadTracker
     }
 
     @_spi(Testing)
@@ -43,11 +56,34 @@ extension Lexer {
       return self.advance()
     }
 
+    /// Record the offset of the end of `nextToken` as the furthest offset in ``LookaheadTracker``
+    private func recordNextTokenInLookaheadTracker() {
+      self.lookaheadTracker.pointee.recordFurthestOffset(self.offsetToNextTokenEnd)
+    }
+
     mutating func advance() -> Lexer.Lexeme {
       defer {
         self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
       }
+      self.recordNextTokenInLookaheadTracker()
       return self.nextToken
+    }
+
+    /// Get the offset of the leading trivia start of `token` relative to `sourceBufferStart`.
+    func getOffsetToStart(_ token: Lexer.Lexeme) -> Int {
+      return self.sourceBufferStart.distance(to: token.cursor)
+    }
+
+    /// Advance the the cursor by `offset` and reset `currentToken`
+    ///
+    /// - Important: This should only be used for incremental parsing.
+    mutating func advance(by offset: Int, currentToken: inout Lexer.Lexeme) {
+      self.cursor = currentToken.cursor
+      self.cursor.position = self.cursor.position.advanced(by: offset)
+
+      self.nextToken = self.cursor.nextToken(sourceBufferStart: self.sourceBufferStart, stateAllocator: lexerStateAllocator)
+
+      currentToken = self.advance()
     }
 
     /// Reset the lexeme sequence to the state we were in when lexing `splitToken`
@@ -63,6 +99,7 @@ extension Lexer {
     }
 
     func peek() -> Lexer.Lexeme {
+      self.recordNextTokenInLookaheadTracker()
       return self.nextToken
     }
 
@@ -104,12 +141,13 @@ extension Lexer {
   @_spi(Testing)
   public static func tokenize(
     _ input: UnsafeBufferPointer<UInt8>,
-    from startIndex: Int = 0
+    from startIndex: Int = 0,
+    lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
   ) -> LexemeSequence {
     precondition(input.isEmpty || startIndex < input.endIndex)
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
     let start = Cursor(input: input, previous: UInt8(ascii: "\0"))
     let cursor = Cursor(input: UnsafeBufferPointer(rebasing: input[startIndex...]), previous: startChar)
-    return LexemeSequence(sourceBufferStart: start, cursor: cursor)
+    return LexemeSequence(sourceBufferStart: start, cursor: cursor, lookaheadTracker: lookaheadTracker)
   }
 }

@@ -25,8 +25,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testReusedNode() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testReusedNode() {
     assertIncrementalParse(
       """
       struct A⏩️⏸️A⏪️ {}
@@ -143,7 +142,7 @@ public class IncrementalParsingTests: XCTestCase {
   public func testInsertTextIdentifier() {
     assertIncrementalParse(
       """
-      self = ⏩️⏸️_                            _⏪️foo(1)[object1, object2] + o bar(1)
+      self = ⏩️⏸️_                            _⏪️foo(1)[object1, object2] + bar(1)
       """
     )
   }
@@ -272,8 +271,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testNextTokenCalculation() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testNextTokenCalculation() {
     assertIncrementalParse(
       """
           let a = "hello"
@@ -285,8 +283,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testReplace() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testReplace() {
     assertIncrementalParse(
       """
       func foo() {
@@ -426,6 +423,46 @@ public class IncrementalParsingTests: XCTestCase {
       """
       let y⏩️⏸️ou⏪️ = 42
       """
+    )
+  }
+
+  public func testTrailingClosure() {
+    assertIncrementalParse(
+      """
+      foo() {}
+      trailingClosure: ⏩️switch x {
+        default: break
+      }⏸️{}⏪️
+      """
+    )
+  }
+
+  public func testMultiFunctionCall() {
+    assertIncrementalParse(
+      """
+      foo() {}
+      foo1() {}
+      foo2() {}
+      ⏩️⏸️foo3() {}⏪️
+      """,
+      reusedNodes: [
+        ReusedNodeSpec("foo() {}", kind: .codeBlockItem),
+        ReusedNodeSpec("foo1() {}", kind: .codeBlockItem),
+      ]
+    )
+  }
+
+  public func testDeclFollowedByLabeledStmt() {
+    assertIncrementalParse(
+      """
+      class foo {}
+      trailingClosure: ⏩️switch x {
+        default: break
+      }⏸️{}⏪️
+      """,
+      reusedNodes: [
+        ReusedNodeSpec("class foo {}", kind: .codeBlockItem)
+      ]
     )
   }
 }

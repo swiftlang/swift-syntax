@@ -15,9 +15,14 @@ import XCTest
 @_spi(RawSyntax) @_spi(Testing) import SwiftParser
 
 fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
+  let lookaheadTracker = UnsafeMutablePointer<LookaheadTracker>.allocate(capacity: 1)
+  defer {
+    lookaheadTracker.deallocate()
+  }
+  lookaheadTracker.initialize(to: LookaheadTracker())
   try sourceBytes.withUnsafeBufferPointer { (buf) in
     var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(buf, from: 0) {
+    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker) {
       lexemes.append(token)
 
       if token.rawTokenKind == .eof {

@@ -918,6 +918,20 @@ extension RawSyntax {
   }
 }
 
+extension RawSyntax: Identifiable {
+  public struct ID: Hashable {
+    /// The pointer to the start of the `RawSyntax` node.
+    private var pointer: UnsafeRawPointer
+    fileprivate init(_ raw: RawSyntax) {
+      self.pointer = UnsafeRawPointer(raw.pointer)
+    }
+  }
+
+  public var id: ID {
+    return ID(self)
+  }
+}
+
 #if DEBUG
 /// See `SyntaxMemoryLayout`.
 var RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [

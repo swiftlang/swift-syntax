@@ -14,6 +14,7 @@ import _InstructionCounter
 import ArgumentParser
 import Foundation
 import SwiftParser
+import SwiftSyntax
 
 struct PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(
@@ -21,6 +22,9 @@ struct PerformanceTest: ParsableCommand {
     abstract:
       "Parse all .swift files in '--directory' and its subdirectories '--iteration' times and output the average time (in milliseconds) one iteration took."
   )
+
+  @Flag(name: .long, help: "Parse files incrementally")
+  var incrementalParse: Bool = false
 
   @Option(help: "The directory in which all .swift files should be parsed")
   var directory: String
@@ -37,12 +41,35 @@ struct PerformanceTest: ParsableCommand {
       .filter { $0.pathExtension == "swift" }
       .map { try Data(contentsOf: $0) }
 
+    var fileTransition: [Data: IncrementalParseTransition] = [:]
+
+    if self.incrementalParse {
+      /// The initial parse for incremental parsing
+      for file in files {
+        file.withUnsafeBytes { buf in
+          let (tree, lookaheadRanges) = Parser.parseIncrementally(
+            source: buf.bindMemory(to: UInt8.self),
+            parseTransition: nil
+          )
+
+          fileTransition[file] = IncrementalParseTransition(
+            previousTree: tree,
+            edits: ConcurrentEdits(fromSequential: []),
+            lookaheadRanges: lookaheadRanges
+          )
+        }
+      }
+    }
+
     let start = Date()
     let startInstructions = getInstructionsExecuted()
     for _ in 0..<self.iterations {
       for file in files {
         file.withUnsafeBytes { buf in
-          _ = Parser.parse(source: buf.bindMemory(to: UInt8.self))
+          _ = Parser.parseIncrementally(
+            source: buf.bindMemory(to: UInt8.self),
+            parseTransition: fileTransition[file]
+          )
         }
       }
     }

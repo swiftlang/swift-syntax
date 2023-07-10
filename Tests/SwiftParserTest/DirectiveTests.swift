@@ -197,4 +197,128 @@ final class DirectiveTests: XCTestCase {
     )
   }
 
+  func testEndIfFollowedByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if false
+        var x: Int
+        #endif1️⃣; var x = 1
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
+  func testIfFollowByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG1️⃣; var x = 1
+        var x: Int
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG || UAT1️⃣; var x = 1
+        var x: Int
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
+  func testElseIfFollowByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #elseif UAT1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #elseif UAT || UAT1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
+  func testElseFollowByDeclarations() {
+    assertParse(
+      """
+      struct Foo {
+        #if DEBUG
+        var x: Int = 1
+        #else1️⃣; var x = 1
+        var x: Int = 2
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following conditional compilation directive"
+        )
+      ]
+    )
+  }
+
+  func testSourcelocationDirectiveFollowedByDeclarations() {
+    assertParse(
+      """
+      var sometName: Int
+      #sourceLocation(file: "other.swift", line: 1)
+      var someName: Int
+      """
+    )
+
+    assertParse(
+      """
+      #sourceLocation(file: "other.swift", line: 1)1️⃣; let x = 1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extra tokens following the #sourceLocation directive"
+        )
+      ]
+    )
+  }
 }

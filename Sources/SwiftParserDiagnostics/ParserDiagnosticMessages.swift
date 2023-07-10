@@ -156,6 +156,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var expectedSequenceExpressionInForEachLoop: Self {
     .init("expected Sequence expression for for-each loop")
   }
+  public static var extraTokensAtTheEndOfSourceLocationDirective: Self {
+    .init("extra tokens following the #sourceLocation directive")
+  }
+  public static var extraTokensFollowingConditionalCompilationDirective: Self {
+    .init("extra tokens following conditional compilation directive")
+  }
   public static var extraRightBracket: Self {
     .init("unexpected ']' in type; did you mean to write an array type?")
   }

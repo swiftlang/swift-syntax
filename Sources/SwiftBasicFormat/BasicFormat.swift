@@ -186,12 +186,12 @@ open class BasicFormat: SyntaxRewriter {
     }
 
     switch (first?.tokenKind, second?.tokenKind) {
-
     case (.multilineStringQuote, .backslash),  // string interpolation segment inside a multi-line string literal
       (.multilineStringQuote, .multilineStringQuote),  // empty multi-line string literal
       (.multilineStringQuote, .stringSegment),  // segment starting a multi-line string literal
       (.stringSegment, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
       (.rightParen, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
+      (.poundEndifKeyword, _),
       (_, .poundElseKeyword),
       (_, .poundElseifKeyword),
       (_, .poundEndifKeyword),

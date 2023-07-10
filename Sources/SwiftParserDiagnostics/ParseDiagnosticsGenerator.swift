@@ -1100,6 +1100,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedBetweenConditionAndElements = node.unexpectedBetweenConditionAndElements {
+      addDiagnostic(
+        unexpectedBetweenConditionAndElements,
+        .extraTokensFollowingConditionalCompilationDirective,
+        handledNodes: [unexpectedBetweenConditionAndElements.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     for clause in node.clauses where clause.hasError {
       if let unexpectedBeforePoundKeyword = clause.unexpectedBeforePoundKeyword,
@@ -1136,6 +1152,15 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         }
       }
     }
+
+    if let unexpectedAfterPoundEndif = node.unexpectedAfterPoundEndif {
+      addDiagnostic(
+        unexpectedAfterPoundEndif,
+        .extraTokensFollowingConditionalCompilationDirective,
+        handledNodes: [unexpectedAfterPoundEndif.id]
+      )
+    }
+
     return .visitChildren
   }
 
@@ -1411,6 +1436,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndIdentifier, name: node.identifier)
     diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, name: node.identifier)
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedAfterRightParen = node.unexpectedAfterRightParen {
+      addDiagnostic(
+        unexpectedAfterRightParen,
+        .extraTokensAtTheEndOfSourceLocationDirective,
+        handledNodes: [unexpectedAfterRightParen.id]
+      )
+    }
 
     return .visitChildren
   }

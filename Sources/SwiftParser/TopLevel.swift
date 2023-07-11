@@ -151,6 +151,12 @@ extension Parser {
   ///     statement → compiler-control-statement
   ///     statements → statement statements?
   mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
+    let startToken = self.currentToken
+    if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {
+      self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
+      return RawCodeBlockItemSyntax(syntax.raw)
+    }
+
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,
@@ -183,12 +189,17 @@ extension Parser {
     if item.raw.isEmpty && semi == nil && trailingSemis.isEmpty {
       return nil
     }
-    return RawCodeBlockItemSyntax(
+
+    let result = RawCodeBlockItemSyntax(
       item: item,
       semicolon: semi,
       RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
       arena: self.arena
     )
+
+    self.registerNodeForIncrementalParse(node: result.raw, startToken: startToken)
+
+    return result
   }
 
   private mutating func parseStatementItem() -> RawCodeBlockItemSyntax.Item {

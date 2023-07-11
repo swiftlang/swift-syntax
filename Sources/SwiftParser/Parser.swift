@@ -101,6 +101,15 @@ public struct Parser {
   /// When this nesting level is exceeded, the parser should stop parsing.
   let maximumNestingLevel: Int
 
+  /// See comments in ``IncrementalParseLookup``
+  var parseLookup: IncrementalParseLookup?
+
+  /// See comments in ``LookaheadRanges``
+  public internal(set) var lookaheadRanges = LookaheadRanges()
+
+  /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
+  let lookaheadTrackerOwner = LookaheadTrackerOwner()
+
   /// A default maximum nesting level that is used if the client didn't
   /// explicitly specify one. Debug builds of the parser consume a lot more stack
   /// space and thus have a lower default maximum nesting level.
@@ -111,7 +120,11 @@ public struct Parser {
   #endif
 
   /// Initializes a ``Parser`` from the given string.
-  public init(_ input: String, maximumNestingLevel: Int? = nil) {
+  public init(
+    _ input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil
+  ) {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
     self.arena = ParsingSyntaxArena(
@@ -124,8 +137,13 @@ public struct Parser {
       return arena.internSourceBuffer(buffer)
     }
 
-    self.lexemes = Lexer.tokenize(interned)
+    self.lexemes = Lexer.tokenize(interned, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
     self.currentToken = self.lexemes.advance()
+    if let parseTransition {
+      self.parseLookup = IncrementalParseLookup(transition: parseTransition)
+    } else {
+      self.parseLookup = nil
+    }
   }
 
   /// Initializes a ``Parser`` from the given input buffer.
@@ -142,7 +160,12 @@ public struct Parser {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be within its registered
   ///            source buffer or allocator.
-  public init(_ input: UnsafeBufferPointer<UInt8>, maximumNestingLevel: Int? = nil, arena: ParsingSyntaxArena? = nil) {
+  public init(
+    _ input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    arena: ParsingSyntaxArena? = nil
+  ) {
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
 
     var sourceBuffer: UnsafeBufferPointer<UInt8>
@@ -157,8 +180,13 @@ public struct Parser {
       sourceBuffer = self.arena.internSourceBuffer(input)
     }
 
-    self.lexemes = Lexer.tokenize(sourceBuffer)
+    self.lexemes = Lexer.tokenize(sourceBuffer, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
     self.currentToken = self.lexemes.advance()
+    if let parseTransition {
+      self.parseLookup = IncrementalParseLookup(transition: parseTransition)
+    } else {
+      self.parseLookup = nil
+    }
   }
 
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
@@ -643,5 +671,47 @@ extension Parser {
       RawTokenSyntax(missing: .period, arena: arena),
       afterContainsAnyNewline
     )
+  }
+}
+
+/// Record the furthest offset to `sourceBufferStart` that is reached by  `LexemeSequence.advance()` or `LexemeSequence.peek()`.
+public struct LookaheadTracker {
+  private(set) var furthestOffset: Int = 0
+
+  public init() {}
+
+  mutating func recordFurthestOffset(_ furthestOffset: Int) {
+    /// We could lookahead multi-times to find different valid part of a node, so we should take the maximum of the lookahead offset as the possible affect range of a node.
+    self.furthestOffset = max(furthestOffset, self.furthestOffset)
+  }
+}
+
+/// Owns a ``LookaheadTracker``.
+///
+/// Once the `LookeaheadTrackerOwner` is deinitialized, the ``LookaheadTracker`` is also destroyed.
+class LookaheadTrackerOwner {
+  var lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
+
+  init() {
+    self.lookaheadTracker = .allocate(capacity: 1)
+    self.lookaheadTracker.initialize(to: LookaheadTracker())
+  }
+
+  deinit {
+    self.lookaheadTracker.deallocate()
+  }
+}
+
+/// Record the lookahead ranges for syntax nodes.
+public struct LookaheadRanges {
+  /// For each node that is recorded for re-use, the number of UTF-8 bytes that the parser looked ahead to parse the node, measured from the start of the node’s leading trivia.
+  ///
+  /// This information can be used to determine whether a node can be reused in incremental parse. A node can only be re-used if no byte in its looked range has changed.
+  var lookaheadRanges: [RawSyntax.ID: Int] = [:]
+
+  public init() {}
+
+  mutating func registerNodeForIncrementalParse(node: RawSyntax, lookaheadLength: Int) {
+    self.lookaheadRanges[node.id] = lookaheadLength
   }
 }

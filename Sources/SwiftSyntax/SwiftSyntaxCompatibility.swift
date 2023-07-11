@@ -19,6 +19,11 @@ public typealias AccessPathSyntax = ImportPathSyntax
 @available(*, deprecated, renamed: "ImportPathComponentSyntax")
 public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 
+extension AttributeSyntax {
+  @available(*, deprecated, renamed: "Arguments")
+  public typealias Argument = Arguments
+}
+
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
@@ -58,14 +63,17 @@ public extension FreestandingMacroExpansionSyntax {
   }
 }
 
-@available(*, deprecated, renamed: "NamedDecl")
-public protocol IdentifiedDeclSyntax {
-  var identifier: TokenSyntax { get set }
+extension GenericRequirementSyntax {
+  @available(*, deprecated, renamed: "Requirement")
+  public typealias Body = Requirement
 }
 
 @available(*, deprecated, renamed: "NamedDecl")
-public extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
-  var identifier: TokenSyntax {
+public typealias IdentifiedDeclSyntax = NamedDeclSyntax
+
+@available(*, deprecated, renamed: "NamedDecl")
+extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
+  public var identifier: TokenSyntax {
     get {
       return self.name
     }
@@ -75,28 +83,15 @@ public extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
   }
 }
 
-@available(*, deprecated)
-extension ActorDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension ClassDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension EnumDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension FunctionDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension MacroDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension ProtocolDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension StructDeclSyntax: IdentifiedDeclSyntax {}
-@available(*, deprecated)
-extension TypealiasDeclSyntax: IdentifiedDeclSyntax {}
+extension PatternBindingSyntax {
+  @available(*, deprecated, renamed: "Accessors")
+  public typealias Accessor = Accessors
+}
+
+extension SubscriptDeclSyntax {
+  @available(*, deprecated, renamed: "Accessors")
+  public typealias Accessor = Accessors
+}
 
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")

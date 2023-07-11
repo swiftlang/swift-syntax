@@ -58,6 +58,46 @@ public extension FreestandingMacroExpansionSyntax {
   }
 }
 
+@available(*, deprecated, renamed: "NamedDecl")
+public protocol IdentifiedDeclSyntax {
+  var identifier: TokenSyntax { get set }
+}
+
+@available(*, deprecated, renamed: "NamedDecl")
+public extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
+  var identifier: TokenSyntax {
+    get {
+      return self.name
+    }
+    set {
+      self.name = newValue
+    }
+  }
+}
+
+@available(*, deprecated)
+extension ActorDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension ClassDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension EnumDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension FunctionDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension MacroDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension ProtocolDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension StructDeclSyntax: IdentifiedDeclSyntax {}
+@available(*, deprecated)
+extension TypealiasDeclSyntax: IdentifiedDeclSyntax {}
+
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {

@@ -506,14 +506,18 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         ValidationFailure(node: .accessesEffect, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: .accessorParameter, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .differentiabilityParams, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .editorPlaceholderDecl, message: "could conform to trait 'MissingNode' but does not"),
-        ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'IdentifiedDecl' but does not"),
-        ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'IdentifiedDecl' but does not"),
+        ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
+        ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .initializesEffect, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .precedenceGroupDecl, message: "could conform to trait 'Braced' but does not"),
+        ValidationFailure(node: .precedenceGroupNameElement, message: "could conform to trait 'NamedDecl' but does not"),
+        ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .yieldList, message: "could conform to trait 'Parenthesized' but does not"),
       ]
     )
@@ -587,6 +591,33 @@ class ValidateSyntaxNodes: XCTestCase {
       expectedFailures: [
         // The child is singular here, the path just consists of multiple components
         ValidationFailure(node: .importDecl, message: "child 'Path' is a collection and should thus be named as a plural")
+      ]
+    )
+  }
+
+  /// Identifier is a wonderful ambiguous term. Almost always, 'name' or something similar is more expressive
+  func testNoChildIsNamedIdentifier() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.children {
+        if child.name == "Identifier" {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "children should generally not be named 'Identifier'"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        // The identifier expr / pattern nodes do actually have a child that’s the identifier
+        ValidationFailure(node: .identifierExpr, message: "children should generally not be named 'Identifier'"),
+        ValidationFailure(node: .identifierPattern, message: "children should generally not be named 'Identifier'"),
       ]
     )
   }

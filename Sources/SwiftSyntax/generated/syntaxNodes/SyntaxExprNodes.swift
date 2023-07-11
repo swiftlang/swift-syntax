@@ -1955,7 +1955,7 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `identifier`: `<identifier>`
+///  - `placeholder`: `<identifier>`
 public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1979,16 +1979,16 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeIdentifier, identifier, unexpectedAfterIdentifier))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeIdentifier?.raw, identifier.raw, unexpectedAfterIdentifier?.raw]
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.editorPlaceholderExpr,
         from: layout,
@@ -2002,7 +2002,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2011,7 +2011,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var placeholder: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -2020,7 +2020,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2030,7 +2030,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
   
   public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeIdentifier, \Self.identifier, \Self.unexpectedAfterIdentifier])
+    return .layout([\Self.unexpectedBeforePlaceholder, \Self.placeholder, \Self.unexpectedAfterPlaceholder])
   }
 }
 

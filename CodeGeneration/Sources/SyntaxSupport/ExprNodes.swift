@@ -706,7 +706,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "editor placeholder",
     children: [
       Child(
-        name: "Identifier",
+        name: "Placeholder",
+        deprecatedName: "Identifier",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       )
     ]
@@ -1082,7 +1083,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "key path property component",
     children: [
       Child(
-        name: "Identifier",
+        name: "Property",
+        deprecatedName: "Identifier",
         kind: .token(choices: [
           .token(tokenKind: "IdentifierToken"),
           .keyword(text: "self"),

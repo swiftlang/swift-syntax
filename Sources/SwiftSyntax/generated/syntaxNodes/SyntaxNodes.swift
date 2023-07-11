@@ -8161,7 +8161,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
 ///
 /// ### Children
 /// 
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `associatedValue`: ``EnumCaseParameterClauseSyntax``?
 ///  - `rawValue`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
@@ -8185,16 +8185,16 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - identifier: The name of this case.
+  ///   - name: The name of this case.
   ///   - associatedValue: The set of associated values of the case.
   ///   - rawValue: The raw value of this enum element, if present.
   ///   - trailingComma: The trailing comma of this element, if the case has multiple elements.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndAssociatedValue: UnexpectedNodesSyntax? = nil,
       associatedValue: EnumCaseParameterClauseSyntax? = nil,
       _ unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? = nil,
       rawValue: InitializerClauseSyntax? = nil,
@@ -8207,9 +8207,9 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndAssociatedValue, 
+            unexpectedBeforeName, 
+            name, 
+            unexpectedBetweenNameAndAssociatedValue, 
             associatedValue, 
             unexpectedBetweenAssociatedValueAndRawValue, 
             rawValue, 
@@ -8218,9 +8218,9 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndAssociatedValue?.raw, 
+          unexpectedBeforeName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndAssociatedValue?.raw, 
           associatedValue?.raw, 
           unexpectedBetweenAssociatedValueAndRawValue?.raw, 
           rawValue?.raw, 
@@ -8241,7 +8241,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -8251,7 +8251,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of this case.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -8260,7 +8260,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndAssociatedValue: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -8328,9 +8328,9 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndAssociatedValue, 
+          \Self.unexpectedBeforeName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndAssociatedValue, 
           \Self.associatedValue, 
           \Self.unexpectedBetweenAssociatedValueAndRawValue, 
           \Self.rawValue, 
@@ -12147,7 +12147,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `identifier`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
+///  - `property`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
@@ -12173,9 +12173,9 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeProperty: UnexpectedNodesSyntax? = nil,
+      property: TokenSyntax,
+      _ unexpectedBetweenPropertyAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
       declNameArguments: DeclNameArgumentsSyntax? = nil,
       _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
@@ -12186,18 +12186,18 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndDeclNameArguments, 
+            unexpectedBeforeProperty, 
+            property, 
+            unexpectedBetweenPropertyAndDeclNameArguments, 
             declNameArguments, 
             unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndDeclNameArguments?.raw, 
+          unexpectedBeforeProperty?.raw, 
+          property.raw, 
+          unexpectedBetweenPropertyAndDeclNameArguments?.raw, 
           declNameArguments?.raw, 
           unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.raw, 
           genericArgumentClause?.raw, 
@@ -12216,7 +12216,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeProperty: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -12225,7 +12225,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var property: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -12234,7 +12234,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPropertyAndDeclNameArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -12281,9 +12281,9 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndDeclNameArguments, 
+          \Self.unexpectedBeforeProperty, 
+          \Self.property, 
+          \Self.unexpectedBetweenPropertyAndDeclNameArguments, 
           \Self.declNameArguments, 
           \Self.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
           \Self.genericArgumentClause, 

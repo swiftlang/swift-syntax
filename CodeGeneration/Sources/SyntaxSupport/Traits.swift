@@ -73,9 +73,9 @@ public let TRAITS: [Trait] = [
     ]
   ),
   Trait(
-    traitName: "IdentifiedDecl",
+    traitName: "NamedDecl",
     children: [
-      Child(name: "Identifier", kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
+      Child(name: "Name", kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
     ]
   ),
   Trait(

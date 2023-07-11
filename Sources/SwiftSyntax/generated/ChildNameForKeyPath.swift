@@ -125,12 +125,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndActorKeyword"
   case \ActorDeclSyntax.actorKeyword:
     return "actorKeyword"
-  case \ActorDeclSyntax.unexpectedBetweenActorKeywordAndIdentifier:
-    return "unexpectedBetweenActorKeywordAndIdentifier"
-  case \ActorDeclSyntax.identifier:
-    return "identifier"
-  case \ActorDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \ActorDeclSyntax.unexpectedBetweenActorKeywordAndName:
+    return "unexpectedBetweenActorKeywordAndName"
+  case \ActorDeclSyntax.name:
+    return "name"
+  case \ActorDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \ActorDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \ActorDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
@@ -231,12 +231,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndAssociatedtypeKeyword"
   case \AssociatedtypeDeclSyntax.associatedtypeKeyword:
     return "associatedtypeKeyword"
-  case \AssociatedtypeDeclSyntax.unexpectedBetweenAssociatedtypeKeywordAndIdentifier:
-    return "unexpectedBetweenAssociatedtypeKeywordAndIdentifier"
-  case \AssociatedtypeDeclSyntax.identifier:
-    return "identifier"
-  case \AssociatedtypeDeclSyntax.unexpectedBetweenIdentifierAndInheritanceClause:
-    return "unexpectedBetweenIdentifierAndInheritanceClause"
+  case \AssociatedtypeDeclSyntax.unexpectedBetweenAssociatedtypeKeywordAndName:
+    return "unexpectedBetweenAssociatedtypeKeywordAndName"
+  case \AssociatedtypeDeclSyntax.name:
+    return "name"
+  case \AssociatedtypeDeclSyntax.unexpectedBetweenNameAndInheritanceClause:
+    return "unexpectedBetweenNameAndInheritanceClause"
   case \AssociatedtypeDeclSyntax.inheritanceClause:
     return "inheritanceClause"
   case \AssociatedtypeDeclSyntax.unexpectedBetweenInheritanceClauseAndInitializer:
@@ -515,12 +515,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndClassKeyword"
   case \ClassDeclSyntax.classKeyword:
     return "classKeyword"
-  case \ClassDeclSyntax.unexpectedBetweenClassKeywordAndIdentifier:
-    return "unexpectedBetweenClassKeywordAndIdentifier"
-  case \ClassDeclSyntax.identifier:
-    return "identifier"
-  case \ClassDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \ClassDeclSyntax.unexpectedBetweenClassKeywordAndName:
+    return "unexpectedBetweenClassKeywordAndName"
+  case \ClassDeclSyntax.name:
+    return "name"
+  case \ClassDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \ClassDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \ClassDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
@@ -1155,12 +1155,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "placeholder"
   case \EditorPlaceholderDeclSyntax.unexpectedAfterPlaceholder:
     return "unexpectedAfterPlaceholder"
-  case \EditorPlaceholderExprSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \EditorPlaceholderExprSyntax.identifier:
-    return "identifier"
-  case \EditorPlaceholderExprSyntax.unexpectedAfterIdentifier:
-    return "unexpectedAfterIdentifier"
+  case \EditorPlaceholderExprSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \EditorPlaceholderExprSyntax.placeholder:
+    return "placeholder"
+  case \EditorPlaceholderExprSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
   case \EnumCaseDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \EnumCaseDeclSyntax.attributes:
@@ -1179,12 +1179,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "elements"
   case \EnumCaseDeclSyntax.unexpectedAfterElements:
     return "unexpectedAfterElements"
-  case \EnumCaseElementSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \EnumCaseElementSyntax.identifier:
-    return "identifier"
-  case \EnumCaseElementSyntax.unexpectedBetweenIdentifierAndAssociatedValue:
-    return "unexpectedBetweenIdentifierAndAssociatedValue"
+  case \EnumCaseElementSyntax.unexpectedBeforeName:
+    return "unexpectedBeforeName"
+  case \EnumCaseElementSyntax.name:
+    return "name"
+  case \EnumCaseElementSyntax.unexpectedBetweenNameAndAssociatedValue:
+    return "unexpectedBetweenNameAndAssociatedValue"
   case \EnumCaseElementSyntax.associatedValue:
     return "associatedValue"
   case \EnumCaseElementSyntax.unexpectedBetweenAssociatedValueAndRawValue:
@@ -1253,12 +1253,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndEnumKeyword"
   case \EnumDeclSyntax.enumKeyword:
     return "enumKeyword"
-  case \EnumDeclSyntax.unexpectedBetweenEnumKeywordAndIdentifier:
-    return "unexpectedBetweenEnumKeywordAndIdentifier"
-  case \EnumDeclSyntax.identifier:
-    return "identifier"
-  case \EnumDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \EnumDeclSyntax.unexpectedBetweenEnumKeywordAndName:
+    return "unexpectedBetweenEnumKeywordAndName"
+  case \EnumDeclSyntax.name:
+    return "name"
+  case \EnumDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \EnumDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \EnumDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
@@ -1455,12 +1455,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndFuncKeyword"
   case \FunctionDeclSyntax.funcKeyword:
     return "funcKeyword"
-  case \FunctionDeclSyntax.unexpectedBetweenFuncKeywordAndIdentifier:
-    return "unexpectedBetweenFuncKeywordAndIdentifier"
-  case \FunctionDeclSyntax.identifier:
-    return "identifier"
-  case \FunctionDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \FunctionDeclSyntax.unexpectedBetweenFuncKeywordAndName:
+    return "unexpectedBetweenFuncKeywordAndName"
+  case \FunctionDeclSyntax.name:
+    return "name"
+  case \FunctionDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \FunctionDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \FunctionDeclSyntax.unexpectedBetweenGenericParameterClauseAndSignature:
@@ -1945,12 +1945,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "questionOrExclamationMark"
   case \KeyPathOptionalComponentSyntax.unexpectedAfterQuestionOrExclamationMark:
     return "unexpectedAfterQuestionOrExclamationMark"
-  case \KeyPathPropertyComponentSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \KeyPathPropertyComponentSyntax.identifier:
-    return "identifier"
-  case \KeyPathPropertyComponentSyntax.unexpectedBetweenIdentifierAndDeclNameArguments:
-    return "unexpectedBetweenIdentifierAndDeclNameArguments"
+  case \KeyPathPropertyComponentSyntax.unexpectedBeforeProperty:
+    return "unexpectedBeforeProperty"
+  case \KeyPathPropertyComponentSyntax.property:
+    return "property"
+  case \KeyPathPropertyComponentSyntax.unexpectedBetweenPropertyAndDeclNameArguments:
+    return "unexpectedBetweenPropertyAndDeclNameArguments"
   case \KeyPathPropertyComponentSyntax.declNameArguments:
     return "declNameArguments"
   case \KeyPathPropertyComponentSyntax.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause:
@@ -2051,12 +2051,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndMacroKeyword"
   case \MacroDeclSyntax.macroKeyword:
     return "macroKeyword"
-  case \MacroDeclSyntax.unexpectedBetweenMacroKeywordAndIdentifier:
-    return "unexpectedBetweenMacroKeywordAndIdentifier"
-  case \MacroDeclSyntax.identifier:
-    return "identifier"
-  case \MacroDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \MacroDeclSyntax.unexpectedBetweenMacroKeywordAndName:
+    return "unexpectedBetweenMacroKeywordAndName"
+  case \MacroDeclSyntax.name:
+    return "name"
+  case \MacroDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \MacroDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \MacroDeclSyntax.unexpectedBetweenGenericParameterClauseAndSignature:
@@ -2357,12 +2357,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenFixitySpecifierAndOperatorKeyword"
   case \OperatorDeclSyntax.operatorKeyword:
     return "operatorKeyword"
-  case \OperatorDeclSyntax.unexpectedBetweenOperatorKeywordAndIdentifier:
-    return "unexpectedBetweenOperatorKeywordAndIdentifier"
-  case \OperatorDeclSyntax.identifier:
-    return "identifier"
-  case \OperatorDeclSyntax.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes:
-    return "unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes"
+  case \OperatorDeclSyntax.unexpectedBetweenOperatorKeywordAndName:
+    return "unexpectedBetweenOperatorKeywordAndName"
+  case \OperatorDeclSyntax.name:
+    return "name"
+  case \OperatorDeclSyntax.unexpectedBetweenNameAndOperatorPrecedenceAndTypes:
+    return "unexpectedBetweenNameAndOperatorPrecedenceAndTypes"
   case \OperatorDeclSyntax.operatorPrecedenceAndTypes:
     return "operatorPrecedenceAndTypes"
   case \OperatorDeclSyntax.unexpectedAfterOperatorPrecedenceAndTypes:
@@ -2625,12 +2625,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndPrecedencegroupKeyword"
   case \PrecedenceGroupDeclSyntax.precedencegroupKeyword:
     return "precedencegroupKeyword"
-  case \PrecedenceGroupDeclSyntax.unexpectedBetweenPrecedencegroupKeywordAndIdentifier:
-    return "unexpectedBetweenPrecedencegroupKeywordAndIdentifier"
-  case \PrecedenceGroupDeclSyntax.identifier:
-    return "identifier"
-  case \PrecedenceGroupDeclSyntax.unexpectedBetweenIdentifierAndLeftBrace:
-    return "unexpectedBetweenIdentifierAndLeftBrace"
+  case \PrecedenceGroupDeclSyntax.unexpectedBetweenPrecedencegroupKeywordAndName:
+    return "unexpectedBetweenPrecedencegroupKeywordAndName"
+  case \PrecedenceGroupDeclSyntax.name:
+    return "name"
+  case \PrecedenceGroupDeclSyntax.unexpectedBetweenNameAndLeftBrace:
+    return "unexpectedBetweenNameAndLeftBrace"
   case \PrecedenceGroupDeclSyntax.leftBrace:
     return "leftBrace"
   case \PrecedenceGroupDeclSyntax.unexpectedBetweenLeftBraceAndGroupAttributes:
@@ -2713,12 +2713,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndProtocolKeyword"
   case \ProtocolDeclSyntax.protocolKeyword:
     return "protocolKeyword"
-  case \ProtocolDeclSyntax.unexpectedBetweenProtocolKeywordAndIdentifier:
-    return "unexpectedBetweenProtocolKeywordAndIdentifier"
-  case \ProtocolDeclSyntax.identifier:
-    return "identifier"
-  case \ProtocolDeclSyntax.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause:
-    return "unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause"
+  case \ProtocolDeclSyntax.unexpectedBetweenProtocolKeywordAndName:
+    return "unexpectedBetweenProtocolKeywordAndName"
+  case \ProtocolDeclSyntax.name:
+    return "name"
+  case \ProtocolDeclSyntax.unexpectedBetweenNameAndPrimaryAssociatedTypeClause:
+    return "unexpectedBetweenNameAndPrimaryAssociatedTypeClause"
   case \ProtocolDeclSyntax.primaryAssociatedTypeClause:
     return "primaryAssociatedTypeClause"
   case \ProtocolDeclSyntax.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause:
@@ -2903,12 +2903,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndStructKeyword"
   case \StructDeclSyntax.structKeyword:
     return "structKeyword"
-  case \StructDeclSyntax.unexpectedBetweenStructKeywordAndIdentifier:
-    return "unexpectedBetweenStructKeywordAndIdentifier"
-  case \StructDeclSyntax.identifier:
-    return "identifier"
-  case \StructDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \StructDeclSyntax.unexpectedBetweenStructKeywordAndName:
+    return "unexpectedBetweenStructKeywordAndName"
+  case \StructDeclSyntax.name:
+    return "name"
+  case \StructDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \StructDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \StructDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
@@ -3295,12 +3295,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndTypealiasKeyword"
   case \TypealiasDeclSyntax.typealiasKeyword:
     return "typealiasKeyword"
-  case \TypealiasDeclSyntax.unexpectedBetweenTypealiasKeywordAndIdentifier:
-    return "unexpectedBetweenTypealiasKeywordAndIdentifier"
-  case \TypealiasDeclSyntax.identifier:
-    return "identifier"
-  case \TypealiasDeclSyntax.unexpectedBetweenIdentifierAndGenericParameterClause:
-    return "unexpectedBetweenIdentifierAndGenericParameterClause"
+  case \TypealiasDeclSyntax.unexpectedBetweenTypealiasKeywordAndName:
+    return "unexpectedBetweenTypealiasKeywordAndName"
+  case \TypealiasDeclSyntax.name:
+    return "name"
+  case \TypealiasDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+    return "unexpectedBetweenNameAndGenericParameterClause"
   case \TypealiasDeclSyntax.genericParameterClause:
     return "genericParameterClause"
   case \TypealiasDeclSyntax.unexpectedBetweenGenericParameterClauseAndInitializer:

@@ -55,7 +55,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Argument",
+        name: "Arguments",
+        deprecatedName: "Argument",
         kind: .nodeChoices(choices: [
           Child(
             name: "ArgumentList",
@@ -456,7 +457,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "DiffParams",
+        name: "DifferentiabilityParameters",
         kind: .collection(kind: .differentiabilityParamList, collectionElementName: "DifferentiabilityParam"),
         documentation: "The parameters for differentiation."
       ),
@@ -583,7 +584,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "Declname",
+        name: "DeclName",
+        deprecatedName: "Declname",
         kind: .node(kind: .declName)
       ),
     ]
@@ -863,7 +865,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The colon separating the label and the value"
       ),
       Child(
-        name: "Declname",
+        name: "DeclName",
+        deprecatedName: "Declname",
         kind: .node(kind: .declName),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"

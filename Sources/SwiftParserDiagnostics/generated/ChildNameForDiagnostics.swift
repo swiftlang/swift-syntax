@@ -336,7 +336,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \TargetFunctionEntrySyntax.targetLabel:
     return "label"
-  case \TargetFunctionEntrySyntax.declname:
+  case \TargetFunctionEntrySyntax.declName:
     return "declaration name"
   case \TernaryExprSyntax.condition:
     return "condition"

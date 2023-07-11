@@ -625,9 +625,11 @@ class ValidateSyntaxNodes: XCTestCase {
   func testNoAbbreviationsInChildNames() {
     var failures: [ValidationFailure] = []
 
+    let abbreviations = ["Args", "Params"]
+
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for child in node.nonUnexpectedChildren {
-        if child.name.contains("Args") {
+        if abbreviations.contains(where: { child.name.contains($0) }) {
           failures.append(
             ValidationFailure(
               node: node.kind,

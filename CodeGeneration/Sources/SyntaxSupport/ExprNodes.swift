@@ -107,7 +107,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "TypeName",
+        name: "Type",
+        deprecatedName: "TypeName",
         kind: .node(kind: .type)
       ),
     ]
@@ -996,7 +997,8 @@ public let EXPR_NODES: [Node] = [
         documentation: "The `is` keyword for this expression."
       ),
       Child(
-        name: "TypeName",
+        name: "Type",
+        deprecatedName: "TypeName",
         kind: .node(kind: .type),
         documentation: "The type against which the expression will be checked to see if the expression can be cast to it."
       ),
@@ -1151,7 +1153,8 @@ public let EXPR_NODES: [Node] = [
         documentation: "The `#` sign."
       ),
       Child(
-        name: "Macro",
+        name: "MacroName",
+        deprecatedName: "Macro",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(

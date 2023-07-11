@@ -1268,7 +1268,8 @@ public let DECL_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "TypeName",
+        name: "Type",
+        deprecatedName: "TypeName",
         kind: .node(kind: .type)
       ),
       Child(
@@ -1464,7 +1465,8 @@ public let DECL_NODES: [Node] = [
         documentation: "The `#` sign."
       ),
       Child(
-        name: "Macro",
+        name: "MacroName",
+        deprecatedName: "Macro",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
       ),
       Child(
@@ -1698,7 +1700,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Accessor",
+        name: "Accessors",
+        deprecatedName: "Accessor",
         kind: .nodeChoices(choices: [
           Child(
             name: "Accessors",
@@ -2257,7 +2260,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Accessor",
+        name: "Accessors",
+        deprecatedName: "Accessor",
         kind: .nodeChoices(choices: [
           Child(
             name: "Accessors",

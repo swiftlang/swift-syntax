@@ -909,10 +909,10 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `atSign`: `'@'`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `'('`?
-///  - `argument`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilitySpecListSyntax`` | ``SpecializeAttributeSpecListSyntax`` | ``ObjCSelectorSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeRegistrationAttributeArgumentsSyntax`` | ``BackDeployedAttributeSpecListSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementArgumentsSyntax`` | ``UnavailableFromAsyncArgumentsSyntax`` | ``EffectsArgumentsSyntax`` | ``DocumentationAttributeArgumentsSyntax``)?
+///  - `arguments`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilitySpecListSyntax`` | ``SpecializeAttributeSpecListSyntax`` | ``ObjCSelectorSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeRegistrationAttributeArgumentsSyntax`` | ``BackDeployedAttributeSpecListSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementArgumentsSyntax`` | ``UnavailableFromAsyncArgumentsSyntax`` | ``EffectsArgumentsSyntax`` | ``DocumentationAttributeArgumentsSyntax``)?
 ///  - `rightParen`: `')'`?
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Argument: SyntaxChildChoices {
+  public enum Arguments: SyntaxChildChoices {
     case `argumentList`(TupleExprElementListSyntax)
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
@@ -1195,7 +1195,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - atSign: The `@` sign.
   ///   - attributeName: The name of the attribute.
   ///   - leftParen: If the attribute takes arguments, the opening parenthesis.
-  ///   - argument: The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.
+  ///   - arguments: The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.
   ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -1206,9 +1206,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       attributeName: some TypeSyntaxProtocol,
       _ unexpectedBetweenAttributeNameAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
-      _ unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? = nil,
-      argument: Argument? = nil,
-      _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: Arguments? = nil,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -1223,9 +1223,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
             attributeName, 
             unexpectedBetweenAttributeNameAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArgument, 
-            argument, 
-            unexpectedBetweenArgumentAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
@@ -1236,9 +1236,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
           attributeName.raw, 
           unexpectedBetweenAttributeNameAndLeftParen?.raw, 
           leftParen?.raw, 
-          unexpectedBetweenLeftParenAndArgument?.raw, 
-          argument?.raw, 
-          unexpectedBetweenArgumentAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments?.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen?.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -1312,7 +1312,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgument: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1322,16 +1322,16 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.
-  public var argument: Argument? {
+  public var arguments: Arguments? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(Argument.init)
+      return data.child(at: 7, parent: Syntax(self)).map(Arguments.init)
     }
     set(value) {
       self = AttributeSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1367,9 +1367,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.attributeName, 
           \Self.unexpectedBetweenAttributeNameAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArgument, 
-          \Self.argument, 
-          \Self.unexpectedBetweenArgumentAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
@@ -7403,7 +7403,7 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
-///  - `diffParams`: ``DifferentiabilityParamListSyntax``
+///  - `differentiabilityParameters`: ``DifferentiabilityParamListSyntax``
 ///  - `rightParen`: `')'`
 public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -7425,15 +7425,15 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - diffParams: The parameters for differentiation.
+  ///   - differentiabilityParameters: The parameters for differentiation.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? = nil,
-      diffParams: DifferentiabilityParamListSyntax,
-      _ unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? = nil,
+      differentiabilityParameters: DifferentiabilityParamListSyntax,
+      _ unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -7444,18 +7444,18 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndDiffParams, 
-            diffParams, 
-            unexpectedBetweenDiffParamsAndRightParen, 
+            unexpectedBetweenLeftParenAndDifferentiabilityParameters, 
+            differentiabilityParameters, 
+            unexpectedBetweenDifferentiabilityParametersAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndDiffParams?.raw, 
-          diffParams.raw, 
-          unexpectedBetweenDiffParamsAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndDifferentiabilityParameters?.raw, 
+          differentiabilityParameters.raw, 
+          unexpectedBetweenDifferentiabilityParametersAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -7490,7 +7490,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndDiffParams: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7500,7 +7500,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The parameters for differentiation.
-  public var diffParams: DifferentiabilityParamListSyntax {
+  public var differentiabilityParameters: DifferentiabilityParamListSyntax {
     get {
       return DifferentiabilityParamListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -7509,12 +7509,12 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `diffParams`
+  /// Adds the provided `element` to the node's `differentiabilityParameters`
   /// collection.
   /// - param element: The new `DifferentiabilityParam` to add to the node's
-  ///                  `diffParams` collection.
+  ///                  `differentiabilityParameters` collection.
   /// - returns: A copy of the receiver with the provided `DifferentiabilityParam`
-  ///            appended to its `diffParams` collection.
+  ///            appended to its `differentiabilityParameters` collection.
   public func addDifferentiabilityParam(_ element: DifferentiabilityParamSyntax) -> DifferentiabilityParamsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7533,7 +7533,7 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityParamsSyntax(newData)
   }
   
-  public var unexpectedBetweenDiffParamsAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7564,9 +7564,9 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndDiffParams, 
-          \Self.diffParams, 
-          \Self.unexpectedBetweenDiffParamsAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndDifferentiabilityParameters, 
+          \Self.differentiabilityParameters, 
+          \Self.unexpectedBetweenDifferentiabilityParametersAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
@@ -8012,7 +8012,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `forLabel`: `'for'`
 ///  - `colon`: `':'`
-///  - `declname`: ``DeclNameSyntax``
+///  - `declName`: ``DeclNameSyntax``
 public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8040,9 +8040,9 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
       forLabel: TokenSyntax = .keyword(.for),
       _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: DeclNameSyntax,
-      _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclNameSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -8053,18 +8053,18 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
             forLabel, 
             unexpectedBetweenForLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndDeclname, 
-            declname, 
-            unexpectedAfterDeclname
+            unexpectedBetweenColonAndDeclName, 
+            declName, 
+            unexpectedAfterDeclName
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeForLabel?.raw, 
           forLabel.raw, 
           unexpectedBetweenForLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndDeclname?.raw, 
-          declname.raw, 
-          unexpectedAfterDeclname?.raw
+          unexpectedBetweenColonAndDeclName?.raw, 
+          declName.raw, 
+          unexpectedAfterDeclName?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.dynamicReplacementArguments,
@@ -8115,7 +8115,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
     }
   }
   
-  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -8124,7 +8124,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
     }
   }
   
-  public var declname: DeclNameSyntax {
+  public var declName: DeclNameSyntax {
     get {
       return DeclNameSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -8133,7 +8133,7 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
     }
   }
   
-  public var unexpectedAfterDeclname: UnexpectedNodesSyntax? {
+  public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -8148,9 +8148,9 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
           \Self.forLabel, 
           \Self.unexpectedBetweenForLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndDeclname, 
-          \Self.declname, 
-          \Self.unexpectedAfterDeclname
+          \Self.unexpectedBetweenColonAndDeclName, 
+          \Self.declName, 
+          \Self.unexpectedAfterDeclName
         ])
   }
 }
@@ -10580,10 +10580,10 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `body`: (``SameTypeRequirementSyntax`` | ``ConformanceRequirementSyntax`` | ``LayoutRequirementSyntax``)
+///  - `requirement`: (``SameTypeRequirementSyntax`` | ``ConformanceRequirementSyntax`` | ``LayoutRequirementSyntax``)
 ///  - `trailingComma`: `','`?
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Body: SyntaxChildChoices {
+  public enum Requirement: SyntaxChildChoices {
     case `sameTypeRequirement`(SameTypeRequirementSyntax)
     case `conformanceRequirement`(ConformanceRequirementSyntax)
     case `layoutRequirement`(LayoutRequirementSyntax)
@@ -10658,9 +10658,9 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBody: UnexpectedNodesSyntax? = nil,
-      body: Body,
-      _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeRequirement: UnexpectedNodesSyntax? = nil,
+      requirement: Requirement,
+      _ unexpectedBetweenRequirementAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -10669,16 +10669,16 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBody, 
-            body, 
-            unexpectedBetweenBodyAndTrailingComma, 
+            unexpectedBeforeRequirement, 
+            requirement, 
+            unexpectedBetweenRequirementAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeBody?.raw, 
-          body.raw, 
-          unexpectedBetweenBodyAndTrailingComma?.raw, 
+          unexpectedBeforeRequirement?.raw, 
+          requirement.raw, 
+          unexpectedBetweenRequirementAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -10695,7 +10695,7 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeBody: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeRequirement: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10704,16 +10704,16 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var body: Body {
+  public var requirement: Requirement {
     get {
-      return Body(data.child(at: 1, parent: Syntax(self))!)
+      return Requirement(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
       self = GenericRequirementSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenRequirementAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10742,9 +10742,9 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeBody, 
-          \Self.body, 
-          \Self.unexpectedBetweenBodyAndTrailingComma, 
+          \Self.unexpectedBeforeRequirement, 
+          \Self.requirement, 
+          \Self.unexpectedBetweenRequirementAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -11445,7 +11445,7 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `typeName`: ``TypeSyntax``
+///  - `type`: ``TypeSyntax``
 ///  - `trailingComma`: `','`?
 public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -11470,9 +11470,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeTypeName: UnexpectedNodesSyntax? = nil,
-      typeName: some TypeSyntaxProtocol,
-      _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+      type: some TypeSyntaxProtocol,
+      _ unexpectedBetweenTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -11481,16 +11481,16 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeTypeName, 
-            typeName, 
-            unexpectedBetweenTypeNameAndTrailingComma, 
+            unexpectedBeforeType, 
+            type, 
+            unexpectedBetweenTypeAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeTypeName?.raw, 
-          typeName.raw, 
-          unexpectedBetweenTypeNameAndTrailingComma?.raw, 
+          unexpectedBeforeType?.raw, 
+          type.raw, 
+          unexpectedBetweenTypeAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -11507,7 +11507,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -11516,7 +11516,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var typeName: TypeSyntax {
+  public var type: TypeSyntax {
     get {
       return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -11525,7 +11525,7 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypeAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -11554,9 +11554,9 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeTypeName, 
-          \Self.typeName, 
-          \Self.unexpectedBetweenTypeNameAndTrailingComma, 
+          \Self.unexpectedBeforeType, 
+          \Self.type, 
+          \Self.unexpectedBetweenTypeAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -14693,10 +14693,10 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `initializer`: ``InitializerClauseSyntax``?
-///  - `accessor`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
+///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 ///  - `trailingComma`: `','`?
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Accessor: SyntaxChildChoices {
+  public enum Accessors: SyntaxChildChoices {
     case `accessors`(AccessorBlockSyntax)
     case `getter`(CodeBlockSyntax)
     
@@ -14766,9 +14766,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       typeAnnotation: TypeAnnotationSyntax? = nil,
       _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: InitializerClauseSyntax? = nil,
-      _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessor? = nil,
-      _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenInitializerAndAccessors: UnexpectedNodesSyntax? = nil,
+      accessors: Accessors? = nil,
+      _ unexpectedBetweenAccessorsAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -14783,9 +14783,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
             typeAnnotation, 
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
-            unexpectedBetweenInitializerAndAccessor, 
-            accessor, 
-            unexpectedBetweenAccessorAndTrailingComma, 
+            unexpectedBetweenInitializerAndAccessors, 
+            accessors, 
+            unexpectedBetweenAccessorsAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
@@ -14796,9 +14796,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           typeAnnotation?.raw, 
           unexpectedBetweenTypeAnnotationAndInitializer?.raw, 
           initializer?.raw, 
-          unexpectedBetweenInitializerAndAccessor?.raw, 
-          accessor?.raw, 
-          unexpectedBetweenAccessorAndTrailingComma?.raw, 
+          unexpectedBetweenInitializerAndAccessors?.raw, 
+          accessors?.raw, 
+          unexpectedBetweenAccessorsAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -14869,7 +14869,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenInitializerAndAccessors: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14878,16 +14878,16 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessor: Accessor? {
+  public var accessors: Accessors? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(Accessor.init)
+      return data.child(at: 7, parent: Syntax(self)).map(Accessors.init)
     }
     set(value) {
       self = PatternBindingSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAccessorsAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14922,9 +14922,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.typeAnnotation, 
           \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
           \Self.initializer, 
-          \Self.unexpectedBetweenInitializerAndAccessor, 
-          \Self.accessor, 
-          \Self.unexpectedBetweenAccessorAndTrailingComma, 
+          \Self.unexpectedBetweenInitializerAndAccessors, 
+          \Self.accessors, 
+          \Self.unexpectedBetweenAccessorsAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -17292,7 +17292,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `targetLabel`: `'target'`
 ///  - `colon`: `':'`
-///  - `declname`: ``DeclNameSyntax``
+///  - `declName`: ``DeclNameSyntax``
 ///  - `trailingComma`: `','`?
 public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -17316,7 +17316,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - targetLabel: The label of the argument
   ///   - colon: The colon separating the label and the value
-  ///   - declname: The value for this argument
+  ///   - declName: The value for this argument
   ///   - trailingComma: A trailing comma if this argument is followed by another one
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -17325,9 +17325,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
       targetLabel: TokenSyntax = .keyword(.target),
       _ unexpectedBetweenTargetLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: DeclNameSyntax,
-      _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclNameSyntax,
+      _ unexpectedBetweenDeclNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -17340,9 +17340,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
             targetLabel, 
             unexpectedBetweenTargetLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndDeclname, 
-            declname, 
-            unexpectedBetweenDeclnameAndTrailingComma, 
+            unexpectedBetweenColonAndDeclName, 
+            declName, 
+            unexpectedBetweenDeclNameAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
@@ -17351,9 +17351,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
           targetLabel.raw, 
           unexpectedBetweenTargetLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndDeclname?.raw, 
-          declname.raw, 
-          unexpectedBetweenDeclnameAndTrailingComma?.raw, 
+          unexpectedBetweenColonAndDeclName?.raw, 
+          declName.raw, 
+          unexpectedBetweenDeclNameAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -17408,7 +17408,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17418,7 +17418,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The value for this argument
-  public var declname: DeclNameSyntax {
+  public var declName: DeclNameSyntax {
     get {
       return DeclNameSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -17427,7 +17427,7 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDeclNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17461,9 +17461,9 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
           \Self.targetLabel, 
           \Self.unexpectedBetweenTargetLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndDeclname, 
-          \Self.declname, 
-          \Self.unexpectedBetweenDeclnameAndTrailingComma, 
+          \Self.unexpectedBetweenColonAndDeclName, 
+          \Self.declName, 
+          \Self.unexpectedBetweenDeclNameAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])

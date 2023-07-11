@@ -4201,7 +4201,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `pound`: `'#'`
-///  - `macro`: `<identifier>`
+///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
 ///  - `arguments`: ``TupleExprElementListSyntax``
@@ -4238,9 +4238,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
       pound: TokenSyntax = .poundToken(),
-      _ unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? = nil,
-      macro: TokenSyntax,
-      _ unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+      macroName: TokenSyntax,
+      _ unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
       _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
@@ -4265,9 +4265,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndPound, 
             pound, 
-            unexpectedBetweenPoundAndMacro, 
-            macro, 
-            unexpectedBetweenMacroAndGenericArgumentClause, 
+            unexpectedBetweenPoundAndMacroName, 
+            macroName, 
+            unexpectedBetweenMacroNameAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedBetweenGenericArgumentClauseAndLeftParen, 
             leftParen, 
@@ -4288,9 +4288,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndPound?.raw, 
           pound.raw, 
-          unexpectedBetweenPoundAndMacro?.raw, 
-          macro.raw, 
-          unexpectedBetweenMacroAndGenericArgumentClause?.raw, 
+          unexpectedBetweenPoundAndMacroName?.raw, 
+          macroName.raw, 
+          unexpectedBetweenMacroNameAndGenericArgumentClause?.raw, 
           genericArgumentClause?.raw, 
           unexpectedBetweenGenericArgumentClauseAndLeftParen?.raw, 
           leftParen?.raw, 
@@ -4420,7 +4420,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4429,7 +4429,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var macro: TokenSyntax {
+  public var macroName: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -4438,7 +4438,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4611,9 +4611,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndPound, 
           \Self.pound, 
-          \Self.unexpectedBetweenPoundAndMacro, 
-          \Self.macro, 
-          \Self.unexpectedBetweenMacroAndGenericArgumentClause, 
+          \Self.unexpectedBetweenPoundAndMacroName, 
+          \Self.macroName, 
+          \Self.unexpectedBetweenMacroNameAndGenericArgumentClause, 
           \Self.genericArgumentClause, 
           \Self.unexpectedBetweenGenericArgumentClauseAndLeftParen, 
           \Self.leftParen, 
@@ -6305,9 +6305,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `parameterClause`: ``ParameterClauseSyntax``
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `accessor`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
+///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public enum Accessor: SyntaxChildChoices {
+  public enum Accessors: SyntaxChildChoices {
     case `accessors`(AccessorBlockSyntax)
     case `getter`(CodeBlockSyntax)
     
@@ -6387,9 +6387,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       returnClause: ReturnClauseSyntax,
       _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
-      _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessor? = nil,
-      _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? = nil,
+      accessors: Accessors? = nil,
+      _ unexpectedAfterAccessors: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6410,9 +6410,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             returnClause, 
             unexpectedBetweenReturnClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndAccessor, 
-            accessor, 
-            unexpectedAfterAccessor
+            unexpectedBetweenGenericWhereClauseAndAccessors, 
+            accessors, 
+            unexpectedAfterAccessors
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -6429,9 +6429,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           returnClause.raw, 
           unexpectedBetweenReturnClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndAccessor?.raw, 
-          accessor?.raw, 
-          unexpectedAfterAccessor?.raw
+          unexpectedBetweenGenericWhereClauseAndAccessors?.raw, 
+          accessors?.raw, 
+          unexpectedAfterAccessors?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.subscriptDecl,
@@ -6622,7 +6622,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6631,16 +6631,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessor: Accessor? {
+  public var accessors: Accessors? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(Accessor.init)
+      return data.child(at: 15, parent: Syntax(self)).map(Accessors.init)
     }
     set(value) {
       self = SubscriptDeclSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
+  public var unexpectedAfterAccessors: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6665,9 +6665,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.returnClause, 
           \Self.unexpectedBetweenReturnClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndAccessor, 
-          \Self.accessor, 
-          \Self.unexpectedAfterAccessor
+          \Self.unexpectedBetweenGenericWhereClauseAndAccessors, 
+          \Self.accessors, 
+          \Self.unexpectedAfterAccessors
         ])
   }
 }

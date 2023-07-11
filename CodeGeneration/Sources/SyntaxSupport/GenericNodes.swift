@@ -142,7 +142,8 @@ public let GENERIC_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Body",
+        name: "Requirement",
+        deprecatedName: "Body",
         kind: .nodeChoices(choices: [
           Child(
             name: "SameTypeRequirement",

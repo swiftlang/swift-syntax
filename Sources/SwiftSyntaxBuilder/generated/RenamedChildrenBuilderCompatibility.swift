@@ -606,7 +606,7 @@ extension KeyPathSubscriptComponentSyntax {
 }
 
 extension MacroExpansionDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause, arguments argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -643,7 +643,7 @@ extension MacroExpansionDeclSyntax {
         unexpectedBetweenModifiersAndPoundToken, 
         pound: poundToken, 
         unexpectedBetweenPoundTokenAndMacro, 
-        macro: macro, 
+        macroName: macro, 
         unexpectedBetweenMacroAndGenericArguments, 
         genericArgumentClause: genericArguments, 
         unexpectedBetweenGenericArgumentsAndLeftParen, 
@@ -663,7 +663,7 @@ extension MacroExpansionDeclSyntax {
 }
 
 extension MacroExpansionExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause, arguments argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -692,7 +692,7 @@ extension MacroExpansionExprSyntax {
         unexpectedBeforePoundToken, 
         pound: poundToken, 
         unexpectedBetweenPoundTokenAndMacro, 
-        macro: macro, 
+        macroName: macro, 
         unexpectedBetweenMacroAndGenericArguments, 
         genericArgumentClause: genericArguments, 
         unexpectedBetweenGenericArgumentsAndLeftParen, 

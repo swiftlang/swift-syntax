@@ -2445,12 +2445,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeEachKeyword"
   case \PackElementExprSyntax.eachKeyword:
     return "eachKeyword"
-  case \PackElementExprSyntax.unexpectedBetweenEachKeywordAndPackRefExpr:
-    return "unexpectedBetweenEachKeywordAndPackRefExpr"
-  case \PackElementExprSyntax.packRefExpr:
-    return "packRefExpr"
-  case \PackElementExprSyntax.unexpectedAfterPackRefExpr:
-    return "unexpectedAfterPackRefExpr"
+  case \PackElementExprSyntax.unexpectedBetweenEachKeywordAndPackReference:
+    return "unexpectedBetweenEachKeywordAndPackReference"
+  case \PackElementExprSyntax.packReference:
+    return "packReference"
+  case \PackElementExprSyntax.unexpectedAfterPackReference:
+    return "unexpectedAfterPackReference"
   case \PackExpansionExprSyntax.unexpectedBeforeRepeatKeyword:
     return "unexpectedBeforeRepeatKeyword"
   case \PackExpansionExprSyntax.repeatKeyword:
@@ -2575,12 +2575,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenPoundSourceLocationAndLeftParen"
   case \PoundSourceLocationSyntax.leftParen:
     return "leftParen"
-  case \PoundSourceLocationSyntax.unexpectedBetweenLeftParenAndArgs:
-    return "unexpectedBetweenLeftParenAndArgs"
-  case \PoundSourceLocationSyntax.args:
-    return "args"
-  case \PoundSourceLocationSyntax.unexpectedBetweenArgsAndRightParen:
-    return "unexpectedBetweenArgsAndRightParen"
+  case \PoundSourceLocationSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \PoundSourceLocationSyntax.arguments:
+    return "arguments"
+  case \PoundSourceLocationSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
   case \PoundSourceLocationSyntax.rightParen:
     return "rightParen"
   case \PoundSourceLocationSyntax.unexpectedAfterRightParen:

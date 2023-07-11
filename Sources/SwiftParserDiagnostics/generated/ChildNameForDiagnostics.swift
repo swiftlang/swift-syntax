@@ -270,7 +270,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "file name"
   case \PoundSourceLocationArgsSyntax.lineNumber:
     return "line number"
-  case \PoundSourceLocationSyntax.args:
+  case \PoundSourceLocationSyntax.arguments:
     return "arguments"
   case \PrecedenceGroupDeclSyntax.attributes:
     return "attributes"

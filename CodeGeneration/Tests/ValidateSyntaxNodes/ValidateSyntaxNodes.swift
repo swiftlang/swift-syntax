@@ -621,4 +621,26 @@ class ValidateSyntaxNodes: XCTestCase {
       ]
     )
   }
+
+  func testNoAbbreviationsInChildNames() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.nonUnexpectedChildren {
+        if child.name.contains("Args") {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' should not contain abbreviations"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: []
+    )
+  }
 }

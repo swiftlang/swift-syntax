@@ -1320,7 +1320,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "each")])
       ),
       Child(
-        name: "PackRefExpr",
+        name: "PackReference",
+        deprecatedName: "PackRefExpr",
         kind: .node(kind: .expr)
       ),
     ]

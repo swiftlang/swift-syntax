@@ -4403,6 +4403,61 @@ extension OptionalBindingConditionSyntax {
   }
 }
 
+extension PackElementExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenEachKeywordAndPackReference")
+  public var unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEachKeywordAndPackReference
+    }
+    set {
+      unexpectedBetweenEachKeywordAndPackReference = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "packReference")
+  public var packRefExpr: ExprSyntax {
+    get {
+      return packReference
+    }
+    set {
+      packReference = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterPackReference")
+  public var unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterPackReference
+    }
+    set {
+      unexpectedAfterPackReference = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with packReference argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
+      eachKeyword: TokenSyntax = .keyword(.each),
+      _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
+      packRefExpr: some ExprSyntaxProtocol,
+      _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeEachKeyword, 
+        eachKeyword: eachKeyword, 
+        unexpectedBetweenEachKeywordAndPackRefExpr, 
+        packReference: packRefExpr, 
+        unexpectedAfterPackRefExpr, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ParameterClauseSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
   public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
@@ -4657,6 +4712,69 @@ extension PoundSourceLocationArgsSyntax {
         unexpectedBetweenLineArgColonAndLineNumber, 
         lineNumber: lineNumber, 
         unexpectedAfterLineNumber, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension PoundSourceLocationSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndArguments")
+  public var unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndArguments
+    }
+    set {
+      unexpectedBetweenLeftParenAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var args: PoundSourceLocationArgsSyntax? {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightParen")
+  public var unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightParen
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? = nil,
+      poundSourceLocation: TokenSyntax = .poundSourceLocationToken(),
+      _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
+      args: PoundSourceLocationArgsSyntax? = nil,
+      _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforePoundSourceLocation, 
+        poundSourceLocation: poundSourceLocation, 
+        unexpectedBetweenPoundSourceLocationAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndArgs, 
+        arguments: args, 
+        unexpectedBetweenArgsAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -1778,7 +1778,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "Args",
+        name: "Arguments",
+        deprecatedName: "Args",
         kind: .node(kind: .poundSourceLocationArgs),
         nameForDiagnostics: "arguments",
         isOptional: true

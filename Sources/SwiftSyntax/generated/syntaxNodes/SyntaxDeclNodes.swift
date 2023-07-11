@@ -5025,7 +5025,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `poundSourceLocation`: `'#sourceLocation'`
 ///  - `leftParen`: `'('`
-///  - `args`: ``PoundSourceLocationArgsSyntax``?
+///  - `arguments`: ``PoundSourceLocationArgsSyntax``?
 ///  - `rightParen`: `')'`
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -5054,9 +5054,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       poundSourceLocation: TokenSyntax = .poundSourceLocationToken(),
       _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
-      args: PoundSourceLocationArgsSyntax? = nil,
-      _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: PoundSourceLocationArgsSyntax? = nil,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -5069,9 +5069,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
             poundSourceLocation, 
             unexpectedBetweenPoundSourceLocationAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArgs, 
-            args, 
-            unexpectedBetweenArgsAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
@@ -5080,9 +5080,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           poundSourceLocation.raw, 
           unexpectedBetweenPoundSourceLocationAndLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndArgs?.raw, 
-          args?.raw, 
-          unexpectedBetweenArgsAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments?.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -5135,7 +5135,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5144,7 +5144,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var args: PoundSourceLocationArgsSyntax? {
+  public var arguments: PoundSourceLocationArgsSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(PoundSourceLocationArgsSyntax.init)
     }
@@ -5153,7 +5153,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5186,9 +5186,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.poundSourceLocation, 
           \Self.unexpectedBetweenPoundSourceLocationAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArgs, 
-          \Self.args, 
-          \Self.unexpectedBetweenArgsAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])

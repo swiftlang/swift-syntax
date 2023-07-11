@@ -4529,7 +4529,7 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `eachKeyword`: `'each'`
-///  - `packRefExpr`: ``ExprSyntax``
+///  - `packReference`: ``ExprSyntax``
 public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4555,9 +4555,9 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeEachKeyword: UnexpectedNodesSyntax? = nil,
       eachKeyword: TokenSyntax = .keyword(.each),
-      _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
-      packRefExpr: some ExprSyntaxProtocol,
-      _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEachKeywordAndPackReference: UnexpectedNodesSyntax? = nil,
+      packReference: some ExprSyntaxProtocol,
+      _ unexpectedAfterPackReference: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4566,16 +4566,16 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeEachKeyword, 
             eachKeyword, 
-            unexpectedBetweenEachKeywordAndPackRefExpr, 
-            packRefExpr, 
-            unexpectedAfterPackRefExpr
+            unexpectedBetweenEachKeywordAndPackReference, 
+            packReference, 
+            unexpectedAfterPackReference
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeEachKeyword?.raw, 
           eachKeyword.raw, 
-          unexpectedBetweenEachKeywordAndPackRefExpr?.raw, 
-          packRefExpr.raw, 
-          unexpectedAfterPackRefExpr?.raw
+          unexpectedBetweenEachKeywordAndPackReference?.raw, 
+          packReference.raw, 
+          unexpectedAfterPackReference?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.packElementExpr,
@@ -4608,7 +4608,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEachKeywordAndPackReference: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4617,7 +4617,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var packRefExpr: ExprSyntax {
+  public var packReference: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -4626,7 +4626,7 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? {
+  public var unexpectedAfterPackReference: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4639,9 +4639,9 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeEachKeyword, 
           \Self.eachKeyword, 
-          \Self.unexpectedBetweenEachKeywordAndPackRefExpr, 
-          \Self.packRefExpr, 
-          \Self.unexpectedAfterPackRefExpr
+          \Self.unexpectedBetweenEachKeywordAndPackReference, 
+          \Self.packReference, 
+          \Self.unexpectedAfterPackReference
         ])
   }
 }

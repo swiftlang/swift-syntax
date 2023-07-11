@@ -526,11 +526,11 @@ extension Parser {
           keepGoing = self.consume(if: .comma)
           elements.append(
             RawGenericRequirementSyntax(
-              body: .sameTypeRequirement(
+              requirement: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
-                  leftTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-                  equalityToken: missingToken(.binaryOperator, text: "=="),
-                  rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  leftType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  equal: missingToken(.binaryOperator, text: "=="),
+                  rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
                   arena: self.arena
                 )
               ),
@@ -567,7 +567,7 @@ extension Parser {
           }
         }
 
-        let requirement: RawGenericRequirementSyntax.Body
+        let requirement: RawGenericRequirementSyntax.Requirement
         switch self.at(anyIn: ExpectedTokenKind.self) {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
@@ -623,7 +623,7 @@ extension Parser {
 
             requirement = .layoutRequirement(
               RawLayoutRequirementSyntax(
-                typeIdentifier: firstType,
+                type: firstType,
                 colon: colon,
                 layoutConstraint: constraint,
                 unexpectedBeforeLeftParen,
@@ -641,9 +641,9 @@ extension Parser {
             let secondType = self.parseType()
             requirement = .conformanceRequirement(
               RawConformanceRequirementSyntax(
-                leftTypeIdentifier: firstType,
+                leftType: firstType,
                 colon: colon,
-                rightTypeIdentifier: secondType,
+                rightType: secondType,
                 arena: self.arena
               )
             )
@@ -655,18 +655,18 @@ extension Parser {
           let secondType = self.parseType()
           requirement = .sameTypeRequirement(
             RawSameTypeRequirementSyntax(
-              leftTypeIdentifier: firstType,
-              equalityToken: equal,
-              rightTypeIdentifier: secondType,
+              leftType: firstType,
+              equal: equal,
+              rightType: secondType,
               arena: self.arena
             )
           )
         case nil:
           requirement = .sameTypeRequirement(
             RawSameTypeRequirementSyntax(
-              leftTypeIdentifier: firstType,
-              equalityToken: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-              rightTypeIdentifier: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              leftType: firstType,
+              equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
+              rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
               arena: self.arena
             )
           )
@@ -686,7 +686,7 @@ extension Parser {
 
         elements.append(
           RawGenericRequirementSyntax(
-            body: requirement,
+            requirement: requirement,
             unexpectedBetweenBodyAndTrailingComma,
             trailingComma: keepGoing,
             arena: self.arena
@@ -698,7 +698,7 @@ extension Parser {
     return RawGenericWhereClauseSyntax(
       unexpectedBeforeWhereKeyword,
       whereKeyword: whereKeyword,
-      requirementList: RawGenericRequirementListSyntax(elements: elements, arena: self.arena),
+      requirements: RawGenericRequirementListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
   }
@@ -851,7 +851,7 @@ extension Parser {
         elements.append(
           RawEnumCaseElementSyntax(
             RawUnexpectedNodesSyntax(combining: unexpectedPeriod, unexpectedBeforeName, arena: self.arena),
-            identifier: name,
+            name: name,
             associatedValue: associatedValue,
             rawValue: rawValue,
             trailingComma: keepGoing,
@@ -898,7 +898,7 @@ extension Parser {
         unexpectedBeforeAssocKeyword,
         associatedtypeKeyword: assocKeyword,
         unexpectedBeforeName,
-        identifier: name,
+        name: name,
         inheritanceClause: nil,
         initializer: nil,
         genericWhereClause: nil,
@@ -944,7 +944,7 @@ extension Parser {
       unexpectedBeforeAssocKeyword,
       associatedtypeKeyword: assocKeyword,
       unexpectedBeforeName,
-      identifier: name,
+      name: name,
       RawUnexpectedNodesSyntax([ellipsis], arena: self.arena),
       inheritanceClause: inheritance,
       initializer: defaultType,
@@ -1079,18 +1079,18 @@ extension Parser {
   {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
-    let result: RawTypeSyntax
+    let type: RawTypeSyntax
     if allowNamedOpaqueResultType {
-      result = self.parseResultType()
+      type = self.parseResultType()
     } else {
-      result = self.parseType()
+      type = self.parseType()
     }
     let unexpectedAfterReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let returnClause = RawReturnClauseSyntax(
       unexpectedBeforeArrow,
       arrow: arrow,
       unexpectedBeforeReturnType,
-      returnType: result,
+      type: type,
       unexpectedAfterReturnType,
       arena: self.arena
     )
@@ -1140,7 +1140,7 @@ extension Parser {
       unexpectedBeforeFuncKeyword,
       funcKeyword: funcKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: identifier,
       genericParameterClause: genericParams,
       signature: signature,
       genericWhereClause: generics,
@@ -1231,7 +1231,7 @@ extension Parser {
     }
 
     // Parse getter and setter.
-    let accessor: RawSubscriptDeclSyntax.Accessor?
+    let accessor: RawSubscriptDeclSyntax.Accessors?
     if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
       accessor = self.parseGetSet()
     } else {
@@ -1248,7 +1248,7 @@ extension Parser {
       parameterClause: parameterClause,
       returnClause: returnClause,
       genericWhereClause: genericWhereClause,
-      accessor: accessor,
+      accessors: accessor,
       arena: self.arena
     )
   }
@@ -1353,16 +1353,16 @@ extension Parser {
           initializer = nil
         }
 
-        let accessor: RawPatternBindingSyntax.Accessor?
+        let accessors: RawPatternBindingSyntax.Accessors?
         if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil && !self.at(.keyword(.`init`))) {
           switch self.parseGetSet() {
-          case .accessors(let accessors):
-            accessor = .accessors(accessors)
+          case .accessors(let parsedAccessors):
+            accessors = .accessors(parsedAccessors)
           case .getter(let getter):
-            accessor = .getter(getter)
+            accessors = .getter(getter)
           }
         } else {
-          accessor = nil
+          accessors = nil
         }
 
         keepGoing = self.consume(if: .comma)
@@ -1371,7 +1371,7 @@ extension Parser {
             pattern: pattern,
             typeAnnotation: typeAnnotation,
             initializer: initializer,
-            accessor: accessor,
+            accessors: accessors,
             trailingComma: keepGoing,
             arena: self.arena
           )
@@ -1507,7 +1507,7 @@ extension Parser {
   ///     getter-setter-block → code-block
   ///     getter-setter-block → { getter-clause setter-clause opt }
   ///     getter-setter-block → { setter-clause getter-clause }
-  mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessor {
+  mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessors {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
@@ -1627,7 +1627,7 @@ extension Parser {
       unexpectedBeforeTypealiasKeyword,
       typealiasKeyword: typealiasKeyword,
       unexpectedBeforeName,
-      identifier: name,
+      name: name,
       genericParameterClause: generics,
       initializer: initializer,
       genericWhereClause: genericWhereClause,
@@ -1800,7 +1800,7 @@ extension Parser {
       introducer.unexpectedBeforeOperatorKeyword,
       operatorKeyword: introducer.operatorKeyword,
       unexpectedBeforeName,
-      identifier: name,
+      name: name,
       RawUnexpectedNodesSyntax(identifiersAfterOperatorName, arena: self.arena),
       operatorPrecedenceAndTypes: precedenceAndTypes,
       unexpectedAtEnd,
@@ -1836,7 +1836,7 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
-    let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
+    let (unexpectedBeforeName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let groupAttributes = self.parsePrecedenceGroupAttributeListSyntax()
@@ -1847,8 +1847,8 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeGroup,
       precedencegroupKeyword: group,
-      unexpectedBeforeIdentifier,
-      identifier: identifier,
+      unexpectedBeforeName,
+      name: name,
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
       groupAttributes: groupAttributes,
@@ -2021,7 +2021,7 @@ extension Parser {
       unexpectedBeforeIntroducerKeyword,
       macroKeyword: introducerKeyword,
       unexpectedBeforeName,
-      identifier: name,
+      name: name,
       genericParameterClause: genericParams,
       signature: signature,
       definition: definition,
@@ -2102,10 +2102,10 @@ extension Parser {
       unexpectedBeforePound,
       pound: pound,
       unexpectedBeforeMacro,
-      macro: macro,
+      macroName: macro,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      argumentList: RawTupleExprElementListSyntax(
+      arguments: RawTupleExprElementListSyntax(
         elements: args,
         arena: self.arena
       ),

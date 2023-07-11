@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 final class ForInStmtTests: XCTestCase {
   func testEmptyForInStmtSyntax() throws {
-    let buildable = ForInStmtSyntax(pattern: PatternSyntax("foo"), sequenceExpr: ExprSyntax("bar")) {}
+    let buildable = ForInStmtSyntax(pattern: PatternSyntax("foo"), sequence: ExprSyntax("bar")) {}
     assertBuildResult(
       buildable,
       """
@@ -63,7 +63,7 @@ final class ForInStmtTests: XCTestCase {
       tryKeyword: .keyword(.try),
       awaitKeyword: .keyword(.await),
       pattern: PatternSyntax("foo"),
-      sequenceExpr: ExprSyntax("bar"),
+      sequence: ExprSyntax("bar"),
       body: CodeBlockSyntax(
         statements: [
           .init(item: .decl("let baz = await foo.baz")),

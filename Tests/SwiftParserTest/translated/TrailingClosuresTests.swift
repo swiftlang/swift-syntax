@@ -186,7 +186,7 @@ final class TrailingClosuresTests: XCTestCase {
             leftBrace: .leftBraceToken(presence: .missing),
             statements: CodeBlockItemListSyntax([
               CodeBlockItemSyntax(
-                item: .init(EditorPlaceholderExprSyntax(identifier: .identifier("<#T##() -> Void#>")))
+                item: .init(EditorPlaceholderExprSyntax(placeholder: .identifier("<#T##() -> Void#>")))
               )
             ]),
             rightBrace: .rightBraceToken(presence: .missing)

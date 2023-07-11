@@ -29,7 +29,7 @@ final class ExtensionDeclTests: XCTestCase {
         PatternBindingSyntax(
           pattern: PatternSyntax("`\(raw: keyword)`"),
           typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("TokenSyntax")),
-          accessor: .getter(body)
+          accessors: .getter(body)
         )
 
       }

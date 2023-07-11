@@ -72,7 +72,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \ClosureParamSyntax.name:
     return "name"
-  case \ClosureParameterClauseSyntax.properties:
+  case \ClosureParameterClauseSyntax.parameters:
     return "parameters"
   case \ClosureParameterSyntax.attributes:
     return "attributes"

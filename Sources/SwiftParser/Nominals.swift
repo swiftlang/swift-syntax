@@ -21,7 +21,7 @@ protocol NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: PrimaryOrGenerics?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -39,7 +39,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -52,7 +52,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
       unexpectedBeforeIntroducerKeyword,
       protocolKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: name,
       primaryAssociatedTypeClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
@@ -73,7 +73,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -86,7 +86,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
       unexpectedBeforeIntroducerKeyword,
       classKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: name,
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
@@ -107,7 +107,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -120,7 +120,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
       unexpectedBeforeIntroducerKeyword,
       actorKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: name,
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
@@ -141,7 +141,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -154,7 +154,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
       unexpectedBeforeIntroducerKeyword,
       structKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: name,
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
@@ -175,7 +175,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
-    identifier: RawTokenSyntax,
+    name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawTypeInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -188,7 +188,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
       unexpectedBeforeIntroducerKeyword,
       enumKeyword: introducerKeyword,
       unexpectedBeforeIdentifier,
-      identifier: identifier,
+      name: name,
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
@@ -218,7 +218,7 @@ extension Parser {
         unexpectedBeforeIntroducerKeyword,
         introducerKeyword: introducerKeyword,
         unexpectedBeforeName,
-        identifier: name,
+        name: name,
         primaryOrGenerics: nil,
         inheritanceClause: nil,
         genericWhereClause: nil,
@@ -261,7 +261,7 @@ extension Parser {
       unexpectedBeforeIntroducerKeyword,
       introducerKeyword: introducerKeyword,
       unexpectedBeforeName,
-      identifier: name,
+      name: name,
       primaryOrGenerics: primaryOrGenerics,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
@@ -306,7 +306,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawInheritedTypeSyntax(
-            typeName: type,
+            type: type,
             trailingComma: keepGoing,
             arena: self.arena
           )
@@ -326,7 +326,7 @@ extension Parser {
     return RawTypeInheritanceClauseSyntax(
       unexpectedBeforeColon,
       colon: colon,
-      inheritedTypeCollection: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),
+      inheritedTypes: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),
       unexpectedAfterInheritedTypeCollection,
       arena: self.arena
     )
@@ -355,7 +355,7 @@ extension Parser {
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(
       leftAngle: langle,
-      primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
+      primaryAssociatedTypes: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
       rightAngle: rangle,
       arena: self.arena
     )

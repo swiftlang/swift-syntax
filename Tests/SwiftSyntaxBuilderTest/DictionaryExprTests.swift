@@ -18,7 +18,7 @@ final class DictionaryExprTests: XCTestCase {
   func testPlainDictionaryExpr() {
     let buildable = DictionaryExprSyntax {
       for i in 1...3 {
-        DictionaryElementSyntax(keyExpression: IntegerLiteralExprSyntax(i), valueExpression: IntegerLiteralExprSyntax(i))
+        DictionaryElementSyntax(key: IntegerLiteralExprSyntax(i), value: IntegerLiteralExprSyntax(i))
       }
     }
     assertBuildResult(buildable, "[1: 1, 2: 2, 3: 3]")

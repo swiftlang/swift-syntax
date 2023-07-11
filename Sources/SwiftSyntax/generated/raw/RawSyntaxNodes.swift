@@ -4236,9 +4236,9 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndProperties: RawUnexpectedNodesSyntax? = nil, 
-      properties: RawClosureParameterListSyntax, 
-      _ unexpectedBetweenPropertiesAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndParameters: RawUnexpectedNodesSyntax? = nil, 
+      parameters: RawClosureParameterListSyntax, 
+      _ unexpectedBetweenParametersAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -4248,9 +4248,9 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndProperties?.raw
-      layout[3] = properties.raw
-      layout[4] = unexpectedBetweenPropertiesAndRightParen?.raw
+      layout[2] = unexpectedBetweenLeftParenAndParameters?.raw
+      layout[3] = parameters.raw
+      layout[4] = unexpectedBetweenParametersAndRightParen?.raw
       layout[5] = rightParen.raw
       layout[6] = unexpectedAfterRightParen?.raw
     }
@@ -4265,15 +4265,15 @@ public struct RawClosureParameterClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndProperties: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndParameters: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var properties: RawClosureParameterListSyntax {
+  public var parameters: RawClosureParameterListSyntax {
     layoutView.children[3].map(RawClosureParameterListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenPropertiesAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

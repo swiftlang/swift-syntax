@@ -1325,37 +1325,37 @@ extension ClosureCaptureItemSyntax {
 }
 
 extension ClosureParameterClauseSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
   public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftParenAndProperties
+      return unexpectedBetweenLeftParenAndParameters
     }
     set {
-      unexpectedBetweenLeftParenAndProperties = newValue
+      unexpectedBetweenLeftParenAndParameters = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "properties")
+  @available(*, deprecated, renamed: "parameters")
   public var parameterList: ClosureParameterListSyntax {
     get {
-      return properties
+      return parameters
     }
     set {
-      properties = newValue
+      parameters = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
   public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPropertiesAndRightParen
+      return unexpectedBetweenParametersAndRightParen
     }
     set {
-      unexpectedBetweenPropertiesAndRightParen = newValue
+      unexpectedBetweenParametersAndRightParen = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
+  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1374,7 +1374,7 @@ extension ClosureParameterClauseSyntax {
         unexpectedBeforeLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndParameterList, 
-        properties: parameterList, 
+        parameters: parameterList, 
         unexpectedBetweenParameterListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 

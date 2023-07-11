@@ -285,7 +285,7 @@ final class BasicFormatTest: XCTestCase {
             colon: .colonToken(trailingTrivia: .space),
             type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int")))
           ),
-          accessor: PatternBindingSyntax.Accessor(
+          accessors: PatternBindingSyntax.Accessors(
             AccessorBlockSyntax(
               leftBrace: .leftBraceToken(leadingTrivia: .space),
               accessors: AccessorListSyntax([]),

@@ -151,7 +151,7 @@ extension OperatorTable {
     if let ternaryExpr = op.as(UnresolvedTernaryExprSyntax.self) {
       return ExprSyntax(
         TernaryExprSyntax(
-          conditionExpression: lhs,
+          condition: lhs,
           ternaryExpr.unexpectedBeforeQuestionMark,
           questionMark: ternaryExpr.questionMark,
           ternaryExpr.unexpectedBetweenQuestionMarkAndFirstChoice,
@@ -183,7 +183,7 @@ extension OperatorTable {
           expression: lhs,
           isExpr.unexpectedBeforeIsKeyword,
           isKeyword: isExpr.isKeyword,
-          typeName: rhs.as(TypeExprSyntax.self)!.type
+          type: rhs.as(TypeExprSyntax.self)!.type
         )
       )
     }
@@ -199,7 +199,7 @@ extension OperatorTable {
           asKeyword: asExpr.asKeyword,
           asExpr.unexpectedBetweenAsKeywordAndQuestionOrExclamationMark,
           questionOrExclamationMark: asExpr.questionOrExclamationMark,
-          typeName: rhs.as(TypeExprSyntax.self)!.type
+          type: rhs.as(TypeExprSyntax.self)!.type
         )
       )
     }

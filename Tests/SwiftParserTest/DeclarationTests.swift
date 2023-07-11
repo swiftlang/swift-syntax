@@ -810,11 +810,11 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         FunctionDeclSyntax(
           funcKeyword: .keyword(.func),
-          identifier: .identifier("withoutParameters"),
+          name: .identifier("withoutParameters"),
           signature: FunctionSignatureSyntax(
             parameterClause: ParameterClauseSyntax(
               leftParen: .leftParenToken(presence: .missing),
-              parameterList: FunctionParameterListSyntax([]),
+              parameters: FunctionParameterListSyntax([]),
               rightParen: .rightParenToken(presence: .missing)
             )
           )
@@ -1252,7 +1252,7 @@ final class DeclarationTests: XCTestCase {
           colon: .colonToken(presence: .missing),
           type: ArrayTypeSyntax(
             leftSquare: .leftSquareToken(),
-            elementType: SimpleTypeIdentifierSyntax(name: .identifier("third")),
+            element: SimpleTypeIdentifierSyntax(name: .identifier("third")),
             rightSquare: .rightSquareToken(presence: .missing)
           )
         )
@@ -1646,7 +1646,7 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         SourceFileSyntax(
           CodeBlockItemListSyntax {
-            MacroExpansionDeclSyntax(macro: "expand") {}
+            MacroExpansionDeclSyntax(macroName: "expand") {}
           }
         )
       )
@@ -1663,8 +1663,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           pound: .poundToken(),
-          macro: .identifier("case"),
-          argumentList: TupleExprElementListSyntax([])
+          macroName: .identifier("case"),
+          arguments: TupleExprElementListSyntax([])
         )
       )
     )
@@ -1678,8 +1678,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macro: "topLevelWithAttr",
-          argumentList: []
+          macroName: "topLevelWithAttr",
+          arguments: []
         )
       )
     )
@@ -1691,8 +1691,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macro: "topLevelWithModifier",
-          argumentList: []
+          macroName: "topLevelWithModifier",
+          arguments: []
         )
       )
     )
@@ -1703,8 +1703,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         MacroExpansionExprSyntax(
-          macro: "topLevelBare",
-          argumentList: []
+          macroName: "topLevelBare",
+          arguments: []
         )
       )
     )
@@ -1718,8 +1718,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macro: "memberWithAttr",
-          argumentList: []
+          macroName: "memberWithAttr",
+          arguments: []
         )
       )
     )
@@ -1733,8 +1733,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macro: "memberWithModifier",
-          argumentList: []
+          macroName: "memberWithModifier",
+          arguments: []
         )
       )
     )
@@ -1747,8 +1747,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         MacroExpansionDeclSyntax(
-          macro: "memberBare",
-          argumentList: []
+          macroName: "memberBare",
+          arguments: []
         )
       )
     )
@@ -1762,8 +1762,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macro: "bodyWithAttr",
-          argumentList: []
+          macroName: "bodyWithAttr",
+          arguments: []
         )
       )
     )
@@ -1777,8 +1777,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macro: "bodyWithModifier",
-          argumentList: []
+          macroName: "bodyWithModifier",
+          arguments: []
         )
 
       )
@@ -1792,8 +1792,8 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         MacroExpansionExprSyntax(
-          macro: "bodyBare",
-          argumentList: []
+          macroName: "bodyBare",
+          arguments: []
         )
       )
     )
@@ -1814,8 +1814,8 @@ final class DeclarationTests: XCTestCase {
             .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
           ],
           modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macro: "declMacro",
-          argumentList: []
+          macroName: "declMacro",
+          arguments: []
         )
       )
     )
@@ -1830,8 +1830,8 @@ final class DeclarationTests: XCTestCase {
         MacroExpansionDeclSyntax(
           attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
           pound: .poundToken(),
-          macro: .identifier("class"),
-          argumentList: []
+          macroName: .identifier("class"),
+          arguments: []
         )
       )
     )
@@ -1845,8 +1845,8 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionDeclSyntax(
           pound: .poundToken(),
-          macro: .identifier("struct"),
-          argumentList: []
+          macroName: .identifier("struct"),
+          arguments: []
         )
       )
     )
@@ -2062,7 +2062,7 @@ final class DeclarationTests: XCTestCase {
             item: .init(
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
-                identifier: .identifier("A"),
+                name: .identifier("A"),
                 memberBlock: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),
                   members: MemberDeclListSyntax([
@@ -2070,11 +2070,11 @@ final class DeclarationTests: XCTestCase {
                       decl: DeclSyntax(
                         FunctionDeclSyntax(
                           funcKeyword: .keyword(.func, presence: .missing),
-                          identifier: .binaryOperator("^"),
+                          name: .binaryOperator("^"),
                           signature: FunctionSignatureSyntax(
                             parameterClause: ParameterClauseSyntax(
                               leftParen: .leftParenToken(presence: .missing),
-                              parameterList: FunctionParameterListSyntax([]),
+                              parameters: FunctionParameterListSyntax([]),
                               rightParen: .rightParenToken(presence: .missing)
                             )
                           )
@@ -2091,7 +2091,7 @@ final class DeclarationTests: XCTestCase {
             item: .init(
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
-                identifier: .identifier("B"),
+                name: .identifier("B"),
                 memberBlock: MemberDeclBlockSyntax(
                   leftBrace: .leftBraceToken(),
                   members: MemberDeclListSyntax([]),
@@ -2245,7 +2245,7 @@ final class DeclarationTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("open")),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([
+          arguments: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("set"))
             )
@@ -2377,9 +2377,9 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         InheritedTypeSyntax(
-          typeName: SuppressedTypeSyntax(
+          type: SuppressedTypeSyntax(
             withoutTilde: .prefixOperator("~"),
-            patternType: TypeSyntax(stringLiteral: "Copyable")
+            type: TypeSyntax(stringLiteral: "Copyable")
           )
         )
       )
@@ -2393,19 +2393,19 @@ final class DeclarationTests: XCTestCase {
         Syntax(
           TypeInheritanceClauseSyntax(
             colon: .colonToken(),
-            inheritedTypeCollection: InheritedTypeListSyntax([
+            inheritedTypes: InheritedTypeListSyntax([
               InheritedTypeSyntax(
-                typeName: TypeSyntax(stringLiteral: "Int"),
+                type: TypeSyntax(stringLiteral: "Int"),
                 trailingComma: .commaToken()
               ),
               InheritedTypeSyntax(
-                typeName: SuppressedTypeSyntax(
+                type: SuppressedTypeSyntax(
                   withoutTilde: .prefixOperator("~"),
-                  patternType: TypeSyntax(stringLiteral: "Hashable")
+                  type: TypeSyntax(stringLiteral: "Hashable")
                 ),
                 trailingComma: .commaToken()
               ),
-              InheritedTypeSyntax(typeName: TypeSyntax(stringLiteral: "Equatable")),
+              InheritedTypeSyntax(type: TypeSyntax(stringLiteral: "Equatable")),
             ])
           )
         )
@@ -2440,9 +2440,9 @@ final class DeclarationTests: XCTestCase {
         Syntax(
           SuppressedTypeSyntax(
             withoutTilde: .prefixOperator("~"),
-            patternType: FunctionTypeSyntax(
+            type: FunctionTypeSyntax(
               parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
-              returnClause: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
+              returnClause: ReturnClauseSyntax(type: TypeSyntax("Bool"))
             )
           )
         )
@@ -2574,7 +2574,7 @@ final class DeclarationTests: XCTestCase {
           signature: FunctionSignatureSyntax(
             parameterClause: ParameterClauseSyntax(
               leftParen: .leftParenToken(),
-              parameterList: FunctionParameterListSyntax([
+              parameters: FunctionParameterListSyntax([
                 FunctionParameterSyntax(
                   firstName: .identifier("initialValue"),
                   colon: .colonToken(presence: .missing),

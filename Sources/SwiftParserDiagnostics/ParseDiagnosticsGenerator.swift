@@ -244,8 +244,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   private func handleMisplacedEffectSpecifiers(effectSpecifiers: (some EffectSpecifiersSyntax)?, output: ReturnClauseSyntax?) {
-    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedBetweenArrowAndReturnType)
-    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedAfterReturnType)
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedBetweenArrowAndType)
+    handleMisplacedEffectSpecifiersAfterArrow(effectSpecifiers: effectSpecifiers, misplacedSpecifiers: output?.unexpectedAfterType)
   }
 
   private func handleEffectSpecifiers(_ node: some EffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
@@ -488,14 +488,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     // Emit a custom diagnostic for an unexpected 'each' before an associatedtype
     // name.
     removeToken(
-      node.unexpectedBetweenAssociatedtypeKeywordAndIdentifier,
+      node.unexpectedBetweenAssociatedtypeKeywordAndName,
       where: { $0.tokenKind == .keyword(.each) },
       message: { _ in .associatedTypeCannotUsePack }
     )
     // Emit a custom diagnostic for an unexpected '...' after an associatedtype
     // name.
     removeToken(
-      node.unexpectedBetweenIdentifierAndInheritanceClause,
+      node.unexpectedBetweenNameAndInheritanceClause,
       where: { $0.tokenKind == .ellipsis },
       message: { _ in .associatedTypeCannotUsePack }
     )
@@ -523,14 +523,14 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let argument = node.argument, argument.isMissingAllTokens {
+    if let arguments = node.arguments, arguments.isMissingAllTokens {
       addDiagnostic(
-        argument,
+        arguments,
         MissingAttributeArgument(attributeName: node.attributeName),
         fixIts: [
-          FixIt(message: .insertAttributeArguments, changes: .makePresent(argument))
+          FixIt(message: .insertAttributeArguments, changes: .makePresent(arguments))
         ],
-        handledNodes: [argument.id]
+        handledNodes: [arguments.id]
       )
       return .visitChildren
     }
@@ -757,11 +757,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let unexpected = node.unexpectedBetweenBodyAndTrailingComma,
+    if let unexpected = node.unexpectedBetweenRequirementAndTrailingComma,
       let token = unexpected.presentTokens(satisfying: { $0.tokenKind == .binaryOperator("&&") }).first,
       let trailingComma = node.trailingComma,
       trailingComma.isMissing,
-      let previous = node.unexpectedBetweenBodyAndTrailingComma?.previousToken(viewMode: .sourceAccurate)
+      let previous = node.unexpectedBetweenRequirementAndTrailingComma?.previousToken(viewMode: .sourceAccurate)
     {
 
       addDiagnostic(
@@ -933,27 +933,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           Syntax(node.typeAnnotation),
           Syntax(node.unexpectedBetweenTypeAnnotationAndInKeyword),
           Syntax(node.inKeyword),
-          Syntax(node.unexpectedBetweenInKeywordAndSequenceExpr),
-          Syntax(node.sequenceExpr),
-          Syntax(node.unexpectedBetweenSequenceExprAndWhereClause),
+          Syntax(node.unexpectedBetweenInKeywordAndSequence),
+          Syntax(node.sequence),
+          Syntax(node.unexpectedBetweenSequenceAndWhereClause),
           Syntax(node.whereClause),
           Syntax(node.unexpectedBetweenWhereClauseAndBody),
           Syntax(unexpectedCondition),
         ] as [Syntax?]).compactMap({ $0 }),
-        handledNodes: [node.inKeyword.id, node.sequenceExpr.id, unexpectedCondition.id]
+        handledNodes: [node.inKeyword.id, node.sequence.id, unexpectedCondition.id]
       )
     } else {  // If it's not a C-style for loop
-      if node.sequenceExpr.is(MissingExprSyntax.self) {
+      if node.sequence.is(MissingExprSyntax.self) {
         addDiagnostic(
-          node.sequenceExpr,
+          node.sequence,
           .expectedSequenceExpressionInForEachLoop,
           fixIts: [
             FixIt(
-              message: InsertTokenFixIt(missingNodes: [Syntax(node.sequenceExpr)]),
-              changes: [.makePresent(node.sequenceExpr)]
+              message: InsertTokenFixIt(missingNodes: [Syntax(node.sequence)]),
+              changes: [.makePresent(node.sequence)]
             )
           ],
-          handledNodes: [node.sequenceExpr.id]
+          handledNodes: [node.sequence.id]
         )
       }
     }
@@ -1400,17 +1400,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
       if let message {
         let fixIts: [FixIt]
-        if node.identifier.isPresent {
+        if node.name.isPresent {
           fixIts = [FixIt(message: RemoveNodesFixIt(unexpected), changes: .makeMissing(unexpected))]
         } else {
           fixIts = []
         }
-        addDiagnostic(unexpected, message, highlights: [Syntax(unexpected)], fixIts: fixIts, handledNodes: [unexpected.id, node.identifier.id])
+        addDiagnostic(unexpected, message, highlights: [Syntax(unexpected)], fixIts: fixIts, handledNodes: [unexpected.id, node.name.id])
       }
     }
 
-    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndIdentifier, name: node.identifier)
-    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, name: node.identifier)
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenOperatorKeywordAndName, name: node.name)
+    diagnoseIdentifierInOperatorName(unexpected: node.unexpectedBetweenNameAndOperatorPrecedenceAndTypes, name: node.name)
 
     return .visitChildren
   }
@@ -1475,11 +1475,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.equalityToken.isMissing && node.rightTypeIdentifier.isMissingAllTokens {
+    if node.equal.isMissing && node.rightType.isMissingAllTokens {
       addDiagnostic(
-        node.equalityToken,
+        node.equal,
         .missingConformanceRequirement,
-        handledNodes: [node.equalityToken.id, node.rightTypeIdentifier.id]
+        handledNodes: [node.equal.id, node.rightType.id]
       )
     }
     return .visitChildren
@@ -1721,7 +1721,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
       var replaceTokens = [leftParen]
 
-      if let rightParen = node.unexpectedAfterInheritedTypeCollection?.onlyPresentToken(where: { $0.tokenKind == .rightParen }) {
+      if let rightParen = node.unexpectedAfterInheritedTypes?.onlyPresentToken(where: { $0.tokenKind == .rightParen }) {
         handledNodes += [rightParen.id]
         changes += [
           .makeMissing(rightParen)

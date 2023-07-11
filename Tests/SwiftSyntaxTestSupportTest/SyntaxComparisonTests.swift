@@ -21,9 +21,9 @@ private func parse(source: String) -> Syntax {
 
 public class SyntaxComparisonTests: XCTestCase {
   public func testSame() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f")))
+    let expected = Syntax(makeFunc(name: .identifier("f")))
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f")))
+    let actual = Syntax(makeFunc(name: .identifier("f")))
     XCTAssertNil(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -31,7 +31,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentType() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f")))
+    let expected = Syntax(makeFunc(name: .identifier("f")))
     let actual = Syntax(makeBody())
 
     let diff = try XCTUnwrap(actual.findFirstDifference(baseline: expected))
@@ -41,7 +41,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenKind() throws {
-    let expected = Syntax(makeFunc(identifier: .binaryOperator("f")))
+    let expected = Syntax(makeFunc(name: .binaryOperator("f")))
 
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
@@ -50,7 +50,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .identifier("f"))
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f")))
+    let actual = Syntax(makeFunc(name: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher("struct A { 1️⃣func f() { } }", parse: parse)
@@ -58,7 +58,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenText() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f")))
+    let expected = Syntax(makeFunc(name: .identifier("f")))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
@@ -66,7 +66,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .identifier("g"))
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("g")))
+    let actual = Syntax(makeFunc(name: .identifier("g")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher("struct A { 1️⃣func g() { } }", parse: parse)
@@ -74,7 +74,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTrivia() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f"), indent: 2))
+    let expected = Syntax(makeFunc(name: .identifier("f"), indent: 2))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .trivia)
@@ -82,7 +82,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(diff.node.leadingTrivia, [])
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f")))
+    let actual = Syntax(makeFunc(name: .identifier("f")))
     XCTAssertNil(actual.findFirstDifference(baseline: expected))
     try expectations(actual.findFirstDifference(baseline: expected, includeTrivia: true))
 
@@ -94,7 +94,7 @@ public class SyntaxComparisonTests: XCTestCase {
   public func testDifferentPresence() throws {
     let expected = Syntax(
       makeFunc(
-        identifier: .identifier("f"),
+        name: .identifier("f"),
         body: CodeBlockSyntax(
           leftBrace: .leftBraceToken(presence: .missing),
           statements: CodeBlockItemListSyntax([]),
@@ -109,7 +109,7 @@ public class SyntaxComparisonTests: XCTestCase {
       XCTAssertEqual(diff.node.as(TokenSyntax.self)?.presence, .present)
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f")))
+    let actual = Syntax(makeFunc(name: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -117,13 +117,13 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testMissingNode() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f"), body: makeBody(statementCount: 1)))
+    let expected = Syntax(makeFunc(name: .identifier("f"), body: makeBody(statementCount: 1)))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .missingNode)
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f")))
+    let actual = Syntax(makeFunc(name: .identifier("f")))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher("struct A { func f() { } }", parse: parse)
@@ -131,13 +131,13 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testAdditionalNode() throws {
-    let expected = Syntax(makeFunc(identifier: .identifier("f")))
+    let expected = Syntax(makeFunc(name: .identifier("f")))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .additionalNode)
     }
 
-    let actual = Syntax(makeFunc(identifier: .identifier("f"), body: makeBody(statementCount: 1)))
+    let actual = Syntax(makeFunc(name: .identifier("f"), body: makeBody(statementCount: 1)))
     try expectations(actual.findFirstDifference(baseline: expected))
 
     let matcher = SubtreeMatcher(
@@ -154,7 +154,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testMultipleSubtreeMatches() throws {
-    let expectedFunc = Syntax(makeFunc(identifier: .identifier("f")))
+    let expectedFunc = Syntax(makeFunc(name: .identifier("f")))
     let expectedBody = Syntax(makeBody())
 
     let matcher = SubtreeMatcher(
@@ -181,7 +181,7 @@ public class SyntaxComparisonTests: XCTestCase {
   /// and `body` with some optional leading indentation (which applied only to
   /// the start, not the entire body).
   private func makeFunc(
-    identifier: TokenSyntax,
+    name: TokenSyntax,
     keyword: TokenSyntax = .keyword(.func),
     body: CodeBlockSyntax? = nil,
     indent: Int = 0
@@ -195,13 +195,13 @@ public class SyntaxComparisonTests: XCTestCase {
     let emptySignature = FunctionSignatureSyntax(
       parameterClause: ParameterClauseSyntax(
         leftParen: .leftParenToken(),
-        parameterList: FunctionParameterListSyntax([]),
+        parameters: FunctionParameterListSyntax([]),
         rightParen: .rightParenToken()
       )
     )
     let fd = FunctionDeclSyntax(
       funcKeyword: keyword,
-      identifier: identifier,
+      name: name,
       signature: emptySignature,
       body: funcBody
     )

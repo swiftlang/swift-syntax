@@ -152,7 +152,7 @@ extension Parser {
         atSign: atSign,
         attributeName: attributeName,
         leftParen: nil,
-        argument: nil,
+        arguments: nil,
         rightParen: nil,
         arena: self.arena
       )
@@ -167,7 +167,7 @@ extension Parser {
 
   mutating func parseAttribute(
     argumentMode: AttributeArgumentMode,
-    parseArguments: (inout Parser) -> RawAttributeSyntax.Argument
+    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments
   ) -> RawAttributeListSyntax.Element {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     let attributeName = self.parseType()
@@ -191,7 +191,7 @@ extension Parser {
           attributeName: attributeName,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
-          argument: argument,
+          arguments: argument,
           unexpectedBeforeRightParen,
           rightParen: rightParen,
           arena: self.arena
@@ -204,7 +204,7 @@ extension Parser {
           atSign: atSign,
           attributeName: attributeName,
           leftParen: nil,
-          argument: nil,
+          arguments: nil,
           rightParen: nil,
           arena: self.arena
         )
@@ -331,7 +331,7 @@ extension Parser {
           unexpectedBeforeAttributeName,
           attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena)),
           leftParen: nil,
-          argument: nil,
+          arguments: nil,
           rightParen: nil,
           arena: self.arena
         )
@@ -384,7 +384,7 @@ extension Parser {
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .differentiableArguments(argument),
+      arguments: .differentiableArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -464,7 +464,7 @@ extension Parser {
     let parameters = RawDifferentiabilityParamListSyntax(elements: elements, arena: self.arena)
     let list = RawDifferentiabilityParamsSyntax(
       leftParen: leftParen,
-      diffParams: parameters,
+      differentiabilityParameters: parameters,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -526,7 +526,7 @@ extension Parser {
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .derivativeRegistrationArguments(argument),
+      arguments: .derivativeRegistrationArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -548,7 +548,7 @@ extension Parser {
       attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena)),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      argument: .derivativeRegistrationArguments(argument),
+      arguments: .derivativeRegistrationArguments(argument),
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -694,7 +694,7 @@ extension Parser {
               targetLabel: ident,
               unexpectedBeforeColon,
               colon: colon,
-              declname: declName,
+              declName: declName,
               trailingComma: comma,
               arena: self.arena
             )
@@ -855,7 +855,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseConventionArguments() -> RawAttributeSyntax.Argument {
+  mutating func parseConventionArguments() -> RawAttributeSyntax.Arguments {
     if let witnessMethod = self.consume(if: .keyword(.witness_method)) {
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let name = self.parseAnyIdentifier()
@@ -1037,7 +1037,7 @@ extension Parser {
       forLabel: label,
       unexpectedBeforeColon,
       colon: colon,
-      declname: method,
+      declName: method,
       arena: self.arena
     )
   }

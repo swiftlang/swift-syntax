@@ -673,7 +673,7 @@ extension Parser {
       typeAnnotation: type,
       unexpectedBeforeInKeyword,
       inKeyword: inKeyword,
-      sequenceExpr: expr,
+      sequence: expr,
       whereClause: whereClause,
       body: body,
       arena: self.arena
@@ -817,7 +817,7 @@ extension Parser {
       yields = .yieldList(
         RawYieldListSyntax(
           leftParen: lparen,
-          elementList: exprList,
+          elements: exprList,
           unexpectedBeforeRParen,
           rightParen: rparen,
           arena: self.arena

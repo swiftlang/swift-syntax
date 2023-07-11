@@ -184,13 +184,13 @@ final class FunctionTests: XCTestCase {
           FunctionDeclSyntax(
             attributes: [.attribute(AttributeSyntax("@inline(__always)")), .attribute(AttributeSyntax("@discardableResult"))],
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-            identifier: TokenSyntax.identifier("foo"),
+            name: TokenSyntax.identifier("foo"),
             signature: FunctionSignatureSyntax(
               parameterClause: ParameterClauseSyntax(
-                parameterList: FunctionParameterListSyntax {}
+                parameters: FunctionParameterListSyntax {}
               ),
               returnClause: ReturnClauseSyntax(
-                returnType: SimpleTypeIdentifierSyntax(name: .identifier("String"))
+                type: SimpleTypeIdentifierSyntax(name: .identifier("String"))
               )
             ),
             bodyBuilder: {
@@ -208,16 +208,16 @@ final class FunctionTests: XCTestCase {
         DeclSyntax(
           FunctionDeclSyntax(
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-            identifier: TokenSyntax.identifier("=="),
+            name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
               parameterClause: ParameterClauseSyntax(
-                parameterList: FunctionParameterListSyntax {
+                parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {
@@ -243,10 +243,10 @@ final class FunctionTests: XCTestCase {
         DeclSyntax(
           FunctionDeclSyntax(
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
-            identifier: TokenSyntax.identifier("=="),
+            name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
               parameterClause: ParameterClauseSyntax(
-                parameterList: FunctionParameterListSyntax {
+                parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colonToken(), type: TypeSyntax("String"))
@@ -254,7 +254,7 @@ final class FunctionTests: XCTestCase {
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {

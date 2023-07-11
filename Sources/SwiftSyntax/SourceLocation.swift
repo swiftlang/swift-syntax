@@ -196,7 +196,7 @@ public final class SourceLocationConverter {
 
     for directive in SourceLocationCollector.collectSourceLocations(in: tree) {
       let location = self.physicalLocation(for: directive.positionAfterSkippingLeadingTrivia)
-      if let args = directive.args {
+      if let args = directive.arguments {
         if let parsedArgs = try? SourceLocationDirectiveArguments(args) {
           // Ignore any malformed `#sourceLocation` directives.
           sourceLocationDirectives.append((sourceLine: location.line, arguments: parsedArgs))

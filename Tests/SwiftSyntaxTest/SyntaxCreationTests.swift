@@ -24,7 +24,7 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   )
   return StructDeclSyntax(
     structKeyword: structKW,
-    identifier: fooID,
+    name: fooID,
     memberBlock: memberBlock
   )
 }
@@ -46,7 +46,7 @@ public class SyntaxCreationTests: XCTestCase {
     let forType = TokenSyntax.identifier("`for`", trailingTrivia: .space)
     let newBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newlines(2))
 
-    let renamed = structDecl.with(\.identifier, forType)
+    let renamed = structDecl.with(\.name, forType)
       .with(
         \.memberBlock,
         structDecl.memberBlock
@@ -118,7 +118,7 @@ public class SyntaxCreationTests: XCTestCase {
     let call = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      argumentList: TupleExprElementListSyntax([arg]),
+      arguments: TupleExprElementListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
@@ -134,7 +134,7 @@ public class SyntaxCreationTests: XCTestCase {
       expression: emptyString
     )
     let callWithTerminator = call.with(
-      \.argumentList,
+      \.arguments,
       TupleExprElementListSyntax([
         arg.with(
           \.trailingComma,
@@ -163,7 +163,7 @@ public class SyntaxCreationTests: XCTestCase {
     let call1 = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      argumentList: TupleExprElementListSyntax([arg]),
+      arguments: TupleExprElementListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertNotNil(call1.leftParen)
@@ -175,7 +175,7 @@ public class SyntaxCreationTests: XCTestCase {
 
     let call3 = FunctionCallExprSyntax(
       calledExpression: printID,
-      argumentList: TupleExprElementListSyntax([arg])
+      arguments: TupleExprElementListSyntax([arg])
     )
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)

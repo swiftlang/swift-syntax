@@ -52,7 +52,7 @@ extension AttributeSyntax {
     self.init(
       attributeName: attributeName,
       leftParen: argumentList != nil ? .leftParenToken() : nil,
-      argument: argumentList.map(AttributeSyntax.Argument.argumentList),
+      arguments: argumentList.map(AttributeSyntax.Arguments.argumentList),
       rightParen: argumentList != nil ? .rightParenToken() : nil
     )
   }
@@ -180,7 +180,7 @@ extension FunctionCallExprSyntax {
     self.init(
       calledExpression: callee,
       leftParen: shouldOmitParens ? nil : .leftParenToken(),
-      argumentList: argumentList,
+      arguments: argumentList,
       rightParen: shouldOmitParens ? nil : .rightParenToken(),
       trailingClosure: trailingClosure,
       additionalTrailingClosures: additionalTrailingClosures

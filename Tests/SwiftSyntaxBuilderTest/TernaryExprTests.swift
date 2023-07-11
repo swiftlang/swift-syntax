@@ -41,7 +41,7 @@ final class TernaryExprTests: XCTestCase {
 
   func testTernaryExpr() {
     let buildable = TernaryExprSyntax(
-      conditionExpression: BooleanLiteralExprSyntax(true),
+      condition: BooleanLiteralExprSyntax(true),
       firstChoice: IntegerLiteralExprSyntax(1),
       secondChoice: IntegerLiteralExprSyntax(0)
     )

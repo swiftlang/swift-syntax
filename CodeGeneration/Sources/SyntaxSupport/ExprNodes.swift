@@ -444,7 +444,7 @@ public let EXPR_NODES: [Node] = [
         documentation: "The '(' to open the parameter clause."
       ),
       Child(
-        name: "Properties",
+        name: "Parameters",
         deprecatedName: "ParameterList",
         kind: .collection(kind: .closureParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",

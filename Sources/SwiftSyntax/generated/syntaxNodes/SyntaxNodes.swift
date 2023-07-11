@@ -3745,7 +3745,7 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
-///  - `properties`: ``ClosureParameterListSyntax``
+///  - `parameters`: ``ClosureParameterListSyntax``
 ///  - `rightParen`: `')'`
 public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -3768,16 +3768,16 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - leftParen: The '(' to open the parameter clause.
-  ///   - properties: The actual parameters.
+  ///   - parameters: The actual parameters.
   ///   - rightParen: The ')' to close the parameter clause.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndProperties: UnexpectedNodesSyntax? = nil,
-      properties: ClosureParameterListSyntax,
-      _ unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil,
+      parameters: ClosureParameterListSyntax,
+      _ unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -3788,18 +3788,18 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndProperties, 
-            properties, 
-            unexpectedBetweenPropertiesAndRightParen, 
+            unexpectedBetweenLeftParenAndParameters, 
+            parameters, 
+            unexpectedBetweenParametersAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndProperties?.raw, 
-          properties.raw, 
-          unexpectedBetweenPropertiesAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndParameters?.raw, 
+          parameters.raw, 
+          unexpectedBetweenParametersAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -3835,7 +3835,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndProperties: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3845,7 +3845,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The actual parameters.
-  public var properties: ClosureParameterListSyntax {
+  public var parameters: ClosureParameterListSyntax {
     get {
       return ClosureParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -3854,12 +3854,12 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `properties`
+  /// Adds the provided `element` to the node's `parameters`
   /// collection.
   /// - param element: The new `Parameter` to add to the node's
-  ///                  `properties` collection.
+  ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
-  ///            appended to its `properties` collection.
+  ///            appended to its `parameters` collection.
   public func addParameter(_ element: ClosureParameterSyntax) -> ClosureParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3878,7 +3878,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return ClosureParameterClauseSyntax(newData)
   }
   
-  public var unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3910,9 +3910,9 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndProperties, 
-          \Self.properties, 
-          \Self.unexpectedBetweenPropertiesAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndParameters, 
+          \Self.parameters, 
+          \Self.unexpectedBetweenParametersAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])

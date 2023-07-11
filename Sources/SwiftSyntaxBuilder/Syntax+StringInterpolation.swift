@@ -266,7 +266,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
       return ExprSyntax(
         PrefixOperatorExprSyntax(
           operator: .prefixOperator("-"),
-          postfixExpression: (-self).makeLiteralSyntax()
+          baseExpression: (-self).makeLiteralSyntax()
         )
       )
 
@@ -338,9 +338,9 @@ extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLite
     DictionaryExprSyntax(leftSquare: .leftSquareToken(), rightSquare: .rightSquareToken()) {
       for elem in self {
         DictionaryElementSyntax(
-          keyExpression: elem.key.makeLiteralSyntax(),
+          key: elem.key.makeLiteralSyntax(),
           colon: .colonToken(),
-          valueExpression: elem.value.makeLiteralSyntax()
+          value: elem.value.makeLiteralSyntax()
         )
       }
     }
@@ -359,9 +359,9 @@ extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteral
     return DictionaryExprSyntax(leftSquare: .leftSquareToken(), rightSquare: .rightSquareToken()) {
       for elemSyntax in elemSyntaxes {
         DictionaryElementSyntax(
-          keyExpression: elemSyntax.key,
+          key: elemSyntax.key,
           colon: .colonToken(),
-          valueExpression: elemSyntax.value
+          value: elemSyntax.value
         )
       }
     }
@@ -378,7 +378,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       if let call = expr.as(FunctionCallExprSyntax.self),
         let memberAccess = call.calledExpression.as(MemberAccessExprSyntax.self),
         memberAccess.name.text == "some",
-        let argument = call.argumentList.first?.expression
+        let argument = call.arguments.first?.expression
       {
         return containsNil(argument)
       }

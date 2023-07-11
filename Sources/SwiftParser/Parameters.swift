@@ -33,13 +33,13 @@ extension RawClosureParameterListSyntax: RawParameterListTrait {}
 extension RawEnumCaseParameterListSyntax: RawParameterListTrait {}
 
 protocol RawParameterClauseTrait: RawSyntaxNodeProtocol {
-  associatedtype ParameterList: RawParameterListTrait
+  associatedtype Parameters: RawParameterListTrait
 
   init(
     _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?,
     leftParen: RawTokenSyntax,
     _ unexpectedBetweenLeftParenAndParameterList: RawUnexpectedNodesSyntax?,
-    parameterList: ParameterList,
+    parameters: Parameters,
     _ unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax?,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?,
@@ -272,10 +272,10 @@ extension Parser {
     ParameterClause: RawParameterClauseTrait
   >(
     _ parameterClauseType: ParameterClause.Type,
-    parseParameter: (inout Parser) -> ParameterClause.ParameterList.ParameterSyntax
+    parseParameter: (inout Parser) -> ParameterClause.Parameters.ParameterSyntax
   ) -> ParameterClause {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    var elements = [ParameterClause.ParameterList.ParameterSyntax]()
+    var elements = [ParameterClause.Parameters.ParameterSyntax]()
     // If we are missing the left parenthesis and the next token doesn't appear
     // to be an argument label, don't parse any parameters.
     let shouldSkipParameterParsing =
@@ -299,18 +299,18 @@ extension Parser {
     }
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
-    let parameters: ParameterClause.ParameterList
+    let parameters: ParameterClause.Parameters
     if elements.isEmpty && (lparen.isMissing || rparen.isMissing) {
-      parameters = ParameterClause.ParameterList(elements: [], arena: self.arena)
+      parameters = ParameterClause.Parameters(elements: [], arena: self.arena)
     } else {
-      parameters = ParameterClause.ParameterList(elements: elements, arena: self.arena)
+      parameters = ParameterClause.Parameters(elements: elements, arena: self.arena)
     }
 
     return ParameterClause(
       unexpectedBeforeLParen,
       leftParen: lparen,
       nil,
-      parameterList: parameters,
+      parameters: parameters,
       unexpectedBeforeRParen,
       rightParen: rparen,
       nil,

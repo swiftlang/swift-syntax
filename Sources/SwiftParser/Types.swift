@@ -30,7 +30,7 @@ extension Parser {
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
           repeatKeyword: repeatKeyword,
-          patternType: type,
+          pack: type,
           arena: self.arena
         )
       )
@@ -42,7 +42,7 @@ extension Parser {
       return RawTypeSyntax(
         RawSuppressedTypeSyntax(
           withoutTilde: withoutTilde,
-          patternType: type,
+          type: type,
           arena: self.arena
         )
       )
@@ -144,7 +144,7 @@ extension Parser {
       return RawTypeSyntax(
         RawPackReferenceTypeSyntax(
           eachKeyword: each,
-          packType: packType,
+          pack: packType,
           arena: self.arena
         )
       )
@@ -435,7 +435,7 @@ extension Parser {
         keepGoing = self.consume(if: .comma)
         arguments.append(
           RawGenericArgumentSyntax(
-            argumentType: type,
+            argument: type,
             trailingComma: keepGoing,
             arena: self.arena
           )
@@ -604,7 +604,7 @@ extension Parser {
         RawArrayTypeSyntax(
           remaingingTokens,
           leftSquare: missingToken(.leftSquare),
-          elementType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+          element: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
           rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
@@ -620,9 +620,9 @@ extension Parser {
         RawDictionaryTypeSyntax(
           unexpectedBeforeLSquare,
           leftSquare: leftsquare,
-          keyType: firstType,
+          key: firstType,
           colon: colon,
-          valueType: secondType,
+          value: secondType,
           unexpectedBeforeRSquareBracket,
           rightSquare: rightSquare,
           arena: self.arena
@@ -634,7 +634,7 @@ extension Parser {
         RawArrayTypeSyntax(
           unexpectedBeforeLSquare,
           leftSquare: leftsquare,
-          elementType: firstType,
+          element: firstType,
           unexpectedBeforeRSquareBracket,
           rightSquare: rSquareBracket,
           arena: self.arena
@@ -1014,7 +1014,7 @@ extension Parser {
         result = RawTypeSyntax(
           RawArrayTypeSyntax(
             leftSquare: missingToken(.leftSquare),
-            elementType: result,
+            element: result,
             rightSquare: rightSquare,
             arena: self.arena
           )
@@ -1035,9 +1035,9 @@ extension Parser {
         result = RawTypeSyntax(
           RawDictionaryTypeSyntax(
             leftSquare: self.missingToken(.leftSquare),
-            keyType: result,
+            key: result,
             colon: colon,
-            valueType: secondType,
+            value: secondType,
             rightSquare: rightSquare,
             arena: self.arena
           )

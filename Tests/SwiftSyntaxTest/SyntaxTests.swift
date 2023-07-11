@@ -25,15 +25,15 @@ public class SyntaxTests: XCTestCase {
     XCTAssertTrue(
       FunctionDeclSyntax(
         funcKeyword: TokenSyntax.keyword(.func, presence: .missing),
-        identifier: .identifier("foo"),
-        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameterList: []))
+        name: .identifier("foo"),
+        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameters: []))
       ).hasError
     )
     XCTAssertFalse(
       FunctionDeclSyntax(
         funcKeyword: TokenSyntax.keyword(.func, presence: .present),
-        identifier: .identifier("foo"),
-        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameterList: []))
+        name: .identifier("foo"),
+        signature: FunctionSignatureSyntax(parameterClause: ParameterClauseSyntax(parameters: []))
       ).hasError
     )
   }
@@ -41,7 +41,7 @@ public class SyntaxTests: XCTestCase {
   public func testDetached() {
     let s = StructDeclSyntax(
       structKeyword: .keyword(.struct),
-      identifier: .identifier("someStruct"),
+      name: .identifier("someStruct"),
       memberBlock: MemberDeclBlockSyntax(leftBrace: .leftBraceToken(), members: [], rightBrace: .rightBraceToken())
     )
 

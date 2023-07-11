@@ -629,12 +629,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \ClosureParameterClauseSyntax.leftParen:
     return "leftParen"
-  case \ClosureParameterClauseSyntax.unexpectedBetweenLeftParenAndProperties:
-    return "unexpectedBetweenLeftParenAndProperties"
-  case \ClosureParameterClauseSyntax.properties:
-    return "properties"
-  case \ClosureParameterClauseSyntax.unexpectedBetweenPropertiesAndRightParen:
-    return "unexpectedBetweenPropertiesAndRightParen"
+  case \ClosureParameterClauseSyntax.unexpectedBetweenLeftParenAndParameters:
+    return "unexpectedBetweenLeftParenAndParameters"
+  case \ClosureParameterClauseSyntax.parameters:
+    return "parameters"
+  case \ClosureParameterClauseSyntax.unexpectedBetweenParametersAndRightParen:
+    return "unexpectedBetweenParametersAndRightParen"
   case \ClosureParameterClauseSyntax.rightParen:
     return "rightParen"
   case \ClosureParameterClauseSyntax.unexpectedAfterRightParen:

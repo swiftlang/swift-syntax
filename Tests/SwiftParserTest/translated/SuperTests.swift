@@ -140,7 +140,7 @@ final class SuperTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: SuperRefExprSyntax(superKeyword: .keyword(.super)),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([
+          arguments: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
             )

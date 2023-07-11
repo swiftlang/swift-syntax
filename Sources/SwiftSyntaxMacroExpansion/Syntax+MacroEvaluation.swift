@@ -67,10 +67,10 @@ extension Syntax {
   var evaluatedMacroName: String? {
     switch self.as(SyntaxEnum.self) {
     case .macroExpansionDecl(let expansion):
-      return expansion.macro.text
+      return expansion.macroName.text
 
     case .macroExpansionExpr(let expansion):
-      return expansion.macro.text
+      return expansion.macroName.text
 
     default:
       return nil

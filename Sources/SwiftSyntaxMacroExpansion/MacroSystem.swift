@@ -205,7 +205,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     for item in node {
       // Expand declaration macros, which produce zero or more declarations.
       if let declExpansion = item.decl.as(MacroExpansionDeclSyntax.self),
-        let macro = macroSystem.macros[declExpansion.macro.text],
+        let macro = macroSystem.macros[declExpansion.macroName.text],
         let freestandingMacro = macro as? DeclarationMacro.Type
       {
         do {
@@ -343,7 +343,7 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         visitedVarDecl.bindings.with(
           \.[visitedVarDecl.bindings.startIndex],
           binding.with(
-            \.accessor,
+            \.accessors,
             .accessors(
               .init(
                 leftBrace: .leftBraceToken(leadingTrivia: .space),
@@ -407,8 +407,8 @@ extension MacroApplication {
   // set of extension declarations.
   private func expandExtensions(of decl: DeclGroupSyntax) -> [DeclSyntax] {
     let extendedType: TypeSyntax
-    if let identified = decl.asProtocol(IdentifiedDeclSyntax.self) {
-      extendedType = "\(identified.identifier.trimmed)"
+    if let named = decl.asProtocol(NamedDeclSyntax.self) {
+      extendedType = "\(named.name.trimmed)"
     } else if let ext = decl.as(ExtensionDeclSyntax.self) {
       extendedType = "\(ext.extendedType.trimmed)"
     } else {

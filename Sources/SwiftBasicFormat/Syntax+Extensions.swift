@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-public extension TokenSyntax {
+extension TokenSyntax {
   /// The indentation of this token
   ///
   /// In contrast to `indentationOfLine`, this does not walk to previous tokens to
@@ -23,7 +23,7 @@ public extension TokenSyntax {
   }
 
   /// Returns the indentation of the line this token occurs on
-  var indentationOfLine: Trivia {
+  public var indentationOfLine: Trivia {
     var token: TokenSyntax = self
     if let indentation = token.indentation {
       return indentation

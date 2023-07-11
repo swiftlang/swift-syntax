@@ -90,21 +90,5 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         )
       }
     }
-
-    DeclSyntax(
-      """
-      public static func eof(
-        leadingTrivia: Trivia = [],
-        presence: SourcePresence = .present
-      ) -> TokenSyntax {
-        return TokenSyntax(
-          .eof,
-          leadingTrivia: leadingTrivia,
-          trailingTrivia: [],
-          presence: presence
-        )
-      }
-      """
-    )
   }
 }

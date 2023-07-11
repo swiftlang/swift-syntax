@@ -196,7 +196,7 @@ extension Parser.Lookahead {
       } while self.consume(if: .period) != nil
 
       if self.consume(if: .leftParen) != nil {
-        while !self.at(.eof, .rightParen, .poundEndifKeyword) {
+        while !self.at(.endOfFile, .rightParen, .poundEndifKeyword) {
           self.skipSingle()
         }
         self.consume(if: .rightParen)
@@ -291,7 +291,7 @@ extension Parser.Lookahead {
   }
 
   mutating func skipUntilEndOfLine() {
-    while !self.at(.eof) && !self.currentToken.isAtStartOfLine {
+    while !self.at(.endOfFile) && !self.currentToken.isAtStartOfLine {
       self.skipSingle()
     }
   }
@@ -393,7 +393,7 @@ extension Parser.Lookahead {
           return
         }
       case .skipUntil(let t1, let t2):
-        if !self.at(.eof, t1, t2) && !self.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) {
+        if !self.at(.endOfFile, t1, t2) && !self.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword) {
           stack += [.skipUntil(t1, t2), .skipSingle]
         }
       }

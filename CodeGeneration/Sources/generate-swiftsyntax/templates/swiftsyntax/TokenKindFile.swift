@@ -22,8 +22,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     public enum TokenKind: Hashable
     """
   ) {
-    DeclSyntax("case eof")
-
     for token in SYNTAX_TOKENS {
       // Tokens that don't have a set text have an associated value that
       // contains their text.
@@ -59,10 +57,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
         }
-
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax(#"return """#)
-        }
       }
     }
 
@@ -86,9 +80,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
         }
 
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax(#"return """#)
-        }
         SwitchCaseSyntax("default:") {
           StmtSyntax(#"return """#)
         }
@@ -106,10 +97,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return false")
-        }
-
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
@@ -122,10 +109,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension TokenKind: Equatable") {
     try FunctionDeclSyntax("public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool") {
       try SwitchExprSyntax("switch (lhs, rhs)") {
-        SwitchCaseSyntax("case (.eof, .eof):") {
-          StmtSyntax("return true")
-        }
-
         for token in SYNTAX_TOKENS {
           if token.text != nil {
             SwitchCaseSyntax("case (.\(raw: token.swiftKind), .\(raw: token.swiftKind)):") {
@@ -156,8 +139,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     public enum RawTokenKind: UInt8, Equatable, Hashable
     """
   ) {
-    DeclSyntax("case eof")
-
     for token in SYNTAX_TOKENS {
       DeclSyntax("case \(raw: token.swiftKind)")
     }
@@ -169,10 +150,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax(#"return """#)
-        }
-
         for token in SYNTAX_TOKENS {
           if let text = token.text {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
@@ -198,10 +175,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return false")
-        }
-
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
             StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
@@ -220,10 +193,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch rawKind") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return .eof")
-        }
-
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
@@ -259,10 +228,6 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch self") {
-        SwitchCaseSyntax("case .eof:") {
-          StmtSyntax("return (.eof, nil)")
-        }
-
         for token in SYNTAX_TOKENS {
           if token.swiftKind == "keyword" {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let keyword):") {

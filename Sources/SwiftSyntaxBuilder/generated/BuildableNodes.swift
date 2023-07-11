@@ -1222,7 +1222,7 @@ extension SourceFileSyntax {
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax? = nil, 
-      endOfFileToken: TokenSyntax = .eof(), 
+      endOfFileToken: TokenSyntax = .endOfFileToken(), 
       unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil

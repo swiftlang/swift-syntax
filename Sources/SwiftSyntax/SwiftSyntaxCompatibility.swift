@@ -75,6 +75,9 @@ public extension TokenKind {
   static var rightSquareBracket: TokenKind {
     return .rightSquare
   }
+
+  @available(*, deprecated, renamed: "endOfFile")
+  static var eof: TokenKind { .endOfFile }
 }
 
 public extension TokenSyntax {
@@ -98,6 +101,19 @@ public extension TokenSyntax {
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return .rightSquareToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "endOfFileToken")
+  static func eof(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return .endOfFileToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

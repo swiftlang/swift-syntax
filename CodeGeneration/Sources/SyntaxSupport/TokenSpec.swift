@@ -183,6 +183,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Comma", kind: "comma", text: ",", requiresTrailingSpace: true),
   MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
   PunctuatorSpec(name: "Ellipsis", kind: "ellipsis", text: "..."),
+  MiscSpec(name: "EndOfFile", kind: "eof", nameForDiagnostics: "end of file", text: ""),
   PunctuatorSpec(name: "Equal", kind: "equal", text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
   PunctuatorSpec(name: "ExclamationMark", kind: "exclaim_postfix", text: "!"),
   MiscSpec(name: "ExtendedRegexDelimiter", kind: "extended_regex_delimiter", nameForDiagnostics: "extended delimiter", classification: "RegexLiteral"),
@@ -224,8 +225,6 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
 ]
 
-// FIXME: Generate the EOF token as part of the normal SYNTAX_TOKENS and remove the special handling for it.
 public let SYNTAX_TOKEN_MAP = Dictionary(
-  uniqueKeysWithValues: (SYNTAX_TOKENS + [MiscSpec(name: "EOF", kind: "eof", nameForDiagnostics: "end of file", text: "")])
-    .map { ("\($0.name)Token", $0) }
+  uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) }
 )

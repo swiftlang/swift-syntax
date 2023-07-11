@@ -90,7 +90,7 @@ public struct Parser {
   var arena: ParsingSyntaxArena
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
-  /// The current token. If there was no input, this token will have a kind of `.eof`.
+  /// The current token. If there was no input, this token will have a kind of `.endOfFile`.
   var currentToken: Lexer.Lexeme
 
   /// The current nesting level, i.e. the number of tokens that
@@ -266,7 +266,7 @@ extension Parser {
 
     var unexpectedTokens = [RawTokenSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.eof), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+    while !self.at(.endOfFile), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
       unexpectedTokens += [self.consumeAnyToken()]
     }
 

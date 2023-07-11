@@ -205,7 +205,7 @@ extension Parser {
   ) -> [Element] {
     var elements = [Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.eof)
+    while !self.at(.endOfFile)
       && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword)
       && !self.atElifTypo()
       && elementsProgress.evaluate(currentToken)

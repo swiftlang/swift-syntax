@@ -85,7 +85,7 @@ extension TokenConsumer {
     }
 
     if hasAttribute {
-      if subparser.at(.rightBrace) || subparser.at(.eof) || subparser.at(.poundEndifKeyword) {
+      if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndifKeyword) {
         return true
       }
     }
@@ -776,7 +776,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(currentToken) {
         let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
         guard let newElement = self.parseMemberDeclListItem() else {
           break
@@ -1539,7 +1539,7 @@ extension Parser {
     var elements = [RawAccessorDeclSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(currentToken) {
         guard let introducer = self.parseAccessorIntroducer() else {
           // There can only be an implicit getter if no other accessors were
           // seen before this one.
@@ -1758,7 +1758,7 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     while (identifiersAfterOperatorName.last ?? name).trailingTriviaByteLength == 0,
       self.currentToken.leadingTriviaByteLength == 0,
-      !self.at(.colon, .leftBrace, .eof),
+      !self.at(.colon, .leftBrace, .endOfFile),
       loopProgress.evaluate(self.currentToken)
     {
       identifiersAfterOperatorName.append(consumeAnyToken())
@@ -1906,7 +1906,7 @@ extension Parser {
     var elements = [RawPrecedenceGroupAttributeListSyntax.Element]()
     do {
       var attributesProgress = LoopProgressCondition()
-      LOOP: while !self.at(.eof, .rightBrace) && attributesProgress.evaluate(currentToken) {
+      LOOP: while !self.at(.endOfFile, .rightBrace) && attributesProgress.evaluate(currentToken) {
         switch self.at(anyIn: LabelText.self) {
         case (.associativity, let handle)?:
           let associativity = self.eat(handle)

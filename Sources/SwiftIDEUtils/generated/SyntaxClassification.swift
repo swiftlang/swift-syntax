@@ -122,6 +122,8 @@ extension RawTokenKind {
       return .dollarIdentifier
     case .ellipsis:
       return .none
+    case .endOfFile:
+      return .none
     case .equal:
       return .none
     case .exclamationMark:
@@ -199,8 +201,6 @@ extension RawTokenKind {
     case .unknown:
       return .none
     case .wildcard:
-      return .none
-    case .eof:
       return .none
     }
   }

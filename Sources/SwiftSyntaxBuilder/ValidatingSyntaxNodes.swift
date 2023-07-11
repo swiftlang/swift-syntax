@@ -38,7 +38,7 @@ extension Trivia {
     self = trivia
     if pieces.contains(where: { $0.isUnexpected }) {
       var diagnostics: [Diagnostic] = []
-      let tree = SourceFileSyntax(statements: [], endOfFileToken: .eof(leadingTrivia: self))
+      let tree = SourceFileSyntax(statements: [], endOfFileToken: .endOfFileToken(leadingTrivia: self))
       var offset = 0
       for piece in pieces {
         if case .unexpectedText(let contents) = piece {

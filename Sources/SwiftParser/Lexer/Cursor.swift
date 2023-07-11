@@ -972,7 +972,7 @@ extension Lexer.Cursor {
     case UInt8(ascii: "`"):
       return self.lexEscapedIdentifier()
     case nil:
-      return Lexer.Result(.eof)
+      return Lexer.Result(.endOfFile)
     default:
       var tmp = self
       if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierStartCodePoint }) {
@@ -1000,7 +1000,7 @@ extension Lexer.Cursor {
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringQuote(isOpening: true, leadingDelimiterLength: delimiterLength)
     case nil:
-      return Lexer.Result(.eof)
+      return Lexer.Result(.endOfFile)
     default:
       preconditionFailure("state 'afterRawStringDelimiter' expects to be positioned at a quote")
     }
@@ -1011,7 +1011,7 @@ extension Lexer.Cursor {
     case UInt8(ascii: #"'"#), UInt8(ascii: #"""#):
       return self.lexStringQuote(isOpening: false, leadingDelimiterLength: 0)
     case nil:
-      return Lexer.Result(.eof)
+      return Lexer.Result(.endOfFile)
     default:
       preconditionFailure("state 'isAfterStringLiteral' expects to be positioned at a quote")
     }
@@ -1023,7 +1023,7 @@ extension Lexer.Cursor {
       self.advance(while: { $0 == Unicode.Scalar("#") })
       return Lexer.Result(.rawStringDelimiter, stateTransition: .pop)
     case nil:
-      return Lexer.Result(.eof)
+      return Lexer.Result(.endOfFile)
     default:
       preconditionFailure("state 'afterClosingStringQuote' expects to be positioned at a '#'")
     }
@@ -1045,7 +1045,7 @@ extension Lexer.Cursor {
       _ = self.advance()
       return Lexer.Result(.leftParen, stateTransition: .replace(newState: .inStringInterpolation(stringLiteralKind: stringLiteralKind, parenCount: 0)))
     case nil:
-      return Lexer.Result(.eof)
+      return Lexer.Result(.endOfFile)
     default:
       preconditionFailure("state 'afterBackslashOfStringInterpolation' expects to be positioned at '#' or '('")
     }
@@ -1884,7 +1884,7 @@ extension Lexer.Cursor {
   }
 
   mutating func lexInStringLiteral(stringLiteralKind: StringLiteralKind, delimiterLength: Int) -> Lexer.Result {
-    if self.isAtEndOfFile { return .init(.eof) }
+    if self.isAtEndOfFile { return .init(.endOfFile) }
 
     var error: LexingDiagnostic? = nil
 

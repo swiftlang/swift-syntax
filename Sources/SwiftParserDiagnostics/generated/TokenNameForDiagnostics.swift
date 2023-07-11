@@ -17,8 +17,6 @@
 extension TokenKind {
   var nameForDiagnostics: String {
     switch self {
-    case .eof:
-      return "end of file"
     case .arrow:
       return #"->"#
     case .atSign:
@@ -37,6 +35,8 @@ extension TokenKind {
       return #"dollar identifier"#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #"end of file"#
     case .equal:
       return #"="#
     case .exclamationMark:

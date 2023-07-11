@@ -16,7 +16,7 @@ extension Parser {
   /// Consumes and returns all remaining tokens in the source file.
   mutating func consumeRemainingTokens() -> [RawSyntax] {
     var extraneousTokens = [RawSyntax]()
-    while !self.at(.eof) {
+    while !self.at(.endOfFile) {
       extraneousTokens.append(RawSyntax(consumeAnyToken()))
     }
     return extraneousTokens
@@ -26,7 +26,7 @@ extension Parser {
   /// as unexpected nodes that have the `isMaximumNestingLevelOverflow` bit set.
   /// Check this in places that are likely to cause deep recursion and if this returns non-nil, abort parsing.
   mutating func remainingTokensIfMaximumNestingLevelReached() -> RawUnexpectedNodesSyntax? {
-    if nestingLevel > self.maximumNestingLevel && self.currentToken.rawTokenKind != .eof {
+    if nestingLevel > self.maximumNestingLevel && self.currentToken.rawTokenKind != .endOfFile {
       let remainingTokens = self.consumeRemainingTokens()
       return RawUnexpectedNodesSyntax(elements: remainingTokens, isMaximumNestingLevelOverflow: true, arena: self.arena)
     } else {
@@ -46,12 +46,12 @@ extension Parser {
   ///     source-file → top-level-declaration?
   mutating func parseSourceFile() -> RawSourceFileSyntax {
     let items = self.parseTopLevelCodeBlockItems()
-    let unexpectedBeforeEof = consumeRemainingTokens()
-    let eof = self.consume(if: .eof)!
+    let unexpectedBeforeEndOfFileToken = consumeRemainingTokens()
+    let endOfFile = self.consume(if: .endOfFile)!
     return .init(
       statements: items,
-      RawUnexpectedNodesSyntax(unexpectedBeforeEof, arena: self.arena),
-      endOfFileToken: eof,
+      RawUnexpectedNodesSyntax(unexpectedBeforeEndOfFileToken, arena: self.arena),
+      endOfFileToken: endOfFile,
       arena: self.arena
     )
   }

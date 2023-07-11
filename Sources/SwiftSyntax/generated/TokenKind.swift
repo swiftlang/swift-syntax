@@ -14,7 +14,6 @@
 
 /// Enumerates the kinds of tokens in the Swift language.
 public enum TokenKind: Hashable {
-  case eof
   case arrow
   case atSign
   case backslash
@@ -24,6 +23,7 @@ public enum TokenKind: Hashable {
   case comma
   case dollarIdentifier(String)
   case ellipsis
+  case endOfFile
   case equal
   case exclamationMark
   case extendedRegexDelimiter(String)
@@ -86,6 +86,8 @@ public enum TokenKind: Hashable {
       return text
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -164,8 +166,6 @@ public enum TokenKind: Hashable {
       return text
     case .wildcard:
       return #"_"#
-    case .eof:
-      return ""
     }
   }
   
@@ -187,6 +187,8 @@ public enum TokenKind: Hashable {
       return #","#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -245,8 +247,6 @@ public enum TokenKind: Hashable {
       return #"""#
     case .wildcard:
       return #"_"#
-    case .eof:
-      return ""
     default:
       return ""
     }
@@ -259,8 +259,6 @@ public enum TokenKind: Hashable {
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
-    case .eof:
-      return false
     case .arrow:
       return true
     case .atSign:
@@ -279,6 +277,8 @@ public enum TokenKind: Hashable {
       return false
     case .ellipsis:
       return true
+    case .endOfFile:
+      return false
     case .equal:
       return true
     case .exclamationMark:
@@ -364,8 +364,6 @@ public enum TokenKind: Hashable {
 extension TokenKind: Equatable {
   public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
-    case (.eof, .eof):
-      return true
     case (.arrow, .arrow):
       return true
     case (.atSign, .atSign):
@@ -383,6 +381,8 @@ extension TokenKind: Equatable {
     case (.dollarIdentifier(let lhsText), .dollarIdentifier(let rhsText)):
       return lhsText == rhsText
     case (.ellipsis, .ellipsis):
+      return true
+    case (.endOfFile, .endOfFile):
       return true
     case (.equal, .equal):
       return true
@@ -475,7 +475,6 @@ extension TokenKind: Equatable {
 @frozen // FIXME: Not actually stable, works around a miscompile
 @_spi(RawSyntax)
 public enum RawTokenKind: UInt8, Equatable, Hashable {
-  case eof
   case arrow
   case atSign
   case backslash
@@ -485,6 +484,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case comma
   case dollarIdentifier
   case ellipsis
+  case endOfFile
   case equal
   case exclamationMark
   case extendedRegexDelimiter
@@ -528,8 +528,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
     switch self {
-    case .eof:
-      return ""
     case .arrow:
       return #"->"#
     case .atSign:
@@ -544,6 +542,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return #","#
     case .ellipsis:
       return #"..."#
+    case .endOfFile:
+      return #""#
     case .equal:
       return #"="#
     case .exclamationMark:
@@ -612,8 +612,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   /// quote characters in a string literal.
   public var isPunctuation: Bool {
     switch self {
-    case .eof:
-      return false
     case .arrow:
       return true
     case .atSign:
@@ -632,6 +630,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     case .ellipsis:
       return true
+    case .endOfFile:
+      return false
     case .equal:
       return true
     case .exclamationMark:
@@ -719,8 +719,6 @@ extension TokenKind {
   @_spi(RawSyntax)
   public static func fromRaw(kind rawKind: RawTokenKind, text: String) -> TokenKind {
     switch rawKind {
-    case .eof:
-      return .eof
     case .arrow:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .arrow
@@ -746,6 +744,9 @@ extension TokenKind {
     case .ellipsis:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .ellipsis
+    case .endOfFile:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .endOfFile
     case .equal:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .equal
@@ -863,8 +864,6 @@ extension TokenKind {
   @_spi(RawSyntax)
   public func decomposeToRaw() -> (rawKind: RawTokenKind, string: String?) {
     switch self {
-    case .eof:
-      return (.eof, nil)
     case .arrow:
       return (.arrow, nil)
     case .atSign:
@@ -883,6 +882,8 @@ extension TokenKind {
       return (.dollarIdentifier, str)
     case .ellipsis:
       return (.ellipsis, nil)
+    case .endOfFile:
+      return (.endOfFile, nil)
     case .equal:
       return (.equal, nil)
     case .exclamationMark:

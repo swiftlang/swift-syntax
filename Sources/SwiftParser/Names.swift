@@ -115,7 +115,7 @@ extension Parser {
     var elements = [RawDeclNameArgumentSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.eof, .rightParen) && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightParen) && loopProgress.evaluate(currentToken) {
         // Check to see if there is an argument label.
         precondition(self.currentToken.canBeArgumentLabel() && self.peek().rawTokenKind == .colon)
         let name = self.consumeAnyToken()
@@ -240,7 +240,7 @@ extension Parser.Lookahead {
     }
 
     var loopProgress = LoopProgressCondition()
-    while !lookahead.at(.eof, .rightParen) && loopProgress.evaluate(lookahead.currentToken) {
+    while !lookahead.at(.endOfFile, .rightParen) && loopProgress.evaluate(lookahead.currentToken) {
       // Check to see if there is an argument label.
       guard lookahead.currentToken.canBeArgumentLabel() && lookahead.peek().rawTokenKind == .colon else {
         return false

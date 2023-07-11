@@ -74,9 +74,6 @@ public extension Child {
     if token.isKeyword {
       return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)()"))
     }
-    if token.name == "EOF" {
-      return InitializerClauseSyntax(value: ExprSyntax(".eof()"))
-    }
     if token.text != nil {
       return InitializerClauseSyntax(value: ExprSyntax(".\(raw: token.swiftKind)Token()"))
     }

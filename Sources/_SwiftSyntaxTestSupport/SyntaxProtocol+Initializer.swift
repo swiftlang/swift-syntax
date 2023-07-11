@@ -153,7 +153,7 @@ extension SyntaxProtocol {
       if case .keyword(let keyword) = tokenKind {
         tokenInitializerName = "keyword"
         tokenKindArgument = ExprSyntax(".\(raw: keyword)")
-      } else if tokenKind.isLexerClassifiedKeyword || tokenKind == .eof {
+      } else if tokenKind.isLexerClassifiedKeyword {
         tokenInitializerName = String(describing: tokenKind)
         tokenKindArgument = nil
       } else if tokenKind.decomposeToRaw().rawKind.defaultText != nil {

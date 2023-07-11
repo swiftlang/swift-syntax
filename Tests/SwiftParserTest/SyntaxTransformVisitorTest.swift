@@ -60,12 +60,12 @@ final class SyntaxTransformVisitorTest: XCTestCase {
       }
 
       public func visit(_ node: FunctionDeclSyntax) -> String {
-        let argStrings = node.signature.input.parameterList
+        let argStrings = node.signature.parameterClause.parameterList
           .compactMap { $0.type }
           .compactMap(visit)
 
         let resultString: String
-        if let out = node.signature.output {
+        if let out = node.signature.returnClause {
           resultString = visit(out.returnType)
         } else {
           resultString = "Void"

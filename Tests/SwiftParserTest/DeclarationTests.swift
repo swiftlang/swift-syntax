@@ -812,7 +812,7 @@ final class DeclarationTests: XCTestCase {
           funcKeyword: .keyword(.func),
           identifier: .identifier("withoutParameters"),
           signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(
+            parameterClause: ParameterClauseSyntax(
               leftParen: .leftParenToken(presence: .missing),
               parameterList: FunctionParameterListSyntax([]),
               rightParen: .rightParenToken(presence: .missing)
@@ -2072,7 +2072,7 @@ final class DeclarationTests: XCTestCase {
                           funcKeyword: .keyword(.func, presence: .missing),
                           identifier: .binaryOperator("^"),
                           signature: FunctionSignatureSyntax(
-                            input: ParameterClauseSyntax(
+                            parameterClause: ParameterClauseSyntax(
                               leftParen: .leftParenToken(presence: .missing),
                               parameterList: FunctionParameterListSyntax([]),
                               rightParen: .rightParenToken(presence: .missing)
@@ -2442,7 +2442,7 @@ final class DeclarationTests: XCTestCase {
             withoutTilde: .prefixOperator("~"),
             patternType: FunctionTypeSyntax(
               parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
-              output: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
+              returnClause: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
             )
           )
         )
@@ -2572,7 +2572,7 @@ final class DeclarationTests: XCTestCase {
         InitializerDeclSyntax(
           initKeyword: .keyword(.`init`),
           signature: FunctionSignatureSyntax(
-            input: ParameterClauseSyntax(
+            parameterClause: ParameterClauseSyntax(
               leftParen: .leftParenToken(),
               parameterList: FunctionParameterListSyntax([
                 FunctionParameterSyntax(

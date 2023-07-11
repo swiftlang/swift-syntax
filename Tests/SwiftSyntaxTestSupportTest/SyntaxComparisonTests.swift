@@ -193,7 +193,7 @@ public class SyntaxComparisonTests: XCTestCase {
       funcBody = makeBody()
     }
     let emptySignature = FunctionSignatureSyntax(
-      input: ParameterClauseSyntax(
+      parameterClause: ParameterClauseSyntax(
         leftParen: .leftParenToken(),
         parameterList: FunctionParameterListSyntax([]),
         rightParen: .rightParenToken()

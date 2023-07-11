@@ -225,7 +225,10 @@ final class VariableTests: XCTestCase {
   }
 
   func testClosureTypeVariableDecl() {
-    let type = FunctionTypeSyntax(parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))], output: ReturnClauseSyntax(returnType: TypeSyntax("Bool")))
+    let type = FunctionTypeSyntax(
+      parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
+      returnClause: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
+    )
     let buildable = VariableDeclSyntax(bindingSpecifier: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))
     }

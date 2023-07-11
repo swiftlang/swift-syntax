@@ -455,12 +455,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenLabelAndColon"
   case \CanImportVersionInfoSyntax.colon:
     return "colon"
-  case \CanImportVersionInfoSyntax.unexpectedBetweenColonAndVersionTuple:
-    return "unexpectedBetweenColonAndVersionTuple"
-  case \CanImportVersionInfoSyntax.versionTuple:
-    return "versionTuple"
-  case \CanImportVersionInfoSyntax.unexpectedAfterVersionTuple:
-    return "unexpectedAfterVersionTuple"
+  case \CanImportVersionInfoSyntax.unexpectedBetweenColonAndVersion:
+    return "unexpectedBetweenColonAndVersion"
+  case \CanImportVersionInfoSyntax.version:
+    return "version"
+  case \CanImportVersionInfoSyntax.unexpectedAfterVersion:
+    return "unexpectedAfterVersion"
   case \CaseItemSyntax.unexpectedBeforePattern:
     return "unexpectedBeforePattern"
   case \CaseItemSyntax.pattern:
@@ -681,20 +681,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAttributesAndCapture"
   case \ClosureSignatureSyntax.capture:
     return "capture"
-  case \ClosureSignatureSyntax.unexpectedBetweenCaptureAndInput:
-    return "unexpectedBetweenCaptureAndInput"
-  case \ClosureSignatureSyntax.input:
-    return "input"
-  case \ClosureSignatureSyntax.unexpectedBetweenInputAndEffectSpecifiers:
-    return "unexpectedBetweenInputAndEffectSpecifiers"
+  case \ClosureSignatureSyntax.unexpectedBetweenCaptureAndParameterClause:
+    return "unexpectedBetweenCaptureAndParameterClause"
+  case \ClosureSignatureSyntax.parameterClause:
+    return "parameterClause"
+  case \ClosureSignatureSyntax.unexpectedBetweenParameterClauseAndEffectSpecifiers:
+    return "unexpectedBetweenParameterClauseAndEffectSpecifiers"
   case \ClosureSignatureSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \ClosureSignatureSyntax.unexpectedBetweenEffectSpecifiersAndOutput:
-    return "unexpectedBetweenEffectSpecifiersAndOutput"
-  case \ClosureSignatureSyntax.output:
-    return "output"
-  case \ClosureSignatureSyntax.unexpectedBetweenOutputAndInKeyword:
-    return "unexpectedBetweenOutputAndInKeyword"
+  case \ClosureSignatureSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
+    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \ClosureSignatureSyntax.returnClause:
+    return "returnClause"
+  case \ClosureSignatureSyntax.unexpectedBetweenReturnClauseAndInKeyword:
+    return "unexpectedBetweenReturnClauseAndInKeyword"
   case \ClosureSignatureSyntax.inKeyword:
     return "inKeyword"
   case \ClosureSignatureSyntax.unexpectedAfterInKeyword:
@@ -877,16 +877,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \DeclNameArgumentsSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \DeclNameSyntax.unexpectedBeforeDeclBaseName:
-    return "unexpectedBeforeDeclBaseName"
-  case \DeclNameSyntax.declBaseName:
-    return "declBaseName"
-  case \DeclNameSyntax.unexpectedBetweenDeclBaseNameAndDeclNameArguments:
-    return "unexpectedBetweenDeclBaseNameAndDeclNameArguments"
-  case \DeclNameSyntax.declNameArguments:
-    return "declNameArguments"
-  case \DeclNameSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
+  case \DeclNameSyntax.unexpectedBeforeBaseName:
+    return "unexpectedBeforeBaseName"
+  case \DeclNameSyntax.baseName:
+    return "baseName"
+  case \DeclNameSyntax.unexpectedBetweenBaseNameAndArguments:
+    return "unexpectedBetweenBaseNameAndArguments"
+  case \DeclNameSyntax.arguments:
+    return "arguments"
+  case \DeclNameSyntax.unexpectedAfterArguments:
+    return "unexpectedAfterArguments"
   case \DeferStmtSyntax.unexpectedBeforeDeferKeyword:
     return "unexpectedBeforeDeferKeyword"
   case \DeferStmtSyntax.deferKeyword:
@@ -1073,12 +1073,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenParametersAndParametersComma"
   case \DifferentiableAttributeArgumentsSyntax.parametersComma:
     return "parametersComma"
-  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenParametersCommaAndWhereClause:
-    return "unexpectedBetweenParametersCommaAndWhereClause"
-  case \DifferentiableAttributeArgumentsSyntax.whereClause:
-    return "whereClause"
-  case \DifferentiableAttributeArgumentsSyntax.unexpectedAfterWhereClause:
-    return "unexpectedAfterWhereClause"
+  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenParametersCommaAndGenericWhereClause:
+    return "unexpectedBetweenParametersCommaAndGenericWhereClause"
+  case \DifferentiableAttributeArgumentsSyntax.genericWhereClause:
+    return "genericWhereClause"
+  case \DifferentiableAttributeArgumentsSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
   case \DiscardAssignmentExprSyntax.unexpectedBeforeWildcard:
     return "unexpectedBeforeWildcard"
   case \DiscardAssignmentExprSyntax.wildcard:
@@ -1525,20 +1525,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \FunctionParameterSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \FunctionSignatureSyntax.unexpectedBeforeInput:
-    return "unexpectedBeforeInput"
-  case \FunctionSignatureSyntax.input:
-    return "input"
-  case \FunctionSignatureSyntax.unexpectedBetweenInputAndEffectSpecifiers:
-    return "unexpectedBetweenInputAndEffectSpecifiers"
+  case \FunctionSignatureSyntax.unexpectedBeforeParameterClause:
+    return "unexpectedBeforeParameterClause"
+  case \FunctionSignatureSyntax.parameterClause:
+    return "parameterClause"
+  case \FunctionSignatureSyntax.unexpectedBetweenParameterClauseAndEffectSpecifiers:
+    return "unexpectedBetweenParameterClauseAndEffectSpecifiers"
   case \FunctionSignatureSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \FunctionSignatureSyntax.unexpectedBetweenEffectSpecifiersAndOutput:
-    return "unexpectedBetweenEffectSpecifiersAndOutput"
-  case \FunctionSignatureSyntax.output:
-    return "output"
-  case \FunctionSignatureSyntax.unexpectedAfterOutput:
-    return "unexpectedAfterOutput"
+  case \FunctionSignatureSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
+    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \FunctionSignatureSyntax.returnClause:
+    return "returnClause"
+  case \FunctionSignatureSyntax.unexpectedAfterReturnClause:
+    return "unexpectedAfterReturnClause"
   case \FunctionTypeSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \FunctionTypeSyntax.leftParen:
@@ -1555,12 +1555,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenRightParenAndEffectSpecifiers"
   case \FunctionTypeSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \FunctionTypeSyntax.unexpectedBetweenEffectSpecifiersAndOutput:
-    return "unexpectedBetweenEffectSpecifiersAndOutput"
-  case \FunctionTypeSyntax.output:
-    return "output"
-  case \FunctionTypeSyntax.unexpectedAfterOutput:
-    return "unexpectedAfterOutput"
+  case \FunctionTypeSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
+    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \FunctionTypeSyntax.returnClause:
+    return "returnClause"
+  case \FunctionTypeSyntax.unexpectedAfterReturnClause:
+    return "unexpectedAfterReturnClause"
   case \GenericArgumentClauseSyntax.unexpectedBeforeLeftAngle:
     return "unexpectedBeforeLeftAngle"
   case \GenericArgumentClauseSyntax.leftAngle:
@@ -2089,12 +2089,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenPoundAndMacro"
   case \MacroExpansionDeclSyntax.macro:
     return "macro"
-  case \MacroExpansionDeclSyntax.unexpectedBetweenMacroAndGenericArguments:
-    return "unexpectedBetweenMacroAndGenericArguments"
-  case \MacroExpansionDeclSyntax.genericArguments:
-    return "genericArguments"
-  case \MacroExpansionDeclSyntax.unexpectedBetweenGenericArgumentsAndLeftParen:
-    return "unexpectedBetweenGenericArgumentsAndLeftParen"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenMacroAndGenericArgumentClause:
+    return "unexpectedBetweenMacroAndGenericArgumentClause"
+  case \MacroExpansionDeclSyntax.genericArgumentClause:
+    return "genericArgumentClause"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenGenericArgumentClauseAndLeftParen:
+    return "unexpectedBetweenGenericArgumentClauseAndLeftParen"
   case \MacroExpansionDeclSyntax.leftParen:
     return "leftParen"
   case \MacroExpansionDeclSyntax.unexpectedBetweenLeftParenAndArgumentList:
@@ -2123,12 +2123,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenPoundAndMacro"
   case \MacroExpansionExprSyntax.macro:
     return "macro"
-  case \MacroExpansionExprSyntax.unexpectedBetweenMacroAndGenericArguments:
-    return "unexpectedBetweenMacroAndGenericArguments"
-  case \MacroExpansionExprSyntax.genericArguments:
-    return "genericArguments"
-  case \MacroExpansionExprSyntax.unexpectedBetweenGenericArgumentsAndLeftParen:
-    return "unexpectedBetweenGenericArgumentsAndLeftParen"
+  case \MacroExpansionExprSyntax.unexpectedBetweenMacroAndGenericArgumentClause:
+    return "unexpectedBetweenMacroAndGenericArgumentClause"
+  case \MacroExpansionExprSyntax.genericArgumentClause:
+    return "genericArgumentClause"
+  case \MacroExpansionExprSyntax.unexpectedBetweenGenericArgumentClauseAndLeftParen:
+    return "unexpectedBetweenGenericArgumentClauseAndLeftParen"
   case \MacroExpansionExprSyntax.leftParen:
     return "leftParen"
   case \MacroExpansionExprSyntax.unexpectedBetweenLeftParenAndArgumentList:
@@ -2941,16 +2941,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenSubscriptKeywordAndGenericParameterClause"
   case \SubscriptDeclSyntax.genericParameterClause:
     return "genericParameterClause"
-  case \SubscriptDeclSyntax.unexpectedBetweenGenericParameterClauseAndIndices:
-    return "unexpectedBetweenGenericParameterClauseAndIndices"
-  case \SubscriptDeclSyntax.indices:
-    return "indices"
-  case \SubscriptDeclSyntax.unexpectedBetweenIndicesAndResult:
-    return "unexpectedBetweenIndicesAndResult"
-  case \SubscriptDeclSyntax.result:
-    return "result"
-  case \SubscriptDeclSyntax.unexpectedBetweenResultAndGenericWhereClause:
-    return "unexpectedBetweenResultAndGenericWhereClause"
+  case \SubscriptDeclSyntax.unexpectedBetweenGenericParameterClauseAndParameterClause:
+    return "unexpectedBetweenGenericParameterClauseAndParameterClause"
+  case \SubscriptDeclSyntax.parameterClause:
+    return "parameterClause"
+  case \SubscriptDeclSyntax.unexpectedBetweenParameterClauseAndReturnClause:
+    return "unexpectedBetweenParameterClauseAndReturnClause"
+  case \SubscriptDeclSyntax.returnClause:
+    return "returnClause"
+  case \SubscriptDeclSyntax.unexpectedBetweenReturnClauseAndGenericWhereClause:
+    return "unexpectedBetweenReturnClauseAndGenericWhereClause"
   case \SubscriptDeclSyntax.genericWhereClause:
     return "genericWhereClause"
   case \SubscriptDeclSyntax.unexpectedBetweenGenericWhereClauseAndAccessor:

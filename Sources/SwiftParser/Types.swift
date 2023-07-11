@@ -104,7 +104,7 @@ extension Parser {
           unexpectedBetweenElementsAndRightParen,
           rightParen: rightParen,
           effectSpecifiers: effectSpecifiers,
-          output: returnClause,
+          returnClause: returnClause,
           arena: self.arena
         )
       )

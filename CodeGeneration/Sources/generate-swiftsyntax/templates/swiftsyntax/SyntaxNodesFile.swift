@@ -91,7 +91,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           }
 
           let closureSignature = ClosureSignatureSyntax(
-            input: .input(
+            parameterClause: .parameterClause(
               ClosureParameterClauseSyntax(
                 parameterList: ClosureParameterListSyntax {
                   ClosureParameterSyntax(firstName: .identifier("arena"))

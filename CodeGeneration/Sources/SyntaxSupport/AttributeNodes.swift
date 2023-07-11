@@ -302,7 +302,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     nameForDiagnostics: "declaration name",
     children: [
       Child(
-        name: "DeclBaseName",
+        name: "BaseName",
+        deprecatedName: "DeclBaseName",
         kind: .token(choices: [
           .token(tokenKind: "IdentifierToken"),
           .token(tokenKind: "BinaryOperatorToken"),
@@ -314,7 +315,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The base name of the protocol's requirement."
       ),
       Child(
-        name: "DeclNameArguments",
+        name: "Arguments",
+        deprecatedName: "DeclNameArguments",
         kind: .node(kind: .declNameArguments),
         nameForDiagnostics: "arguments",
         documentation: "The argument labels of the protocol's requirement if it is a function requirement.",
@@ -505,7 +507,8 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "WhereClause",
+        name: "GenericWhereClause",
+        deprecatedName: "WhereClause",
         kind: .node(kind: .genericWhereClause),
         isOptional: true
       ),

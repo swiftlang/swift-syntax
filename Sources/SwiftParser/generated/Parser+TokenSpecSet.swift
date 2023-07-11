@@ -653,7 +653,7 @@ extension DeclModifierSyntax {
 }
 
 extension DeclNameSyntax {
-  enum DeclBaseNameOptions: TokenSpecSet {
+  enum BaseNameOptions: TokenSpecSet {
     case identifier
     case binaryOperator
     case `init`

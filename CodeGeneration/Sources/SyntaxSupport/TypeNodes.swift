@@ -202,7 +202,8 @@ public let TYPE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Output",
+        name: "ReturnClause",
+        deprecatedName: "Output",
         kind: .node(kind: .returnClause)
       ),
     ]

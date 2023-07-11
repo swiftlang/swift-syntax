@@ -186,10 +186,10 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             identifier: TokenSyntax.identifier("foo"),
             signature: FunctionSignatureSyntax(
-              input: ParameterClauseSyntax(
+              parameterClause: ParameterClauseSyntax(
                 parameterList: FunctionParameterListSyntax {}
               ),
-              output: ReturnClauseSyntax(
+              returnClause: ReturnClauseSyntax(
                 returnType: SimpleTypeIdentifierSyntax(name: .identifier("String"))
               )
             ),
@@ -210,13 +210,13 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             identifier: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              input: ParameterClauseSyntax(
+              parameterClause: ParameterClauseSyntax(
                 parameterList: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
               ),
-              output: ReturnClauseSyntax(
+              returnClause: ReturnClauseSyntax(
                 returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
@@ -245,7 +245,7 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             identifier: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              input: ParameterClauseSyntax(
+              parameterClause: ParameterClauseSyntax(
                 parameterList: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
@@ -253,7 +253,7 @@ final class FunctionTests: XCTestCase {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
               ),
-              output: ReturnClauseSyntax(
+              returnClause: ReturnClauseSyntax(
                 returnType: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),

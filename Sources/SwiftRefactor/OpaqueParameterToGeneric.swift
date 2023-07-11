@@ -180,7 +180,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
     if let funcSyntax = decl.as(FunctionDeclSyntax.self) {
       guard
         let (newInput, newGenericParams) = replaceSomeParameters(
-          in: funcSyntax.signature.input,
+          in: funcSyntax.signature.parameterClause,
           augmenting: funcSyntax.genericParameterClause
         )
       else {
@@ -189,7 +189,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
 
       return DeclSyntax(
         funcSyntax
-          .with(\.signature, funcSyntax.signature.with(\.input, newInput))
+          .with(\.signature, funcSyntax.signature.with(\.parameterClause, newInput))
           .with(\.genericParameterClause, newGenericParams)
       )
     }
@@ -198,7 +198,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
     if let initSyntax = decl.as(InitializerDeclSyntax.self) {
       guard
         let (newInput, newGenericParams) = replaceSomeParameters(
-          in: initSyntax.signature.input,
+          in: initSyntax.signature.parameterClause,
           augmenting: initSyntax.genericParameterClause
         )
       else {
@@ -207,7 +207,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
 
       return DeclSyntax(
         initSyntax
-          .with(\.signature, initSyntax.signature.with(\.input, newInput))
+          .with(\.signature, initSyntax.signature.with(\.parameterClause, newInput))
           .with(\.genericParameterClause, newGenericParams)
       )
     }
@@ -216,7 +216,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
     if let subscriptSyntax = decl.as(SubscriptDeclSyntax.self) {
       guard
         let (newIndices, newGenericParams) = replaceSomeParameters(
-          in: subscriptSyntax.indices,
+          in: subscriptSyntax.parameterClause,
           augmenting: subscriptSyntax.genericParameterClause
         )
       else {
@@ -225,7 +225,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
 
       return DeclSyntax(
         subscriptSyntax
-          .with(\.indices, newIndices)
+          .with(\.parameterClause, newIndices)
           .with(\.genericParameterClause, newGenericParams)
       )
     }

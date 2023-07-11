@@ -871,7 +871,7 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 ///  - `parameters`: ``TupleTypeElementListSyntax``
 ///  - `rightParen`: `')'`
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `output`: ``ReturnClauseSyntax``
+///  - `returnClause`: ``ReturnClauseSyntax``
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -903,9 +903,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
-      output: ReturnClauseSyntax,
-      _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+      returnClause: ReturnClauseSyntax,
+      _ unexpectedAfterReturnClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -920,9 +920,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
             rightParen, 
             unexpectedBetweenRightParenAndEffectSpecifiers, 
             effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndOutput, 
-            output, 
-            unexpectedAfterOutput
+            unexpectedBetweenEffectSpecifiersAndReturnClause, 
+            returnClause, 
+            unexpectedAfterReturnClause
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
@@ -933,9 +933,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           rightParen.raw, 
           unexpectedBetweenRightParenAndEffectSpecifiers?.raw, 
           effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndOutput?.raw, 
-          output.raw, 
-          unexpectedAfterOutput?.raw
+          unexpectedBetweenEffectSpecifiersAndReturnClause?.raw, 
+          returnClause.raw, 
+          unexpectedAfterReturnClause?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionType,
@@ -1046,7 +1046,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1055,7 +1055,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var output: ReturnClauseSyntax {
+  public var returnClause: ReturnClauseSyntax {
     get {
       return ReturnClauseSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
@@ -1064,7 +1064,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterOutput: UnexpectedNodesSyntax? {
+  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1083,9 +1083,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           \Self.rightParen, 
           \Self.unexpectedBetweenRightParenAndEffectSpecifiers, 
           \Self.effectSpecifiers, 
-          \Self.unexpectedBetweenEffectSpecifiersAndOutput, 
-          \Self.output, 
-          \Self.unexpectedAfterOutput
+          \Self.unexpectedBetweenEffectSpecifiersAndReturnClause, 
+          \Self.returnClause, 
+          \Self.unexpectedAfterReturnClause
         ])
   }
 }

@@ -19,24 +19,30 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for trait in TRAITS {
     try! ProtocolDeclSyntax(
       """
-      // MARK: - \(raw: trait.traitName)Syntax
+      // MARK: - \(trait.protocolName)
 
-      public protocol \(raw: trait.traitName)Syntax: SyntaxProtocol
+      \(raw: trait.documentation)
+      public protocol \(trait.protocolName): SyntaxProtocol
       """
     ) {
       for child in trait.children {
-        DeclSyntax("var \(raw: child.varName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }")
+        DeclSyntax(
+          """
+          \(raw: child.docComment)
+          var \(raw: child.varName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
+          """
+        )
       }
     }
 
-    try! ExtensionDeclSyntax("public extension \(raw: trait.traitName)Syntax") {
+    try! ExtensionDeclSyntax("public extension \(trait.protocolName)") {
       DeclSyntax(
         """
         /// Without this function, the `with` function defined on `SyntaxProtocol`
         /// does not work on existentials of this protocol type.
         @_disfavoredOverload
-        func with<T>(_ keyPath: WritableKeyPath<\(raw: trait.traitName)Syntax, T>, _ newChild: T) -> \(raw: trait.traitName)Syntax {
-          var copy: \(raw: trait.traitName)Syntax = self
+        func with<T>(_ keyPath: WritableKeyPath<\(trait.protocolName), T>, _ newChild: T) -> \(trait.protocolName) {
+          var copy: \(trait.protocolName) = self
           copy[keyPath: keyPath] = newChild
           return copy
         }
@@ -48,10 +54,10 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Check whether the non-type erased version of this syntax node conforms to
-        /// `\(raw: trait.traitName)Syntax`.
+        /// `\(trait.protocolName)`.
         /// Note that this will incur an existential conversion.
-        func isProtocol(_: \(raw: trait.traitName)Syntax.Protocol) -> Bool {
-          return self.asProtocol(\(raw: trait.traitName)Syntax.self) != nil
+        func isProtocol(_: \(trait.protocolName).Protocol) -> Bool {
+          return self.asProtocol(\(trait.protocolName).self) != nil
         }
         """
       )
@@ -59,10 +65,10 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Return the non-type erased version of this syntax node if it conforms to
-        /// `\(raw: trait.traitName)Syntax`. Otherwise return `nil`.
+        /// `\(trait.protocolName)`. Otherwise return `nil`.
         /// Note that this will incur an existential conversion.
-        func asProtocol(_: \(raw: trait.traitName)Syntax.Protocol) -> \(raw: trait.traitName)Syntax? {
-          return Syntax(self).asProtocol(SyntaxProtocol.self) as? \(raw: trait.traitName)Syntax
+        func asProtocol(_: \(trait.protocolName).Protocol) -> \(trait.protocolName)? {
+          return Syntax(self).asProtocol(SyntaxProtocol.self) as? \(trait.protocolName)
         }
         """
       )

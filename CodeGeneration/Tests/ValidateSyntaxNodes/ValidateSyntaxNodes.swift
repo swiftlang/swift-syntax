@@ -540,6 +540,7 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .differentiabilityParams, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: .editorPlaceholderDecl, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'IdentifiedDecl' but does not"),
         ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'IdentifiedDecl' but does not"),
         ValidationFailure(node: .initializesEffect, message: "could conform to trait 'Parenthesized' but does not"),

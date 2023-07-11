@@ -10,15 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 public class Trait {
   public let traitName: String
+  public let protocolName: TokenSyntax
+  public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
-  public let description: String?
 
-  init(traitName: String, children: [Child], description: String? = nil) {
+  init(traitName: String, documentation: String? = nil, children: [Child]) {
     self.traitName = traitName
+    self.protocolName = .identifier("\(traitName)Syntax")
+    self.documentation = docCommentTrivia(from: documentation)
     self.children = children
-    self.description = description
   }
 }
 
@@ -104,6 +108,23 @@ public let TRAITS: [Trait] = [
     traitName: "WithTrailingComma",
     children: [
       Child(name: "TrailingComma", kind: .token(choices: [.token(tokenKind: "CommaToken")]), isOptional: true)
+    ]
+  ),
+  Trait(
+    traitName: "MissingNode",
+    documentation: """
+      Represents a layout node that is missing in the source file.
+
+      See the types conforming to this protocol for examples of where missing nodes can occur.
+      """,
+    children: [
+      Child(
+        name: "Placeholder",
+        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        documentation: """
+          A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
+          """
+      )
     ]
   ),
 ]

@@ -383,6 +383,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/WithModifiersSyntax>
 - <doc:SwiftSyntax/WithStatementsSyntax>
 - <doc:SwiftSyntax/WithTrailingCommaSyntax>
+- <doc:SwiftSyntax/MissingNodeSyntax>
 
 
 

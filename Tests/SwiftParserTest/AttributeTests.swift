@@ -107,7 +107,7 @@ final class AttributeTests: XCTestCase {
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute", fixIts: ["insert declaration"]),
       ],
       fixedSource: """
-        @_specialize(e:, exported: false)  <#declaration#>
+        @_specialize(e:, exported: false) <#declaration#>
         """
     )
   }
@@ -343,7 +343,7 @@ final class AttributeTests: XCTestCase {
       "@resultBuilder1️⃣",
       diagnostics: [DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"])],
       fixedSource: """
-        @resultBuilder  <#declaration#>
+        @resultBuilder <#declaration#>
         """
     )
   }

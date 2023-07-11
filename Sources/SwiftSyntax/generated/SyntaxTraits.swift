@@ -14,6 +14,7 @@
 
 // MARK: - BracedSyntax
 
+
 public protocol BracedSyntax: SyntaxProtocol {
   var leftBrace: TokenSyntax {
     get
@@ -54,6 +55,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - DeclGroupSyntax
+
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? {
@@ -111,6 +113,7 @@ public extension SyntaxProtocol {
 
 // MARK: - EffectSpecifiersSyntax
 
+
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
     get
@@ -166,6 +169,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - FreestandingMacroExpansionSyntax
+
 
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
   var poundToken: TokenSyntax {
@@ -238,6 +242,7 @@ public extension SyntaxProtocol {
 
 // MARK: - IdentifiedDeclSyntax
 
+
 public protocol IdentifiedDeclSyntax: SyntaxProtocol {
   var identifier: TokenSyntax {
     get
@@ -273,6 +278,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - ParenthesizedSyntax
+
 
 public protocol ParenthesizedSyntax: SyntaxProtocol {
   var leftParen: TokenSyntax {
@@ -315,6 +321,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithAttributesSyntax
 
+
 public protocol WithAttributesSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax? {
     get
@@ -350,6 +357,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithCodeBlockSyntax
+
 
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax {
@@ -387,6 +395,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithModifiersSyntax
 
+
 public protocol WithModifiersSyntax: SyntaxProtocol {
   var modifiers: ModifierListSyntax? {
     get
@@ -422,6 +431,7 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithStatementsSyntax
+
 
 public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax {
@@ -459,6 +469,7 @@ public extension SyntaxProtocol {
 
 // MARK: - WithTrailingCommaSyntax
 
+
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   var trailingComma: TokenSyntax? {
     get
@@ -490,6 +501,46 @@ public extension SyntaxProtocol {
   /// Note that this will incur an existential conversion.
   func asProtocol(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithTrailingCommaSyntax
+  }
+}
+
+// MARK: - MissingNodeSyntax
+
+/// Represents a layout node that is missing in the source file.
+/// 
+/// See the types conforming to this protocol for examples of where missing nodes can occur.
+public protocol MissingNodeSyntax: SyntaxProtocol {
+  /// A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
+  var placeholder: TokenSyntax {
+    get
+    set
+  }
+}
+
+public extension MissingNodeSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<MissingNodeSyntax, T>, _ newChild: T) -> MissingNodeSyntax {
+    var copy: MissingNodeSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `MissingNodeSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: MissingNodeSyntax.Protocol) -> Bool {
+    return self.asProtocol(MissingNodeSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `MissingNodeSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: MissingNodeSyntax.Protocol) -> MissingNodeSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? MissingNodeSyntax
   }
 }
 
@@ -605,7 +656,17 @@ extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {}
 
 extension MemberDeclBlockSyntax: BracedSyntax {}
 
-extension MissingDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+extension MissingDeclSyntax: MissingNodeSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+
+extension MissingExprSyntax: MissingNodeSyntax {}
+
+extension MissingPatternSyntax: MissingNodeSyntax {}
+
+extension MissingStmtSyntax: MissingNodeSyntax {}
+
+extension MissingSyntax: MissingNodeSyntax {}
+
+extension MissingTypeSyntax: MissingNodeSyntax {}
 
 extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
 

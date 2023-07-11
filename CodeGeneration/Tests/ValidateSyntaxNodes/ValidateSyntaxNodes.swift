@@ -289,7 +289,7 @@ class ValidateSyntaxNodes: XCTestCase {
         // If the node is named the same as the token, we don't need to repeat the entire token name
         ValidationFailure(
           node: .regexLiteralExpr,
-          message: "child 'RegexPattern' has a token as its only token choice and should thus be named 'RegexLiteralPattern'"
+          message: "child 'Regex' has a token as its only token choice and should thus be named 'RegexLiteralPattern'"
             // No point repeating the `Literal` because the node name alredy contains it
         ),
         ValidationFailure(
@@ -641,6 +641,53 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: []
+    )
+  }
+
+  func testChildrenDontEndWithExprEtc() {
+    var failures: [ValidationFailure] = []
+
+    let forbiddenSuffixes = ["Decl", "Declaration", "Expr", "Expression", "Pattern", "Stmt", "Statement", "Syntax", "Type"]
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.nonUnexpectedChildren {
+        for forbiddenSuffix in forbiddenSuffixes {
+          if child.name.hasSuffix(forbiddenSuffix) && child.name != forbiddenSuffix {
+            failures.append(
+              ValidationFailure(
+                node: node.kind,
+                message: "child '\(child.name)' should not end with '\(forbiddenSuffix)'"
+              )
+            )
+          }
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        // MARK: Adjective + Type
+        // There’s no real better way to name these except to use an adjective followed by 'Type'
+        ValidationFailure(node: .attributedType, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .conformanceRequirement, message: "child 'LeftType' should not end with 'Type'"),
+        ValidationFailure(node: .conformanceRequirement, message: "child 'RightType' should not end with 'Type'"),
+        ValidationFailure(node: .constrainedSugarType, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .extensionDecl, message: "child 'ExtendedType' should not end with 'Type'"),
+        ValidationFailure(node: .genericParameter, message: "child 'InheritedType' should not end with 'Type'"),
+        ValidationFailure(node: .implicitlyUnwrappedOptionalType, message: "child 'WrappedType' should not end with 'Type'"),
+        ValidationFailure(node: .memberTypeIdentifier, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .metatypeType, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .namedOpaqueReturnType, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .optionalType, message: "child 'WrappedType' should not end with 'Type'"),
+        ValidationFailure(node: .qualifiedDeclName, message: "child 'BaseType' should not end with 'Type'"),
+        ValidationFailure(node: .sameTypeRequirement, message: "child 'LeftType' should not end with 'Type'"),
+        ValidationFailure(node: .sameTypeRequirement, message: "child 'RightType' should not end with 'Type'"),
+        // MARK: Adjective + Expr
+        ValidationFailure(node: .functionCallExpr, message: "child 'CalledExpression' should not end with 'Expression'"),
+        ValidationFailure(node: .prefixOperatorExpr, message: "child 'BaseExpression' should not end with 'Expression'"),
+        ValidationFailure(node: .subscriptExpr, message: "child 'CalledExpression' should not end with 'Expression'"),
+      ]
     )
   }
 }

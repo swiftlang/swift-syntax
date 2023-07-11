@@ -2047,7 +2047,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ArrowToken")])
       ),
       Child(
-        name: "ReturnType",
+        name: "Type",
+        deprecatedName: "ReturnType",
         kind: .node(kind: .type),
         nameForDiagnostics: "return type"
       ),

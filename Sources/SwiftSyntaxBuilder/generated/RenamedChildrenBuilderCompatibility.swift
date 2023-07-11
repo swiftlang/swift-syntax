@@ -307,6 +307,63 @@ extension ExpressionSegmentSyntax {
   }
 }
 
+extension ForInStmtSyntax {
+  @available(*, deprecated, message: "Use an initializer with sequence argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeForKeyword: UnexpectedNodesSyntax? = nil, 
+      forKeyword: TokenSyntax = .keyword(.for), 
+      unexpectedBetweenForKeywordAndTryKeyword: UnexpectedNodesSyntax? = nil, 
+      tryKeyword: TokenSyntax? = nil, 
+      unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil, 
+      awaitKeyword: TokenSyntax? = nil, 
+      unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil, 
+      caseKeyword: TokenSyntax? = nil, 
+      unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil, 
+      pattern: PatternSyntaxProtocol, 
+      unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? = nil, 
+      typeAnnotation: TypeAnnotationSyntax? = nil, 
+      unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil, 
+      inKeyword: TokenSyntax = .keyword(.in), 
+      unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil, 
+      sequenceExpr: ExprSyntaxProtocol, 
+      unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil, 
+      whereClause: WhereClauseSyntax? = nil, 
+      unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
+      @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeForKeyword, 
+        forKeyword: forKeyword, 
+        unexpectedBetweenForKeywordAndTryKeyword, 
+        tryKeyword: tryKeyword, 
+        unexpectedBetweenTryKeywordAndAwaitKeyword, 
+        awaitKeyword: awaitKeyword, 
+        unexpectedBetweenAwaitKeywordAndCaseKeyword, 
+        caseKeyword: caseKeyword, 
+        unexpectedBetweenCaseKeywordAndPattern, 
+        pattern: PatternSyntax(fromProtocol: pattern), 
+        unexpectedBetweenPatternAndTypeAnnotation, 
+        typeAnnotation: typeAnnotation, 
+        unexpectedBetweenTypeAnnotationAndInKeyword, 
+        inKeyword: inKeyword, 
+        unexpectedBetweenInKeywordAndSequenceExpr, 
+        sequence: ExprSyntax(fromProtocol: sequenceExpr), 
+        unexpectedBetweenSequenceExprAndWhereClause, 
+        whereClause: whereClause, 
+        unexpectedBetweenWhereClauseAndBody, 
+        body: CodeBlockSyntax(statements: bodyBuilder()), 
+        unexpectedAfterBody, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension FunctionCallExprSyntax {
   @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
   @_disfavoredOverload

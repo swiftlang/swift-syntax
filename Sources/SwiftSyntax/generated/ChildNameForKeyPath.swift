@@ -175,12 +175,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftSquare"
   case \ArrayTypeSyntax.leftSquare:
     return "leftSquare"
-  case \ArrayTypeSyntax.unexpectedBetweenLeftSquareAndElementType:
-    return "unexpectedBetweenLeftSquareAndElementType"
-  case \ArrayTypeSyntax.elementType:
-    return "elementType"
-  case \ArrayTypeSyntax.unexpectedBetweenElementTypeAndRightSquare:
-    return "unexpectedBetweenElementTypeAndRightSquare"
+  case \ArrayTypeSyntax.unexpectedBetweenLeftSquareAndElement:
+    return "unexpectedBetweenLeftSquareAndElement"
+  case \ArrayTypeSyntax.element:
+    return "element"
+  case \ArrayTypeSyntax.unexpectedBetweenElementAndRightSquare:
+    return "unexpectedBetweenElementAndRightSquare"
   case \ArrayTypeSyntax.rightSquare:
     return "rightSquare"
   case \ArrayTypeSyntax.unexpectedAfterRightSquare:
@@ -965,20 +965,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "name"
   case \DesignatedTypeElementSyntax.unexpectedAfterName:
     return "unexpectedAfterName"
-  case \DictionaryElementSyntax.unexpectedBeforeKeyExpression:
-    return "unexpectedBeforeKeyExpression"
-  case \DictionaryElementSyntax.keyExpression:
-    return "keyExpression"
-  case \DictionaryElementSyntax.unexpectedBetweenKeyExpressionAndColon:
-    return "unexpectedBetweenKeyExpressionAndColon"
+  case \DictionaryElementSyntax.unexpectedBeforeKey:
+    return "unexpectedBeforeKey"
+  case \DictionaryElementSyntax.key:
+    return "key"
+  case \DictionaryElementSyntax.unexpectedBetweenKeyAndColon:
+    return "unexpectedBetweenKeyAndColon"
   case \DictionaryElementSyntax.colon:
     return "colon"
-  case \DictionaryElementSyntax.unexpectedBetweenColonAndValueExpression:
-    return "unexpectedBetweenColonAndValueExpression"
-  case \DictionaryElementSyntax.valueExpression:
-    return "valueExpression"
-  case \DictionaryElementSyntax.unexpectedBetweenValueExpressionAndTrailingComma:
-    return "unexpectedBetweenValueExpressionAndTrailingComma"
+  case \DictionaryElementSyntax.unexpectedBetweenColonAndValue:
+    return "unexpectedBetweenColonAndValue"
+  case \DictionaryElementSyntax.value:
+    return "value"
+  case \DictionaryElementSyntax.unexpectedBetweenValueAndTrailingComma:
+    return "unexpectedBetweenValueAndTrailingComma"
   case \DictionaryElementSyntax.trailingComma:
     return "trailingComma"
   case \DictionaryElementSyntax.unexpectedAfterTrailingComma:
@@ -1001,20 +1001,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftSquare"
   case \DictionaryTypeSyntax.leftSquare:
     return "leftSquare"
-  case \DictionaryTypeSyntax.unexpectedBetweenLeftSquareAndKeyType:
-    return "unexpectedBetweenLeftSquareAndKeyType"
-  case \DictionaryTypeSyntax.keyType:
-    return "keyType"
-  case \DictionaryTypeSyntax.unexpectedBetweenKeyTypeAndColon:
-    return "unexpectedBetweenKeyTypeAndColon"
+  case \DictionaryTypeSyntax.unexpectedBetweenLeftSquareAndKey:
+    return "unexpectedBetweenLeftSquareAndKey"
+  case \DictionaryTypeSyntax.key:
+    return "key"
+  case \DictionaryTypeSyntax.unexpectedBetweenKeyAndColon:
+    return "unexpectedBetweenKeyAndColon"
   case \DictionaryTypeSyntax.colon:
     return "colon"
-  case \DictionaryTypeSyntax.unexpectedBetweenColonAndValueType:
-    return "unexpectedBetweenColonAndValueType"
-  case \DictionaryTypeSyntax.valueType:
-    return "valueType"
-  case \DictionaryTypeSyntax.unexpectedBetweenValueTypeAndRightSquare:
-    return "unexpectedBetweenValueTypeAndRightSquare"
+  case \DictionaryTypeSyntax.unexpectedBetweenColonAndValue:
+    return "unexpectedBetweenColonAndValue"
+  case \DictionaryTypeSyntax.value:
+    return "value"
+  case \DictionaryTypeSyntax.unexpectedBetweenValueAndRightSquare:
+    return "unexpectedBetweenValueAndRightSquare"
   case \DictionaryTypeSyntax.rightSquare:
     return "rightSquare"
   case \DictionaryTypeSyntax.unexpectedAfterRightSquare:
@@ -1393,12 +1393,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTypeAnnotationAndInKeyword"
   case \ForInStmtSyntax.inKeyword:
     return "inKeyword"
-  case \ForInStmtSyntax.unexpectedBetweenInKeywordAndSequenceExpr:
-    return "unexpectedBetweenInKeywordAndSequenceExpr"
-  case \ForInStmtSyntax.sequenceExpr:
-    return "sequenceExpr"
-  case \ForInStmtSyntax.unexpectedBetweenSequenceExprAndWhereClause:
-    return "unexpectedBetweenSequenceExprAndWhereClause"
+  case \ForInStmtSyntax.unexpectedBetweenInKeywordAndSequence:
+    return "unexpectedBetweenInKeywordAndSequence"
+  case \ForInStmtSyntax.sequence:
+    return "sequence"
+  case \ForInStmtSyntax.unexpectedBetweenSequenceAndWhereClause:
+    return "unexpectedBetweenSequenceAndWhereClause"
   case \ForInStmtSyntax.whereClause:
     return "whereClause"
   case \ForInStmtSyntax.unexpectedBetweenWhereClauseAndBody:
@@ -1575,12 +1575,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightAngle"
   case \GenericArgumentClauseSyntax.unexpectedAfterRightAngle:
     return "unexpectedAfterRightAngle"
-  case \GenericArgumentSyntax.unexpectedBeforeArgumentType:
-    return "unexpectedBeforeArgumentType"
-  case \GenericArgumentSyntax.argumentType:
-    return "argumentType"
-  case \GenericArgumentSyntax.unexpectedBetweenArgumentTypeAndTrailingComma:
-    return "unexpectedBetweenArgumentTypeAndTrailingComma"
+  case \GenericArgumentSyntax.unexpectedBeforeArgument:
+    return "unexpectedBeforeArgument"
+  case \GenericArgumentSyntax.argument:
+    return "argument"
+  case \GenericArgumentSyntax.unexpectedBetweenArgumentAndTrailingComma:
+    return "unexpectedBetweenArgumentAndTrailingComma"
   case \GenericArgumentSyntax.trailingComma:
     return "trailingComma"
   case \GenericArgumentSyntax.unexpectedAfterTrailingComma:
@@ -2455,32 +2455,32 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeRepeatKeyword"
   case \PackExpansionExprSyntax.repeatKeyword:
     return "repeatKeyword"
-  case \PackExpansionExprSyntax.unexpectedBetweenRepeatKeywordAndPatternExpr:
-    return "unexpectedBetweenRepeatKeywordAndPatternExpr"
-  case \PackExpansionExprSyntax.patternExpr:
-    return "patternExpr"
-  case \PackExpansionExprSyntax.unexpectedAfterPatternExpr:
-    return "unexpectedAfterPatternExpr"
+  case \PackExpansionExprSyntax.unexpectedBetweenRepeatKeywordAndPack:
+    return "unexpectedBetweenRepeatKeywordAndPack"
+  case \PackExpansionExprSyntax.pack:
+    return "pack"
+  case \PackExpansionExprSyntax.unexpectedAfterPack:
+    return "unexpectedAfterPack"
   case \PackExpansionTypeSyntax.unexpectedBeforeRepeatKeyword:
     return "unexpectedBeforeRepeatKeyword"
   case \PackExpansionTypeSyntax.repeatKeyword:
     return "repeatKeyword"
-  case \PackExpansionTypeSyntax.unexpectedBetweenRepeatKeywordAndPatternType:
-    return "unexpectedBetweenRepeatKeywordAndPatternType"
-  case \PackExpansionTypeSyntax.patternType:
-    return "patternType"
-  case \PackExpansionTypeSyntax.unexpectedAfterPatternType:
-    return "unexpectedAfterPatternType"
+  case \PackExpansionTypeSyntax.unexpectedBetweenRepeatKeywordAndPack:
+    return "unexpectedBetweenRepeatKeywordAndPack"
+  case \PackExpansionTypeSyntax.pack:
+    return "pack"
+  case \PackExpansionTypeSyntax.unexpectedAfterPack:
+    return "unexpectedAfterPack"
   case \PackReferenceTypeSyntax.unexpectedBeforeEachKeyword:
     return "unexpectedBeforeEachKeyword"
   case \PackReferenceTypeSyntax.eachKeyword:
     return "eachKeyword"
-  case \PackReferenceTypeSyntax.unexpectedBetweenEachKeywordAndPackType:
-    return "unexpectedBetweenEachKeywordAndPackType"
-  case \PackReferenceTypeSyntax.packType:
-    return "packType"
-  case \PackReferenceTypeSyntax.unexpectedAfterPackType:
-    return "unexpectedAfterPackType"
+  case \PackReferenceTypeSyntax.unexpectedBetweenEachKeywordAndPack:
+    return "unexpectedBetweenEachKeywordAndPack"
+  case \PackReferenceTypeSyntax.pack:
+    return "pack"
+  case \PackReferenceTypeSyntax.unexpectedAfterPack:
+    return "unexpectedAfterPack"
   case \ParameterClauseSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \ParameterClauseSyntax.leftParen:
@@ -2671,12 +2671,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeOperator"
   case \PrefixOperatorExprSyntax.operator:
     return "operator"
-  case \PrefixOperatorExprSyntax.unexpectedBetweenOperatorAndPostfixExpression:
-    return "unexpectedBetweenOperatorAndPostfixExpression"
-  case \PrefixOperatorExprSyntax.postfixExpression:
-    return "postfixExpression"
-  case \PrefixOperatorExprSyntax.unexpectedAfterPostfixExpression:
-    return "unexpectedAfterPostfixExpression"
+  case \PrefixOperatorExprSyntax.unexpectedBetweenOperatorAndBaseExpression:
+    return "unexpectedBetweenOperatorAndBaseExpression"
+  case \PrefixOperatorExprSyntax.baseExpression:
+    return "baseExpression"
+  case \PrefixOperatorExprSyntax.unexpectedAfterBaseExpression:
+    return "unexpectedAfterBaseExpression"
   case \PrimaryAssociatedTypeClauseSyntax.unexpectedBeforeLeftAngle:
     return "unexpectedBeforeLeftAngle"
   case \PrimaryAssociatedTypeClauseSyntax.leftAngle:
@@ -2761,12 +2761,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenOpeningPoundsAndOpenSlash"
   case \RegexLiteralExprSyntax.openSlash:
     return "openSlash"
-  case \RegexLiteralExprSyntax.unexpectedBetweenOpenSlashAndRegexPattern:
-    return "unexpectedBetweenOpenSlashAndRegexPattern"
-  case \RegexLiteralExprSyntax.regexPattern:
-    return "regexPattern"
-  case \RegexLiteralExprSyntax.unexpectedBetweenRegexPatternAndCloseSlash:
-    return "unexpectedBetweenRegexPatternAndCloseSlash"
+  case \RegexLiteralExprSyntax.unexpectedBetweenOpenSlashAndRegex:
+    return "unexpectedBetweenOpenSlashAndRegex"
+  case \RegexLiteralExprSyntax.regex:
+    return "regex"
+  case \RegexLiteralExprSyntax.unexpectedBetweenRegexAndCloseSlash:
+    return "unexpectedBetweenRegexAndCloseSlash"
   case \RegexLiteralExprSyntax.closeSlash:
     return "closeSlash"
   case \RegexLiteralExprSyntax.unexpectedBetweenCloseSlashAndClosingPounds:
@@ -2797,12 +2797,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeArrow"
   case \ReturnClauseSyntax.arrow:
     return "arrow"
-  case \ReturnClauseSyntax.unexpectedBetweenArrowAndReturnType:
-    return "unexpectedBetweenArrowAndReturnType"
-  case \ReturnClauseSyntax.returnType:
-    return "returnType"
-  case \ReturnClauseSyntax.unexpectedAfterReturnType:
-    return "unexpectedAfterReturnType"
+  case \ReturnClauseSyntax.unexpectedBetweenArrowAndType:
+    return "unexpectedBetweenArrowAndType"
+  case \ReturnClauseSyntax.type:
+    return "type"
+  case \ReturnClauseSyntax.unexpectedAfterType:
+    return "unexpectedAfterType"
   case \ReturnStmtSyntax.unexpectedBeforeReturnKeyword:
     return "unexpectedBeforeReturnKeyword"
   case \ReturnStmtSyntax.returnKeyword:
@@ -2995,12 +2995,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeWithoutTilde"
   case \SuppressedTypeSyntax.withoutTilde:
     return "withoutTilde"
-  case \SuppressedTypeSyntax.unexpectedBetweenWithoutTildeAndPatternType:
-    return "unexpectedBetweenWithoutTildeAndPatternType"
-  case \SuppressedTypeSyntax.patternType:
-    return "patternType"
-  case \SuppressedTypeSyntax.unexpectedAfterPatternType:
-    return "unexpectedAfterPatternType"
+  case \SuppressedTypeSyntax.unexpectedBetweenWithoutTildeAndType:
+    return "unexpectedBetweenWithoutTildeAndType"
+  case \SuppressedTypeSyntax.type:
+    return "type"
+  case \SuppressedTypeSyntax.unexpectedAfterType:
+    return "unexpectedAfterType"
   case \SwitchCaseLabelSyntax.unexpectedBeforeCaseKeyword:
     return "unexpectedBeforeCaseKeyword"
   case \SwitchCaseLabelSyntax.caseKeyword:
@@ -3079,12 +3079,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \TargetFunctionEntrySyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \TernaryExprSyntax.unexpectedBeforeConditionExpression:
-    return "unexpectedBeforeConditionExpression"
-  case \TernaryExprSyntax.conditionExpression:
-    return "conditionExpression"
-  case \TernaryExprSyntax.unexpectedBetweenConditionExpressionAndQuestionMark:
-    return "unexpectedBetweenConditionExpressionAndQuestionMark"
+  case \TernaryExprSyntax.unexpectedBeforeCondition:
+    return "unexpectedBeforeCondition"
+  case \TernaryExprSyntax.condition:
+    return "condition"
+  case \TernaryExprSyntax.unexpectedBetweenConditionAndQuestionMark:
+    return "unexpectedBetweenConditionAndQuestionMark"
   case \TernaryExprSyntax.questionMark:
     return "questionMark"
   case \TernaryExprSyntax.unexpectedBetweenQuestionMarkAndFirstChoice:
@@ -3381,12 +3381,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeBindingSpecifier"
   case \ValueBindingPatternSyntax.bindingSpecifier:
     return "bindingSpecifier"
-  case \ValueBindingPatternSyntax.unexpectedBetweenBindingSpecifierAndValuePattern:
-    return "unexpectedBetweenBindingSpecifierAndValuePattern"
-  case \ValueBindingPatternSyntax.valuePattern:
-    return "valuePattern"
-  case \ValueBindingPatternSyntax.unexpectedAfterValuePattern:
-    return "unexpectedAfterValuePattern"
+  case \ValueBindingPatternSyntax.unexpectedBetweenBindingSpecifierAndPattern:
+    return "unexpectedBetweenBindingSpecifierAndPattern"
+  case \ValueBindingPatternSyntax.pattern:
+    return "pattern"
+  case \ValueBindingPatternSyntax.unexpectedAfterPattern:
+    return "unexpectedAfterPattern"
   case \VariableDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \VariableDeclSyntax.attributes:

@@ -635,7 +635,8 @@ public let EXPR_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "KeyExpression",
+        name: "Key",
+        deprecatedName: "KeyExpression",
         kind: .node(kind: .expr),
         nameForDiagnostics: "key"
       ),
@@ -644,7 +645,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "ValueExpression",
+        name: "Value",
+        deprecatedName: "ValueExpression",
         kind: .node(kind: .expr),
         nameForDiagnostics: "value"
       ),
@@ -1338,7 +1340,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "repeat")])
       ),
       Child(
-        name: "PatternExpr",
+        name: "Pack",
+        deprecatedName: "PatternExpr",
         kind: .node(kind: .expr)
       ),
     ]
@@ -1395,7 +1398,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "PostfixExpression",
+        name: "BaseExpression",
+        deprecatedName: "PostfixExpression",
         kind: .node(kind: .expr)
       ),
     ]
@@ -1418,7 +1422,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "RegexSlashToken")])
       ),
       Child(
-        name: "RegexPattern",
+        name: "Regex",
+        deprecatedName: "RegexPattern",
         kind: .token(choices: [.token(tokenKind: "RegexLiteralPatternToken")])
       ),
       Child(
@@ -1696,7 +1701,8 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "ternay expression",
     children: [
       Child(
-        name: "ConditionExpression",
+        name: "Condition",
+        deprecatedName: "ConditionExpression",
         kind: .node(kind: .expr),
         nameForDiagnostics: "condition"
       ),

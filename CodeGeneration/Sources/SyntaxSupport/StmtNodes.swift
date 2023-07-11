@@ -316,7 +316,8 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "in")])
       ),
       Child(
-        name: "SequenceExpr",
+        name: "Sequence",
+        deprecatedName: "SequenceExpr",
         kind: .node(kind: .expr)
       ),
       Child(

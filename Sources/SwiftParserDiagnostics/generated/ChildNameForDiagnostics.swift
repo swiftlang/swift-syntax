@@ -94,13 +94,13 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \DeinitializerDeclSyntax.modifiers:
     return "modifiers"
-  case \DictionaryElementSyntax.keyExpression:
+  case \DictionaryElementSyntax.key:
     return "key"
-  case \DictionaryElementSyntax.valueExpression:
+  case \DictionaryElementSyntax.value:
     return "value"
-  case \DictionaryTypeSyntax.keyType:
+  case \DictionaryTypeSyntax.key:
     return "key type"
-  case \DictionaryTypeSyntax.valueType:
+  case \DictionaryTypeSyntax.value:
     return "value type"
   case \DifferentiabilityParamsClauseSyntax.parameters:
     return "parameters"
@@ -300,7 +300,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \RepeatWhileStmtSyntax.condition:
     return "condition"
-  case \ReturnClauseSyntax.returnType:
+  case \ReturnClauseSyntax.type:
     return "return type"
   case \SameTypeRequirementSyntax.leftType:
     return "left-hand type"
@@ -338,7 +338,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \TargetFunctionEntrySyntax.declname:
     return "declaration name"
-  case \TernaryExprSyntax.conditionExpression:
+  case \TernaryExprSyntax.condition:
     return "condition"
   case \TernaryExprSyntax.firstChoice:
     return "first choice"

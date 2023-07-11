@@ -174,23 +174,23 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case \ClosureExprSyntax.statements:
       return true
-    case \ClosureParameterClauseSyntax.parameterList:
+    case \ClosureParameterClauseSyntax.parameters:
       return true
     case \CodeBlockSyntax.statements:
       return true
-    case \DictionaryElementSyntax.valueExpression:
+    case \DictionaryElementSyntax.value:
       return true
     case \DictionaryExprSyntax.content:
       return true
-    case \EnumCaseParameterClauseSyntax.parameterList:
+    case \EnumCaseParameterClauseSyntax.parameters:
       return true
-    case \FunctionCallExprSyntax.argumentList:
+    case \FunctionCallExprSyntax.arguments:
       return true
     case \FunctionTypeSyntax.parameters:
       return true
     case \MemberDeclBlockSyntax.members:
       return true
-    case \ParameterClauseSyntax.parameterList:
+    case \ParameterClauseSyntax.parameters:
       return true
     case \SwitchCaseSyntax.statements:
       return true

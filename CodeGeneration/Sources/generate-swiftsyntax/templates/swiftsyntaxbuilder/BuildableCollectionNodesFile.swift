@@ -37,7 +37,7 @@ let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: copyrightHead
       if elementType.isBaseType && node.elementChoices.count == 1 {
         DeclSyntax(
           """
-          public init(_ elements: \(ArrayTypeSyntax(elementType: elementType.parameterType))) {
+          public init(_ elements: \(ArrayTypeSyntax(element: elementType.parameterType))) {
             self = \(raw: node.type.syntaxBaseName)(elements.map {
               \(elementType.syntax)(fromProtocol: $0)
             } as [\(elementType.syntax)])

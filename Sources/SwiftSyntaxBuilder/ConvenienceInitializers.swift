@@ -287,6 +287,8 @@ extension StringLiteralExprSyntax {
       case (true, _) where c.unicodeScalars.contains("#"):
         consecutivePounds += 1
         maxPounds = max(maxPounds, consecutivePounds)
+      case (true, "\""), (true, "\\"):
+        continue
       case (true, _):
         countingPounds = false
         consecutivePounds = 0

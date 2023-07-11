@@ -68,6 +68,15 @@ fileprivate extension ChildKind {
       return false
     }
   }
+
+  var isCollection: Bool {
+    switch self {
+    case .node: return false
+    case .nodeChoices(let choices): return choices.contains(where: { $0.kind.isCollection })
+    case .collection: return true
+    case .token: return false
+    }
+  }
 }
 
 fileprivate extension Child {
@@ -531,6 +540,53 @@ class ValidateSyntaxNodes: XCTestCase {
       expectedFailures: [
         // it's not obvious that the end of file is represented by a token, thus its good to highlight it in the name
         ValidationFailure(node: .sourceFile, message: "child 'EndOfFileToken' should not end with 'Token'")
+      ]
+    )
+  }
+
+  func testAllCollectionChildrenAreMarkedAsSuch() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.children {
+        if case .node(kind: let kind) = child.kind, SYNTAX_NODE_MAP[kind]?.collectionNode != nil {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' is a SyntaxCollection but child is not marked as a collection"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: []
+    )
+  }
+
+  func testSyntaxCollectionChildrenArePlural() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.nonUnexpectedChildren where child.kind.isCollection {
+        if !child.name.hasSuffix("s") {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' is a collection and should thus be named as a plural"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        // The child is singular here, the path just consists of multiple components
+        ValidationFailure(node: .importDecl, message: "child 'Path' is a collection and should thus be named as a plural")
       ]
     )
   }

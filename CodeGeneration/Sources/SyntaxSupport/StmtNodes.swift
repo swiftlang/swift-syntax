@@ -573,7 +573,8 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "ElementList",
+        name: "Elements",
+        deprecatedName: "ElementList",
         kind: .collection(kind: .yieldExprList, collectionElementName: "Element")
       ),
       Child(

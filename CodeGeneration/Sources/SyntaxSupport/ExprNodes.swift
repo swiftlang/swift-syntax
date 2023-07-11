@@ -443,7 +443,8 @@ public let EXPR_NODES: [Node] = [
         documentation: "The '(' to open the parameter clause."
       ),
       Child(
-        name: "ParameterList",
+        name: "Properties",
+        deprecatedName: "ParameterList",
         kind: .collection(kind: .closureParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
         documentation: "The actual parameters."
@@ -805,7 +806,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "ArgumentList",
+        name: "Arguments",
+        deprecatedName: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
@@ -1116,7 +1118,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
-        name: "ArgumentList",
+        name: "Arguments",
+        deprecatedName: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
@@ -1159,7 +1162,8 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "ArgumentList",
+        name: "Arguments",
+        deprecatedName: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument")
       ),
       Child(
@@ -1524,7 +1528,8 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
-        name: "ArgumentList",
+        name: "Arguments",
+        deprecatedName: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),

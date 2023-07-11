@@ -79,7 +79,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "PropertyList",
+        name: "Properties",
+        deprecatedName: "PropertyList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
         nameForDiagnostics: "properties"
       ),
@@ -104,7 +105,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "PropertyList",
+        name: "Properties",
+        deprecatedName: "PropertyList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
         nameForDiagnostics: "properties"
       ),
@@ -676,7 +678,8 @@ public let DECL_NODES: [Node] = [
         documentation: "The '(' to open the parameter clause."
       ),
       Child(
-        name: "ParameterList",
+        name: "Parameters",
+        deprecatedName: "ParameterList",
         kind: .collection(kind: .enumCaseParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
         documentation: "The actual parameters."
@@ -1469,7 +1472,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "ArgumentList",
+        name: "Arguments",
+        deprecatedName: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument")
       ),
       Child(
@@ -1642,7 +1646,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "ParameterList",
+        name: "Parameters",
+        deprecatedName: "ParameterList",
         kind: .collection(kind: .functionParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters"
       ),
@@ -2266,7 +2271,8 @@ public let DECL_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "InheritedTypeCollection",
+        name: "InheritedTypes",
+        deprecatedName: "InheritedTypeCollection",
         kind: .collection(kind: .inheritedTypeList, collectionElementName: "InheritedType")
       ),
     ]

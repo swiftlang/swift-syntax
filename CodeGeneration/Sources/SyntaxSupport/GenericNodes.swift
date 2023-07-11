@@ -177,7 +177,8 @@ public let GENERIC_NODES: [Node] = [
         documentation: "The `where` keyword in the clause."
       ),
       Child(
-        name: "RequirementList",
+        name: "Requirements",
+        deprecatedName: "RequirementList",
         kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
         documentation: "The list of requirements in the clause."
       ),
@@ -254,7 +255,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
-        name: "PrimaryAssociatedTypeList",
+        name: "PrimaryAssociatedTypes",
+        deprecatedName: "PrimaryAssociatedTypeList",
         kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(

@@ -12,6 +12,69 @@
 //
 //===----------------------------------------------------------------------===//
 
+extension AccessesEffectSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
+  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndProperties
+    }
+    set {
+      unexpectedBetweenLeftParenAndProperties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "properties")
+  public var propertyList: TupleExprElementListSyntax {
+    get {
+      return properties
+    }
+    set {
+      properties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
+  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPropertiesAndRightParen
+    }
+    set {
+      unexpectedBetweenPropertiesAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? = nil,
+      accessesKeyword: TokenSyntax = .keyword(.accesses),
+      _ unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
+      propertyList: TupleExprElementListSyntax,
+      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAccessesKeyword, 
+        accessesKeyword: accessesKeyword, 
+        unexpectedBetweenAccessesKeywordAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndPropertyList, 
+        properties: propertyList, 
+        unexpectedBetweenPropertyListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension AccessorDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenModifierAndAccessorSpecifier")
   public var unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? {
@@ -958,6 +1021,65 @@ extension ClosureCaptureItemSyntax {
   }
 }
 
+extension ClosureParameterClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndProperties
+    }
+    set {
+      unexpectedBetweenLeftParenAndProperties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "properties")
+  public var parameterList: ClosureParameterListSyntax {
+    get {
+      return properties
+    }
+    set {
+      properties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPropertiesAndRightParen
+    }
+    set {
+      unexpectedBetweenPropertiesAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: ClosureParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndParameterList, 
+        properties: parameterList, 
+        unexpectedBetweenParameterListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ClosureSignatureSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenCaptureAndParameterClause")
   public var unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? {
@@ -1562,6 +1684,65 @@ extension EditorPlaceholderDeclSyntax {
   }
 }
 
+extension EnumCaseParameterClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndParameters
+    }
+    set {
+      unexpectedBetweenLeftParenAndParameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameters")
+  public var parameterList: EnumCaseParameterListSyntax {
+    get {
+      return parameters
+    }
+    set {
+      parameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParametersAndRightParen
+    }
+    set {
+      unexpectedBetweenParametersAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: EnumCaseParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndParameterList, 
+        parameters: parameterList, 
+        unexpectedBetweenParameterListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenIdentifierAndGenericParameterClause")
   public var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
@@ -1754,6 +1935,77 @@ extension FloatLiteralExprSyntax {
         unexpectedBeforeFloatingDigits, 
         digits: floatingDigits, 
         unexpectedAfterFloatingDigits, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension FunctionCallExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndArguments")
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndArguments
+    }
+    set {
+      unexpectedBetweenLeftParenAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightParen")
+  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightParen
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
+      calledExpression: some ExprSyntaxProtocol,
+      _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
+      argumentList: TupleExprElementListSyntax,
+      _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax? = nil,
+      _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+      trailingClosure: ClosureExprSyntax? = nil,
+      _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeCalledExpression, 
+        calledExpression: calledExpression, 
+        unexpectedBetweenCalledExpressionAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndArgumentList, 
+        arguments: argumentList, 
+        unexpectedBetweenArgumentListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedBetweenRightParenAndTrailingClosure, 
+        trailingClosure: trailingClosure, 
+        unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
+        additionalTrailingClosures: additionalTrailingClosures, 
+        unexpectedAfterAdditionalTrailingClosures, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -2228,6 +2480,61 @@ extension GenericParameterSyntax {
   }
 }
 
+extension GenericWhereClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenWhereKeywordAndRequirements")
+  public var unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenWhereKeywordAndRequirements
+    }
+    set {
+      unexpectedBetweenWhereKeywordAndRequirements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "requirements")
+  public var requirementList: GenericRequirementListSyntax {
+    get {
+      return requirements
+    }
+    set {
+      requirements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterRequirements")
+  public var unexpectedAfterRequirementList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRequirements
+    }
+    set {
+      unexpectedAfterRequirements = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with requirements argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
+      whereKeyword: TokenSyntax = .keyword(.where),
+      _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil,
+      requirementList: GenericRequirementListSyntax,
+      _ unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeWhereKeyword, 
+        whereKeyword: whereKeyword, 
+        unexpectedBetweenWhereKeywordAndRequirementList, 
+        requirements: requirementList, 
+        unexpectedAfterRequirementList, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ImportDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndImportKeyword")
   public var unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? {
@@ -2370,6 +2677,69 @@ extension ImportPathComponentSyntax {
   }
 }
 
+extension InitializesEffectSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
+  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndProperties
+    }
+    set {
+      unexpectedBetweenLeftParenAndProperties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "properties")
+  public var propertyList: TupleExprElementListSyntax {
+    get {
+      return properties
+    }
+    set {
+      properties = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
+  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPropertiesAndRightParen
+    }
+    set {
+      unexpectedBetweenPropertiesAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? = nil,
+      initializesKeyword: TokenSyntax = .keyword(.initializes),
+      _ unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
+      propertyList: TupleExprElementListSyntax,
+      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeInitializesKeyword, 
+        initializesKeyword: initializesKeyword, 
+        unexpectedBetweenInitializesKeywordAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndPropertyList, 
+        properties: propertyList, 
+        unexpectedBetweenPropertyListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension IsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenExpressionAndIsKeyword")
   public var unexpectedBetweenExpressionAndIsTok: UnexpectedNodesSyntax? {
@@ -2450,23 +2820,33 @@ extension KeyPathSubscriptComponentSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndArgumentList")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndArguments")
   public var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftSquareAndArgumentList
+      return unexpectedBetweenLeftSquareAndArguments
     }
     set {
-      unexpectedBetweenLeftSquareAndArgumentList = newValue
+      unexpectedBetweenLeftSquareAndArguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenArgumentListAndRightSquare")
-  public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: TupleExprElementListSyntax {
     get {
-      return unexpectedBetweenArgumentListAndRightSquare
+      return arguments
     }
     set {
-      unexpectedBetweenArgumentListAndRightSquare = newValue
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightSquare")
+  public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightSquare
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightSquare = newValue
     }
   }
   
@@ -2490,7 +2870,7 @@ extension KeyPathSubscriptComponentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftSquare, arguments, rightSquare argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2509,7 +2889,7 @@ extension KeyPathSubscriptComponentSyntax {
         unexpectedBeforeLeftBracket, 
         leftSquare: leftBracket, 
         unexpectedBetweenLeftBracketAndArgumentList, 
-        argumentList: argumentList, 
+        arguments: argumentList, 
         unexpectedBetweenArgumentListAndRightBracket, 
         rightSquare: rightBracket, 
         unexpectedAfterRightBracket, 
@@ -2658,7 +3038,37 @@ extension MacroExpansionDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndArguments")
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndArguments
+    }
+    set {
+      unexpectedBetweenLeftParenAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightParen")
+  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightParen
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2701,7 +3111,7 @@ extension MacroExpansionDeclSyntax {
         unexpectedBetweenGenericArgumentsAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndArgumentList, 
-        argumentList: argumentList, 
+        arguments: argumentList, 
         unexpectedBetweenArgumentListAndRightParen, 
         rightParen: rightParen, 
         unexpectedBetweenRightParenAndTrailingClosure, 
@@ -2775,7 +3185,37 @@ extension MacroExpansionExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndArguments")
+  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndArguments
+    }
+    set {
+      unexpectedBetweenLeftParenAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: TupleExprElementListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightParen")
+  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightParen
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with pound, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2810,7 +3250,7 @@ extension MacroExpansionExprSyntax {
         unexpectedBetweenGenericArgumentsAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndArgumentList, 
-        argumentList: argumentList, 
+        arguments: argumentList, 
         unexpectedBetweenArgumentListAndRightParen, 
         rightParen: rightParen, 
         unexpectedBetweenRightParenAndTrailingClosure, 
@@ -3176,6 +3616,65 @@ extension OptionalBindingConditionSyntax {
         unexpectedBetweenTypeAnnotationAndInitializer, 
         initializer: initializer, 
         unexpectedAfterInitializer, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension ParameterClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndParameters
+    }
+    set {
+      unexpectedBetweenLeftParenAndParameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameters")
+  public var parameterList: FunctionParameterListSyntax {
+    get {
+      return parameters
+    }
+    set {
+      parameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParametersAndRightParen
+    }
+    set {
+      unexpectedBetweenParametersAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: FunctionParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndParameterList, 
+        parameters: parameterList, 
+        unexpectedBetweenParameterListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -3664,23 +4163,33 @@ extension PrimaryAssociatedTypeClauseSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftAngleAndPrimaryAssociatedTypeList")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes")
   public var unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftAngleAndPrimaryAssociatedTypeList
+      return unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes
     }
     set {
-      unexpectedBetweenLeftAngleAndPrimaryAssociatedTypeList = newValue
+      unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenPrimaryAssociatedTypeListAndRightAngle")
-  public var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "primaryAssociatedTypes")
+  public var primaryAssociatedTypeList: PrimaryAssociatedTypeListSyntax {
     get {
-      return unexpectedBetweenPrimaryAssociatedTypeListAndRightAngle
+      return primaryAssociatedTypes
     }
     set {
-      unexpectedBetweenPrimaryAssociatedTypeListAndRightAngle = newValue
+      primaryAssociatedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenPrimaryAssociatedTypesAndRightAngle")
+  public var unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPrimaryAssociatedTypesAndRightAngle
+    }
+    set {
+      unexpectedBetweenPrimaryAssociatedTypesAndRightAngle = newValue
     }
   }
   
@@ -3704,7 +4213,7 @@ extension PrimaryAssociatedTypeClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftAngle, rightAngle argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftAngle, primaryAssociatedTypes, rightAngle argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3723,7 +4232,7 @@ extension PrimaryAssociatedTypeClauseSyntax {
         unexpectedBeforeLeftAngleBracket, 
         leftAngle: leftAngleBracket, 
         unexpectedBetweenLeftAngleBracketAndPrimaryAssociatedTypeList, 
-        primaryAssociatedTypeList: primaryAssociatedTypeList, 
+        primaryAssociatedTypes: primaryAssociatedTypeList, 
         unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, 
         rightAngle: rightAngleBracket, 
         unexpectedAfterRightAngleBracket, 
@@ -4029,23 +4538,33 @@ extension SubscriptExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndArgumentList")
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftSquareAndArguments")
   public var unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftSquareAndArgumentList
+      return unexpectedBetweenLeftSquareAndArguments
     }
     set {
-      unexpectedBetweenLeftSquareAndArgumentList = newValue
+      unexpectedBetweenLeftSquareAndArguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenArgumentListAndRightSquare")
-  public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: TupleExprElementListSyntax {
     get {
-      return unexpectedBetweenArgumentListAndRightSquare
+      return arguments
     }
     set {
-      unexpectedBetweenArgumentListAndRightSquare = newValue
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightSquare")
+  public var unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightSquare
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightSquare = newValue
     }
   }
   
@@ -4069,7 +4588,7 @@ extension SubscriptExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
+  @available(*, deprecated, message: "Use an initializer with leftSquare, arguments, rightSquare argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4096,7 +4615,7 @@ extension SubscriptExprSyntax {
         unexpectedBetweenCalledExpressionAndLeftBracket, 
         leftSquare: leftBracket, 
         unexpectedBetweenLeftBracketAndArgumentList, 
-        argumentList: argumentList, 
+        arguments: argumentList, 
         unexpectedBetweenArgumentListAndRightBracket, 
         rightSquare: rightBracket, 
         unexpectedBetweenRightBracketAndTrailingClosure, 
@@ -4460,6 +4979,61 @@ extension TupleTypeElementSyntax {
   }
 }
 
+extension TypeInheritanceClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndInheritedTypes")
+  public var unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndInheritedTypes
+    }
+    set {
+      unexpectedBetweenColonAndInheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "inheritedTypes")
+  public var inheritedTypeCollection: InheritedTypeListSyntax {
+    get {
+      return inheritedTypes
+    }
+    set {
+      inheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterInheritedTypes")
+  public var unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterInheritedTypes
+    }
+    set {
+      unexpectedAfterInheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with inheritedTypes argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
+      inheritedTypeCollection: InheritedTypeListSyntax,
+      _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndInheritedTypeCollection, 
+        inheritedTypes: inheritedTypeCollection, 
+        unexpectedAfterInheritedTypeCollection, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension UnresolvedAsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeAsKeyword")
   public var unexpectedBeforeAsTok: UnexpectedNodesSyntax? {
@@ -4738,6 +5312,65 @@ extension VariableDeclSyntax {
         unexpectedBetweenBindingKeywordAndBindings, 
         bindings: bindings, 
         unexpectedAfterBindings, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension YieldListSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
+  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndElements
+    }
+    set {
+      unexpectedBetweenLeftParenAndElements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "elements")
+  public var elementList: YieldExprListSyntax {
+    get {
+      return elements
+    }
+    set {
+      elements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
+  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenElementsAndRightParen
+    }
+    set {
+      unexpectedBetweenElementsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
+      elementList: YieldExprListSyntax,
+      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndElementList, 
+        elements: elementList, 
+        unexpectedBetweenElementListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

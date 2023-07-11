@@ -4204,7 +4204,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `macro`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
-///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -4244,9 +4244,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
       _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
-      _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
-      _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: TupleExprElementListSyntax,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
@@ -4271,9 +4271,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             genericArgumentClause, 
             unexpectedBetweenGenericArgumentClauseAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArgumentList, 
-            argumentList, 
-            unexpectedBetweenArgumentListAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedBetweenRightParenAndTrailingClosure, 
             trailingClosure, 
@@ -4294,9 +4294,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           genericArgumentClause?.raw, 
           unexpectedBetweenGenericArgumentClauseAndLeftParen?.raw, 
           leftParen?.raw, 
-          unexpectedBetweenLeftParenAndArgumentList?.raw, 
-          argumentList.raw, 
-          unexpectedBetweenArgumentListAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen?.raw, 
           unexpectedBetweenRightParenAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
@@ -4474,7 +4474,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4483,7 +4483,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var argumentList: TupleExprElementListSyntax {
+  public var arguments: TupleExprElementListSyntax {
     get {
       return TupleExprElementListSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
@@ -4492,12 +4492,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `argumentList`
+  /// Adds the provided `element` to the node's `arguments`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
-  ///                  `argumentList` collection.
+  ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
-  ///            appended to its `argumentList` collection.
+  ///            appended to its `arguments` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4516,7 +4516,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MacroExpansionDeclSyntax(newData)
   }
   
-  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4617,9 +4617,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.genericArgumentClause, 
           \Self.unexpectedBetweenGenericArgumentClauseAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArgumentList, 
-          \Self.argumentList, 
-          \Self.unexpectedBetweenArgumentListAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedBetweenRightParenAndTrailingClosure, 
           \Self.trailingClosure, 

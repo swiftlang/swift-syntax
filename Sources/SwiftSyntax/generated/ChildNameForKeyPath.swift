@@ -25,12 +25,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAccessesKeywordAndLeftParen"
   case \AccessesEffectSyntax.leftParen:
     return "leftParen"
-  case \AccessesEffectSyntax.unexpectedBetweenLeftParenAndPropertyList:
-    return "unexpectedBetweenLeftParenAndPropertyList"
-  case \AccessesEffectSyntax.propertyList:
-    return "propertyList"
-  case \AccessesEffectSyntax.unexpectedBetweenPropertyListAndRightParen:
-    return "unexpectedBetweenPropertyListAndRightParen"
+  case \AccessesEffectSyntax.unexpectedBetweenLeftParenAndProperties:
+    return "unexpectedBetweenLeftParenAndProperties"
+  case \AccessesEffectSyntax.properties:
+    return "properties"
+  case \AccessesEffectSyntax.unexpectedBetweenPropertiesAndRightParen:
+    return "unexpectedBetweenPropertiesAndRightParen"
   case \AccessesEffectSyntax.rightParen:
     return "rightParen"
   case \AccessesEffectSyntax.unexpectedAfterRightParen:
@@ -629,12 +629,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \ClosureParameterClauseSyntax.leftParen:
     return "leftParen"
-  case \ClosureParameterClauseSyntax.unexpectedBetweenLeftParenAndParameterList:
-    return "unexpectedBetweenLeftParenAndParameterList"
-  case \ClosureParameterClauseSyntax.parameterList:
-    return "parameterList"
-  case \ClosureParameterClauseSyntax.unexpectedBetweenParameterListAndRightParen:
-    return "unexpectedBetweenParameterListAndRightParen"
+  case \ClosureParameterClauseSyntax.unexpectedBetweenLeftParenAndProperties:
+    return "unexpectedBetweenLeftParenAndProperties"
+  case \ClosureParameterClauseSyntax.properties:
+    return "properties"
+  case \ClosureParameterClauseSyntax.unexpectedBetweenPropertiesAndRightParen:
+    return "unexpectedBetweenPropertiesAndRightParen"
   case \ClosureParameterClauseSyntax.rightParen:
     return "rightParen"
   case \ClosureParameterClauseSyntax.unexpectedAfterRightParen:
@@ -1201,12 +1201,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \EnumCaseParameterClauseSyntax.leftParen:
     return "leftParen"
-  case \EnumCaseParameterClauseSyntax.unexpectedBetweenLeftParenAndParameterList:
-    return "unexpectedBetweenLeftParenAndParameterList"
-  case \EnumCaseParameterClauseSyntax.parameterList:
-    return "parameterList"
-  case \EnumCaseParameterClauseSyntax.unexpectedBetweenParameterListAndRightParen:
-    return "unexpectedBetweenParameterListAndRightParen"
+  case \EnumCaseParameterClauseSyntax.unexpectedBetweenLeftParenAndParameters:
+    return "unexpectedBetweenLeftParenAndParameters"
+  case \EnumCaseParameterClauseSyntax.parameters:
+    return "parameters"
+  case \EnumCaseParameterClauseSyntax.unexpectedBetweenParametersAndRightParen:
+    return "unexpectedBetweenParametersAndRightParen"
   case \EnumCaseParameterClauseSyntax.rightParen:
     return "rightParen"
   case \EnumCaseParameterClauseSyntax.unexpectedAfterRightParen:
@@ -1425,12 +1425,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenCalledExpressionAndLeftParen"
   case \FunctionCallExprSyntax.leftParen:
     return "leftParen"
-  case \FunctionCallExprSyntax.unexpectedBetweenLeftParenAndArgumentList:
-    return "unexpectedBetweenLeftParenAndArgumentList"
-  case \FunctionCallExprSyntax.argumentList:
-    return "argumentList"
-  case \FunctionCallExprSyntax.unexpectedBetweenArgumentListAndRightParen:
-    return "unexpectedBetweenArgumentListAndRightParen"
+  case \FunctionCallExprSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \FunctionCallExprSyntax.arguments:
+    return "arguments"
+  case \FunctionCallExprSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
   case \FunctionCallExprSyntax.rightParen:
     return "rightParen"
   case \FunctionCallExprSyntax.unexpectedBetweenRightParenAndTrailingClosure:
@@ -1643,12 +1643,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeWhereKeyword"
   case \GenericWhereClauseSyntax.whereKeyword:
     return "whereKeyword"
-  case \GenericWhereClauseSyntax.unexpectedBetweenWhereKeywordAndRequirementList:
-    return "unexpectedBetweenWhereKeywordAndRequirementList"
-  case \GenericWhereClauseSyntax.requirementList:
-    return "requirementList"
-  case \GenericWhereClauseSyntax.unexpectedAfterRequirementList:
-    return "unexpectedAfterRequirementList"
+  case \GenericWhereClauseSyntax.unexpectedBetweenWhereKeywordAndRequirements:
+    return "unexpectedBetweenWhereKeywordAndRequirements"
+  case \GenericWhereClauseSyntax.requirements:
+    return "requirements"
+  case \GenericWhereClauseSyntax.unexpectedAfterRequirements:
+    return "unexpectedAfterRequirements"
   case \GuardStmtSyntax.unexpectedBeforeGuardKeyword:
     return "unexpectedBeforeGuardKeyword"
   case \GuardStmtSyntax.guardKeyword:
@@ -1875,12 +1875,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenInitializesKeywordAndLeftParen"
   case \InitializesEffectSyntax.leftParen:
     return "leftParen"
-  case \InitializesEffectSyntax.unexpectedBetweenLeftParenAndPropertyList:
-    return "unexpectedBetweenLeftParenAndPropertyList"
-  case \InitializesEffectSyntax.propertyList:
-    return "propertyList"
-  case \InitializesEffectSyntax.unexpectedBetweenPropertyListAndRightParen:
-    return "unexpectedBetweenPropertyListAndRightParen"
+  case \InitializesEffectSyntax.unexpectedBetweenLeftParenAndProperties:
+    return "unexpectedBetweenLeftParenAndProperties"
+  case \InitializesEffectSyntax.properties:
+    return "properties"
+  case \InitializesEffectSyntax.unexpectedBetweenPropertiesAndRightParen:
+    return "unexpectedBetweenPropertiesAndRightParen"
   case \InitializesEffectSyntax.rightParen:
     return "rightParen"
   case \InitializesEffectSyntax.unexpectedAfterRightParen:
@@ -1963,12 +1963,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftSquare"
   case \KeyPathSubscriptComponentSyntax.leftSquare:
     return "leftSquare"
-  case \KeyPathSubscriptComponentSyntax.unexpectedBetweenLeftSquareAndArgumentList:
-    return "unexpectedBetweenLeftSquareAndArgumentList"
-  case \KeyPathSubscriptComponentSyntax.argumentList:
-    return "argumentList"
-  case \KeyPathSubscriptComponentSyntax.unexpectedBetweenArgumentListAndRightSquare:
-    return "unexpectedBetweenArgumentListAndRightSquare"
+  case \KeyPathSubscriptComponentSyntax.unexpectedBetweenLeftSquareAndArguments:
+    return "unexpectedBetweenLeftSquareAndArguments"
+  case \KeyPathSubscriptComponentSyntax.arguments:
+    return "arguments"
+  case \KeyPathSubscriptComponentSyntax.unexpectedBetweenArgumentsAndRightSquare:
+    return "unexpectedBetweenArgumentsAndRightSquare"
   case \KeyPathSubscriptComponentSyntax.rightSquare:
     return "rightSquare"
   case \KeyPathSubscriptComponentSyntax.unexpectedAfterRightSquare:
@@ -2097,12 +2097,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenGenericArgumentClauseAndLeftParen"
   case \MacroExpansionDeclSyntax.leftParen:
     return "leftParen"
-  case \MacroExpansionDeclSyntax.unexpectedBetweenLeftParenAndArgumentList:
-    return "unexpectedBetweenLeftParenAndArgumentList"
-  case \MacroExpansionDeclSyntax.argumentList:
-    return "argumentList"
-  case \MacroExpansionDeclSyntax.unexpectedBetweenArgumentListAndRightParen:
-    return "unexpectedBetweenArgumentListAndRightParen"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \MacroExpansionDeclSyntax.arguments:
+    return "arguments"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
   case \MacroExpansionDeclSyntax.rightParen:
     return "rightParen"
   case \MacroExpansionDeclSyntax.unexpectedBetweenRightParenAndTrailingClosure:
@@ -2131,12 +2131,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenGenericArgumentClauseAndLeftParen"
   case \MacroExpansionExprSyntax.leftParen:
     return "leftParen"
-  case \MacroExpansionExprSyntax.unexpectedBetweenLeftParenAndArgumentList:
-    return "unexpectedBetweenLeftParenAndArgumentList"
-  case \MacroExpansionExprSyntax.argumentList:
-    return "argumentList"
-  case \MacroExpansionExprSyntax.unexpectedBetweenArgumentListAndRightParen:
-    return "unexpectedBetweenArgumentListAndRightParen"
+  case \MacroExpansionExprSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \MacroExpansionExprSyntax.arguments:
+    return "arguments"
+  case \MacroExpansionExprSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
   case \MacroExpansionExprSyntax.rightParen:
     return "rightParen"
   case \MacroExpansionExprSyntax.unexpectedBetweenRightParenAndTrailingClosure:
@@ -2485,12 +2485,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \ParameterClauseSyntax.leftParen:
     return "leftParen"
-  case \ParameterClauseSyntax.unexpectedBetweenLeftParenAndParameterList:
-    return "unexpectedBetweenLeftParenAndParameterList"
-  case \ParameterClauseSyntax.parameterList:
-    return "parameterList"
-  case \ParameterClauseSyntax.unexpectedBetweenParameterListAndRightParen:
-    return "unexpectedBetweenParameterListAndRightParen"
+  case \ParameterClauseSyntax.unexpectedBetweenLeftParenAndParameters:
+    return "unexpectedBetweenLeftParenAndParameters"
+  case \ParameterClauseSyntax.parameters:
+    return "parameters"
+  case \ParameterClauseSyntax.unexpectedBetweenParametersAndRightParen:
+    return "unexpectedBetweenParametersAndRightParen"
   case \ParameterClauseSyntax.rightParen:
     return "rightParen"
   case \ParameterClauseSyntax.unexpectedAfterRightParen:
@@ -2681,12 +2681,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftAngle"
   case \PrimaryAssociatedTypeClauseSyntax.leftAngle:
     return "leftAngle"
-  case \PrimaryAssociatedTypeClauseSyntax.unexpectedBetweenLeftAngleAndPrimaryAssociatedTypeList:
-    return "unexpectedBetweenLeftAngleAndPrimaryAssociatedTypeList"
-  case \PrimaryAssociatedTypeClauseSyntax.primaryAssociatedTypeList:
-    return "primaryAssociatedTypeList"
-  case \PrimaryAssociatedTypeClauseSyntax.unexpectedBetweenPrimaryAssociatedTypeListAndRightAngle:
-    return "unexpectedBetweenPrimaryAssociatedTypeListAndRightAngle"
+  case \PrimaryAssociatedTypeClauseSyntax.unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes:
+    return "unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes"
+  case \PrimaryAssociatedTypeClauseSyntax.primaryAssociatedTypes:
+    return "primaryAssociatedTypes"
+  case \PrimaryAssociatedTypeClauseSyntax.unexpectedBetweenPrimaryAssociatedTypesAndRightAngle:
+    return "unexpectedBetweenPrimaryAssociatedTypesAndRightAngle"
   case \PrimaryAssociatedTypeClauseSyntax.rightAngle:
     return "rightAngle"
   case \PrimaryAssociatedTypeClauseSyntax.unexpectedAfterRightAngle:
@@ -2967,12 +2967,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenCalledExpressionAndLeftSquare"
   case \SubscriptExprSyntax.leftSquare:
     return "leftSquare"
-  case \SubscriptExprSyntax.unexpectedBetweenLeftSquareAndArgumentList:
-    return "unexpectedBetweenLeftSquareAndArgumentList"
-  case \SubscriptExprSyntax.argumentList:
-    return "argumentList"
-  case \SubscriptExprSyntax.unexpectedBetweenArgumentListAndRightSquare:
-    return "unexpectedBetweenArgumentListAndRightSquare"
+  case \SubscriptExprSyntax.unexpectedBetweenLeftSquareAndArguments:
+    return "unexpectedBetweenLeftSquareAndArguments"
+  case \SubscriptExprSyntax.arguments:
+    return "arguments"
+  case \SubscriptExprSyntax.unexpectedBetweenArgumentsAndRightSquare:
+    return "unexpectedBetweenArgumentsAndRightSquare"
   case \SubscriptExprSyntax.rightSquare:
     return "rightSquare"
   case \SubscriptExprSyntax.unexpectedBetweenRightSquareAndTrailingClosure:
@@ -3267,12 +3267,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeColon"
   case \TypeInheritanceClauseSyntax.colon:
     return "colon"
-  case \TypeInheritanceClauseSyntax.unexpectedBetweenColonAndInheritedTypeCollection:
-    return "unexpectedBetweenColonAndInheritedTypeCollection"
-  case \TypeInheritanceClauseSyntax.inheritedTypeCollection:
-    return "inheritedTypeCollection"
-  case \TypeInheritanceClauseSyntax.unexpectedAfterInheritedTypeCollection:
-    return "unexpectedAfterInheritedTypeCollection"
+  case \TypeInheritanceClauseSyntax.unexpectedBetweenColonAndInheritedTypes:
+    return "unexpectedBetweenColonAndInheritedTypes"
+  case \TypeInheritanceClauseSyntax.inheritedTypes:
+    return "inheritedTypes"
+  case \TypeInheritanceClauseSyntax.unexpectedAfterInheritedTypes:
+    return "unexpectedAfterInheritedTypes"
   case \TypeInitializerClauseSyntax.unexpectedBeforeEqual:
     return "unexpectedBeforeEqual"
   case \TypeInitializerClauseSyntax.equal:
@@ -3473,12 +3473,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \YieldListSyntax.leftParen:
     return "leftParen"
-  case \YieldListSyntax.unexpectedBetweenLeftParenAndElementList:
-    return "unexpectedBetweenLeftParenAndElementList"
-  case \YieldListSyntax.elementList:
-    return "elementList"
-  case \YieldListSyntax.unexpectedBetweenElementListAndRightParen:
-    return "unexpectedBetweenElementListAndRightParen"
+  case \YieldListSyntax.unexpectedBetweenLeftParenAndElements:
+    return "unexpectedBetweenLeftParenAndElements"
+  case \YieldListSyntax.elements:
+    return "elements"
+  case \YieldListSyntax.unexpectedBetweenElementsAndRightParen:
+    return "unexpectedBetweenElementsAndRightParen"
   case \YieldListSyntax.rightParen:
     return "rightParen"
   case \YieldListSyntax.unexpectedAfterRightParen:

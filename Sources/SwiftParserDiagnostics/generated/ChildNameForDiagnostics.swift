@@ -222,7 +222,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \LabeledStmtSyntax.label:
     return "label name"
-  case \LayoutRequirementSyntax.typeIdentifier:
+  case \LayoutRequirementSyntax.type:
     return "constrained type"
   case \LayoutRequirementSyntax.size:
     return "size"
@@ -302,9 +302,9 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "condition"
   case \ReturnClauseSyntax.returnType:
     return "return type"
-  case \SameTypeRequirementSyntax.leftTypeIdentifier:
+  case \SameTypeRequirementSyntax.leftType:
     return "left-hand type"
-  case \SameTypeRequirementSyntax.rightTypeIdentifier:
+  case \SameTypeRequirementSyntax.rightType:
     return "right-hand type"
   case \StructDeclSyntax.attributes:
     return "attributes"

@@ -1434,6 +1434,95 @@ extension ClosureSignatureSyntax {
   }
 }
 
+extension ConformanceRequirementSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeLeftType")
+  public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeLeftType
+    }
+    set {
+      unexpectedBeforeLeftType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "leftType")
+  public var leftTypeIdentifier: TypeSyntax {
+    get {
+      return leftType
+    }
+    set {
+      leftType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftTypeAndColon")
+  public var unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftTypeAndColon
+    }
+    set {
+      unexpectedBetweenLeftTypeAndColon = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndRightType")
+  public var unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndRightType
+    }
+    set {
+      unexpectedBetweenColonAndRightType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "rightType")
+  public var rightTypeIdentifier: TypeSyntax {
+    get {
+      return rightType
+    }
+    set {
+      rightType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterRightType")
+  public var unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRightType
+    }
+    set {
+      unexpectedAfterRightType = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with leftType, rightType argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      leftTypeIdentifier: some TypeSyntaxProtocol,
+      _ unexpectedBetweenLeftTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      rightTypeIdentifier: some TypeSyntaxProtocol,
+      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftTypeIdentifier, 
+        leftType: leftTypeIdentifier, 
+        unexpectedBetweenLeftTypeIdentifierAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndRightTypeIdentifier, 
+        rightType: rightTypeIdentifier, 
+        unexpectedAfterRightTypeIdentifier, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension DeclNameSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
   public var unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? {
@@ -3482,6 +3571,85 @@ extension LabeledStmtSyntax {
   }
 }
 
+extension LayoutRequirementSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeType")
+  public var unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeType
+    }
+    set {
+      unexpectedBeforeType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "type")
+  public var typeIdentifier: TypeSyntax {
+    get {
+      return type
+    }
+    set {
+      type = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenTypeAndColon")
+  public var unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenTypeAndColon
+    }
+    set {
+      unexpectedBetweenTypeAndColon = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with type argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      typeIdentifier: some TypeSyntaxProtocol,
+      _ unexpectedBetweenTypeIdentifierAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? = nil,
+      layoutConstraint: TokenSyntax,
+      _ unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? = nil,
+      size: TokenSyntax? = nil,
+      _ unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax? = nil,
+      _ unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? = nil,
+      alignment: TokenSyntax? = nil,
+      _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax? = nil,
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeTypeIdentifier, 
+        type: typeIdentifier, 
+        unexpectedBetweenTypeIdentifierAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndLayoutConstraint, 
+        layoutConstraint: layoutConstraint, 
+        unexpectedBetweenLayoutConstraintAndLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndSize, 
+        size: size, 
+        unexpectedBetweenSizeAndComma, 
+        comma: comma, 
+        unexpectedBetweenCommaAndAlignment, 
+        alignment: alignment, 
+        unexpectedBetweenAlignmentAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension MacroDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenMacroKeywordAndName")
   public var unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? {
@@ -5073,13 +5241,33 @@ extension QualifiedDeclNameSyntax {
 }
 
 extension SameTypeRequirementSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftTypeIdentifierAndEqual")
-  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBeforeLeftType")
+  public var unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftTypeIdentifierAndEqual
+      return unexpectedBeforeLeftType
     }
     set {
-      unexpectedBetweenLeftTypeIdentifierAndEqual = newValue
+      unexpectedBeforeLeftType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "leftType")
+  public var leftTypeIdentifier: TypeSyntax {
+    get {
+      return leftType
+    }
+    set {
+      leftType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftTypeAndEqual")
+  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftTypeAndEqual
+    }
+    set {
+      unexpectedBetweenLeftTypeAndEqual = newValue
     }
   }
   
@@ -5093,17 +5281,37 @@ extension SameTypeRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenEqualAndRightTypeIdentifier")
+  @available(*, deprecated, renamed: "unexpectedBetweenEqualAndRightType")
   public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEqualAndRightTypeIdentifier
+      return unexpectedBetweenEqualAndRightType
     }
     set {
-      unexpectedBetweenEqualAndRightTypeIdentifier = newValue
+      unexpectedBetweenEqualAndRightType = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with equal argument(s).")
+  @available(*, deprecated, renamed: "rightType")
+  public var rightTypeIdentifier: TypeSyntax {
+    get {
+      return rightType
+    }
+    set {
+      rightType = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterRightType")
+  public var unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRightType
+    }
+    set {
+      unexpectedAfterRightType = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with leftType, equal, rightType argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5120,11 +5328,11 @@ extension SameTypeRequirementSyntax {
     self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeLeftTypeIdentifier, 
-        leftTypeIdentifier: leftTypeIdentifier, 
+        leftType: leftTypeIdentifier, 
         unexpectedBetweenLeftTypeIdentifierAndEqualityToken, 
         equal: equalityToken, 
         unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
-        rightTypeIdentifier: rightTypeIdentifier, 
+        rightType: rightTypeIdentifier, 
         unexpectedAfterRightTypeIdentifier, 
         trailingTrivia: trailingTrivia
       )

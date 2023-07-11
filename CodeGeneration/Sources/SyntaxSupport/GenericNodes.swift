@@ -18,7 +18,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "conformance requirement",
     children: [
       Child(
-        name: "LeftTypeIdentifier",
+        name: "LeftType",
+        deprecatedName: "LeftTypeIdentifier",
         kind: .node(kind: .type)
       ),
       Child(
@@ -26,7 +27,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "RightTypeIdentifier",
+        name: "RightType",
+        deprecatedName: "RightTypeIdentifier",
         kind: .node(kind: .type)
       ),
     ]
@@ -193,7 +195,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "layout requirement",
     children: [
       Child(
-        name: "TypeIdentifier",
+        name: "Type",
+        deprecatedName: "TypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "constrained type"
       ),
@@ -303,7 +306,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "same type requirement",
     children: [
       Child(
-        name: "LeftTypeIdentifier",
+        name: "LeftType",
+        deprecatedName: "LeftTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "left-hand type"
       ),
@@ -313,7 +317,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
       ),
       Child(
-        name: "RightTypeIdentifier",
+        name: "RightType",
+        deprecatedName: "RightTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "right-hand type"
       ),

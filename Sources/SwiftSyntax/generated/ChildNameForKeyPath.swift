@@ -749,20 +749,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \ConditionElementSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \ConformanceRequirementSyntax.unexpectedBeforeLeftTypeIdentifier:
-    return "unexpectedBeforeLeftTypeIdentifier"
-  case \ConformanceRequirementSyntax.leftTypeIdentifier:
-    return "leftTypeIdentifier"
-  case \ConformanceRequirementSyntax.unexpectedBetweenLeftTypeIdentifierAndColon:
-    return "unexpectedBetweenLeftTypeIdentifierAndColon"
+  case \ConformanceRequirementSyntax.unexpectedBeforeLeftType:
+    return "unexpectedBeforeLeftType"
+  case \ConformanceRequirementSyntax.leftType:
+    return "leftType"
+  case \ConformanceRequirementSyntax.unexpectedBetweenLeftTypeAndColon:
+    return "unexpectedBetweenLeftTypeAndColon"
   case \ConformanceRequirementSyntax.colon:
     return "colon"
-  case \ConformanceRequirementSyntax.unexpectedBetweenColonAndRightTypeIdentifier:
-    return "unexpectedBetweenColonAndRightTypeIdentifier"
-  case \ConformanceRequirementSyntax.rightTypeIdentifier:
-    return "rightTypeIdentifier"
-  case \ConformanceRequirementSyntax.unexpectedAfterRightTypeIdentifier:
-    return "unexpectedAfterRightTypeIdentifier"
+  case \ConformanceRequirementSyntax.unexpectedBetweenColonAndRightType:
+    return "unexpectedBetweenColonAndRightType"
+  case \ConformanceRequirementSyntax.rightType:
+    return "rightType"
+  case \ConformanceRequirementSyntax.unexpectedAfterRightType:
+    return "unexpectedAfterRightType"
   case \ConstrainedSugarTypeSyntax.unexpectedBeforeSomeOrAnySpecifier:
     return "unexpectedBeforeSomeOrAnySpecifier"
   case \ConstrainedSugarTypeSyntax.someOrAnySpecifier:
@@ -2005,12 +2005,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "statement"
   case \LabeledStmtSyntax.unexpectedAfterStatement:
     return "unexpectedAfterStatement"
-  case \LayoutRequirementSyntax.unexpectedBeforeTypeIdentifier:
-    return "unexpectedBeforeTypeIdentifier"
-  case \LayoutRequirementSyntax.typeIdentifier:
-    return "typeIdentifier"
-  case \LayoutRequirementSyntax.unexpectedBetweenTypeIdentifierAndColon:
-    return "unexpectedBetweenTypeIdentifierAndColon"
+  case \LayoutRequirementSyntax.unexpectedBeforeType:
+    return "unexpectedBeforeType"
+  case \LayoutRequirementSyntax.type:
+    return "type"
+  case \LayoutRequirementSyntax.unexpectedBetweenTypeAndColon:
+    return "unexpectedBetweenTypeAndColon"
   case \LayoutRequirementSyntax.colon:
     return "colon"
   case \LayoutRequirementSyntax.unexpectedBetweenColonAndLayoutConstraint:
@@ -2813,20 +2813,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \ReturnStmtSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \SameTypeRequirementSyntax.unexpectedBeforeLeftTypeIdentifier:
-    return "unexpectedBeforeLeftTypeIdentifier"
-  case \SameTypeRequirementSyntax.leftTypeIdentifier:
-    return "leftTypeIdentifier"
-  case \SameTypeRequirementSyntax.unexpectedBetweenLeftTypeIdentifierAndEqual:
-    return "unexpectedBetweenLeftTypeIdentifierAndEqual"
+  case \SameTypeRequirementSyntax.unexpectedBeforeLeftType:
+    return "unexpectedBeforeLeftType"
+  case \SameTypeRequirementSyntax.leftType:
+    return "leftType"
+  case \SameTypeRequirementSyntax.unexpectedBetweenLeftTypeAndEqual:
+    return "unexpectedBetweenLeftTypeAndEqual"
   case \SameTypeRequirementSyntax.equal:
     return "equal"
-  case \SameTypeRequirementSyntax.unexpectedBetweenEqualAndRightTypeIdentifier:
-    return "unexpectedBetweenEqualAndRightTypeIdentifier"
-  case \SameTypeRequirementSyntax.rightTypeIdentifier:
-    return "rightTypeIdentifier"
-  case \SameTypeRequirementSyntax.unexpectedAfterRightTypeIdentifier:
-    return "unexpectedAfterRightTypeIdentifier"
+  case \SameTypeRequirementSyntax.unexpectedBetweenEqualAndRightType:
+    return "unexpectedBetweenEqualAndRightType"
+  case \SameTypeRequirementSyntax.rightType:
+    return "rightType"
+  case \SameTypeRequirementSyntax.unexpectedAfterRightType:
+    return "unexpectedAfterRightType"
   case \SequenceExprSyntax.unexpectedBeforeElements:
     return "unexpectedBeforeElements"
   case \SequenceExprSyntax.elements:

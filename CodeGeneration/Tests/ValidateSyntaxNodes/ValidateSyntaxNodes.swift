@@ -596,16 +596,16 @@ class ValidateSyntaxNodes: XCTestCase {
   }
 
   /// Identifier is a wonderful ambiguous term. Almost always, 'name' or something similar is more expressive
-  func testNoChildIsNamedIdentifier() {
+  func testNoChildContainsIdentifier() {
     var failures: [ValidationFailure] = []
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-      for child in node.children {
-        if child.name == "Identifier" {
+      for child in node.nonUnexpectedChildren {
+        if child.name.contains("Identifier") {
           failures.append(
             ValidationFailure(
               node: node.kind,
-              message: "children should generally not be named 'Identifier'"
+              message: "child '\(child.name)' should generally not contain 'Identifier'"
             )
           )
         }
@@ -616,8 +616,8 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         // The identifier expr / pattern nodes do actually have a child that’s the identifier
-        ValidationFailure(node: .identifierExpr, message: "children should generally not be named 'Identifier'"),
-        ValidationFailure(node: .identifierPattern, message: "children should generally not be named 'Identifier'"),
+        ValidationFailure(node: .identifierExpr, message: "child 'Identifier' should generally not contain 'Identifier'"),
+        ValidationFailure(node: .identifierPattern, message: "child 'Identifier' should generally not contain 'Identifier'"),
       ]
     )
   }

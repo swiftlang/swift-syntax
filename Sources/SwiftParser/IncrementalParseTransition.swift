@@ -18,7 +18,7 @@ extension Parser {
       return nil
     }
 
-    let currentOffset = self.lexemes.getOffsetToStart(self.currentToken)
+    let currentOffset = self.lexemes.offsetToStart(self.currentToken)
     if let node = parseLookup!.lookUp(currentOffset, kind: kind) {
       self.lexemes.advance(by: node.byteSize, currentToken: &self.currentToken)
       return node
@@ -30,7 +30,7 @@ extension Parser {
   mutating func registerNodeForIncrementalParse(node: RawSyntax, startToken: Lexer.Lexeme) {
     lookaheadRanges.registerNodeForIncrementalParse(
       node: node,
-      lookaheadLength: lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.getOffsetToStart(startToken)
+      lookaheadLength: lexemes.lookaheadTracker.pointee.furthestOffset - self.lexemes.offsetToStart(startToken)
     )
   }
 }

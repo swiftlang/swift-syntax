@@ -162,7 +162,6 @@ public class IncrementalParsingTests: XCTestCase {
   }
 
   public func testMultiEditMapping() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
     assertIncrementalParse(
       """
       let one: Int;let two: Int; let three: Int; ⏩️⏸️                      ⏪️⏩️⏸️   ⏪️let found: Int;let five: Int;

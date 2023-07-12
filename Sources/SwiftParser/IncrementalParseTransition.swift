@@ -35,7 +35,7 @@ extension Parser {
   }
 }
 
-/// Accepts the re-used ``Syntax`` nodes that `IncrementalParseTransition`
+/// Accepts a re-used ``Syntax`` node that `IncrementalParseTransition`
 /// determined they should be re-used for a parse invocation.
 ///
 /// The client can use this information to potentially avoid unnecessary work
@@ -43,28 +43,7 @@ extension Parser {
 ///
 /// This is also used for testing purposes to ensure incremental reparsing
 /// worked as expected.
-public protocol IncrementalParseReusedNodeDelegate {
-  /// Accepts ``Syntax`` node of skipped source region.
-  ///
-  /// - Parameters:
-  ///   - previousNode: The node from the previous tree that is associated with
-  ///                   the skipped source region.
-  func parserReusedNode(previousNode: Syntax)
-}
-
-/// An implementation of `IncrementalParseReusedNodeDelegate` that just collects
-/// the range and re-used node into an array.
-public final class IncrementalParseReusedNodeCollector:
-  IncrementalParseReusedNodeDelegate
-{
-  public var nodes: [Syntax] = []
-
-  public init() {}
-
-  public func parserReusedNode(previousNode: Syntax) {
-    nodes.append(previousNode)
-  }
-}
+public typealias ReusedNodeCallback = (_ node: Syntax) -> ()
 
 /// Keeps track of a previously parsed syntax tree and the source edits that
 /// occurred since it was created.
@@ -72,24 +51,23 @@ public final class IncrementalParseTransition {
   fileprivate let previousTree: SourceFileSyntax
   fileprivate let edits: ConcurrentEdits
   fileprivate let lookaheadRanges: LookaheadRanges
-  fileprivate let reusedDelegate: IncrementalParseReusedNodeDelegate?
+  fileprivate let reusedNodeCallback: ReusedNodeCallback?
 
   /// - Parameters:
   ///   - previousTree: The previous tree to do lookups on.
   ///   - edits: The edits that have occurred since the last parse that resulted
   ///            in the new source that is about to be parsed.
-  ///   - reusedNodeDelegate: Optional delegate to accept information about the
-  ///                         reused regions and nodes.
+  ///   - reusedNodeCallback: Optional closure to accept information about the re-used node. For each node that gets re-used `reusedNodeCallback` is called.
   public init(
     previousTree: SourceFileSyntax,
     edits: ConcurrentEdits,
     lookaheadRanges: LookaheadRanges,
-    reusedNodeDelegate: IncrementalParseReusedNodeDelegate? = nil
+    reusedNodeCallback: ReusedNodeCallback? = nil
   ) {
     self.previousTree = previousTree
     self.edits = edits
     self.lookaheadRanges = lookaheadRanges
-    self.reusedDelegate = reusedNodeDelegate
+    self.reusedNodeCallback = reusedNodeCallback
   }
 }
 
@@ -110,8 +88,8 @@ struct IncrementalParseLookup {
     return transition.edits
   }
 
-  fileprivate var reusedDelegate: IncrementalParseReusedNodeDelegate? {
-    return transition.reusedDelegate
+  fileprivate var reusedCallback: ReusedNodeCallback? {
+    return transition.reusedNodeCallback
   }
 
   /// Does a lookup to see if the current source `offset` should be associated
@@ -132,10 +110,8 @@ struct IncrementalParseLookup {
     }
     let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
     let node = cursorLookup(prevPosition: prevPosition, kind: kind)
-    if let delegate = reusedDelegate, let node {
-      delegate.parserReusedNode(
-        previousNode: node
-      )
+    if let node {
+      reusedCallback?(node)
     }
     return node
   }

@@ -32,12 +32,12 @@ public func assertIncrementalParse(
 
   let (originalTree, lookaheadRanges) = Parser.parseIncrementally(source: originalString, parseTransition: nil)
 
-  let reusedNodesCollector = IncrementalParseReusedNodeCollector()
+  var reusedNodes: [Syntax] = []
   let transition = IncrementalParseTransition(
     previousTree: originalTree,
     edits: concurrentEdits,
     lookaheadRanges: lookaheadRanges,
-    reusedNodeDelegate: reusedNodesCollector
+    reusedNodeCallback: { reusedNodes.append($0) }
   )
 
   let newTree = Parser.parse(source: editedString)
@@ -66,11 +66,11 @@ public func assertIncrementalParse(
   }
 
   // Re-used nodes
-  if reusedNodesCollector.nodes.count != expectedReusedNodes.count {
+  if reusedNodes.count != expectedReusedNodes.count {
     XCTFail(
       """
-      Expected \(expectedReusedNodes.count) re-used nodes but received \(reusedNodesCollector.nodes.count):
-      \(reusedNodesCollector.nodes.map {$0.description}.joined(separator: "\n"))
+      Expected \(expectedReusedNodes.count) re-used nodes but received \(reusedNodes.count):
+      \(reusedNodes.map {$0.description}.joined(separator: "\n"))
       """,
       file: file,
       line: line
@@ -84,11 +84,11 @@ public func assertIncrementalParse(
       continue
     }
 
-    guard let reusedNode = reusedNodesCollector.nodes.first(where: { $0.byteRangeAfterTrimmingTrivia == range }) else {
+    guard let reusedNode = reusedNodes.first(where: { $0.byteRangeAfterTrimmingTrivia == range }) else {
       XCTFail(
         """
         Fail to match the range of \(expectedReusedNode.source) in:
-        \(reusedNodesCollector.nodes.map({"\($0.byteRangeAfterTrimmingTrivia): \($0.description)"}).joined(separator: "\n"))
+        \(reusedNodes.map({"\($0.byteRangeAfterTrimmingTrivia): \($0.description)"}).joined(separator: "\n"))
         """,
         file: expectedReusedNode.file,
         line: expectedReusedNode.line

@@ -377,13 +377,14 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/EffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FreestandingMacroExpansionSyntax>
 - <doc:SwiftSyntax/IdentifiedDeclSyntax>
+- <doc:SwiftSyntax/MissingNodeSyntax>
 - <doc:SwiftSyntax/ParenthesizedSyntax>
 - <doc:SwiftSyntax/WithAttributesSyntax>
 - <doc:SwiftSyntax/WithCodeBlockSyntax>
+- <doc:SwiftSyntax/WithGenericParametersSyntax>
 - <doc:SwiftSyntax/WithModifiersSyntax>
 - <doc:SwiftSyntax/WithStatementsSyntax>
 - <doc:SwiftSyntax/WithTrailingCommaSyntax>
-- <doc:SwiftSyntax/MissingNodeSyntax>
 
 
 

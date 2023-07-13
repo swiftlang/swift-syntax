@@ -329,6 +329,8 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -534,6 +536,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -570,6 +573,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -2454,6 +2458,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2671,6 +2676,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 11, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -2762,6 +2768,8 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2967,6 +2975,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -3003,6 +3012,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -3892,6 +3902,8 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4097,6 +4109,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -4151,6 +4164,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 15, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -6370,6 +6384,8 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6557,6 +6573,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -6611,6 +6628,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -6703,6 +6721,8 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6902,6 +6922,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
@@ -6938,6 +6959,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)

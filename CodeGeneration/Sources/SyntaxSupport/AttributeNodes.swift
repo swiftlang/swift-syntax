@@ -510,6 +510,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "GenericWhereClause",
         deprecatedName: "WhereClause",
         kind: .node(kind: .genericWhereClause),
+        documentation: "A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.",
         isOptional: true
       ),
     ]

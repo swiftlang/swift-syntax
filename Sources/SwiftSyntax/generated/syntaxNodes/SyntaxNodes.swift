@@ -7664,6 +7664,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - kindSpecifierComma: The comma following the differentiability kind, if it exists.
   ///   - parametersComma: The comma following the differentiability parameters clause, if it exists.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7805,6 +7806,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 9, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -10188,8 +10190,8 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - GenericParameterClauseSyntax
 
-
-
+/// The parameter clause that defines the generic parameters.
+///
 /// ### Children
 /// 
 ///  - `leftAngle`: `'<'`
@@ -10216,6 +10218,10 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leftAngle: The opening angle bracket (`<`) of the generic parameter clause.
+  ///   - parameters: The list of generic parameters in the clause.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+  ///   - rightAngle: The closing angle bracket (`>`) of the generic parameter clause.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -10277,6 +10283,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The opening angle bracket (`<`) of the generic parameter clause.
   public var leftAngle: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
@@ -10295,6 +10302,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The list of generic parameters in the clause.
   public var parameters: GenericParameterListSyntax {
     get {
       return GenericParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
@@ -10337,6 +10345,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
@@ -10355,6 +10364,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The closing angle bracket (`>`) of the generic parameter clause.
   public var rightAngle: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
@@ -10823,8 +10833,8 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - GenericWhereClauseSyntax
 
-
-
+/// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+///
 /// ### Children
 /// 
 ///  - `whereKeyword`: `'where'`
@@ -10849,6 +10859,8 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - whereKeyword: The `where` keyword in the clause.
+  ///   - requirementList: The list of requirements in the clause.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -10898,6 +10910,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The `where` keyword in the clause.
   public var whereKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
@@ -10916,6 +10929,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The list of requirements in the clause.
   public var requirementList: GenericRequirementListSyntax {
     get {
       return GenericRequirementListSyntax(data.child(at: 3, parent: Syntax(self))!)

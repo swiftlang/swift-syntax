@@ -341,7 +341,8 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "GenericParameterClause",
         deprecatedName: "GenericParameters",
-        kind: .node(kind: .genericParameterClause)
+        kind: .node(kind: .genericParameterClause),
+        documentation: "The parameter clause that defines the generic parameters."
       ),
       Child(
         name: "BaseType",

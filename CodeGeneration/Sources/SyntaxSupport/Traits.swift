@@ -40,7 +40,12 @@ public let TRAITS: [Trait] = [
       Child(name: "Attributes", kind: .node(kind: .attributeList), isOptional: true),
       Child(name: "Modifiers", kind: .node(kind: .modifierList), isOptional: true),
       Child(name: "InheritanceClause", kind: .node(kind: .typeInheritanceClause), isOptional: true),
-      Child(name: "GenericWhereClause", kind: .node(kind: .genericWhereClause), isOptional: true),
+      Child(
+        name: "GenericWhereClause",
+        kind: .node(kind: .genericWhereClause),
+        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        isOptional: true
+      ),
       Child(name: "MemberBlock", kind: .node(kind: .memberDeclBlock)),
     ]
   ),

@@ -1658,6 +1658,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - genericParameterClause: The parameter clause that defines the generic parameters.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1707,6 +1708,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax {
     get {
       return GenericParameterClauseSyntax(data.child(at: 1, parent: Syntax(self))!)

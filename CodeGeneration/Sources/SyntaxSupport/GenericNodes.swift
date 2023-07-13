@@ -37,27 +37,32 @@ public let GENERIC_NODES: [Node] = [
     kind: .genericParameterClause,
     base: .syntax,
     nameForDiagnostics: "generic parameter clause",
+    documentation: "The parameter clause that defines the generic parameters.",
     parserFunction: "parseGenericParameters",
     children: [
       Child(
         name: "LeftAngle",
         deprecatedName: "LeftAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
+        kind: .token(choices: [.token(tokenKind: "LeftAngleToken")]),
+        documentation: "The opening angle bracket (`<`) of the generic parameter clause."
       ),
       Child(
         name: "Parameters",
         deprecatedName: "GenericParameterList",
-        kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter", deprecatedCollectionElementName: "GenericParameter")
+        kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter", deprecatedCollectionElementName: "GenericParameter"),
+        documentation: "The list of generic parameters in the clause."
       ),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: .genericWhereClause),
+        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
       Child(
         name: "RightAngle",
         deprecatedName: "RightAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
+        kind: .token(choices: [.token(tokenKind: "RightAngleToken")]),
+        documentation: "The closing angle bracket (`>`) of the generic parameter clause."
       ),
     ]
   ),
@@ -164,14 +169,17 @@ public let GENERIC_NODES: [Node] = [
     kind: .genericWhereClause,
     base: .syntax,
     nameForDiagnostics: "'where' clause",
+    documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
     children: [
       Child(
         name: "WhereKeyword",
-        kind: .token(choices: [.keyword(text: "where")])
+        kind: .token(choices: [.keyword(text: "where")]),
+        documentation: "The `where` keyword in the clause."
       ),
       Child(
         name: "RequirementList",
-        kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement")
+        kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
+        documentation: "The list of requirements in the clause."
       ),
     ]
   ),

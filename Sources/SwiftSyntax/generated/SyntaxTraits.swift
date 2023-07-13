@@ -73,6 +73,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set
   }
   
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   var genericWhereClause: GenericWhereClauseSyntax? {
     get
     set

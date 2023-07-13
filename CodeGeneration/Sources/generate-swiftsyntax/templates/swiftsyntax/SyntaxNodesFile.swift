@@ -33,14 +33,18 @@ extension Child {
 func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES.compactMap(\.layoutNode) where node.base == emitKind {
+      let documentation = """
+        \(node.documentation)
+        \(node.documentation.isEmpty ? "" : "///")
+        \(node.grammar)
+        """.removingEmptyLines
+
       // We are actually handling this node now
       try! StructDeclSyntax(
         """
         // MARK: - \(raw: node.kind.syntaxType)
 
-        \(raw: node.documentation)
-        \(raw: node.documentation.isEmpty ? "" : "///")
-        \(raw: node.grammar)
+        \(raw: documentation)
         public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {

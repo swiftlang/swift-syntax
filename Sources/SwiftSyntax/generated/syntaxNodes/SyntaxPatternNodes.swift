@@ -14,8 +14,6 @@
 
 // MARK: - ExpressionPatternSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
@@ -99,8 +97,6 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 // MARK: - IdentifierPatternSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `identifier`: (`<identifier>` | `'self'` | `'init'`)
@@ -183,8 +179,6 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - IsTypePatternSyntax
-
-
 
 /// ### Children
 /// 
@@ -395,8 +389,6 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 // MARK: - TuplePatternSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
@@ -570,8 +562,6 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ValueBindingPatternSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
@@ -693,8 +683,6 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - WildcardPatternSyntax
-
-
 
 /// ### Children
 /// 

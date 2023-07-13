@@ -17,11 +17,15 @@ import Utils
 
 let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
+    let documentation = """
+      \(node.documentation)
+      \(node.documentation.isEmpty ? "" : "///")
+      \(node.grammar)
+      """.removingEmptyLines
+
     try! StructDeclSyntax(
       """
-      \(raw: node.documentation)
-      \(raw: node.documentation.isEmpty ? "" : "///")
-      \(raw: node.grammar)
+      \(raw: documentation)
       public struct \(node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {

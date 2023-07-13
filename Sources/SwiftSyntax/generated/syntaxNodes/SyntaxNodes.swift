@@ -14,8 +14,6 @@
 
 // MARK: - AccessesEffectSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `accessesKeyword`: `'accesses'`
@@ -216,8 +214,6 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - AccessorBlockSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftBrace`: `'{'`
@@ -391,8 +387,6 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - AccessorEffectSpecifiersSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `asyncSpecifier`: `'async'`?
@@ -515,8 +509,6 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - AccessorInitEffectsSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `initializesEffect`: ``InitializesEffectSyntax``?
@@ -638,8 +630,6 @@ public struct AccessorInitEffectsSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - AccessorParameterSyntax
-
-
 
 /// ### Children
 /// 
@@ -789,8 +779,6 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ArrayElementSyntax
-
-
 
 /// ### Children
 /// 
@@ -1570,8 +1558,6 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - AvailabilityConditionSyntax
-
-
 
 /// ### Children
 /// 
@@ -2611,8 +2597,6 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
 
 // MARK: - CaseItemSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `pattern`: ``PatternSyntax``
@@ -2761,8 +2745,6 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - CatchClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -2937,8 +2919,6 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - CatchItemSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `pattern`: ``PatternSyntax``?
@@ -3087,8 +3067,6 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ClosureCaptureItemSpecifierSyntax
-
-
 
 /// ### Children
 /// 
@@ -3265,8 +3243,6 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
 }
 
 // MARK: - ClosureCaptureItemSyntax
-
-
 
 /// ### Children
 /// 
@@ -3471,8 +3447,6 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - ClosureCaptureSignatureSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
@@ -3646,8 +3620,6 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - ClosureParamSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `name`: (`<identifier>` | `'_'`)
@@ -3769,8 +3741,6 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ClosureParameterClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -3950,8 +3920,6 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ClosureParameterSyntax
-
-
 
 /// ### Children
 /// 
@@ -4296,8 +4264,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ClosureSignatureSyntax
-
-
 
 /// ### Children
 /// 
@@ -4776,8 +4742,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - CodeBlockSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftBrace`: `'{'`
@@ -4951,8 +4915,6 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - CompositionTypeElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `type`: ``TypeSyntax``
@@ -5074,8 +5036,6 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ConditionElementSyntax
-
-
 
 /// ### Children
 /// 
@@ -5267,8 +5227,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ConformanceRequirementSyntax
-
-
 
 /// ### Children
 /// 
@@ -5777,8 +5735,6 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
 
 // MARK: - DeclModifierDetailSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
@@ -5928,8 +5884,6 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - DeclModifierSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `name`: (`'__consuming'` | `'__setter_access'` | `'_const'` | `'_local'` | `'actor'` | `'async'` | `'borrowing'` | `'class'` | `'consuming'` | `'convenience'` | `'distributed'` | `'dynamic'` | `'fileprivate'` | `'final'` | `'indirect'` | `'infix'` | `'internal'` | `'isolated'` | `'lazy'` | `'mutating'` | `'nonisolated'` | `'nonmutating'` | `'open'` | `'optional'` | `'override'` | `'package'` | `'postfix'` | `'prefix'` | `'private'` | `'public'` | `'reasync'` | `'required'` | `'static'` | `'unowned'` | `'weak'`)
@@ -6052,8 +6006,6 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - DeclNameArgumentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `name`: ``TokenSyntax``
@@ -6175,8 +6127,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - DeclNameArgumentsSyntax
-
-
 
 /// ### Children
 /// 
@@ -6351,8 +6301,6 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - DeclNameSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `baseName`: (`<identifier>` | `<binaryOperator>` | `'init'` | `'self'` | `'Self'`)
@@ -6478,8 +6426,6 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - DeinitEffectSpecifiersSyntax
-
-
 
 /// ### Children
 /// 
@@ -6833,8 +6779,6 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
 
 // MARK: - DesignatedTypeElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leadingComma`: `','`
@@ -6956,8 +6900,6 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - DictionaryElementSyntax
-
-
 
 /// ### Children
 /// 
@@ -7844,8 +7786,6 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 
 // MARK: - DocumentationAttributeArgumentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `label`: (`'visibility'` | `'metadata'`)
@@ -8403,8 +8343,6 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - EnumCaseParameterClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
@@ -8583,8 +8521,6 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - EnumCaseParameterSyntax
-
-
 
 /// ### Children
 /// 
@@ -9026,8 +8962,6 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - ExpressionSegmentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `backslash`: `'\'`
@@ -9255,8 +9189,6 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - FunctionEffectSpecifiersSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `asyncSpecifier`: (`'async'` | `'reasync'`)?
@@ -9378,8 +9310,6 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - FunctionParameterSyntax
-
-
 
 /// ### Children
 /// 
@@ -9740,8 +9670,6 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - FunctionSignatureSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `parameterClause`: ``ParameterClauseSyntax``
@@ -9890,8 +9818,6 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - GenericArgumentClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -10065,8 +9991,6 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - GenericArgumentSyntax
-
-
 
 /// ### Children
 /// 
@@ -10400,8 +10324,6 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - GenericParameterSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -10655,8 +10577,6 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - GenericRequirementSyntax
-
-
 
 /// ### Children
 /// 
@@ -10984,8 +10904,6 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - IfConfigClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -11403,8 +11321,6 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 
 // MARK: - ImportPathComponentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `name`: (`<identifier>` | `<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
@@ -11526,8 +11442,6 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - InheritedTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -11651,8 +11565,6 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - InitializerClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `equal`: `'='`
@@ -11774,8 +11686,6 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - InitializesEffectSyntax
-
-
 
 /// ### Children
 /// 
@@ -11977,8 +11887,6 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - KeyPathComponentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `period`: `'.'`?
@@ -12154,8 +12062,6 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - KeyPathOptionalComponentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `questionOrExclamationMark`: (`'?'` | `'!'`)
@@ -12238,8 +12144,6 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - KeyPathPropertyComponentSyntax
-
-
 
 /// ### Children
 /// 
@@ -12389,8 +12293,6 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - KeyPathSubscriptComponentSyntax
-
-
 
 /// ### Children
 /// 
@@ -12751,8 +12653,6 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - LayoutRequirementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `typeIdentifier`: ``TypeSyntax``
@@ -13037,8 +12937,6 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - MatchingPatternConditionSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `caseKeyword`: `'case'`
@@ -13214,8 +13112,6 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - MemberDeclBlockSyntax
-
-
 
 /// ### Children
 /// 
@@ -13604,8 +13500,6 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - MultipleTrailingClosureElementSyntax
-
-
 
 /// ### Children
 /// 
@@ -14214,8 +14108,6 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - OptionalBindingConditionSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
@@ -14621,8 +14513,6 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 
 // MARK: - ParameterClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
@@ -14795,8 +14685,6 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - PatternBindingSyntax
-
-
 
 /// ### Children
 /// 
@@ -15042,8 +14930,6 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - PoundSourceLocationArgsSyntax
-
-
 
 /// ### Children
 /// 
@@ -15608,8 +15494,6 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
 
 // MARK: - PrecedenceGroupNameElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `name`: `<identifier>`
@@ -15911,8 +15795,6 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - PrimaryAssociatedTypeClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftAngle`: `'<'`
@@ -16085,8 +15967,6 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
 }
 
 // MARK: - PrimaryAssociatedTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -16394,8 +16274,6 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - ReturnClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `arrow`: `'->'`
@@ -16517,8 +16395,6 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - SameTypeRequirementSyntax
-
-
 
 /// ### Children
 /// 
@@ -16669,8 +16545,6 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - SourceFileSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `statements`: ``CodeBlockItemListSyntax``
@@ -16817,8 +16691,6 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - StringSegmentSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `content`: `<stringSegment>`
@@ -16901,8 +16773,6 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - SwitchCaseLabelSyntax
-
-
 
 /// ### Children
 /// 
@@ -17076,8 +16946,6 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - SwitchCaseSyntax
-
-
 
 /// ### Children
 /// 
@@ -17293,8 +17161,6 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - SwitchDefaultLabelSyntax
-
-
 
 /// ### Children
 /// 
@@ -17604,8 +17470,6 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - TupleExprElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `label`: (`<identifier>` | `'_'`)?
@@ -17782,8 +17646,6 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - TuplePatternElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `label`: `<identifier>`?
@@ -17959,8 +17821,6 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - TupleTypeElementSyntax
-
-
 
 /// ### Children
 /// 
@@ -18246,8 +18106,6 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - TypeAnnotationSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `colon`: `':'`
@@ -18370,8 +18228,6 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - TypeEffectSpecifiersSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `asyncSpecifier`: `'async'`?
@@ -18493,8 +18349,6 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - TypeInheritanceClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -18641,8 +18495,6 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - TypeInitializerClauseSyntax
-
-
 
 /// ### Children
 /// 
@@ -19348,8 +19200,6 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - WhereClauseSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `whereKeyword`: `'where'`
@@ -19472,8 +19322,6 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - YieldExprListElementSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
@@ -19595,8 +19443,6 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - YieldListSyntax
-
-
 
 /// ### Children
 /// 

@@ -12,8 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-
-
 /// ### Children
 /// 
 /// ``AccessorDeclSyntax`` `*`
@@ -32,7 +30,6 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.accessorList
 }
 
-
 /// ### Children
 /// 
 /// ``ArrayElementSyntax`` `*`
@@ -50,7 +47,6 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.arrayElementList
 }
-
 
 /// ### Children
 /// 
@@ -112,7 +108,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.attributeList
 }
 
-
 /// ### Children
 /// 
 /// ``AvailabilityArgumentSyntax`` `*`
@@ -130,7 +125,6 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.availabilitySpecList
 }
-
 
 /// ### Children
 /// 
@@ -150,7 +144,6 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   public static let syntaxKind = SyntaxKind.availabilityVersionRestrictionList
 }
 
-
 /// ### Children
 /// 
 /// ``CaseItemSyntax`` `*`
@@ -168,7 +161,6 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.caseItemList
 }
-
 
 /// ### Children
 /// 
@@ -188,7 +180,6 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.catchClauseList
 }
 
-
 /// ### Children
 /// 
 /// ``CatchItemSyntax`` `*`
@@ -206,7 +197,6 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.catchItemList
 }
-
 
 /// ### Children
 /// 
@@ -226,7 +216,6 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureCaptureItemList
 }
 
-
 /// ### Children
 /// 
 /// ``ClosureParamSyntax`` `*`
@@ -244,7 +233,6 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.closureParamList
 }
-
 
 /// ### Children
 /// 
@@ -264,7 +252,6 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureParameterList
 }
 
-
 /// ### Children
 /// 
 /// ``CodeBlockItemSyntax`` `*`
@@ -282,7 +269,6 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.codeBlockItemList
 }
-
 
 /// ### Children
 /// 
@@ -302,7 +288,6 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   public static let syntaxKind = SyntaxKind.compositionTypeElementList
 }
 
-
 /// ### Children
 /// 
 /// ``ConditionElementSyntax`` `*`
@@ -320,7 +305,6 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.conditionElementList
 }
-
 
 /// ### Children
 /// 
@@ -340,7 +324,6 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.declNameArgumentList
 }
 
-
 /// ### Children
 /// 
 /// ``DesignatedTypeElementSyntax`` `*`
@@ -359,7 +342,6 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.designatedTypeList
 }
 
-
 /// ### Children
 /// 
 /// ``DictionaryElementSyntax`` `*`
@@ -377,7 +359,6 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.dictionaryElementList
 }
-
 
 /// ### Children
 /// 
@@ -457,7 +438,6 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.enumCaseElementList
 }
 
-
 /// ### Children
 /// 
 /// ``EnumCaseParameterSyntax`` `*`
@@ -496,7 +476,6 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.exprList
 }
 
-
 /// ### Children
 /// 
 /// ``FunctionParameterSyntax`` `*`
@@ -514,7 +493,6 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.functionParameterList
 }
-
 
 /// ### Children
 /// 
@@ -534,7 +512,6 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.genericArgumentList
 }
 
-
 /// ### Children
 /// 
 /// ``GenericParameterSyntax`` `*`
@@ -552,7 +529,6 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.genericParameterList
 }
-
 
 /// ### Children
 /// 
@@ -572,7 +548,6 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.genericRequirementList
 }
 
-
 /// ### Children
 /// 
 /// ``IfConfigClauseSyntax`` `*`
@@ -590,7 +565,6 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.ifConfigClauseList
 }
-
 
 /// ### Children
 /// 
@@ -610,7 +584,6 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.importPath
 }
 
-
 /// ### Children
 /// 
 /// ``InheritedTypeSyntax`` `*`
@@ -628,7 +601,6 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.inheritedTypeList
 }
-
 
 /// ### Children
 /// 
@@ -648,7 +620,6 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.keyPathComponentList
 }
 
-
 /// ### Children
 /// 
 /// ``MemberDeclListItemSyntax`` `*`
@@ -666,7 +637,6 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.memberDeclList
 }
-
 
 /// ### Children
 /// 
@@ -686,7 +656,6 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.modifierList
 }
 
-
 /// ### Children
 /// 
 /// ``MultipleTrailingClosureElementSyntax`` `*`
@@ -704,7 +673,6 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   
   public static let syntaxKind = SyntaxKind.multipleTrailingClosureElementList
 }
-
 
 /// ### Children
 /// 
@@ -724,7 +692,6 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.objCSelector
 }
 
-
 /// ### Children
 /// 
 /// ``PatternBindingSyntax`` `*`
@@ -742,7 +709,6 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.patternBindingList
 }
-
 
 /// ### Children
 /// 
@@ -816,7 +782,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   public static let syntaxKind = SyntaxKind.precedenceGroupAttributeList
 }
 
-
 /// ### Children
 /// 
 /// ``PrecedenceGroupNameElementSyntax`` `*`
@@ -834,7 +799,6 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.precedenceGroupNameList
 }
-
 
 /// ### Children
 /// 
@@ -941,7 +905,6 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   public static let syntaxKind = SyntaxKind.specializeAttributeSpecList
 }
 
-
 /// ### Children
 /// 
 /// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
@@ -1001,7 +964,6 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.stringLiteralSegments
 }
-
 
 /// ### Children
 /// 
@@ -1063,7 +1025,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.switchCaseList
 }
 
-
 /// ### Children
 /// 
 /// ``TupleExprElementSyntax`` `*`
@@ -1082,7 +1043,6 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.tupleExprElementList
 }
 
-
 /// ### Children
 /// 
 /// ``TuplePatternElementSyntax`` `*`
@@ -1100,7 +1060,6 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.tuplePatternElementList
 }
-
 
 /// ### Children
 /// 
@@ -1140,7 +1099,6 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.unexpectedNodes
 }
 
-
 /// ### Children
 /// 
 /// ``VersionComponentSyntax`` `*`
@@ -1158,7 +1116,6 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   
   public static let syntaxKind = SyntaxKind.versionComponentList
 }
-
 
 /// ### Children
 /// 

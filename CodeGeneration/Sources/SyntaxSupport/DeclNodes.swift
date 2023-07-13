@@ -243,6 +243,7 @@ public let DECL_NODES: [Node] = [
       "DeclGroup",
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -416,6 +417,7 @@ public let DECL_NODES: [Node] = [
       "DeclGroup",
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -837,6 +839,7 @@ public let DECL_NODES: [Node] = [
       "DeclGroup",
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -957,6 +960,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -1300,6 +1304,7 @@ public let DECL_NODES: [Node] = [
       """,
     traits: [
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -1368,6 +1373,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -2128,6 +2134,7 @@ public let DECL_NODES: [Node] = [
       "DeclGroup",
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -2191,6 +2198,7 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "subscript",
     traits: [
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [
@@ -2295,6 +2303,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "IdentifiedDecl",
       "WithAttributes",
+      "WithGenericParameters",
       "WithModifiers",
     ],
     children: [

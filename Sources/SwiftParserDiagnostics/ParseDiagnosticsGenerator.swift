@@ -51,31 +51,6 @@ fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) 
 }
 
 fileprivate extension TokenSyntax {
-  /// The indentation of this token
-  ///
-  /// In contrast to `indentation`, this does not walk to previous tokens to
-  /// find the indentation of the line this token occurs on.
-  private var indentation: Trivia? {
-    let previous = self.previousToken(viewMode: .sourceAccurate)
-    return ((previous?.trailingTrivia ?? []) + leadingTrivia).indentation(isOnNewline: false)
-  }
-
-  /// Returns the indentation of the line this token occurs on
-  var indentationOfLine: Trivia {
-    var token: TokenSyntax = self
-    if let indentation = token.indentation {
-      return indentation
-    }
-    while let previous = token.previousToken(viewMode: .sourceAccurate) {
-      token = previous
-      if let indentation = token.indentation {
-        return indentation
-      }
-    }
-
-    return []
-  }
-
   /// Assuming this token is a `poundAvailableKeyword` or `poundUnavailableKeyword`
   /// returns the opposite keyword.
   var negatedAvailabilityKeyword: TokenSyntax {

@@ -22,6 +22,8 @@ fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
 }
 
 class NoNewlinesFormat: BasicFormat {
+  override var inferInitialTokenIndentaiton: Bool { false }
+
   override func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
     return false
   }

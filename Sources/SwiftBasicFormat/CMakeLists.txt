@@ -9,6 +9,7 @@
 add_swift_host_library(SwiftBasicFormat
   BasicFormat.swift
   generated/BasicFormat+Extensions.swift
+  Syntax+Extensions.swift
   SyntaxProtocol+Formatted.swift
   Trivia+FormatExtensions.swift
 )

@@ -351,7 +351,7 @@ final class BasicFormatTest: XCTestCase {
     let body = decl.cast(FunctionDeclSyntax.self).body!
 
     assertFormatted(
-      source: body.formatted().description,
+      tree: body,
       expected: """
         {
             print(1)
@@ -372,9 +372,9 @@ final class BasicFormatTest: XCTestCase {
     let body = decl.cast(StructDeclSyntax.self).memberBlock.members.first!.decl.cast(FunctionDeclSyntax.self).body!
 
     assertFormatted(
-      source: body.formatted().description,
+      tree: body,
       expected: """
-        {
+            {
                 print(1)
             }
         """

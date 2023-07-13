@@ -253,6 +253,23 @@ extension Parser {
     return self.consumeAnyToken()
   }
 
+  /// Consume the unexpected version token(e.g. integerLiteral, floatingLiteral, identifier) until the period no longer appears.
+  private mutating func parseUnexpectedVersionTokens() -> RawUnexpectedNodesSyntax? {
+    var unexpectedTokens: [RawTokenSyntax] = []
+    var keepGoing: RawTokenSyntax? = nil
+    var loopProgress = LoopProgressCondition()
+    repeat {
+      if let keepGoing {
+        unexpectedTokens.append(keepGoing)
+      }
+      if let unexpectedVersion = self.consume(if: .integerLiteral, .floatingLiteral, .identifier) {
+        unexpectedTokens.append(unexpectedVersion)
+      }
+      keepGoing = self.consume(if: .period)
+    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
+  }
+
   /// Parse a dot-separated list of version numbers.
   ///
   /// Grammar
@@ -286,24 +303,29 @@ extension Parser {
         } else {
           trailingComponents.append(versionComponent)
         }
+
+        if version.isMissing {
+          break
+        }
       }
 
-      var unexpectedTrailingComponents: RawUnexpectedNodesSyntax?
-
-      if !trailingComponents.isEmpty {
-        unexpectedTrailingComponents = RawUnexpectedNodesSyntax(elements: trailingComponents.compactMap { $0.as(RawSyntax.self) }, arena: self.arena)
-      }
-
+      let unexpectedTrailingComponents = RawUnexpectedNodesSyntax(trailingComponents, arena: self.arena)
+      let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
         components: RawVersionComponentListSyntax(elements: components, arena: self.arena),
-        unexpectedTrailingComponents,
+        RawUnexpectedNodesSyntax(combining: unexpectedTrailingComponents, unexpectedAfterComponents, arena: self.arena),
         arena: self.arena
       )
-
     } else {
       let major = self.expectDecimalIntegerWithoutRecovery()
-      return RawVersionTupleSyntax(major: major, components: nil, arena: self.arena)
+      let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
+      return RawVersionTupleSyntax(
+        major: major,
+        components: nil,
+        unexpectedAfterComponents,
+        arena: self.arena
+      )
     }
   }
 }

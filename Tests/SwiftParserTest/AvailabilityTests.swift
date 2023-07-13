@@ -144,17 +144,19 @@ final class AvailabilityTests: XCTestCase {
 
     assertParse(
       """
+      @available(OSX 10.0.1, *)
+      func test() {}
+      """
+    )
+
+    assertParse(
+      """
       @available(OSX 1️⃣10e10)
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version tuple in version restriction", fixIts: ["insert version tuple"]),
-        DiagnosticSpec(message: "unexpected code '10e10' in attribute"),
-      ],
-      fixedSource: """
-        @available(OSX <#integer literal#>10e10)
-        func test() {}
-        """
+        DiagnosticSpec(message: "cannot parse version component code '10e10'")
+      ]
     )
 
     assertParse(
@@ -163,13 +165,8 @@ final class AvailabilityTests: XCTestCase {
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
-        DiagnosticSpec(message: "unexpected code '0e10' in attribute"),
-      ],
-      fixedSource: """
-        @available(OSX 10.<#integer literal#>0e10)
-        func test() {}
-        """
+        DiagnosticSpec(message: "cannot parse version component code '0e10'")
+      ]
     )
 
     assertParse(
@@ -178,13 +175,8 @@ final class AvailabilityTests: XCTestCase {
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected version tuple in version restriction", fixIts: ["insert version tuple"]),
-        DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
-      ],
-      fixedSource: """
-        @available(OSX <#integer literal#>0xff)
-        func test() {}
-        """
+        DiagnosticSpec(message: "cannot parse version component code '0xff'")
+      ]
     )
 
     assertParse(
@@ -193,13 +185,28 @@ final class AvailabilityTests: XCTestCase {
       func test() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected integer literal in version tuple", fixIts: ["insert integer literal"]),
-        DiagnosticSpec(message: "unexpected code '0xff' in attribute"),
-      ],
-      fixedSource: """
-        @available(OSX 1.0.<#integer literal#>0xff)
-        func test() {}
-        """
+        DiagnosticSpec(message: "cannot parse version component code '0xff'")
+      ]
+    )
+
+    assertParse(
+      """
+      @available(OSX 1.0.1️⃣0xff, *)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "cannot parse version component code '0xff'")
+      ]
+    )
+
+    assertParse(
+      """
+      @available(OSX 1.0.1️⃣asdf)
+      func test() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "cannot parse version component code 'asdf'")
+      ]
     )
   }
 }

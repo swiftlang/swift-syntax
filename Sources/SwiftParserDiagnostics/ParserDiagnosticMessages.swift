@@ -292,7 +292,7 @@ public struct CannotParseVersionTuple: ParserError {
   public let versionTuple: UnexpectedNodesSyntax
 
   public var message: String {
-    return "cannot parse version \(versionTuple)"
+    return "cannot parse version component \(versionTuple.shortSingleLineContentDescription)"
   }
 }
 

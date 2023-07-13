@@ -34,7 +34,7 @@ extension Lexer {
 
     /// The offset of the trailing trivia end of `nextToken` relative to the source buffer’s start.
     var offsetToNextTokenEnd: Int {
-      self.getOffsetToStart(self.nextToken) + self.nextToken.byteLength
+      self.offsetToStart(self.nextToken) + self.nextToken.byteLength
     }
 
     /// See doc comments in ``LookaheadTracker``
@@ -70,7 +70,7 @@ extension Lexer {
     }
 
     /// Get the offset of the leading trivia start of `token` relative to `sourceBufferStart`.
-    func getOffsetToStart(_ token: Lexer.Lexeme) -> Int {
+    func offsetToStart(_ token: Lexer.Lexeme) -> Int {
       return self.sourceBufferStart.distance(to: token.cursor)
     }
 
@@ -122,20 +122,6 @@ extension Lexer {
         return remainingText
       }
     }
-
-    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
-    /// If `pointer` is in the source buffer of this ``LexemeSequence``, return
-    /// its offset, otherwise `nil`. Should only be used for the parser's
-    /// alternate token introspection
-    func offset(of pointer: UnsafePointer<UInt8>) -> Int? {
-      let offset = pointer - self.sourceBufferStart.input.baseAddress!
-      if offset <= self.sourceBufferStart.input.count {
-        return offset
-      } else {
-        return nil
-      }
-    }
-    #endif
   }
 
   @_spi(Testing)

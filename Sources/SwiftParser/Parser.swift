@@ -250,11 +250,7 @@ public struct Parser {
   public var alternativeTokenChoices: [Int: [TokenSpec]] = [:]
 
   mutating func recordAlternativeTokenChoice(for lexeme: Lexer.Lexeme, choices: [TokenSpec]) {
-    guard let lexemeBaseAddress = lexeme.tokenText.baseAddress,
-      let offset = lexemes.offset(of: lexemeBaseAddress)
-    else {
-      return
-    }
+    let offset = lexemes.offsetToStart(lexeme)
     alternativeTokenChoices[offset, default: []].append(contentsOf: choices)
   }
   #endif

@@ -2607,4 +2607,16 @@ final class DeclarationTests: XCTestCase {
         """
     )
   }
+
+  func testBorrowingGetAccessor() {
+    assertParse(
+      """
+      struct Foo {
+        var x: Int {
+          borrowing get {}
+        }
+      }
+      """
+    )
+  }
 }

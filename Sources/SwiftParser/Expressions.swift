@@ -257,22 +257,22 @@ extension Parser {
       case binaryOperator
       case infixQuestionMark
       case equal
-      case isKeyword
-      case asKeyword
+      case `is`
+      case `as`
       case async
       case arrow
-      case throwsKeyword
+      case `throws`
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.binaryOperator): self = .binaryOperator
         case TokenSpec(.infixQuestionMark): self = .infixQuestionMark
         case TokenSpec(.equal): self = .equal
-        case TokenSpec(.is): self = .isKeyword
-        case TokenSpec(.as): self = .asKeyword
+        case TokenSpec(.is): self = .is
+        case TokenSpec(.as): self = .as
         case TokenSpec(.async): self = .async
         case TokenSpec(.arrow): self = .arrow
-        case TokenSpec(.throws): self = .throwsKeyword
+        case TokenSpec(.throws): self = .throws
         default: return nil
         }
       }
@@ -282,11 +282,11 @@ extension Parser {
         case .binaryOperator: return .binaryOperator
         case .infixQuestionMark: return .infixQuestionMark
         case .equal: return .equal
-        case .isKeyword: return .keyword(.is)
-        case .asKeyword: return .keyword(.as)
+        case .is: return .keyword(.is)
+        case .as: return .keyword(.as)
         case .async: return .keyword(.async)
         case .arrow: return .arrow
-        case .throwsKeyword: return .keyword(.throws)
+        case .throws: return .keyword(.throws)
         }
       }
     }
@@ -337,7 +337,7 @@ extension Parser {
         return (RawExprSyntax(op), nil)
       }
 
-    case (.isKeyword, let handle)?:
+    case (.is, let handle)?:
       let isKeyword = self.eat(handle)
       let op = RawUnresolvedIsExprSyntax(
         isTok: isKeyword,
@@ -350,7 +350,7 @@ extension Parser {
 
       return (RawExprSyntax(op), RawExprSyntax(rhs))
 
-    case (.asKeyword, let handle)?:
+    case (.as, let handle)?:
       return parseUnresolvedAsExpr(handle: handle)
 
     case (.async, _)?:
@@ -359,7 +359,7 @@ extension Parser {
       } else {
         return nil
       }
-    case (.arrow, _)?, (.throwsKeyword, _)?:
+    case (.arrow, _)?, (.throws, _)?:
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
 
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
@@ -409,7 +409,7 @@ extension Parser {
     }
 
     EXPR_PREFIX: switch self.at(anyIn: ExpressionModifierKeyword.self) {
-    case (.awaitKeyword, let handle)?:
+    case (.await, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -423,7 +423,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.tryKeyword, let handle)?:
+    case (.try, let handle)?:
       let tryKeyword = self.eat(handle)
       let mark = self.consume(if: .exclamationMark, .postfixQuestionMark)
 
@@ -440,7 +440,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._moveKeyword, let handle)?:
+    case (._move, let handle)?:
       let moveTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -454,7 +454,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._borrowKeyword, let handle)?:
+    case (._borrow, let handle)?:
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
@@ -469,7 +469,7 @@ extension Parser {
         )
       )
 
-    case (.copyKeyword, let handle)?:
+    case (.copy, let handle)?:
       // `copy` is only contextually a keyword, if it's followed by an
       // identifier or keyword on the same line. We do this to ensure that we do
       // not break any copy functions defined by users. This is following with
@@ -498,7 +498,7 @@ extension Parser {
         )
       )
 
-    case (.consumeKeyword, let handle)?:
+    case (.consume, let handle)?:
       // `consume` is only contextually a keyword, if it's followed by an
       // identifier or keyword on the same line. We do this to ensure that we do
       // not break any copy functions defined by users. This is following with
@@ -526,6 +526,46 @@ extension Parser {
           arena: self.arena
         )
       )
+
+    case (.repeat, let handle)?:
+      // 'repeat' is the start of a pack expansion expression.
+      return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor, pattern: pattern))
+
+    case (.each, let handle)?:
+      // `each` is only contextually a keyword, if it's followed by an
+      // identifier or 'self' on the same line. We do this to ensure that we do
+      // not break any 'each' functions defined by users. This is following with
+      // what we have done for the consume keyword.
+      switch self.peek() {
+      case TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+        TokenSpec(.self, allowAtStartOfLine: false):
+        break
+      default:
+        // Break out of `outer switch` on failure.
+        break EXPR_PREFIX
+      }
+
+      let each = self.eat(handle)
+      let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+      return RawExprSyntax(
+        RawPackElementExprSyntax(
+          eachKeyword: each,
+          packRefExpr: packRef,
+          arena: self.arena
+        )
+      )
+
+    case (.any, _)?:
+      // `any` is only contextually a keyword if it's followed by an identifier
+      // on the same line.
+      guard case TokenSpec(.identifier, allowAtStartOfLine: false) = self.peek() else {
+        break EXPR_PREFIX
+      }
+      // 'any' is parsed as a part of 'type'.
+      let type = self.parseType()
+      return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
+
     case nil:
       break
     }
@@ -550,10 +590,6 @@ extension Parser {
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
     switch self.currentToken {
-    case TokenSpec(.repeat):
-      // 'repeat' is the start of a pack expansion expression.
-      return RawExprSyntax(parsePackExpansionExpr(flavor, pattern: pattern))
-
     // Try parse an 'if' or 'switch' as an expression. Note we do this here in
     // parseUnaryExpression as we don't allow postfix syntax to hang off such
     // expressions to avoid ambiguities such as postfix '.member', which can
@@ -1192,7 +1228,7 @@ extension Parser {
       return RawExprSyntax(self.parseStringLiteral())
     case (.extendedRegexDelimiter, _)?, (.regexSlash, _)?:
       return RawExprSyntax(self.parseRegexLiteral())
-    case (.nilKeyword, let handle)?:
+    case (.nil, let handle)?:
       let nilKeyword = self.eat(handle)
       return RawExprSyntax(
         RawNilLiteralExprSyntax(
@@ -1200,8 +1236,8 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.trueKeyword, let handle)?,
-      (.falseKeyword, let handle)?:
+    case (.true, let handle)?,
+      (.false, let handle)?:
       let tok = self.eat(handle)
       return RawExprSyntax(
         RawBooleanLiteralExprSyntax(
@@ -1209,7 +1245,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.identifier, let handle)?, (.selfKeyword, let handle)?, (.initKeyword, let handle)?:
+    case (.identifier, let handle)?, (.self, let handle)?, (.`init`, let handle)?:
       // If we have "case let x" followed by ".", "(", "[", or a generic
       // argument list, we parse x as a normal name, not a binding, because it
       // is the start of an enum or expr pattern.
@@ -1224,31 +1260,10 @@ extension Parser {
         return RawExprSyntax(RawUnresolvedPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
 
-      // We might have a contextual keyword followed by an identifier.
-      // 'each <identifier>' is a pack element expr, and 'any <identifier>'
-      // is an existential type expr.
-      if self.peek().rawTokenKind == .identifier, !self.peek().isAtStartOfLine {
-        if self.at(.keyword(.any)) {
-          let ty = self.parseType()
-          return RawExprSyntax(RawTypeExprSyntax(type: ty, arena: self.arena))
-        }
-
-        if let each = self.consume(if: .keyword(.each)) {
-          let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
-          return RawExprSyntax(
-            RawPackElementExprSyntax(
-              eachKeyword: each,
-              packRefExpr: packRef,
-              arena: self.arena
-            )
-          )
-        }
-      }
-
       return RawExprSyntax(self.parseIdentifierExpression())
-    case (.capitalSelfKeyword, _)?:  // Self
+    case (.Self, _)?:  // Self
       return RawExprSyntax(self.parseIdentifierExpression())
-    case (.anyKeyword, _)?:  // Any
+    case (.Any, _)?:  // Any
       let anyType = RawTypeSyntax(self.parseAnyType())
       return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
     case (.dollarIdentifier, _)?:
@@ -1289,7 +1304,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.superKeyword, _)?:  // 'super'
+    case (.super, _)?:  // 'super'
       return RawExprSyntax(self.parseSuperExpression())
 
     case (.leftParen, _)?:
@@ -1441,10 +1456,11 @@ extension Parser {
   /// pack-expansion-expression → 'repeat' pattern-expression
   /// pattern-expression → expression
   mutating func parsePackExpansionExpr(
+    repeatHandle: TokenConsumptionHandle,
     _ flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
-    let repeatKeyword = self.consumeAnyToken()
+    let repeatKeyword = self.eat(repeatHandle)
     let patternExpr = self.parseExpression(flavor, pattern: pattern)
 
     return RawPackExpansionExprSyntax(
@@ -2431,9 +2447,9 @@ extension Parser {
 
     let label: RawSwitchCaseSyntax.Label
     switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
-    case (.caseKeyword, let handle)?:
+    case (.case, let handle)?:
       label = .case(self.parseSwitchCaseLabel(handle))
-    case (.defaultKeyword, let handle)?:
+    case (.default, let handle)?:
       label = .default(self.parseSwitchDefaultLabel(handle))
     case nil:
       label = .case(

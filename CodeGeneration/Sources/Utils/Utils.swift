@@ -35,14 +35,3 @@ public func removedEmptyLines(string: String) -> String {
     .filter { !$0.allSatisfy(\.isWhitespace) }
     .joined(separator: "\n")
 }
-
-public extension Collection {
-  /// If the collection contains a single element, return it, otherwise `nil`.
-  var only: Element? {
-    if !isEmpty && index(after: startIndex) == endIndex {
-      return self.first!
-    } else {
-      return nil
-    }
-  }
-}

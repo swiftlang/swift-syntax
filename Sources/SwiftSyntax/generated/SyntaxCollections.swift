@@ -13,6 +13,10 @@
 //===----------------------------------------------------------------------===//
 
 
+
+/// ### Children
+/// 
+/// ``AccessorDeclSyntax`` `*`
 public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AccessorDeclSyntax
   
@@ -28,6 +32,10 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.accessorList
 }
 
+
+/// ### Children
+/// 
+/// ``ArrayElementSyntax`` `*`
 public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ArrayElementSyntax
   
@@ -43,6 +51,10 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.arrayElementList
 }
 
+
+/// ### Children
+/// 
+/// (``AttributeSyntax`` | ``IfConfigDeclSyntax``) `*`
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
@@ -100,6 +112,10 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.attributeList
 }
 
+
+/// ### Children
+/// 
+/// ``AvailabilityArgumentSyntax`` `*`
 public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AvailabilityArgumentSyntax
   
@@ -115,6 +131,10 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.availabilitySpecList
 }
 
+
+/// ### Children
+/// 
+/// ``AvailabilityVersionRestrictionListEntrySyntax`` `*`
 public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AvailabilityVersionRestrictionListEntrySyntax
   
@@ -130,6 +150,10 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
   public static let syntaxKind = SyntaxKind.availabilityVersionRestrictionList
 }
 
+
+/// ### Children
+/// 
+/// ``CaseItemSyntax`` `*`
 public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CaseItemSyntax
   
@@ -145,6 +169,10 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.caseItemList
 }
 
+
+/// ### Children
+/// 
+/// ``CatchClauseSyntax`` `*`
 public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchClauseSyntax
   
@@ -160,6 +188,10 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.catchClauseList
 }
 
+
+/// ### Children
+/// 
+/// ``CatchItemSyntax`` `*`
 public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchItemSyntax
   
@@ -175,6 +207,10 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.catchItemList
 }
 
+
+/// ### Children
+/// 
+/// ``ClosureCaptureItemSyntax`` `*`
 public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureCaptureItemSyntax
   
@@ -190,6 +226,10 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureCaptureItemList
 }
 
+
+/// ### Children
+/// 
+/// ``ClosureParamSyntax`` `*`
 public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureParamSyntax
   
@@ -205,6 +245,10 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureParamList
 }
 
+
+/// ### Children
+/// 
+/// ``ClosureParameterSyntax`` `*`
 public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureParameterSyntax
   
@@ -220,6 +264,10 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureParameterList
 }
 
+
+/// ### Children
+/// 
+/// ``CodeBlockItemSyntax`` `*`
 public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CodeBlockItemSyntax
   
@@ -235,6 +283,10 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.codeBlockItemList
 }
 
+
+/// ### Children
+/// 
+/// ``CompositionTypeElementSyntax`` `*`
 public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CompositionTypeElementSyntax
   
@@ -250,6 +302,10 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
   public static let syntaxKind = SyntaxKind.compositionTypeElementList
 }
 
+
+/// ### Children
+/// 
+/// ``ConditionElementSyntax`` `*`
 public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ConditionElementSyntax
   
@@ -265,6 +321,10 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.conditionElementList
 }
 
+
+/// ### Children
+/// 
+/// ``DeclNameArgumentSyntax`` `*`
 public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DeclNameArgumentSyntax
   
@@ -280,6 +340,10 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.declNameArgumentList
 }
 
+
+/// ### Children
+/// 
+/// ``DesignatedTypeElementSyntax`` `*`
 public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DesignatedTypeElementSyntax
   
@@ -295,6 +359,10 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.designatedTypeList
 }
 
+
+/// ### Children
+/// 
+/// ``DictionaryElementSyntax`` `*`
 public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DictionaryElementSyntax
   
@@ -310,6 +378,10 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.dictionaryElementList
 }
 
+
+/// ### Children
+/// 
+/// ``DifferentiabilityParamSyntax`` `*`
 public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DifferentiabilityParamSyntax
   
@@ -326,6 +398,10 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
 }
 
 /// The arguments of the '@_documentation' attribute
+///
+/// ### Children
+/// 
+/// ``DocumentationAttributeArgumentSyntax`` `*`
 public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DocumentationAttributeArgumentSyntax
   
@@ -342,6 +418,10 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
 }
 
 /// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+///
+/// ### Children
+/// 
+/// ``TokenSyntax`` `*`
 public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TokenSyntax
   
@@ -358,6 +438,10 @@ public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
 }
 
 /// A collection of 0 or more `EnumCaseElement`s.
+///
+/// ### Children
+/// 
+/// ``EnumCaseElementSyntax`` `*`
 public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseElementSyntax
   
@@ -373,6 +457,10 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.enumCaseElementList
 }
 
+
+/// ### Children
+/// 
+/// ``EnumCaseParameterSyntax`` `*`
 public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseParameterSyntax
   
@@ -389,6 +477,10 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
 }
 
 /// A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.
+///
+/// ### Children
+/// 
+/// ``ExprSyntax`` `*`
 public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ExprSyntax
   
@@ -404,6 +496,10 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.exprList
 }
 
+
+/// ### Children
+/// 
+/// ``FunctionParameterSyntax`` `*`
 public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = FunctionParameterSyntax
   
@@ -419,6 +515,10 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.functionParameterList
 }
 
+
+/// ### Children
+/// 
+/// ``GenericArgumentSyntax`` `*`
 public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericArgumentSyntax
   
@@ -434,6 +534,10 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.genericArgumentList
 }
 
+
+/// ### Children
+/// 
+/// ``GenericParameterSyntax`` `*`
 public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericParameterSyntax
   
@@ -449,6 +553,10 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.genericParameterList
 }
 
+
+/// ### Children
+/// 
+/// ``GenericRequirementSyntax`` `*`
 public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericRequirementSyntax
   
@@ -464,6 +572,10 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.genericRequirementList
 }
 
+
+/// ### Children
+/// 
+/// ``IfConfigClauseSyntax`` `*`
 public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = IfConfigClauseSyntax
   
@@ -479,6 +591,10 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.ifConfigClauseList
 }
 
+
+/// ### Children
+/// 
+/// ``ImportPathComponentSyntax`` `*`
 public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ImportPathComponentSyntax
   
@@ -494,6 +610,10 @@ public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.importPath
 }
 
+
+/// ### Children
+/// 
+/// ``InheritedTypeSyntax`` `*`
 public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = InheritedTypeSyntax
   
@@ -509,6 +629,10 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.inheritedTypeList
 }
 
+
+/// ### Children
+/// 
+/// ``KeyPathComponentSyntax`` `*`
 public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = KeyPathComponentSyntax
   
@@ -524,6 +648,10 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.keyPathComponentList
 }
 
+
+/// ### Children
+/// 
+/// ``MemberDeclListItemSyntax`` `*`
 public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = MemberDeclListItemSyntax
   
@@ -539,6 +667,10 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.memberDeclList
 }
 
+
+/// ### Children
+/// 
+/// ``DeclModifierSyntax`` `*`
 public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DeclModifierSyntax
   
@@ -554,6 +686,10 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.modifierList
 }
 
+
+/// ### Children
+/// 
+/// ``MultipleTrailingClosureElementSyntax`` `*`
 public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = MultipleTrailingClosureElementSyntax
   
@@ -569,6 +705,10 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
   public static let syntaxKind = SyntaxKind.multipleTrailingClosureElementList
 }
 
+
+/// ### Children
+/// 
+/// ``ObjCSelectorPieceSyntax`` `*`
 public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ObjCSelectorPieceSyntax
   
@@ -584,6 +724,10 @@ public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.objCSelector
 }
 
+
+/// ### Children
+/// 
+/// ``PatternBindingSyntax`` `*`
 public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PatternBindingSyntax
   
@@ -599,6 +743,10 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.patternBindingList
 }
 
+
+/// ### Children
+/// 
+/// (``PrecedenceGroupRelationSyntax`` | ``PrecedenceGroupAssignmentSyntax`` | ``PrecedenceGroupAssociativitySyntax``) `*`
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `precedenceGroupRelation`(PrecedenceGroupRelationSyntax)
@@ -668,6 +816,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
   public static let syntaxKind = SyntaxKind.precedenceGroupAttributeList
 }
 
+
+/// ### Children
+/// 
+/// ``PrecedenceGroupNameElementSyntax`` `*`
 public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PrecedenceGroupNameElementSyntax
   
@@ -683,6 +835,10 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.precedenceGroupNameList
 }
 
+
+/// ### Children
+/// 
+/// ``PrimaryAssociatedTypeSyntax`` `*`
 public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PrimaryAssociatedTypeSyntax
   
@@ -699,6 +855,10 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 }
 
 /// A collection of arguments for the `@_specialize` attribute
+///
+/// ### Children
+/// 
+/// (``LabeledSpecializeEntrySyntax`` | ``AvailabilityEntrySyntax`` | ``TargetFunctionEntrySyntax`` | ``GenericWhereClauseSyntax``) `*`
 public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `labeledSpecializeEntry`(LabeledSpecializeEntrySyntax)
@@ -781,6 +941,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
   public static let syntaxKind = SyntaxKind.specializeAttributeSpecList
 }
 
+
+/// ### Children
+/// 
+/// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
 public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
@@ -838,6 +1002,10 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.stringLiteralSegments
 }
 
+
+/// ### Children
+/// 
+/// (``SwitchCaseSyntax`` | ``IfConfigDeclSyntax``) `*`
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `switchCase`(SwitchCaseSyntax)
@@ -895,6 +1063,10 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.switchCaseList
 }
 
+
+/// ### Children
+/// 
+/// ``TupleExprElementSyntax`` `*`
 public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TupleExprElementSyntax
   
@@ -910,6 +1082,10 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.tupleExprElementList
 }
 
+
+/// ### Children
+/// 
+/// ``TuplePatternElementSyntax`` `*`
 public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TuplePatternElementSyntax
   
@@ -925,6 +1101,10 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.tuplePatternElementList
 }
 
+
+/// ### Children
+/// 
+/// ``TupleTypeElementSyntax`` `*`
 public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TupleTypeElementSyntax
   
@@ -941,6 +1121,10 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 }
 
 /// A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.
+///
+/// ### Children
+/// 
+/// ``Syntax`` `*`
 public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = Syntax
   
@@ -956,6 +1140,10 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.unexpectedNodes
 }
 
+
+/// ### Children
+/// 
+/// ``VersionComponentSyntax`` `*`
 public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = VersionComponentSyntax
   
@@ -971,6 +1159,10 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.versionComponentList
 }
 
+
+/// ### Children
+/// 
+/// ``YieldExprListElementSyntax`` `*`
 public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = YieldExprListElementSyntax
   

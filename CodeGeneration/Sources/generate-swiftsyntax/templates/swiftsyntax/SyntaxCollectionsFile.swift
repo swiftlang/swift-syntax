@@ -20,7 +20,9 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! StructDeclSyntax(
       """
       \(raw: node.documentation)
-      public struct \(raw: node.kind.syntaxType): SyntaxCollection, SyntaxHashable
+      \(raw: node.documentation.isEmpty ? "" : "///")
+      \(raw: node.grammar)
+      public struct \(node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {
       if let onlyElement = node.elementChoices.only {

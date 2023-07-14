@@ -114,16 +114,18 @@ public class Node {
       // any two defined children
       childrenWithUnexpected =
         children.enumerated().flatMap { (i, child) -> [Child] in
+          let childName = child.name.withFirstCharacterUppercased
+
           let unexpectedName: String
           let unexpectedDeprecatedName: String?
 
           if i == 0 {
-            unexpectedName = "UnexpectedBefore\(child.name)"
+            unexpectedName = "UnexpectedBefore\(childName)"
             unexpectedDeprecatedName = child.deprecatedName.map { "UnexpectedBefore\($0)" }
           } else {
-            unexpectedName = "UnexpectedBetween\(children[i - 1].name)And\(child.name)"
+            unexpectedName = "UnexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(childName)"
             if let deprecatedName = children[i - 1].deprecatedName {
-              unexpectedDeprecatedName = "UnexpectedBetween\(deprecatedName)And\(child.deprecatedName ?? child.name)"
+              unexpectedDeprecatedName = "UnexpectedBetween\(deprecatedName)And\(child.deprecatedName ?? childName)"
             } else if let deprecatedName = child.deprecatedName {
               unexpectedDeprecatedName = "UnexpectedBetween\(children[i - 1].name)And\(deprecatedName)"
             } else {
@@ -139,9 +141,9 @@ public class Node {
           return [unexpectedBefore, child]
         } + [
           Child(
-            name: "UnexpectedAfter\(children.last!.name)",
+            name: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)",
             deprecatedName: children.last!.deprecatedName.map { "UnexpectedAfter\($0)" },
-            kind: .collection(kind: .unexpectedNodes, collectionElementName: "UnexpectedAfter\(children.last!.name)"),
+            kind: .collection(kind: .unexpectedNodes, collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"),
             isOptional: true
           )
         ]

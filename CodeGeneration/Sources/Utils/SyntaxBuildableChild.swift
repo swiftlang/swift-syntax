@@ -47,7 +47,7 @@ public extension Child {
   var parameterBaseType: String {
     switch kind {
     case .nodeChoices:
-      return self.name
+      return self.name.withFirstCharacterUppercased
     default:
       return type.parameterBaseType
     }

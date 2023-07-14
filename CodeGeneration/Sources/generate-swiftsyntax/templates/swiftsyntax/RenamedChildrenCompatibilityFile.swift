@@ -20,7 +20,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
     try ExtensionDeclSyntax("extension \(raw: layoutNode.type.syntaxBaseName)") {
       for child in layoutNode.children {
         if let deprecatedVarName = child.deprecatedVarName {
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name)"
+          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name.withFirstCharacterUppercased)"
           let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
 
           DeclSyntax(

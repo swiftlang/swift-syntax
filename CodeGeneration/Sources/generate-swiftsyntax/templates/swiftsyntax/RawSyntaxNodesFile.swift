@@ -22,7 +22,7 @@ fileprivate extension Node {
       return node.children.compactMap { child -> (name: TokenSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])? in
         switch child.kind {
         case .nodeChoices(let choices):
-          return (.identifier(child.name), choices.map { (.identifier($0.varName), $0.syntaxNodeKind) })
+          return (.identifier(child.name.withFirstCharacterUppercased), choices.map { (.identifier($0.varName), $0.syntaxNodeKind) })
         default:
           return nil
         }
@@ -257,7 +257,7 @@ fileprivate extension Child {
   var rawParameterType: TypeSyntax {
     let paramType: TypeSyntax
     if case ChildKind.nodeChoices = kind {
-      paramType = "\(raw: name)"
+      paramType = "\(raw: name.withFirstCharacterUppercased)"
     } else {
       paramType = syntaxNodeKind.rawType
     }

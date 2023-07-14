@@ -22,7 +22,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for child in layoutNode.children {
       if case let .token(choices, _, _) = child.kind, choices.count > 1 {
         try! ExtensionDeclSyntax("extension \(raw: layoutNode.kind.syntaxType)") {
-          try EnumDeclSyntax("enum \(raw: child.name)Options: TokenSpecSet") {
+          try EnumDeclSyntax("enum \(raw: child.name.withFirstCharacterUppercased)Options: TokenSpecSet") {
             for choice in choices {
               switch choice {
               case .keyword(let keywordText):

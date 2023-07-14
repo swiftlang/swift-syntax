@@ -160,7 +160,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           // Children properties
           // ===================
 
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name)"
+          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name.withFirstCharacterUppercased)"
           let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
 
           try! VariableDeclSyntax(
@@ -243,7 +243,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
     return nil
   }
 
-  return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
+  return try! EnumDeclSyntax("public enum \(raw: child.name.withFirstCharacterUppercased): SyntaxChildChoices") {
     for choice in choices {
       DeclSyntax("case `\(raw: choice.varName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
     }

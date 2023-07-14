@@ -24,7 +24,7 @@ extension LayoutNode {
     func createFunctionParameterSyntax(for child: Child) -> FunctionParameterSyntax {
       var paramType: TypeSyntax
       if !child.kind.isNodeChoicesEmpty {
-        paramType = "\(raw: child.name)"
+        paramType = "\(raw: child.name.withFirstCharacterUppercased)"
       } else if child.hasBaseType {
         paramType = "some \(raw: child.syntaxNodeKind.protocolType)"
       } else {

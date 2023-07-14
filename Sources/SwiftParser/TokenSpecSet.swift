@@ -76,6 +76,35 @@ enum AccessorKind: TokenSpecSet {
   }
 }
 
+enum AccessorModifier: TokenSpecSet {
+  case __consuming
+  case consuming
+  case borrowing
+  case mutating
+  case nonmutating
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.__consuming): self = .__consuming
+    case TokenSpec(.consuming): self = .consuming
+    case TokenSpec(.borrowing): self = .borrowing
+    case TokenSpec(.mutating): self = .mutating
+    case TokenSpec(.nonmutating): self = .nonmutating
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .__consuming: return .keyword(.__consuming)
+    case .consuming: return .keyword(.consuming)
+    case .borrowing: return .keyword(.borrowing)
+    case .mutating: return .keyword(.mutating)
+    case .nonmutating: return .keyword(.nonmutating)
+    }
+  }
+}
+
 enum CanBeStatementStart: TokenSpecSet {
   case _forget  // NOTE: support for deprecated _forget
   case `break`

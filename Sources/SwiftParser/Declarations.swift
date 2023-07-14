@@ -1458,7 +1458,7 @@ extension Parser {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(if: .keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming)) != nil
+    let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
     guard let (kind, _) = look.at(anyIn: AccessorKind.self) ?? forcedKind else {
       return nil
     }
@@ -1469,7 +1469,7 @@ extension Parser {
     // get and set.
     let modifier: RawDeclModifierSyntax?
     if hasModifier {
-      let (unexpectedBeforeName, name) = self.expect(.keyword(.mutating), .keyword(.nonmutating), .keyword(.__consuming), default: .keyword(.mutating))
+      let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
       modifier = RawDeclModifierSyntax(
         unexpectedBeforeName,
         name: name,

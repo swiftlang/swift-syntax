@@ -86,16 +86,14 @@ extension LayoutNode {
       return "  - \(child.varName): \(firstLine)"
     }
 
-    let formattedParams = removedEmptyLines(
-      string: """
-        - Parameters:
-          - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. \
-        If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-        \(children.compactMap(generateParamDocComment).joined(separator: "\n"))
-          - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. \
-        If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-        """
-    )
+    let formattedParams = """
+      - Parameters:
+        - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. \
+      If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+      \(children.compactMap(generateParamDocComment).joined(separator: "\n"))
+        - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. \
+      If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+      """.removingEmptyLines
 
     return docCommentTrivia(from: formattedParams)
   }

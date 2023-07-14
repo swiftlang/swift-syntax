@@ -20,8 +20,7 @@ extension Child {
     guard let description = documentation else {
       return []
     }
-    let dedented = dedented(string: description)
-    let lines = dedented.split(separator: "\n", omittingEmptySubsequences: false)
+    let lines = description.split(separator: "\n", omittingEmptySubsequences: false)
     let pieces = lines.map { SwiftSyntax.TriviaPiece.docLineComment("/// \($0)") }
     return Trivia(pieces: pieces)
   }

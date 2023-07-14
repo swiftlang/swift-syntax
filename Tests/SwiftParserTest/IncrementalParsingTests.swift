@@ -17,11 +17,14 @@ import _SwiftSyntaxTestSupport
 
 public class IncrementalParsingTests: XCTestCase {
 
-  public func testIncrementalInvalid() {
+  public func testBrokenMemberFunction() {
     assertIncrementalParse(
       """
       struct A⏩️⏸️A⏪️ { func f() {
-      """
+      """,
+      reusedNodes: [
+        ReusedNodeSpec("func f() {", kind: .memberDeclListItem)
+      ]
     )
   }
 
@@ -174,8 +177,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testAddProperty() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testAddProperty() {
     assertIncrementalParse(
       """
       struct Foo {

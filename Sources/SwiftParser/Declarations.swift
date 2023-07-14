@@ -733,6 +733,11 @@ extension Parser {
 
 extension Parser {
   mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
+    let startToken = self.currentToken
+    if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberDeclListItem) {
+      self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
+      return RawMemberDeclListItemSyntax(syntax.raw)
+    }
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberDeclListItemSyntax(
         remainingTokens,
@@ -760,12 +765,16 @@ extension Parser {
       return nil
     }
 
-    return RawMemberDeclListItemSyntax(
+    let result = RawMemberDeclListItemSyntax(
       decl: decl,
       semicolon: semi,
       RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
       arena: self.arena
     )
+
+    self.registerNodeForIncrementalParse(node: result.raw, startToken: startToken)
+
+    return result
   }
 
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.

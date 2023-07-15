@@ -161,7 +161,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testMultiEditMapping() throws {
+  public func testMultiEditMapping() {
     assertIncrementalParse(
       """
       let one: Int;let two: Int; let three: Int; ⏩️⏸️                      ⏪️⏩️⏸️   ⏪️let found: Int;let five: Int;
@@ -197,8 +197,7 @@ public class IncrementalParsingTests: XCTestCase {
     )
   }
 
-  public func testWarpInClass() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testWarpInClass() {
     assertIncrementalParse(
       """
       ⏩️⏸️class Foo {⏪️
@@ -213,26 +212,21 @@ public class IncrementalParsingTests: XCTestCase {
       reusedNodes: [
         ReusedNodeSpec(
           """
-          func foo1() {
-            print("Hello Foo!")
-          }
+          print("Hello Foo!")
           """,
-          kind: .functionDecl
+          kind: .codeBlockItem
         ),
         ReusedNodeSpec(
           """
-          func foo2() {
-            print("Hello again!")
-          }
+          print("Hello again")
           """,
-          kind: .functionDecl
+          kind: .codeBlockItem
         ),
       ]
     )
   }
 
-  public func testUnwarpClass() throws {
-    try XCTSkipIf(true, "Swift parser does not handle node reuse yet")
+  public func testUnwarpClass() {
     assertIncrementalParse(
       """
       ⏩️class Bar {⏸️⏪️
@@ -250,21 +244,27 @@ public class IncrementalParsingTests: XCTestCase {
       reusedNodes: [
         ReusedNodeSpec(
           """
-          func bar1() {
-            let pi = 3.1415
-            print("Pi is (approximately) \\(pi)")
-          }
+          let pi = 3.1415
           """,
-          kind: .functionDecl
+          kind: .codeBlockItem
         ),
         ReusedNodeSpec(
           """
-          func bar2() {
-            print("I can compute Pi as well:")
-            bar1()
-          }
+          print("Pi is (approximately) \\(pi)")
           """,
-          kind: .functionDecl
+          kind: .codeBlockItem
+        ),
+        ReusedNodeSpec(
+          """
+          print("I can compute Pi as well:")
+          """,
+          kind: .codeBlockItem
+        ),
+        ReusedNodeSpec(
+          """
+          bar1()
+          """,
+          kind: .codeBlockItem
         ),
       ]
     )

@@ -19,13 +19,27 @@ import XCTest
 /// 1. Round-trip on the incrementally parsed syntax tree.
 /// 2. verify that incrementally parsing the edited source base on the original source produces the same syntax tree as reparsing the post-edit file from scratch.
 /// 3. verify the reused nodes fall into expectations.
+///
+/// - parameter reusedNodes: The element order should respect to the order of  `ReusedNodeSpec.source` in `source`.
+///   e.g. for `source`
+///   ```
+///   func foo() {}
+///   foo()
+///   ```
+///   The `reusedNodes` should be
+///   ```
+///   [
+///     ReusedNodeSpec("func foo() {}", kind: .codeBlockItem),
+///     ReusedNodeSpec("foo()", kind: .codeBlockItem)
+///   ]
+///    ```
 public func assertIncrementalParse(
   _ source: String,
   reusedNodes expectedReusedNodes: [ReusedNodeSpec] = [],
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  let (concurrentEdits, originalSource, editedSource) = getEditsAndSources(source)
+  let (concurrentEdits, originalSource, editedSource) = extractEditsAndSources(from: source)
 
   let originalString = String(originalSource)
   let editedString = String(editedSource)
@@ -78,8 +92,9 @@ public func assertIncrementalParse(
     return
   }
 
+  var lastRangeUpperBound = originalString.startIndex
   for expectedReusedNode in expectedReusedNodes {
-    guard let range = getByteSourceRange(for: expectedReusedNode.source, in: originalString) else {
+    guard let range = byteSourceRange(for: expectedReusedNode.source, in: originalString, after: lastRangeUpperBound) else {
       XCTFail("Fail to find string in original source,", file: expectedReusedNode.file, line: expectedReusedNode.line)
       continue
     }
@@ -105,11 +120,13 @@ public func assertIncrementalParse(
       file: expectedReusedNode.file,
       line: expectedReusedNode.line
     )
+
+    lastRangeUpperBound = originalString.index(originalString.startIndex, offsetBy: range.endOffset)
   }
 }
 
-fileprivate func getByteSourceRange(for substring: String, in sourceString: String) -> ByteSourceRange? {
-  if let range = sourceString.range(of: substring) {
+fileprivate func byteSourceRange(for substring: String, in sourceString: String, after: String.Index) -> ByteSourceRange? {
+  if let range = sourceString[after...].range(of: substring) {
     return ByteSourceRange(
       offset: sourceString.utf8.distance(from: sourceString.startIndex, to: range.lowerBound),
       length: sourceString.utf8.distance(from: range.lowerBound, to: range.upperBound)
@@ -148,7 +165,7 @@ public struct ReusedNodeSpec {
 /// Contents between `⏩️` and `⏸️` are source text that before modification, contents
 /// betwwen `⏸️` and `⏪️` are source text that after modification
 /// i.e. `⏩️foo⏸️bar⏪️`, the original source is `foo` and the edited source is `bar`
-public func getEditsAndSources(_ source: String) -> (edits: ConcurrentEdits, orignialSource: Substring, editedSource: Substring) {
+public func extractEditsAndSources(from source: String) -> (edits: ConcurrentEdits, orignialSource: Substring, editedSource: Substring) {
   var editedSource = Substring()
   var originalSource = Substring()
   var concurrentEdits: [IncrementalEdit] = []

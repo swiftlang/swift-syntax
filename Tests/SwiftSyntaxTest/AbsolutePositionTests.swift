@@ -85,7 +85,6 @@ public class AbsolutePositionTests: XCTestCase {
         + state.trailingTrivia.sourceLength.utf8Length
         + state.byteSizeAfterTrimmingTrivia
     )
-    XCTAssertFalse(root.statements.isImplicit)
 
     // Test Node trivia setters and getters
 
@@ -120,11 +119,6 @@ public class AbsolutePositionTests: XCTestCase {
     XCTAssertEqual(AbsolutePositionTests.trailingTrivia, root.statements.trailingTrivia)
     modifiedStatements2.trailingTrivia = [.verticalTabs(4)]
     XCTAssertEqual([.verticalTabs(4)], modifiedStatements2.trailingTrivia)
-  }
-
-  public func testImplicit() {
-    let root = self.createSourceFile(0)
-    XCTAssertTrue(root.statements.isImplicit)
   }
 
   public func testWithoutSourceFileRoot() {

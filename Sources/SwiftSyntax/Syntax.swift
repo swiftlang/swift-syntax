@@ -624,6 +624,7 @@ public extension SyntaxProtocol {
 public extension SyntaxProtocol {
   /// When isImplicit is true, the syntax node doesn't include any
   /// underlying tokens, e.g. an empty CodeBlockItemList.
+  @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
   var isImplicit: Bool {
     return raw.isEmpty
   }

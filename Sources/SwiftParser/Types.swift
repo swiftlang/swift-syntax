@@ -508,7 +508,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
+          } else if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
@@ -802,7 +802,7 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
-        if self.currentToken.canBeArgumentLabel() {
+        if self.atArgumentLabel() {
           self.consumeAnyToken()
           guard self.at(.colon) else {
             return false
@@ -1061,12 +1061,6 @@ extension Parser {
 }
 
 extension Lexer.Lexeme {
-  var isAnyOperator: Bool {
-    return self.rawTokenKind == .binaryOperator
-      || self.rawTokenKind == .postfixOperator
-      || self.rawTokenKind == .prefixOperator
-  }
-
   var isGenericTypeDisambiguatingToken: Bool {
     switch self.rawTokenKind {
     case .rightParen,

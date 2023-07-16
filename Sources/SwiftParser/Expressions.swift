@@ -2084,7 +2084,7 @@ extension Parser {
       let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
-      if currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
+      if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
         (unexpectedBeforeLabel, label) = parseArgumentLabel()
         colon = consumeAnyToken()
       } else {
@@ -2169,7 +2169,7 @@ extension Parser.Lookahead {
     // Fast path: the next two tokens must be a label and a colon.
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
-    if !self.currentToken.canBeArgumentLabel()
+    if !self.atArgumentLabel()
       || self.at(.keyword(.default))
       || self.peek().rawTokenKind != .colon
     {

@@ -308,4 +308,9 @@ extension TokenConsumer {
       return false
     }
   }
+
+  /// Whether the current token can be a function argument label.
+  func atArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
+    return self.currentToken.isArgumentLabel(allowDollarIdentifier: allowDollarIdentifier)
+  }
 }

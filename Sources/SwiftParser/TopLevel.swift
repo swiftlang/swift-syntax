@@ -26,7 +26,7 @@ extension Parser {
   /// as unexpected nodes that have the `isMaximumNestingLevelOverflow` bit set.
   /// Check this in places that are likely to cause deep recursion and if this returns non-nil, abort parsing.
   mutating func remainingTokensIfMaximumNestingLevelReached() -> RawUnexpectedNodesSyntax? {
-    if nestingLevel > self.maximumNestingLevel && self.currentToken.rawTokenKind != .endOfFile {
+    if nestingLevel > self.maximumNestingLevel && !self.at(.endOfFile) {
       let remainingTokens = self.consumeRemainingTokens()
       return RawUnexpectedNodesSyntax(elements: remainingTokens, isMaximumNestingLevelOverflow: true, arena: self.arena)
     } else {

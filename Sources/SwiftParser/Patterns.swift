@@ -386,7 +386,7 @@ extension Parser.Lookahead {
     }
 
     // To have a parameter name here, we need a name.
-    guard self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) else {
+    guard self.atArgumentLabel(allowDollarIdentifier: true) else {
       return false
     }
 
@@ -397,7 +397,7 @@ extension Parser.Lookahead {
     }
 
     // If the next token can be an argument label, we might have a name.
-    if nextTok.canBeArgumentLabel(allowDollarIdentifier: true) {
+    if nextTok.isArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't a contextual keyword, we're done.
       if !self.at(.keyword(.isolated))
         && !self.at(.keyword(.some))
@@ -420,7 +420,7 @@ extension Parser.Lookahead {
           return true  // isolated :
         }
         self.consumeAnyToken()
-        return self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon
+        return self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon
       }
     }
 

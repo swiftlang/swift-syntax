@@ -320,7 +320,7 @@ extension Parser {
       return parseUnresolvedAsExpr(handle: handle)
 
     case (.async, _)?:
-      if self.peek().rawTokenKind == .arrow || TokenSpec(.throws) ~= self.peek() {
+      if self.peek(isAt: .arrow, .keyword(.throws)) {
         fallthrough
       } else {
         return nil
@@ -346,6 +346,20 @@ extension Parser {
       // Not an operator.
       return nil
     }
+  }
+
+  /// Whether the current token is a valid contextual exprssion modifier like
+  /// `copy`, `consume`.
+  ///
+  /// `copy` etc. are only contextually a keyword if they are followed by an
+  /// identifier or keyword on the same line. We do this to ensure that we do
+  /// not break any copy functions defined by users.
+  private mutating func isContextualExpressionModifier() -> Bool {
+    return self.peek(
+      isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
+      TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
+      TokenSpec(.self, allowAtStartOfLine: false)
+    )
   }
 
   /// Parse an expression sequence element.
@@ -430,17 +444,7 @@ extension Parser {
       )
 
     case (.copy, let handle)?:
-      // `copy` is only contextually a keyword, if it's followed by an
-      // identifier or keyword on the same line. We do this to ensure that we do
-      // not break any copy functions defined by users. This is following with
-      // what we have done for the consume keyword.
-      switch self.peek() {
-      case TokenSpec(.identifier, allowAtStartOfLine: false),
-        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-        TokenSpec(.self, allowAtStartOfLine: false):
-        break
-      default:
-        // Break out of `outer switch` on failure.
+      if !isContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -459,17 +463,7 @@ extension Parser {
       )
 
     case (.consume, let handle)?:
-      // `consume` is only contextually a keyword, if it's followed by an
-      // identifier or keyword on the same line. We do this to ensure that we do
-      // not break any copy functions defined by users. This is following with
-      // what we have done for the consume keyword.
-      switch self.peek() {
-      case TokenSpec(.identifier, allowAtStartOfLine: false),
-        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-        TokenSpec(.self, allowAtStartOfLine: false):
-        break
-      default:
-        // Break out of the outer `switch`.
+      if !isContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -492,17 +486,7 @@ extension Parser {
       return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor, pattern: pattern))
 
     case (.each, let handle)?:
-      // `each` is only contextually a keyword, if it's followed by an
-      // identifier or 'self' on the same line. We do this to ensure that we do
-      // not break any 'each' functions defined by users. This is following with
-      // what we have done for the consume keyword.
-      switch self.peek() {
-      case TokenSpec(.identifier, allowAtStartOfLine: false),
-        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-        TokenSpec(.self, allowAtStartOfLine: false):
-        break
-      default:
-        // Break out of `outer switch` on failure.
+      if !isContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -517,11 +501,10 @@ extension Parser {
       )
 
     case (.any, _)?:
-      // `any` is only contextually a keyword if it's followed by an identifier
-      // on the same line.
-      guard case TokenSpec(.identifier, allowAtStartOfLine: false) = self.peek() else {
+      if !isContextualExpressionModifier() {
         break EXPR_PREFIX
       }
+
       // 'any' is parsed as a part of 'type'.
       let type = self.parseType()
       return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
@@ -995,7 +978,7 @@ extension Parser {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
       if self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false))
-        || (components.isEmpty && self.at(.period) && self.peek().rawTokenKind == .leftSquare)
+        || (components.isEmpty && self.at(.period) && self.peek(isAt: .leftSquare))
       {
         // Consume the '.', if it's allowed here.
         let period: RawTokenSyntax?
@@ -1722,7 +1705,7 @@ extension Parser {
           let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
           let equal: RawTokenSyntax?
           let expression: RawExprSyntax
-          if self.peek().rawTokenKind == .equal {
+          if self.peek(isAt: .equal) {
             // The name is a new declaration.
             (unexpectedBeforeName, name) = self.expect(.identifier, TokenSpec(.self, remapping: .identifier), default: .identifier)
             (unexpectedBeforeEqual, equal) = self.expect(.equal)
@@ -1901,7 +1884,7 @@ extension Parser {
       let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
-      if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
+      if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek(isAt: .colon) {
         (unexpectedBeforeLabel, label) = parseArgumentLabel()
         colon = consumeAnyToken()
       } else {
@@ -1914,9 +1897,7 @@ extension Parser {
       // this case lexes as a binary operator because it neither leads nor
       // follows a proper subexpression.
       let expr: RawExprSyntax
-      if self.at(.binaryOperator)
-        && (self.peek().rawTokenKind == .comma || self.peek().rawTokenKind == .rightParen || self.peek().rawTokenKind == .rightSquare)
-      {
+      if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
         let (ident, args) = self.parseDeclNameRef(.operators)
         expr = RawExprSyntax(
           RawIdentifierExprSyntax(

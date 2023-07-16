@@ -172,6 +172,57 @@ extension TokenConsumer {
   }
 }
 
+extension TokenConsumer {
+  /// Returns whether the next (peeked) token matches `spec`
+  @inline(__always)
+  mutating func peek(isAt spec: TokenSpec) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.peek(), choices: [spec])
+    }
+    #endif
+    return spec ~= self.peek()
+  }
+
+  /// Returns whether the next (peeked) token matches one of the two specs.
+  @inline(__always)
+  mutating func peek(
+    isAt spec1: TokenSpec,
+    _ spec2: TokenSpec
+  ) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.peek(), choices: [spec1, spec2])
+    }
+    #endif
+    switch self.peek() {
+    case spec1: return true
+    case spec2: return true
+    default: return false
+    }
+  }
+
+  /// Returns whether the next (peeked) token matches one of the three specs.
+  @inline(__always)
+  mutating func peek(
+    isAt spec1: TokenSpec,
+    _ spec2: TokenSpec,
+    _ spec3: TokenSpec
+  ) -> Bool {
+    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
+    if shouldRecordAlternativeTokenChoices {
+      recordAlternativeTokenChoice(for: self.peek(), choices: [spec1, spec2, spec3])
+    }
+    #endif
+    switch self.peek() {
+    case spec1: return true
+    case spec2: return true
+    case spec3: return true
+    default: return false
+    }
+  }
+}
+
 // MARK: Consuming tokens (`consume`)
 
 extension TokenConsumer {

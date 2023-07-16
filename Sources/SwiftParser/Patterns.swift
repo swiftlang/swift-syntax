@@ -181,7 +181,7 @@ extension Parser {
 
         /// If we have something like `x SomeType`, use the indication that `SomeType` starts with a capital letter (and is thus probably a type name)
         /// as an indication that the user forgot to write the colon instead of forgetting to write the comma to separate two elements.
-        if label == nil, colon == nil, self.at(.identifier), peek().rawTokenKind == .identifier, peek().tokenText.isStartingWithUppercase {
+        if label == nil, colon == nil, self.at(.identifier), peek(isAt: .identifier), peek().tokenText.isStartingWithUppercase {
           label = consume(if: .identifier)
           colon = self.missingToken(.colon)
         }

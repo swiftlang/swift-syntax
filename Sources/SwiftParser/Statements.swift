@@ -177,7 +177,7 @@ extension Parser {
     guard
       self.at(.keyword(.let), .keyword(.var), .keyword(.case))
         || self.at(.keyword(.inout))
-        || (lastBindingKind != nil && self.peek().rawTokenKind == .equal)
+        || (lastBindingKind != nil && self.peek(isAt: .equal))
     else {
       // If we lack it, then this is theoretically a boolean condition.
       // However, we also need to handle migrating from Swift 2 syntax, in

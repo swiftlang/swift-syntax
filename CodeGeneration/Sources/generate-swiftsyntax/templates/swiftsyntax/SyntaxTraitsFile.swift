@@ -29,7 +29,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         DeclSyntax(
           """
           \(raw: child.docComment)
-          var \(raw: child.varName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
+          var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
           """
         )
       }

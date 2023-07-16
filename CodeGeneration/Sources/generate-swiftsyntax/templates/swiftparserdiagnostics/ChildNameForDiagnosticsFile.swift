@@ -25,7 +25,7 @@ let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
       for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
         for child in node.children {
           if let nameForDiagnostics = child.nameForDiagnostics {
-            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(raw: child.varName):") {
+            SwitchCaseSyntax("case \\\(raw: node.type.syntaxBaseName).\(child.varOrCaseName):") {
               StmtSyntax(#"return "\#(raw: nameForDiagnostics)""#)
             }
           }

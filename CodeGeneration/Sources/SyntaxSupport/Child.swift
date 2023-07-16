@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 /// The kind of token a node can contain. Either a token of a specific kind or a
 /// keyword with the given text.
 public enum TokenChoice: Equatable {
@@ -77,16 +79,16 @@ public class Child {
   }
 
   /// A name of this child that's suitable to be used for variable or enum case names.
-  public var varName: String {
-    return lowercaseFirstWord(name: name)
+  public var varOrCaseName: TokenSyntax {
+    return .identifier(lowercaseFirstWord(name: name))
   }
 
   /// The deprecated name of this child that's suitable to be used for variable or enum case names.
-  public var deprecatedVarName: String? {
+  public var deprecatedVarName: TokenSyntax? {
     guard let deprecatedName = deprecatedName else {
       return nil
     }
-    return lowercaseFirstWord(name: deprecatedName)
+    return .identifier(lowercaseFirstWord(name: deprecatedName))
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.

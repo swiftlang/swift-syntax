@@ -89,7 +89,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         ) {
           let parameters = ClosureParameterListSyntax {
             for child in node.children {
-              ClosureParameterSyntax(firstName: .identifier(child.varName.backtickedIfNeeded))
+              ClosureParameterSyntax(firstName: child.varOrCaseName.backtickedIfNeeded)
             }
           }
 
@@ -107,7 +107,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             for child in node.children {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.type.optionalChained(expr: ExprSyntax("\(raw: child.varName.backtickedIfNeeded)")),
+                  base: child.type.optionalChained(expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")),
                   period: .periodToken(),
                   name: "raw"
                 )
@@ -169,7 +169,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           try! VariableDeclSyntax(
             """
             \(raw: child.docComment)
-            public var \(raw: child.varName.backtickedIfNeeded): \(type)
+            public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
             """
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
@@ -202,12 +202,12 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
             DeclSyntax(
               """
-              /// Adds the provided `element` to the node's `\(raw: child.varName)`
+              /// Adds the provided `element` to the node's `\(child.varOrCaseName)`
               /// collection.
               /// - param element: The new `\(raw: childElt)` to add to the node's
-              ///                  `\(raw: child.varName)` collection.
+              ///                  `\(child.varOrCaseName)` collection.
               /// - returns: A copy of the receiver with the provided `\(raw: childElt)`
-              ///            appended to its `\(raw: child.varName)` collection.
+              ///            appended to its `\(child.varOrCaseName)` collection.
               public func add\(raw: childElt)(_ element: \(raw: childEltType)) -> \(node.kind.syntaxType) {
                 var collection: RawSyntax
                 let arena = SyntaxArena()
@@ -229,7 +229,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           let layout = ArrayExprSyntax {
             for child in node.children {
               ArrayElementSyntax(
-                expression: ExprSyntax(#"\Self.\#(raw: child.varName)"#)
+                expression: ExprSyntax(#"\Self.\#(child.varOrCaseName)"#)
               )
             }
           }
@@ -248,13 +248,13 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
 
   return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
     for choice in choices {
-      DeclSyntax("case `\(raw: choice.varName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
+      DeclSyntax("case `\(choice.varOrCaseName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
     }
 
     try! VariableDeclSyntax("public var _syntaxNode: Syntax") {
       try! SwitchExprSyntax("switch self") {
         for choice in choices {
-          SwitchCaseSyntax("case .\(raw: choice.varName)(let node):") {
+          SwitchCaseSyntax("case .\(choice.varOrCaseName)(let node):") {
             StmtSyntax("return node._syntaxNode")
           }
         }
@@ -268,7 +268,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
         DeclSyntax(
           """
           public init(_ node: some \(choiceNode.kind.protocolType)) {
-            self = .\(raw: choice.varName)(\(choiceNode.kind.syntaxType)(node))
+            self = .\(choice.varOrCaseName)(\(choiceNode.kind.syntaxType)(node))
           }
           """
         )
@@ -277,7 +277,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
         DeclSyntax(
           """
           public init(_ node: \(choice.syntaxNodeKind.syntaxType)) {
-            self = .\(raw: choice.varName)(node)
+            self = .\(choice.varOrCaseName)(node)
           }
           """
         )
@@ -289,7 +289,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
         StmtSyntax(
           """
           if let node = node.as(\(choice.syntaxNodeKind.syntaxType).self) {
-            self = .\(raw: choice.varName)(node)
+            self = .\(choice.varOrCaseName)(node)
             return
           }
           """

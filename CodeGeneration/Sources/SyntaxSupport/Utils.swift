@@ -65,3 +65,15 @@ public extension Collection {
     }
   }
 }
+
+public extension TokenSyntax {
+  var backtickedIfNeeded: TokenSyntax {
+    if KEYWORDS.contains(where: {
+      $0.name == self.description && $0.isLexerClassified
+    }) {
+      return "`\(self)`"
+    } else {
+      return self
+    }
+  }
+}

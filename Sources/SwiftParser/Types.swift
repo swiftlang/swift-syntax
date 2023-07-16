@@ -650,7 +650,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.currentToken.isEllipsis {
+    if self.atContextualPunctuator("...") {
       self.consumeAnyToken()
     }
 
@@ -1065,10 +1065,6 @@ extension Lexer.Lexeme {
     return self.rawTokenKind == .binaryOperator
       || self.rawTokenKind == .postfixOperator
       || self.rawTokenKind == .prefixOperator
-  }
-
-  var isEllipsis: Bool {
-    return self.isAnyOperator && self.tokenText == "..."
   }
 
   var isGenericTypeDisambiguatingToken: Bool {

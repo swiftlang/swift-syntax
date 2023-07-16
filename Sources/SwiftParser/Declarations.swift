@@ -407,22 +407,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Attempt to consume an ellipsis prefix, splitting the current token if
-  /// necessary.
-  mutating func tryConsumeEllipsisPrefix() -> RawTokenSyntax? {
-    // It is not sufficient to check currentToken.isEllipsis here, as we may
-    // have something like '...>'.
-    // TODO: Recovery for different numbers of dots (which also needs to be
-    // done for regular variadics).
-    guard self.at(anyIn: Operator.self) != nil else { return nil }
-    let text = self.currentToken.tokenText
-    guard text.hasPrefix("...") else { return nil }
-    return self.consumePrefix(
-      SyntaxText(rebasing: text.prefix(3)),
-      as: .ellipsis
-    )
-  }
-
   mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawGenericParameterClauseSyntax(
@@ -453,7 +437,7 @@ extension Parser {
 
         // Parse the unsupported ellipsis for a type parameter pack 'T...'.
         let unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?
-        if let ellipsis = tryConsumeEllipsisPrefix() {
+        if let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis) {
           unexpectedBetweenNameAndColon = RawUnexpectedNodesSyntax([ellipsis], arena: self.arena)
           if each == nil {
             each = missingToken(.each)
@@ -923,7 +907,7 @@ extension Parser {
     }
 
     // Detect an attempt to use (early syntax) type parameter pack.
-    let ellipsis = tryConsumeEllipsisPrefix()
+    let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
     // Parse optional inheritance clause.
     let inheritance: RawTypeInheritanceClauseSyntax?

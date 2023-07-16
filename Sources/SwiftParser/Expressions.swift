@@ -589,21 +589,18 @@ extension Parser {
     // First check to see if we have the start of a regex literal `/.../`.
     //    tryLexRegexLiteral(/*forUnappliedOperator*/ false)
 
-    switch self.currentToken {
     // Try parse an 'if' or 'switch' as an expression. Note we do this here in
     // parseUnaryExpression as we don't allow postfix syntax to hang off such
     // expressions to avoid ambiguities such as postfix '.member', which can
     // currently be parsed as a static dot member for a result builder.
-    case TokenSpec(.switch):
+    if self.at(.keyword(.switch)) {
       return RawExprSyntax(
         parseSwitchExpression(switchHandle: .constant(.keyword(.switch)))
       )
-    case TokenSpec(.if):
+    } else if self.at(.keyword(.if)) {
       return RawExprSyntax(
         parseIfExpression(ifHandle: .constant(.keyword(.if)))
       )
-    default:
-      break
     }
 
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
@@ -951,7 +948,7 @@ extension Parser {
         // Check if the first '#if' body starts with '.' <identifier>, and parse
         // it as a "postfix ifconfig expression".
         do {
-          var backtrack = self.lookahead()
+          var lookahead = self.lookahead()
           // Skip to the first body. We may need to skip multiple '#if' directives
           // since we support nested '#if's. e.g.
           //   baseExpr
@@ -960,13 +957,13 @@ extension Parser {
           //       .someMember
           var loopProgress = LoopProgressCondition()
           repeat {
-            backtrack.eat(.poundIf)
-            while !backtrack.at(.endOfFile) && !backtrack.currentToken.isAtStartOfLine {
-              backtrack.skipSingle()
+            lookahead.eat(.poundIf)
+            while !lookahead.at(.endOfFile) && !lookahead.currentToken.isAtStartOfLine {
+              lookahead.skipSingle()
             }
-          } while backtrack.at(.poundIf) && backtrack.hasProgressed(&loopProgress)
+          } while lookahead.at(.poundIf) && lookahead.hasProgressed(&loopProgress)
 
-          guard backtrack.isAtStartOfPostfixExprSuffix() else {
+          guard lookahead.isAtStartOfPostfixExprSuffix() else {
             break
           }
         }

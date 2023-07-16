@@ -921,7 +921,7 @@ extension Parser {
 
   // label-name → identifier
   mutating func parseOptionalControlTransferTarget() -> RawTokenSyntax? {
-    guard !self.currentToken.isAtStartOfLine else {
+    guard !self.atStartOfLine else {
       return nil
     }
 

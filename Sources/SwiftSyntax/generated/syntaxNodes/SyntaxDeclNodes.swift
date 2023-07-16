@@ -4803,7 +4803,9 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration./// This token should always have `presence = .missing`.
+  /// A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
+  /// 
+  /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)

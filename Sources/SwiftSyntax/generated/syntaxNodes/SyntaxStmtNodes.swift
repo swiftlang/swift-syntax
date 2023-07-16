@@ -1589,7 +1589,9 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// A placeholder, i.e. `<#statement#>`, that can be inserted into the source code to represent the missing pattern./// This token should always have `presence = .missing`.
+  /// A placeholder, i.e. `<#statement#>`, that can be inserted into the source code to represent the missing pattern.
+  /// 
+  /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)

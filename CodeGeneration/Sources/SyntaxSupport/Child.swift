@@ -58,12 +58,32 @@ public enum ChildKind {
 /// A child of a node, that may be declared optional or a token with a
 /// restricted subset of acceptable kinds or texts.
 public class Child {
+  /// The name of the child.
+  ///
+  /// The first character of the name is always uppercase.
   public let name: String
+
+  /// If the child has been renamed, its old, now deprecated, name.
+  ///
+  /// This is used to generate deprecated compatibility layers.
   public let deprecatedName: String?
+
+  /// The kind of the child (node, token, collection, ...)
   public let kind: ChildKind
-  public let nameForDiagnostics: String?
-  public let documentation: String?
+
+  /// Whether this child is optional and can be `nil`.
   public let isOptional: Bool
+
+  /// A name of this child that can be shown in diagnostics.
+  ///
+  /// This is used to e.g. describe the child if all of its tokens are missing in the source file.
+  public let nameForDiagnostics: String?
+
+  /// A doc comment describing the child.
+  public let documentation: SwiftSyntax.Trivia
+
+  /// The first line of the child's documentation
+  public let documentationAbstract: String
 
   public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {
@@ -148,12 +168,6 @@ public class Child {
     }
   }
 
-  /// Returns `true` if this child's type is one of the base syntax kinds and
-  /// it's optional.
-  public var hasOptionalBaseType: Bool {
-    return hasBaseType && isOptional
-  }
-
   /// If a classification is passed, it specifies the color identifiers in
   /// that subtree should inherit for syntax coloring. Must be a member of
   /// ``SyntaxClassification``.
@@ -174,7 +188,8 @@ public class Child {
     self.deprecatedName = deprecatedName
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    self.documentation = documentation
+    self.documentation = docCommentTrivia(from: documentation)
+    self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
   }
 }

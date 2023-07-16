@@ -77,13 +77,10 @@ extension LayoutNode {
 
   func generateInitializerDocComment() -> SwiftSyntax.Trivia {
     func generateParamDocComment(for child: Child) -> String? {
-      guard let documentation = child.documentation,
-        let firstLine = documentation.split(whereSeparator: \.isNewline).first
-      else {
+      if child.documentationAbstract.isEmpty {
         return nil
       }
-
-      return "  - \(child.varOrCaseName): \(firstLine)"
+      return "  - \(child.varOrCaseName): \(child.documentationAbstract)"
     }
 
     let formattedParams = """

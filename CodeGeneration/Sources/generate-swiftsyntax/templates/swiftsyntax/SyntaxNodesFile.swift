@@ -15,17 +15,6 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-extension Child {
-  public var docComment: SwiftSyntax.Trivia {
-    guard let description = documentation else {
-      return []
-    }
-    let lines = description.split(separator: "\n", omittingEmptySubsequences: false)
-    let pieces = lines.map { SwiftSyntax.TriviaPiece.docLineComment("/// \($0)") }
-    return Trivia(pieces: pieces)
-  }
-}
-
 /// This file generates the syntax nodes for SwiftSyntax. To keep the generated
 /// files at a manageable file size, it is to be invoked multiple times with the
 /// variable `emitKind` set to a base kind listed in
@@ -168,7 +157,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
           try! VariableDeclSyntax(
             """
-            \(raw: child.docComment)
+            \(raw: child.documentation)
             public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
             """
           ) {

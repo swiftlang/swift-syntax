@@ -61,7 +61,7 @@ extension TokenConsumer {
 
     var hasAttribute = false
     var attributeProgress = LoopProgressCondition()
-    while attributeProgress.evaluate(subparser.currentToken) && subparser.at(.atSign) {
+    while attributeProgress.evaluate(subparser) && subparser.at(.atSign) {
       hasAttribute = true
       _ = subparser.consumeAttributeList()
     }
@@ -71,7 +71,7 @@ extension TokenConsumer {
       var modifierProgress = LoopProgressCondition()
       while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
         modifierKind != .class,
-        modifierProgress.evaluate(subparser.currentToken)
+        modifierProgress.evaluate(subparser)
       {
         hasModifier = true
         subparser.eat(handle)
@@ -356,7 +356,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    } while keepGoing != nil && loopProgress.evaluate(self)
     return RawImportPathSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -486,7 +486,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
@@ -692,7 +692,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     return RawGenericWhereClauseSyntax(
@@ -758,7 +758,7 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(self) {
         let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
         guard let newElement = self.parseMemberDeclListItem() else {
           break
@@ -858,7 +858,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     return RawEnumCaseDeclSyntax(
@@ -1376,7 +1376,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     return RawVariableDeclSyntax(
@@ -1521,7 +1521,7 @@ extension Parser {
     var elements = [RawAccessorDeclSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(self) {
         guard let introducer = self.parseAccessorIntroducer() else {
           // There can only be an implicit getter if no other accessors were
           // seen before this one.
@@ -1741,7 +1741,7 @@ extension Parser {
     while (identifiersAfterOperatorName.last ?? name).trailingTriviaByteLength == 0,
       self.currentToken.leadingTriviaByteLength == 0,
       !self.at(.colon, .leftBrace, .endOfFile),
-      loopProgress.evaluate(self.currentToken)
+      loopProgress.evaluate(self)
     {
       identifiersAfterOperatorName.append(consumeAnyToken())
     }
@@ -1888,7 +1888,7 @@ extension Parser {
     var elements = [RawPrecedenceGroupAttributeListSyntax.Element]()
     do {
       var attributesProgress = LoopProgressCondition()
-      LOOP: while !self.at(.endOfFile, .rightBrace) && attributesProgress.evaluate(currentToken) {
+      LOOP: while !self.at(.endOfFile, .rightBrace) && attributesProgress.evaluate(self) {
         switch self.at(anyIn: LabelText.self) {
         case (.associativity, let handle)?:
           let associativity = self.eat(handle)
@@ -1952,7 +1952,7 @@ extension Parser {
                   arena: self.arena
                 )
               )
-            } while keepGoing != nil && namesProgress.evaluate(currentToken)
+            } while keepGoing != nil && namesProgress.evaluate(self)
           }
           elements.append(
             .precedenceGroupRelation(

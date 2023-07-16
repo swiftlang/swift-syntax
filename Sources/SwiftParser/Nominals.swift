@@ -311,7 +311,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     let unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?
@@ -350,7 +350,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(

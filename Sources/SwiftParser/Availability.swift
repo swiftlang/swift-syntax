@@ -48,7 +48,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && availabilityArgumentProgress.evaluate(currentToken)
+      } while keepGoing != nil && availabilityArgumentProgress.evaluate(self)
     }
 
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
@@ -176,7 +176,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && loopProgressCondition.evaluate(currentToken)
+    } while keepGoing != nil && loopProgressCondition.evaluate(self)
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
   }
 
@@ -266,7 +266,7 @@ extension Parser {
         unexpectedTokens.append(unexpectedVersion)
       }
       keepGoing = self.consume(if: .period)
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    } while keepGoing != nil && loopProgress.evaluate(self)
     return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
   }
 

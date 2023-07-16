@@ -598,7 +598,7 @@ extension Parser {
     }
 
     var unexpectedBeforeThrowsLoopProgress = LoopProgressCondition()
-    while unexpectedBeforeThrowsLoopProgress.evaluate(self.currentToken) {
+    while unexpectedBeforeThrowsLoopProgress.evaluate(self) {
       if let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncTokenKinds.self) {
         unexpectedBeforeThrows.append(RawSyntax(misspelledAsync))
       } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) {
@@ -620,7 +620,7 @@ extension Parser {
     }
 
     var unexpectedAfterThrowsLoopProgress = LoopProgressCondition()
-    while unexpectedAfterThrowsLoopProgress.evaluate(self.currentToken) {
+    while unexpectedAfterThrowsLoopProgress.evaluate(self) {
       if let (_, handle, _) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpectedAfterThrows.append(RawSyntax(misspelledAsync))
@@ -717,7 +717,7 @@ extension Parser {
     var synthesizedThrows: RawTokenSyntax? = nil
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(self.currentToken) {
+    while loopProgress.evaluate(self) {
       if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
         let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)

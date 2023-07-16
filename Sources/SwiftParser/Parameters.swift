@@ -237,7 +237,7 @@ extension Parser {
   mutating func parseParameterModifiers(isClosure: Bool) -> RawModifierListSyntax? {
     var elements = [RawDeclModifierSyntax]()
     var loopCondition = LoopProgressCondition()
-    MODIFIER_LOOP: while loopCondition.evaluate(currentToken) {
+    MODIFIER_LOOP: while loopCondition.evaluate(self) {
       switch self.at(anyIn: ParameterModifier.self) {
       case (._const, let handle)?:
         elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
@@ -286,7 +286,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen)
         && keepGoing
-        && loopProgress.evaluate(currentToken)
+        && loopProgress.evaluate(self)
       {
         let parameter = parseParameter(&self)
         if parameter.isEmpty {

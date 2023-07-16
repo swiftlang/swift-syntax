@@ -226,7 +226,7 @@ extension Parser.Lookahead {
       self.skipUntilEndOfLine()
 
       var attributesLoopProgress = LoopProgressCondition()
-      ATTRIBUTE_LOOP: while attributesLoopProgress.evaluate(self.currentToken) {
+      ATTRIBUTE_LOOP: while attributesLoopProgress.evaluate(self) {
         switch self.currentToken.rawTokenKind {
         case .atSign:
           didSeeAnyAttributes = true
@@ -237,7 +237,7 @@ extension Parser.Lookahead {
           break ATTRIBUTE_LOOP
         }
       }
-    } while self.at(.poundElseif, .poundElse) && poundIfLoopProgress.evaluate(self.currentToken)
+    } while self.at(.poundElseif, .poundElse) && poundIfLoopProgress.evaluate(self)
 
     return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndif) != nil
   }

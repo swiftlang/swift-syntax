@@ -23,7 +23,7 @@ extension Parser {
     repeat {
       let attribute = self.parseAttribute()
       elements.append(attribute)
-    } while self.at(.atSign, .poundIf) && loopProgress.evaluate(currentToken)
+    } while self.at(.atSign, .poundIf) && loopProgress.evaluate(self)
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -453,7 +453,7 @@ extension Parser {
 
     var elements = [RawDifferentiabilityParamSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightParen) && loopProgress.evaluate(currentToken) {
+    while !self.at(.endOfFile, .rightParen) && loopProgress.evaluate(self) {
       guard let param = self.parseDifferentiabilityParameter() else {
         break
       }
@@ -594,7 +594,7 @@ extension Parser {
   mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(currentToken) {
+    while loopProgress.evaluate(self) {
       // Empty selector piece.
       if let colon = self.consume(if: .colon) {
         elements.append(
@@ -676,7 +676,7 @@ extension Parser {
     var elements = [RawSpecializeAttributeSpecListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightParen, .keyword(.where)) && loopProgress.evaluate(currentToken) {
+    while !self.at(.endOfFile, .rightParen, .keyword(.where)) && loopProgress.evaluate(self) {
       switch self.at(anyIn: SpecializeParameter.self) {
       case (.target, let handle)?:
         let ident = self.eat(handle)

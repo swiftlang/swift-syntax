@@ -121,7 +121,7 @@ extension Parser {
 
     // Proceed to parse #if continuation clauses (#elseif, #else, check #elif typo, #endif)
     var loopProgress = LoopProgressCondition()
-    LOOP: while let (match, handle) = self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self), loopProgress.evaluate(self.currentToken) {
+    LOOP: while let (match, handle) = self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self), loopProgress.evaluate(self) {
       var unexpectedBeforePound: RawUnexpectedNodesSyntax?
       var pound: RawTokenSyntax
       let condition: RawExprSyntax?
@@ -207,7 +207,7 @@ extension Parser {
     while !self.at(.endOfFile)
       && !self.at(.poundElse, .poundElseif, .poundEndif)
       && !self.atElifTypo()
-      && elementsProgress.evaluate(currentToken)
+      && elementsProgress.evaluate(self)
     {
       let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
       guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {

@@ -189,7 +189,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
 
       base = RawTypeSyntax(
         RawCompositionTypeSyntax(
@@ -252,7 +252,7 @@ extension Parser {
     }
 
     var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
+    while loopCondition.evaluate(self) {
       if !stopAtFirstPeriod, self.at(.period) {
         let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: base)
         if skipMemberName {
@@ -440,7 +440,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
 
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
@@ -488,7 +488,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(self) {
         let unexpectedBeforeFirst: RawUnexpectedNodesSyntax?
         let first: RawTokenSyntax?
         let unexpectedBeforeSecond: RawUnexpectedNodesSyntax?
@@ -662,13 +662,13 @@ extension Parser.Lookahead {
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
       self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
-      specifierProgress.evaluate(currentToken)
+      specifierProgress.evaluate(self)
     {
       self.consumeAnyToken()
     }
 
     var attributeProgress = LoopProgressCondition()
-    while self.at(.atSign), attributeProgress.evaluate(currentToken) {
+    while self.at(.atSign), attributeProgress.evaluate(self) {
       self.consumeAnyToken()
       self.skipTypeAttribute()
     }
@@ -688,7 +688,7 @@ extension Parser.Lookahead {
       // Handle type-function if we have an '->' with optional
       // 'async' and/or 'throws'.
       var loopProgress = LoopProgressCondition()
-      while let (_, handle) = self.at(anyIn: EffectSpecifier.self), loopProgress.evaluate(currentToken) {
+      while let (_, handle) = self.at(anyIn: EffectSpecifier.self), loopProgress.evaluate(self) {
         self.eat(handle)
       }
 
@@ -712,7 +712,7 @@ extension Parser.Lookahead {
     }
 
     var loopCondition = LoopProgressCondition()
-    while self.atContextualPunctuator("&") && loopCondition.evaluate(self.currentToken) {
+    while self.atContextualPunctuator("&") && loopCondition.evaluate(self) {
       self.consumeAnyToken()
       guard self.canParseSimpleType() else {
         return false
@@ -757,7 +757,7 @@ extension Parser.Lookahead {
     }
 
     var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
+    while loopCondition.evaluate(self) {
       if self.at(.period) {
         self.consumeAnyToken()
         if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
@@ -823,7 +823,7 @@ extension Parser.Lookahead {
             && !self.at(.rightParen, .rightBrace, .comma)
             && !self.atContextualPunctuator("...")
             && !self.atStartOfDeclaration()
-            && skipProgress.evaluate(currentToken)
+            && skipProgress.evaluate(self)
           {
             self.skipSingle()
           }
@@ -838,7 +838,7 @@ extension Parser.Lookahead {
       }
 
       self.consumeIfContextualPunctuator("...")
-    } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
+    } while self.consume(if: .comma) != nil && loopProgress.evaluate(self)
     return self.consume(if: .rightParen) != nil
   }
 
@@ -910,7 +910,7 @@ extension Parser.Lookahead {
           return false
         }
         // Parse the comma, if the list continues.
-      } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
+      } while self.consume(if: .comma) != nil && loopProgress.evaluate(self)
     }
 
     guard self.consume(ifPrefix: ">", as: .rightAngle) != nil else {
@@ -956,7 +956,7 @@ extension Parser {
   mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {
     var elements = [RawAttributeListSyntax.Element]()
     var attributeProgress = LoopProgressCondition()
-    while self.at(.atSign) && attributeProgress.evaluate(currentToken) {
+    while self.at(.atSign) && attributeProgress.evaluate(self) {
       elements.append(self.parseTypeAttribute())
     }
     return RawAttributeListSyntax(elements: elements, arena: self.arena)
@@ -1045,7 +1045,7 @@ extension Parser {
       }
 
       var loopProgress = LoopProgressCondition()
-      while loopProgress.evaluate(currentToken) {
+      while loopProgress.evaluate(self) {
         if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
           result = RawTypeSyntax(self.parseOptionalType(result))
         } else if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {

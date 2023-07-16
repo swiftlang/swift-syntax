@@ -198,7 +198,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    } while keepGoing != nil && loopProgress.evaluate(self)
 
     return RawConditionElementListSyntax(elements: elements, arena: self.arena)
   }
@@ -451,7 +451,7 @@ extension Parser {
     // If the next token is 'catch', this is a 'do'/'catch' statement.
     var elements = [RawCatchClauseSyntax]()
     var loopProgress = LoopProgressCondition()
-    while self.at(.keyword(.catch)) && loopProgress.evaluate(self.currentToken) {
+    while self.at(.keyword(.catch)) && loopProgress.evaluate(self) {
       // Parse 'catch' clauses
       elements.append(self.parseCatchClause())
     }
@@ -493,7 +493,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && loopProgress.evaluate(self)
     }
     let body = self.parseCodeBlock(introducer: catchKeyword)
     return RawCatchClauseSyntax(
@@ -798,7 +798,7 @@ extension Parser {
         var keepGoing = true
         var elementList = [RawYieldExprListElementSyntax]()
         var loopProgress = LoopProgressCondition()
-        while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
+        while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(self) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(
@@ -1025,7 +1025,7 @@ extension Parser.Lookahead {
     var lookahead = self.lookahead()
     var loopProgress = LoopProgressCondition()
     var hasAttribute = false
-    while lookahead.at(.atSign) && loopProgress.evaluate(lookahead.currentToken) {
+    while lookahead.at(.atSign) && loopProgress.evaluate(lookahead) {
       guard lookahead.peek().rawTokenKind == .identifier else {
         return false
       }
@@ -1062,7 +1062,7 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
-    } while lookahead.at(.poundIf, .poundElseif, .poundElse) && loopProgress.evaluate(lookahead.currentToken)
+    } while lookahead.at(.poundIf, .poundElseif, .poundElse) && loopProgress.evaluate(lookahead)
     return lookahead.isAtStartOfSwitchCase()
   }
 }

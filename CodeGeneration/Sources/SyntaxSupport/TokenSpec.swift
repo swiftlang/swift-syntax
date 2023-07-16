@@ -12,28 +12,32 @@
 
 /// Represents the specification for a Token in the TokenSyntax file.
 public struct TokenSpec {
+  public enum Kind {
+    case punctuation
+    /// The `keyword` TokenKind that contains the actual keyword as an associated value
+    case keyword
+    case other
+  }
+
   public let name: String
   public let nameForDiagnostics: String
   public let text: String?
-  public let isPunctuation: Bool
-  public let associatedValueClass: String?
+  public let kind: Kind
 
   public var swiftKind: String {
     return lowercaseFirstWord(name: self.name)
   }
 
-  private init(
+  fileprivate init(
     name: String,
     nameForDiagnostics: String,
     text: String? = nil,
-    isPunctuation: Bool,
-    associatedValueClass: String? = nil
+    kind: Kind
   ) {
     self.name = name
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
-    self.isPunctuation = isPunctuation
-    self.associatedValueClass = associatedValueClass
+    self.kind = kind
   }
 
   static func punctuator(name: String, text: String) -> TokenSpec {
@@ -41,8 +45,7 @@ public struct TokenSpec {
       name: name,
       nameForDiagnostics: text,
       text: text,
-      isPunctuation: true,
-      associatedValueClass: nil
+      kind: .punctuation
     )
   }
 
@@ -51,20 +54,17 @@ public struct TokenSpec {
       name: name,
       nameForDiagnostics: text,
       text: text,
-      isPunctuation: false,
-      associatedValueClass: nil
+      kind: .other
     )
   }
 
-  static func other(name: String, nameForDiagnostics: String, text: String? = nil, associatedValueClass: String? = nil) -> TokenSpec {
+  static func other(name: String, nameForDiagnostics: String, text: String? = nil) -> TokenSpec {
     TokenSpec(
       name: name,
       nameForDiagnostics: nameForDiagnostics,
       text: text,
-      isPunctuation: false,
-      associatedValueClass: associatedValueClass
+      kind: .other
     )
-
   }
 }
 
@@ -86,7 +86,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   .other(name: "Identifier", nameForDiagnostics: "identifier"),
   .punctuator(name: "InfixQuestionMark", text: "?"),
   .other(name: "IntegerLiteral", nameForDiagnostics: "integer literal"),
-  .other(name: "Keyword", nameForDiagnostics: "keyword", associatedValueClass: "Keyword"),
+  TokenSpec(name: "Keyword", nameForDiagnostics: "keyword", text: nil, kind: .keyword),
   .punctuator(name: "LeftAngle", text: "<"),
   .punctuator(name: "LeftBrace", text: "{"),
   .punctuator(name: "LeftParen", text: "("),

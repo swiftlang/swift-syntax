@@ -71,7 +71,7 @@ public extension Child {
     if token.text != nil {
       return ExprSyntax(".\(raw: token.swiftKind)Token()")
     }
-    guard case .token(let choices, _, _) = kind, choices.count == 1, token.associatedValueClass != nil else {
+    guard case .token(let choices, _, _) = kind, choices.count == 1, token.kind == .keyword else {
       return nil
     }
     var textChoice: String

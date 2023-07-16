@@ -35,11 +35,11 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
           """
         )
-      } else if let associatedValueClass = token.associatedValueClass {
+      } else if token.kind == .keyword {
         DeclSyntax(
           """
           public static func \(raw: token.swiftKind)(
-            _ value: \(raw: associatedValueClass),
+            _ value: Keyword,
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present

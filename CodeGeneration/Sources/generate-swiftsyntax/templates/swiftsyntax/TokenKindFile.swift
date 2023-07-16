@@ -25,8 +25,8 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for token in SYNTAX_TOKENS {
       // Tokens that don't have a set text have an associated value that
       // contains their text.
-      if let associatedValueClass = token.associatedValueClass {
-        DeclSyntax("case \(raw: token.swiftKind)(\(raw: associatedValueClass))")
+      if token.kind == .keyword {
+        DeclSyntax("case \(raw: token.swiftKind)(Keyword)")
       } else if token.text == nil {
         DeclSyntax("case \(raw: token.swiftKind)(String)")
       } else {
@@ -43,7 +43,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ) {
       try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
-          if token.associatedValueClass != nil {
+          if token.kind == .keyword {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
               StmtSyntax("return String(syntaxText: assoc.defaultText)")
             }
@@ -69,7 +69,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ) {
       try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
-          if token.associatedValueClass != nil {
+          if token.kind == .keyword {
             SwitchCaseSyntax("case .\(raw: token.swiftKind)(let assoc):") {
               StmtSyntax("return assoc.defaultText")
             }
@@ -99,7 +99,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: token.isPunctuation)")
+            StmtSyntax("return \(raw: token.kind == .punctuation)")
           }
         }
       }
@@ -177,7 +177,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try! SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: token.isPunctuation)")
+            StmtSyntax("return \(raw: token.kind == .punctuation)")
           }
         }
       }

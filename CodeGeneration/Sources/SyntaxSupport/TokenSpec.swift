@@ -13,14 +13,10 @@
 /// Represents the specification for a Token in the TokenSyntax file.
 public class TokenSpec {
   public let name: String
-  public let kind: String
   public let nameForDiagnostics: String
-  public let unprefixedKind: String
   public let text: String?
   public let classification: SyntaxClassification?
   public let isKeyword: Bool
-  public let requiresLeadingSpace: Bool
-  public let requiresTrailingSpace: Bool
   public let associatedValueClass: String?
 
   public var swiftKind: String {
@@ -35,29 +31,17 @@ public class TokenSpec {
 
   init(
     name: String,
-    kind: String,
     nameForDiagnostics: String,
-    unprefixedKind: String? = nil,
     text: String? = nil,
     classification: String = "None",
     isKeyword: Bool = false,
-    requiresLeadingSpace: Bool = false,
-    requiresTrailingSpace: Bool = false,
     associatedValueClass: String? = nil
   ) {
     self.name = name
-    self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    if let unprefixedKind {
-      self.unprefixedKind = unprefixedKind
-    } else {
-      self.unprefixedKind = kind
-    }
     self.text = text
     self.classification = classificationByName(classification)
     self.isKeyword = isKeyword
-    self.requiresLeadingSpace = requiresLeadingSpace
-    self.requiresTrailingSpace = requiresTrailingSpace
     self.associatedValueClass = associatedValueClass
   }
 }
@@ -65,20 +49,16 @@ public class TokenSpec {
 public class PoundKeywordSpec: TokenSpec {
   init(
     name: String,
-    kind: String,
     nameForDiagnostics: String? = nil,
     text: String,
     classification: String = "Keyword"
   ) {
     super.init(
       name: name,
-      kind: "pound_\(kind)",
       nameForDiagnostics: nameForDiagnostics ?? text,
-      unprefixedKind: kind,
       text: text,
       classification: classification,
-      isKeyword: true,
-      requiresTrailingSpace: true
+      isKeyword: true
     )
   }
 }
@@ -88,7 +68,6 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
 
   init(
     name: String,
-    kind: String,
     text: String,
     classification: String = "ObjectLiteral",
     nameForDiagnostics: String,
@@ -97,7 +76,6 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
     self.`protocol` = `protocol`
     super.init(
       name: name,
-      kind: kind,
       nameForDiagnostics: nameForDiagnostics,
       text: text,
       classification: classification
@@ -110,13 +88,11 @@ public class PoundConfigSpec: PoundKeywordSpec {}
 public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
   init(
     name: String,
-    kind: String,
     text: String,
     classification: String = "PoundDirectiveKeyword"
   ) {
     super.init(
       name: name,
-      kind: kind,
       text: text,
       classification: classification
     )
@@ -126,13 +102,11 @@ public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
 public class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
   override init(
     name: String,
-    kind: String,
     text: String,
     classification: String = "PoundDirectiveKeyword"
   ) {
     super.init(
       name: name,
-      kind: kind,
       text: text,
       classification: classification
     )
@@ -142,22 +116,15 @@ public class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
 public class PunctuatorSpec: TokenSpec {
   init(
     name: String,
-    kind: String,
     text: String,
-    classification: String = "None",
-    requiresLeadingSpace: Bool = false,
-    requiresTrailingSpace: Bool = false
+    classification: String = "None"
   ) {
     super.init(
       name: name,
-      kind: kind,
       nameForDiagnostics: text,
-      unprefixedKind: nil,
       text: text,
       classification: classification,
-      isKeyword: false,
-      requiresLeadingSpace: requiresLeadingSpace,
-      requiresTrailingSpace: requiresTrailingSpace
+      isKeyword: false
     )
   }
 }
@@ -167,62 +134,55 @@ public class LiteralSpec: TokenSpec {}
 public class MiscSpec: TokenSpec {}
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-  PunctuatorSpec(name: "Arrow", kind: "arrow", text: "->", requiresLeadingSpace: true, requiresTrailingSpace: true),
-  PunctuatorSpec(name: "AtSign", kind: "at_sign", text: "@", classification: "Attribute"),
-  PunctuatorSpec(name: "Backslash", kind: "backslash", text: "\\"),
-  PunctuatorSpec(name: "Backtick", kind: "backtick", text: "`"),
-  MiscSpec(
-    name: "BinaryOperator",
-    kind: "oper_binary",
-    nameForDiagnostics: "binary operator",
-    classification: "OperatorIdentifier",
-    requiresLeadingSpace: true,
-    requiresTrailingSpace: true
-  ),
-  PunctuatorSpec(name: "Colon", kind: "colon", text: ":", requiresTrailingSpace: true),
-  PunctuatorSpec(name: "Comma", kind: "comma", text: ",", requiresTrailingSpace: true),
-  MiscSpec(name: "DollarIdentifier", kind: "dollarident", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
-  PunctuatorSpec(name: "Ellipsis", kind: "ellipsis", text: "..."),
-  MiscSpec(name: "EndOfFile", kind: "eof", nameForDiagnostics: "end of file", text: ""),
-  PunctuatorSpec(name: "Equal", kind: "equal", text: "=", requiresLeadingSpace: true, requiresTrailingSpace: true),
-  PunctuatorSpec(name: "ExclamationMark", kind: "exclaim_postfix", text: "!"),
-  MiscSpec(name: "ExtendedRegexDelimiter", kind: "extended_regex_delimiter", nameForDiagnostics: "extended delimiter", classification: "RegexLiteral"),
-  LiteralSpec(name: "FloatingLiteral", kind: "floating_literal", nameForDiagnostics: "floating literal", classification: "FloatingLiteral"),
-  MiscSpec(name: "Identifier", kind: "identifier", nameForDiagnostics: "identifier", classification: "Identifier"),
-  PunctuatorSpec(name: "InfixQuestionMark", kind: "question_infix", text: "?"),
-  LiteralSpec(name: "IntegerLiteral", kind: "integer_literal", nameForDiagnostics: "integer literal", classification: "IntegerLiteral"),
-  MiscSpec(name: "Keyword", kind: "keyword", nameForDiagnostics: "keyword", classification: "Keyword", associatedValueClass: "Keyword"),
-  PunctuatorSpec(name: "LeftAngle", kind: "l_angle", text: "<"),
-  PunctuatorSpec(name: "LeftBrace", kind: "l_brace", text: "{", requiresLeadingSpace: true),
-  PunctuatorSpec(name: "LeftParen", kind: "l_paren", text: "("),
-  PunctuatorSpec(name: "LeftSquare", kind: "l_square", text: "["),
-  PunctuatorSpec(name: "MultilineStringQuote", kind: "multiline_string_quote", text: "\"\"\"", classification: "StringLiteral"),
-  PunctuatorSpec(name: "Period", kind: "period", text: "."),
-  MiscSpec(name: "PostfixOperator", kind: "oper_postfix", nameForDiagnostics: "postfix operator", classification: "OperatorIdentifier"),
-  PunctuatorSpec(name: "PostfixQuestionMark", kind: "question_postfix", text: "?"),
-  PunctuatorSpec(name: "Pound", kind: "pound", text: "#"),
-  PoundConfigSpec(name: "PoundAvailable", kind: "pound_available", text: "#available"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundElse", kind: "pound_else", text: "#else"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundElseif", kind: "pound_elseif", text: "#elseif"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundEndif", kind: "pound_endif", text: "#endif"),
-  PoundConditionalDirectiveKeywordSpec(name: "PoundIf", kind: "pound_if", text: "#if"),
-  PoundDirectiveKeywordSpec(name: "PoundSourceLocation", kind: "pound_sourceLocation", text: "#sourceLocation"),
-  PoundConfigSpec(name: "PoundUnavailable", kind: "pound_unavailable", text: "#unavailable"),
-  PunctuatorSpec(name: "PrefixAmpersand", kind: "amp_prefix", text: "&"),
-  MiscSpec(name: "PrefixOperator", kind: "oper_prefix", nameForDiagnostics: "prefix operator", classification: "OperatorIdentifier"),
-  MiscSpec(name: "RawStringDelimiter", kind: "raw_string_delimiter", nameForDiagnostics: "raw string delimiter"),
-  MiscSpec(name: "RegexLiteralPattern", kind: "regex_literal_pattern", nameForDiagnostics: "regex pattern", classification: "RegexLiteral"),
-  PunctuatorSpec(name: "RegexSlash", kind: "regex_slash", text: "/", classification: "RegexLiteral"),
-  PunctuatorSpec(name: "RightAngle", kind: "r_angle", text: ">"),
-  PunctuatorSpec(name: "RightBrace", kind: "r_brace", text: "}"),
-  PunctuatorSpec(name: "RightParen", kind: "r_paren", text: ")"),
-  PunctuatorSpec(name: "RightSquare", kind: "r_square", text: "]"),
-  PunctuatorSpec(name: "Semicolon", kind: "semi", text: ";"),
-  PunctuatorSpec(name: "SingleQuote", kind: "single_quote", text: "\'", classification: "StringLiteral"),
-  PunctuatorSpec(name: "StringQuote", kind: "string_quote", text: "\"", classification: "StringLiteral"),
-  MiscSpec(name: "StringSegment", kind: "string_segment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
-  MiscSpec(name: "Unknown", kind: "unknown", nameForDiagnostics: "token"),
-  MiscSpec(name: "Wildcard", kind: "_", nameForDiagnostics: "wildcard", text: "_"),
+  PunctuatorSpec(name: "Arrow", text: "->"),
+  PunctuatorSpec(name: "AtSign", text: "@", classification: "Attribute"),
+  PunctuatorSpec(name: "Backslash", text: "\\"),
+  PunctuatorSpec(name: "Backtick", text: "`"),
+  MiscSpec(name: "BinaryOperator", nameForDiagnostics: "binary operator", classification: "OperatorIdentifier"),
+  PunctuatorSpec(name: "Colon", text: ":"),
+  PunctuatorSpec(name: "Comma", text: ","),
+  MiscSpec(name: "DollarIdentifier", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
+  PunctuatorSpec(name: "Ellipsis", text: "..."),
+  MiscSpec(name: "EndOfFile", nameForDiagnostics: "end of file", text: ""),
+  PunctuatorSpec(name: "Equal", text: "="),
+  PunctuatorSpec(name: "ExclamationMark", text: "!"),
+  MiscSpec(name: "ExtendedRegexDelimiter", nameForDiagnostics: "extended delimiter", classification: "RegexLiteral"),
+  LiteralSpec(name: "FloatingLiteral", nameForDiagnostics: "floating literal", classification: "FloatingLiteral"),
+  MiscSpec(name: "Identifier", nameForDiagnostics: "identifier", classification: "Identifier"),
+  PunctuatorSpec(name: "InfixQuestionMark", text: "?"),
+  LiteralSpec(name: "IntegerLiteral", nameForDiagnostics: "integer literal", classification: "IntegerLiteral"),
+  MiscSpec(name: "Keyword", nameForDiagnostics: "keyword", classification: "Keyword", associatedValueClass: "Keyword"),
+  PunctuatorSpec(name: "LeftAngle", text: "<"),
+  PunctuatorSpec(name: "LeftBrace", text: "{"),
+  PunctuatorSpec(name: "LeftParen", text: "("),
+  PunctuatorSpec(name: "LeftSquare", text: "["),
+  PunctuatorSpec(name: "MultilineStringQuote", text: "\"\"\"", classification: "StringLiteral"),
+  PunctuatorSpec(name: "Period", text: "."),
+  MiscSpec(name: "PostfixOperator", nameForDiagnostics: "postfix operator", classification: "OperatorIdentifier"),
+  PunctuatorSpec(name: "PostfixQuestionMark", text: "?"),
+  PunctuatorSpec(name: "Pound", text: "#"),
+  PoundConfigSpec(name: "PoundAvailable", text: "#available"),
+  PoundConditionalDirectiveKeywordSpec(name: "PoundElse", text: "#else"),
+  PoundConditionalDirectiveKeywordSpec(name: "PoundElseif", text: "#elseif"),
+  PoundConditionalDirectiveKeywordSpec(name: "PoundEndif", text: "#endif"),
+  PoundConditionalDirectiveKeywordSpec(name: "PoundIf", text: "#if"),
+  PoundDirectiveKeywordSpec(name: "PoundSourceLocation", text: "#sourceLocation"),
+  PoundConfigSpec(name: "PoundUnavailable", text: "#unavailable"),
+  PunctuatorSpec(name: "PrefixAmpersand", text: "&"),
+  MiscSpec(name: "PrefixOperator", nameForDiagnostics: "prefix operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "RawStringDelimiter", nameForDiagnostics: "raw string delimiter"),
+  MiscSpec(name: "RegexLiteralPattern", nameForDiagnostics: "regex pattern", classification: "RegexLiteral"),
+  PunctuatorSpec(name: "RegexSlash", text: "/", classification: "RegexLiteral"),
+  PunctuatorSpec(name: "RightAngle", text: ">"),
+  PunctuatorSpec(name: "RightBrace", text: "}"),
+  PunctuatorSpec(name: "RightParen", text: ")"),
+  PunctuatorSpec(name: "RightSquare", text: "]"),
+  PunctuatorSpec(name: "Semicolon", text: ";"),
+  PunctuatorSpec(name: "SingleQuote", text: "\'", classification: "StringLiteral"),
+  PunctuatorSpec(name: "StringQuote", text: "\"", classification: "StringLiteral"),
+  MiscSpec(name: "StringSegment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
+  MiscSpec(name: "Unknown", nameForDiagnostics: "token"),
+  MiscSpec(name: "Wildcard", nameForDiagnostics: "wildcard", text: "_"),
 ]
 
 public let SYNTAX_TOKEN_MAP = Dictionary(

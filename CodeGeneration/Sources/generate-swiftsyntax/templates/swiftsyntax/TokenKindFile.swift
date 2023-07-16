@@ -99,7 +99,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
+            StmtSyntax("return \(raw: token.isPunctuation)")
           }
         }
       }
@@ -177,7 +177,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try! SwitchExprSyntax("switch self") {
         for token in SYNTAX_TOKENS {
           SwitchCaseSyntax("case .\(raw: token.swiftKind):") {
-            StmtSyntax("return \(raw: type(of: token) == PunctuatorSpec.self)")
+            StmtSyntax("return \(raw: token.isPunctuation)")
           }
         }
       }

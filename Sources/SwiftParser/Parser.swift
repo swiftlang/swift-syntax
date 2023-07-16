@@ -471,6 +471,17 @@ extension Parser {
     )
   }
 
+  /// If the current token starts with the given prefix, consume the prefis as the given token kind.
+  ///
+  /// Otherwise, synthesize a missing token of the given kind.
+  mutating func expectWithoutRecovery(prefix: SyntaxText, as tokenKind: RawTokenKind) -> Token {
+    if self.at(prefix: prefix) {
+      return consumePrefix(prefix, as: tokenKind)
+    } else {
+      return missingToken(tokenKind)
+    }
+  }
+
   /// - Parameters:
   ///   - keywordRecovery: If set to `true` and the parser is currently
   ///     positioned at a keyword instead of an identifier, this method recovers

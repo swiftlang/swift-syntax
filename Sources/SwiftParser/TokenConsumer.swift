@@ -23,6 +23,13 @@ protocol TokenConsumer {
   /// Consume the current token and change its token kind to `remappedTokenKind`.
   mutating func consumeAnyToken(remapping remappedTokenKind: RawTokenKind) -> Token
 
+  /// Consumes a given token, or splits the current token into a leading token
+  /// matching the given token and a trailing token and consumes the leading
+  /// token.
+  ///
+  ///     <TOKEN> ... -> consumePrefix(<TOK>) -> [ <TOK> ] <EN> ...
+  mutating func consumePrefix(_ prefix: SyntaxText, as tokenKind: RawTokenKind) -> Token
+
   /// Synthesize a missing token with `kind`.
   /// If `text` is not `nil`, use it for the token's text, otherwise use the token's default text.
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText?) -> Token
@@ -137,6 +144,12 @@ extension TokenConsumer {
     return nil
   }
 
+  /// Whether the current token’s text starts with the given prefix.
+  @inline(__always)
+  mutating func at(prefix: SyntaxText) -> Bool {
+    return self.currentToken.tokenText.hasPrefix(prefix)
+  }
+
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   @inline(__always)
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {
@@ -244,6 +257,17 @@ extension TokenConsumer {
   mutating func consume<SpecSet: TokenSpecSet>(ifAnyIn specSet: SpecSet.Type) -> Self.Token? {
     if let (_, handle) = self.at(anyIn: specSet) {
       return self.eat(handle)
+    } else {
+      return nil
+    }
+  }
+
+  /// If the current token starts with the given prefix, consume the prefis as the given token kind.
+  ///
+  /// Otherwise, return `nil`.
+  mutating func consume(ifPrefix prefix: SyntaxText, as tokenKind: RawTokenKind) -> Token? {
+    if self.at(prefix: prefix) {
+      return consumePrefix(prefix, as: tokenKind)
     } else {
       return nil
     }

@@ -228,7 +228,7 @@ extension Parser.Lookahead {
     guard lookahead.canParseTypeIdentifier() else {
       return false
     }
-    return lookahead.currentToken.starts(with: ".")
+    return lookahead.at(prefix: ".")
   }
 }
 
@@ -288,13 +288,5 @@ extension Lexer.Lexeme {
     // Contextual keywords will only be made keywords when a ``RawTokenSyntax`` is
     // constructed from them.
     return self.rawTokenKind == .keyword
-  }
-
-  func starts(with symbol: SyntaxText) -> Bool {
-    guard Operator(lexeme: self) != nil || self.rawTokenKind.isPunctuation else {
-      return false
-    }
-
-    return self.tokenText.hasPrefix(symbol)
   }
 }

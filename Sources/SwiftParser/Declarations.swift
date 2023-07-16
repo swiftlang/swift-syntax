@@ -759,7 +759,7 @@ extension Parser {
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightBrace) && loopProgress.evaluate(self) {
-        let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+        let newItemAtStartOfLine = self.atStartOfLine
         guard let newElement = self.parseMemberDeclListItem() else {
           break
         }
@@ -1341,7 +1341,7 @@ extension Parser {
             value: initExpr,
             arena: self.arena
           )
-        } else if self.atStartOfExpression(), !self.at(.leftBrace), !self.currentToken.flags.contains(.isAtStartOfLine) {
+        } else if self.atStartOfExpression(), !self.at(.leftBrace), !self.atStartOfLine {
           let missingEqual = RawTokenSyntax(missing: .equal, arena: self.arena)
           let expr = self.parseExpression()
           initializer = RawInitializerClauseSyntax(
@@ -2050,7 +2050,7 @@ extension Parser {
     }
     var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     var macro: RawTokenSyntax
-    if !self.currentToken.isAtStartOfLine {
+    if !self.atStartOfLine {
       (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
       if macro.leadingTriviaByteLength != 0 {
         unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)

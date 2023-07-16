@@ -134,7 +134,7 @@ extension Parser {
         )
       )
     case nil:
-      if self.currentToken.isLexerClassifiedKeyword, !self.currentToken.isAtStartOfLine {
+      if self.currentToken.isLexerClassifiedKeyword, !self.atStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
         return RawPatternSyntax(
@@ -171,7 +171,7 @@ extension Parser {
         arena: self.arena
       )
     } else if allowRecoveryFromMissingColon
-      && !self.currentToken.isAtStartOfLine
+      && !self.atStartOfLine
       && lookahead.canParseType()
     {
       let (unexpectedBeforeColon, colon) = self.expect(.colon)

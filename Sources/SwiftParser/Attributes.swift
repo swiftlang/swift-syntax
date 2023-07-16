@@ -1023,7 +1023,7 @@ extension Parser {
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let base: RawTokenSyntax
     let args: RawDeclNameArgumentsSyntax?
-    if label.isMissing && colon.isMissing && self.currentToken.isAtStartOfLine {
+    if label.isMissing && colon.isMissing && self.atStartOfLine {
       base = RawTokenSyntax(missing: .identifier, arena: self.arena)
       args = nil
     } else {

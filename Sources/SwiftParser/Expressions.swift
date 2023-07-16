@@ -29,7 +29,7 @@ extension TokenConsumer {
         // Decide how we want to consume the 'try':
         // If the declaration or statement starts at a new line, the user probably just forgot to write the expression after 'try' -> parse it as a TryExpr
         // If the declaration or statement starts at the same line, the user maybe tried to use 'try' as a modifier -> parse it as unexpected text in front of that decl or stmt.
-        return backtrack.currentToken.isAtStartOfLine
+        return backtrack.atStartOfLine
       } else {
         return true
       }
@@ -133,7 +133,7 @@ extension Parser {
     forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    if forDirective && self.currentToken.isAtStartOfLine {
+    if forDirective && self.atStartOfLine {
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     }
 
@@ -155,7 +155,7 @@ extension Parser {
     while loopCondition.evaluate(self) {
       guard
         !lastElement.is(RawMissingExprSyntax.self),
-        !(forDirective && self.currentToken.isAtStartOfLine)
+        !(forDirective && self.atStartOfLine)
       else {
         break
       }
@@ -175,7 +175,7 @@ extension Parser {
       if let rhsExpr {
         // Operator parsing returned the RHS.
         lastElement = rhsExpr
-      } else if forDirective && self.currentToken.isAtStartOfLine {
+      } else if forDirective && self.atStartOfLine {
         // Don't allow RHS at a newline for `#if` conditions.
         lastElement = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
         break
@@ -317,7 +317,7 @@ extension Parser {
       )
 
       let rhs: RawExprSyntax?
-      if colon.isMissing, currentToken.isAtStartOfLine {
+      if colon.isMissing, self.atStartOfLine {
         rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
       } else {
         rhs = nil
@@ -808,7 +808,7 @@ extension Parser {
     var leadingExpr = start
     var loopCondition = LoopProgressCondition()
     while loopCondition.evaluate(self) {
-      if forDirective && self.currentToken.isAtStartOfLine {
+      if forDirective && self.atStartOfLine {
         return leadingExpr
       }
 
@@ -1426,7 +1426,7 @@ extension Parser {
     }
     var unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
     var macroName: RawTokenSyntax
-    if !self.currentToken.isAtStartOfLine {
+    if !self.atStartOfLine {
       (unexpectedBeforeMacroName, macroName) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
       if macroName.leadingTriviaByteLength != 0 {
         // If there're whitespaces after '#' diagnose.
@@ -1730,9 +1730,9 @@ extension Parser {
           break
         }
 
-        // If The next token is at the beginning of a new line and can never start
+        // If the next token is at the beginning of a new line and can never start
         // an element, break.
-        if self.currentToken.isAtStartOfLine
+        if self.atStartOfLine
           && (self.at(.rightBrace, .poundEndif) || self.atStartOfDeclaration() || self.atStartOfStatement())
         {
           break
@@ -2266,7 +2266,7 @@ extension Parser.Lookahead {
       TokenSpec(.equal),
       TokenSpec(.postfixOperator),
       TokenSpec(.binaryOperator):
-      return !backtrack.currentToken.isAtStartOfLine
+      return !backtrack.atStartOfLine
     default:
       return false
     }

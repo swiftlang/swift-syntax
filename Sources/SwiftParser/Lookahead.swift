@@ -239,7 +239,7 @@ extension Parser.Lookahead {
       }
     } while self.at(.poundElseif, .poundElse) && poundIfLoopProgress.evaluate(self)
 
-    return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndif) != nil
+    return didSeeAnyAttributes && self.atStartOfLine && self.consume(if: .poundEndif) != nil
   }
 }
 
@@ -295,7 +295,7 @@ extension Parser.Lookahead {
   }
 
   mutating func skipUntilEndOfLine() {
-    while !self.at(.endOfFile) && !self.currentToken.isAtStartOfLine {
+    while !self.at(.endOfFile) && !self.atStartOfLine {
       self.skipSingle()
     }
   }

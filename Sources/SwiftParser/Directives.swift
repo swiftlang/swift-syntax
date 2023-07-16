@@ -209,7 +209,7 @@ extension Parser {
       && !self.atElifTypo()
       && elementsProgress.evaluate(self)
     {
-      let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+      let newItemAtStartOfLine = self.atStartOfLine
       guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
         break
       }

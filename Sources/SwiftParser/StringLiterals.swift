@@ -512,7 +512,7 @@ extension Parser {
         // line if this is a single-line literal. Leading trivia is fine as
         // we allow e.g "\(foo )".
         let rightParen: Token
-        if self.at(.rightParen) && self.currentToken.isAtStartOfLine && openQuote.tokenKind != .multilineStringQuote {
+        if self.at(.rightParen) && self.atStartOfLine && openQuote.tokenKind != .multilineStringQuote {
           rightParen = missingToken(.rightParen)
         } else {
           rightParen = self.expectWithoutRecovery(.rightParen)

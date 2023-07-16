@@ -150,6 +150,12 @@ extension TokenConsumer {
     return self.currentToken.tokenText.hasPrefix(prefix)
   }
 
+  /// Whether the current token is at the start of a line.
+  @inline(__always)
+  var atStartOfLine: Bool {
+    return self.currentToken.isAtStartOfLine
+  }
+
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
   @inline(__always)
   mutating func eat(_ handle: TokenConsumptionHandle) -> Token {

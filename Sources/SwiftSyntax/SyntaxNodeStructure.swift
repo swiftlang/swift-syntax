@@ -20,7 +20,7 @@ public enum SyntaxNodeStructure: Sendable {
   /// The node contains a fixed number of children which can be accessed by these key paths.
   case layout([AnyKeyPath & Sendable])
 
-  /// The node is a `SyntaxCollection` of the given type.
+  /// The node is a `SyntaxCollection` with elements of the given type.
   case collection(SyntaxProtocol.Type)
 
   /// The node can contain a single node with one of the listed types.

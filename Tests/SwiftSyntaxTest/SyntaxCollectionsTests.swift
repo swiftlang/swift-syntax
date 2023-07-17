@@ -263,4 +263,17 @@ class SyntaxCollectionsTests: XCTestCase {
     // The filtered sequence should have the `ArrayExprSyntax` as a parent
     XCTAssert(filteredElements.parent?.is(ArrayExprSyntax.self) ?? false)
   }
+
+  public func testKeyPathInParent() throws {
+    let arrayElementList = ArrayElementListSyntax([
+      integerLiteralElement(0),
+      integerLiteralElement(1),
+      integerLiteralElement(2),
+    ])
+
+    let element = arrayElementList[1]
+    let keyPath = try XCTUnwrap(element.keyPathInParent)
+    XCTAssert(type(of: keyPath).rootType == ArrayElementListSyntax.self)
+    XCTAssert(type(of: keyPath).valueType == ArrayElementSyntax.self)
+  }
 }

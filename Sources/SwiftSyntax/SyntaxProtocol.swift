@@ -228,10 +228,15 @@ extension SyntaxProtocol {
     guard let parent = self.parent else {
       return nil
     }
-    guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
-      return nil
+
+    switch parent.kind.syntaxNodeType.structure {
+    case .layout(let childrenKeyPaths):
+      return childrenKeyPaths[Syntax(self).indexInParent]
+    case .collection(_):
+      return (parent.asProtocol(SyntaxProtocol.self) as! any SyntaxCollection).keyPath(for: self.index)
+    case .choices:
+      preconditionFailure("The parent of a syntax node should always be a concrete node and not one with choices")
     }
-    return childrenKeyPaths[Syntax(self).indexInParent]
   }
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
@@ -784,5 +789,14 @@ extension SyntaxChildChoices {
   @available(*, deprecated, message: "This cast will always fail")
   public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+}
+
+extension SyntaxCollection {
+  /// Implementation detail of ``SyntaxProtocol/keyPathInParent``.
+  ///
+  /// I couldn't find a way to express this without an extension on ``SyntaxCollection``.
+  fileprivate func keyPath(for index: SyntaxChildrenIndex) -> AnyKeyPath {
+    return \Self[index]
   }
 }

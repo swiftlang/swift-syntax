@@ -477,14 +477,9 @@ public extension SyntaxProtocol {
     return data.endPosition
   }
 
-  /// The textual byte length of this node including leading and trailing trivia.
-  var byteSize: Int {
-    return totalLength.utf8Length
-  }
-
-  /// The byte source range of this node including leading and trailing trivia.
-  var byteRange: ByteSourceRange {
-    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
+  /// The length of this node including all of its trivia.
+  var totalLength: SourceLength {
+    return raw.totalLength
   }
 
   /// The length this node takes up spelled out in the source, excluding its
@@ -493,12 +488,32 @@ public extension SyntaxProtocol {
     return raw.contentLength
   }
 
-  /// The length of this node including all of its trivia.
-  var totalLength: SourceLength {
-    return raw.totalLength
+  /// The byte source range of this node including leading and trailing trivia.
+  var totalByteRange: ByteSourceRange {
+    return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
+  }
+
+  /// The byte source range of this node excluding leading and trailing trivia.
+  var contentByteRange: ByteSourceRange {
+    return ByteSourceRange(
+      offset: positionAfterSkippingLeadingTrivia.utf8Offset,
+      length: contentLength.utf8Length
+    )
+  }
+
+  @available(*, deprecated, renamed: "totalByteRange")
+  var byteRange: ByteSourceRange {
+    return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
+  }
+
+  /// The textual byte length of this node including leading and trailing trivia.
+  @available(*, deprecated, message: "Use totalLength.utf8Length")
+  var byteSize: Int {
+    return totalLength.utf8Length
   }
 
   /// The textual byte length of this node exluding leading and trailing trivia.
+  @available(*, deprecated, message: "Use contentLength.utf8Length")
   var byteSizeAfterTrimmingTrivia: Int {
     return contentLength.utf8Length
   }

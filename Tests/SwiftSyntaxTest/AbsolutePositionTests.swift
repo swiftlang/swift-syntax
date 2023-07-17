@@ -34,7 +34,7 @@ public class AbsolutePositionTests: XCTestCase {
       endOfFileToken: .endOfFileToken()
     )
     _ = root.statements[idx].position
-    _ = root.statements[idx].byteSize
+    _ = root.statements[idx].totalLength.utf8Length
     _ = root.statements[idx].positionAfterSkippingLeadingTrivia
   }
 
@@ -80,10 +80,10 @@ public class AbsolutePositionTests: XCTestCase {
     XCTAssertEqual(3, state.leadingTrivia.count)
     XCTAssertEqual(2, state.trailingTrivia.count)
     XCTAssertEqual(
-      state.byteSize,
+      state.totalLength.utf8Length,
       state.leadingTrivia.sourceLength.utf8Length
         + state.trailingTrivia.sourceLength.utf8Length
-        + state.byteSizeAfterTrimmingTrivia
+        + state.contentLength.utf8Length
     )
 
     // Test Node trivia setters and getters

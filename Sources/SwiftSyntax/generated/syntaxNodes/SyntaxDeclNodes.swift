@@ -14,8 +14,6 @@
 
 // MARK: - AccessorDeclSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -296,8 +294,6 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ActorDeclSyntax
-
-
 
 /// ### Children
 /// 
@@ -2427,8 +2423,6 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ExtensionDeclSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -2735,8 +2729,6 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - FunctionDeclSyntax
-
-
 
 /// ### Children
 /// 
@@ -3073,8 +3065,6 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - IfConfigDeclSyntax
-
-
 
 /// ### Children
 /// 
@@ -3870,8 +3860,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MacroDeclSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -4207,8 +4195,6 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - MacroExpansionDeclSyntax
-
-
 
 /// ### Children
 /// 
@@ -5032,8 +5018,6 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - PoundSourceLocationSyntax
-
-
 
 /// ### Children
 /// 
@@ -6310,8 +6294,6 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - SubscriptDeclSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -6690,8 +6672,6 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - TypealiasDeclSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -7000,8 +6980,6 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - VariableDeclSyntax
-
-
 
 /// ### Children
 /// 

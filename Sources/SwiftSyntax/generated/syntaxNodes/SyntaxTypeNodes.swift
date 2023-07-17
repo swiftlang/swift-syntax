@@ -14,8 +14,6 @@
 
 // MARK: - ArrayTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
@@ -164,8 +162,6 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - AttributedTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -340,8 +336,6 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ClassRestrictionTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `classKeyword`: `'class'`
@@ -424,8 +418,6 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - CompositionTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -533,8 +525,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - ConstrainedSugarTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -657,8 +647,6 @@ public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - DictionaryTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -862,8 +850,6 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - FunctionTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -1092,8 +1078,6 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `wrappedType`: ``TypeSyntax``
@@ -1215,8 +1199,6 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 }
 
 // MARK: - MemberTypeIdentifierSyntax
-
-
 
 /// ### Children
 /// 
@@ -1393,8 +1375,6 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - MetatypeTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -1632,8 +1612,6 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - NamedOpaqueReturnTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``
@@ -1758,8 +1736,6 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - OptionalTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `wrappedType`: ``TypeSyntax``
@@ -1881,8 +1857,6 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - PackExpansionTypeSyntax
-
-
 
 /// ### Children
 /// 
@@ -2006,8 +1980,6 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - PackReferenceTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `eachKeyword`: `'each'`
@@ -2129,8 +2101,6 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - SimpleTypeIdentifierSyntax
-
-
 
 /// ### Children
 /// 
@@ -2254,8 +2224,6 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 // MARK: - SuppressedTypeSyntax
 
-
-
 /// ### Children
 /// 
 ///  - `withoutTilde`: `<prefixOperator>`
@@ -2377,8 +2345,6 @@ public struct SuppressedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 }
 
 // MARK: - TupleTypeSyntax
-
-
 
 /// ### Children
 /// 

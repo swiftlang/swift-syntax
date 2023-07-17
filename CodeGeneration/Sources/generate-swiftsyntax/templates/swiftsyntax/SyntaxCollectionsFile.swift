@@ -17,10 +17,16 @@ import Utils
 
 let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
+    let documentation = """
+      \(node.documentation)
+      \(node.documentation.isEmpty ? "" : "///")
+      \(node.grammar)
+      """.removingEmptyLines
+
     try! StructDeclSyntax(
       """
-      \(raw: node.documentation)
-      public struct \(raw: node.kind.syntaxType): SyntaxCollection, SyntaxHashable
+      \(raw: documentation)
+      public struct \(node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {
       if let onlyElement = node.elementChoices.only {

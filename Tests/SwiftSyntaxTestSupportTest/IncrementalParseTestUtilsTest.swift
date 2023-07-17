@@ -27,7 +27,7 @@ public class IncrementalParseUtilTest: XCTestCase {
       }
       """
 
-    let (concurrentEdits, originalSource, _) = getEditsAndSources(source)
+    let (concurrentEdits, originalSource, _) = extractEditsAndSources(from: source)
 
     XCTAssertEqual(
       concurrentEdits.edits,
@@ -57,7 +57,7 @@ public class IncrementalParseUtilTest: XCTestCase {
   public func testReplaceMultiByteCharWithShorter() {
     let source = "⏩️👨‍👩‍👧‍👦⏸️🎉⏪️"
 
-    let (concurrentEdits, originalSource, editedSource) = getEditsAndSources(source)
+    let (concurrentEdits, originalSource, editedSource) = extractEditsAndSources(from: source)
 
     XCTAssertEqual(String(originalSource), "👨‍👩‍👧‍👦")
     XCTAssertEqual(String(editedSource), "🎉")
@@ -72,7 +72,7 @@ public class IncrementalParseUtilTest: XCTestCase {
   public func testReplaceWithMultiByteChar() {
     let source = "⏩️a⏸️👨‍👩‍👧‍👦⏪️"
 
-    let (concurrentEdits, originalSource, editedSource) = getEditsAndSources(source)
+    let (concurrentEdits, originalSource, editedSource) = extractEditsAndSources(from: source)
 
     XCTAssertEqual(String(originalSource), "a")
     XCTAssertEqual(String(editedSource), "👨‍👩‍👧‍👦")

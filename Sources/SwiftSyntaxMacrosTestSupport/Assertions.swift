@@ -248,8 +248,8 @@ func assertDiagnostic(
 /// - Parameters:
 ///   - originalSource: The original source code, which is expected to contain
 ///     macros in various places (e.g., `#stringify(x + y)`).
-///   - expandedSource: The source code that we expect to see after performing
-///     macro expansion on the original source.
+///   - expectedExpandedSource: The source code that we expect to see after
+///     performing macro expansion on the original source.
 ///   - diagnostics: The diagnostics when expanding any macro
 ///   - macros: The macros that should be expanded, provided as a dictionary
 ///     mapping macro names (e.g., `"stringify"`) to implementation types
@@ -258,7 +258,7 @@ func assertDiagnostic(
 ///   - testFileName: The name of the test file name to use.
 public func assertMacroExpansion(
   _ originalSource: String,
-  expandedSource: String,
+  expandedSource expectedExpandedSource: String,
   diagnostics: [DiagnosticSpec] = [],
   macros: [String: Macro.Type],
   testModuleName: String = "TestModule",
@@ -294,10 +294,10 @@ public func assertMacroExpansion(
   let formattedSourceFile = expandedSourceFile.formatted(using: BasicFormat(indentationWidth: indentationWidth))
   assertStringsEqualWithDiff(
     formattedSourceFile.description.trimmingCharacters(in: .newlines),
-    expandedSource.trimmingCharacters(in: .newlines),
+    expectedExpandedSource.trimmingCharacters(in: .newlines),
     additionalInfo: """
       Actual expanded source:
-      \(expandedSource)
+      \(formattedSourceFile)
       """,
     file: file,
     line: line

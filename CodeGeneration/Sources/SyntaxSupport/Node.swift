@@ -270,4 +270,21 @@ public struct CollectionNode {
       return choices
     }
   }
+
+  public var grammar: SwiftSyntax.Trivia {
+    let grammar: String
+    if let onlyElement = elementChoices.only {
+      grammar = "``\(onlyElement.syntaxType)`` `*`"
+    } else {
+      grammar = "(\(elementChoices.map { "``\($0.syntaxType)``" }.joined(separator: " | "))) `*`"
+    }
+
+    return docCommentTrivia(
+      from: """
+        ### Children
+
+        \(grammar)
+        """
+    )
+  }
 }

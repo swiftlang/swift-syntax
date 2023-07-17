@@ -297,7 +297,7 @@ public func assertMacroExpansion(
     expandedSource.trimmingCharacters(in: .newlines),
     additionalInfo: """
       Actual expanded source:
-      \(expandedSource)
+      \(formattedSourceFile)
       """,
     file: file,
     line: line

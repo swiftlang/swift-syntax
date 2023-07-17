@@ -1818,7 +1818,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
     if node.colon.isMissing {
       if let siblings = node.parent?.children(viewMode: .all),
-        let nextSibling = siblings[siblings.index(after: node.index)...].first,
+        let nodeIndex = siblings.index(of: node),
+        let nextSibling = siblings[siblings.index(after: nodeIndex)...].first,
         nextSibling.is(MissingExprSyntax.self)
       {
         addDiagnostic(

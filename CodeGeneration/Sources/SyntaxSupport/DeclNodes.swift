@@ -542,8 +542,7 @@ public let DECL_NODES: [Node] = [
           .keyword(text: "static"),
           .keyword(text: "unowned"),
           .keyword(text: "weak"),
-        ]),
-        classification: "Attribute"
+        ])
       ),
       Child(
         name: "Detail",
@@ -1128,15 +1127,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "PoundKeyword",
-        kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")]),
-        classification: "BuildConfigId"
+        kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")])
       ),
       Child(
         name: "Condition",
         kind: .node(kind: .expr),
         nameForDiagnostics: "condition",
-        isOptional: true,
-        classification: "BuildConfigId"
+        isOptional: true
       ),
       Child(
         name: "Elements",
@@ -1180,8 +1177,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "PoundEndif",
-        kind: .token(choices: [.token(tokenKind: "PoundEndifToken")]),
-        classification: "BuildConfigId"
+        kind: .token(choices: [.token(tokenKind: "PoundEndifToken")])
       ),
     ]
   ),
@@ -1597,8 +1593,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")]),
-        classification: "OperatorIdentifier"
+        kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
       ),
       Child(
         name: "OperatorPrecedenceAndTypes",
@@ -1820,8 +1815,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "AssociativityLabel",
         deprecatedName: "AssociativityKeyword",
-        kind: .token(choices: [.keyword(text: "associativity")]),
-        classification: "Keyword"
+        kind: .token(choices: [.keyword(text: "associativity")])
       ),
       Child(
         name: "Colon",
@@ -1938,8 +1932,7 @@ public let DECL_NODES: [Node] = [
         name: "HigherThanOrLowerThanLabel",
         deprecatedName: "HigherThanOrLowerThan",
         kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
-        documentation: "The relation to specified other precedence groups.",
-        classification: "Keyword"
+        documentation: "The relation to specified other precedence groups."
       ),
       Child(
         name: "Colon",

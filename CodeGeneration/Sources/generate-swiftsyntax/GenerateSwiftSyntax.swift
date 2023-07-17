@@ -80,9 +80,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
     let fileSpecs: [GeneratedFileSpec] =
       [
-        // IDEUtils
-        GeneratedFileSpec(swiftideUtilsGeneratedDir + ["SyntaxClassification.swift"], syntaxClassificationFile),
-
         // SwiftParser
         GeneratedFileSpec(swiftParserGeneratedDir + ["IsLexerClassified.swift"], isLexerClassifiedFile),
         GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+Entry.swift"], parserEntryFile),

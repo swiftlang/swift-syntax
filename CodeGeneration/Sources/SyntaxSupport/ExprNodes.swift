@@ -740,9 +740,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
-        classification: "StringInterpolationAnchor",
-        forceClassification: true
+        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
         name: "Expressions",
@@ -750,9 +748,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
-        classification: "StringInterpolationAnchor",
-        forceClassification: true
+        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
       ),
     ]
   ),

@@ -61,9 +61,7 @@ public class Child {
   public let kind: ChildKind
   public let nameForDiagnostics: String?
   public let documentation: String?
-  public let forceClassification: Bool
   public let isOptional: Bool
-  public let classification: SyntaxClassification?
 
   public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {
@@ -165,9 +163,7 @@ public class Child {
     kind: ChildKind,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
-    isOptional: Bool = false,
-    classification: String? = nil,
-    forceClassification: Bool = false
+    isOptional: Bool = false
   ) {
     if let firstCharInName = name.first {
       precondition(firstCharInName.isUppercase == true, "The first letter of a child’s name should be uppercase")
@@ -177,8 +173,6 @@ public class Child {
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = documentation
-    self.classification = classificationByName(classification)
-    self.forceClassification = forceClassification
     self.isOptional = isOptional
   }
 }

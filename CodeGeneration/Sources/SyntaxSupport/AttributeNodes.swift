@@ -46,8 +46,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "AttributeName",
         kind: .node(kind: .type),
         nameForDiagnostics: "name",
-        documentation: "The name of the attribute.",
-        classification: "Attribute"
+        documentation: "The name of the attribute."
       ),
       Child(
         name: "LeftParen",
@@ -191,8 +190,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "AvailabilityVersionRestriction",
-        kind: .node(kind: .availabilityVersionRestriction),
-        classification: "Keyword"
+        kind: .node(kind: .availabilityVersionRestriction)
       ),
       Child(
         name: "TrailingComma",

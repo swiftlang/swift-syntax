@@ -15,7 +15,6 @@ public class TokenSpec {
   public let name: String
   public let nameForDiagnostics: String
   public let text: String?
-  public let classification: SyntaxClassification?
   public let isKeyword: Bool
   public let associatedValueClass: String?
 
@@ -33,14 +32,12 @@ public class TokenSpec {
     name: String,
     nameForDiagnostics: String,
     text: String? = nil,
-    classification: String = "None",
     isKeyword: Bool = false,
     associatedValueClass: String? = nil
   ) {
     self.name = name
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
-    self.classification = classificationByName(classification)
     self.isKeyword = isKeyword
     self.associatedValueClass = associatedValueClass
   }
@@ -50,14 +47,12 @@ public class PoundKeywordSpec: TokenSpec {
   init(
     name: String,
     nameForDiagnostics: String? = nil,
-    text: String,
-    classification: String = "Keyword"
+    text: String
   ) {
     super.init(
       name: name,
       nameForDiagnostics: nameForDiagnostics ?? text,
       text: text,
-      classification: classification,
       isKeyword: true
     )
   }
@@ -69,7 +64,6 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
   init(
     name: String,
     text: String,
-    classification: String = "ObjectLiteral",
     nameForDiagnostics: String,
     `protocol`: String
   ) {
@@ -77,8 +71,7 @@ public class PoundObjectLiteralSpec: PoundKeywordSpec {
     super.init(
       name: name,
       nameForDiagnostics: nameForDiagnostics,
-      text: text,
-      classification: classification
+      text: text
     )
   }
 }
@@ -88,13 +81,11 @@ public class PoundConfigSpec: PoundKeywordSpec {}
 public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
   init(
     name: String,
-    text: String,
-    classification: String = "PoundDirectiveKeyword"
+    text: String
   ) {
     super.init(
       name: name,
-      text: text,
-      classification: classification
+      text: text
     )
   }
 }
@@ -102,13 +93,11 @@ public class PoundDirectiveKeywordSpec: PoundKeywordSpec {
 public class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
   override init(
     name: String,
-    text: String,
-    classification: String = "PoundDirectiveKeyword"
+    text: String
   ) {
     super.init(
       name: name,
-      text: text,
-      classification: classification
+      text: text
     )
   }
 }
@@ -116,14 +105,12 @@ public class PoundConditionalDirectiveKeywordSpec: PoundDirectiveKeywordSpec {
 public class PunctuatorSpec: TokenSpec {
   init(
     name: String,
-    text: String,
-    classification: String = "None"
+    text: String
   ) {
     super.init(
       name: name,
       nameForDiagnostics: text,
       text: text,
-      classification: classification,
       isKeyword: false
     )
   }
@@ -135,30 +122,30 @@ public class MiscSpec: TokenSpec {}
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
   PunctuatorSpec(name: "Arrow", text: "->"),
-  PunctuatorSpec(name: "AtSign", text: "@", classification: "Attribute"),
+  PunctuatorSpec(name: "AtSign", text: "@"),
   PunctuatorSpec(name: "Backslash", text: "\\"),
   PunctuatorSpec(name: "Backtick", text: "`"),
-  MiscSpec(name: "BinaryOperator", nameForDiagnostics: "binary operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "BinaryOperator", nameForDiagnostics: "binary operator"),
   PunctuatorSpec(name: "Colon", text: ":"),
   PunctuatorSpec(name: "Comma", text: ","),
-  MiscSpec(name: "DollarIdentifier", nameForDiagnostics: "dollar identifier", classification: "DollarIdentifier"),
+  MiscSpec(name: "DollarIdentifier", nameForDiagnostics: "dollar identifier"),
   PunctuatorSpec(name: "Ellipsis", text: "..."),
   MiscSpec(name: "EndOfFile", nameForDiagnostics: "end of file", text: ""),
   PunctuatorSpec(name: "Equal", text: "="),
   PunctuatorSpec(name: "ExclamationMark", text: "!"),
-  MiscSpec(name: "ExtendedRegexDelimiter", nameForDiagnostics: "extended delimiter", classification: "RegexLiteral"),
-  LiteralSpec(name: "FloatingLiteral", nameForDiagnostics: "floating literal", classification: "FloatingLiteral"),
-  MiscSpec(name: "Identifier", nameForDiagnostics: "identifier", classification: "Identifier"),
+  MiscSpec(name: "ExtendedRegexDelimiter", nameForDiagnostics: "extended delimiter"),
+  LiteralSpec(name: "FloatingLiteral", nameForDiagnostics: "floating literal"),
+  MiscSpec(name: "Identifier", nameForDiagnostics: "identifier"),
   PunctuatorSpec(name: "InfixQuestionMark", text: "?"),
-  LiteralSpec(name: "IntegerLiteral", nameForDiagnostics: "integer literal", classification: "IntegerLiteral"),
-  MiscSpec(name: "Keyword", nameForDiagnostics: "keyword", classification: "Keyword", associatedValueClass: "Keyword"),
+  LiteralSpec(name: "IntegerLiteral", nameForDiagnostics: "integer literal"),
+  MiscSpec(name: "Keyword", nameForDiagnostics: "keyword", associatedValueClass: "Keyword"),
   PunctuatorSpec(name: "LeftAngle", text: "<"),
   PunctuatorSpec(name: "LeftBrace", text: "{"),
   PunctuatorSpec(name: "LeftParen", text: "("),
   PunctuatorSpec(name: "LeftSquare", text: "["),
-  PunctuatorSpec(name: "MultilineStringQuote", text: "\"\"\"", classification: "StringLiteral"),
+  PunctuatorSpec(name: "MultilineStringQuote", text: "\"\"\""),
   PunctuatorSpec(name: "Period", text: "."),
-  MiscSpec(name: "PostfixOperator", nameForDiagnostics: "postfix operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "PostfixOperator", nameForDiagnostics: "postfix operator"),
   PunctuatorSpec(name: "PostfixQuestionMark", text: "?"),
   PunctuatorSpec(name: "Pound", text: "#"),
   PoundConfigSpec(name: "PoundAvailable", text: "#available"),
@@ -169,18 +156,18 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   PoundDirectiveKeywordSpec(name: "PoundSourceLocation", text: "#sourceLocation"),
   PoundConfigSpec(name: "PoundUnavailable", text: "#unavailable"),
   PunctuatorSpec(name: "PrefixAmpersand", text: "&"),
-  MiscSpec(name: "PrefixOperator", nameForDiagnostics: "prefix operator", classification: "OperatorIdentifier"),
+  MiscSpec(name: "PrefixOperator", nameForDiagnostics: "prefix operator"),
   MiscSpec(name: "RawStringDelimiter", nameForDiagnostics: "raw string delimiter"),
-  MiscSpec(name: "RegexLiteralPattern", nameForDiagnostics: "regex pattern", classification: "RegexLiteral"),
-  PunctuatorSpec(name: "RegexSlash", text: "/", classification: "RegexLiteral"),
+  MiscSpec(name: "RegexLiteralPattern", nameForDiagnostics: "regex pattern"),
+  PunctuatorSpec(name: "RegexSlash", text: "/"),
   PunctuatorSpec(name: "RightAngle", text: ">"),
   PunctuatorSpec(name: "RightBrace", text: "}"),
   PunctuatorSpec(name: "RightParen", text: ")"),
   PunctuatorSpec(name: "RightSquare", text: "]"),
   PunctuatorSpec(name: "Semicolon", text: ";"),
-  PunctuatorSpec(name: "SingleQuote", text: "\'", classification: "StringLiteral"),
-  PunctuatorSpec(name: "StringQuote", text: "\"", classification: "StringLiteral"),
-  MiscSpec(name: "StringSegment", nameForDiagnostics: "string segment", classification: "StringLiteral"),
+  PunctuatorSpec(name: "SingleQuote", text: "\'"),
+  PunctuatorSpec(name: "StringQuote", text: "\""),
+  MiscSpec(name: "StringSegment", nameForDiagnostics: "string segment"),
   MiscSpec(name: "Unknown", nameForDiagnostics: "token"),
   MiscSpec(name: "Wildcard", nameForDiagnostics: "wildcard", text: "_"),
 ]

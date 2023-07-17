@@ -297,8 +297,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "Name",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self")]),
-        nameForDiagnostics: "name",
-        classification: "TypeIdentifier"
+        nameForDiagnostics: "name"
       ),
       Child(
         name: "GenericArgumentClause",
@@ -432,8 +431,7 @@ public let TYPE_NODES: [Node] = [
           .keyword(text: "Self"),
           .keyword(text: "Any"),
           .token(tokenKind: "WildcardToken"),
-        ]),
-        classification: "TypeIdentifier"
+        ])
       ),
       Child(
         name: "GenericArgumentClause",

@@ -71,8 +71,7 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "Statements",
         kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
-        nameForDiagnostics: "statements",
-        isIndented: true
+        nameForDiagnostics: "statements"
       ),
       Child(
         name: "RightBrace",

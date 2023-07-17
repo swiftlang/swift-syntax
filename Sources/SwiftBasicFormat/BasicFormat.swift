@@ -164,7 +164,43 @@ open class BasicFormat: SyntaxRewriter {
 
   /// Whether a leading newline on `token` should be added.
   open func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
-    return node.requiresIndent
+    guard let keyPath = node.keyPathInParent else {
+      return false
+    }
+    switch keyPath {
+    case \AccessorBlockSyntax.accessors:
+      return true
+    case \ArrayExprSyntax.elements:
+      return true
+    case \ClosureExprSyntax.statements:
+      return true
+    case \ClosureParameterClauseSyntax.parameterList:
+      return true
+    case \CodeBlockSyntax.statements:
+      return true
+    case \DictionaryElementSyntax.valueExpression:
+      return true
+    case \DictionaryExprSyntax.content:
+      return true
+    case \EnumCaseParameterClauseSyntax.parameterList:
+      return true
+    case \FunctionCallExprSyntax.argumentList:
+      return true
+    case \FunctionTypeSyntax.parameters:
+      return true
+    case \MemberDeclBlockSyntax.members:
+      return true
+    case \ParameterClauseSyntax.parameterList:
+      return true
+    case \SwitchCaseSyntax.statements:
+      return true
+    case \TupleExprSyntax.elements:
+      return true
+    case \TupleTypeSyntax.elements:
+      return true
+    default:
+      return false
+    }
   }
 
   open func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {

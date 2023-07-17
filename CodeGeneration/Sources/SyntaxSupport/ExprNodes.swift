@@ -53,8 +53,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
-        kind: .collection(kind: .arrayElementList, collectionElementName: "Element"),
-        isIndented: true
+        kind: .collection(kind: .arrayElementList, collectionElementName: "Element")
       ),
       Child(
         name: "RightSquare",
@@ -447,8 +446,7 @@ public let EXPR_NODES: [Node] = [
         name: "ParameterList",
         kind: .collection(kind: .closureParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
-        documentation: "The actual parameters.",
-        isIndented: true
+        documentation: "The actual parameters."
       ),
       Child(
         name: "RightParen",
@@ -478,8 +476,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
-        isIndented: true
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
       ),
       Child(
         name: "RightBrace",
@@ -648,8 +645,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "ValueExpression",
         kind: .node(kind: .expr),
-        nameForDiagnostics: "value",
-        isIndented: true
+        nameForDiagnostics: "value"
       ),
       Child(
         name: "TrailingComma",
@@ -680,8 +676,7 @@ public let EXPR_NODES: [Node] = [
             name: "Elements",
             kind: .node(kind: .dictionaryElementList)
           ),
-        ]),
-        isIndented: true
+        ])
       ),
       Child(
         name: "RightSquare",
@@ -816,8 +811,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "ArgumentList",
         kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
-        nameForDiagnostics: "arguments",
-        isIndented: true
+        nameForDiagnostics: "arguments"
       ),
       Child(
         name: "RightParen",
@@ -1630,8 +1624,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
-        isIndented: true
+        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
       ),
     ]
   ),
@@ -1805,8 +1798,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Elements",
         deprecatedName: "ElementList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element"),
-        isIndented: true
+        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",

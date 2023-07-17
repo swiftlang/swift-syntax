@@ -62,7 +62,6 @@ public class Child {
   public let nameForDiagnostics: String?
   public let documentation: String?
   public let forceClassification: Bool
-  public let isIndented: Bool
   public let isOptional: Bool
   public let classification: SyntaxClassification?
 
@@ -168,8 +167,7 @@ public class Child {
     documentation: String? = nil,
     isOptional: Bool = false,
     classification: String? = nil,
-    forceClassification: Bool = false,
-    isIndented: Bool = false
+    forceClassification: Bool = false
   ) {
     if let firstCharInName = name.first {
       precondition(firstCharInName.isUppercase == true, "The first letter of a child’s name should be uppercase")
@@ -181,7 +179,6 @@ public class Child {
     self.documentation = documentation
     self.classification = classificationByName(classification)
     self.forceClassification = forceClassification
-    self.isIndented = isIndented
     self.isOptional = isOptional
   }
 }

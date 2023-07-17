@@ -56,8 +56,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Accessors",
-        kind: .collection(kind: .accessorList, collectionElementName: "Accessor"),
-        isIndented: true
+        kind: .collection(kind: .accessorList, collectionElementName: "Accessor")
       ),
       Child(
         name: "RightBrace",
@@ -681,8 +680,7 @@ public let DECL_NODES: [Node] = [
         name: "ParameterList",
         kind: .collection(kind: .enumCaseParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
-        documentation: "The actual parameters.",
-        isIndented: true
+        documentation: "The actual parameters."
       ),
       Child(
         name: "RightParen",
@@ -1509,8 +1507,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Members",
-        kind: .collection(kind: .memberDeclList, collectionElementName: "Member"),
-        isIndented: true
+        kind: .collection(kind: .memberDeclList, collectionElementName: "Member")
       ),
       Child(
         name: "RightBrace",
@@ -1652,8 +1649,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "ParameterList",
         kind: .collection(kind: .functionParameterList, collectionElementName: "Parameter"),
-        nameForDiagnostics: "parameters",
-        isIndented: true
+        nameForDiagnostics: "parameters"
       ),
       Child(
         name: "RightParen",

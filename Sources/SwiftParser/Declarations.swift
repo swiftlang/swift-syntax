@@ -407,22 +407,6 @@ extension Parser {
 }
 
 extension Parser {
-  /// Attempt to consume an ellipsis prefix, splitting the current token if
-  /// necessary.
-  mutating func tryConsumeEllipsisPrefix() -> RawTokenSyntax? {
-    // It is not sufficient to check currentToken.isEllipsis here, as we may
-    // have something like '...>'.
-    // TODO: Recovery for different numbers of dots (which also needs to be
-    // done for regular variadics).
-    guard self.at(anyIn: Operator.self) != nil else { return nil }
-    let text = self.currentToken.tokenText
-    guard text.hasPrefix("...") else { return nil }
-    return self.consumePrefix(
-      SyntaxText(rebasing: text.prefix(3)),
-      as: .ellipsis
-    )
-  }
-
   mutating func parseGenericParameters() -> RawGenericParameterClauseSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawGenericParameterClauseSyntax(
@@ -435,12 +419,7 @@ extension Parser {
       )
     }
 
-    let langle: RawTokenSyntax
-    if self.currentToken.starts(with: "<") {
-      langle = self.consumePrefix("<", as: .leftAngle)
-    } else {
-      langle = missingToken(.leftAngle)
-    }
+    let langle = self.expectWithoutRecovery(prefix: "<", as: .leftAngle)
     var elements = [RawGenericParameterSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -452,14 +431,13 @@ extension Parser {
         var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.currentToken.starts(with: ">")
-        {
+        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.at(prefix: ">") {
           break
         }
 
         // Parse the unsupported ellipsis for a type parameter pack 'T...'.
         let unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?
-        if let ellipsis = tryConsumeEllipsisPrefix() {
+        if let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis) {
           unexpectedBetweenNameAndColon = RawUnexpectedNodesSyntax([ellipsis], arena: self.arena)
           if each == nil {
             each = missingToken(.each)
@@ -518,12 +496,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let rangle: RawTokenSyntax
-    if self.currentToken.starts(with: ">") {
-      rangle = self.consumePrefix(">", as: .rightAngle)
-    } else {
-      rangle = RawTokenSyntax(missing: .rightAngle, arena: self.arena)
-    }
+    let rangle = expectWithoutRecovery(prefix: ">", as: .rightAngle)
 
     let parameters: RawGenericParameterListSyntax
     if elements.isEmpty && rangle.isMissing {
@@ -934,7 +907,7 @@ extension Parser {
     }
 
     // Detect an attempt to use (early syntax) type parameter pack.
-    let ellipsis = tryConsumeEllipsisPrefix()
+    let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
     // Parse optional inheritance clause.
     let inheritance: RawTypeInheritanceClauseSyntax?
@@ -1011,7 +984,7 @@ extension Parser {
     }
 
     let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       generics = self.parseGenericParameters()
     } else {
       generics = nil
@@ -1145,7 +1118,7 @@ extension Parser {
     }
 
     let genericParams: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       genericParams = self.parseGenericParameters()
     } else {
       genericParams = nil
@@ -1229,14 +1202,14 @@ extension Parser {
     let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(handle)
 
     let unexpectedName: RawTokenSyntax?
-    if self.at(.identifier) && self.peek().starts(with: "<") || self.peek().rawTokenKind == .leftParen {
+    if self.at(.identifier) && self.peek().tokenText.hasPrefix("<") || self.peek().rawTokenKind == .leftParen {
       unexpectedName = self.consumeAnyToken()
     } else {
       unexpectedName = nil
     }
 
     let genericParameterClause: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       genericParameterClause = self.parseGenericParameters()
     } else {
       genericParameterClause = nil
@@ -1617,7 +1590,7 @@ extension Parser {
 
     // Parse a generic parameter list if it is present.
     let generics: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       generics = self.parseGenericParameters()
     } else {
       generics = nil
@@ -2012,7 +1985,7 @@ extension Parser {
 
     // Optional generic parameters.
     let genericParams: RawGenericParameterClauseSyntax?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       genericParams = self.parseGenericParameters()
     } else {
       genericParams = nil

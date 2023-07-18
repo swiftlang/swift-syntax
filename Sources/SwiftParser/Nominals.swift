@@ -233,7 +233,7 @@ extension Parser {
     }
 
     let primaryOrGenerics: T.PrimaryOrGenerics?
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       primaryOrGenerics = T.parsePrimaryOrGenerics(&self)
     } else {
       primaryOrGenerics = nil
@@ -352,18 +352,10 @@ extension Parser {
         )
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
-    let unexpectedBeforeRangle: RawUnexpectedNodesSyntax?
-    let rangle: RawTokenSyntax
-    if self.currentToken.starts(with: ">") {
-      unexpectedBeforeRangle = nil
-      rangle = self.consumePrefix(">", as: .rightAngle)
-    } else {
-      (unexpectedBeforeRangle, rangle) = self.expect(.rightAngle)
-    }
+    let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(
       leftAngle: langle,
       primaryAssociatedTypeList: RawPrimaryAssociatedTypeListSyntax(elements: associatedTypes, arena: self.arena),
-      unexpectedBeforeRangle,
       rightAngle: rangle,
       arena: self.arena
     )

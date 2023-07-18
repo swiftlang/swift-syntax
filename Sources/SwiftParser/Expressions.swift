@@ -1023,21 +1023,12 @@ extension Parser {
 
     for _ in 0..<numComponents {
       // Consume a period, if there is one.
-      let period: RawTokenSyntax?
-      if self.currentToken.starts(with: ".") {
-        period = self.consumePrefix(".", as: .period)
-      } else {
-        period = nil
-      }
+      let period = self.consume(ifPrefix: ".", as: .period)
 
       // Consume the '!' or '?'.
-      let questionOrExclaim: RawTokenSyntax
-      if self.currentToken.starts(with: "!") {
-        questionOrExclaim = self.consumePrefix("!", as: .exclamationMark)
-      } else {
-        precondition(self.currentToken.starts(with: "?"))
-        questionOrExclaim = self.consumePrefix("?", as: .postfixQuestionMark)
-      }
+      let questionOrExclaim =
+        self.consume(ifPrefix: "!", as: .exclamationMark)
+        ?? self.expectWithoutRecovery(prefix: "?", as: .postfixQuestionMark)
 
       components.append(
         RawKeyPathComponentSyntax(
@@ -1078,7 +1069,7 @@ extension Parser {
     // operator token. Since keypath allows '.!' '.?' and '.[', consume '.'
     // the token is an operator starts with '.', or the following token is '['.
     let rootType: RawTypeSyntax?
-    if !self.currentToken.starts(with: ".") {
+    if !self.at(prefix: ".") {
       rootType = self.parseSimpleType(stopAtFirstPeriod: true)
     } else {
       rootType = nil

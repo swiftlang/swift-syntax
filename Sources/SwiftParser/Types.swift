@@ -422,8 +422,7 @@ extension Parser {
   ///     generic-argument-list → generic-argument | generic-argument ',' generic-argument-list
   ///     generic-argument → type
   mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
-    precondition(self.currentToken.starts(with: "<"))
-    let langle = self.consumePrefix("<", as: .leftAngle)
+    let langle = self.expectWithoutRecovery(prefix: "<", as: .leftAngle)
     var arguments = [RawGenericArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
@@ -444,12 +443,7 @@ extension Parser {
       } while keepGoing != nil && loopProgress.evaluate(currentToken)
     }
 
-    let rangle: RawTokenSyntax
-    if self.currentToken.starts(with: ">") {
-      rangle = self.consumePrefix(">", as: .rightAngle)
-    } else {
-      rangle = RawTokenSyntax(missing: .rightAngle, arena: self.arena)
-    }
+    let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
 
     let args: RawGenericArgumentListSyntax
     if arguments.isEmpty && rangle.isMissing {
@@ -656,7 +650,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.currentToken.isEllipsis {
+    if self.atContextualPunctuator("...") {
       self.consumeAnyToken()
     }
 
@@ -884,7 +878,7 @@ extension Parser.Lookahead {
     self.consumeAnyToken()
 
     // Parse an optional generic argument list.
-    if self.currentToken.starts(with: "<") && !self.consumeGenericArguments() {
+    if self.at(prefix: "<") && !self.consumeGenericArguments() {
       return false
     }
 
@@ -905,13 +899,11 @@ extension Parser.Lookahead {
 
   mutating func consumeGenericArguments() -> Bool {
     // Parse the opening '<'.
-    guard self.currentToken.starts(with: "<") else {
+    guard self.consume(ifPrefix: "<", as: .leftAngle) != nil else {
       return false
     }
 
-    self.consumePrefix("<", as: .leftAngle)
-
-    if !self.currentToken.starts(with: ">") {
+    if !self.at(prefix: ">") {
       var loopProgress = LoopProgressCondition()
       repeat {
         guard self.canParseType() else {
@@ -921,11 +913,10 @@ extension Parser.Lookahead {
       } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
     }
 
-    guard self.currentToken.starts(with: ">") else {
+    guard self.consume(ifPrefix: ">", as: .rightAngle) != nil else {
       return false
     }
 
-    self.consumePrefix(">", as: .rightAngle)
     return true
   }
 }
@@ -1001,7 +992,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseResultType() -> RawTypeSyntax {
-    if self.currentToken.starts(with: "<") {
+    if self.at(prefix: "<") {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
       return RawTypeSyntax(
@@ -1074,10 +1065,6 @@ extension Lexer.Lexeme {
     return self.rawTokenKind == .binaryOperator
       || self.rawTokenKind == .postfixOperator
       || self.rawTokenKind == .prefixOperator
-  }
-
-  var isEllipsis: Bool {
-    return self.isAnyOperator && self.tokenText == "..."
   }
 
   var isGenericTypeDisambiguatingToken: Bool {

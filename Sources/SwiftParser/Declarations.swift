@@ -342,7 +342,7 @@ extension Parser {
     return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindSpecifierOptions.self)
   }
 
-  mutating func parseImportPath() -> RawImportPathSyntax {
+  mutating func parseImportPath() -> RawImportPathComponentListSyntax {
     var elements = [RawImportPathComponentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
@@ -357,7 +357,7 @@ extension Parser {
         )
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
-    return RawImportPathSyntax(elements: elements, arena: self.arena)
+    return RawImportPathComponentListSyntax(elements: elements, arena: self.arena)
   }
 }
 

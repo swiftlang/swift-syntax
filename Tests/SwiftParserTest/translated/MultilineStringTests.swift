@@ -499,7 +499,7 @@ final class MultilineStringTests: XCTestCase {
         StringLiteralExprSyntax(
           openDelimiter: .rawStringDelimiter("#"),
           openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(
               StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
             ),
@@ -528,7 +528,7 @@ final class MultilineStringTests: XCTestCase {
         StringLiteralExprSyntax(
           openDelimiter: .rawStringDelimiter("#"),
           openQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(
               StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
             ),

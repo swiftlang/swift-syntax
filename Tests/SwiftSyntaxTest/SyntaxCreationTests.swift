@@ -110,7 +110,7 @@ public class SyntaxCreationTests: XCTestCase {
   public func testFunctionCallSyntaxBuilder() {
     let string = StringLiteralExprSyntax(
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken()
     )
     let printID = IdentifierExprSyntax(identifier: .identifier("print"))
@@ -125,7 +125,7 @@ public class SyntaxCreationTests: XCTestCase {
 
     let emptyString = StringLiteralExprSyntax(
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment(" ")))]),
+      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment(" ")))]),
       closeQuote: .stringQuoteToken()
     )
     let terminatorArg = TupleExprElementSyntax(
@@ -154,7 +154,7 @@ public class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openDelimiter: nil,
       openQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken(),
       closeDelimiter: nil
     )
@@ -184,7 +184,7 @@ public class SyntaxCreationTests: XCTestCase {
   public func testMakeStringLiteralExpr() {
     let expr = StringLiteralExprSyntax(
       openQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
-      segments: StringLiteralSegmentsSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closeQuote: .stringQuoteToken()
     )
     let expected = """

@@ -3224,7 +3224,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `importKeyword`: `'import'`
 ///  - `importKindSpecifier`: (`'typealias'` | `'struct'` | `'class'` | `'enum'` | `'protocol'` | `'var'` | `'let'` | `'func'` | `'inout'`)?
-///  - `path`: ``ImportPathSyntax``
+///  - `path`: ``ImportPathComponentListSyntax``
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3262,7 +3262,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenImportKeywordAndImportKindSpecifier: UnexpectedNodesSyntax? = nil,
       importKindSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenImportKindSpecifierAndPath: UnexpectedNodesSyntax? = nil,
-      path: ImportPathSyntax,
+      path: ImportPathComponentListSyntax,
       _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -3442,9 +3442,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The path to the module, submodule or symbol being imported.
-  public var path: ImportPathSyntax {
+  public var path: ImportPathComponentListSyntax {
     get {
-      return ImportPathSyntax(data.child(at: 9, parent: Syntax(self))!)
+      return ImportPathComponentListSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
       self = ImportDeclSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
@@ -3463,7 +3463,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.importPath,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.importPathComponentList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(

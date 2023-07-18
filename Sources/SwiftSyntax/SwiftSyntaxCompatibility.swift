@@ -51,6 +51,12 @@ public extension DeclGroupSyntax {
   }
 }
 
+@available(*, deprecated, renamed: "DocumentationAttributeArgumentListSyntax")
+public typealias DocumentationAttributeArgumentsSyntax = DocumentationAttributeArgumentListSyntax
+
+@available(*, deprecated, renamed: "EffectsArgumentListSyntax")
+public typealias EffectsArgumentsSyntax = EffectsArgumentListSyntax
+
 public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "genericArgumentClause")
   var genericArguments: GenericArgumentClauseSyntax? {
@@ -83,14 +89,45 @@ extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
   }
 }
 
+@available(*, deprecated, renamed: "ImportPathComponentListSyntax")
+public typealias ImportPathSyntax = ImportPathComponentListSyntax
+
+@available(*, deprecated, renamed: "ObjCSelectorPieceListSyntax")
+public typealias ObjCSelector = ObjCSelectorPieceListSyntax
+
 extension PatternBindingSyntax {
   @available(*, deprecated, renamed: "Accessors")
   public typealias Accessor = Accessors
 }
 
+@available(*, deprecated, renamed: "StringLiteralSegmentListSyntax")
+public typealias StringLiteralSegmentsSyntax = StringLiteralSegmentListSyntax
+
 extension SubscriptDeclSyntax {
   @available(*, deprecated, renamed: "Accessors")
   public typealias Accessor = Accessors
+}
+
+public extension SyntaxKind {
+  static var documentationAttributeArguments: Self {
+    return .documentationAttributeArgumentList
+  }
+
+  static var effectsArguments: Self {
+    return .effectsArgumentList
+  }
+
+  static var importPath: Self {
+    return .importPathComponentList
+  }
+
+  static var objCSelector: Self {
+    return .objCSelectorPieceList
+  }
+
+  static var stringLiteralSegments: Self {
+    return .stringLiteralSegmentList
+  }
 }
 
 public extension SyntaxProtocol {

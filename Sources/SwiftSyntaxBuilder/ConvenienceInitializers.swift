@@ -326,7 +326,7 @@ extension StringLiteralExprSyntax {
     )
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
-    let segments = StringLiteralSegmentsSyntax([.stringSegment(segment)])
+    let segments = StringLiteralSegmentListSyntax([.stringSegment(segment)])
 
     self.init(
       openDelimiter: openDelimiter,

@@ -1488,7 +1488,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Segments",
-        kind: .collection(kind: .stringLiteralSegments, collectionElementName: "Segment")
+        kind: .collection(kind: .stringLiteralSegmentList, collectionElementName: "Segment")
       ),
       Child(
         name: "CloseQuote",
@@ -1503,7 +1503,7 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    kind: .stringLiteralSegments,
+    kind: .stringLiteralSegmentList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.stringSegment, .expressionSegment]

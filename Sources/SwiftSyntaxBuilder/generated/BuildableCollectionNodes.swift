@@ -141,14 +141,14 @@ extension DifferentiabilityParamListSyntax: ExpressibleByArrayLiteral {
 }
 
 /// The arguments of the '@_documentation' attribute
-extension DocumentationAttributeArgumentsSyntax: ExpressibleByArrayLiteral {
+extension DocumentationAttributeArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
 }
 
 /// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
-extension EffectsArgumentsSyntax: ExpressibleByArrayLiteral {
+extension EffectsArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -216,8 +216,8 @@ extension IfConfigClauseListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `ImportPathSyntax` represents a collection of `ImportPathComponentSyntax`
-extension ImportPathSyntax: ExpressibleByArrayLiteral {
+/// `ImportPathComponentListSyntax` represents a collection of `ImportPathComponentSyntax`
+extension ImportPathComponentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -258,8 +258,8 @@ extension MultipleTrailingClosureElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `ObjCSelectorSyntax` represents a collection of `ObjCSelectorPieceSyntax`
-extension ObjCSelectorSyntax: ExpressibleByArrayLiteral {
+/// `ObjCSelectorPieceListSyntax` represents a collection of `ObjCSelectorPieceSyntax`
+extension ObjCSelectorPieceListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -300,8 +300,8 @@ extension SpecializeAttributeSpecListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `StringLiteralSegmentsSyntax` represents a collection of `Syntax`
-extension StringLiteralSegmentsSyntax: ExpressibleByArrayLiteral {
+/// `StringLiteralSegmentListSyntax` represents a collection of `Syntax`
+extension StringLiteralSegmentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

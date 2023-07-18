@@ -407,7 +407,7 @@ public struct MissingAttributeArgument: ParserError {
 }
 
 public struct MissingBothStringQuotesOfStringSegments: ParserError {
-  public let stringSegments: StringLiteralSegmentsSyntax
+  public let stringSegments: StringLiteralSegmentListSyntax
 
   public var message: String {
     return #"expected \#(stringSegments.shortSingleLineContentDescription) to be surrounded by '"'"#

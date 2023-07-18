@@ -290,7 +290,7 @@ extension Parser {
         while !parser.at(.rightParen, .endOfFile) {
           tokens.append(parser.consumeAnyToken())
         }
-        return .effectsArguments(RawEffectsArgumentsSyntax(elements: tokens, arena: parser.arena))
+        return .effectsArguments(RawEffectsArgumentListSyntax(elements: tokens, arena: parser.arena))
       }
     case ._cdecl:
       return parseAttribute(argumentMode: .required) { parser in
@@ -591,7 +591,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseObjectiveCSelector() -> RawObjCSelectorSyntax {
+  mutating func parseObjectiveCSelector() -> RawObjCSelectorPieceListSyntax {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
@@ -633,7 +633,7 @@ extension Parser {
         break
       }
     }
-    return RawObjCSelectorSyntax(elements: elements, arena: self.arena)
+    return RawObjCSelectorPieceListSyntax(elements: elements, arena: self.arena)
   }
 }
 
@@ -1069,7 +1069,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseDocumentationAttributeArguments() -> RawDocumentationAttributeArgumentsSyntax {
+  mutating func parseDocumentationAttributeArguments() -> RawDocumentationAttributeArgumentListSyntax {
     var arguments: [RawDocumentationAttributeArgumentSyntax] = []
 
     var keepGoing: RawTokenSyntax? = nil
@@ -1138,7 +1138,7 @@ extension Parser {
       )
     } while keepGoing != nil
 
-    return RawDocumentationAttributeArgumentsSyntax(elements: arguments, arena: self.arena)
+    return RawDocumentationAttributeArgumentListSyntax(elements: arguments, arena: self.arena)
   }
 }
 

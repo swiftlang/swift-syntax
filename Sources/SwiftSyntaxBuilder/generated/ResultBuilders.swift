@@ -1500,7 +1500,7 @@ public extension DifferentiabilityParamListSyntax {
 }
 
 @resultBuilder
-public struct DocumentationAttributeArgumentsBuilder {
+public struct DocumentationAttributeArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = DocumentationAttributeArgumentSyntax
@@ -1511,7 +1511,7 @@ public struct DocumentationAttributeArgumentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DocumentationAttributeArgumentsSyntax
+  public typealias FinalResult = DocumentationAttributeArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1576,14 +1576,14 @@ public struct DocumentationAttributeArgumentsBuilder {
   }
 }
 
-public extension DocumentationAttributeArgumentsSyntax {
-  init(@DocumentationAttributeArgumentsBuilder itemsBuilder: () throws -> DocumentationAttributeArgumentsSyntax) rethrows {
+public extension DocumentationAttributeArgumentListSyntax {
+  init(@DocumentationAttributeArgumentListBuilder itemsBuilder: () throws -> DocumentationAttributeArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
 
 @resultBuilder
-public struct EffectsArgumentsBuilder {
+public struct EffectsArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = TokenSyntax
@@ -1594,7 +1594,7 @@ public struct EffectsArgumentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = EffectsArgumentsSyntax
+  public typealias FinalResult = EffectsArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1656,8 +1656,8 @@ public struct EffectsArgumentsBuilder {
   }
 }
 
-public extension EffectsArgumentsSyntax {
-  init(@EffectsArgumentsBuilder itemsBuilder: () throws -> EffectsArgumentsSyntax) rethrows {
+public extension EffectsArgumentListSyntax {
+  init(@EffectsArgumentListBuilder itemsBuilder: () throws -> EffectsArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -2321,7 +2321,7 @@ public extension IfConfigClauseListSyntax {
 }
 
 @resultBuilder
-public struct ImportPathBuilder {
+public struct ImportPathComponentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ImportPathComponentSyntax
@@ -2332,7 +2332,7 @@ public struct ImportPathBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ImportPathSyntax
+  public typealias FinalResult = ImportPathComponentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2394,8 +2394,8 @@ public struct ImportPathBuilder {
   }
 }
 
-public extension ImportPathSyntax {
-  init(@ImportPathBuilder itemsBuilder: () throws -> ImportPathSyntax) rethrows {
+public extension ImportPathComponentListSyntax {
+  init(@ImportPathComponentListBuilder itemsBuilder: () throws -> ImportPathComponentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -2804,7 +2804,7 @@ public extension MultipleTrailingClosureElementListSyntax {
 }
 
 @resultBuilder
-public struct ObjCSelectorBuilder {
+public struct ObjCSelectorPieceListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = ObjCSelectorPieceSyntax
@@ -2815,7 +2815,7 @@ public struct ObjCSelectorBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ObjCSelectorSyntax
+  public typealias FinalResult = ObjCSelectorPieceListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2877,8 +2877,8 @@ public struct ObjCSelectorBuilder {
   }
 }
 
-public extension ObjCSelectorSyntax {
-  init(@ObjCSelectorBuilder itemsBuilder: () throws -> ObjCSelectorSyntax) rethrows {
+public extension ObjCSelectorPieceListSyntax {
+  init(@ObjCSelectorPieceListBuilder itemsBuilder: () throws -> ObjCSelectorPieceListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -3335,10 +3335,10 @@ public extension SpecializeAttributeSpecListSyntax {
 }
 
 @resultBuilder
-public struct StringLiteralSegmentsBuilder {
+public struct StringLiteralSegmentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = StringLiteralSegmentsSyntax.Element
+  public typealias Expression = StringLiteralSegmentListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3346,7 +3346,7 @@ public struct StringLiteralSegmentsBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = StringLiteralSegmentsSyntax
+  public typealias FinalResult = StringLiteralSegmentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3420,8 +3420,8 @@ public struct StringLiteralSegmentsBuilder {
   }
 }
 
-public extension StringLiteralSegmentsSyntax {
-  init(@StringLiteralSegmentsBuilder itemsBuilder: () throws -> StringLiteralSegmentsSyntax) rethrows {
+public extension StringLiteralSegmentListSyntax {
+  init(@StringLiteralSegmentListBuilder itemsBuilder: () throws -> StringLiteralSegmentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }

@@ -239,9 +239,9 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/DictionaryElementSyntax>
 - <doc:SwiftSyntax/DifferentiabilityParamListSyntax>
 - <doc:SwiftSyntax/DifferentiabilityParamSyntax>
-- <doc:SwiftSyntax/DocumentationAttributeArgumentsSyntax>
+- <doc:SwiftSyntax/DocumentationAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>
-- <doc:SwiftSyntax/EffectsArgumentsSyntax>
+- <doc:SwiftSyntax/EffectsArgumentListSyntax>
 - <doc:SwiftSyntax/EnumCaseElementListSyntax>
 - <doc:SwiftSyntax/EnumCaseElementSyntax>
 - <doc:SwiftSyntax/EnumCaseParameterListSyntax>
@@ -257,7 +257,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/GenericRequirementSyntax>
 - <doc:SwiftSyntax/IfConfigClauseListSyntax>
 - <doc:SwiftSyntax/IfConfigClauseSyntax>
-- <doc:SwiftSyntax/ImportPathSyntax>
+- <doc:SwiftSyntax/ImportPathComponentListSyntax>
 - <doc:SwiftSyntax/ImportPathComponentSyntax>
 - <doc:SwiftSyntax/InheritedTypeListSyntax>
 - <doc:SwiftSyntax/InheritedTypeSyntax>
@@ -269,7 +269,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/DeclModifierSyntax>
 - <doc:SwiftSyntax/MultipleTrailingClosureElementListSyntax>
 - <doc:SwiftSyntax/MultipleTrailingClosureElementSyntax>
-- <doc:SwiftSyntax/ObjCSelectorSyntax>
+- <doc:SwiftSyntax/ObjCSelectorPieceListSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
 - <doc:SwiftSyntax/PatternBindingListSyntax>
 - <doc:SwiftSyntax/PatternBindingSyntax>
@@ -286,7 +286,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/AvailabilityEntrySyntax>
 - <doc:SwiftSyntax/TargetFunctionEntrySyntax>
 - <doc:SwiftSyntax/GenericWhereClauseSyntax>
-- <doc:SwiftSyntax/StringLiteralSegmentsSyntax>
+- <doc:SwiftSyntax/StringLiteralSegmentListSyntax>
 - <doc:SwiftSyntax/StringSegmentSyntax>
 - <doc:SwiftSyntax/ExpressionSegmentSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>

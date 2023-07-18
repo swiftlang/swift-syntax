@@ -909,7 +909,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `atSign`: `'@'`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `'('`?
-///  - `arguments`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilitySpecListSyntax`` | ``SpecializeAttributeSpecListSyntax`` | ``ObjCSelectorSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeRegistrationAttributeArgumentsSyntax`` | ``BackDeployedAttributeSpecListSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementArgumentsSyntax`` | ``UnavailableFromAsyncArgumentsSyntax`` | ``EffectsArgumentsSyntax`` | ``DocumentationAttributeArgumentsSyntax``)?
+///  - `arguments`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilitySpecListSyntax`` | ``SpecializeAttributeSpecListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeRegistrationAttributeArgumentsSyntax`` | ``BackDeployedAttributeSpecListSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementArgumentsSyntax`` | ``UnavailableFromAsyncArgumentsSyntax`` | ``EffectsArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
 ///  - `rightParen`: `')'`?
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Arguments: SyntaxChildChoices {
@@ -918,7 +918,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `string`(StringLiteralExprSyntax)
     case `availability`(AvailabilitySpecListSyntax)
     case `specializeArguments`(SpecializeAttributeSpecListSyntax)
-    case `objCName`(ObjCSelectorSyntax)
+    case `objCName`(ObjCSelectorPieceListSyntax)
     case `implementsArguments`(ImplementsAttributeArgumentsSyntax)
     case `differentiableArguments`(DifferentiableAttributeArgumentsSyntax)
     case `derivativeRegistrationArguments`(DerivativeRegistrationAttributeArgumentsSyntax)
@@ -931,8 +931,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     case `underscorePrivateAttributeArguments`(UnderscorePrivateAttributeArgumentsSyntax)
     case `dynamicReplacementArguments`(DynamicReplacementArgumentsSyntax)
     case `unavailableFromAsyncArguments`(UnavailableFromAsyncArgumentsSyntax)
-    case `effectsArguments`(EffectsArgumentsSyntax)
-    case `documentationArguments`(DocumentationAttributeArgumentsSyntax)
+    case `effectsArguments`(EffectsArgumentListSyntax)
+    case `documentationArguments`(DocumentationAttributeArgumentListSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -1003,7 +1003,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       self = .specializeArguments(node)
     }
     
-    public init(_ node: ObjCSelectorSyntax) {
+    public init(_ node: ObjCSelectorPieceListSyntax) {
       self = .objCName(node)
     }
     
@@ -1055,11 +1055,11 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       self = .unavailableFromAsyncArguments(node)
     }
     
-    public init(_ node: EffectsArgumentsSyntax) {
+    public init(_ node: EffectsArgumentListSyntax) {
       self = .effectsArguments(node)
     }
     
-    public init(_ node: DocumentationAttributeArgumentsSyntax) {
+    public init(_ node: DocumentationAttributeArgumentListSyntax) {
       self = .documentationArguments(node)
     }
     
@@ -1084,7 +1084,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .specializeArguments(node)
         return
       }
-      if let node = node.as(ObjCSelectorSyntax.self) {
+      if let node = node.as(ObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
         return
       }
@@ -1136,11 +1136,11 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
         self = .unavailableFromAsyncArguments(node)
         return
       }
-      if let node = node.as(EffectsArgumentsSyntax.self) {
+      if let node = node.as(EffectsArgumentListSyntax.self) {
         self = .effectsArguments(node)
         return
       }
-      if let node = node.as(DocumentationAttributeArgumentsSyntax.self) {
+      if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
         return
       }
@@ -1154,7 +1154,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
             .node(StringLiteralExprSyntax.self), 
             .node(AvailabilitySpecListSyntax.self), 
             .node(SpecializeAttributeSpecListSyntax.self), 
-            .node(ObjCSelectorSyntax.self), 
+            .node(ObjCSelectorPieceListSyntax.self), 
             .node(ImplementsAttributeArgumentsSyntax.self), 
             .node(DifferentiableAttributeArgumentsSyntax.self), 
             .node(DerivativeRegistrationAttributeArgumentsSyntax.self), 
@@ -1167,8 +1167,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
             .node(UnderscorePrivateAttributeArgumentsSyntax.self), 
             .node(DynamicReplacementArgumentsSyntax.self), 
             .node(UnavailableFromAsyncArgumentsSyntax.self), 
-            .node(EffectsArgumentsSyntax.self), 
-            .node(DocumentationAttributeArgumentsSyntax.self)
+            .node(EffectsArgumentListSyntax.self), 
+            .node(DocumentationAttributeArgumentListSyntax.self)
           ])
     }
   }

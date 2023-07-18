@@ -5572,7 +5572,7 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `openDelimiter`: `<rawStringDelimiter>`?
 ///  - `openQuote`: (`'"'` | `'"""'` | `'''`)
-///  - `segments`: ``StringLiteralSegmentsSyntax``
+///  - `segments`: ``StringLiteralSegmentListSyntax``
 ///  - `closeQuote`: (`'"'` | `'"""'` | `'''`)
 ///  - `closeDelimiter`: `<rawStringDelimiter>`?
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
@@ -5603,7 +5603,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodesSyntax? = nil,
       openQuote: TokenSyntax,
       _ unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodesSyntax? = nil,
-      segments: StringLiteralSegmentsSyntax,
+      segments: StringLiteralSegmentListSyntax,
       _ unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodesSyntax? = nil,
       closeQuote: TokenSyntax,
       _ unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? = nil,
@@ -5698,9 +5698,9 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var segments: StringLiteralSegmentsSyntax {
+  public var segments: StringLiteralSegmentListSyntax {
     get {
-      return StringLiteralSegmentsSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return StringLiteralSegmentListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = StringLiteralExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -5719,7 +5719,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegments,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.stringLiteralSegmentList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(

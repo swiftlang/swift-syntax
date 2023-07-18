@@ -1209,7 +1209,7 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         StringLiteralExprSyntax(
           openQuote: .stringQuoteToken(),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("This is unterminated")))
           ]),
           closeQuote: .stringQuoteToken(presence: .missing)
@@ -1240,7 +1240,7 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
@@ -1260,7 +1260,7 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(
               StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))
             ),
@@ -1282,7 +1282,7 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         StringLiteralExprSyntax(
           openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
             .stringSegment(
               StringSegmentSyntax(
@@ -1331,7 +1331,7 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openDelimiter: nil,
           openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("\n"))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: [.spaces(2)], trailingTrivia: .newline))),
@@ -1354,7 +1354,7 @@ final class ExpressionTests: XCTestCase {
         StringLiteralExprSyntax(
           openDelimiter: nil,
           openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
-          segments: StringLiteralSegmentsSyntax([
+          segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("", trailingTrivia: .newline))),
           ]),

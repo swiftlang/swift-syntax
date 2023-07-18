@@ -155,12 +155,7 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(node: .documentationAttributeArguments, message: "is a collection but does not end with ListSyntax"),
-        ValidationFailure(node: .unexpectedNodes, message: "is a collection but does not end with ListSyntax"),
-        ValidationFailure(node: .effectsArguments, message: "is a collection but does not end with ListSyntax"),
-        ValidationFailure(node: .importPath, message: "is a collection but does not end with ListSyntax"),
-        ValidationFailure(node: .objCSelector, message: "is a collection but does not end with ListSyntax"),
-        ValidationFailure(node: .stringLiteralSegments, message: "is a collection but does not end with ListSyntax"),
+        ValidationFailure(node: .unexpectedNodes, message: "is a collection but does not end with ListSyntax")
       ]
     )
   }

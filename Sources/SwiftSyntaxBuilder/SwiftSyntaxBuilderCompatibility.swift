@@ -16,7 +16,7 @@
 import SwiftSyntax
 
 @available(*, deprecated, renamed: "ImportPathBuilder")
-public typealias AccessPathBuilder = ImportPathBuilder
+public typealias AccessPathBuilder = ImportPathComponentListBuilder
 
 //==========================================================================//
 // IMPORTANT: If you are tempted to add a compatibility layer code here     //

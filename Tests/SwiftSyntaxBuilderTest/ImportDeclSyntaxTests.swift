@@ -19,7 +19,7 @@ final class ImportDeclSyntaxTests: XCTestCase {
     let identifier = TokenSyntax.identifier("SwiftSyntax")
 
     let importDecl = ImportDeclSyntax(
-      path: ImportPathSyntax([ImportPathComponentSyntax(name: identifier)])
+      path: ImportPathComponentListSyntax([ImportPathComponentSyntax(name: identifier)])
     )
 
     assertBuildResult(importDecl, "import SwiftSyntax")

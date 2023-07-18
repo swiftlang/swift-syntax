@@ -147,17 +147,17 @@ extension SyntaxKind {
       return "'discard' statement"
     case .doStmt:
       return "'do' statement"
+    case .documentationAttributeArgumentList:
+      return "@_documentation arguments"
     case .documentationAttributeArgument:
       return "@_documentation argument"
-    case .documentationAttributeArguments:
-      return "@_documentation arguments"
     case .dynamicReplacementArguments:
       return "@_dynamicReplacement argument"
     case .editorPlaceholderDecl:
       return "editor placeholder"
     case .editorPlaceholderExpr:
       return "editor placeholder"
-    case .effectsArguments:
+    case .effectsArgumentList:
       return "@_effects arguments"
     case .enumCaseDecl:
       return "enum case"
@@ -287,10 +287,10 @@ extension SyntaxKind {
       return "trailing closure"
     case .namedOpaqueReturnType:
       return "named opaque return type"
+    case .objCSelectorPieceList:
+      return "Objective-C selector"
     case .objCSelectorPiece:
       return "Objective-C selector piece"
-    case .objCSelector:
-      return "Objective-C selector"
     case .opaqueReturnTypeOfAttributeArguments:
       return "opaque return type arguments"
     case .operatorDecl:

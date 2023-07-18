@@ -479,15 +479,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DoStmtSyntax) -> ResultType
   
+  /// Visiting ``DocumentationAttributeArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DocumentationAttributeArgumentListSyntax) -> ResultType
+  
   /// Visiting ``DocumentationAttributeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType
-  
-  /// Visiting ``DocumentationAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -504,10 +504,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
   
-  /// Visiting ``EffectsArgumentsSyntax`` specifically.
+  /// Visiting ``EffectsArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EffectsArgumentsSyntax) -> ResultType
+  func visit(_ node: EffectsArgumentListSyntax) -> ResultType
   
   /// Visiting ``EnumCaseDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -724,15 +724,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportDeclSyntax) -> ResultType
   
+  /// Visiting ``ImportPathComponentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ImportPathComponentListSyntax) -> ResultType
+  
   /// Visiting ``ImportPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ImportPathComponentSyntax) -> ResultType
-  
-  /// Visiting ``ImportPathSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ImportPathSyntax) -> ResultType
   
   /// Visiting ``InOutExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -939,15 +939,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: NilLiteralExprSyntax) -> ResultType
   
+  /// Visiting ``ObjCSelectorPieceListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ObjCSelectorPieceListSyntax) -> ResultType
+  
   /// Visiting ``ObjCSelectorPieceSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType
-  
-  /// Visiting ``ObjCSelectorSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ObjCSelectorSyntax) -> ResultType
   
   /// Visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1159,10 +1159,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StringLiteralExprSyntax) -> ResultType
   
-  /// Visiting ``StringLiteralSegmentsSyntax`` specifically.
+  /// Visiting ``StringLiteralSegmentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType
+  func visit(_ node: StringLiteralSegmentListSyntax) -> ResultType
   
   /// Visiting ``StringSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -2059,17 +2059,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``DocumentationAttributeArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DocumentationAttributeArgumentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``DocumentationAttributeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``DocumentationAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DocumentationAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2094,10 +2094,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``EffectsArgumentsSyntax`` specifically.
+  /// Visiting ``EffectsArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EffectsArgumentsSyntax) -> ResultType {
+  public func visit(_ node: EffectsArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2402,17 +2402,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``ImportPathComponentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ImportPathComponentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``ImportPathComponentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ImportPathComponentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ImportPathSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ImportPathSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2703,17 +2703,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``ObjCSelectorPieceListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ObjCSelectorPieceListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``ObjCSelectorPieceSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ObjCSelectorPieceSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ObjCSelectorSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ObjCSelectorSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3011,10 +3011,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``StringLiteralSegmentsSyntax`` specifically.
+  /// Visiting ``StringLiteralSegmentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: StringLiteralSegmentsSyntax) -> ResultType {
+  public func visit(_ node: StringLiteralSegmentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3549,9 +3549,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .doStmt(let derived):
       return visit(derived)
-    case .documentationAttributeArgument(let derived):
+    case .documentationAttributeArgumentList(let derived):
       return visit(derived)
-    case .documentationAttributeArguments(let derived):
+    case .documentationAttributeArgument(let derived):
       return visit(derived)
     case .dynamicReplacementArguments(let derived):
       return visit(derived)
@@ -3559,7 +3559,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .editorPlaceholderExpr(let derived):
       return visit(derived)
-    case .effectsArguments(let derived):
+    case .effectsArgumentList(let derived):
       return visit(derived)
     case .enumCaseDecl(let derived):
       return visit(derived)
@@ -3647,9 +3647,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .importDecl(let derived):
       return visit(derived)
-    case .importPathComponent(let derived):
+    case .importPathComponentList(let derived):
       return visit(derived)
-    case .importPath(let derived):
+    case .importPathComponent(let derived):
       return visit(derived)
     case .inOutExpr(let derived):
       return visit(derived)
@@ -3733,9 +3733,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .nilLiteralExpr(let derived):
       return visit(derived)
-    case .objCSelectorPiece(let derived):
+    case .objCSelectorPieceList(let derived):
       return visit(derived)
-    case .objCSelector(let derived):
+    case .objCSelectorPiece(let derived):
       return visit(derived)
     case .opaqueReturnTypeOfAttributeArguments(let derived):
       return visit(derived)
@@ -3821,7 +3821,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .stringLiteralExpr(let derived):
       return visit(derived)
-    case .stringLiteralSegments(let derived):
+    case .stringLiteralSegmentList(let derived):
       return visit(derived)
     case .stringSegment(let derived):
       return visit(derived)

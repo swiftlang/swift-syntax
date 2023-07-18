@@ -139,7 +139,7 @@ extension Parser.Lookahead {
         return $0.spec.recoveryPrecedence
       }).min()!
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile) && loopProgress.evaluate(self) {
+    while !self.at(.endOfFile) && self.hasProgressed(&loopProgress) {
       if !recoveryPrecedence.shouldSkipOverNewlines, self.atStartOfLine {
         break
       }

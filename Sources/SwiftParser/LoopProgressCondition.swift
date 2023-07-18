@@ -12,38 +12,30 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-/// A type that can be used in place of a `while true` loop.
-/// See `evaluate` for more detail.
+/// A type that can be used to make sure that a loop in the parser makes process.
+///
+/// See `TokenConsumer.hasProgressed` for details.
 struct LoopProgressCondition {
   var currentToken: Lexer.Lexeme?
 
   init() {}
+}
 
-  /// Check that the loop has made progress since `evaluate` was called the last time.
-  /// In assert builds, this traps if the loop has not made any parser progress in between two iterations,
-  /// ie. it checks if the parser's `currentToken` has changed in between two calls to `evaluate`.
-  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made progress, thus aborting the loop.
-  @inline(__always)
-  mutating func evaluate(_ parser: Parser) -> Bool {
-    return evaluate(parser.currentToken)
-  }
-
-  /// Check that the loop has made progress since `evaluate` was called the last time.
-  /// In assert builds, this traps if the loop has not made any parser progress in between two iterations,
-  /// ie. it checks if the parser's `currentToken` has changed in between two calls to `evaluate`.
-  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made progress, thus aborting the loop.
-  @inline(__always)
-  mutating func evaluate(_ parser: Parser.Lookahead) -> Bool {
-    return evaluate(parser.currentToken)
-  }
-
-  /// Implementation of the above `evaluate` methods.
-  private mutating func evaluate(_ currentToken: Lexer.Lexeme) -> Bool {
+extension TokenConsumer {
+  /// Check that the token consumer has made progress since `hasProgress` was
+  /// called the last time with this `loopProgress`.
+  ///
+  /// In assert builds, this traps if the loop has not made any parser progress
+  /// in between two iterations, ie. it checks if the parser's `currentToken`
+  /// has changed in between two calls to `evaluate`.
+  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made
+  /// progress, thus aborting the loop.
+  func hasProgressed(_ loopProgress: inout LoopProgressCondition) -> Bool {
     defer {
-      self.currentToken = currentToken
+      loopProgress.currentToken = currentToken
     }
 
-    guard let previousToken = self.currentToken else {
+    guard let previousToken = loopProgress.currentToken else {
       return true
     }
     // The loop has made progress if either

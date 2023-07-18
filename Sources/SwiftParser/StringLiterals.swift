@@ -487,7 +487,7 @@ extension Parser {
     /// Parse segments.
     var segments: [RawStringLiteralSegmentsSyntax.Element] = []
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(self) {
+    while self.hasProgressed(&loopProgress) {
       // If we encounter a token with leading trivia, we're no longer in the
       // string literal.
       guard currentToken.leadingTriviaText.isEmpty else { break }
@@ -504,7 +504,7 @@ extension Parser {
         var unexpectedBeforeRightParen: [RawTokenSyntax] = []
         var unexpectedProgress = LoopProgressCondition()
         while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(TokenSpec(openQuoteKind), .endOfFile)
-          && unexpectedProgress.evaluate(self)
+          && self.hasProgressed(&unexpectedProgress)
         {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }

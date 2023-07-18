@@ -215,7 +215,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(self) {
+      while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
         // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
         var (label, colon) = (labelAndColon?.0, labelAndColon?.1)
@@ -368,7 +368,7 @@ extension Parser.Lookahead {
         guard self.canParsePattern() else {
           return false
         }
-      } while self.consume(if: .comma) != nil && loopProgress.evaluate(self)
+      } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
     }
 
     return self.consume(if: .rightParen) != nil

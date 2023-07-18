@@ -118,8 +118,7 @@ public let AVAILABILITY_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
         nameForDiagnostics: "platform",
         documentation:
-          "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.",
-        classification: "Keyword"
+          "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version."
       ),
       Child(
         name: "Version",

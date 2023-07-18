@@ -262,8 +262,8 @@ def verify_code_generated_files(
 
     print("** Verifing code generated files **")
 
-    for module in ["SwiftBasicFormat", "SwiftIDEUtils", \
-      "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"]:
+    for module in ["SwiftParser", "SwiftParserDiagnostics", \
+      "SwiftSyntax", "SwiftSyntaxBuilder"]:
       self_generated_dir = os.path.join(self_temp_dir, module, "generated")
       user_generated_dir = os.path.join(SOURCES_DIR, module, "generated")
       check_generated_files_match(self_generated_dir, user_generated_dir)

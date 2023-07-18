@@ -189,8 +189,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "Parameters",
         deprecatedName: "arguments",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument"),
-        isIndented: true
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument")
       ),
       Child(
         name: "RightParen",
@@ -298,8 +297,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "Name",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self")]),
-        nameForDiagnostics: "name",
-        classification: "TypeIdentifier"
+        nameForDiagnostics: "name"
       ),
       Child(
         name: "GenericArgumentClause",
@@ -433,8 +431,7 @@ public let TYPE_NODES: [Node] = [
           .keyword(text: "Self"),
           .keyword(text: "Any"),
           .token(tokenKind: "WildcardToken"),
-        ]),
-        classification: "TypeIdentifier"
+        ])
       ),
       Child(
         name: "GenericArgumentClause",
@@ -521,8 +518,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Elements",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Element"),
-        isIndented: true
+        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",

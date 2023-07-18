@@ -13,7 +13,7 @@ To avoid ongoing repetition of common long terms, SwiftSyntax uses a couple of a
 
 **Expr** Abbreviation for *Expression*
 
-**Layout Node** A layout node has can have an arbitrary number of children and provides structure to the syntax tree. All ``Syntax`` nodes that aren’t ``TokenSyntax`` are layout nodes. For example a ``StructDeclSyntax`` consists of, among others, of the `struct` keyword, the name and the `memberBlock`. The latter is again a layout node that contains multiple children. Layout nodes never represent any source code in the syntax tree by themselves. All source code within the syntax tree is represented by *tokens*.
+**Layout Node** A layout node can have an arbitrary number of children and provides structure to the syntax tree. All ``Syntax`` nodes that aren’t ``TokenSyntax`` are layout nodes. For example a ``StructDeclSyntax`` consists of, among others, of the `struct` keyword, the name and the `memberBlock`. The latter is again a layout node that contains multiple children. Layout nodes never represent any source code in the syntax tree by themselves. All source code within the syntax tree is represented by *tokens*.
 
 **Node** A *layout node* or *token*
 

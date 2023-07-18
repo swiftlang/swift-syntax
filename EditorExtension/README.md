@@ -64,7 +64,7 @@ sub-menu, so mousing over it will reveal all of the actions that the editor
 extension detected at start up.
 
 Selecting a refactoring action will run it over the entire file. The plugin
-executes the corresponding `RefactoringProvider` and, whenever it recieves a
+executes the corresponding `RefactoringProvider` and, whenever it receives a
 non-`nil` response, it performs a structured edit of the syntax of the code.
 
 ## Troubleshooting

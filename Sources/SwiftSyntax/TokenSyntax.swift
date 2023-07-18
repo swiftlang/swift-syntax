@@ -121,8 +121,8 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
-  public var contentLength: SourceLength {
-    return tokenView.contentLength
+  public var trimmedLength: SourceLength {
+    return tokenView.trimmedLength
   }
 
   /// The length this node's leading trivia takes up spelled out in source.

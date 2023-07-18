@@ -508,7 +508,7 @@ extension RawSyntax {
   /// The length of this node’s content, without the first leading and the last
   /// trailing trivia. Intermediate trivia inside a layout node is included in
   /// this.
-  var contentByteLength: Int {
+  var trimmedByteLength: Int {
     let result = byteLength - leadingTriviaByteLength - trailingTriviaByteLength
     precondition(result >= 0)
     return result
@@ -523,8 +523,8 @@ extension RawSyntax {
   }
 
   /// The length of this node excluding its leading and trailing trivia.
-  var contentLength: SourceLength {
-    SourceLength(utf8Length: contentByteLength)
+  var trimmedLength: SourceLength {
+    SourceLength(utf8Length: trimmedByteLength)
   }
 }
 

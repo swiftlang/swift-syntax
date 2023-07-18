@@ -229,7 +229,7 @@ public struct RawSyntaxTokenView {
   }
 
   @_spi(RawSyntax)
-  public var contentLength: SourceLength {
+  public var trimmedLength: SourceLength {
     SourceLength(utf8Length: textByteLength)
   }
 

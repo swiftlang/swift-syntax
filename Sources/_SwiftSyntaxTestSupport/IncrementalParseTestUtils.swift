@@ -84,11 +84,11 @@ public func assertIncrementalParse(
       continue
     }
 
-    guard let reusedNode = reusedNodes.first(where: { $0.contentByteRange == range }) else {
+    guard let reusedNode = reusedNodes.first(where: { $0.trimmedByteRange == range }) else {
       XCTFail(
         """
         Fail to match the range of \(expectedReusedNode.source) in:
-        \(reusedNodes.map({"\($0.contentByteRange): \($0.description)"}).joined(separator: "\n"))
+        \(reusedNodes.map({"\($0.trimmedByteRange): \($0.description)"}).joined(separator: "\n"))
         """,
         file: expectedReusedNode.file,
         line: expectedReusedNode.line

@@ -484,8 +484,11 @@ public extension SyntaxProtocol {
 
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
-  var contentLength: SourceLength {
-    return raw.contentLength
+  ///
+  /// - Note: If this node consists of multiple tokens, only the first token’s
+  ///   leading and the last token’s trailing trivia will be trimmed.
+  var trimmedLength: SourceLength {
+    return raw.trimmedLength
   }
 
   /// The byte source range of this node including leading and trailing trivia.
@@ -494,11 +497,19 @@ public extension SyntaxProtocol {
   }
 
   /// The byte source range of this node excluding leading and trailing trivia.
-  var contentByteRange: ByteSourceRange {
+  ///
+  /// - Note: If this node consists of multiple tokens, only the first token’s
+  ///   leading and the last token’s trailing trivia will be trimmed.
+  var trimmedByteRange: ByteSourceRange {
     return ByteSourceRange(
       offset: positionAfterSkippingLeadingTrivia.utf8Offset,
-      length: contentLength.utf8Length
+      length: trimmedLength.utf8Length
     )
+  }
+
+  @available(*, deprecated, renamed: "trimmedLength")
+  var contentLength: SourceLength {
+    return trimmedLength
   }
 
   @available(*, deprecated, renamed: "totalByteRange")
@@ -513,9 +524,9 @@ public extension SyntaxProtocol {
   }
 
   /// The textual byte length of this node exluding leading and trailing trivia.
-  @available(*, deprecated, message: "Use contentLength.utf8Length")
+  @available(*, deprecated, message: "Use trimmedLength.utf8Length")
   var byteSizeAfterTrimmingTrivia: Int {
-    return contentLength.utf8Length
+    return trimmedLength.utf8Length
   }
 }
 

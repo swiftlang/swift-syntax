@@ -83,7 +83,7 @@ public class AbsolutePositionTests: XCTestCase {
       state.totalLength.utf8Length,
       state.leadingTrivia.sourceLength.utf8Length
         + state.trailingTrivia.sourceLength.utf8Length
-        + state.contentLength.utf8Length
+        + state.trimmedLength.utf8Length
     )
 
     // Test Node trivia setters and getters

@@ -400,7 +400,7 @@ public extension Syntax {
   ) -> SourceLocation {
     var pos = data.position
     pos += raw.leadingTriviaLength
-    pos += raw.contentLength
+    pos += raw.trimmedLength
     if afterTrailingTrivia {
       pos += raw.trailingTriviaLength
     }

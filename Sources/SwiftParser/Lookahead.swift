@@ -117,6 +117,10 @@ extension Parser.Lookahead {
   ///
   ///     <TOKEN> ... -> consumePrefix(<TOK>) -> [ <TOK> ] <EN> ...
   mutating func consumePrefix(_ prefix: SyntaxText, as tokenKind: RawTokenKind) {
+    precondition(
+      tokenKind.defaultText == nil || prefix == tokenKind.defaultText!,
+      "If tokenKind has a defaultText, the prefix needs to match it"
+    )
     let tokenText = self.currentToken.tokenText
 
     if tokenText == prefix {

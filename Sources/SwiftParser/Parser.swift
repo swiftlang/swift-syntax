@@ -605,6 +605,10 @@ extension Parser {
     _ prefix: SyntaxText,
     as tokenKind: RawTokenKind
   ) -> RawTokenSyntax {
+    precondition(
+      tokenKind.defaultText == nil || prefix == tokenKind.defaultText!,
+      "If tokenKind has a defaultText, the prefix needs to match it"
+    )
     let current = self.currentToken
     // Current token can be either one-character token we want to consume...
     let tokenText = current.tokenText

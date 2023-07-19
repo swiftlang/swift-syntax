@@ -22,11 +22,17 @@ import Utils
 func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES.compactMap(\.layoutNode) where node.base == emitKind {
-      let documentation = """
-        \(node.documentation)
-        \(node.documentation.isEmpty ? "" : "///")
-        \(node.grammar)
-        """.removingEmptyLines
+      let documentationSections = [
+        node.documentation,
+        node.grammar,
+        node.containedIn,
+      ]
+      let documentation =
+        documentationSections
+        .filter { !$0.isEmpty }
+        .map { [$0] }
+        .joined(separator: [Trivia.newline, Trivia.docLineComment("///"), Trivia.newline])
+        .reduce(Trivia(), +)
 
       // We are actually handling this node now
       try! StructDeclSyntax(

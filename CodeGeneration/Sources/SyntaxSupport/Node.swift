@@ -149,6 +149,50 @@ public class Node {
     self.data = .layout(children: childrenWithUnexpected, traits: traits)
   }
 
+  /// A doc comment that lists all the nodes in which this node occurs as a child in.
+  public var containedIn: SwiftSyntax.Trivia {
+    var childIn: [(node: SyntaxNodeKind, child: Child?)] = []
+    for node in SYNTAX_NODES {
+      if let layout = node.layoutNode {
+        for child in layout.children {
+          if child.kinds.contains(self.kind) {
+            childIn.append((node.kind, child))
+          }
+        }
+      } else if let collection = node.collectionNode {
+        if collection.elementChoices.contains(self.kind) {
+          childIn.append((node.kind, nil))
+        }
+      }
+    }
+
+    guard !childIn.isEmpty else {
+      return []
+    }
+
+    let list =
+      childIn
+      .map {
+        if let childName = $0.child?.varOrCaseName {
+          // This will repeat the syntax type before and after the dot, which is
+          // a little unfortunate, but it's the only way I found to get docc to
+          // generate a fully-qualified type + member.
+          return " - ``\($0.node.syntaxType)``.``\($0.node.syntaxType)/\(childName)``"
+        } else {
+          return " - ``\($0.node.syntaxType)``"
+        }
+      }
+      .joined(separator: "\n")
+
+    return docCommentTrivia(
+      from: """
+        ### Contained in
+
+        \(list)
+        """
+    )
+  }
+
   /// Construct the specification for a collection syntax node.
   ///
   /// `base` must be `.syntaxCollection`.
@@ -287,4 +331,23 @@ public struct CollectionNode {
         """
     )
   }
+}
+
+fileprivate extension Child {
+  var kinds: [SyntaxNodeKind] {
+    switch kind {
+    case .node(let kind):
+      return [kind]
+    case .nodeChoices(let choices):
+      return choices.flatMap(\.kinds)
+    case .collection(let kind, _, _):
+      return [kind]
+    case .token:
+      return [.token]
+    }
+  }
+}
+
+fileprivate extension Node {
+
 }

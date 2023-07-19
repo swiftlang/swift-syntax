@@ -15,6 +15,10 @@
 /// ### Children
 /// 
 /// ``AccessorDeclSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/accessors``
 public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AccessorDeclSyntax
   
@@ -33,6 +37,10 @@ public struct AccessorListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ArrayElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ArrayExprSyntax``.``ArrayExprSyntax/elements``
 public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ArrayElementSyntax
   
@@ -51,6 +59,36 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// (``AttributeSyntax`` | ``IfConfigDeclSyntax``) `*`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/attributes``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/attributes``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/attributes``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/attributes``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/attributes``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/attributes``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/attributes``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/attributes``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/attributes``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/attributes``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/attributes``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/attributes``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/attributes``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/attributes``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/attributes``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/attributes``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/attributes``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/attributes``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/attributes``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/attributes``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/attributes``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/attributes``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/attributes``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/attributes``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/attributes``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/attributes``
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `attribute`(AttributeSyntax)
@@ -111,6 +149,12 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``AvailabilityArgumentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/availabilityArguments``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/availabilityArguments``
 public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AvailabilityArgumentSyntax
   
@@ -129,6 +173,11 @@ public struct AvailabilitySpecListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``AvailabilityVersionRestrictionListEntrySyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``BackDeployedAttributeSpecListSyntax``.``BackDeployedAttributeSpecListSyntax/platforms``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/platforms``
 public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = AvailabilityVersionRestrictionListEntrySyntax
   
@@ -147,6 +196,10 @@ public struct AvailabilityVersionRestrictionListSyntax: SyntaxCollection, Syntax
 /// ### Children
 /// 
 /// ``CaseItemSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/caseItems``
 public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CaseItemSyntax
   
@@ -165,6 +218,10 @@ public struct CaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``CatchClauseSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``DoStmtSyntax``.``DoStmtSyntax/catchClauses``
 public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchClauseSyntax
   
@@ -183,6 +240,10 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``CatchItemSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/catchItems``
 public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchItemSyntax
   
@@ -201,6 +262,10 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ClosureCaptureItemSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureCaptureSignatureSyntax``.``ClosureCaptureSignatureSyntax/items``
 public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureCaptureItemSyntax
   
@@ -219,6 +284,10 @@ public struct ClosureCaptureItemListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ClosureParamSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/parameterClause``
 public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureParamSyntax
   
@@ -237,6 +306,10 @@ public struct ClosureParamListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ClosureParameterSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureParameterClauseSyntax``.``ClosureParameterClauseSyntax/parameters``
 public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ClosureParameterSyntax
   
@@ -255,6 +328,14 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``CodeBlockItemSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/statements``
+///  - ``CodeBlockSyntax``.``CodeBlockSyntax/statements``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``
+///  - ``SourceFileSyntax``.``SourceFileSyntax/statements``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/statements``
 public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CodeBlockItemSyntax
   
@@ -273,6 +354,10 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``CompositionTypeElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``CompositionTypeSyntax``.``CompositionTypeSyntax/elements``
 public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CompositionTypeElementSyntax
   
@@ -291,6 +376,12 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
 /// ### Children
 /// 
 /// ``ConditionElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/conditions``
+///  - ``IfExprSyntax``.``IfExprSyntax/conditions``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/conditions``
 public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ConditionElementSyntax
   
@@ -309,6 +400,10 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``DeclNameArgumentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``DeclNameArgumentsSyntax``.``DeclNameArgumentsSyntax/arguments``
 public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DeclNameArgumentSyntax
   
@@ -327,6 +422,10 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``DesignatedTypeElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``OperatorPrecedenceAndTypesSyntax``.``OperatorPrecedenceAndTypesSyntax/designatedTypes``
 public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DesignatedTypeElementSyntax
   
@@ -345,6 +444,10 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``DictionaryElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``DictionaryExprSyntax``.``DictionaryExprSyntax/content``
 public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DictionaryElementSyntax
   
@@ -363,6 +466,10 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``DifferentiabilityParamSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``DifferentiabilityParamsSyntax``.``DifferentiabilityParamsSyntax/differentiabilityParameters``
 public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DifferentiabilityParamSyntax
   
@@ -383,6 +490,10 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
 /// ### Children
 /// 
 /// ``DocumentationAttributeArgumentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DocumentationAttributeArgumentSyntax
   
@@ -403,6 +514,10 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
 /// ### Children
 /// 
 /// ``TokenSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct EffectsArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TokenSyntax
   
@@ -423,6 +538,10 @@ public struct EffectsArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``EnumCaseElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/elements``
 public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseElementSyntax
   
@@ -441,6 +560,10 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``EnumCaseParameterSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseParameterClauseSyntax``.``EnumCaseParameterClauseSyntax/parameters``
 public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = EnumCaseParameterSyntax
   
@@ -461,6 +584,10 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ExprSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``SequenceExprSyntax``.``SequenceExprSyntax/elements``
 public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ExprSyntax
   
@@ -479,6 +606,10 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``FunctionParameterSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ParameterClauseSyntax``.``ParameterClauseSyntax/parameters``
 public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = FunctionParameterSyntax
   
@@ -497,6 +628,10 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``GenericArgumentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``GenericArgumentClauseSyntax``.``GenericArgumentClauseSyntax/arguments``
 public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericArgumentSyntax
   
@@ -515,6 +650,10 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``GenericParameterSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/parameters``
 public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericParameterSyntax
   
@@ -533,6 +672,10 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``GenericRequirementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``GenericWhereClauseSyntax``.``GenericWhereClauseSyntax/requirements``
 public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = GenericRequirementSyntax
   
@@ -551,6 +694,10 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``IfConfigClauseSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``IfConfigDeclSyntax``.``IfConfigDeclSyntax/clauses``
 public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = IfConfigClauseSyntax
   
@@ -569,6 +716,10 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ImportPathComponentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/path``
 public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ImportPathComponentSyntax
   
@@ -587,6 +738,10 @@ public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``InheritedTypeSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``TypeInheritanceClauseSyntax``.``TypeInheritanceClauseSyntax/inheritedTypes``
 public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = InheritedTypeSyntax
   
@@ -605,6 +760,10 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``KeyPathComponentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathExprSyntax``.``KeyPathExprSyntax/components``
 public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = KeyPathComponentSyntax
   
@@ -623,6 +782,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``MemberDeclListItemSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``
+///  - ``MemberDeclBlockSyntax``.``MemberDeclBlockSyntax/members``
 public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = MemberDeclListItemSyntax
   
@@ -641,6 +805,32 @@ public struct MemberDeclListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``DeclModifierSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/modifiers``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/modifiers``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/modifiers``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/modifiers``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/modifiers``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/modifiers``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/modifiers``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/modifiers``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/modifiers``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/modifiers``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/modifiers``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/modifiers``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/modifiers``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/modifiers``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/modifiers``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/modifiers``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/modifiers``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/modifiers``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/modifiers``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/modifiers``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/modifiers``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/modifiers``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/modifiers``
 public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DeclModifierSyntax
   
@@ -659,6 +849,13 @@ public struct ModifierListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``MultipleTrailingClosureElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/additionalTrailingClosures``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/additionalTrailingClosures``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/additionalTrailingClosures``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/additionalTrailingClosures``
 public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = MultipleTrailingClosureElementSyntax
   
@@ -677,6 +874,10 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 /// ### Children
 /// 
 /// ``ObjCSelectorPieceSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ObjCSelectorPieceSyntax
   
@@ -695,6 +896,10 @@ public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``PatternBindingSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/bindings``
 public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PatternBindingSyntax
   
@@ -713,6 +918,10 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// (``PrecedenceGroupRelationSyntax`` | ``PrecedenceGroupAssignmentSyntax`` | ``PrecedenceGroupAssociativitySyntax``) `*`
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/groupAttributes``
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `precedenceGroupRelation`(PrecedenceGroupRelationSyntax)
@@ -785,6 +994,10 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
 /// ### Children
 /// 
 /// ``PrecedenceGroupNameElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/otherNames``
 public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PrecedenceGroupNameElementSyntax
   
@@ -803,6 +1016,10 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``PrimaryAssociatedTypeSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``PrimaryAssociatedTypeClauseSyntax``.``PrimaryAssociatedTypeClauseSyntax/primaryAssociatedTypes``
 public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PrimaryAssociatedTypeSyntax
   
@@ -823,6 +1040,10 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 /// ### Children
 /// 
 /// (``LabeledSpecializeEntrySyntax`` | ``AvailabilityEntrySyntax`` | ``TargetFunctionEntrySyntax`` | ``GenericWhereClauseSyntax``) `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `labeledSpecializeEntry`(LabeledSpecializeEntrySyntax)
@@ -908,6 +1129,10 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
 /// ### Children
 /// 
 /// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
+///
+/// ### Contained in
+/// 
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/segments``
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
@@ -968,6 +1193,11 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// (``SwitchCaseSyntax`` | ``IfConfigDeclSyntax``) `*`
+///
+/// ### Contained in
+/// 
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/cases``
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `switchCase`(SwitchCaseSyntax)
@@ -1028,6 +1258,19 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``TupleExprElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/properties``
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/properties``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/arguments``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/arguments``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/arguments``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/arguments``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/elements``
 public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TupleExprElementSyntax
   
@@ -1046,6 +1289,10 @@ public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``TuplePatternElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``TuplePatternSyntax``.``TuplePatternSyntax/elements``
 public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TuplePatternElementSyntax
   
@@ -1064,6 +1311,11 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``TupleTypeElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/parameters``
+///  - ``TupleTypeSyntax``.``TupleTypeSyntax/elements``
 public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TupleTypeElementSyntax
   
@@ -1084,6 +1336,993 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``Syntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/unexpectedBeforeAccessesKeyword``
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/unexpectedBetweenAccessesKeywordAndLeftParen``
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/unexpectedBetweenLeftParenAndProperties``
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/unexpectedBetweenPropertiesAndRightParen``
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/unexpectedAfterRightParen``
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/unexpectedBeforeLeftBrace``
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/unexpectedBetweenLeftBraceAndAccessors``
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/unexpectedBetweenAccessorsAndRightBrace``
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/unexpectedAfterRightBrace``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBeforeAttributes``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenAttributesAndModifier``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenModifierAndAccessorSpecifier``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenAccessorSpecifierAndParameter``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenParameterAndEffectSpecifiers``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenEffectSpecifiersAndInitEffects``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedBetweenInitEffectsAndBody``
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/unexpectedAfterBody``
+///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/unexpectedBeforeAsyncSpecifier``
+///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/unexpectedBetweenAsyncSpecifierAndThrowsSpecifier``
+///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/unexpectedAfterThrowsSpecifier``
+///  - ``AccessorInitEffectsSyntax``.``AccessorInitEffectsSyntax/unexpectedBeforeInitializesEffect``
+///  - ``AccessorInitEffectsSyntax``.``AccessorInitEffectsSyntax/unexpectedBetweenInitializesEffectAndAccessesEffect``
+///  - ``AccessorInitEffectsSyntax``.``AccessorInitEffectsSyntax/unexpectedAfterAccessesEffect``
+///  - ``AccessorParameterSyntax``.``AccessorParameterSyntax/unexpectedBeforeLeftParen``
+///  - ``AccessorParameterSyntax``.``AccessorParameterSyntax/unexpectedBetweenLeftParenAndName``
+///  - ``AccessorParameterSyntax``.``AccessorParameterSyntax/unexpectedBetweenNameAndRightParen``
+///  - ``AccessorParameterSyntax``.``AccessorParameterSyntax/unexpectedAfterRightParen``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBeforeAttributes``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenModifiersAndActorKeyword``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenActorKeywordAndName``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenGenericParameterClauseAndInheritanceClause``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``ArrayElementSyntax``.``ArrayElementSyntax/unexpectedBeforeExpression``
+///  - ``ArrayElementSyntax``.``ArrayElementSyntax/unexpectedBetweenExpressionAndTrailingComma``
+///  - ``ArrayElementSyntax``.``ArrayElementSyntax/unexpectedAfterTrailingComma``
+///  - ``ArrayExprSyntax``.``ArrayExprSyntax/unexpectedBeforeLeftSquare``
+///  - ``ArrayExprSyntax``.``ArrayExprSyntax/unexpectedBetweenLeftSquareAndElements``
+///  - ``ArrayExprSyntax``.``ArrayExprSyntax/unexpectedBetweenElementsAndRightSquare``
+///  - ``ArrayExprSyntax``.``ArrayExprSyntax/unexpectedAfterRightSquare``
+///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedBeforeLeftSquare``
+///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedBetweenLeftSquareAndElement``
+///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedBetweenElementAndRightSquare``
+///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedAfterRightSquare``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedBeforeEffectSpecifiers``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedBetweenEffectSpecifiersAndArrow``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedAfterArrow``
+///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBeforeExpression``
+///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBetweenExpressionAndAsKeyword``
+///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBetweenAsKeywordAndQuestionOrExclamationMark``
+///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBetweenQuestionOrExclamationMarkAndType``
+///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedAfterType``
+///  - ``AssignmentExprSyntax``.``AssignmentExprSyntax/unexpectedBeforeEqual``
+///  - ``AssignmentExprSyntax``.``AssignmentExprSyntax/unexpectedAfterEqual``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBeforeAttributes``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenModifiersAndAssociatedtypeKeyword``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenAssociatedtypeKeywordAndName``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenNameAndInheritanceClause``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenInheritanceClauseAndInitializer``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedBetweenInitializerAndGenericWhereClause``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/unexpectedAfterGenericWhereClause``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedBeforeAtSign``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedBetweenAtSignAndAttributeName``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedBetweenAttributeNameAndLeftParen``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``AttributeSyntax``.``AttributeSyntax/unexpectedAfterRightParen``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/unexpectedBeforeSpecifier``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/unexpectedBetweenSpecifierAndAttributes``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/unexpectedBetweenAttributesAndBaseType``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/unexpectedAfterBaseType``
+///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/unexpectedBeforeEntry``
+///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/unexpectedBetweenEntryAndTrailingComma``
+///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/unexpectedAfterTrailingComma``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/unexpectedBeforeAvailabilityKeyword``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/unexpectedBetweenAvailabilityKeywordAndLeftParen``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/unexpectedBetweenLeftParenAndAvailabilityArguments``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/unexpectedBetweenAvailabilityArgumentsAndRightParen``
+///  - ``AvailabilityConditionSyntax``.``AvailabilityConditionSyntax/unexpectedAfterRightParen``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/unexpectedBeforeAvailabilityLabel``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/unexpectedBetweenAvailabilityLabelAndColon``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/unexpectedBetweenColonAndAvailabilityArguments``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/unexpectedBetweenAvailabilityArgumentsAndSemicolon``
+///  - ``AvailabilityEntrySyntax``.``AvailabilityEntrySyntax/unexpectedAfterSemicolon``
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/unexpectedBeforeLabel``
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/unexpectedBetweenLabelAndColon``
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/unexpectedBetweenColonAndValue``
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/unexpectedAfterValue``
+///  - ``AvailabilityVersionRestrictionListEntrySyntax``.``AvailabilityVersionRestrictionListEntrySyntax/unexpectedBeforeAvailabilityVersionRestriction``
+///  - ``AvailabilityVersionRestrictionListEntrySyntax``.``AvailabilityVersionRestrictionListEntrySyntax/unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma``
+///  - ``AvailabilityVersionRestrictionListEntrySyntax``.``AvailabilityVersionRestrictionListEntrySyntax/unexpectedAfterTrailingComma``
+///  - ``AvailabilityVersionRestrictionSyntax``.``AvailabilityVersionRestrictionSyntax/unexpectedBeforePlatform``
+///  - ``AvailabilityVersionRestrictionSyntax``.``AvailabilityVersionRestrictionSyntax/unexpectedBetweenPlatformAndVersion``
+///  - ``AvailabilityVersionRestrictionSyntax``.``AvailabilityVersionRestrictionSyntax/unexpectedAfterVersion``
+///  - ``AwaitExprSyntax``.``AwaitExprSyntax/unexpectedBeforeAwaitKeyword``
+///  - ``AwaitExprSyntax``.``AwaitExprSyntax/unexpectedBetweenAwaitKeywordAndExpression``
+///  - ``AwaitExprSyntax``.``AwaitExprSyntax/unexpectedAfterExpression``
+///  - ``BackDeployedAttributeSpecListSyntax``.``BackDeployedAttributeSpecListSyntax/unexpectedBeforeBeforeLabel``
+///  - ``BackDeployedAttributeSpecListSyntax``.``BackDeployedAttributeSpecListSyntax/unexpectedBetweenBeforeLabelAndColon``
+///  - ``BackDeployedAttributeSpecListSyntax``.``BackDeployedAttributeSpecListSyntax/unexpectedBetweenColonAndPlatforms``
+///  - ``BackDeployedAttributeSpecListSyntax``.``BackDeployedAttributeSpecListSyntax/unexpectedAfterPlatforms``
+///  - ``BinaryOperatorExprSyntax``.``BinaryOperatorExprSyntax/unexpectedBeforeOperator``
+///  - ``BinaryOperatorExprSyntax``.``BinaryOperatorExprSyntax/unexpectedAfterOperator``
+///  - ``BooleanLiteralExprSyntax``.``BooleanLiteralExprSyntax/unexpectedBeforeLiteral``
+///  - ``BooleanLiteralExprSyntax``.``BooleanLiteralExprSyntax/unexpectedAfterLiteral``
+///  - ``BorrowExprSyntax``.``BorrowExprSyntax/unexpectedBeforeBorrowKeyword``
+///  - ``BorrowExprSyntax``.``BorrowExprSyntax/unexpectedBetweenBorrowKeywordAndExpression``
+///  - ``BorrowExprSyntax``.``BorrowExprSyntax/unexpectedAfterExpression``
+///  - ``BreakStmtSyntax``.``BreakStmtSyntax/unexpectedBeforeBreakKeyword``
+///  - ``BreakStmtSyntax``.``BreakStmtSyntax/unexpectedBetweenBreakKeywordAndLabel``
+///  - ``BreakStmtSyntax``.``BreakStmtSyntax/unexpectedAfterLabel``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedBeforeCanImportKeyword``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedBetweenCanImportKeywordAndLeftParen``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedBetweenLeftParenAndImportPath``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedBetweenImportPathAndVersionInfo``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedBetweenVersionInfoAndRightParen``
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/unexpectedAfterRightParen``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/unexpectedBeforeComma``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/unexpectedBetweenCommaAndLabel``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/unexpectedBetweenLabelAndColon``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/unexpectedBetweenColonAndVersion``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/unexpectedAfterVersion``
+///  - ``CaseItemSyntax``.``CaseItemSyntax/unexpectedBeforePattern``
+///  - ``CaseItemSyntax``.``CaseItemSyntax/unexpectedBetweenPatternAndWhereClause``
+///  - ``CaseItemSyntax``.``CaseItemSyntax/unexpectedBetweenWhereClauseAndTrailingComma``
+///  - ``CaseItemSyntax``.``CaseItemSyntax/unexpectedAfterTrailingComma``
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/unexpectedBeforeCatchKeyword``
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/unexpectedBetweenCatchKeywordAndCatchItems``
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/unexpectedBetweenCatchItemsAndBody``
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/unexpectedAfterBody``
+///  - ``CatchItemSyntax``.``CatchItemSyntax/unexpectedBeforePattern``
+///  - ``CatchItemSyntax``.``CatchItemSyntax/unexpectedBetweenPatternAndWhereClause``
+///  - ``CatchItemSyntax``.``CatchItemSyntax/unexpectedBetweenWhereClauseAndTrailingComma``
+///  - ``CatchItemSyntax``.``CatchItemSyntax/unexpectedAfterTrailingComma``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBeforeAttributes``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenModifiersAndClassKeyword``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenClassKeywordAndName``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenGenericParameterClauseAndInheritanceClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``ClassRestrictionTypeSyntax``.``ClassRestrictionTypeSyntax/unexpectedBeforeClassKeyword``
+///  - ``ClassRestrictionTypeSyntax``.``ClassRestrictionTypeSyntax/unexpectedAfterClassKeyword``
+///  - ``ClosureCaptureItemSpecifierSyntax``.``ClosureCaptureItemSpecifierSyntax/unexpectedBeforeSpecifier``
+///  - ``ClosureCaptureItemSpecifierSyntax``.``ClosureCaptureItemSpecifierSyntax/unexpectedBetweenSpecifierAndLeftParen``
+///  - ``ClosureCaptureItemSpecifierSyntax``.``ClosureCaptureItemSpecifierSyntax/unexpectedBetweenLeftParenAndDetail``
+///  - ``ClosureCaptureItemSpecifierSyntax``.``ClosureCaptureItemSpecifierSyntax/unexpectedBetweenDetailAndRightParen``
+///  - ``ClosureCaptureItemSpecifierSyntax``.``ClosureCaptureItemSpecifierSyntax/unexpectedAfterRightParen``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedBeforeSpecifier``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedBetweenSpecifierAndName``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedBetweenNameAndEqual``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedBetweenEqualAndExpression``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedBetweenExpressionAndTrailingComma``
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/unexpectedAfterTrailingComma``
+///  - ``ClosureCaptureSignatureSyntax``.``ClosureCaptureSignatureSyntax/unexpectedBeforeLeftSquare``
+///  - ``ClosureCaptureSignatureSyntax``.``ClosureCaptureSignatureSyntax/unexpectedBetweenLeftSquareAndItems``
+///  - ``ClosureCaptureSignatureSyntax``.``ClosureCaptureSignatureSyntax/unexpectedBetweenItemsAndRightSquare``
+///  - ``ClosureCaptureSignatureSyntax``.``ClosureCaptureSignatureSyntax/unexpectedAfterRightSquare``
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/unexpectedBeforeLeftBrace``
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/unexpectedBetweenLeftBraceAndSignature``
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/unexpectedBetweenSignatureAndStatements``
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/unexpectedBetweenStatementsAndRightBrace``
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/unexpectedAfterRightBrace``
+///  - ``ClosureParamSyntax``.``ClosureParamSyntax/unexpectedBeforeName``
+///  - ``ClosureParamSyntax``.``ClosureParamSyntax/unexpectedBetweenNameAndTrailingComma``
+///  - ``ClosureParamSyntax``.``ClosureParamSyntax/unexpectedAfterTrailingComma``
+///  - ``ClosureParameterClauseSyntax``.``ClosureParameterClauseSyntax/unexpectedBeforeLeftParen``
+///  - ``ClosureParameterClauseSyntax``.``ClosureParameterClauseSyntax/unexpectedBetweenLeftParenAndParameters``
+///  - ``ClosureParameterClauseSyntax``.``ClosureParameterClauseSyntax/unexpectedBetweenParametersAndRightParen``
+///  - ``ClosureParameterClauseSyntax``.``ClosureParameterClauseSyntax/unexpectedAfterRightParen``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBeforeAttributes``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenModifiersAndFirstName``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenFirstNameAndSecondName``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenSecondNameAndColon``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenColonAndType``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenTypeAndEllipsis``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedBetweenEllipsisAndTrailingComma``
+///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/unexpectedAfterTrailingComma``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBeforeAttributes``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBetweenAttributesAndCapture``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBetweenCaptureAndParameterClause``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBetweenParameterClauseAndEffectSpecifiers``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBetweenEffectSpecifiersAndReturnClause``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedBetweenReturnClauseAndInKeyword``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/unexpectedAfterInKeyword``
+///  - ``CodeBlockItemSyntax``.``CodeBlockItemSyntax/unexpectedBeforeItem``
+///  - ``CodeBlockItemSyntax``.``CodeBlockItemSyntax/unexpectedBetweenItemAndSemicolon``
+///  - ``CodeBlockItemSyntax``.``CodeBlockItemSyntax/unexpectedAfterSemicolon``
+///  - ``CodeBlockSyntax``.``CodeBlockSyntax/unexpectedBeforeLeftBrace``
+///  - ``CodeBlockSyntax``.``CodeBlockSyntax/unexpectedBetweenLeftBraceAndStatements``
+///  - ``CodeBlockSyntax``.``CodeBlockSyntax/unexpectedBetweenStatementsAndRightBrace``
+///  - ``CodeBlockSyntax``.``CodeBlockSyntax/unexpectedAfterRightBrace``
+///  - ``CompositionTypeElementSyntax``.``CompositionTypeElementSyntax/unexpectedBeforeType``
+///  - ``CompositionTypeElementSyntax``.``CompositionTypeElementSyntax/unexpectedBetweenTypeAndAmpersand``
+///  - ``CompositionTypeElementSyntax``.``CompositionTypeElementSyntax/unexpectedAfterAmpersand``
+///  - ``CompositionTypeSyntax``.``CompositionTypeSyntax/unexpectedBeforeElements``
+///  - ``CompositionTypeSyntax``.``CompositionTypeSyntax/unexpectedAfterElements``
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/unexpectedBeforeCondition``
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/unexpectedBetweenConditionAndTrailingComma``
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/unexpectedAfterTrailingComma``
+///  - ``ConformanceRequirementSyntax``.``ConformanceRequirementSyntax/unexpectedBeforeLeftType``
+///  - ``ConformanceRequirementSyntax``.``ConformanceRequirementSyntax/unexpectedBetweenLeftTypeAndColon``
+///  - ``ConformanceRequirementSyntax``.``ConformanceRequirementSyntax/unexpectedBetweenColonAndRightType``
+///  - ``ConformanceRequirementSyntax``.``ConformanceRequirementSyntax/unexpectedAfterRightType``
+///  - ``ConstrainedSugarTypeSyntax``.``ConstrainedSugarTypeSyntax/unexpectedBeforeSomeOrAnySpecifier``
+///  - ``ConstrainedSugarTypeSyntax``.``ConstrainedSugarTypeSyntax/unexpectedBetweenSomeOrAnySpecifierAndBaseType``
+///  - ``ConstrainedSugarTypeSyntax``.``ConstrainedSugarTypeSyntax/unexpectedAfterBaseType``
+///  - ``ContinueStmtSyntax``.``ContinueStmtSyntax/unexpectedBeforeContinueKeyword``
+///  - ``ContinueStmtSyntax``.``ContinueStmtSyntax/unexpectedBetweenContinueKeywordAndLabel``
+///  - ``ContinueStmtSyntax``.``ContinueStmtSyntax/unexpectedAfterLabel``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedBeforeConventionLabel``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedBetweenConventionLabelAndComma``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedBetweenCommaAndCTypeLabel``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedBetweenCTypeLabelAndColon``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedBetweenColonAndCTypeString``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/unexpectedAfterCTypeString``
+///  - ``ConventionWitnessMethodAttributeArgumentsSyntax``.``ConventionWitnessMethodAttributeArgumentsSyntax/unexpectedBeforeWitnessMethodLabel``
+///  - ``ConventionWitnessMethodAttributeArgumentsSyntax``.``ConventionWitnessMethodAttributeArgumentsSyntax/unexpectedBetweenWitnessMethodLabelAndColon``
+///  - ``ConventionWitnessMethodAttributeArgumentsSyntax``.``ConventionWitnessMethodAttributeArgumentsSyntax/unexpectedBetweenColonAndProtocolName``
+///  - ``ConventionWitnessMethodAttributeArgumentsSyntax``.``ConventionWitnessMethodAttributeArgumentsSyntax/unexpectedAfterProtocolName``
+///  - ``CopyExprSyntax``.``CopyExprSyntax/unexpectedBeforeCopyKeyword``
+///  - ``CopyExprSyntax``.``CopyExprSyntax/unexpectedBetweenCopyKeywordAndExpression``
+///  - ``CopyExprSyntax``.``CopyExprSyntax/unexpectedAfterExpression``
+///  - ``DeclModifierDetailSyntax``.``DeclModifierDetailSyntax/unexpectedBeforeLeftParen``
+///  - ``DeclModifierDetailSyntax``.``DeclModifierDetailSyntax/unexpectedBetweenLeftParenAndDetail``
+///  - ``DeclModifierDetailSyntax``.``DeclModifierDetailSyntax/unexpectedBetweenDetailAndRightParen``
+///  - ``DeclModifierDetailSyntax``.``DeclModifierDetailSyntax/unexpectedAfterRightParen``
+///  - ``DeclModifierSyntax``.``DeclModifierSyntax/unexpectedBeforeName``
+///  - ``DeclModifierSyntax``.``DeclModifierSyntax/unexpectedBetweenNameAndDetail``
+///  - ``DeclModifierSyntax``.``DeclModifierSyntax/unexpectedAfterDetail``
+///  - ``DeclNameArgumentSyntax``.``DeclNameArgumentSyntax/unexpectedBeforeName``
+///  - ``DeclNameArgumentSyntax``.``DeclNameArgumentSyntax/unexpectedBetweenNameAndColon``
+///  - ``DeclNameArgumentSyntax``.``DeclNameArgumentSyntax/unexpectedAfterColon``
+///  - ``DeclNameArgumentsSyntax``.``DeclNameArgumentsSyntax/unexpectedBeforeLeftParen``
+///  - ``DeclNameArgumentsSyntax``.``DeclNameArgumentsSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``DeclNameArgumentsSyntax``.``DeclNameArgumentsSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``DeclNameArgumentsSyntax``.``DeclNameArgumentsSyntax/unexpectedAfterRightParen``
+///  - ``DeclNameSyntax``.``DeclNameSyntax/unexpectedBeforeBaseName``
+///  - ``DeclNameSyntax``.``DeclNameSyntax/unexpectedBetweenBaseNameAndArguments``
+///  - ``DeclNameSyntax``.``DeclNameSyntax/unexpectedAfterArguments``
+///  - ``DeferStmtSyntax``.``DeferStmtSyntax/unexpectedBeforeDeferKeyword``
+///  - ``DeferStmtSyntax``.``DeferStmtSyntax/unexpectedBetweenDeferKeywordAndBody``
+///  - ``DeferStmtSyntax``.``DeferStmtSyntax/unexpectedAfterBody``
+///  - ``DeinitEffectSpecifiersSyntax``.``DeinitEffectSpecifiersSyntax/unexpectedBeforeAsyncSpecifier``
+///  - ``DeinitEffectSpecifiersSyntax``.``DeinitEffectSpecifiersSyntax/unexpectedAfterAsyncSpecifier``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedBeforeAttributes``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedBetweenModifiersAndDeinitKeyword``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedBetweenDeinitKeywordAndEffectSpecifiers``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedBetweenEffectSpecifiersAndBody``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/unexpectedAfterBody``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBeforeOfLabel``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenOfLabelAndColon``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenColonAndOriginalDeclName``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenOriginalDeclNameAndPeriod``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenPeriodAndAccessorSpecifier``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenAccessorSpecifierAndComma``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedBetweenCommaAndParameters``
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/unexpectedAfterParameters``
+///  - ``DesignatedTypeElementSyntax``.``DesignatedTypeElementSyntax/unexpectedBeforeLeadingComma``
+///  - ``DesignatedTypeElementSyntax``.``DesignatedTypeElementSyntax/unexpectedBetweenLeadingCommaAndName``
+///  - ``DesignatedTypeElementSyntax``.``DesignatedTypeElementSyntax/unexpectedAfterName``
+///  - ``DictionaryElementSyntax``.``DictionaryElementSyntax/unexpectedBeforeKey``
+///  - ``DictionaryElementSyntax``.``DictionaryElementSyntax/unexpectedBetweenKeyAndColon``
+///  - ``DictionaryElementSyntax``.``DictionaryElementSyntax/unexpectedBetweenColonAndValue``
+///  - ``DictionaryElementSyntax``.``DictionaryElementSyntax/unexpectedBetweenValueAndTrailingComma``
+///  - ``DictionaryElementSyntax``.``DictionaryElementSyntax/unexpectedAfterTrailingComma``
+///  - ``DictionaryExprSyntax``.``DictionaryExprSyntax/unexpectedBeforeLeftSquare``
+///  - ``DictionaryExprSyntax``.``DictionaryExprSyntax/unexpectedBetweenLeftSquareAndContent``
+///  - ``DictionaryExprSyntax``.``DictionaryExprSyntax/unexpectedBetweenContentAndRightSquare``
+///  - ``DictionaryExprSyntax``.``DictionaryExprSyntax/unexpectedAfterRightSquare``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedBeforeLeftSquare``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedBetweenLeftSquareAndKey``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedBetweenKeyAndColon``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedBetweenColonAndValue``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedBetweenValueAndRightSquare``
+///  - ``DictionaryTypeSyntax``.``DictionaryTypeSyntax/unexpectedAfterRightSquare``
+///  - ``DifferentiabilityParamSyntax``.``DifferentiabilityParamSyntax/unexpectedBeforeParameter``
+///  - ``DifferentiabilityParamSyntax``.``DifferentiabilityParamSyntax/unexpectedBetweenParameterAndTrailingComma``
+///  - ``DifferentiabilityParamSyntax``.``DifferentiabilityParamSyntax/unexpectedAfterTrailingComma``
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/unexpectedBeforeWrtLabel``
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/unexpectedBetweenWrtLabelAndColon``
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/unexpectedBetweenColonAndParameters``
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/unexpectedAfterParameters``
+///  - ``DifferentiabilityParamsSyntax``.``DifferentiabilityParamsSyntax/unexpectedBeforeLeftParen``
+///  - ``DifferentiabilityParamsSyntax``.``DifferentiabilityParamsSyntax/unexpectedBetweenLeftParenAndDifferentiabilityParameters``
+///  - ``DifferentiabilityParamsSyntax``.``DifferentiabilityParamsSyntax/unexpectedBetweenDifferentiabilityParametersAndRightParen``
+///  - ``DifferentiabilityParamsSyntax``.``DifferentiabilityParamsSyntax/unexpectedAfterRightParen``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedBeforeKindSpecifier``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedBetweenKindSpecifierAndKindSpecifierComma``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedBetweenKindSpecifierCommaAndParameters``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedBetweenParametersAndParametersComma``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedBetweenParametersCommaAndGenericWhereClause``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/unexpectedAfterGenericWhereClause``
+///  - ``DiscardAssignmentExprSyntax``.``DiscardAssignmentExprSyntax/unexpectedBeforeWildcard``
+///  - ``DiscardAssignmentExprSyntax``.``DiscardAssignmentExprSyntax/unexpectedAfterWildcard``
+///  - ``DiscardStmtSyntax``.``DiscardStmtSyntax/unexpectedBeforeDiscardKeyword``
+///  - ``DiscardStmtSyntax``.``DiscardStmtSyntax/unexpectedBetweenDiscardKeywordAndExpression``
+///  - ``DiscardStmtSyntax``.``DiscardStmtSyntax/unexpectedAfterExpression``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/unexpectedBeforeDoKeyword``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/unexpectedBetweenDoKeywordAndBody``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/unexpectedBetweenBodyAndCatchClauses``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/unexpectedAfterCatchClauses``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/unexpectedBeforeLabel``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/unexpectedBetweenLabelAndColon``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/unexpectedBetweenColonAndValue``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/unexpectedBetweenValueAndTrailingComma``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/unexpectedAfterTrailingComma``
+///  - ``DynamicReplacementArgumentsSyntax``.``DynamicReplacementArgumentsSyntax/unexpectedBeforeForLabel``
+///  - ``DynamicReplacementArgumentsSyntax``.``DynamicReplacementArgumentsSyntax/unexpectedBetweenForLabelAndColon``
+///  - ``DynamicReplacementArgumentsSyntax``.``DynamicReplacementArgumentsSyntax/unexpectedBetweenColonAndDeclName``
+///  - ``DynamicReplacementArgumentsSyntax``.``DynamicReplacementArgumentsSyntax/unexpectedAfterDeclName``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/unexpectedBeforeAttributes``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/unexpectedBetweenModifiersAndPlaceholder``
+///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/unexpectedAfterPlaceholder``
+///  - ``EditorPlaceholderExprSyntax``.``EditorPlaceholderExprSyntax/unexpectedBeforePlaceholder``
+///  - ``EditorPlaceholderExprSyntax``.``EditorPlaceholderExprSyntax/unexpectedAfterPlaceholder``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/unexpectedBeforeAttributes``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/unexpectedBetweenModifiersAndCaseKeyword``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/unexpectedBetweenCaseKeywordAndElements``
+///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/unexpectedAfterElements``
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/unexpectedBeforeName``
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/unexpectedBetweenNameAndAssociatedValue``
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/unexpectedBetweenAssociatedValueAndRawValue``
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/unexpectedBetweenRawValueAndTrailingComma``
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/unexpectedAfterTrailingComma``
+///  - ``EnumCaseParameterClauseSyntax``.``EnumCaseParameterClauseSyntax/unexpectedBeforeLeftParen``
+///  - ``EnumCaseParameterClauseSyntax``.``EnumCaseParameterClauseSyntax/unexpectedBetweenLeftParenAndParameters``
+///  - ``EnumCaseParameterClauseSyntax``.``EnumCaseParameterClauseSyntax/unexpectedBetweenParametersAndRightParen``
+///  - ``EnumCaseParameterClauseSyntax``.``EnumCaseParameterClauseSyntax/unexpectedAfterRightParen``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBeforeModifiers``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenModifiersAndFirstName``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenFirstNameAndSecondName``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenSecondNameAndColon``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenColonAndType``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenTypeAndDefaultArgument``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedBetweenDefaultArgumentAndTrailingComma``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/unexpectedAfterTrailingComma``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBeforeAttributes``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenModifiersAndEnumKeyword``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenEnumKeywordAndName``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenGenericParameterClauseAndInheritanceClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedBeforeLanguage``
+///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedBetweenLanguageAndComma``
+///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedBetweenCommaAndCxxName``
+///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedAfterCxxName``
+///  - ``ExpressionPatternSyntax``.``ExpressionPatternSyntax/unexpectedBeforeExpression``
+///  - ``ExpressionPatternSyntax``.``ExpressionPatternSyntax/unexpectedAfterExpression``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBeforeBackslash``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenBackslashAndRawStringDelimiter``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenRawStringDelimiterAndLeftParen``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenLeftParenAndExpressions``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenExpressionsAndRightParen``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedAfterRightParen``
+///  - ``ExpressionStmtSyntax``.``ExpressionStmtSyntax/unexpectedBeforeExpression``
+///  - ``ExpressionStmtSyntax``.``ExpressionStmtSyntax/unexpectedAfterExpression``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBeforeAttributes``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenModifiersAndExtensionKeyword``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenExtensionKeywordAndExtendedType``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenExtendedTypeAndInheritanceClause``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``FallthroughStmtSyntax``.``FallthroughStmtSyntax/unexpectedBeforeFallthroughKeyword``
+///  - ``FallthroughStmtSyntax``.``FallthroughStmtSyntax/unexpectedAfterFallthroughKeyword``
+///  - ``FloatLiteralExprSyntax``.``FloatLiteralExprSyntax/unexpectedBeforeDigits``
+///  - ``FloatLiteralExprSyntax``.``FloatLiteralExprSyntax/unexpectedAfterDigits``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBeforeForKeyword``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenForKeywordAndTryKeyword``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenTryKeywordAndAwaitKeyword``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenAwaitKeywordAndCaseKeyword``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenCaseKeywordAndPattern``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenPatternAndTypeAnnotation``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenTypeAnnotationAndInKeyword``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenInKeywordAndSequence``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenSequenceAndWhereClause``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedBetweenWhereClauseAndBody``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/unexpectedAfterBody``
+///  - ``ForcedValueExprSyntax``.``ForcedValueExprSyntax/unexpectedBeforeExpression``
+///  - ``ForcedValueExprSyntax``.``ForcedValueExprSyntax/unexpectedBetweenExpressionAndExclamationMark``
+///  - ``ForcedValueExprSyntax``.``ForcedValueExprSyntax/unexpectedAfterExclamationMark``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBeforeCalledExpression``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBetweenCalledExpressionAndLeftParen``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBetweenRightParenAndTrailingClosure``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/unexpectedAfterAdditionalTrailingClosures``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBeforeAttributes``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenModifiersAndFuncKeyword``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenFuncKeywordAndName``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenGenericParameterClauseAndSignature``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenSignatureAndGenericWhereClause``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedBetweenGenericWhereClauseAndBody``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/unexpectedAfterBody``
+///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/unexpectedBeforeAsyncSpecifier``
+///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/unexpectedBetweenAsyncSpecifierAndThrowsSpecifier``
+///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/unexpectedAfterThrowsSpecifier``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBeforeAttributes``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenModifiersAndFirstName``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenFirstNameAndSecondName``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenSecondNameAndColon``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenColonAndType``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenTypeAndEllipsis``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenEllipsisAndDefaultArgument``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedBetweenDefaultArgumentAndTrailingComma``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/unexpectedAfterTrailingComma``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/unexpectedBeforeParameterClause``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/unexpectedBetweenParameterClauseAndEffectSpecifiers``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/unexpectedBetweenEffectSpecifiersAndReturnClause``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/unexpectedAfterReturnClause``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedBeforeLeftParen``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedBetweenLeftParenAndParameters``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedBetweenParametersAndRightParen``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedBetweenRightParenAndEffectSpecifiers``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedBetweenEffectSpecifiersAndReturnClause``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/unexpectedAfterReturnClause``
+///  - ``GenericArgumentClauseSyntax``.``GenericArgumentClauseSyntax/unexpectedBeforeLeftAngle``
+///  - ``GenericArgumentClauseSyntax``.``GenericArgumentClauseSyntax/unexpectedBetweenLeftAngleAndArguments``
+///  - ``GenericArgumentClauseSyntax``.``GenericArgumentClauseSyntax/unexpectedBetweenArgumentsAndRightAngle``
+///  - ``GenericArgumentClauseSyntax``.``GenericArgumentClauseSyntax/unexpectedAfterRightAngle``
+///  - ``GenericArgumentSyntax``.``GenericArgumentSyntax/unexpectedBeforeArgument``
+///  - ``GenericArgumentSyntax``.``GenericArgumentSyntax/unexpectedBetweenArgumentAndTrailingComma``
+///  - ``GenericArgumentSyntax``.``GenericArgumentSyntax/unexpectedAfterTrailingComma``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/unexpectedBeforeLeftAngle``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/unexpectedBetweenLeftAngleAndParameters``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/unexpectedBetweenParametersAndGenericWhereClause``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/unexpectedBetweenGenericWhereClauseAndRightAngle``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/unexpectedAfterRightAngle``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBeforeAttributes``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBetweenAttributesAndEachKeyword``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBetweenEachKeywordAndName``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBetweenNameAndColon``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBetweenColonAndInheritedType``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedBetweenInheritedTypeAndTrailingComma``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/unexpectedAfterTrailingComma``
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/unexpectedBeforeRequirement``
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/unexpectedBetweenRequirementAndTrailingComma``
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/unexpectedAfterTrailingComma``
+///  - ``GenericWhereClauseSyntax``.``GenericWhereClauseSyntax/unexpectedBeforeWhereKeyword``
+///  - ``GenericWhereClauseSyntax``.``GenericWhereClauseSyntax/unexpectedBetweenWhereKeywordAndRequirements``
+///  - ``GenericWhereClauseSyntax``.``GenericWhereClauseSyntax/unexpectedAfterRequirements``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/unexpectedBeforeGuardKeyword``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/unexpectedBetweenGuardKeywordAndConditions``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/unexpectedBetweenConditionsAndElseKeyword``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/unexpectedBetweenElseKeywordAndBody``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/unexpectedAfterBody``
+///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/unexpectedBeforeIdentifier``
+///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/unexpectedBetweenIdentifierAndDeclNameArguments``
+///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/unexpectedAfterDeclNameArguments``
+///  - ``IdentifierPatternSyntax``.``IdentifierPatternSyntax/unexpectedBeforeIdentifier``
+///  - ``IdentifierPatternSyntax``.``IdentifierPatternSyntax/unexpectedAfterIdentifier``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/unexpectedBeforePoundKeyword``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/unexpectedBetweenPoundKeywordAndCondition``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/unexpectedBetweenConditionAndElements``
+///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/unexpectedAfterElements``
+///  - ``IfConfigDeclSyntax``.``IfConfigDeclSyntax/unexpectedBeforeClauses``
+///  - ``IfConfigDeclSyntax``.``IfConfigDeclSyntax/unexpectedBetweenClausesAndPoundEndif``
+///  - ``IfConfigDeclSyntax``.``IfConfigDeclSyntax/unexpectedAfterPoundEndif``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedBeforeIfKeyword``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedBetweenIfKeywordAndConditions``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedBetweenConditionsAndBody``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedBetweenBodyAndElseKeyword``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedBetweenElseKeywordAndElseBody``
+///  - ``IfExprSyntax``.``IfExprSyntax/unexpectedAfterElseBody``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/unexpectedBeforeType``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/unexpectedBetweenTypeAndComma``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/unexpectedBetweenCommaAndDeclBaseName``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/unexpectedBetweenDeclBaseNameAndDeclNameArguments``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/unexpectedAfterDeclNameArguments``
+///  - ``ImplicitlyUnwrappedOptionalTypeSyntax``.``ImplicitlyUnwrappedOptionalTypeSyntax/unexpectedBeforeWrappedType``
+///  - ``ImplicitlyUnwrappedOptionalTypeSyntax``.``ImplicitlyUnwrappedOptionalTypeSyntax/unexpectedBetweenWrappedTypeAndExclamationMark``
+///  - ``ImplicitlyUnwrappedOptionalTypeSyntax``.``ImplicitlyUnwrappedOptionalTypeSyntax/unexpectedAfterExclamationMark``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedBeforeAttributes``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedBetweenModifiersAndImportKeyword``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedBetweenImportKeywordAndImportKindSpecifier``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedBetweenImportKindSpecifierAndPath``
+///  - ``ImportDeclSyntax``.``ImportDeclSyntax/unexpectedAfterPath``
+///  - ``ImportPathComponentSyntax``.``ImportPathComponentSyntax/unexpectedBeforeName``
+///  - ``ImportPathComponentSyntax``.``ImportPathComponentSyntax/unexpectedBetweenNameAndTrailingPeriod``
+///  - ``ImportPathComponentSyntax``.``ImportPathComponentSyntax/unexpectedAfterTrailingPeriod``
+///  - ``InOutExprSyntax``.``InOutExprSyntax/unexpectedBeforeAmpersand``
+///  - ``InOutExprSyntax``.``InOutExprSyntax/unexpectedBetweenAmpersandAndExpression``
+///  - ``InOutExprSyntax``.``InOutExprSyntax/unexpectedAfterExpression``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBeforeLeftOperand``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenLeftOperandAndOperatorOperand``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenOperatorOperandAndRightOperand``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedAfterRightOperand``
+///  - ``InheritedTypeSyntax``.``InheritedTypeSyntax/unexpectedBeforeType``
+///  - ``InheritedTypeSyntax``.``InheritedTypeSyntax/unexpectedBetweenTypeAndTrailingComma``
+///  - ``InheritedTypeSyntax``.``InheritedTypeSyntax/unexpectedAfterTrailingComma``
+///  - ``InitializerClauseSyntax``.``InitializerClauseSyntax/unexpectedBeforeEqual``
+///  - ``InitializerClauseSyntax``.``InitializerClauseSyntax/unexpectedBetweenEqualAndValue``
+///  - ``InitializerClauseSyntax``.``InitializerClauseSyntax/unexpectedAfterValue``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBeforeAttributes``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenModifiersAndInitKeyword``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenInitKeywordAndOptionalMark``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenOptionalMarkAndGenericParameterClause``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenGenericParameterClauseAndSignature``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenSignatureAndGenericWhereClause``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedBetweenGenericWhereClauseAndBody``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/unexpectedAfterBody``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/unexpectedBeforeInitializesKeyword``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/unexpectedBetweenInitializesKeywordAndLeftParen``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/unexpectedBetweenLeftParenAndProperties``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/unexpectedBetweenPropertiesAndRightParen``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/unexpectedAfterRightParen``
+///  - ``IntegerLiteralExprSyntax``.``IntegerLiteralExprSyntax/unexpectedBeforeDigits``
+///  - ``IntegerLiteralExprSyntax``.``IntegerLiteralExprSyntax/unexpectedAfterDigits``
+///  - ``IsExprSyntax``.``IsExprSyntax/unexpectedBeforeExpression``
+///  - ``IsExprSyntax``.``IsExprSyntax/unexpectedBetweenExpressionAndIsKeyword``
+///  - ``IsExprSyntax``.``IsExprSyntax/unexpectedBetweenIsKeywordAndType``
+///  - ``IsExprSyntax``.``IsExprSyntax/unexpectedAfterType``
+///  - ``IsTypePatternSyntax``.``IsTypePatternSyntax/unexpectedBeforeIsKeyword``
+///  - ``IsTypePatternSyntax``.``IsTypePatternSyntax/unexpectedBetweenIsKeywordAndType``
+///  - ``IsTypePatternSyntax``.``IsTypePatternSyntax/unexpectedAfterType``
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/unexpectedBeforePeriod``
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/unexpectedBetweenPeriodAndComponent``
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/unexpectedAfterComponent``
+///  - ``KeyPathExprSyntax``.``KeyPathExprSyntax/unexpectedBeforeBackslash``
+///  - ``KeyPathExprSyntax``.``KeyPathExprSyntax/unexpectedBetweenBackslashAndRoot``
+///  - ``KeyPathExprSyntax``.``KeyPathExprSyntax/unexpectedBetweenRootAndComponents``
+///  - ``KeyPathExprSyntax``.``KeyPathExprSyntax/unexpectedAfterComponents``
+///  - ``KeyPathOptionalComponentSyntax``.``KeyPathOptionalComponentSyntax/unexpectedBeforeQuestionOrExclamationMark``
+///  - ``KeyPathOptionalComponentSyntax``.``KeyPathOptionalComponentSyntax/unexpectedAfterQuestionOrExclamationMark``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/unexpectedBeforeProperty``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/unexpectedBetweenPropertyAndDeclNameArguments``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/unexpectedAfterGenericArgumentClause``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedBeforeLeftSquare``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedBetweenLeftSquareAndArguments``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedBetweenArgumentsAndRightSquare``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedAfterRightSquare``
+///  - ``LabeledSpecializeEntrySyntax``.``LabeledSpecializeEntrySyntax/unexpectedBeforeLabel``
+///  - ``LabeledSpecializeEntrySyntax``.``LabeledSpecializeEntrySyntax/unexpectedBetweenLabelAndColon``
+///  - ``LabeledSpecializeEntrySyntax``.``LabeledSpecializeEntrySyntax/unexpectedBetweenColonAndValue``
+///  - ``LabeledSpecializeEntrySyntax``.``LabeledSpecializeEntrySyntax/unexpectedBetweenValueAndTrailingComma``
+///  - ``LabeledSpecializeEntrySyntax``.``LabeledSpecializeEntrySyntax/unexpectedAfterTrailingComma``
+///  - ``LabeledStmtSyntax``.``LabeledStmtSyntax/unexpectedBeforeLabel``
+///  - ``LabeledStmtSyntax``.``LabeledStmtSyntax/unexpectedBetweenLabelAndColon``
+///  - ``LabeledStmtSyntax``.``LabeledStmtSyntax/unexpectedBetweenColonAndStatement``
+///  - ``LabeledStmtSyntax``.``LabeledStmtSyntax/unexpectedAfterStatement``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBeforeType``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenTypeAndColon``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenColonAndLayoutConstraint``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenLayoutConstraintAndLeftParen``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenLeftParenAndSize``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenSizeAndComma``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenCommaAndAlignment``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedBetweenAlignmentAndRightParen``
+///  - ``LayoutRequirementSyntax``.``LayoutRequirementSyntax/unexpectedAfterRightParen``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBeforeAttributes``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenModifiersAndMacroKeyword``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenMacroKeywordAndName``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenGenericParameterClauseAndSignature``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenSignatureAndDefinition``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedBetweenDefinitionAndGenericWhereClause``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/unexpectedAfterGenericWhereClause``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBeforeAttributes``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenModifiersAndPound``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenPoundAndMacroName``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenMacroNameAndGenericArgumentClause``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenGenericArgumentClauseAndLeftParen``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenRightParenAndTrailingClosure``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/unexpectedAfterAdditionalTrailingClosures``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBeforePound``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenPoundAndMacroName``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenMacroNameAndGenericArgumentClause``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenGenericArgumentClauseAndLeftParen``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenRightParenAndTrailingClosure``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/unexpectedAfterAdditionalTrailingClosures``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/unexpectedBeforeCaseKeyword``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/unexpectedBetweenCaseKeywordAndPattern``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/unexpectedBetweenPatternAndTypeAnnotation``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/unexpectedBetweenTypeAnnotationAndInitializer``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/unexpectedAfterInitializer``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/unexpectedBeforeBase``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/unexpectedBetweenBaseAndPeriod``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/unexpectedBetweenPeriodAndName``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/unexpectedBetweenNameAndDeclNameArguments``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/unexpectedAfterDeclNameArguments``
+///  - ``MemberDeclBlockSyntax``.``MemberDeclBlockSyntax/unexpectedBeforeLeftBrace``
+///  - ``MemberDeclBlockSyntax``.``MemberDeclBlockSyntax/unexpectedBetweenLeftBraceAndMembers``
+///  - ``MemberDeclBlockSyntax``.``MemberDeclBlockSyntax/unexpectedBetweenMembersAndRightBrace``
+///  - ``MemberDeclBlockSyntax``.``MemberDeclBlockSyntax/unexpectedAfterRightBrace``
+///  - ``MemberDeclListItemSyntax``.``MemberDeclListItemSyntax/unexpectedBeforeDecl``
+///  - ``MemberDeclListItemSyntax``.``MemberDeclListItemSyntax/unexpectedBetweenDeclAndSemicolon``
+///  - ``MemberDeclListItemSyntax``.``MemberDeclListItemSyntax/unexpectedAfterSemicolon``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/unexpectedBeforeBaseType``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/unexpectedBetweenBaseTypeAndPeriod``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/unexpectedBetweenPeriodAndName``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/unexpectedBetweenNameAndGenericArgumentClause``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/unexpectedAfterGenericArgumentClause``
+///  - ``MetatypeTypeSyntax``.``MetatypeTypeSyntax/unexpectedBeforeBaseType``
+///  - ``MetatypeTypeSyntax``.``MetatypeTypeSyntax/unexpectedBetweenBaseTypeAndPeriod``
+///  - ``MetatypeTypeSyntax``.``MetatypeTypeSyntax/unexpectedBetweenPeriodAndMetatypeSpecifier``
+///  - ``MetatypeTypeSyntax``.``MetatypeTypeSyntax/unexpectedAfterMetatypeSpecifier``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/unexpectedBeforeAttributes``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/unexpectedBetweenModifiersAndPlaceholder``
+///  - ``MissingDeclSyntax``.``MissingDeclSyntax/unexpectedAfterPlaceholder``
+///  - ``MissingExprSyntax``.``MissingExprSyntax/unexpectedBeforePlaceholder``
+///  - ``MissingExprSyntax``.``MissingExprSyntax/unexpectedAfterPlaceholder``
+///  - ``MissingPatternSyntax``.``MissingPatternSyntax/unexpectedBeforePlaceholder``
+///  - ``MissingPatternSyntax``.``MissingPatternSyntax/unexpectedAfterPlaceholder``
+///  - ``MissingStmtSyntax``.``MissingStmtSyntax/unexpectedBeforePlaceholder``
+///  - ``MissingStmtSyntax``.``MissingStmtSyntax/unexpectedAfterPlaceholder``
+///  - ``MissingSyntax``.``MissingSyntax/unexpectedBeforePlaceholder``
+///  - ``MissingSyntax``.``MissingSyntax/unexpectedAfterPlaceholder``
+///  - ``MissingTypeSyntax``.``MissingTypeSyntax/unexpectedBeforePlaceholder``
+///  - ``MissingTypeSyntax``.``MissingTypeSyntax/unexpectedAfterPlaceholder``
+///  - ``MoveExprSyntax``.``MoveExprSyntax/unexpectedBeforeConsumeKeyword``
+///  - ``MoveExprSyntax``.``MoveExprSyntax/unexpectedBetweenConsumeKeywordAndExpression``
+///  - ``MoveExprSyntax``.``MoveExprSyntax/unexpectedAfterExpression``
+///  - ``MultipleTrailingClosureElementSyntax``.``MultipleTrailingClosureElementSyntax/unexpectedBeforeLabel``
+///  - ``MultipleTrailingClosureElementSyntax``.``MultipleTrailingClosureElementSyntax/unexpectedBetweenLabelAndColon``
+///  - ``MultipleTrailingClosureElementSyntax``.``MultipleTrailingClosureElementSyntax/unexpectedBetweenColonAndClosure``
+///  - ``MultipleTrailingClosureElementSyntax``.``MultipleTrailingClosureElementSyntax/unexpectedAfterClosure``
+///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/unexpectedBeforeGenericParameterClause``
+///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/unexpectedBetweenGenericParameterClauseAndBaseType``
+///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/unexpectedAfterBaseType``
+///  - ``NilLiteralExprSyntax``.``NilLiteralExprSyntax/unexpectedBeforeNilKeyword``
+///  - ``NilLiteralExprSyntax``.``NilLiteralExprSyntax/unexpectedAfterNilKeyword``
+///  - ``ObjCSelectorPieceSyntax``.``ObjCSelectorPieceSyntax/unexpectedBeforeName``
+///  - ``ObjCSelectorPieceSyntax``.``ObjCSelectorPieceSyntax/unexpectedBetweenNameAndColon``
+///  - ``ObjCSelectorPieceSyntax``.``ObjCSelectorPieceSyntax/unexpectedAfterColon``
+///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/unexpectedBeforeMangledName``
+///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/unexpectedBetweenMangledNameAndComma``
+///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/unexpectedBetweenCommaAndOrdinal``
+///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/unexpectedAfterOrdinal``
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/unexpectedBeforeFixitySpecifier``
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/unexpectedBetweenFixitySpecifierAndOperatorKeyword``
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/unexpectedBetweenOperatorKeywordAndName``
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/unexpectedBetweenNameAndOperatorPrecedenceAndTypes``
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/unexpectedAfterOperatorPrecedenceAndTypes``
+///  - ``OperatorPrecedenceAndTypesSyntax``.``OperatorPrecedenceAndTypesSyntax/unexpectedBeforeColon``
+///  - ``OperatorPrecedenceAndTypesSyntax``.``OperatorPrecedenceAndTypesSyntax/unexpectedBetweenColonAndPrecedenceGroup``
+///  - ``OperatorPrecedenceAndTypesSyntax``.``OperatorPrecedenceAndTypesSyntax/unexpectedBetweenPrecedenceGroupAndDesignatedTypes``
+///  - ``OperatorPrecedenceAndTypesSyntax``.``OperatorPrecedenceAndTypesSyntax/unexpectedAfterDesignatedTypes``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/unexpectedBeforeBindingSpecifier``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/unexpectedBetweenBindingSpecifierAndPattern``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/unexpectedBetweenPatternAndTypeAnnotation``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/unexpectedBetweenTypeAnnotationAndInitializer``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/unexpectedAfterInitializer``
+///  - ``OptionalChainingExprSyntax``.``OptionalChainingExprSyntax/unexpectedBeforeExpression``
+///  - ``OptionalChainingExprSyntax``.``OptionalChainingExprSyntax/unexpectedBetweenExpressionAndQuestionMark``
+///  - ``OptionalChainingExprSyntax``.``OptionalChainingExprSyntax/unexpectedAfterQuestionMark``
+///  - ``OptionalTypeSyntax``.``OptionalTypeSyntax/unexpectedBeforeWrappedType``
+///  - ``OptionalTypeSyntax``.``OptionalTypeSyntax/unexpectedBetweenWrappedTypeAndQuestionMark``
+///  - ``OptionalTypeSyntax``.``OptionalTypeSyntax/unexpectedAfterQuestionMark``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedBeforeModuleLabel``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedBetweenModuleLabelAndColon``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedBetweenColonAndModuleName``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedBetweenModuleNameAndComma``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedBetweenCommaAndPlatforms``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/unexpectedAfterPlatforms``
+///  - ``PackElementExprSyntax``.``PackElementExprSyntax/unexpectedBeforeEachKeyword``
+///  - ``PackElementExprSyntax``.``PackElementExprSyntax/unexpectedBetweenEachKeywordAndPackReference``
+///  - ``PackElementExprSyntax``.``PackElementExprSyntax/unexpectedAfterPackReference``
+///  - ``PackExpansionExprSyntax``.``PackExpansionExprSyntax/unexpectedBeforeRepeatKeyword``
+///  - ``PackExpansionExprSyntax``.``PackExpansionExprSyntax/unexpectedBetweenRepeatKeywordAndPack``
+///  - ``PackExpansionExprSyntax``.``PackExpansionExprSyntax/unexpectedAfterPack``
+///  - ``PackExpansionTypeSyntax``.``PackExpansionTypeSyntax/unexpectedBeforeRepeatKeyword``
+///  - ``PackExpansionTypeSyntax``.``PackExpansionTypeSyntax/unexpectedBetweenRepeatKeywordAndPack``
+///  - ``PackExpansionTypeSyntax``.``PackExpansionTypeSyntax/unexpectedAfterPack``
+///  - ``PackReferenceTypeSyntax``.``PackReferenceTypeSyntax/unexpectedBeforeEachKeyword``
+///  - ``PackReferenceTypeSyntax``.``PackReferenceTypeSyntax/unexpectedBetweenEachKeywordAndPack``
+///  - ``PackReferenceTypeSyntax``.``PackReferenceTypeSyntax/unexpectedAfterPack``
+///  - ``ParameterClauseSyntax``.``ParameterClauseSyntax/unexpectedBeforeLeftParen``
+///  - ``ParameterClauseSyntax``.``ParameterClauseSyntax/unexpectedBetweenLeftParenAndParameters``
+///  - ``ParameterClauseSyntax``.``ParameterClauseSyntax/unexpectedBetweenParametersAndRightParen``
+///  - ``ParameterClauseSyntax``.``ParameterClauseSyntax/unexpectedAfterRightParen``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedBeforePattern``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedBetweenPatternAndTypeAnnotation``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedBetweenTypeAnnotationAndInitializer``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedBetweenInitializerAndAccessors``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedBetweenAccessorsAndTrailingComma``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/unexpectedAfterTrailingComma``
+///  - ``PostfixIfConfigExprSyntax``.``PostfixIfConfigExprSyntax/unexpectedBeforeBase``
+///  - ``PostfixIfConfigExprSyntax``.``PostfixIfConfigExprSyntax/unexpectedBetweenBaseAndConfig``
+///  - ``PostfixIfConfigExprSyntax``.``PostfixIfConfigExprSyntax/unexpectedAfterConfig``
+///  - ``PostfixUnaryExprSyntax``.``PostfixUnaryExprSyntax/unexpectedBeforeExpression``
+///  - ``PostfixUnaryExprSyntax``.``PostfixUnaryExprSyntax/unexpectedBetweenExpressionAndOperator``
+///  - ``PostfixUnaryExprSyntax``.``PostfixUnaryExprSyntax/unexpectedAfterOperator``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBeforeFileLabel``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenFileLabelAndFileColon``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenFileColonAndFileName``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenFileNameAndComma``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenCommaAndLineLabel``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenLineLabelAndLineColon``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedBetweenLineColonAndLineNumber``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/unexpectedAfterLineNumber``
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/unexpectedBeforePoundSourceLocation``
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/unexpectedBetweenPoundSourceLocationAndLeftParen``
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/unexpectedBetweenLeftParenAndArguments``
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/unexpectedBetweenArgumentsAndRightParen``
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/unexpectedAfterRightParen``
+///  - ``PrecedenceGroupAssignmentSyntax``.``PrecedenceGroupAssignmentSyntax/unexpectedBeforeAssignmentLabel``
+///  - ``PrecedenceGroupAssignmentSyntax``.``PrecedenceGroupAssignmentSyntax/unexpectedBetweenAssignmentLabelAndColon``
+///  - ``PrecedenceGroupAssignmentSyntax``.``PrecedenceGroupAssignmentSyntax/unexpectedBetweenColonAndValue``
+///  - ``PrecedenceGroupAssignmentSyntax``.``PrecedenceGroupAssignmentSyntax/unexpectedAfterValue``
+///  - ``PrecedenceGroupAssociativitySyntax``.``PrecedenceGroupAssociativitySyntax/unexpectedBeforeAssociativityLabel``
+///  - ``PrecedenceGroupAssociativitySyntax``.``PrecedenceGroupAssociativitySyntax/unexpectedBetweenAssociativityLabelAndColon``
+///  - ``PrecedenceGroupAssociativitySyntax``.``PrecedenceGroupAssociativitySyntax/unexpectedBetweenColonAndValue``
+///  - ``PrecedenceGroupAssociativitySyntax``.``PrecedenceGroupAssociativitySyntax/unexpectedAfterValue``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBeforeAttributes``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenModifiersAndPrecedencegroupKeyword``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenPrecedencegroupKeywordAndName``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenNameAndLeftBrace``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenLeftBraceAndGroupAttributes``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedBetweenGroupAttributesAndRightBrace``
+///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/unexpectedAfterRightBrace``
+///  - ``PrecedenceGroupNameElementSyntax``.``PrecedenceGroupNameElementSyntax/unexpectedBeforeName``
+///  - ``PrecedenceGroupNameElementSyntax``.``PrecedenceGroupNameElementSyntax/unexpectedBetweenNameAndTrailingComma``
+///  - ``PrecedenceGroupNameElementSyntax``.``PrecedenceGroupNameElementSyntax/unexpectedAfterTrailingComma``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBeforeHigherThanOrLowerThanLabel``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBetweenHigherThanOrLowerThanLabelAndColon``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBetweenColonAndOtherNames``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedAfterOtherNames``
+///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedBeforeOperator``
+///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedBetweenOperatorAndBase``
+///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedAfterBase``
+///  - ``PrimaryAssociatedTypeClauseSyntax``.``PrimaryAssociatedTypeClauseSyntax/unexpectedBeforeLeftAngle``
+///  - ``PrimaryAssociatedTypeClauseSyntax``.``PrimaryAssociatedTypeClauseSyntax/unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes``
+///  - ``PrimaryAssociatedTypeClauseSyntax``.``PrimaryAssociatedTypeClauseSyntax/unexpectedBetweenPrimaryAssociatedTypesAndRightAngle``
+///  - ``PrimaryAssociatedTypeClauseSyntax``.``PrimaryAssociatedTypeClauseSyntax/unexpectedAfterRightAngle``
+///  - ``PrimaryAssociatedTypeSyntax``.``PrimaryAssociatedTypeSyntax/unexpectedBeforeName``
+///  - ``PrimaryAssociatedTypeSyntax``.``PrimaryAssociatedTypeSyntax/unexpectedBetweenNameAndTrailingComma``
+///  - ``PrimaryAssociatedTypeSyntax``.``PrimaryAssociatedTypeSyntax/unexpectedAfterTrailingComma``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBeforeAttributes``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenModifiersAndProtocolKeyword``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenProtocolKeywordAndName``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenNameAndPrimaryAssociatedTypeClause``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/unexpectedBeforeBaseType``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/unexpectedBetweenBaseTypeAndPeriod``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/unexpectedBetweenPeriodAndName``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/unexpectedBetweenNameAndArguments``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/unexpectedAfterArguments``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedBeforeOpeningPounds``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedBetweenOpeningPoundsAndOpenSlash``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedBetweenOpenSlashAndRegex``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedBetweenRegexAndCloseSlash``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedBetweenCloseSlashAndClosingPounds``
+///  - ``RegexLiteralExprSyntax``.``RegexLiteralExprSyntax/unexpectedAfterClosingPounds``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/unexpectedBeforeRepeatKeyword``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/unexpectedBetweenRepeatKeywordAndBody``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/unexpectedBetweenBodyAndWhileKeyword``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/unexpectedBetweenWhileKeywordAndCondition``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/unexpectedAfterCondition``
+///  - ``ReturnClauseSyntax``.``ReturnClauseSyntax/unexpectedBeforeArrow``
+///  - ``ReturnClauseSyntax``.``ReturnClauseSyntax/unexpectedBetweenArrowAndType``
+///  - ``ReturnClauseSyntax``.``ReturnClauseSyntax/unexpectedAfterType``
+///  - ``ReturnStmtSyntax``.``ReturnStmtSyntax/unexpectedBeforeReturnKeyword``
+///  - ``ReturnStmtSyntax``.``ReturnStmtSyntax/unexpectedBetweenReturnKeywordAndExpression``
+///  - ``ReturnStmtSyntax``.``ReturnStmtSyntax/unexpectedAfterExpression``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/unexpectedBeforeLeftType``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/unexpectedBetweenLeftTypeAndEqual``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/unexpectedBetweenEqualAndRightType``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/unexpectedAfterRightType``
+///  - ``SequenceExprSyntax``.``SequenceExprSyntax/unexpectedBeforeElements``
+///  - ``SequenceExprSyntax``.``SequenceExprSyntax/unexpectedAfterElements``
+///  - ``SimpleTypeIdentifierSyntax``.``SimpleTypeIdentifierSyntax/unexpectedBeforeName``
+///  - ``SimpleTypeIdentifierSyntax``.``SimpleTypeIdentifierSyntax/unexpectedBetweenNameAndGenericArgumentClause``
+///  - ``SimpleTypeIdentifierSyntax``.``SimpleTypeIdentifierSyntax/unexpectedAfterGenericArgumentClause``
+///  - ``SourceFileSyntax``.``SourceFileSyntax/unexpectedBeforeStatements``
+///  - ``SourceFileSyntax``.``SourceFileSyntax/unexpectedBetweenStatementsAndEndOfFileToken``
+///  - ``SourceFileSyntax``.``SourceFileSyntax/unexpectedAfterEndOfFileToken``
+///  - ``SpecializeExprSyntax``.``SpecializeExprSyntax/unexpectedBeforeExpression``
+///  - ``SpecializeExprSyntax``.``SpecializeExprSyntax/unexpectedBetweenExpressionAndGenericArgumentClause``
+///  - ``SpecializeExprSyntax``.``SpecializeExprSyntax/unexpectedAfterGenericArgumentClause``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedBeforeOpenDelimiter``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedBetweenOpenDelimiterAndOpenQuote``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedBetweenOpenQuoteAndSegments``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedBetweenSegmentsAndCloseQuote``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedBetweenCloseQuoteAndCloseDelimiter``
+///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/unexpectedAfterCloseDelimiter``
+///  - ``StringSegmentSyntax``.``StringSegmentSyntax/unexpectedBeforeContent``
+///  - ``StringSegmentSyntax``.``StringSegmentSyntax/unexpectedAfterContent``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBeforeAttributes``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenModifiersAndStructKeyword``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenStructKeywordAndName``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenGenericParameterClauseAndInheritanceClause``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/unexpectedAfterMemberBlock``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBeforeAttributes``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenModifiersAndSubscriptKeyword``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenSubscriptKeywordAndGenericParameterClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenGenericParameterClauseAndParameterClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenParameterClauseAndReturnClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenReturnClauseAndGenericWhereClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedBetweenGenericWhereClauseAndAccessors``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/unexpectedAfterAccessors``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBeforeCalledExpression``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBetweenCalledExpressionAndLeftSquare``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBetweenLeftSquareAndArguments``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBetweenArgumentsAndRightSquare``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBetweenRightSquareAndTrailingClosure``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/unexpectedAfterAdditionalTrailingClosures``
+///  - ``SuperRefExprSyntax``.``SuperRefExprSyntax/unexpectedBeforeSuperKeyword``
+///  - ``SuperRefExprSyntax``.``SuperRefExprSyntax/unexpectedAfterSuperKeyword``
+///  - ``SuppressedTypeSyntax``.``SuppressedTypeSyntax/unexpectedBeforeWithoutTilde``
+///  - ``SuppressedTypeSyntax``.``SuppressedTypeSyntax/unexpectedBetweenWithoutTildeAndType``
+///  - ``SuppressedTypeSyntax``.``SuppressedTypeSyntax/unexpectedAfterType``
+///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedBeforeCaseKeyword``
+///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedBetweenCaseKeywordAndCaseItems``
+///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedBetweenCaseItemsAndColon``
+///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedAfterColon``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBeforeUnknownAttr``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBetweenUnknownAttrAndLabel``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBetweenLabelAndStatements``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedAfterStatements``
+///  - ``SwitchDefaultLabelSyntax``.``SwitchDefaultLabelSyntax/unexpectedBeforeDefaultKeyword``
+///  - ``SwitchDefaultLabelSyntax``.``SwitchDefaultLabelSyntax/unexpectedBetweenDefaultKeywordAndColon``
+///  - ``SwitchDefaultLabelSyntax``.``SwitchDefaultLabelSyntax/unexpectedAfterColon``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedBeforeSwitchKeyword``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedBetweenSwitchKeywordAndExpression``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedBetweenExpressionAndLeftBrace``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedBetweenLeftBraceAndCases``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedBetweenCasesAndRightBrace``
+///  - ``SwitchExprSyntax``.``SwitchExprSyntax/unexpectedAfterRightBrace``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/unexpectedBeforeTargetLabel``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/unexpectedBetweenTargetLabelAndColon``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/unexpectedBetweenColonAndDeclName``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/unexpectedBetweenDeclNameAndTrailingComma``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/unexpectedAfterTrailingComma``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedBeforeCondition``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedBetweenConditionAndQuestionMark``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedBetweenQuestionMarkAndFirstChoice``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedBetweenFirstChoiceAndColon``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedBetweenColonAndSecondChoice``
+///  - ``TernaryExprSyntax``.``TernaryExprSyntax/unexpectedAfterSecondChoice``
+///  - ``ThrowStmtSyntax``.``ThrowStmtSyntax/unexpectedBeforeThrowKeyword``
+///  - ``ThrowStmtSyntax``.``ThrowStmtSyntax/unexpectedBetweenThrowKeywordAndExpression``
+///  - ``ThrowStmtSyntax``.``ThrowStmtSyntax/unexpectedAfterExpression``
+///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedBeforeTryKeyword``
+///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedBetweenTryKeywordAndQuestionOrExclamationMark``
+///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedBetweenQuestionOrExclamationMarkAndExpression``
+///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedAfterExpression``
+///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBeforeLabel``
+///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenLabelAndColon``
+///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenColonAndExpression``
+///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenExpressionAndTrailingComma``
+///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedAfterTrailingComma``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBeforeLeftParen``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBetweenLeftParenAndElements``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBetweenElementsAndRightParen``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedAfterRightParen``
+///  - ``TuplePatternElementSyntax``.``TuplePatternElementSyntax/unexpectedBeforeLabel``
+///  - ``TuplePatternElementSyntax``.``TuplePatternElementSyntax/unexpectedBetweenLabelAndColon``
+///  - ``TuplePatternElementSyntax``.``TuplePatternElementSyntax/unexpectedBetweenColonAndPattern``
+///  - ``TuplePatternElementSyntax``.``TuplePatternElementSyntax/unexpectedBetweenPatternAndTrailingComma``
+///  - ``TuplePatternElementSyntax``.``TuplePatternElementSyntax/unexpectedAfterTrailingComma``
+///  - ``TuplePatternSyntax``.``TuplePatternSyntax/unexpectedBeforeLeftParen``
+///  - ``TuplePatternSyntax``.``TuplePatternSyntax/unexpectedBetweenLeftParenAndElements``
+///  - ``TuplePatternSyntax``.``TuplePatternSyntax/unexpectedBetweenElementsAndRightParen``
+///  - ``TuplePatternSyntax``.``TuplePatternSyntax/unexpectedAfterRightParen``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBeforeInoutKeyword``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenInoutKeywordAndName``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenNameAndSecondName``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenSecondNameAndColon``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenColonAndType``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenTypeAndEllipsis``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenEllipsisAndInitializer``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedBetweenInitializerAndTrailingComma``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/unexpectedAfterTrailingComma``
+///  - ``TupleTypeSyntax``.``TupleTypeSyntax/unexpectedBeforeLeftParen``
+///  - ``TupleTypeSyntax``.``TupleTypeSyntax/unexpectedBetweenLeftParenAndElements``
+///  - ``TupleTypeSyntax``.``TupleTypeSyntax/unexpectedBetweenElementsAndRightParen``
+///  - ``TupleTypeSyntax``.``TupleTypeSyntax/unexpectedAfterRightParen``
+///  - ``TypeAnnotationSyntax``.``TypeAnnotationSyntax/unexpectedBeforeColon``
+///  - ``TypeAnnotationSyntax``.``TypeAnnotationSyntax/unexpectedBetweenColonAndType``
+///  - ``TypeAnnotationSyntax``.``TypeAnnotationSyntax/unexpectedAfterType``
+///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/unexpectedBeforeAsyncSpecifier``
+///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/unexpectedBetweenAsyncSpecifierAndThrowsSpecifier``
+///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/unexpectedAfterThrowsSpecifier``
+///  - ``TypeExprSyntax``.``TypeExprSyntax/unexpectedBeforeType``
+///  - ``TypeExprSyntax``.``TypeExprSyntax/unexpectedAfterType``
+///  - ``TypeInheritanceClauseSyntax``.``TypeInheritanceClauseSyntax/unexpectedBeforeColon``
+///  - ``TypeInheritanceClauseSyntax``.``TypeInheritanceClauseSyntax/unexpectedBetweenColonAndInheritedTypes``
+///  - ``TypeInheritanceClauseSyntax``.``TypeInheritanceClauseSyntax/unexpectedAfterInheritedTypes``
+///  - ``TypeInitializerClauseSyntax``.``TypeInitializerClauseSyntax/unexpectedBeforeEqual``
+///  - ``TypeInitializerClauseSyntax``.``TypeInitializerClauseSyntax/unexpectedBetweenEqualAndValue``
+///  - ``TypeInitializerClauseSyntax``.``TypeInitializerClauseSyntax/unexpectedAfterValue``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBeforeAttributes``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenModifiersAndTypealiasKeyword``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenTypealiasKeywordAndName``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenNameAndGenericParameterClause``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenGenericParameterClauseAndInitializer``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedBetweenInitializerAndGenericWhereClause``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/unexpectedAfterGenericWhereClause``
+///  - ``UnavailableFromAsyncArgumentsSyntax``.``UnavailableFromAsyncArgumentsSyntax/unexpectedBeforeMessageLabel``
+///  - ``UnavailableFromAsyncArgumentsSyntax``.``UnavailableFromAsyncArgumentsSyntax/unexpectedBetweenMessageLabelAndColon``
+///  - ``UnavailableFromAsyncArgumentsSyntax``.``UnavailableFromAsyncArgumentsSyntax/unexpectedBetweenColonAndMessage``
+///  - ``UnavailableFromAsyncArgumentsSyntax``.``UnavailableFromAsyncArgumentsSyntax/unexpectedAfterMessage``
+///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedBeforeSourceFileLabel``
+///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedBetweenSourceFileLabelAndColon``
+///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedBetweenColonAndFilename``
+///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedAfterFilename``
+///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedBeforeAsKeyword``
+///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedBetweenAsKeywordAndQuestionOrExclamationMark``
+///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedAfterQuestionOrExclamationMark``
+///  - ``UnresolvedIsExprSyntax``.``UnresolvedIsExprSyntax/unexpectedBeforeIsKeyword``
+///  - ``UnresolvedIsExprSyntax``.``UnresolvedIsExprSyntax/unexpectedAfterIsKeyword``
+///  - ``UnresolvedPatternExprSyntax``.``UnresolvedPatternExprSyntax/unexpectedBeforePattern``
+///  - ``UnresolvedPatternExprSyntax``.``UnresolvedPatternExprSyntax/unexpectedAfterPattern``
+///  - ``UnresolvedTernaryExprSyntax``.``UnresolvedTernaryExprSyntax/unexpectedBeforeQuestionMark``
+///  - ``UnresolvedTernaryExprSyntax``.``UnresolvedTernaryExprSyntax/unexpectedBetweenQuestionMarkAndFirstChoice``
+///  - ``UnresolvedTernaryExprSyntax``.``UnresolvedTernaryExprSyntax/unexpectedBetweenFirstChoiceAndColon``
+///  - ``UnresolvedTernaryExprSyntax``.``UnresolvedTernaryExprSyntax/unexpectedAfterColon``
+///  - ``ValueBindingPatternSyntax``.``ValueBindingPatternSyntax/unexpectedBeforeBindingSpecifier``
+///  - ``ValueBindingPatternSyntax``.``ValueBindingPatternSyntax/unexpectedBetweenBindingSpecifierAndPattern``
+///  - ``ValueBindingPatternSyntax``.``ValueBindingPatternSyntax/unexpectedAfterPattern``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/unexpectedBeforeAttributes``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/unexpectedBetweenAttributesAndModifiers``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/unexpectedBetweenModifiersAndBindingSpecifier``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/unexpectedBetweenBindingSpecifierAndBindings``
+///  - ``VariableDeclSyntax``.``VariableDeclSyntax/unexpectedAfterBindings``
+///  - ``VersionComponentSyntax``.``VersionComponentSyntax/unexpectedBeforePeriod``
+///  - ``VersionComponentSyntax``.``VersionComponentSyntax/unexpectedBetweenPeriodAndNumber``
+///  - ``VersionComponentSyntax``.``VersionComponentSyntax/unexpectedAfterNumber``
+///  - ``VersionTupleSyntax``.``VersionTupleSyntax/unexpectedBeforeMajor``
+///  - ``VersionTupleSyntax``.``VersionTupleSyntax/unexpectedBetweenMajorAndComponents``
+///  - ``VersionTupleSyntax``.``VersionTupleSyntax/unexpectedAfterComponents``
+///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedBeforeWhereKeyword``
+///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedBetweenWhereKeywordAndGuardResult``
+///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedAfterGuardResult``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBeforeWhileKeyword``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBetweenWhileKeywordAndConditions``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBetweenConditionsAndBody``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedAfterBody``
+///  - ``WildcardPatternSyntax``.``WildcardPatternSyntax/unexpectedBeforeWildcard``
+///  - ``WildcardPatternSyntax``.``WildcardPatternSyntax/unexpectedBetweenWildcardAndTypeAnnotation``
+///  - ``WildcardPatternSyntax``.``WildcardPatternSyntax/unexpectedAfterTypeAnnotation``
+///  - ``YieldExprListElementSyntax``.``YieldExprListElementSyntax/unexpectedBeforeExpression``
+///  - ``YieldExprListElementSyntax``.``YieldExprListElementSyntax/unexpectedBetweenExpressionAndComma``
+///  - ``YieldExprListElementSyntax``.``YieldExprListElementSyntax/unexpectedAfterComma``
+///  - ``YieldListSyntax``.``YieldListSyntax/unexpectedBeforeLeftParen``
+///  - ``YieldListSyntax``.``YieldListSyntax/unexpectedBetweenLeftParenAndElements``
+///  - ``YieldListSyntax``.``YieldListSyntax/unexpectedBetweenElementsAndRightParen``
+///  - ``YieldListSyntax``.``YieldListSyntax/unexpectedAfterRightParen``
+///  - ``YieldStmtSyntax``.``YieldStmtSyntax/unexpectedBeforeYieldKeyword``
+///  - ``YieldStmtSyntax``.``YieldStmtSyntax/unexpectedBetweenYieldKeywordAndYields``
+///  - ``YieldStmtSyntax``.``YieldStmtSyntax/unexpectedAfterYields``
 public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = Syntax
   
@@ -1102,6 +2341,10 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``VersionComponentSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``VersionTupleSyntax``.``VersionTupleSyntax/components``
 public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = VersionComponentSyntax
   
@@ -1120,6 +2363,10 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``YieldExprListElementSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``YieldListSyntax``.``YieldListSyntax/elements``
 public struct YieldExprListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = YieldExprListElementSyntax
   

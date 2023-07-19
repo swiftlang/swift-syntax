@@ -1187,6 +1187,10 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `label`: (`'_version'` | `'_underlyingVersion'`)
 ///  - `colon`: `':'`
 ///  - `version`: ``VersionTupleSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``CanImportExprSyntax``.``CanImportExprSyntax/versionInfo``
 public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1363,6 +1367,14 @@ public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `signature`: ``ClosureSignatureSyntax``?
 ///  - `statements`: ``CodeBlockItemListSyntax``
 ///  - `rightBrace`: `'}'`
+///
+/// ### Contained in
+/// 
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/trailingClosure``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/trailingClosure``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/trailingClosure``
+///  - ``MultipleTrailingClosureElementSyntax``.``MultipleTrailingClosureElementSyntax/closure``
+///  - ``SubscriptExprSyntax``.``SubscriptExprSyntax/trailingClosure``
 public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2648,6 +2660,10 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `body`: ``CodeBlockSyntax``
 ///  - `elseKeyword`: `'else'`?
 ///  - `elseBody`: (``IfExprSyntax`` | ``CodeBlockSyntax``)?
+///
+/// ### Contained in
+/// 
+///  - ``IfExprSyntax``.``IfExprSyntax/elseBody``
 public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public enum ElseBody: SyntaxChildChoices {
     case `ifExpr`(IfExprSyntax)
@@ -5575,6 +5591,19 @@ public struct SpecializeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `segments`: ``StringLiteralSegmentListSyntax``
 ///  - `closeQuote`: (`'"'` | `'"""'` | `'''`)
 ///  - `closeDelimiter`: `<rawStringDelimiter>`?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
+///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/cTypeString``
+///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/value``
+///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/cxxName``
+///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/mangledName``
+///  - ``OriginallyDefinedInArgumentsSyntax``.``OriginallyDefinedInArgumentsSyntax/moduleName``
+///  - ``PoundSourceLocationArgsSyntax``.``PoundSourceLocationArgsSyntax/fileName``
+///  - ``UnavailableFromAsyncArgumentsSyntax``.``UnavailableFromAsyncArgumentsSyntax/message``
+///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/filename``
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

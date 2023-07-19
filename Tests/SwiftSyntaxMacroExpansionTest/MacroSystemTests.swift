@@ -732,6 +732,22 @@ public struct DeclsFromStringsMacroNoAttrs: DeclarationMacro {
   }
 }
 
+public struct ConstantOneAccessorMacro: AccessorMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [AccessorDeclSyntax] {
+    return [
+      """
+      get {
+        return 1
+      }
+      """
+    ]
+  }
+}
+
 // MARK: Tests
 
 /// The set of test macros we use here.
@@ -753,6 +769,7 @@ public let testMacros: [String: Macro.Type] = [
   "unwrap": UnwrapMacro.self,
   "AddSendable": SendableConformanceMacro.self,
   "AddSendableExtension": SendableExtensionMacro.self,
+  "ConstantOne": ConstantOneAccessorMacro.self,
 ]
 
 final class MacroSystemTests: XCTestCase {
@@ -1236,6 +1253,48 @@ final class MacroSystemTests: XCTestCase {
         struct MyType {
         }
         extension MyType: Sendable {
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorMacro() {
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @ConstantOne var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int {
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @ConstantOne var x: Int {
+          willSet { print("willSet") }
+        }
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int {
+            get {
+              return 1
+            }
+          }
         }
         """,
       macros: testMacros,

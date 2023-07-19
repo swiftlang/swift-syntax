@@ -346,9 +346,9 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
             \.accessor,
             .accessors(
               .init(
-                leftBrace: .leftBraceToken(leadingTrivia: .space),
+                leftBrace: .leftBraceToken(),
                 accessors: .init(accessors),
-                rightBrace: .rightBraceToken(leadingTrivia: .newline)
+                rightBrace: .rightBraceToken()
               )
             )
           )

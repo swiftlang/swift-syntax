@@ -14,22 +14,22 @@
 
 extension Parser {
   private enum IfConfigContinuationClauseStartKeyword: TokenSpecSet {
-    case poundElseifKeyword
-    case poundElseKeyword
+    case poundElseif
+    case poundElse
     case pound
 
     var spec: TokenSpec {
       switch self {
-      case .poundElseifKeyword: return .poundElseifKeyword
-      case .poundElseKeyword: return .poundElseKeyword
+      case .poundElseif: return .poundElseif
+      case .poundElse: return .poundElse
       case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
       }
     }
 
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
-      case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
+      case TokenSpec(.poundElseif): self = .poundElseif
+      case TokenSpec(.poundElse): self = .poundElse
       case TokenSpec(.pound): self = .pound
       default: return nil
       }
@@ -96,7 +96,7 @@ extension Parser {
       return RawIfConfigDeclSyntax(
         remainingTokens,
         clauses: RawIfConfigClauseListSyntax(elements: [], arena: self.arena),
-        poundEndif: missingToken(.poundEndifKeyword),
+        poundEndif: missingToken(.poundEndif),
         arena: self.arena
       )
     }
@@ -104,14 +104,14 @@ extension Parser {
     var clauses = [RawIfConfigClauseSyntax]()
 
     // Parse #if
-    let (unexpectedBeforePoundIfKeyword, poundIfKeyword) = self.expect(.poundIfKeyword)
+    let (unexpectedBeforePoundIf, poundIf) = self.expect(.poundIf)
     let condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
     let unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
 
     clauses.append(
       RawIfConfigClauseSyntax(
-        unexpectedBeforePoundIfKeyword,
-        poundKeyword: poundIfKeyword,
+        unexpectedBeforePoundIf,
+        poundKeyword: poundIf,
         condition: condition,
         unexpectedBetweenConditionAndElements,
         elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
@@ -122,21 +122,21 @@ extension Parser {
     // Proceed to parse #if continuation clauses (#elseif, #else, check #elif typo, #endif)
     var loopProgress = LoopProgressCondition()
     LOOP: while let (match, handle) = self.canRecoverTo(anyIn: IfConfigContinuationClauseStartKeyword.self), loopProgress.evaluate(self.currentToken) {
-      var unexpectedBeforePoundKeyword: RawUnexpectedNodesSyntax?
-      var poundKeyword: RawTokenSyntax
+      var unexpectedBeforePound: RawUnexpectedNodesSyntax?
+      var pound: RawTokenSyntax
       let condition: RawExprSyntax?
       let unexpectedBetweenConditionAndElements: RawUnexpectedNodesSyntax?
 
       switch match {
-      case .poundElseifKeyword:
-        (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+      case .poundElseif:
+        (unexpectedBeforePound, pound) = self.eat(handle)
         condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
-      case .poundElseKeyword:
-        (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+      case .poundElse:
+        (unexpectedBeforePound, pound) = self.eat(handle)
         if let ifToken = self.consume(if: .init(.if, allowAtStartOfLine: false)) {
-          unexpectedBeforePoundKeyword = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundKeyword, poundKeyword, ifToken, arena: self.arena)
-          poundKeyword = self.missingToken(.poundElseifKeyword)
+          unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, ifToken, arena: self.arena)
+          pound = self.missingToken(.poundElseif)
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
         } else {
           condition = nil
@@ -144,12 +144,12 @@ extension Parser {
         unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
       case .pound:
         if self.atElifTypo() {
-          (unexpectedBeforePoundKeyword, poundKeyword) = self.eat(handle)
+          (unexpectedBeforePound, pound) = self.eat(handle)
           guard let elif = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) else {
             preconditionFailure("The current token should be an identifier, guaranteed by the `atElifTypo` check.")
           }
-          unexpectedBeforePoundKeyword = RawUnexpectedNodesSyntax(combining: unexpectedBeforePoundKeyword, poundKeyword, elif, arena: self.arena)
-          poundKeyword = self.missingToken(.poundElseifKeyword)
+          unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, elif, arena: self.arena)
+          pound = self.missingToken(.poundElseif)
           condition = RawExprSyntax(self.parseSequenceExpression(.basic, forDirective: true))
           unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
         } else {
@@ -159,8 +159,8 @@ extension Parser {
 
       clauses.append(
         RawIfConfigClauseSyntax(
-          unexpectedBeforePoundKeyword,
-          poundKeyword: poundKeyword,
+          unexpectedBeforePound,
+          poundKeyword: pound,
           condition: condition,
           unexpectedBetweenConditionAndElements,
           elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
@@ -169,9 +169,8 @@ extension Parser {
       )
     }
 
-    let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndifKeyword)
+    let (unexpectedBeforePoundEndIf, poundEndIf) = self.expect(.poundEndif)
     let unexpectedAfterPoundEndif = self.consumeRemainingTokenOnLine()
-
     return RawIfConfigDeclSyntax(
       clauses: RawIfConfigClauseListSyntax(elements: clauses, arena: self.arena),
       unexpectedBeforePoundEndIf,
@@ -206,7 +205,7 @@ extension Parser {
     var elements = [Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(.endOfFile)
-      && !self.at(.poundElseKeyword, .poundElseifKeyword, .poundEndifKeyword)
+      && !self.at(.poundElse, .poundElseif, .poundEndif)
       && !self.atElifTypo()
       && elementsProgress.evaluate(currentToken)
     {

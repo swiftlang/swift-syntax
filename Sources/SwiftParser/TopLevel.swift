@@ -238,7 +238,7 @@ extension Parser {
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookahead.
   private mutating func parseItem(isAtTopLevel: Bool = false, allowInitDecl: Bool = true) -> RawCodeBlockItemSyntax.Item {
-    if self.at(.poundIfKeyword) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       // If config of attributes is parsed as part of declaration parsing as it
       // doesn't constitute its own code block item.
       let directive = self.parsePoundIfDirective { (parser, _) in
@@ -260,7 +260,7 @@ extension Parser {
         return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
       return .decl(RawDeclSyntax(directive))
-    } else if self.at(.poundSourceLocationKeyword) {
+    } else if self.at(.poundSourceLocation) {
       return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
       return .decl(self.parseDeclaration())

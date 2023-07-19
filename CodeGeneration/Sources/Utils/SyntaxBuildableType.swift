@@ -63,9 +63,7 @@ public struct SyntaxBuildableType: Hashable {
     if isOptional {
       return ExprSyntax(NilLiteralExprSyntax())
     } else if let token = token {
-      if token.isKeyword {
-        return ExprSyntax(".\(raw: token.swiftKind)()")
-      } else if token.text != nil {
+      if token.text != nil {
         return ExprSyntax(".\(raw: lowercaseFirstWord(name: token.name))Token()")
       }
     }

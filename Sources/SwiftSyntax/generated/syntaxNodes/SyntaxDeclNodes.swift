@@ -3096,7 +3096,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeClauses: UnexpectedNodesSyntax? = nil,
       clauses: IfConfigClauseListSyntax,
       _ unexpectedBetweenClausesAndPoundEndif: UnexpectedNodesSyntax? = nil,
-      poundEndif: TokenSyntax = .poundEndifKeyword(),
+      poundEndif: TokenSyntax = .poundEndifToken(),
       _ unexpectedAfterPoundEndif: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5051,7 +5051,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforePoundSourceLocation: UnexpectedNodesSyntax? = nil,
-      poundSourceLocation: TokenSyntax = .poundSourceLocationKeyword(),
+      poundSourceLocation: TokenSyntax = .poundSourceLocationToken(),
       _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,

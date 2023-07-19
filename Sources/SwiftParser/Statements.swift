@@ -216,7 +216,7 @@ extension Parser {
   /// `lastBindingKind` will be used to get a correct fall back, when there is missing `var` or `let` in a `if` statement etc.
   mutating func parseConditionElement(lastBindingKind: RawTokenSyntax?) -> RawConditionElementSyntax.Condition {
     // Parse a leading #available/#unavailable condition if present.
-    if self.at(.poundAvailableKeyword, .poundUnavailableKeyword) {
+    if self.at(.poundAvailable, .poundUnavailable) {
       return self.parsePoundAvailableConditionElement()
     }
 
@@ -333,7 +333,7 @@ extension Parser {
   ///     availability-condition → '#available' '(' availability-arguments ')'
   ///     availability-condition → '#unavailable' '(' availability-arguments ')'
   mutating func parsePoundAvailableConditionElement() -> RawConditionElementSyntax.Condition {
-    precondition(self.at(.poundAvailableKeyword, .poundUnavailableKeyword))
+    precondition(self.at(.poundAvailable, .poundUnavailable))
     let keyword = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let arguments = self.parseAvailabilitySpecList()
@@ -690,10 +690,10 @@ extension Parser {
       case `case`
       case `default`
       case semicolon
-      case poundIfKeyword
-      case poundEndifKeyword
-      case poundElseKeyword
-      case poundElseifKeyword
+      case poundIf
+      case poundEndif
+      case poundElse
+      case poundElseif
       case endOfFile
 
       init?(lexeme: Lexer.Lexeme) {
@@ -702,10 +702,10 @@ extension Parser {
         case TokenSpec(.case): self = .case
         case TokenSpec(.default): self = .default
         case TokenSpec(.semicolon): self = .semicolon
-        case TokenSpec(.poundIfKeyword): self = .poundIfKeyword
-        case TokenSpec(.poundEndifKeyword): self = .poundEndifKeyword
-        case TokenSpec(.poundElseKeyword): self = .poundElseKeyword
-        case TokenSpec(.poundElseifKeyword): self = .poundElseifKeyword
+        case TokenSpec(.poundIf): self = .poundIf
+        case TokenSpec(.poundEndif): self = .poundEndif
+        case TokenSpec(.poundElse): self = .poundElse
+        case TokenSpec(.poundElseif): self = .poundElseif
         case TokenSpec(.endOfFile): self = .endOfFile
         default: return nil
         }
@@ -717,10 +717,10 @@ extension Parser {
         case .case: return .keyword(.case)
         case .default: return .keyword(.default)
         case .semicolon: return .semicolon
-        case .poundIfKeyword: return .poundIfKeyword
-        case .poundEndifKeyword: return .poundEndifKeyword
-        case .poundElseKeyword: return .poundElseKeyword
-        case .poundElseifKeyword: return .poundElseifKeyword
+        case .poundIf: return .poundIf
+        case .poundEndif: return .poundEndif
+        case .poundElse: return .poundElse
+        case .poundElseif: return .poundElseif
         case .endOfFile: return .endOfFile
         }
       }
@@ -1052,7 +1052,7 @@ extension Parser.Lookahead {
   }
 
   mutating func isStartOfConditionalSwitchCases() -> Bool {
-    guard self.at(.poundIfKeyword) else {
+    guard self.at(.poundIf) else {
       return self.isAtStartOfSwitchCase()
     }
 
@@ -1062,7 +1062,7 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
-    } while lookahead.at(.poundIfKeyword, .poundElseifKeyword, .poundElseKeyword) && loopProgress.evaluate(lookahead.currentToken)
+    } while lookahead.at(.poundIf, .poundElseif, .poundElse) && loopProgress.evaluate(lookahead.currentToken)
     return lookahead.isAtStartOfSwitchCase()
   }
 }

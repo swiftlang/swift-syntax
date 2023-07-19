@@ -19,7 +19,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
     let buildable = IfConfigDeclSyntax(
       clauses: IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
-          poundKeyword: .poundIfKeyword(),
+          poundKeyword: .poundIfToken(),
           condition: ExprSyntax("DEBUG"),
           elements: .statements(
             CodeBlockItemListSyntax {
@@ -34,7 +34,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
           )
         )
         IfConfigClauseSyntax(
-          poundKeyword: .poundElseifKeyword(),
+          poundKeyword: .poundElseifToken(),
           condition: ExprSyntax("TEST"),
           elements: .statements(
             CodeBlockItemListSyntax {
@@ -49,7 +49,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
           )
         )
         IfConfigClauseSyntax(
-          poundKeyword: .poundElseKeyword(),
+          poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
               DeclSyntax(
@@ -63,7 +63,7 @@ final class IfConfigDeclSyntaxTests: XCTestCase {
           )
         )
       },
-      poundEndif: .poundEndifKeyword()
+      poundEndif: .poundEndifToken()
     )
 
     assertBuildResult(

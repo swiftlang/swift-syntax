@@ -55,10 +55,10 @@ fileprivate extension TokenSyntax {
   /// returns the opposite keyword.
   var negatedAvailabilityKeyword: TokenSyntax {
     switch self.tokenKind {
-    case .poundAvailableKeyword:
-      return self.with(\.tokenKind, .poundUnavailableKeyword)
-    case .poundUnavailableKeyword:
-      return self.with(\.tokenKind, .poundAvailableKeyword)
+    case .poundAvailable:
+      return self.with(\.tokenKind, .poundUnavailable)
+    case .poundUnavailable:
+      return self.with(\.tokenKind, .poundAvailable)
     default:
       preconditionFailure("The availability token of an AvailabilityConditionSyntax should always be #available or #unavailable")
     }
@@ -1094,7 +1094,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   public override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     for clause in node.clauses where clause.hasError {
       if let unexpectedBeforePoundKeyword = clause.unexpectedBeforePoundKeyword,
-        clause.poundKeyword.tokenKind == .poundElseifKeyword,
+        clause.poundKeyword.tokenKind == .poundElseif,
         clause.poundKeyword.isMissing
       {
         let unexpectedTokens =
@@ -1103,7 +1103,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           .compactMap { $0.as(TokenSyntax.self) }
         var diagnosticMessage: DiagnosticMessage?
 
-        if unexpectedTokens.map(\.tokenKind) == [.poundElseKeyword, .keyword(.if)] {
+        if unexpectedTokens.map(\.tokenKind) == [.poundElse, .keyword(.if)] {
           diagnosticMessage = StaticParserError.unexpectedPoundElseSpaceIf
         } else if unexpectedTokens.first?.tokenKind == .pound, unexpectedTokens.last?.text == "elif" {
           diagnosticMessage = UnknownDirectiveError(unexpected: unexpectedBeforePoundKeyword)

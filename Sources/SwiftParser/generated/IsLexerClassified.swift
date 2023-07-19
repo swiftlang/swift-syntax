@@ -140,20 +140,6 @@ extension TokenKind {
   @_spi(Diagnostics) @_spi(Testing)
   public var isLexerClassifiedKeyword: Bool {
     switch self {
-    case .poundAvailableKeyword:
-      return true
-    case .poundElseKeyword:
-      return true
-    case .poundElseifKeyword:
-      return true
-    case .poundEndifKeyword:
-      return true
-    case .poundIfKeyword:
-      return true
-    case .poundSourceLocationKeyword:
-      return true
-    case .poundUnavailableKeyword:
-      return true
     case .keyword(let keyword):
       return keyword.isLexerClassified
     default:

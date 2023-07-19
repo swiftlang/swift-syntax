@@ -71,6 +71,41 @@ public extension TokenKind {
     return .leftSquare
   }
 
+  @available(*, deprecated, renamed: "poundAvailable")
+  static var poundAvailableKeyword: TokenKind {
+    return .poundAvailable
+  }
+
+  @available(*, deprecated, renamed: "poundElse")
+  static var poundElseKeyword: TokenKind {
+    return .poundElse
+  }
+
+  @available(*, deprecated, renamed: "poundElseif")
+  static var poundElseifKeyword: TokenKind {
+    return .poundElseif
+  }
+
+  @available(*, deprecated, renamed: "poundEndif")
+  static var poundEndifKeyword: TokenKind {
+    return .poundEndif
+  }
+
+  @available(*, deprecated, renamed: "poundIf")
+  static var poundIfKeyword: TokenKind {
+    return .poundIf
+  }
+
+  @available(*, deprecated, renamed: "poundSourceLocation")
+  static var poundSourceLocationKeyword: TokenKind {
+    return .poundSourceLocation
+  }
+
+  @available(*, deprecated, renamed: "poundUnavailable")
+  static var poundUnavailableKeyword: TokenKind {
+    return .poundUnavailable
+  }
+
   @available(*, deprecated, renamed: "rightSquare")
   static var rightSquareBracket: TokenKind {
     return .rightSquare
@@ -88,6 +123,97 @@ public extension TokenSyntax {
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return .leftSquareToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundAvailableToken")
+  static func poundAvailableKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundAvailableToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundElseToken")
+  static func poundElseKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundElseToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundElseifToken")
+  static func poundElseIfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundElseifToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundEndifToken")
+  static func poundEndifKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundEndifToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundIfToken")
+  static func poundIfKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundIfToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundSourceLocationToken")
+  static func poundSourceLocationKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundSourceLocationToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "poundUnavailableToken")
+  static func poundUnavailableKeyword(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return poundUnavailableToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

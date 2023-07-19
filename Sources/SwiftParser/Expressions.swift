@@ -1,4 +1,5 @@
 //===----------------------------------------------------------------------===//
+//===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
 //
@@ -743,7 +744,7 @@ extension Parser {
     _ flavor: ExprFlavor,
     forDirective: Bool
   ) -> RawExprSyntax {
-    precondition(self.at(.poundIfKeyword))
+    precondition(self.at(.poundIf))
 
     let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
       if !isFirstElement {
@@ -752,7 +753,7 @@ extension Parser {
       let head: RawExprSyntax
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
-      } else if parser.at(.poundIfKeyword) {
+      } else if parser.at(.poundIf) {
         head = parser.parseIfConfigExpressionSuffix(nil, flavor, forDirective: forDirective)
       } else {
         // TODO: diagnose and skip.
@@ -946,7 +947,7 @@ extension Parser {
         continue
       }
 
-      if self.at(.poundIfKeyword) {
+      if self.at(.poundIf) {
         // Check if the first '#if' body starts with '.' <identifier>, and parse
         // it as a "postfix ifconfig expression".
         do {
@@ -959,11 +960,11 @@ extension Parser {
           //       .someMember
           var loopProgress = LoopProgressCondition()
           repeat {
-            backtrack.eat(.poundIfKeyword)
+            backtrack.eat(.poundIf)
             while !backtrack.at(.endOfFile) && !backtrack.currentToken.isAtStartOfLine {
               backtrack.skipSingle()
             }
-          } while backtrack.at(.poundIfKeyword) && loopProgress.evaluate(backtrack.currentToken)
+          } while backtrack.at(.poundIf) && loopProgress.evaluate(backtrack.currentToken)
 
           guard backtrack.isAtStartOfPostfixExprSuffix() else {
             break
@@ -1281,7 +1282,7 @@ extension Parser {
       return RawExprSyntax(
         self.parseMacroExpansionExpr(pattern: pattern, flavor: flavor)
       )
-    case (.poundAvailableKeyword, _)?, (.poundUnavailableKeyword, _)?:
+    case (.poundAvailable, _)?, (.poundUnavailable, _)?:
       let poundAvailable = self.parsePoundAvailableConditionElement()
       return RawExprSyntax(
         RawIdentifierExprSyntax(
@@ -1732,7 +1733,7 @@ extension Parser {
         // If The next token is at the beginning of a new line and can never start
         // an element, break.
         if self.currentToken.isAtStartOfLine
-          && (self.at(.rightBrace, .poundEndifKeyword) || self.atStartOfDeclaration() || self.atStartOfStatement())
+          && (self.at(.rightBrace, .poundEndif) || self.atStartOfDeclaration() || self.atStartOfStatement())
         {
           break
         }
@@ -2238,7 +2239,7 @@ extension Parser.Lookahead {
     backtrack.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
     while !backtrack.at(.endOfFile, .rightBrace)
-      && !backtrack.at(.poundEndifKeyword, .poundElseKeyword, .poundElseifKeyword)
+      && !backtrack.at(.poundEndif, .poundElse, .poundElseif)
       && loopProgress.evaluate(backtrack.currentToken)
     {
       backtrack.skipSingle()
@@ -2390,12 +2391,12 @@ extension Parser {
   mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword)
+    while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndif, .poundElseif, .poundElse)
       && elementsProgress.evaluate(currentToken)
     {
       if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
-      } else if self.canRecoverTo(.poundIfKeyword) != nil {
+      } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
         elements.append(
@@ -2461,7 +2462,7 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
-      $0.at(.rightBrace) || $0.at(.poundEndifKeyword, .poundElseifKeyword, .poundElseKeyword) || $0.withLookahead({ $0.isStartOfConditionalSwitchCases() })
+      $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse) || $0.withLookahead({ $0.isStartOfConditionalSwitchCases() })
     })
   }
 

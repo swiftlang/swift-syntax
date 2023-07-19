@@ -709,7 +709,7 @@ final class IfconfigExprTests: XCTestCase {
       """,
       substructure: Syntax(
         IfConfigClauseSyntax(
-          poundKeyword: .poundIfKeyword(),
+          poundKeyword: .poundIfToken(),
           condition: FunctionCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("hasFeature")),
             leftParen: .leftParenToken(),

@@ -28,7 +28,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
     IfConfigDeclSyntax(
       clauses: try IfConfigClauseListSyntax {
         IfConfigClauseSyntax(
-          poundKeyword: .poundIfKeyword(),
+          poundKeyword: .poundIfToken(),
           condition: ExprSyntax("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"),
           elements: .statements(
             try CodeBlockItemListSyntax {

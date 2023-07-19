@@ -53,7 +53,7 @@ enum TokenPrecedence: Comparable {
     case .openingBrace(closingDelimiter: let closingDelimiter):
       return closingDelimiter
     case .openingPoundIf:
-      return .poundEndifKeyword
+      return .poundEndif
     default:
       return nil
     }
@@ -119,7 +119,7 @@ enum TokenPrecedence: Comparable {
     case  // Literals
     .floatingLiteral, .integerLiteral,
       // Pound literals
-      .poundAvailableKeyword, .poundSourceLocationKeyword, .poundUnavailableKeyword,
+      .poundAvailable, .poundSourceLocation, .poundUnavailable,
       // Identifiers
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
@@ -161,7 +161,7 @@ enum TokenPrecedence: Comparable {
     // MARK: Strong bracketed
     case .leftBrace:
       self = .openingBrace(closingDelimiter: .rightBrace)
-    case .poundElseifKeyword, .poundElseKeyword, .poundIfKeyword:
+    case .poundElseif, .poundElse, .poundIf:
       self = .openingPoundIf
 
     // MARK: Strong punctuator
@@ -176,7 +176,7 @@ enum TokenPrecedence: Comparable {
     // MARK: Strong bracket close
     case .rightBrace:
       self = .closingBrace
-    case .poundEndifKeyword:
+    case .poundEndif:
       self = .closingPoundIf
     case .keyword:
       preconditionFailure("RawTokenKind passed to init(nonKeyword:) must not be a keyword")

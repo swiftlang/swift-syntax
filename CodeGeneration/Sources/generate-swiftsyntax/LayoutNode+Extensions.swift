@@ -39,18 +39,18 @@ extension LayoutNode {
         }
       }
 
-      let parameterName: String
+      let parameterName: TokenSyntax
 
       if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
         parameterName = deprecatedVarName
       } else {
-        parameterName = child.varName
+        parameterName = child.varOrCaseName
       }
 
       return FunctionParameterSyntax(
         leadingTrivia: .newline,
-        firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(parameterName),
-        secondName: child.isUnexpectedNodes ? .identifier(parameterName) : nil,
+        firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : parameterName,
+        secondName: child.isUnexpectedNodes ? parameterName : nil,
         colon: .colonToken(),
         type: paramType,
         defaultArgument: child.defaultInitialization
@@ -77,13 +77,10 @@ extension LayoutNode {
 
   func generateInitializerDocComment() -> SwiftSyntax.Trivia {
     func generateParamDocComment(for child: Child) -> String? {
-      guard let documentation = child.documentation,
-        let firstLine = documentation.split(whereSeparator: \.isNewline).first
-      else {
+      if child.documentationAbstract.isEmpty {
         return nil
       }
-
-      return "  - \(child.varName): \(firstLine)"
+      return "  - \(child.varOrCaseName): \(child.documentationAbstract)"
     }
 
     let formattedParams = """
@@ -114,12 +111,12 @@ extension LayoutNode {
     for child in children {
       /// The expression that is used to call the default initializer defined above.
       let produceExpr: ExprSyntax
-      let childName: String
+      let childName: TokenSyntax
 
       if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
         childName = deprecatedVarName
       } else {
-        childName = child.varName
+        childName = child.varOrCaseName
       }
 
       if child.type.isBuilderInitializable {
@@ -129,12 +126,12 @@ extension LayoutNode {
         if child.type.builderInitializableType != child.type {
           let param = Node.from(type: child.type).layoutNode!.singleNonDefaultedChild
           if child.isOptional {
-            produceExpr = ExprSyntax("\(raw: childName)Builder().map { \(raw: child.type.syntaxBaseName)(\(raw: param.varName): $0) }")
+            produceExpr = ExprSyntax("\(childName)Builder().map { \(raw: child.type.syntaxBaseName)(\(param.varOrCaseName): $0) }")
           } else {
-            produceExpr = ExprSyntax("\(raw: child.type.syntaxBaseName)(\(raw: param.varName): \(raw: childName)Builder())")
+            produceExpr = ExprSyntax("\(raw: child.type.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
           }
         } else {
-          produceExpr = ExprSyntax("\(raw: childName)Builder()")
+          produceExpr = ExprSyntax("\(childName)Builder()")
         }
         builderParameters.append(
           FunctionParameterSyntax(
@@ -145,14 +142,20 @@ extension LayoutNode {
         produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child, useDeprecatedChildName: useDeprecatedChildName)
         normalParameters.append(
           FunctionParameterSyntax(
-            firstName: .identifier(childName),
+            firstName: childName,
             colon: .colonToken(),
             type: child.parameterType,
             defaultArgument: child.defaultInitialization
           )
         )
       }
-      delegatedInitArgs.append(TupleExprElementSyntax(label: child.isUnexpectedNodes ? nil : child.varName, expression: produceExpr))
+      delegatedInitArgs.append(
+        TupleExprElementSyntax(
+          label: child.isUnexpectedNodes ? nil : child.varOrCaseName,
+          colon: child.isUnexpectedNodes ? nil : .colonToken(),
+          expression: produceExpr
+        )
+      )
     }
 
     guard shouldCreateInitializer else {
@@ -185,11 +188,11 @@ extension LayoutNode {
 }
 
 fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecatedChildName: Bool = false) -> ExprSyntax {
-  let childName: String
+  let childName: TokenSyntax
   if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
     childName = deprecatedVarName
   } else {
-    childName = child.varName
+    childName = child.varOrCaseName
   }
 
   if child.type.isBaseType && !child.kind.isNodeChoices {

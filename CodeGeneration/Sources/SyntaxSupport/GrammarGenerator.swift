@@ -57,7 +57,7 @@ struct GrammarGenerator {
     return
       children
       .filter { !$0.isUnexpectedNodes }
-      .map { " - `\($0.varName)`: \(generator.grammar(for: $0))" }
+      .map { " - `\($0.varOrCaseName)`: \(generator.grammar(for: $0))" }
       .joined(separator: "\n")
   }
 }

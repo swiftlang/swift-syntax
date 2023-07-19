@@ -28,8 +28,8 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       for child in trait.children {
         DeclSyntax(
           """
-          \(raw: child.docComment)
-          var \(raw: child.varName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
+          \(raw: child.documentation)
+          var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
           """
         )
       }

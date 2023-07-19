@@ -22,7 +22,7 @@ fileprivate extension Node {
       return node.children.compactMap { child -> (name: TokenSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])? in
         switch child.kind {
         case .nodeChoices(let choices):
-          return (.identifier(child.name), choices.map { (.identifier($0.varName), $0.syntaxNodeKind) })
+          return (.identifier(child.name), choices.map { ($0.varOrCaseName, $0.syntaxNodeKind) })
         default:
           return nil
         }
@@ -202,8 +202,8 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         let params = FunctionParameterListSyntax {
           for child in node.children {
             FunctionParameterSyntax(
-              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : .identifier(child.varName),
-              secondName: child.isUnexpectedNodes ? .identifier(child.varName) : nil,
+              firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : child.varOrCaseName,
+              secondName: child.isUnexpectedNodes ? child.varOrCaseName : nil,
               colon: .colonToken(),
               type: child.rawParameterType,
               defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization : nil
@@ -218,7 +218,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               ExprSyntax("layout.initialize(repeating: nil)")
               for (index, child) in node.children.enumerated() {
                 let optionalMark = child.isOptional ? "?" : ""
-                ExprSyntax("layout[\(raw: index)] = \(raw: child.varName.backtickedIfNeeded)\(raw: optionalMark).raw")
+                ExprSyntax("layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(raw: optionalMark).raw")
                   .with(\.leadingTrivia, .newline)
               }
             }
@@ -238,7 +238,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for (index, child) in node.children.enumerated() {
-          try VariableDeclSyntax("public var \(raw: child.varName.backtickedIfNeeded): Raw\(raw: child.type.buildable)") {
+          try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(raw: child.type.buildable)") {
             let iuoMark = child.isOptional ? "" : "!"
 
             if child.syntaxNodeKind == .syntax {

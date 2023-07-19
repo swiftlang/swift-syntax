@@ -31,7 +31,7 @@ macro PeerWithSuffix() = #externalMacro(module: "ExamplePlugin", type: "PeerValu
 @attached(memberAttribute)
 macro MemberDeprecated() = #externalMacro(module: "ExamplePlugin", type: "MemberDeprecatedMacro")
 
-@attached(conformance)
+@attached(extension, conformances: Equatable)
 macro Equatable() = #externalMacro(module: "ExamplePlugin", type: "EquatableConformanceMacro")
 
 @attached(accessor)
@@ -77,7 +77,7 @@ struct MyStruct {
 // CHECK-NEXT: @available(*, deprecated)
 // CHECK-NEXT: ------------------------------
 
-// CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMc_.swift
+// CHECK: @__swiftmacro_7TestApp8MyStruct9EquatablefMe_.swift
 // CHECK-NEXT: ------------------------------
 // CHECK-NEXT: extension MyStruct: Equatable  {
 // CHECK-NEXT: }

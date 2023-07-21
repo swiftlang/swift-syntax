@@ -125,7 +125,7 @@ public func assertIncrementalParse(
   }
 }
 
-fileprivate func byteSourceRange(for substring: String, in sourceString: String, after: String.Index) -> ByteSourceRange? {
+public func byteSourceRange(for substring: String, in sourceString: String, after: String.Index) -> ByteSourceRange? {
   if let range = sourceString[after...].range(of: substring) {
     return ByteSourceRange(
       offset: sourceString.utf8.distance(from: sourceString.startIndex, to: range.lowerBound),

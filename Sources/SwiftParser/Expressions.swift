@@ -627,7 +627,7 @@ extension Parser {
       return RawExprSyntax(
         RawPrefixOperatorExprSyntax(
           operator: op,
-          baseExpression: postfix,
+          base: postfix,
           arena: self.arena
         )
       )

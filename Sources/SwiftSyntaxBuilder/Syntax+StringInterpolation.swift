@@ -266,7 +266,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
       return ExprSyntax(
         PrefixOperatorExprSyntax(
           operator: .prefixOperator("-"),
-          baseExpression: (-self).makeLiteralSyntax()
+          base: (-self).makeLiteralSyntax()
         )
       )
 

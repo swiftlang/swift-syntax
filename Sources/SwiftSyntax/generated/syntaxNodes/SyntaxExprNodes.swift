@@ -5017,7 +5017,7 @@ public struct PostfixUnaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `operator`: `<prefixOperator>`?
-///  - `baseExpression`: ``ExprSyntax``
+///  - `base`: ``ExprSyntax``
 public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5043,9 +5043,9 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
       operator: TokenSyntax? = nil,
-      _ unexpectedBetweenOperatorAndBaseExpression: UnexpectedNodesSyntax? = nil,
-      baseExpression: some ExprSyntaxProtocol,
-      _ unexpectedAfterBaseExpression: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenOperatorAndBase: UnexpectedNodesSyntax? = nil,
+      base: some ExprSyntaxProtocol,
+      _ unexpectedAfterBase: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5054,16 +5054,16 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeOperator, 
             `operator`, 
-            unexpectedBetweenOperatorAndBaseExpression, 
-            baseExpression, 
-            unexpectedAfterBaseExpression
+            unexpectedBetweenOperatorAndBase, 
+            base, 
+            unexpectedAfterBase
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOperator?.raw, 
           `operator`?.raw, 
-          unexpectedBetweenOperatorAndBaseExpression?.raw, 
-          baseExpression.raw, 
-          unexpectedAfterBaseExpression?.raw
+          unexpectedBetweenOperatorAndBase?.raw, 
+          base.raw, 
+          unexpectedAfterBase?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.prefixOperatorExpr,
@@ -5096,7 +5096,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenOperatorAndBaseExpression: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenOperatorAndBase: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5105,7 +5105,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var baseExpression: ExprSyntax {
+  public var base: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -5114,7 +5114,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterBaseExpression: UnexpectedNodesSyntax? {
+  public var unexpectedAfterBase: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5127,9 +5127,9 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeOperator, 
           \Self.operator, 
-          \Self.unexpectedBetweenOperatorAndBaseExpression, 
-          \Self.baseExpression, 
-          \Self.unexpectedAfterBaseExpression
+          \Self.unexpectedBetweenOperatorAndBase, 
+          \Self.base, 
+          \Self.unexpectedAfterBase
         ])
   }
 }

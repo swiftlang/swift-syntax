@@ -646,7 +646,7 @@ class ValidateSyntaxNodes: XCTestCase {
     )
   }
 
-  func testChildrenDontEndWithExprEtc() {
+  func testChildrenDontEndWithNodeKind() {
     var failures: [ValidationFailure] = []
 
     let forbiddenSuffixes = ["Decl", "Declaration", "Expr", "Expression", "Pattern", "Stmt", "Statement", "Syntax", "Type"]
@@ -687,7 +687,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .sameTypeRequirement, message: "child 'RightType' should not end with 'Type'"),
         // MARK: Adjective + Expr
         ValidationFailure(node: .functionCallExpr, message: "child 'CalledExpression' should not end with 'Expression'"),
-        ValidationFailure(node: .prefixOperatorExpr, message: "child 'BaseExpression' should not end with 'Expression'"),
         ValidationFailure(node: .subscriptExpr, message: "child 'CalledExpression' should not end with 'Expression'"),
       ]
     )

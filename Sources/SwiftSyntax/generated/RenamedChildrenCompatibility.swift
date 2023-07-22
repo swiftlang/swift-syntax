@@ -5869,37 +5869,37 @@ extension PrefixOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenOperatorAndBaseExpression")
+  @available(*, deprecated, renamed: "unexpectedBetweenOperatorAndBase")
   public var unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenOperatorAndBaseExpression
+      return unexpectedBetweenOperatorAndBase
     }
     set {
-      unexpectedBetweenOperatorAndBaseExpression = newValue
+      unexpectedBetweenOperatorAndBase = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "baseExpression")
+  @available(*, deprecated, renamed: "base")
   public var postfixExpression: ExprSyntax {
     get {
-      return baseExpression
+      return base
     }
     set {
-      baseExpression = newValue
+      base = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterBaseExpression")
+  @available(*, deprecated, renamed: "unexpectedAfterBase")
   public var unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterBaseExpression
+      return unexpectedAfterBase
     }
     set {
-      unexpectedAfterBaseExpression = newValue
+      unexpectedAfterBase = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator, baseExpression argument(s).")
+  @available(*, deprecated, message: "Use an initializer with operator, base argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5916,7 +5916,7 @@ extension PrefixOperatorExprSyntax {
         unexpectedBeforeOperatorToken, 
         operator: operatorToken, 
         unexpectedBetweenOperatorTokenAndPostfixExpression, 
-        baseExpression: postfixExpression, 
+        base: postfixExpression, 
         unexpectedAfterPostfixExpression, 
         trailingTrivia: trailingTrivia
       )

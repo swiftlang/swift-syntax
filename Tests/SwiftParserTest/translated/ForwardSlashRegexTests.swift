@@ -811,7 +811,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       substructure: Syntax(
         PrefixOperatorExprSyntax(
           operator: .prefixOperator("!!"),
-          baseExpression: MemberAccessExprSyntax(
+          base: MemberAccessExprSyntax(
             base: RegexLiteralExprSyntax(regex: .regexLiteralPattern("1")),
             name: "bitWidth"
           )
@@ -1058,7 +1058,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x// comment
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), baseExpression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), base: IdentifierExprSyntax(identifier: "x")))
     )
   }
 
@@ -1067,7 +1067,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x // comment
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), baseExpression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), base: IdentifierExprSyntax(identifier: "x")))
     )
   }
 
@@ -1076,7 +1076,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x/*comment*/
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), baseExpression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), base: IdentifierExprSyntax(identifier: "x")))
     )
   }
 

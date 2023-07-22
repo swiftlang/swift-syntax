@@ -2671,12 +2671,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeOperator"
   case \PrefixOperatorExprSyntax.operator:
     return "operator"
-  case \PrefixOperatorExprSyntax.unexpectedBetweenOperatorAndBaseExpression:
-    return "unexpectedBetweenOperatorAndBaseExpression"
-  case \PrefixOperatorExprSyntax.baseExpression:
-    return "baseExpression"
-  case \PrefixOperatorExprSyntax.unexpectedAfterBaseExpression:
-    return "unexpectedAfterBaseExpression"
+  case \PrefixOperatorExprSyntax.unexpectedBetweenOperatorAndBase:
+    return "unexpectedBetweenOperatorAndBase"
+  case \PrefixOperatorExprSyntax.base:
+    return "base"
+  case \PrefixOperatorExprSyntax.unexpectedAfterBase:
+    return "unexpectedAfterBase"
   case \PrimaryAssociatedTypeClauseSyntax.unexpectedBeforeLeftAngle:
     return "unexpectedBeforeLeftAngle"
   case \PrimaryAssociatedTypeClauseSyntax.leftAngle:

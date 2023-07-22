@@ -16,6 +16,7 @@ import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
+import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 

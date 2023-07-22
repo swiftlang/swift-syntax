@@ -2817,12 +2817,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftTypeIdentifier"
   case \SameTypeRequirementSyntax.leftTypeIdentifier:
     return "leftTypeIdentifier"
-  case \SameTypeRequirementSyntax.unexpectedBetweenLeftTypeIdentifierAndEqualityToken:
-    return "unexpectedBetweenLeftTypeIdentifierAndEqualityToken"
-  case \SameTypeRequirementSyntax.equalityToken:
-    return "equalityToken"
-  case \SameTypeRequirementSyntax.unexpectedBetweenEqualityTokenAndRightTypeIdentifier:
-    return "unexpectedBetweenEqualityTokenAndRightTypeIdentifier"
+  case \SameTypeRequirementSyntax.unexpectedBetweenLeftTypeIdentifierAndEqual:
+    return "unexpectedBetweenLeftTypeIdentifierAndEqual"
+  case \SameTypeRequirementSyntax.equal:
+    return "equal"
+  case \SameTypeRequirementSyntax.unexpectedBetweenEqualAndRightTypeIdentifier:
+    return "unexpectedBetweenEqualAndRightTypeIdentifier"
   case \SameTypeRequirementSyntax.rightTypeIdentifier:
     return "rightTypeIdentifier"
   case \SameTypeRequirementSyntax.unexpectedAfterRightTypeIdentifier:

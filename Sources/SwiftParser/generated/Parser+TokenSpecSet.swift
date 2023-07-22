@@ -1749,7 +1749,7 @@ extension QualifiedDeclNameSyntax {
 }
 
 extension SameTypeRequirementSyntax {
-  enum EqualityTokenOptions: TokenSpecSet {
+  enum EqualOptions: TokenSpecSet {
     case binaryOperator
     case prefixOperator
     case postfixOperator

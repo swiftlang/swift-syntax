@@ -16401,7 +16401,7 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `leftTypeIdentifier`: ``TypeSyntax``
-///  - `equalityToken`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
+///  - `equal`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
 ///  - `rightTypeIdentifier`: ``TypeSyntax``
 public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -16428,9 +16428,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
       leftTypeIdentifier: some TypeSyntaxProtocol,
-      _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
-      equalityToken: TokenSyntax,
-      _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftTypeIdentifierAndEqual: UnexpectedNodesSyntax? = nil,
+      equal: TokenSyntax,
+      _ unexpectedBetweenEqualAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       rightTypeIdentifier: some TypeSyntaxProtocol,
       _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -16441,18 +16441,18 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftTypeIdentifier, 
             leftTypeIdentifier, 
-            unexpectedBetweenLeftTypeIdentifierAndEqualityToken, 
-            equalityToken, 
-            unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
+            unexpectedBetweenLeftTypeIdentifierAndEqual, 
+            equal, 
+            unexpectedBetweenEqualAndRightTypeIdentifier, 
             rightTypeIdentifier, 
             unexpectedAfterRightTypeIdentifier
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftTypeIdentifier?.raw, 
           leftTypeIdentifier.raw, 
-          unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.raw, 
-          equalityToken.raw, 
-          unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw, 
+          unexpectedBetweenLeftTypeIdentifierAndEqual?.raw, 
+          equal.raw, 
+          unexpectedBetweenEqualAndRightTypeIdentifier?.raw, 
           rightTypeIdentifier.raw, 
           unexpectedAfterRightTypeIdentifier?.raw
         ]
@@ -16487,7 +16487,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftTypeIdentifierAndEqual: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -16496,7 +16496,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var equalityToken: TokenSyntax {
+  public var equal: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -16505,7 +16505,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEqualAndRightTypeIdentifier: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -16536,9 +16536,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftTypeIdentifier, 
           \Self.leftTypeIdentifier, 
-          \Self.unexpectedBetweenLeftTypeIdentifierAndEqualityToken, 
-          \Self.equalityToken, 
-          \Self.unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
+          \Self.unexpectedBetweenLeftTypeIdentifierAndEqual, 
+          \Self.equal, 
+          \Self.unexpectedBetweenEqualAndRightTypeIdentifier, 
           \Self.rightTypeIdentifier, 
           \Self.unexpectedAfterRightTypeIdentifier
         ])

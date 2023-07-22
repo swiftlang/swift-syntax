@@ -18470,9 +18470,9 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftTypeIdentifier: RawUnexpectedNodesSyntax? = nil, 
       leftTypeIdentifier: RawTypeSyntax, 
-      _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax? = nil, 
-      equalityToken: RawTokenSyntax, 
-      _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftTypeIdentifierAndEqual: RawUnexpectedNodesSyntax? = nil, 
+      equal: RawTokenSyntax, 
+      _ unexpectedBetweenEqualAndRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil, 
       rightTypeIdentifier: RawTypeSyntax, 
       _ unexpectedAfterRightTypeIdentifier: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -18482,9 +18482,9 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftTypeIdentifier?.raw
       layout[1] = leftTypeIdentifier.raw
-      layout[2] = unexpectedBetweenLeftTypeIdentifierAndEqualityToken?.raw
-      layout[3] = equalityToken.raw
-      layout[4] = unexpectedBetweenEqualityTokenAndRightTypeIdentifier?.raw
+      layout[2] = unexpectedBetweenLeftTypeIdentifierAndEqual?.raw
+      layout[3] = equal.raw
+      layout[4] = unexpectedBetweenEqualAndRightTypeIdentifier?.raw
       layout[5] = rightTypeIdentifier.raw
       layout[6] = unexpectedAfterRightTypeIdentifier?.raw
     }
@@ -18499,15 +18499,15 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawTypeSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftTypeIdentifierAndEqual: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var equalityToken: RawTokenSyntax {
+  public var equal: RawTokenSyntax {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEqualAndRightTypeIdentifier: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

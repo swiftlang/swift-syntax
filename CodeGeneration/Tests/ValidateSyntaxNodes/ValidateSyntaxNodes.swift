@@ -509,4 +509,29 @@ class ValidateSyntaxNodes: XCTestCase {
       ]
     )
   }
+
+  func testChildrenShouldNeverEndWithToken() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.nonUnexpectedChildren {
+        if child.name.hasSuffix("Token") {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' should not end with 'Token'"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        // it's not obvious that the end of file is represented by a token, thus its good to highlight it in the name
+        ValidationFailure(node: .sourceFile, message: "child 'EndOfFileToken' should not end with 'Token'")
+      ]
+    )
+  }
 }

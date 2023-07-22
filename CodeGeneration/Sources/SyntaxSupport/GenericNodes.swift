@@ -306,7 +306,8 @@ public let GENERIC_NODES: [Node] = [
         nameForDiagnostics: "left-hand type"
       ),
       Child(
-        name: "EqualityToken",
+        name: "Equal",
+        deprecatedName: "EqualityToken",
         kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
       ),
       Child(

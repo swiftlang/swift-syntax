@@ -3795,6 +3795,65 @@ extension QualifiedDeclNameSyntax {
   }
 }
 
+extension SameTypeRequirementSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftTypeIdentifierAndEqual")
+  public var unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftTypeIdentifierAndEqual
+    }
+    set {
+      unexpectedBetweenLeftTypeIdentifierAndEqual = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "equal")
+  public var equalityToken: TokenSyntax {
+    get {
+      return equal
+    }
+    set {
+      equal = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenEqualAndRightTypeIdentifier")
+  public var unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEqualAndRightTypeIdentifier
+    }
+    set {
+      unexpectedBetweenEqualAndRightTypeIdentifier = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with equal argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      leftTypeIdentifier: some TypeSyntaxProtocol,
+      _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
+      equalityToken: TokenSyntax,
+      _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      rightTypeIdentifier: some TypeSyntaxProtocol,
+      _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftTypeIdentifier, 
+        leftTypeIdentifier: leftTypeIdentifier, 
+        unexpectedBetweenLeftTypeIdentifierAndEqualityToken, 
+        equal: equalityToken, 
+        unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
+        rightTypeIdentifier: rightTypeIdentifier, 
+        unexpectedAfterRightTypeIdentifier, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension SourceFileSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenStatementsAndEndOfFileToken")
   public var unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? {

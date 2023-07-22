@@ -1,0 +1,7 @@
+{
+   "testNativeParsingPerformance": 307024328,
+   "testClassifierPerformance": 2624475912,
+   "testEmptyVisitorPerformance": 48502831,
+   "testEmptyRewriterPerformance": 54438776,
+   "testEmptyAnyVisitorPerformance": 49123765
+}

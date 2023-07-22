@@ -25,13 +25,11 @@ public class ParsingPerformanceTests: XCTestCase {
 
   func testNativeParsingPerformance() throws {
     try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
-    measure {
-      do {
-        let source = try String(contentsOf: inputFile)
-        _ = Parser.parse(source: source)
-      } catch {
-        XCTFail(error.localizedDescription)
-      }
+
+    let source = try String(contentsOf: inputFile)
+
+    try measureInstructions {
+      _ = Parser.parse(source: source)
     }
   }
 }

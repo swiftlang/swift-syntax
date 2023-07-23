@@ -23,6 +23,9 @@ extension Parser {
       case `let`
       case `var`
       case `inout`
+      case _mutating
+      case _borrowing
+      case _consuming
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
@@ -33,6 +36,9 @@ extension Parser {
         case TokenSpec(.let): self = .let
         case TokenSpec(.var): self = .var
         case TokenSpec(.inout): self = .inout
+        case TokenSpec(._mutating): self = ._mutating
+        case TokenSpec(._borrowing): self = ._borrowing
+        case TokenSpec(._consuming): self = ._consuming
         default: return nil
         }
       }
@@ -46,6 +52,9 @@ extension Parser {
         case .let: return .keyword(.let)
         case .var: return .keyword(.var)
         case .inout: return .keyword(.inout)
+        case ._mutating: return .keyword(._mutating)
+        case ._borrowing: return .keyword(._borrowing)
+        case ._consuming: return .keyword(._consuming)
         }
       }
     }
@@ -93,7 +102,10 @@ extension Parser {
       )
     case (.let, let handle)?,
       (.var, let handle)?,
-      (.inout, let handle)?:
+      (.inout, let handle)?,
+      (._mutating, let handle)?,
+      (._borrowing, let handle)?,
+      (._consuming, let handle)?:
       let bindingSpecifier = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(
@@ -217,7 +229,10 @@ extension Parser {
     switch self.at(anyIn: MatchingPatternStart.self) {
     case (.var, let handle)?,
       (.let, let handle)?,
-      (.inout, let handle)?:
+      (.inout, let handle)?,
+      (._mutating, let handle)?,
+      (._borrowing, let handle)?,
+      (._consuming, let handle)?:
       let bindingSpecifier = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(
@@ -274,6 +289,9 @@ extension Parser.Lookahead {
       case `var`
       case leftParen
       case `inout`
+      case _mutating
+      case _borrowing
+      case _consuming
 
       init?(lexeme: Lexer.Lexeme) {
         switch PrepareForKeywordMatch(lexeme) {
@@ -283,6 +301,9 @@ extension Parser.Lookahead {
         case TokenSpec(.var): self = .var
         case TokenSpec(.leftParen): self = .leftParen
         case TokenSpec(.inout): self = .inout
+        case TokenSpec(._mutating): self = ._mutating
+        case TokenSpec(._borrowing): self = ._borrowing
+        case TokenSpec(._consuming): self = ._consuming
         default: return nil
         }
       }
@@ -295,6 +316,9 @@ extension Parser.Lookahead {
         case .var: return .keyword(.var)
         case .leftParen: return .leftParen
         case .inout: return .keyword(.inout)
+        case ._mutating: return .keyword(._mutating)
+        case ._borrowing: return .keyword(._borrowing)
+        case ._consuming: return .keyword(._consuming)
         }
       }
     }
@@ -306,7 +330,10 @@ extension Parser.Lookahead {
       return true
     case (.let, let handle)?,
       (.var, let handle)?,
-      (.inout, let handle)?:
+      (.inout, let handle)?,
+      (._mutating, let handle)?,
+      (._borrowing, let handle)?,
+      (._consuming, let handle)?:
       self.eat(handle)
       return self.canParsePattern()
     case (.leftParen, _)?:

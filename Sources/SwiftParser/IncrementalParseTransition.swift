@@ -20,7 +20,7 @@ extension Parser {
 
     let currentOffset = self.lexemes.offsetToStart(self.currentToken)
     if let node = parseLookup!.lookUp(currentOffset, kind: kind) {
-      self.lexemes.advance(by: node.byteSize, currentToken: &self.currentToken)
+      self.lexemes.advance(by: node.totalLength.utf8Length, currentToken: &self.currentToken)
       return node
     }
 

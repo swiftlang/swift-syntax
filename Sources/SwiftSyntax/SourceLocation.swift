@@ -192,7 +192,7 @@ public final class SourceLocationConverter {
     self.file = file
     self.source = tree.syntaxTextBytes
     (self.lines, endOfFile) = computeLines(tree: Syntax(tree))
-    precondition(tree.byteSize == endOfFile.utf8Offset)
+    precondition(tree.totalLength.utf8Length == endOfFile.utf8Offset)
 
     for directive in SourceLocationCollector.collectSourceLocations(in: tree) {
       let location = self.physicalLocation(for: directive.positionAfterSkippingLeadingTrivia)
@@ -400,7 +400,7 @@ public extension Syntax {
   ) -> SourceLocation {
     var pos = data.position
     pos += raw.leadingTriviaLength
-    pos += raw.contentLength
+    pos += raw.trimmedLength
     if afterTrailingTrivia {
       pos += raw.trailingTriviaLength
     }

@@ -123,6 +123,6 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual(funcKW.positionAfterSkippingLeadingTrivia, AbsolutePosition(utf8Offset: 2))
     XCTAssertEqual(funcKW.endPositionBeforeTrailingTrivia, AbsolutePosition(utf8Offset: 6))
     XCTAssertEqual(funcKW.endPosition, AbsolutePosition(utf8Offset: 7))
-    XCTAssertEqual(funcKW.contentLength, SourceLength(utf8Length: 4))
+    XCTAssertEqual(funcKW.trimmedLength, SourceLength(utf8Length: 4))
   }
 }

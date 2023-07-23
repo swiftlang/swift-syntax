@@ -21,7 +21,7 @@ public extension SyntaxProtocol {
   /// consecutive tokens would have the same classification then a single classified
   /// range is provided for all of them.
   var classifications: SyntaxClassifications {
-    let fullRange = ByteSourceRange(offset: 0, length: byteSize)
+    let fullRange = ByteSourceRange(offset: 0, length: totalLength.utf8Length)
     return SyntaxClassifications(_syntaxNode, in: fullRange)
   }
 

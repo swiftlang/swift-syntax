@@ -99,11 +99,11 @@ public func assertIncrementalParse(
       continue
     }
 
-    guard let reusedNode = reusedNodes.first(where: { $0.byteRangeAfterTrimmingTrivia == range }) else {
+    guard let reusedNode = reusedNodes.first(where: { $0.trimmedByteRange == range }) else {
       XCTFail(
         """
         Fail to match the range of \(expectedReusedNode.source) in:
-        \(reusedNodes.map({"\($0.byteRangeAfterTrimmingTrivia): \($0.description)"}).joined(separator: "\n"))
+        \(reusedNodes.map({"\($0.trimmedByteRange): \($0.description)"}).joined(separator: "\n"))
         """,
         file: expectedReusedNode.file,
         line: expectedReusedNode.line
@@ -236,11 +236,4 @@ public func applyEdits(
     bytes.insert(contentsOf: [UInt8](repeating: replacementAscii, count: edit.replacementLength), at: edit.offset)
   }
   return String(bytes: bytes, encoding: .utf8)!
-}
-
-fileprivate extension Syntax {
-  /// The  byte source range of this node exluding leading and trailing trivia.
-  var byteRangeAfterTrimmingTrivia: ByteSourceRange {
-    return ByteSourceRange(offset: positionAfterSkippingLeadingTrivia.utf8Offset, length: byteSizeAfterTrimmingTrivia)
-  }
 }

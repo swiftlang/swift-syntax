@@ -178,6 +178,22 @@ public protocol SyntaxProtocol: CustomStringConvertible,
   static var structure: SyntaxNodeStructure { get }
 }
 
+// MARK: Access underlying data
+
+extension SyntaxProtocol {
+  var data: SyntaxData {
+    return _syntaxNode.data
+  }
+
+  /// Access the raw syntax assuming the node is a Syntax.
+  @_spi(RawSyntax)
+  public var raw: RawSyntax {
+    return _syntaxNode.data.raw
+  }
+}
+
+// MARK: Casting
+
 // Casting functions to specialized syntax nodes.
 public extension SyntaxProtocol {
   /// Converts the given specialized node to this type. Returns `nil` if the
@@ -202,6 +218,8 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: Modifying
+
 public extension SyntaxProtocol {
   /// Returns a new syntax node that has the child at `keyPath` replaced by
   /// `value`.
@@ -210,29 +228,21 @@ public extension SyntaxProtocol {
     copy[keyPath: keyPath] = value
     return copy
   }
-}
-
-extension SyntaxProtocol {
-  var data: SyntaxData {
-    return _syntaxNode.data
-  }
-
-  /// Access the raw syntax assuming the node is a Syntax.
-  @_spi(RawSyntax)
-  public var raw: RawSyntax {
-    return _syntaxNode.data.raw
-  }
 
   /// Return this subtree with this node as the root, ie. detach this node
   /// from its parent.
-  public var detached: Self {
+  var detached: Self {
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
       return Syntax(raw: self.raw, rawNodeArena: self.raw.arena).cast(Self.self)
     }
   }
+}
 
+// MARK: Type information
+
+extension SyntaxProtocol {
   /// The kind of the syntax node, e.g. if it is a `functionDecl`.
   ///
   /// If you want to check for a node's kind and cast the node to that type, see
@@ -241,15 +251,18 @@ extension SyntaxProtocol {
     return raw.kind
   }
 
-  /// The dynamic metatype of the concrete node. You almost always want to prefer this
-  /// over `type(of: self)` because if `self` is a ``DeclSyntax`` representing a
-  /// ``FunctionDeclSyntax``, `type(of: self)` will return ``DeclSyntax``, while
-  /// `syntaxNodeType` looks at the dynamic kind of this node and returns
-  /// ``FunctionDeclSyntax``.
+  /// The dynamic metatype of the concrete node.
+  ///
+  /// You almost always want to prefer this over `type(of: self)` because if
+  /// `self` is a ``DeclSyntax`` representing a ``FunctionDeclSyntax``,
+  /// `type(of: self)` will return ``DeclSyntax``, while `syntaxNodeType` looks
+  /// at the dynamic kind of this node and returns ``FunctionDeclSyntax``.
   public var syntaxNodeType: SyntaxProtocol.Type {
     return self.raw.kind.syntaxNodeType
   }
 }
+
+// MARK: Children / parent
 
 public extension SyntaxProtocol {
   /// A sequence over the `present` children of this node.
@@ -268,32 +281,18 @@ public extension SyntaxProtocol {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
-  /// Whether the tree contained by this layout has any
-  ///  - missing nodes or
-  ///  - unexpected nodes or
-  ///  - tokens with a ``TokenDiagnostic`` of severity ``TokenDiagnostic/Severity-swift.enum/error``.
-  var hasError: Bool {
-    return raw.hasError
-  }
-
-  /// Whether the tree contained by this layout has any tokens with a
-  /// ``TokenDiagnostic`` of severity `warning`.
-  var hasWarning: Bool {
-    return raw.recursiveFlags.contains(.hasWarning)
-  }
-
-  /// Whether this tree contains a missing token or unexpected node.
-  var hasSequenceExpr: Bool {
-    return raw.recursiveFlags.contains(.hasSequenceExpr)
-  }
-
-  var hasMaximumNestingLevelOverflow: Bool {
-    return raw.recursiveFlags.contains(.hasMaximumNestingLevelOverflow)
-  }
-
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
     return data.parent.map(Syntax.init(_:))
+  }
+
+  /// The root of the tree in which this node resides.
+  var root: Syntax {
+    var this = _syntaxNode
+    while let parent = this.parent {
+      this = parent
+    }
+    return this
   }
 
   /// Whether or not this node has a parent.
@@ -315,7 +314,11 @@ public extension SyntaxProtocol {
   var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
   }
+}
 
+// MARK: Accessing tokens
+
+public extension SyntaxProtocol {
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
   func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
@@ -398,6 +401,11 @@ public extension SyntaxProtocol {
     return nil
   }
 
+  /// Sequence of tokens that are part of this Syntax node.
+  func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
+    return TokenSequence(_syntaxNode, viewMode: viewMode)
+  }
+
   /// Find the syntax token at the given absolute position within this
   /// syntax node or any of its children.
   func token(at position: AbsolutePosition) -> TokenSyntax? {
@@ -420,7 +428,38 @@ public extension SyntaxProtocol {
 
     fatalError("Children of syntax node do not cover all positions in it")
   }
+}
 
+// MARK: Recursive flags
+
+public extension SyntaxProtocol {
+  /// Whether the tree contained by this layout has any
+  ///  - missing nodes or
+  ///  - unexpected nodes or
+  ///  - tokens with a ``TokenDiagnostic`` of severity ``TokenDiagnostic/Severity-swift.enum/error``.
+  var hasError: Bool {
+    return raw.hasError
+  }
+
+  /// Whether the tree contained by this layout has any tokens with a
+  /// ``TokenDiagnostic`` of severity `warning`.
+  var hasWarning: Bool {
+    return raw.recursiveFlags.contains(.hasWarning)
+  }
+
+  /// Whether this tree contains a missing token or unexpected node.
+  var hasSequenceExpr: Bool {
+    return raw.recursiveFlags.contains(.hasSequenceExpr)
+  }
+
+  var hasMaximumNestingLevelOverflow: Bool {
+    return raw.recursiveFlags.contains(.hasMaximumNestingLevelOverflow)
+  }
+}
+
+// MARK: Position / length / range
+
+public extension SyntaxProtocol {
   /// The absolute position of the starting point of this node. If the first token
   /// is with leading trivia, the position points to the start of the leading
   /// trivia.
@@ -444,22 +483,62 @@ public extension SyntaxProtocol {
     return data.endPosition
   }
 
-  /// The textual byte length of this node including leading and trailing trivia.
-  var byteSize: Int {
-    return totalLength.utf8Length
-  }
-
-  /// The byte source range of this node including leading and trailing trivia.
-  var byteRange: ByteSourceRange {
-    return ByteSourceRange(offset: position.utf8Offset, length: byteSize)
+  /// The length of this node including all of its trivia.
+  var totalLength: SourceLength {
+    return raw.totalLength
   }
 
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
-  var contentLength: SourceLength {
-    return raw.contentLength
+  ///
+  /// - Note: If this node consists of multiple tokens, only the first token’s
+  ///   leading and the last token’s trailing trivia will be trimmed.
+  var trimmedLength: SourceLength {
+    return raw.trimmedLength
   }
 
+  /// The byte source range of this node including leading and trailing trivia.
+  var totalByteRange: ByteSourceRange {
+    return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
+  }
+
+  /// The byte source range of this node excluding leading and trailing trivia.
+  ///
+  /// - Note: If this node consists of multiple tokens, only the first token’s
+  ///   leading and the last token’s trailing trivia will be trimmed.
+  var trimmedByteRange: ByteSourceRange {
+    return ByteSourceRange(
+      offset: positionAfterSkippingLeadingTrivia.utf8Offset,
+      length: trimmedLength.utf8Length
+    )
+  }
+
+  @available(*, deprecated, renamed: "trimmedLength")
+  var contentLength: SourceLength {
+    return trimmedLength
+  }
+
+  @available(*, deprecated, renamed: "totalByteRange")
+  var byteRange: ByteSourceRange {
+    return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
+  }
+
+  /// The textual byte length of this node including leading and trailing trivia.
+  @available(*, deprecated, message: "Use totalLength.utf8Length")
+  var byteSize: Int {
+    return totalLength.utf8Length
+  }
+
+  /// The textual byte length of this node exluding leading and trailing trivia.
+  @available(*, deprecated, message: "Use trimmedLength.utf8Length")
+  var byteSizeAfterTrimmingTrivia: Int {
+    return trimmedLength.utf8Length
+  }
+}
+
+// MARK: Trivia
+
+public extension SyntaxProtocol {
   /// The leading trivia of this syntax node. Leading trivia is attached to
   /// the first token syntax contained by this node. Without such token, this
   /// property will return nil.
@@ -505,42 +584,9 @@ public extension SyntaxProtocol {
   var trailingTriviaLength: SourceLength {
     return raw.trailingTriviaLength
   }
-
-  /// The length of this node including all of its trivia.
-  var totalLength: SourceLength {
-    return raw.totalLength
-  }
-
-  /// When isImplicit is true, the syntax node doesn't include any
-  /// underlying tokens, e.g. an empty CodeBlockItemList.
-  var isImplicit: Bool {
-    return raw.isEmpty
-  }
-
-  /// The textual byte length of this node exluding leading and trailing trivia.
-  var byteSizeAfterTrimmingTrivia: Int {
-    return contentLength.utf8Length
-  }
-
-  /// The root of the tree in which this node resides.
-  var root: Syntax {
-    var this = _syntaxNode
-    while let parent = this.parent {
-      this = parent
-    }
-    return this
-  }
-
-  /// Sequence of tokens that are part of this Syntax node.
-  func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
-    return TokenSequence(_syntaxNode, viewMode: viewMode)
-  }
-
-  /// Returns a value representing the unique identity of the node.
-  var id: SyntaxIdentifier {
-    return data.nodeId
-  }
 }
+
+// MARK: Content
 
 /// Provides the source-accurate text for a node
 public extension SyntaxProtocol {
@@ -604,6 +650,24 @@ public extension SyntaxProtocol {
     return self.trimmed(matching: filter).description
   }
 }
+
+// MARK: Miscellaneous
+
+public extension SyntaxProtocol {
+  /// When isImplicit is true, the syntax node doesn't include any
+  /// underlying tokens, e.g. an empty CodeBlockItemList.
+  @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
+  var isImplicit: Bool {
+    return raw.isEmpty
+  }
+
+  /// Returns a value representing the unique identity of the node.
+  var id: SyntaxIdentifier {
+    return data.nodeId
+  }
+}
+
+// MARK: Debug description
 
 /// Provides debug descriptions for a node
 public extension SyntaxProtocol {

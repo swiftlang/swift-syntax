@@ -529,7 +529,7 @@ public extension SyntaxProtocol {
     return totalLength.utf8Length
   }
 
-  /// The textual byte length of this node exluding leading and trailing trivia.
+  /// The textual byte length of this node excluding leading and trailing trivia.
   @available(*, deprecated, message: "Use trimmedLength.utf8Length")
   var byteSizeAfterTrimmingTrivia: Int {
     return trimmedLength.utf8Length

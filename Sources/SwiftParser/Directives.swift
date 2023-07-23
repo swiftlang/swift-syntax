@@ -45,41 +45,6 @@ extension Parser {
   /// parsing parses items and collects the items into a ``MemberDeclListSyntax``
   /// node.
   ///
-  /// Grammar
-  /// =======
-  ///
-  ///     conditional-compilation-block → if-directive-clause elseif-directive-clauses? else-directive-clause? endif-directive
-  ///
-  ///     if-directive-clause → if-directive compilation-condition statements?
-  ///     elseif-directive-clauses → elseif-directive-clause elseif-directive-clauses?
-  ///     elseif-directive-clause → elseif-directive compilation-condition statements?
-  ///     else-directive-clause → else-directive statements?
-  ///     if-directive → '#if'
-  ///     elseif-directive → '#elseif'
-  ///     else-directive → '#else'
-  ///     endif-directive → '#endif'
-  ///
-  ///     compilation-condition → platform-condition
-  ///     compilation-condition → identifier
-  ///     compilation-condition → boolean-literal
-  ///     compilation-condition → '(' compilation-condition ')'
-  ///     compilation-condition → '!' compilation-condition
-  ///     compilation-condition → compilation-condition '&&' compilation-condition
-  ///     compilation-condition → compilation-condition '||' compilation-condition
-  ///
-  ///     platform-condition → 'os' '(' operating-system ')'
-  ///     platform-condition → 'arch' '(' architecture ')'
-  ///     platform-condition → 'swift' '(' '>=' swift-version ')' | 'swift' ( < swift-version )
-  ///     platform-condition → 'compiler' '(' '>=' swift-version ')' | 'compiler' ( < swift-version )
-  ///     platform-condition → 'canImport' '(' import-path ')'
-  ///     platform-condition → 'targetEnvironment' '(' environment ')'
-  ///
-  ///     operating-system → 'macOS' | 'iOS' | 'watchOS' | 'tvOS' | 'Linux' | 'Windows'
-  ///     architecture → 'i386' | 'x86_64' | 'arm' | 'arm64'
-  ///     swift-version → decimal-digits swift-version-continuation?
-  ///     swift-version-continuation → '.' decimal-digits swift-version-continuation?
-  ///     environment → 'simulator' | 'macCatalyst'
-  ///
   /// - Parameters:
   ///   - parseElement: Parse an element of the conditional compilation block.
   ///   - addSemicolonIfNeeded: If elements need to be separated by a newline, this
@@ -224,14 +189,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a line control directive.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     line-control-statement → '#sourceLocation' '(' 'file' ':' file-path ',' 'line' ':' line-number ')'
-  ///     line-control-statement → '#sourceLocation' '(' ')'
-  ///     line-number → `A decimal integer greater than zero`
-  ///     file-path → static-string-literal
   mutating func parsePoundSourceLocationDirective() -> RawPoundSourceLocationSyntax {
     let line = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)

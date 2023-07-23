@@ -14,15 +14,6 @@
 
 extension Parser {
   /// Parse a type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     type → simple-type
-  ///     type → function-type
-  ///     type → protocol-composition-type
-  ///     type → constrained-sugar-type
-  ///     type → opaque-type
   mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
@@ -126,17 +117,6 @@ extension Parser {
   }
 
   /// Parse a protocol composition involving at least one element.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     protocol-composition-type → simple-type '&' protocol-composition-continuation
-  ///     protocol-composition-continuation → simple-type | protocol-composition-type
-  ///
-  ///     constrained-sugar-type → constrained-sugar-type-specifier constrained-sugar-type-constraint
-  ///     constrained-sugar-type-specifier → 'any' | 'some'
-  ///     constrained-sugar-type-constraint → protocol-composition-type
-  ///     constrained-sugar-type-constraint → type-simple
   mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
     // 'each' is a contextual keyword for a pack reference.
     if let each = consume(if: .keyword(.each)) {
@@ -213,25 +193,6 @@ extension Parser {
   }
 
   /// Parse a "simple" type
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     simple-type → type-identifier
-  ///     simple-type → any-type
-  ///     simple-type → paren-type
-  ///     simple-type → tuple-type
-  ///     simple-type → array-type
-  ///     simple-type → dictionary-type
-  ///     simple-type → optional-type
-  ///     simple-type → implicitly-unwrapped-optional-type
-  ///     simple-type → metatype-type
-  ///     simple-type → member-type-identifier
-  ///
-  ///     metatype-type → simple-type '.' 'Type' | simple-type '.' 'Protocol'
-  ///
-  ///     member-type-identifier → member-type-identifier-base '.' type-identifier
-  ///     member-type-identifier-base → simple-type | member-type-identifier
   mutating func parseSimpleType(
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
@@ -311,11 +272,6 @@ extension Parser {
   }
 
   /// Parse an optional type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     optional-type → type '?'
   mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.postfixQuestionMark)
     return RawOptionalTypeSyntax(
@@ -327,11 +283,6 @@ extension Parser {
   }
 
   /// Parse an optional type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     implicitly-unwrapped-optional-type → type '!'
   mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.exclamationMark)
     return RawImplicitlyUnwrappedOptionalTypeSyntax(
@@ -358,11 +309,6 @@ extension Parser {
   }
 
   /// Parse a type identifier.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     type-identifier → identifier generic-argument-clause?
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
     if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
@@ -379,11 +325,6 @@ extension Parser {
   }
 
   /// Parse the existential `Any` type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     any-type → 'Any'
   mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
     let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawSimpleTypeIdentifierSyntax(
@@ -395,11 +336,6 @@ extension Parser {
   }
 
   /// Parse a type placeholder.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     placeholder-type → wildcard
   mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
     // FIXME: Need a better syntax node than this
@@ -414,13 +350,6 @@ extension Parser {
 
 extension Parser {
   /// Parse the generic arguments applied to a type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     generic-argument-clause → '<' generic-argument-list '>'
-  ///     generic-argument-list → generic-argument | generic-argument ',' generic-argument-list
-  ///     generic-argument → type
   mutating func parseGenericArguments() -> RawGenericArgumentClauseSyntax {
     let langle = self.expectWithoutRecovery(prefix: "<", as: .leftAngle)
     var arguments = [RawGenericArgumentSyntax]()
@@ -462,16 +391,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a tuple type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     paren-type → '(' type ')'
-  ///
-  ///     tuple-type → '(' ')' | '(' tuple-type-element ',' tuple-type-element-list ')'
-  ///     tuple-type-element-list → tuple-type-element | tuple-type-element ',' tuple-type-element-list
-  ///     tuple-type-element → element-name type-annotation | type
-  ///     element-name → identifier
   mutating func parseTupleTypeBody() -> RawTupleTypeSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTupleTypeSyntax(
@@ -591,13 +510,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an array or dictionary type..
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     array-type → '[' type ']'
-  ///
-  ///     dictionary-type → '[' type ':' type ']'
   mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawTypeSyntax(

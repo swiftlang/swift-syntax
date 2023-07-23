@@ -96,12 +96,6 @@ extension Parser {
   }
 
   /// Parse an expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     expression → try-operator? await-operator? prefix-expression infix-expressions?
-  ///     expression-list → expression | expression ',' expression-list
   mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, pattern: PatternContext = .none) -> RawExprSyntax {
     // If we are parsing a refutable pattern, check to see if this is the start
     // of a let/var/is pattern.  If so, parse it as an UnresolvedPatternExpr and
@@ -119,15 +113,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a sequence of expressions.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     infix-expression → infix-operator prefix-expression
-  ///     infix-expression → assignment-operator try-operator? prefix-expression
-  ///     infix-expression → conditional-operator try-operator? prefix-expression
-  ///     infix-expression → type-casting-operator
-  ///     infix-expressions → infix-expression infix-expressions?
   mutating func parseSequenceExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
@@ -209,11 +194,6 @@ extension Parser {
   }
 
   /// Parse an unresolved 'as' expression.
-  ///
-  ///     type-casting-operator → 'as' type
-  ///     type-casting-operator → 'as' '?' type
-  ///     type-casting-operator → 'as' '!' type
-  ///
   mutating func parseUnresolvedAsExpr(
     handle: TokenConsumptionHandle
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax) {
@@ -238,20 +218,6 @@ extension Parser {
   /// Returns a tuple of an operator expression and an optional right operand
   /// expression. The right operand is only returned if it is not a common
   /// sequence element.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     infix-operator → operator
-  ///     assignment-operator → '='
-  ///     conditional-operator → '?' expression ':'
-  ///     type-casting-operator → 'is' type
-  ///     type-casting-operator → 'as' type
-  ///     type-casting-operator → 'as' '?' type
-  ///     type-casting-operator → 'as' '!' type
-  ///     arrow-operator -> 'async' '->'
-  ///     arrow-operator -> 'throws' '->'
-  ///     arrow-operator -> 'async' 'throws' '->'
   mutating func parseSequenceExpressionOperator(
     _ flavor: ExprFlavor,
     pattern: PatternContext
@@ -383,12 +349,6 @@ extension Parser {
   }
 
   /// Parse an expression sequence element.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     expression → try-operator? await-operator? prefix-expression infix-expressions?
-  ///     expression-list → expression | expression ',' expression-list
   mutating func parseSequenceExpressionElement(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
@@ -573,14 +533,6 @@ extension Parser {
   }
 
   /// Parse an optional prefix operator followed by an expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     prefix-expression → prefix-operator? postfix-expression
-  ///     prefix-expression → in-out-expression
-  ///
-  ///     in-out-expression → '&' identifier
   mutating func parseUnaryExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool = false,
@@ -643,19 +595,6 @@ extension Parser {
   }
 
   /// Parse a postfix expression applied to another expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     postfix-expression → primary-expression
-  ///     postfix-expression → postfix-expression postfix-operator
-  ///     postfix-expression → function-call-expression
-  ///     postfix-expression → initializer-expression
-  ///     postfix-expression → explicit-member-expression
-  ///     postfix-expression → postfix-self-expression
-  ///     postfix-expression → subscript-expression
-  ///     postfix-expression → forced-value-expression
-  ///     postfix-expression → optional-chaining-expression
   mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
     forDirective: Bool,
@@ -786,18 +725,6 @@ extension Parser {
   }
 
   /// Parse the suffix of a postfix expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     postfix-expression → postfix-expression postfix-operator
-  ///     postfix-expression → function-call-expression
-  ///     postfix-expression → initializer-expression
-  ///     postfix-expression → explicit-member-expression
-  ///     postfix-expression → postfix-self-expression
-  ///     postfix-expression → subscript-expression
-  ///     postfix-expression → forced-value-expression
-  ///     postfix-expression → optional-chaining-expression
   mutating func parsePostfixExpressionSuffix(
     _ start: RawExprSyntax,
     _ flavor: ExprFlavor,
@@ -1049,17 +976,6 @@ extension Parser {
   }
 
   /// Parse a keypath expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     key-path-expression → '\' type? '.' key-path-components
-  ///
-  ///     key-path-components → key-path-component | key-path-component '.' key-path-components
-  ///     key-path-component → identifier key-path-postfixes? | key-path-postfixes
-  ///
-  ///     key-path-postfixes → key-path-postfix key-path-postfixes?
-  ///     key-path-postfix → '?' | '!' | 'self' | '[' function-call-argument-list ']'
   mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
     // Consume '\'.
     let (unexpectedBeforeBackslash, backslash) = self.expect(.backslash)
@@ -1181,21 +1097,6 @@ extension Parser {
 extension Parser {
   /// Parse a "primary expression" - these are the most basic leaves of the
   /// Swift expression grammar.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     primary-expression → identifier generic-argument-clause?
-  ///     primary-expression → literal-expression
-  ///     primary-expression → self-expression
-  ///     primary-expression → superclass-expression
-  ///     primary-expression → closure-expression
-  ///     primary-expression → parenthesized-expression
-  ///     primary-expression → tuple-expression
-  ///     primary-expression → implicit-member-expression
-  ///     primary-expression → wildcard-expression
-  ///     primary-expression → key-path-expression
-  ///     primary-expression → macro-expansion-expression
   mutating func parsePrimaryExpression(
     pattern: PatternContext,
     forDirective: Bool,
@@ -1365,11 +1266,6 @@ extension Parser {
 
 extension Parser {
   /// Parse an identifier as an expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     primary-expression → identifier
   mutating func parseIdentifierExpression() -> RawExprSyntax {
     let (name, args) = self.parseDeclNameRef(.compoundNames)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
@@ -1408,12 +1304,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a macro expansion as an expression.
-  ///
-  ///
-  /// Grammar
-  /// =======
-  ///
-  /// macro-expansion-expression → '#' identifier expr-call-suffix?
   mutating func parseMacroExpansionExpr(
     pattern: PatternContext,
     flavor: ExprFlavor
@@ -1492,13 +1382,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a pack expansion as an expression.
-  ///
-  ///
-  /// Grammar
-  /// =======
-  ///
-  /// pack-expansion-expression → 'repeat' pattern-expression
-  /// pattern-expression → expression
   mutating func parsePackExpansionExpr(
     repeatHandle: TokenConsumptionHandle,
     _ flavor: ExprFlavor,
@@ -1519,11 +1402,6 @@ extension Parser {
   /// Parse a regular expression literal.
   ///
   /// The broad structure of the regular expression is validated by the lexer.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     regular-expression-literal → '#'* '/' `Any valid regular expression characters` '/' '#'*
   mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
     // See if we have an opening set of pounds.
     let openPounds = self.consume(if: .extendedRegexDelimiter)
@@ -1560,11 +1438,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a 'super' reference to the superclass instance of a class.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     primary-expression → 'super'
   mutating func parseSuperExpression() -> RawSuperRefExprSyntax {
     // Parse the 'super' reference.
     let (unexpectedBeforeSuperKeyword, superKeyword) = self.expect(.keyword(.super))
@@ -1578,12 +1451,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a tuple expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     tuple-expression → '(' ')' | '(' tuple-element ',' tuple-element-list ')'
-  ///     tuple-element-list → tuple-element | tuple-element ',' tuple-element-list
   mutating func parseTupleExpression(pattern: PatternContext) -> RawTupleExprSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let elements = self.parseArgumentListElements(pattern: pattern)
@@ -1606,13 +1473,6 @@ extension Parser {
   }
 
   /// Parse an element of an array or dictionary literal.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     array-literal-item → expression
-  ///
-  ///     dictionary-literal-item → expression ':' expression
   mutating func parseCollectionElement(_ existing: CollectionKind?) -> CollectionKind {
     let key = self.parseExpression()
     switch existing {
@@ -1631,15 +1491,6 @@ extension Parser {
   }
 
   /// Parse an array or dictionary literal.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     array-literal → '[' array-literal-items? ']'
-  ///     array-literal-items → array-literal-item ','? | array-literal-item ',' array-literal-items
-  ///
-  ///     dictionary-literal → '[' dictionary-literal-items ']' | '[' ':' ']'
-  ///     dictionary-literal-items → dictionary-literal-item ','? | dictionary-literal-item ',' dictionary-literal-items
   mutating func parseCollectionLiteral() -> RawExprSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawExprSyntax(
@@ -1816,11 +1667,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a closure expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     closure-expression → '{' attributes? closure-signature? statements? '}'
   mutating func parseClosureExpression() -> RawClosureExprSyntax {
     // Parse the opening left brace.
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
@@ -1846,27 +1692,6 @@ extension Parser {
 
 extension Parser {
   /// Parse the signature of a closure, if one is present.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     closure-signature → capture-list? closure-parameter-clause 'async'? 'throws'? function-result? 'in'
-  ///     closure-signature → capture-list 'in'
-  ///
-  ///     closure-parameter-clause → '(' ')' | '(' closure-parameter-list ')' | identifier-list
-  ///
-  ///     closure-parameter-list → closure-parameter | closure-parameter , closure-parameter-list
-  ///     closure-parameter → closure-parameter-name type-annotation?
-  ///     closure-parameter → closure-parameter-name type-annotation '...'
-  ///     closure-parameter-name → identifier
-  ///
-  ///     capture-list → '[' capture-list-items ']'
-  ///     capture-list-items → capture-list-item | capture-list-item , capture-list-items
-  ///     capture-list-item → capture-specifier? identifier
-  ///     capture-list-item → capture-specifier? identifier '=' expression
-  ///     capture-list-item → capture-specifier? self-expression
-  ///
-  ///     capture-specifier → 'weak' | 'unowned' | 'unowned(safe)' | 'unowned(unsafe)'
   mutating func parseClosureSignatureIfPresent() -> RawClosureSignatureSyntax? {
     // If we have a leading token that may be part of the closure signature, do a
     // speculative parse to validate it and look for 'in'.
@@ -2054,11 +1879,6 @@ extension Parser {
   ///
   /// This is currently the same as parsing a tuple expression. In the future,
   /// this will be a dedicated argument list type.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     tuple-element → expression | identifier ':' expression
   mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return [
@@ -2129,13 +1949,6 @@ extension Parser {
 
 extension Parser {
   /// Parse the trailing closure(s) following a call expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     trailing-closures → closure-expression labeled-trailing-closures?
-  ///     labeled-trailing-closures → labeled-trailing-closure labeled-trailing-closures?
-  ///     labeled-trailing-closure → identifier ':' closure-expression
   mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax?) {
     // Parse the closure.
     let closure = self.parseClosureExpression()
@@ -2277,12 +2090,6 @@ extension Parser.Lookahead {
 
 extension Parser {
   /// Parse an if statement/expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     if-expression → 'if' condition-list code-block else-clause?
-  ///     else-clause  → 'else' code-block | else if-statement
   mutating func parseIfExpression(
     ifHandle: RecoveryConsumptionHandle
   ) -> RawIfExprSyntax {
@@ -2338,12 +2145,6 @@ extension Parser {
 
 extension Parser {
   /// Parse a switch statement/expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     switch-expression → 'switch' expression '{' switch-cases? '}'
-  ///     switch-cases → switch-case switch-cases?
   mutating func parseSwitchExpression(
     switchHandle: RecoveryConsumptionHandle
   ) -> RawSwitchExprSyntax {
@@ -2378,11 +2179,6 @@ extension Parser {
   }
 
   /// Parse a list of switch case clauses.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     switch-cases → switch-case switch-cases?
   ///
   /// If `allowStandaloneStmtRecovery` is `true` and we discover a statement that
   /// isn't covered by a case, we assume that the developer forgot to wrote the
@@ -2467,13 +2263,6 @@ extension Parser {
   }
 
   /// Parse a single switch case clause.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     switch-case → case-label statements
-  ///     switch-case → default-label statements
-  ///     switch-case → conditional-switch-case
   mutating func parseSwitchCase() -> RawSwitchCaseSyntax {
     var unknownAttr: RawAttributeSyntax?
     if let at = self.consume(if: .atSign) {
@@ -2531,12 +2320,6 @@ extension Parser {
   }
 
   /// Parse a switch case with a 'case' label.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     case-label → attributes? case case-item-list ':'
-  ///     case-item-list → pattern where-clause? | pattern where-clause? ',' case-item-list
   mutating func parseSwitchCaseLabel(
     _ handle: RecoveryConsumptionHandle
   ) -> RawSwitchCaseLabelSyntax {
@@ -2570,11 +2353,6 @@ extension Parser {
   }
 
   /// Parse a switch case with a 'default' label.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     default-label → attributes? 'default' ':'
   mutating func parseSwitchDefaultLabel(
     _ handle: RecoveryConsumptionHandle
   ) -> RawSwitchDefaultLabelSyntax {
@@ -2591,11 +2369,6 @@ extension Parser {
 
   /// Parse a pattern-matching clause for a case statement,
   /// including the guard expression.
-  ///
-  /// Grammar
-  /// =======
-  ///
-  ///     case-item → pattern where-clause?
   mutating func parseGuardedCasePattern() -> (RawPatternSyntax, RawWhereClauseSyntax?) {
     let pattern = self.parseMatchingPattern(context: .matching)
 

@@ -159,7 +159,7 @@ public class SyntaxVisitorTests: XCTestCase {
       statements: CodeBlockItemListSyntax([])
     )
     let rewriter = ClosureRewriter(viewMode: .sourceAccurate)
-    let rewritten = rewriter.visit(closure)
+    let rewritten = rewriter.rewrite(closure)
     XCTAssertEqual(closure.description, rewritten.description)
   }
 
@@ -236,8 +236,8 @@ public class SyntaxVisitorTests: XCTestCase {
       ])
     )
     XCTAssertEqual(source.description, "let a = 5")
-    let visitor = TriviaRemover(viewMode: .sourceAccurate)
-    let rewritten = visitor.visit(source)
+    let rewriter = TriviaRemover(viewMode: .sourceAccurate)
+    let rewritten = rewriter.rewrite(source)
     XCTAssertEqual(rewritten.description, "leta=5")
   }
 }

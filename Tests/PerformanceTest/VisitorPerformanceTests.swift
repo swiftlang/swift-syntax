@@ -45,7 +45,7 @@ public class VisitorPerformanceTests: XCTestCase {
     let emptyRewriter = EmptyRewriter(viewMode: .sourceAccurate)
 
     try measureInstructions {
-      _ = emptyRewriter.visit(parsed)
+      _ = emptyRewriter.rewrite(parsed)
     }
   }
 

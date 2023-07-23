@@ -116,7 +116,7 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
     let identifier = node.identifier
     let signature = macro.signature
 
-    let matchedParameter = signature.parameterClause.parameterList.enumerated().first { (index, parameter) in
+    let matchedParameter = signature.parameterClause.parameters.enumerated().first { (index, parameter) in
       if identifier.text == "_" {
         return false
       }
@@ -294,7 +294,7 @@ extension MacroDeclSyntax {
   ) -> ExprSyntax {
     // Dig out the argument list.
     let argumentList: TupleExprElementListSyntax?
-    if case let .argumentList(argList) = node.argument {
+    if case let .argumentList(argList) = node.arguments {
       argumentList = argList
     } else {
       argumentList = nil

@@ -35,7 +35,7 @@ final class ClassDeclSyntaxTests: XCTestCase {
   }
 
   func testThrowableClass() throws {
-    let buildable = try ClassDeclSyntax(identifier: .identifier("Foo")) {
+    let buildable = try ClassDeclSyntax(name: .identifier("Foo")) {
       try FunctionDeclSyntax("func foo() -> String") {
         StmtSyntax(#"return "hello world""#)
       }
@@ -54,7 +54,7 @@ final class ClassDeclSyntaxTests: XCTestCase {
   }
 
   func testNodeWithoutAnchorPointInResultBuilder() throws {
-    let buildable = ClassDeclSyntax(identifier: .identifier("Foo")) {
+    let buildable = ClassDeclSyntax(name: .identifier("Foo")) {
       DeclSyntax(
         """
           func foo() -> String {

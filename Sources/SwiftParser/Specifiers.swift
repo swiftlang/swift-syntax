@@ -794,7 +794,7 @@ extension Parser {
       initializesKeyword: keyword,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      propertyList: argumentList,
+      properties: argumentList,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -820,7 +820,7 @@ extension Parser {
       accessesKeyword: keyword,
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      propertyList: argumentList,
+      properties: argumentList,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena

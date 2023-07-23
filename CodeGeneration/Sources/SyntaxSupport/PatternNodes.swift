@@ -151,7 +151,8 @@ public let PATTERN_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(
-        name: "ValuePattern",
+        name: "Pattern",
+        deprecatedName: "ValuePattern",
         kind: .node(kind: .pattern)
       ),
     ]

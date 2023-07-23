@@ -23,7 +23,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
-        name: "ElementType",
+        name: "Element",
+        deprecatedName: "ElementType",
         kind: .node(kind: .type)
       ),
       Child(
@@ -150,7 +151,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
       ),
       Child(
-        name: "KeyType",
+        name: "Key",
+        deprecatedName: "KeyType",
         kind: .node(kind: .type),
         nameForDiagnostics: "key type"
       ),
@@ -159,7 +161,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "ValueType",
+        name: "Value",
+        deprecatedName: "ValueType",
         kind: .node(kind: .type),
         nameForDiagnostics: "value type"
       ),
@@ -251,7 +254,8 @@ public let TYPE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "ArgumentType",
+        name: "Argument",
+        deprecatedName: "ArgumentType",
         kind: .node(kind: .type)
       ),
       Child(
@@ -377,7 +381,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")])
       ),
       Child(
-        name: "PatternType",
+        name: "Type",
+        deprecatedName: "PatternType",
         kind: .node(kind: .type)
       ),
     ]
@@ -394,7 +399,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "repeat")])
       ),
       Child(
-        name: "PatternType",
+        name: "Pack",
+        deprecatedName: "PatternType",
         kind: .node(kind: .type)
       ),
     ]
@@ -411,7 +417,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "each")])
       ),
       Child(
-        name: "PackType",
+        name: "Pack",
+        deprecatedName: "PackType",
         kind: .node(kind: .type)
       ),
     ]

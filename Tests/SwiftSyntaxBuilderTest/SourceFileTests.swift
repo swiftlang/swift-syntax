@@ -21,7 +21,7 @@ final class SourceFileTests: XCTestCase {
       DeclSyntax("import UIKit")
       ClassDeclSyntax(
         classKeyword: .keyword(.class),
-        identifier: "SomeViewController",
+        name: "SomeViewController",
         memberBlockBuilder: {
           DeclSyntax("let tableView: UITableView")
         }

@@ -1190,7 +1190,7 @@ final class RegexLiteralTests: XCTestCase {
       """
       [/,/]
       """,
-      substructure: Syntax(RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern(",")))
+      substructure: Syntax(RegexLiteralExprSyntax(regex: .regexLiteralPattern(",")))
     )
   }
 
@@ -1277,8 +1277,8 @@ final class RegexLiteralTests: XCTestCase {
         SequenceExprSyntax(
           elements: .init([
             BooleanLiteralExprSyntax(booleanLiteral: true),
-            UnresolvedTernaryExprSyntax(firstChoice: RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("abc"))),
-            RegexLiteralExprSyntax(regexPattern: .regexLiteralPattern("def")),
+            UnresolvedTernaryExprSyntax(firstChoice: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
+            RegexLiteralExprSyntax(regex: .regexLiteralPattern("def")),
           ])
         )
       )
@@ -1293,7 +1293,7 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         InOutExprSyntax(
           expression: RegexLiteralExprSyntax(
-            regexPattern: .regexLiteralPattern("abc")
+            regex: .regexLiteralPattern("abc")
           )
         )
       )

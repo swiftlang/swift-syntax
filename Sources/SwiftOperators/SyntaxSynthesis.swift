@@ -28,8 +28,7 @@ extension Operator {
   public func synthesizedSyntax() -> OperatorDeclSyntax {
     let fixitySpecifier = TokenSyntax.keyword(kind.keyword)
     let operatorKeyword = TokenSyntax.keyword(.operator, leadingTrivia: .space)
-    let identifierSyntax =
-      TokenSyntax.binaryOperator(name, leadingTrivia: .space)
+    let name = TokenSyntax.binaryOperator(name, leadingTrivia: .space)
     let precedenceGroupSyntax = precedenceGroup.map { groupName in
       OperatorPrecedenceAndTypesSyntax(
         colon: .colonToken(),
@@ -41,7 +40,7 @@ extension Operator {
     return OperatorDeclSyntax(
       fixitySpecifier: fixitySpecifier,
       operatorKeyword: operatorKeyword,
-      identifier: identifierSyntax,
+      name: name,
       operatorPrecedenceAndTypes: precedenceGroupSyntax
     )
   }
@@ -146,7 +145,7 @@ extension PrecedenceGroup {
 
     return PrecedenceGroupDeclSyntax(
       precedencegroupKeyword: precedencegroupKeyword,
-      identifier: identifierSyntax,
+      name: identifierSyntax,
       leftBrace: leftBrace,
       groupAttributes: PrecedenceGroupAttributeListSyntax(groupAttributes),
       rightBrace: rightBrace

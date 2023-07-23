@@ -107,7 +107,7 @@ extension CompilerPluginMessageHandler {
     }
     let conformanceList = conformanceListSyntax.map {
       let placeholderStruct = sourceManager.add($0).cast(StructDeclSyntax.self)
-      return placeholderStruct.inheritanceClause!.inheritedTypeCollection
+      return placeholderStruct.inheritanceClause!.inheritedTypes
     }
 
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.

@@ -241,22 +241,22 @@ public extension SyntaxProtocol {
   }
 }
 
-// MARK: - IdentifiedDeclSyntax
+// MARK: - NamedDeclSyntax
 
 
-public protocol IdentifiedDeclSyntax: SyntaxProtocol {
-  var identifier: TokenSyntax {
+public protocol NamedDeclSyntax: SyntaxProtocol {
+  var name: TokenSyntax {
     get
     set
   }
 }
 
-public extension IdentifiedDeclSyntax {
+public extension NamedDeclSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<IdentifiedDeclSyntax, T>, _ newChild: T) -> IdentifiedDeclSyntax {
-    var copy: IdentifiedDeclSyntax = self
+  func with<T>(_ keyPath: WritableKeyPath<NamedDeclSyntax, T>, _ newChild: T) -> NamedDeclSyntax {
+    var copy: NamedDeclSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
@@ -264,17 +264,17 @@ public extension IdentifiedDeclSyntax {
 
 public extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
-  /// `IdentifiedDeclSyntax`.
+  /// `NamedDeclSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: IdentifiedDeclSyntax.Protocol) -> Bool {
-    return self.asProtocol(IdentifiedDeclSyntax.self) != nil
+  func isProtocol(_: NamedDeclSyntax.Protocol) -> Bool {
+    return self.asProtocol(NamedDeclSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
-  /// `IdentifiedDeclSyntax`. Otherwise return `nil`.
+  /// `NamedDeclSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: IdentifiedDeclSyntax.Protocol) -> IdentifiedDeclSyntax? {
-    return Syntax(self).asProtocol(SyntaxProtocol.self) as? IdentifiedDeclSyntax
+  func asProtocol(_: NamedDeclSyntax.Protocol) -> NamedDeclSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax
   }
 }
 
@@ -599,11 +599,11 @@ extension AccessorEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
 extension AccessorParameterSyntax: ParenthesizedSyntax {}
 
-extension ActorDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension ActorDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension ArrayElementSyntax: WithTrailingCommaSyntax {}
 
-extension AssociatedtypeDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension AssociatedtypeDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension AttributedTypeSyntax: WithAttributesSyntax {}
 
@@ -617,7 +617,7 @@ extension CatchClauseSyntax: WithCodeBlockSyntax {}
 
 extension CatchItemSyntax: WithTrailingCommaSyntax {}
 
-extension ClassDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension ClassDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
 
@@ -661,7 +661,7 @@ extension EnumCaseParameterClauseSyntax: ParenthesizedSyntax {}
 
 extension EnumCaseParameterSyntax: WithTrailingCommaSyntax, WithModifiersSyntax {}
 
-extension EnumDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension EnumDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
 
@@ -669,7 +669,7 @@ extension ExtensionDeclSyntax: DeclGroupSyntax, WithAttributesSyntax, WithModifi
 
 extension ForInStmtSyntax: WithCodeBlockSyntax {}
 
-extension FunctionDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension FunctionDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension FunctionEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
@@ -695,7 +695,7 @@ extension InitializerDeclSyntax: WithAttributesSyntax, WithGenericParametersSynt
 
 extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
 
-extension MacroDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension MacroDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
@@ -715,7 +715,7 @@ extension MissingSyntax: MissingNodeSyntax {}
 
 extension MissingTypeSyntax: MissingNodeSyntax {}
 
-extension OperatorDeclSyntax: IdentifiedDeclSyntax {}
+extension OperatorDeclSyntax: NamedDeclSyntax {}
 
 extension ParameterClauseSyntax: ParenthesizedSyntax {}
 
@@ -723,19 +723,19 @@ extension PatternBindingSyntax: WithTrailingCommaSyntax {}
 
 extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 
-extension PrecedenceGroupDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension PrecedenceGroupDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension PrecedenceGroupNameElementSyntax: WithTrailingCommaSyntax {}
 
 extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {}
 
-extension ProtocolDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension ProtocolDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {}
 
 extension SourceFileSyntax: WithStatementsSyntax {}
 
-extension StructDeclSyntax: DeclGroupSyntax, IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension StructDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension SubscriptDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
@@ -759,7 +759,7 @@ extension TupleTypeSyntax: ParenthesizedSyntax {}
 
 extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
-extension TypealiasDeclSyntax: IdentifiedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension TypealiasDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension VariableDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 

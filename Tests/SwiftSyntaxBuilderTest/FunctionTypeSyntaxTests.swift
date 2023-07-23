@@ -20,7 +20,7 @@ final class FunctionTypeSyntaxTests: XCTestCase {
     let buildable = FunctionTypeSyntax(
       parameters: [],
       effectSpecifiers: typeEffects,
-      returnClause: .init(returnType: TypeSyntax("String"))
+      returnClause: .init(type: TypeSyntax("String"))
     )
 
     assertBuildResult(

@@ -56,7 +56,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
     attributes: nil,
     modifiers: nil,
     structKeyword: structKW,
-    identifier: fooID,
+    name: fooID,
     genericParameterClause: nil,
     inheritanceClause: nil,
     genericWhereClause: nil,
@@ -83,7 +83,7 @@ final class RawSyntaxTests: XCTestCase {
   func testAccessor() {
     withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
-      XCTAssertEqual(structDecl.identifier.tokenKind, .identifier)
+      XCTAssertEqual(structDecl.name.tokenKind, .identifier)
       XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
       XCTAssertEqual(structDecl.memberBlock.leftBrace.tokenText, "{")
       XCTAssertEqual(structDecl.memberBlock.members.elements.count, 0)

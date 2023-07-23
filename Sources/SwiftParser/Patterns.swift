@@ -129,7 +129,7 @@ extension Parser {
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
           bindingSpecifier: bindingSpecifier,
-          valuePattern: value,
+          pattern: value,
           arena: self.arena
         )
       )
@@ -264,7 +264,7 @@ extension Parser {
       return RawPatternSyntax(
         RawValueBindingPatternSyntax(
           bindingSpecifier: bindingSpecifier,
-          valuePattern: value,
+          pattern: value,
           arena: self.arena
         )
       )

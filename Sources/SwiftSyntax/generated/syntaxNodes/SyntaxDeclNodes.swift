@@ -300,7 +300,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `actorKeyword`: `'actor'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -336,9 +336,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
       actorKeyword: TokenSyntax = .keyword(.actor),
-      _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
@@ -359,9 +359,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndActorKeyword, 
             actorKeyword, 
-            unexpectedBetweenActorKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenActorKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
             inheritanceClause, 
@@ -378,9 +378,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndActorKeyword?.raw, 
           actorKeyword.raw, 
-          unexpectedBetweenActorKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenActorKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
@@ -505,7 +505,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -514,7 +514,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -523,7 +523,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -614,9 +614,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndActorKeyword, 
           \Self.actorKeyword, 
-          \Self.unexpectedBetweenActorKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenActorKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
@@ -660,7 +660,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `associatedtypeKeyword`: `'associatedtype'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `initializer`: ``TypeInitializerClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -687,7 +687,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes attached to the associated type declaration.
   ///   - modifiers: Modifiers attached to the associated type declaration.
   ///   - associatedtypeKeyword: The `associatedtype` keyword for this declaration.
-  ///   - identifier: The name of this associated type.
+  ///   - name: The name of this associated type.
   ///   - inheritanceClause: The inheritance clause describing conformances for this associated type declaration.
   ///   - initializer: The type initializer clause for this associated type declaration which represents a default type assignment for the associated type.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this associated type declaration.
@@ -700,9 +700,9 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil,
       associatedtypeKeyword: TokenSyntax = .keyword(.associatedtype),
-      _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenAssociatedtypeKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: TypeInitializerClauseSyntax? = nil,
@@ -721,9 +721,9 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndAssociatedtypeKeyword, 
             associatedtypeKeyword, 
-            unexpectedBetweenAssociatedtypeKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndInheritanceClause, 
+            unexpectedBetweenAssociatedtypeKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndInheritanceClause, 
             inheritanceClause, 
             unexpectedBetweenInheritanceClauseAndInitializer, 
             initializer, 
@@ -738,9 +738,9 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndAssociatedtypeKeyword?.raw, 
           associatedtypeKeyword.raw, 
-          unexpectedBetweenAssociatedtypeKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndInheritanceClause?.raw, 
+          unexpectedBetweenAssociatedtypeKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
           unexpectedBetweenInheritanceClauseAndInitializer?.raw, 
           initializer?.raw, 
@@ -866,7 +866,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAssociatedtypeKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -876,7 +876,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of this associated type.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -885,7 +885,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -959,9 +959,9 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndAssociatedtypeKeyword, 
           \Self.associatedtypeKeyword, 
-          \Self.unexpectedBetweenAssociatedtypeKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndInheritanceClause, 
+          \Self.unexpectedBetweenAssociatedtypeKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndInheritanceClause, 
           \Self.inheritanceClause, 
           \Self.unexpectedBetweenInheritanceClauseAndInitializer, 
           \Self.initializer, 
@@ -1001,7 +1001,7 @@ public struct AssociatedtypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `classKeyword`: `'class'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -1029,7 +1029,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes attached to the class declaration, such as an `@available` attribute.
   ///   - modifiers: Modifiers attached to the class declaration, such as `public`.
   ///   - classKeyword: The `class` keyword for this declaration.
-  ///   - identifier: The name of the class.
+  ///   - name: The name of the class.
   ///   - genericParameterClause: The generic parameters, if any, of the class declaration.
   ///   - inheritanceClause: The inheritance clause describing one or more conformances for this class declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this class declaration.
@@ -1043,9 +1043,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
       classKeyword: TokenSyntax = .keyword(.class),
-      _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
@@ -1066,9 +1066,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndClassKeyword, 
             classKeyword, 
-            unexpectedBetweenClassKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenClassKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
             inheritanceClause, 
@@ -1085,9 +1085,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndClassKeyword?.raw, 
           classKeyword.raw, 
-          unexpectedBetweenClassKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenClassKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
@@ -1215,7 +1215,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1225,7 +1225,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of the class.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -1234,7 +1234,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1327,9 +1327,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndClassKeyword, 
           \Self.classKeyword, 
-          \Self.unexpectedBetweenClassKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenClassKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
@@ -2080,7 +2080,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `enumKeyword`: `'enum'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -2108,7 +2108,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: The attributes applied to the enum declaration.
   ///   - modifiers: The declaration modifiers applied to the enum declaration.
   ///   - enumKeyword: The `enum` keyword for this declaration.
-  ///   - identifier: Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it.
+  ///   - name: Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it.
   ///   - genericParameterClause: The generic parameters, if any, for this enum declaration.
   ///   - inheritanceClause: The inheritance clause describing conformances or raw values for this enum declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this enum declaration.
@@ -2122,9 +2122,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
       enumKeyword: TokenSyntax = .keyword(.enum),
-      _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
@@ -2145,9 +2145,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndEnumKeyword, 
             enumKeyword, 
-            unexpectedBetweenEnumKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenEnumKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
             inheritanceClause, 
@@ -2164,9 +2164,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndEnumKeyword?.raw, 
           enumKeyword.raw, 
-          unexpectedBetweenEnumKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenEnumKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
@@ -2294,7 +2294,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2304,7 +2304,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -2313,7 +2313,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2406,9 +2406,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndEnumKeyword, 
           \Self.enumKeyword, 
-          \Self.unexpectedBetweenEnumKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenEnumKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
@@ -2735,7 +2735,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `funcKeyword`: `'func'`
-///  - `identifier`: (`<identifier>` | `<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
+///  - `name`: (`<identifier>` | `<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `signature`: ``FunctionSignatureSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -2771,9 +2771,9 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil,
       funcKeyword: TokenSyntax = .keyword(.func),
-      _ unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenFuncKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
       signature: FunctionSignatureSyntax,
@@ -2794,9 +2794,9 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndFuncKeyword, 
             funcKeyword, 
-            unexpectedBetweenFuncKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenFuncKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndSignature, 
             signature, 
@@ -2813,9 +2813,9 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndFuncKeyword?.raw, 
           funcKeyword.raw, 
-          unexpectedBetweenFuncKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenFuncKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndSignature?.raw, 
           signature.raw, 
@@ -2940,7 +2940,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenFuncKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -2949,7 +2949,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -2958,7 +2958,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3049,9 +3049,9 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndFuncKeyword, 
           \Self.funcKeyword, 
-          \Self.unexpectedBetweenFuncKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenFuncKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndSignature, 
           \Self.signature, 
@@ -3865,7 +3865,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `macroKeyword`: `'macro'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `signature`: ``FunctionSignatureSyntax``
 ///  - `definition`: ``InitializerClauseSyntax``?
@@ -3901,9 +3901,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
       macroKeyword: TokenSyntax = .keyword(.macro),
-      _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenMacroKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? = nil,
       signature: FunctionSignatureSyntax,
@@ -3924,9 +3924,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndMacroKeyword, 
             macroKeyword, 
-            unexpectedBetweenMacroKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenMacroKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndSignature, 
             signature, 
@@ -3943,9 +3943,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndMacroKeyword?.raw, 
           macroKeyword.raw, 
-          unexpectedBetweenMacroKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenMacroKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndSignature?.raw, 
           signature.raw, 
@@ -4070,7 +4070,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4079,7 +4079,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -4088,7 +4088,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4179,9 +4179,9 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndMacroKeyword, 
           \Self.macroKeyword, 
-          \Self.unexpectedBetweenMacroKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenMacroKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndSignature, 
           \Self.signature, 
@@ -4201,10 +4201,10 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `pound`: `'#'`
-///  - `macro`: `<identifier>`
+///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
-///  - `argumentList`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -4238,15 +4238,15 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
       pound: TokenSyntax = .poundToken(),
-      _ unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? = nil,
-      macro: TokenSyntax,
-      _ unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+      macroName: TokenSyntax,
+      _ unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
       _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
-      _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
-      _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: TupleExprElementListSyntax,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
@@ -4265,15 +4265,15 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndPound, 
             pound, 
-            unexpectedBetweenPoundAndMacro, 
-            macro, 
-            unexpectedBetweenMacroAndGenericArgumentClause, 
+            unexpectedBetweenPoundAndMacroName, 
+            macroName, 
+            unexpectedBetweenMacroNameAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedBetweenGenericArgumentClauseAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArgumentList, 
-            argumentList, 
-            unexpectedBetweenArgumentListAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedBetweenRightParenAndTrailingClosure, 
             trailingClosure, 
@@ -4288,15 +4288,15 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndPound?.raw, 
           pound.raw, 
-          unexpectedBetweenPoundAndMacro?.raw, 
-          macro.raw, 
-          unexpectedBetweenMacroAndGenericArgumentClause?.raw, 
+          unexpectedBetweenPoundAndMacroName?.raw, 
+          macroName.raw, 
+          unexpectedBetweenMacroNameAndGenericArgumentClause?.raw, 
           genericArgumentClause?.raw, 
           unexpectedBetweenGenericArgumentClauseAndLeftParen?.raw, 
           leftParen?.raw, 
-          unexpectedBetweenLeftParenAndArgumentList?.raw, 
-          argumentList.raw, 
-          unexpectedBetweenArgumentListAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen?.raw, 
           unexpectedBetweenRightParenAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
@@ -4420,7 +4420,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPoundAndMacro: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4429,7 +4429,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var macro: TokenSyntax {
+  public var macroName: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -4438,7 +4438,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenMacroAndGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4474,7 +4474,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4483,7 +4483,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var argumentList: TupleExprElementListSyntax {
+  public var arguments: TupleExprElementListSyntax {
     get {
       return TupleExprElementListSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
@@ -4492,12 +4492,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `argumentList`
+  /// Adds the provided `element` to the node's `arguments`
   /// collection.
   /// - param element: The new `Argument` to add to the node's
-  ///                  `argumentList` collection.
+  ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
-  ///            appended to its `argumentList` collection.
+  ///            appended to its `arguments` collection.
   public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4516,7 +4516,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return MacroExpansionDeclSyntax(newData)
   }
   
-  public var unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4611,15 +4611,15 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndPound, 
           \Self.pound, 
-          \Self.unexpectedBetweenPoundAndMacro, 
-          \Self.macro, 
-          \Self.unexpectedBetweenMacroAndGenericArgumentClause, 
+          \Self.unexpectedBetweenPoundAndMacroName, 
+          \Self.macroName, 
+          \Self.unexpectedBetweenMacroNameAndGenericArgumentClause, 
           \Self.genericArgumentClause, 
           \Self.unexpectedBetweenGenericArgumentClauseAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArgumentList, 
-          \Self.argumentList, 
-          \Self.unexpectedBetweenArgumentListAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedBetweenRightParenAndTrailingClosure, 
           \Self.trailingClosure, 
@@ -4845,7 +4845,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `fixitySpecifier`: (`'prefix'` | `'postfix'` | `'infix'`)
 ///  - `operatorKeyword`: `'operator'`
-///  - `identifier`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
+///  - `name`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
 ///  - `operatorPrecedenceAndTypes`: ``OperatorPrecedenceAndTypesSyntax``?
 public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -4876,9 +4876,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       fixitySpecifier: TokenSyntax,
       _ unexpectedBetweenFixitySpecifierAndOperatorKeyword: UnexpectedNodesSyntax? = nil,
       operatorKeyword: TokenSyntax = .keyword(.operator),
-      _ unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenOperatorKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
       operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? = nil,
       _ unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -4891,9 +4891,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             fixitySpecifier, 
             unexpectedBetweenFixitySpecifierAndOperatorKeyword, 
             operatorKeyword, 
-            unexpectedBetweenOperatorKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, 
+            unexpectedBetweenOperatorKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndOperatorPrecedenceAndTypes, 
             operatorPrecedenceAndTypes, 
             unexpectedAfterOperatorPrecedenceAndTypes
           ))) { (arena, _) in
@@ -4902,9 +4902,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           fixitySpecifier.raw, 
           unexpectedBetweenFixitySpecifierAndOperatorKeyword?.raw, 
           operatorKeyword.raw, 
-          unexpectedBetweenOperatorKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes?.raw, 
+          unexpectedBetweenOperatorKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndOperatorPrecedenceAndTypes?.raw, 
           operatorPrecedenceAndTypes?.raw, 
           unexpectedAfterOperatorPrecedenceAndTypes?.raw
         ]
@@ -4958,7 +4958,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenOperatorKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenOperatorKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4967,7 +4967,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -4976,7 +4976,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5010,9 +5010,9 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.fixitySpecifier, 
           \Self.unexpectedBetweenFixitySpecifierAndOperatorKeyword, 
           \Self.operatorKeyword, 
-          \Self.unexpectedBetweenOperatorKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, 
+          \Self.unexpectedBetweenOperatorKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndOperatorPrecedenceAndTypes, 
           \Self.operatorPrecedenceAndTypes, 
           \Self.unexpectedAfterOperatorPrecedenceAndTypes
         ])
@@ -5025,7 +5025,7 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `poundSourceLocation`: `'#sourceLocation'`
 ///  - `leftParen`: `'('`
-///  - `args`: ``PoundSourceLocationArgsSyntax``?
+///  - `arguments`: ``PoundSourceLocationArgsSyntax``?
 ///  - `rightParen`: `')'`
 public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -5054,9 +5054,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
       poundSourceLocation: TokenSyntax = .poundSourceLocationToken(),
       _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
-      args: PoundSourceLocationArgsSyntax? = nil,
-      _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: PoundSourceLocationArgsSyntax? = nil,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -5069,9 +5069,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
             poundSourceLocation, 
             unexpectedBetweenPoundSourceLocationAndLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndArgs, 
-            args, 
-            unexpectedBetweenArgsAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
@@ -5080,9 +5080,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           poundSourceLocation.raw, 
           unexpectedBetweenPoundSourceLocationAndLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndArgs?.raw, 
-          args?.raw, 
-          unexpectedBetweenArgsAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments?.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -5135,7 +5135,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5144,7 +5144,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var args: PoundSourceLocationArgsSyntax? {
+  public var arguments: PoundSourceLocationArgsSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(PoundSourceLocationArgsSyntax.init)
     }
@@ -5153,7 +5153,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5186,9 +5186,9 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.poundSourceLocation, 
           \Self.unexpectedBetweenPoundSourceLocationAndLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArgs, 
-          \Self.args, 
-          \Self.unexpectedBetweenArgsAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
@@ -5204,7 +5204,7 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `precedencegroupKeyword`: `'precedencegroup'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `leftBrace`: `'{'`
 ///  - `groupAttributes`: ``PrecedenceGroupAttributeListSyntax``
 ///  - `rightBrace`: `'}'`
@@ -5230,7 +5230,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - attributes: The attributes applied to the 'precedencegroup' declaration.
   ///   - modifiers: The declaration modifiers applied to the 'precedencegroup' declaration.
-  ///   - identifier: The name of this precedence group.
+  ///   - name: The name of this precedence group.
   ///   - groupAttributes: The characteristics of this precedence group.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -5241,9 +5241,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil,
       precedencegroupKeyword: TokenSyntax = .keyword(.precedencegroup),
-      _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPrecedencegroupKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndLeftBrace: UnexpectedNodesSyntax? = nil,
       leftBrace: TokenSyntax = .leftBraceToken(),
       _ unexpectedBetweenLeftBraceAndGroupAttributes: UnexpectedNodesSyntax? = nil,
       groupAttributes: PrecedenceGroupAttributeListSyntax,
@@ -5262,9 +5262,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndPrecedencegroupKeyword, 
             precedencegroupKeyword, 
-            unexpectedBetweenPrecedencegroupKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndLeftBrace, 
+            unexpectedBetweenPrecedencegroupKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndLeftBrace, 
             leftBrace, 
             unexpectedBetweenLeftBraceAndGroupAttributes, 
             groupAttributes, 
@@ -5279,9 +5279,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndPrecedencegroupKeyword?.raw, 
           precedencegroupKeyword.raw, 
-          unexpectedBetweenPrecedencegroupKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndLeftBrace?.raw, 
+          unexpectedBetweenPrecedencegroupKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndLeftBrace?.raw, 
           leftBrace.raw, 
           unexpectedBetweenLeftBraceAndGroupAttributes?.raw, 
           groupAttributes.raw, 
@@ -5406,7 +5406,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPrecedencegroupKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5416,7 +5416,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of this precedence group.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -5425,7 +5425,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndLeftBrace: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndLeftBrace: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5521,9 +5521,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndPrecedencegroupKeyword, 
           \Self.precedencegroupKeyword, 
-          \Self.unexpectedBetweenPrecedencegroupKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndLeftBrace, 
+          \Self.unexpectedBetweenPrecedencegroupKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndLeftBrace, 
           \Self.leftBrace, 
           \Self.unexpectedBetweenLeftBraceAndGroupAttributes, 
           \Self.groupAttributes, 
@@ -5549,7 +5549,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `protocolKeyword`: `'protocol'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `primaryAssociatedTypeClause`: ``PrimaryAssociatedTypeClauseSyntax``?
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -5577,7 +5577,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes attached to the protocol declaration, such as an `@available` attribute.
   ///   - modifiers: Modifiers attached to the protocol declaration, such as `public`.
   ///   - protocolKeyword: The `protocol` keyword for this declaration.
-  ///   - identifier: The name of the protocol.
+  ///   - name: The name of the protocol.
   ///   - primaryAssociatedTypeClause: The primary associated type for the protocol.
   ///   - inheritanceClause: The inheritance clause describing one or more conformances for this protocol declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this protocol declaration.
@@ -5591,9 +5591,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
       protocolKeyword: TokenSyntax = .keyword(.protocol),
-      _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
       primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
       _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
@@ -5614,9 +5614,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndProtocolKeyword, 
             protocolKeyword, 
-            unexpectedBetweenProtocolKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, 
+            unexpectedBetweenProtocolKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndPrimaryAssociatedTypeClause, 
             primaryAssociatedTypeClause, 
             unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, 
             inheritanceClause, 
@@ -5633,9 +5633,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndProtocolKeyword?.raw, 
           protocolKeyword.raw, 
-          unexpectedBetweenProtocolKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause?.raw, 
+          unexpectedBetweenProtocolKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndPrimaryAssociatedTypeClause?.raw, 
           primaryAssociatedTypeClause?.raw, 
           unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
@@ -5763,7 +5763,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5773,7 +5773,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of the protocol.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -5782,7 +5782,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -5875,9 +5875,9 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndProtocolKeyword, 
           \Self.protocolKeyword, 
-          \Self.unexpectedBetweenProtocolKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause, 
+          \Self.unexpectedBetweenProtocolKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndPrimaryAssociatedTypeClause, 
           \Self.primaryAssociatedTypeClause, 
           \Self.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
@@ -5953,7 +5953,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `structKeyword`: `'struct'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``TypeInheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -5981,7 +5981,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes that are attached to the struct declaration.
   ///   - modifiers: Modifiers that are attached to the struct declaration.
   ///   - structKeyword: The `struct` keyword for this declaration.
-  ///   - identifier: Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
+  ///   - name: Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
   ///   - genericParameterClause: The generic parameters, if any, of the struct declaration.
   ///   - inheritanceClause: The struct declaration inheritance clause describing one or more conformances for this struct declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this struct declaration.
@@ -5995,9 +5995,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
       structKeyword: TokenSyntax = .keyword(.struct),
-      _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
       inheritanceClause: TypeInheritanceClauseSyntax? = nil,
@@ -6018,9 +6018,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndStructKeyword, 
             structKeyword, 
-            unexpectedBetweenStructKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenStructKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
             inheritanceClause, 
@@ -6037,9 +6037,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndStructKeyword?.raw, 
           structKeyword.raw, 
-          unexpectedBetweenStructKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenStructKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
           inheritanceClause?.raw, 
@@ -6167,7 +6167,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6177,7 +6177,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -6186,7 +6186,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6279,9 +6279,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndStructKeyword, 
           \Self.structKeyword, 
-          \Self.unexpectedBetweenStructKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenStructKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
           \Self.inheritanceClause, 
@@ -6305,9 +6305,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `parameterClause`: ``ParameterClauseSyntax``
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `accessor`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
+///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public enum Accessor: SyntaxChildChoices {
+  public enum Accessors: SyntaxChildChoices {
     case `accessors`(AccessorBlockSyntax)
     case `getter`(CodeBlockSyntax)
     
@@ -6387,9 +6387,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       returnClause: ReturnClauseSyntax,
       _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
-      _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessor? = nil,
-      _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? = nil,
+      accessors: Accessors? = nil,
+      _ unexpectedAfterAccessors: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6410,9 +6410,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             returnClause, 
             unexpectedBetweenReturnClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndAccessor, 
-            accessor, 
-            unexpectedAfterAccessor
+            unexpectedBetweenGenericWhereClauseAndAccessors, 
+            accessors, 
+            unexpectedAfterAccessors
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -6429,9 +6429,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           returnClause.raw, 
           unexpectedBetweenReturnClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndAccessor?.raw, 
-          accessor?.raw, 
-          unexpectedAfterAccessor?.raw
+          unexpectedBetweenGenericWhereClauseAndAccessors?.raw, 
+          accessors?.raw, 
+          unexpectedAfterAccessors?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.subscriptDecl,
@@ -6622,7 +6622,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6631,16 +6631,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessor: Accessor? {
+  public var accessors: Accessors? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(Accessor.init)
+      return data.child(at: 15, parent: Syntax(self)).map(Accessors.init)
     }
     set(value) {
       self = SubscriptDeclSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
+  public var unexpectedAfterAccessors: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6665,9 +6665,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.returnClause, 
           \Self.unexpectedBetweenReturnClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndAccessor, 
-          \Self.accessor, 
-          \Self.unexpectedAfterAccessor
+          \Self.unexpectedBetweenGenericWhereClauseAndAccessors, 
+          \Self.accessors, 
+          \Self.unexpectedAfterAccessors
         ])
   }
 }
@@ -6679,7 +6679,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``ModifierListSyntax``
 ///  - `typealiasKeyword`: `'typealias'`
-///  - `identifier`: `<identifier>`
+///  - `name`: `<identifier>`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `initializer`: ``TypeInitializerClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
@@ -6714,9 +6714,9 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       modifiers: ModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
       typealiasKeyword: TokenSyntax = .keyword(.typealias),
-      _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenTypealiasKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: TypeInitializerClauseSyntax,
@@ -6735,9 +6735,9 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             modifiers, 
             unexpectedBetweenModifiersAndTypealiasKeyword, 
             typealiasKeyword, 
-            unexpectedBetweenTypealiasKeywordAndIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndGenericParameterClause, 
+            unexpectedBetweenTypealiasKeywordAndName, 
+            name, 
+            unexpectedBetweenNameAndGenericParameterClause, 
             genericParameterClause, 
             unexpectedBetweenGenericParameterClauseAndInitializer, 
             initializer, 
@@ -6752,9 +6752,9 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           modifiers?.raw, 
           unexpectedBetweenModifiersAndTypealiasKeyword?.raw, 
           typealiasKeyword.raw, 
-          unexpectedBetweenTypealiasKeywordAndIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndGenericParameterClause?.raw, 
+          unexpectedBetweenTypealiasKeywordAndName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericParameterClause?.raw, 
           genericParameterClause?.raw, 
           unexpectedBetweenGenericParameterClauseAndInitializer?.raw, 
           initializer.raw, 
@@ -6877,7 +6877,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypealiasKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6886,7 +6886,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var identifier: TokenSyntax {
+  public var name: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
@@ -6895,7 +6895,7 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6968,9 +6968,9 @@ public struct TypealiasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.modifiers, 
           \Self.unexpectedBetweenModifiersAndTypealiasKeyword, 
           \Self.typealiasKeyword, 
-          \Self.unexpectedBetweenTypealiasKeywordAndIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndGenericParameterClause, 
+          \Self.unexpectedBetweenTypealiasKeywordAndName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericParameterClause, 
           \Self.genericParameterClause, 
           \Self.unexpectedBetweenGenericParameterClauseAndInitializer, 
           \Self.initializer, 

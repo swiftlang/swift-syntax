@@ -894,7 +894,7 @@ extension EnumCaseParameterSyntax {
 }
 
 extension FunctionDeclSyntax {
-  enum IdentifierOptions: TokenSpecSet {
+  enum NameOptions: TokenSpecSet {
     case identifier
     case binaryOperator
     case prefixOperator
@@ -1308,7 +1308,7 @@ extension KeyPathOptionalComponentSyntax {
 }
 
 extension KeyPathPropertyComponentSyntax {
-  enum IdentifierOptions: TokenSpecSet {
+  enum PropertyOptions: TokenSpecSet {
     case identifier
     case `self`
     case `Self`
@@ -1557,7 +1557,7 @@ extension OperatorDeclSyntax {
 }
 
 extension OperatorDeclSyntax {
-  enum IdentifierOptions: TokenSpecSet {
+  enum NameOptions: TokenSpecSet {
     case binaryOperator
     case prefixOperator
     case postfixOperator
@@ -1749,7 +1749,7 @@ extension QualifiedDeclNameSyntax {
 }
 
 extension SameTypeRequirementSyntax {
-  enum EqualityTokenOptions: TokenSpecSet {
+  enum EqualOptions: TokenSpecSet {
     case binaryOperator
     case prefixOperator
     case postfixOperator

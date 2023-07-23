@@ -16,7 +16,7 @@ import SwiftSyntax
 
 private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
-  case \AccessesEffectSyntax.propertyList:
+  case \AccessesEffectSyntax.properties:
     return "properties"
   case \AccessorDeclSyntax.attributes:
     return "attributes"
@@ -72,7 +72,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \ClosureParamSyntax.name:
     return "name"
-  case \ClosureParameterClauseSyntax.parameterList:
+  case \ClosureParameterClauseSyntax.parameters:
     return "parameters"
   case \ClosureParameterSyntax.attributes:
     return "attributes"
@@ -94,13 +94,13 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \DeinitializerDeclSyntax.modifiers:
     return "modifiers"
-  case \DictionaryElementSyntax.keyExpression:
+  case \DictionaryElementSyntax.key:
     return "key"
-  case \DictionaryElementSyntax.valueExpression:
+  case \DictionaryElementSyntax.value:
     return "value"
-  case \DictionaryTypeSyntax.keyType:
+  case \DictionaryTypeSyntax.key:
     return "key type"
-  case \DictionaryTypeSyntax.valueType:
+  case \DictionaryTypeSyntax.value:
     return "value type"
   case \DifferentiabilityParamsClauseSyntax.parameters:
     return "parameters"
@@ -116,7 +116,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "elements"
   case \EnumCaseElementSyntax.associatedValue:
     return "associated values"
-  case \EnumCaseParameterClauseSyntax.parameterList:
+  case \EnumCaseParameterClauseSyntax.parameters:
     return "parameters"
   case \EnumCaseParameterSyntax.modifiers:
     return "modifiers"
@@ -146,7 +146,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \FunctionCallExprSyntax.calledExpression:
     return "called expression"
-  case \FunctionCallExprSyntax.argumentList:
+  case \FunctionCallExprSyntax.arguments:
     return "arguments"
   case \FunctionCallExprSyntax.trailingClosure:
     return "trailing closure"
@@ -210,11 +210,11 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "function signature"
   case \InitializerDeclSyntax.genericWhereClause:
     return "generic where clause"
-  case \InitializesEffectSyntax.propertyList:
+  case \InitializesEffectSyntax.properties:
     return "properties"
   case \KeyPathExprSyntax.root:
     return "root"
-  case \KeyPathSubscriptComponentSyntax.argumentList:
+  case \KeyPathSubscriptComponentSyntax.arguments:
     return "arguments"
   case \LabeledSpecializeEntrySyntax.label:
     return "label"
@@ -222,7 +222,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \LabeledStmtSyntax.label:
     return "label name"
-  case \LayoutRequirementSyntax.typeIdentifier:
+  case \LayoutRequirementSyntax.type:
     return "constrained type"
   case \LayoutRequirementSyntax.size:
     return "size"
@@ -262,7 +262,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "fixity"
   case \OperatorPrecedenceAndTypesSyntax.precedenceGroup:
     return "precedence group"
-  case \ParameterClauseSyntax.parameterList:
+  case \ParameterClauseSyntax.parameters:
     return "parameters"
   case \PatternBindingSyntax.typeAnnotation:
     return "type annotation"
@@ -270,7 +270,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "file name"
   case \PoundSourceLocationArgsSyntax.lineNumber:
     return "line number"
-  case \PoundSourceLocationSyntax.args:
+  case \PoundSourceLocationSyntax.arguments:
     return "arguments"
   case \PrecedenceGroupDeclSyntax.attributes:
     return "attributes"
@@ -300,11 +300,11 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \RepeatWhileStmtSyntax.condition:
     return "condition"
-  case \ReturnClauseSyntax.returnType:
+  case \ReturnClauseSyntax.type:
     return "return type"
-  case \SameTypeRequirementSyntax.leftTypeIdentifier:
+  case \SameTypeRequirementSyntax.leftType:
     return "left-hand type"
-  case \SameTypeRequirementSyntax.rightTypeIdentifier:
+  case \SameTypeRequirementSyntax.rightType:
     return "right-hand type"
   case \StructDeclSyntax.attributes:
     return "attributes"
@@ -326,7 +326,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \SubscriptExprSyntax.calledExpression:
     return "called expression"
-  case \SubscriptExprSyntax.argumentList:
+  case \SubscriptExprSyntax.arguments:
     return "arguments"
   case \SubscriptExprSyntax.trailingClosure:
     return "trailing closure"
@@ -336,9 +336,9 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \TargetFunctionEntrySyntax.targetLabel:
     return "label"
-  case \TargetFunctionEntrySyntax.declname:
+  case \TargetFunctionEntrySyntax.declName:
     return "declaration name"
-  case \TernaryExprSyntax.conditionExpression:
+  case \TernaryExprSyntax.condition:
     return "condition"
   case \TernaryExprSyntax.firstChoice:
     return "first choice"

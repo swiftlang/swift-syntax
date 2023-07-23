@@ -19,7 +19,7 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.let)) {
-      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
+      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int"))))
     }
 
     assertBuildResult(buildable, "␣let a: [Int]")
@@ -29,7 +29,7 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.inout)) {
-      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(elementType: TypeSyntax("Int"))))
+      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int"))))
     }
 
     assertBuildResult(buildable, "␣inout a: [Int]")
@@ -161,7 +161,7 @@ final class VariableTests: XCTestCase {
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.var)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("d"),
-        typeAnnotation: TypeAnnotationSyntax(type: DictionaryTypeSyntax(keyType: TypeSyntax("String"), valueType: TypeSyntax("Int"))),
+        typeAnnotation: TypeAnnotationSyntax(type: DictionaryTypeSyntax(key: TypeSyntax("String"), value: TypeSyntax("Int"))),
         initializer: InitializerClauseSyntax(value: DictionaryExprSyntax())
       )
     }
@@ -213,7 +213,7 @@ final class VariableTests: XCTestCase {
         initializer: InitializerClauseSyntax(
           value: DictionaryExprSyntax {
             for i in 1...3 {
-              DictionaryElementSyntax(keyExpression: StringLiteralExprSyntax(content: "key\(i)"), valueExpression: IntegerLiteralExprSyntax(i))
+              DictionaryElementSyntax(key: StringLiteralExprSyntax(content: "key\(i)"), value: IntegerLiteralExprSyntax(i))
             }
           }
         )
@@ -227,7 +227,7 @@ final class VariableTests: XCTestCase {
   func testClosureTypeVariableDecl() {
     let type = FunctionTypeSyntax(
       parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
-      returnClause: ReturnClauseSyntax(returnType: TypeSyntax("Bool"))
+      returnClause: ReturnClauseSyntax(type: TypeSyntax("Bool"))
     )
     let buildable = VariableDeclSyntax(bindingSpecifier: .keyword(.let)) {
       PatternBindingSyntax(pattern: PatternSyntax("c"), typeAnnotation: TypeAnnotationSyntax(type: type))

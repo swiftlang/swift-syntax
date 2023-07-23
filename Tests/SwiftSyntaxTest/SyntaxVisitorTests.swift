@@ -56,11 +56,11 @@ public class SyntaxVisitorTests: XCTestCase {
           item: CodeBlockItemSyntax.Item(
             FunctionDeclSyntax(
               funcKeyword: .keyword(.func, trailingTrivia: .space),
-              identifier: .identifier("foo"),
+              name: .identifier("foo"),
               signature: FunctionSignatureSyntax(
                 parameterClause: ParameterClauseSyntax(
                   leftParen: .leftParenToken(),
-                  parameterList: FunctionParameterListSyntax([]),
+                  parameters: FunctionParameterListSyntax([]),
                   rightParen: .rightParenToken(trailingTrivia: .space)
                 )
               ),
@@ -74,11 +74,11 @@ public class SyntaxVisitorTests: XCTestCase {
                           DeclModifierSyntax(name: .keyword(.public, leadingTrivia: [.newlines(1), .spaces(2)], trailingTrivia: .space))
                         ]),
                         funcKeyword: .keyword(.func, trailingTrivia: .space),
-                        identifier: .identifier("foo"),
+                        name: .identifier("foo"),
                         signature: FunctionSignatureSyntax(
                           parameterClause: ParameterClauseSyntax(
                             leftParen: .leftParenToken(),
-                            parameterList: FunctionParameterListSyntax([]),
+                            parameters: FunctionParameterListSyntax([]),
                             rightParen: .rightParenToken(trailingTrivia: .space)
                           )
                         ),
@@ -89,11 +89,11 @@ public class SyntaxVisitorTests: XCTestCase {
                               item: CodeBlockItemSyntax.Item(
                                 FunctionDeclSyntax(
                                   funcKeyword: .keyword(.func, leadingTrivia: [.newlines(1), .spaces(4)], trailingTrivia: .space),
-                                  identifier: .identifier("foo"),
+                                  name: .identifier("foo"),
                                   signature: FunctionSignatureSyntax(
                                     parameterClause: ParameterClauseSyntax(
                                       leftParen: .leftParenToken(),
-                                      parameterList: FunctionParameterListSyntax([]),
+                                      parameters: FunctionParameterListSyntax([]),
                                       rightParen: .rightParenToken(trailingTrivia: .space)
                                     )
                                   ),

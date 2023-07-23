@@ -153,7 +153,7 @@ final class TypeMemberTests: XCTestCase {
             \.genericArgumentClause,
             GenericArgumentClauseSyntax(
               arguments: .init([
-                GenericArgumentSyntax(argumentType: SimpleTypeIdentifierSyntax(name: .identifier("W")))
+                GenericArgumentSyntax(argument: SimpleTypeIdentifierSyntax(name: .identifier("W")))
               ])
             )
           )

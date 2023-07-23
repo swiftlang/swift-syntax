@@ -132,7 +132,7 @@ final class ExpressionTests: XCTestCase {
                     period: .periodToken(),
                     component: .init(
                       KeyPathPropertyComponentSyntax(
-                        identifier: .identifier("foo")
+                        property: .identifier("foo")
                       )
                     )
                   ),
@@ -281,7 +281,7 @@ final class ExpressionTests: XCTestCase {
               KeyPathComponentSyntax(
                 period: .periodToken(),
                 component: .init(
-                  KeyPathPropertyComponentSyntax(identifier: .identifier("y"))
+                  KeyPathPropertyComponentSyntax(property: .identifier("y"))
                 )
               )
             ])
@@ -389,16 +389,16 @@ final class ExpressionTests: XCTestCase {
       """,
       substructure: Syntax(
         DictionaryElementSyntax.init(
-          keyExpression: MacroExpansionExprSyntax(
+          key: MacroExpansionExprSyntax(
             pound: .poundToken(),
-            macro: .identifier("line"),
-            argumentList: TupleExprElementListSyntax([])
+            macroName: .identifier("line"),
+            arguments: TupleExprElementListSyntax([])
           ),
           colon: .colonToken(),
-          valueExpression: FunctionCallExprSyntax(
+          value: FunctionCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
             leftParen: .leftParenToken(),
-            argumentList: TupleExprElementListSyntax([
+            arguments: TupleExprElementListSyntax([
               TupleExprElementSyntax(
                 label: .identifier("identifier"),
                 colon: .colonToken(),
@@ -1157,8 +1157,8 @@ final class ExpressionTests: XCTestCase {
       substructure: Syntax(
         MacroExpansionExprSyntax(
           pound: .poundToken(),
-          macro: .identifier("case"),
-          argumentList: TupleExprElementListSyntax([])
+          macroName: .identifier("case"),
+          arguments: TupleExprElementListSyntax([])
         )
       )
     )
@@ -2600,7 +2600,7 @@ final class StatementExpressionTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([]),
+          arguments: TupleExprElementListSyntax([]),
           rightParen: .rightParenToken()
         )
       )

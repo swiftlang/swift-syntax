@@ -18,9 +18,9 @@ final class FunctionSignatureSyntaxTests: XCTestCase {
   func testFunctionEffectSpecifiersSyntax() throws {
     let functionEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async), throwsSpecifier: .keyword(.rethrows))
     let buildable = FunctionSignatureSyntax(
-      parameterClause: .init(parameterList: []),
+      parameterClause: .init(parameters: []),
       effectSpecifiers: functionEffects,
-      returnClause: .init(returnType: TypeSyntax("String"))
+      returnClause: .init(type: TypeSyntax("String"))
     )
 
     assertBuildResult(

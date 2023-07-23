@@ -373,7 +373,7 @@ final class StatementTests: XCTestCase {
             leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argumentType: OptionalTypeSyntax(
+                argument: OptionalTypeSyntax(
                   wrappedType: SimpleTypeIdentifierSyntax(name: .identifier("String")),
                   questionMark: .postfixQuestionMarkToken()
                 )
@@ -397,7 +397,7 @@ final class StatementTests: XCTestCase {
             leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argumentType: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
+                argument: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
               )
             ]),
             rightAngle: .rightAngleToken()
@@ -472,7 +472,7 @@ final class StatementTests: XCTestCase {
               expression: SubscriptExprSyntax(
                 calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
                 leftSquare: .leftSquareToken(),
-                argumentList: TupleExprElementListSyntax([
+                arguments: TupleExprElementListSyntax([
                   TupleExprElementSyntax(
                     expression: IdentifierExprSyntax(identifier: .identifier("key")),
                     trailingComma: .commaToken()
@@ -505,7 +505,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([]),
+          arguments: TupleExprElementListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -524,7 +524,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([]),
+          arguments: TupleExprElementListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -539,7 +539,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          argumentList: TupleExprElementListSyntax([
+          arguments: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: ArrayExprSyntax(
                 leftSquare: .leftSquareToken(),
@@ -692,7 +692,7 @@ final class StatementTests: XCTestCase {
         SubscriptExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
           leftSquare: .leftSquareToken(),
-          argumentList: TupleExprElementListSyntax([
+          arguments: TupleExprElementListSyntax([
             TupleExprElementSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("position")),
               trailingComma: .commaToken()

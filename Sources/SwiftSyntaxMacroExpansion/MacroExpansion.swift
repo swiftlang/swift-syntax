@@ -254,14 +254,14 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       let extensionOf: TypeSyntax
       if let extendedType {
         extensionOf = extendedType
-      } else if let identified = declarationNode.asProtocol(IdentifiedDeclSyntax.self) {
+      } else if let identified = declarationNode.asProtocol(NamedDeclSyntax.self) {
         // Fallback for old compilers with a new plugin, where
-        extensionOf = TypeSyntax(SimpleTypeIdentifierSyntax(name: identified.identifier))
+        extensionOf = TypeSyntax(SimpleTypeIdentifierSyntax(name: identified.name))
       } else {
         throw MacroExpansionError.noExtendedTypeSyntax
       }
 
-      let protocols = conformanceList?.map(\.typeName) ?? []
+      let protocols = conformanceList?.map(\.type) ?? []
 
       let extensions = try attachedMacro.expansion(
         of: attributeNode,
@@ -354,7 +354,7 @@ public func collapse<Node: SyntaxProtocol>(
   if role == .accessor,
     let varDecl = declarationNode.as(VariableDeclSyntax.self),
     let binding = varDecl.bindings.first,
-    binding.accessor == nil
+    binding.accessors == nil
   {
     let indentation = String(repeating: " ", count: 4)
 

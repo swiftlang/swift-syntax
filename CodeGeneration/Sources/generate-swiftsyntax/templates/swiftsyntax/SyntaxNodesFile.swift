@@ -85,7 +85,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           let closureSignature = ClosureSignatureSyntax(
             parameterClause: .parameterClause(
               ClosureParameterClauseSyntax(
-                parameterList: ClosureParameterListSyntax {
+                parameters: ClosureParameterListSyntax {
                   ClosureParameterSyntax(firstName: .identifier("arena"))
                   ClosureParameterSyntax(firstName: .wildcardToken())
                 }
@@ -107,7 +107,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           let initializer = FunctionCallExprSyntax(
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
-            argumentList: TupleExprElementListSyntax {
+            arguments: TupleExprElementListSyntax {
               TupleExprElementSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
             },
             rightParen: .rightParenToken(),

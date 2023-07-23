@@ -20,21 +20,21 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        valuePattern: ExpressionPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
               base: SpecializeExprSyntax(
                 expression: IdentifierExprSyntax(identifier: .identifier("E")),
                 genericArgumentClause: GenericArgumentClauseSyntax(
                   arguments: .init([
-                    .init(argumentType: SimpleTypeIdentifierSyntax(name: .identifier("Int")))
+                    .init(argument: SimpleTypeIdentifierSyntax(name: .identifier("Int")))
                   ])
                 )
               ),
               name: .identifier("e")
             ),
             leftParen: .leftParenToken(),
-            argumentList: TupleExprElementListSyntax([
+            arguments: TupleExprElementListSyntax([
               .init(
                 expression: UnresolvedPatternExprSyntax(
                   pattern: IdentifierPatternSyntax(identifier: .identifier("y"))
@@ -74,14 +74,14 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        valuePattern: ExpressionPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: TupleExprSyntax(
             elements: .init([
               .init(
                 expression: SubscriptExprSyntax(
                   calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
                   leftSquare: .leftSquareToken(),
-                  argumentList: TupleExprElementListSyntax([
+                  arguments: TupleExprElementListSyntax([
                     .init(expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0")))
                   ]),
                   rightSquare: .rightSquareToken()
@@ -126,11 +126,11 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        valuePattern: ExpressionPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: SubscriptExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
             leftSquare: .leftSquareToken(),
-            argumentList: TupleExprElementListSyntax([
+            arguments: TupleExprElementListSyntax([
               .init(
                 expression: UnresolvedPatternExprSyntax(
                   pattern: IdentifierPatternSyntax(identifier: .identifier("z"))

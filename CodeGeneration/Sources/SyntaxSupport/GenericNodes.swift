@@ -18,7 +18,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "conformance requirement",
     children: [
       Child(
-        name: "LeftTypeIdentifier",
+        name: "LeftType",
+        deprecatedName: "LeftTypeIdentifier",
         kind: .node(kind: .type)
       ),
       Child(
@@ -26,7 +27,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "RightTypeIdentifier",
+        name: "RightType",
+        deprecatedName: "RightTypeIdentifier",
         kind: .node(kind: .type)
       ),
     ]
@@ -140,7 +142,8 @@ public let GENERIC_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Body",
+        name: "Requirement",
+        deprecatedName: "Body",
         kind: .nodeChoices(choices: [
           Child(
             name: "SameTypeRequirement",
@@ -177,7 +180,8 @@ public let GENERIC_NODES: [Node] = [
         documentation: "The `where` keyword in the clause."
       ),
       Child(
-        name: "RequirementList",
+        name: "Requirements",
+        deprecatedName: "RequirementList",
         kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
         documentation: "The list of requirements in the clause."
       ),
@@ -192,7 +196,8 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "layout requirement",
     children: [
       Child(
-        name: "TypeIdentifier",
+        name: "Type",
+        deprecatedName: "TypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "constrained type"
       ),
@@ -254,7 +259,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
       ),
       Child(
-        name: "PrimaryAssociatedTypeList",
+        name: "PrimaryAssociatedTypes",
+        deprecatedName: "PrimaryAssociatedTypeList",
         kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(
@@ -301,16 +307,19 @@ public let GENERIC_NODES: [Node] = [
     nameForDiagnostics: "same type requirement",
     children: [
       Child(
-        name: "LeftTypeIdentifier",
+        name: "LeftType",
+        deprecatedName: "LeftTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "left-hand type"
       ),
       Child(
-        name: "EqualityToken",
+        name: "Equal",
+        deprecatedName: "EqualityToken",
         kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
       ),
       Child(
-        name: "RightTypeIdentifier",
+        name: "RightType",
+        deprecatedName: "RightTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "right-hand type"
       ),

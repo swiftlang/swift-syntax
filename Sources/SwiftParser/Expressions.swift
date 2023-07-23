@@ -547,11 +547,11 @@ extension Parser {
       }
 
       let each = self.eat(handle)
-      let packRef = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+      let packReference = self.parseSequenceExpressionElement(flavor, pattern: pattern)
       return RawExprSyntax(
         RawPackElementExprSyntax(
           eachKeyword: each,
-          packRefExpr: packRef,
+          packReference: packReference,
           arena: self.arena
         )
       )
@@ -627,7 +627,7 @@ extension Parser {
       return RawExprSyntax(
         RawPrefixOperatorExprSyntax(
           operator: op,
-          postfixExpression: postfix,
+          base: postfix,
           arena: self.arena
         )
       )
@@ -837,7 +837,7 @@ extension Parser {
           RawFunctionCallExprSyntax(
             calledExpression: leadingExpr,
             leftParen: lparen,
-            argumentList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
+            arguments: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
             unexpectedBeforeRParen,
             rightParen: rparen,
             trailingClosure: trailingClosure,
@@ -873,7 +873,7 @@ extension Parser {
           RawSubscriptExprSyntax(
             calledExpression: leadingExpr,
             leftSquare: lsquare,
-            argumentList: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
+            arguments: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
             unexpectedBeforeRSquare,
             rightSquare: rsquare,
             trailingClosure: trailingClosure,
@@ -895,7 +895,7 @@ extension Parser {
           RawFunctionCallExprSyntax(
             calledExpression: leadingExpr,
             leftParen: nil,
-            argumentList: list,
+            arguments: list,
             rightParen: nil,
             trailingClosure: first,
             additionalTrailingClosures: rest,
@@ -1108,7 +1108,7 @@ extension Parser {
             component: .subscript(
               RawKeyPathSubscriptComponentSyntax(
                 leftSquare: lsquare,
-                argumentList: RawTupleExprElementListSyntax(
+                arguments: RawTupleExprElementListSyntax(
                   elements: args,
                   arena: self.arena
                 ),
@@ -1149,7 +1149,7 @@ extension Parser {
             period: period,
             component: .property(
               RawKeyPathPropertyComponentSyntax(
-                identifier: name,
+                property: name,
                 declNameArguments: declNameArgs,
                 genericArgumentClause: generics,
                 arena: self.arena
@@ -1376,7 +1376,7 @@ extension Parser {
       if name.tokenText.isEditorPlaceholder && args == nil {
         return RawExprSyntax(
           RawEditorPlaceholderExprSyntax(
-            identifier: name,
+            placeholder: name,
             arena: self.arena
           )
         )
@@ -1424,18 +1424,18 @@ extension Parser {
       unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, arena: self.arena)
       pound = self.missingToken(.pound)
     }
-    var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
-    var macro: RawTokenSyntax
+    var unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
+    var macroName: RawTokenSyntax
     if !self.currentToken.isAtStartOfLine {
-      (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
-      if macro.leadingTriviaByteLength != 0 {
+      (unexpectedBeforeMacroName, macroName) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
+      if macroName.leadingTriviaByteLength != 0 {
         // If there're whitespaces after '#' diagnose.
-        unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)
-        pound = self.missingToken(.identifier, text: macro.tokenText)
+        unexpectedBeforeMacroName = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacroName, macroName, arena: self.arena)
+        pound = self.missingToken(.identifier, text: macroName.tokenText)
       }
     } else {
-      unexpectedBeforeMacro = nil
-      macro = self.missingToken(.identifier)
+      unexpectedBeforeMacroName = nil
+      macroName = self.missingToken(.identifier)
     }
 
     // Parse the optional generic argument list.
@@ -1473,11 +1473,11 @@ extension Parser {
     return RawMacroExpansionExprSyntax(
       unexpectedBeforePound,
       pound: pound,
-      unexpectedBeforeMacro,
-      macro: macro,
+      unexpectedBeforeMacroName,
+      macroName: macroName,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      argumentList: RawTupleExprElementListSyntax(
+      arguments: RawTupleExprElementListSyntax(
         elements: args,
         arena: self.arena
       ),
@@ -1505,11 +1505,11 @@ extension Parser {
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
     let repeatKeyword = self.eat(repeatHandle)
-    let patternExpr = self.parseExpression(flavor, pattern: pattern)
+    let pack = self.parseExpression(flavor, pattern: pattern)
 
     return RawPackExpansionExprSyntax(
       repeatKeyword: repeatKeyword,
-      patternExpr: patternExpr,
+      pack: pack,
       arena: self.arena
     )
   }
@@ -1539,7 +1539,7 @@ extension Parser {
     // Parse the pattern and closing slash, avoiding recovery or leading trivia
     // as the lexer should provide the tokens exactly in order without trivia,
     // otherwise they should be treated as missing.
-    let pattern = self.expectWithoutRecoveryOrLeadingTrivia(.regexLiteralPattern)
+    let regex = self.expectWithoutRecoveryOrLeadingTrivia(.regexLiteralPattern)
     let closeSlash = self.expectWithoutRecoveryOrLeadingTrivia(.regexSlash)
 
     // Finally, parse a closing set of pounds.
@@ -1549,7 +1549,7 @@ extension Parser {
       openingPounds: openPounds,
       unexpectedBeforeSlash,
       openSlash: openSlash,
-      regexPattern: pattern,
+      regex: regex,
       closeSlash: closeSlash,
       unexpectedBeforeClosePounds,
       closingPounds: closePounds,
@@ -1704,10 +1704,10 @@ extension Parser {
           }
         case .dictionary(let key, let unexpectedBeforeColon, let colon, let value):
           let element = RawDictionaryElementSyntax(
-            keyExpression: key,
+            key: key,
             unexpectedBeforeColon,
             colon: colon,
-            valueExpression: value,
+            value: value,
             trailingComma: comma,
             arena: self.arena
           )
@@ -2484,7 +2484,7 @@ extension Parser {
         unexpectedBeforeIdent,
         attributeName: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: ident, genericArgumentClause: nil, arena: self.arena)),
         leftParen: nil,
-        argument: nil,
+        arguments: nil,
         rightParen: nil,
         arena: self.arena
       )

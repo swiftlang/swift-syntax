@@ -85,7 +85,7 @@ extension SyntaxClassification {
       return (.buildConfigId, false)
     case \MemberTypeIdentifierSyntax.name:
       return (.typeIdentifier, false)
-    case \OperatorDeclSyntax.identifier:
+    case \OperatorDeclSyntax.name:
       return (.operatorIdentifier, false)
     case \PrecedenceGroupAssociativitySyntax.associativityLabel:
       return (.keyword, false)

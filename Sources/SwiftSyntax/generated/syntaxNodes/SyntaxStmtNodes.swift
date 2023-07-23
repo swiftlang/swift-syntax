@@ -850,7 +850,7 @@ public struct FallthroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `inKeyword`: `'in'`
-///  - `sequenceExpr`: ``ExprSyntax``
+///  - `sequence`: ``ExprSyntax``
 ///  - `whereClause`: ``WhereClauseSyntax``?
 ///  - `body`: ``CodeBlockSyntax``
 public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
@@ -890,9 +890,9 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       typeAnnotation: TypeAnnotationSyntax? = nil,
       _ unexpectedBetweenTypeAnnotationAndInKeyword: UnexpectedNodesSyntax? = nil,
       inKeyword: TokenSyntax = .keyword(.in),
-      _ unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? = nil,
-      sequenceExpr: some ExprSyntaxProtocol,
-      _ unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenInKeywordAndSequence: UnexpectedNodesSyntax? = nil,
+      sequence: some ExprSyntaxProtocol,
+      _ unexpectedBetweenSequenceAndWhereClause: UnexpectedNodesSyntax? = nil,
       whereClause: WhereClauseSyntax? = nil,
       _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
@@ -917,9 +917,9 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
             typeAnnotation, 
             unexpectedBetweenTypeAnnotationAndInKeyword, 
             inKeyword, 
-            unexpectedBetweenInKeywordAndSequenceExpr, 
-            sequenceExpr, 
-            unexpectedBetweenSequenceExprAndWhereClause, 
+            unexpectedBetweenInKeywordAndSequence, 
+            sequence, 
+            unexpectedBetweenSequenceAndWhereClause, 
             whereClause, 
             unexpectedBetweenWhereClauseAndBody, 
             body, 
@@ -940,9 +940,9 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           typeAnnotation?.raw, 
           unexpectedBetweenTypeAnnotationAndInKeyword?.raw, 
           inKeyword.raw, 
-          unexpectedBetweenInKeywordAndSequenceExpr?.raw, 
-          sequenceExpr.raw, 
-          unexpectedBetweenSequenceExprAndWhereClause?.raw, 
+          unexpectedBetweenInKeywordAndSequence?.raw, 
+          sequence.raw, 
+          unexpectedBetweenSequenceAndWhereClause?.raw, 
           whereClause?.raw, 
           unexpectedBetweenWhereClauseAndBody?.raw, 
           body.raw, 
@@ -1087,7 +1087,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenInKeywordAndSequence: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1096,7 +1096,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var sequenceExpr: ExprSyntax {
+  public var sequence: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
@@ -1105,7 +1105,7 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenSequenceExprAndWhereClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenSequenceAndWhereClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1166,9 +1166,9 @@ public struct ForInStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           \Self.typeAnnotation, 
           \Self.unexpectedBetweenTypeAnnotationAndInKeyword, 
           \Self.inKeyword, 
-          \Self.unexpectedBetweenInKeywordAndSequenceExpr, 
-          \Self.sequenceExpr, 
-          \Self.unexpectedBetweenSequenceExprAndWhereClause, 
+          \Self.unexpectedBetweenInKeywordAndSequence, 
+          \Self.sequence, 
+          \Self.unexpectedBetweenSequenceAndWhereClause, 
           \Self.whereClause, 
           \Self.unexpectedBetweenWhereClauseAndBody, 
           \Self.body, 

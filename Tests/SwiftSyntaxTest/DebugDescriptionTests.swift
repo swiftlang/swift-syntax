@@ -185,7 +185,7 @@ public class DebugDescriptionTests: XCTestCase {
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
                         calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
                         leftParen: .leftParenToken(),
-                        argumentList: TupleExprElementListSyntax([
+                        arguments: TupleExprElementListSyntax([
                               TupleExprElementSyntax(
                                   expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
                                   trailingComma: .commaToken(trailingTrivia: .space)
@@ -208,7 +208,7 @@ public class DebugDescriptionTests: XCTestCase {
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
                         calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
                         leftParen: .leftParenToken(),
-                        argumentList: TupleExprElementListSyntax([
+                        arguments: TupleExprElementListSyntax([
                               TupleExprElementSyntax(
                                   expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
                                   trailingComma: .commaToken()

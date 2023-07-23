@@ -30,7 +30,9 @@ func measureInstructions(_ baselineName: StaticString = #function, block: () -> 
   let numberOfInstructions = endInstructions - startInstructions
   let strippedBaselineName = "\(baselineName)".replacingOccurrences(of: "()", with: "")
 
-  #if os(Darwin)
+  // Performance testing is only supported on macOS.
+  // On all other platforms `getInstructionsExecuted` returns 0.
+  #if os(macOS)
   // If the is no data, we just continue the test
   guard let data = try? Data(contentsOf: baselineURL) else {
     return

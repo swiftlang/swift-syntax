@@ -64,7 +64,7 @@ extension Parser {
   fileprivate mutating func parseParameterNames() -> ParameterNames {
     let unexpectedBeforeFirstName: RawUnexpectedNodesSyntax?
     let firstName: RawTokenSyntax?
-    if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+    if self.atArgumentLabel(allowDollarIdentifier: true) {
       (unexpectedBeforeFirstName, firstName) = self.parseArgumentLabel()
     } else {
       (unexpectedBeforeFirstName, firstName) = (nil, nil)
@@ -72,7 +72,7 @@ extension Parser {
 
     let unexpectedBeforeSecondName: RawUnexpectedNodesSyntax?
     let secondName: RawTokenSyntax?
-    if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) {
+    if self.atArgumentLabel(allowDollarIdentifier: true) {
       (unexpectedBeforeSecondName, secondName) = self.parseArgumentLabel()
     } else {
       (unexpectedBeforeSecondName, secondName) = (nil, nil)
@@ -280,7 +280,7 @@ extension Parser {
     // to be an argument label, don't parse any parameters.
     let shouldSkipParameterParsing =
       lparen.isMissing
-      && (!currentToken.canBeArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
+      && (!self.atArgumentLabel(allowDollarIdentifier: true) || currentToken.isLexerClassifiedKeyword)
     if !shouldSkipParameterParsing {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()

@@ -196,19 +196,49 @@ extension Parser {
   mutating func parseSimpleType(
     stopAtFirstPeriod: Bool = false
   ) -> RawTypeSyntax {
+    enum TypeBaseStart: TokenSpecSet {
+      case `Self`
+      case `Any`
+      case identifier
+      case leftParen
+      case leftSquare
+      case wildcard
+
+      init?(lexeme: Lexer.Lexeme) {
+        switch PrepareForKeywordMatch(lexeme) {
+        case .keyword(.Self): self = .Self
+        case .keyword(.Any): self = .Any
+        case .identifier: self = .identifier
+        case .leftParen: self = .leftParen
+        case .leftSquare: self = .leftSquare
+        case .wildcard: self = .wildcard
+        default: return nil
+        }
+      }
+
+      var spec: TokenSpec {
+        switch self {
+        case .Self: return .keyword(.Self)
+        case .Any: return .keyword(.Any)
+        case .identifier: return .identifier
+        case .leftParen: return .leftParen
+        case .leftSquare: return .leftSquare
+        case .wildcard: return .wildcard
+        }
+      }
+    }
+
     var base: RawTypeSyntax
-    switch self.currentToken {
-    case TokenSpec(.Self),
-      TokenSpec(.Any),
-      TokenSpec(.identifier):
+    switch self.at(anyIn: TypeBaseStart.self)?.spec {
+    case .Self, .Any, .identifier:
       base = self.parseTypeIdentifier()
-    case TokenSpec(.leftParen):
+    case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
-    case TokenSpec(.leftSquare):
+    case .leftSquare:
       base = RawTypeSyntax(self.parseCollectionType())
-    case TokenSpec(.wildcard):
+    case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
-    default:
+    case nil:
       return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
     }
 
@@ -427,7 +457,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
+          } else if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {
@@ -714,7 +744,7 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
-        if self.currentToken.canBeArgumentLabel() {
+        if self.atArgumentLabel() {
           self.consumeAnyToken()
           guard self.at(.colon) else {
             return false
@@ -973,12 +1003,6 @@ extension Parser {
 }
 
 extension Lexer.Lexeme {
-  var isAnyOperator: Bool {
-    return self.rawTokenKind == .binaryOperator
-      || self.rawTokenKind == .postfixOperator
-      || self.rawTokenKind == .prefixOperator
-  }
-
   var isGenericTypeDisambiguatingToken: Bool {
     switch self.rawTokenKind {
     case .rightParen,

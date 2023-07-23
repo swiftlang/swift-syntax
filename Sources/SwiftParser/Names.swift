@@ -24,7 +24,7 @@ extension Parser {
   }
 
   mutating func parseArgumentLabel() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
-    guard self.currentToken.canBeArgumentLabel(allowDollarIdentifier: true) else {
+    guard self.atArgumentLabel(allowDollarIdentifier: true) else {
       return (nil, missingToken(.identifier))
     }
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
@@ -98,7 +98,7 @@ extension Parser {
     // A close parenthesis, if empty lists are allowed.
     let nextIsRParen = flags.contains(.zeroArgCompoundNames) && next.rawTokenKind == .rightParen
     // An argument label.
-    let nextIsArgLabel = next.canBeArgumentLabel() || next.rawTokenKind == .colon
+    let nextIsArgLabel = next.isArgumentLabel() || next.rawTokenKind == .colon
 
     guard nextIsRParen || nextIsArgLabel else {
       return nil
@@ -117,7 +117,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
         // Check to see if there is an argument label.
-        precondition(self.currentToken.canBeArgumentLabel() && self.peek().rawTokenKind == .colon)
+        precondition(self.atArgumentLabel() && self.peek().rawTokenKind == .colon)
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(
@@ -242,7 +242,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     while !lookahead.at(.endOfFile, .rightParen) && lookahead.hasProgressed(&loopProgress) {
       // Check to see if there is an argument label.
-      guard lookahead.currentToken.canBeArgumentLabel() && lookahead.peek().rawTokenKind == .colon else {
+      guard lookahead.atArgumentLabel() && lookahead.peek().rawTokenKind == .colon else {
         return false
       }
 
@@ -261,18 +261,16 @@ extension Parser.Lookahead {
 }
 
 extension Lexer.Lexeme {
-  func canBeArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
-    // `inout` is reserved as an argument label for historical reasons.
-    if TypeSpecifier(lexeme: self) == .inout {
-      return false
-    }
-
-    switch self.rawTokenKind {
+  func isArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
+    switch self {
     case .identifier, .wildcard:
       // Identifiers, escaped identifiers, and '_' can be argument labels.
       return true
     case .dollarIdentifier:
       return allowDollarIdentifier
+    case .keyword(.inout):
+      // `inout` cannot be an argument label for historical reasons.
+      return false
     default:
       // All other keywords can be argument labels.
       return self.isLexerClassifiedKeyword

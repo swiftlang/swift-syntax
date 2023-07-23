@@ -786,7 +786,7 @@ extension Parser {
   }
 
   mutating func parseOptionalControlTransferTarget() -> RawTokenSyntax? {
-    guard !self.currentToken.isAtStartOfLine else {
+    guard !self.atStartOfLine else {
       return nil
     }
 

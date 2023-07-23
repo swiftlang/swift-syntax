@@ -223,9 +223,9 @@ extension Parser {
         inheritanceClause: nil,
         genericWhereClause: nil,
         memberBlock: RawMemberDeclBlockSyntax(
-          leftBrace: RawTokenSyntax(missing: .leftBrace, arena: self.arena),
+          leftBrace: missingToken(.leftBrace),
           members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
-          rightBrace: RawTokenSyntax(missing: .rightBrace, arena: self.arena),
+          rightBrace: missingToken(.rightBrace),
           arena: self.arena
         ),
         arena: self.arena

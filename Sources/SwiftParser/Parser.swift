@@ -90,7 +90,12 @@ public struct Parser {
   var arena: ParsingSyntaxArena
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
-  /// The current token. If there was no input, this token will have a kind of `.endOfFile`.
+  /// The current token that should be consumed next.
+  ///
+  /// If the end of the source file is reached, this is `.endOfFile`.
+  ///
+  /// - Important: You should almost never need to access this token directly
+  ///   in the parser. Instead, prefer using the `at` methods.
   var currentToken: Lexer.Lexeme
 
   /// The current nesting level, i.e. the number of tokens that

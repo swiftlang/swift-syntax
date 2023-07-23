@@ -226,7 +226,7 @@ extension Parser.Lookahead {
       self.skipUntilEndOfLine()
 
       var attributesLoopProgress = LoopProgressCondition()
-      ATTRIBUTE_LOOP: while attributesLoopProgress.evaluate(self.currentToken) {
+      ATTRIBUTE_LOOP: while self.hasProgressed(&attributesLoopProgress) {
         switch self.currentToken.rawTokenKind {
         case .atSign:
           didSeeAnyAttributes = true
@@ -237,9 +237,9 @@ extension Parser.Lookahead {
           break ATTRIBUTE_LOOP
         }
       }
-    } while self.at(.poundElseif, .poundElse) && poundIfLoopProgress.evaluate(self.currentToken)
+    } while self.at(.poundElseif, .poundElse) && self.hasProgressed(&poundIfLoopProgress)
 
-    return didSeeAnyAttributes && self.currentToken.isAtStartOfLine && self.consume(if: .poundEndif) != nil
+    return didSeeAnyAttributes && self.atStartOfLine && self.consume(if: .poundEndif) != nil
   }
 }
 
@@ -295,7 +295,7 @@ extension Parser.Lookahead {
   }
 
   mutating func skipUntilEndOfLine() {
-    while !self.at(.endOfFile) && !self.currentToken.isAtStartOfLine {
+    while !self.at(.endOfFile) && !self.atStartOfLine {
       self.skipSingle()
     }
   }

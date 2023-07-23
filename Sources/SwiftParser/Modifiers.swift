@@ -15,8 +15,8 @@
 extension Parser {
   mutating func parseModifierList() -> RawModifierListSyntax? {
     var elements = [RawDeclModifierSyntax]()
-    var modifierLoopCondition = LoopProgressCondition()
-    MODIFIER_LOOP: while modifierLoopCondition.evaluate(currentToken) {
+    var modifierLoopProgress = LoopProgressCondition()
+    MODIFIER_LOOP: while self.hasProgressed(&modifierLoopProgress) {
       switch self.canRecoverTo(anyIn: DeclarationStart.self) {
       case (.declarationModifier(.private), _)?,
         (.declarationModifier(.fileprivate), _)?,

@@ -48,7 +48,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && availabilityArgumentProgress.evaluate(currentToken)
+      } while keepGoing != nil && self.hasProgressed(&availabilityArgumentProgress)
     }
 
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
@@ -99,7 +99,7 @@ extension Parser {
     var elements = [RawAvailabilityArgumentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
 
-    var loopProgressCondition = LoopProgressCondition()
+    var loopProgress = LoopProgressCondition()
     LOOP: repeat {
       let entry: RawAvailabilityArgumentSyntax.Entry
       switch self.at(anyIn: AvailabilityArgumentKind.self) {
@@ -176,7 +176,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && loopProgressCondition.evaluate(currentToken)
+    } while keepGoing != nil && self.hasProgressed(&loopProgress)
     return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
   }
 
@@ -266,7 +266,7 @@ extension Parser {
         unexpectedTokens.append(unexpectedVersion)
       }
       keepGoing = self.consume(if: .period)
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    } while keepGoing != nil && self.hasProgressed(&loopProgress)
     return RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
   }
 

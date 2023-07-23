@@ -77,7 +77,7 @@ extension Parser.Lookahead {
     let shouldSkipOverNewlines = recoveryPrecedence.shouldSkipOverNewlines && spec1.allowAtStartOfLine && spec2.allowAtStartOfLine && spec3.allowAtStartOfLine
 
     while !self.at(.endOfFile) {
-      if !shouldSkipOverNewlines, self.currentToken.isAtStartOfLine {
+      if !shouldSkipOverNewlines, self.atStartOfLine {
         break
       }
       let matchedSpec: TokenSpec?
@@ -139,10 +139,8 @@ extension Parser.Lookahead {
         return $0.spec.recoveryPrecedence
       }).min()!
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile) && loopProgress.evaluate(self.currentToken) {
-      if !recoveryPrecedence.shouldSkipOverNewlines,
-        self.currentToken.isAtStartOfLine
-      {
+    while !self.at(.endOfFile) && self.hasProgressed(&loopProgress) {
+      if !recoveryPrecedence.shouldSkipOverNewlines, self.atStartOfLine {
         break
       }
       if let (kind, handle) = self.at(anyIn: specSet) {

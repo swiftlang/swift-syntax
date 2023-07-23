@@ -29,7 +29,7 @@ extension TokenConsumer {
         // Decide how we want to consume the 'try':
         // If the declaration or statement starts at a new line, the user probably just forgot to write the expression after 'try' -> parse it as a TryExpr
         // If the declaration or statement starts at the same line, the user maybe tried to use 'try' as a modifier -> parse it as unexpected text in front of that decl or stmt.
-        return backtrack.currentToken.isAtStartOfLine
+        return backtrack.atStartOfLine
       } else {
         return true
       }
@@ -133,7 +133,7 @@ extension Parser {
     forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    if forDirective && self.currentToken.isAtStartOfLine {
+    if forDirective && self.atStartOfLine {
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     }
 
@@ -151,11 +151,11 @@ extension Parser {
       pattern: pattern
     )
 
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
+    var loopProgress = LoopProgressCondition()
+    while self.hasProgressed(&loopProgress) {
       guard
         !lastElement.is(RawMissingExprSyntax.self),
-        !(forDirective && self.currentToken.isAtStartOfLine)
+        !(forDirective && self.atStartOfLine)
       else {
         break
       }
@@ -175,7 +175,7 @@ extension Parser {
       if let rhsExpr {
         // Operator parsing returned the RHS.
         lastElement = rhsExpr
-      } else if forDirective && self.currentToken.isAtStartOfLine {
+      } else if forDirective && self.atStartOfLine {
         // Don't allow RHS at a newline for `#if` conditions.
         lastElement = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
         break
@@ -317,7 +317,7 @@ extension Parser {
       )
 
       let rhs: RawExprSyntax?
-      if colon.isMissing, currentToken.isAtStartOfLine {
+      if colon.isMissing, self.atStartOfLine {
         rhs = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
       } else {
         rhs = nil
@@ -806,9 +806,9 @@ extension Parser {
   ) -> RawExprSyntax {
     // Handle suffix expressions.
     var leadingExpr = start
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
-      if forDirective && self.currentToken.isAtStartOfLine {
+    var loopProgress = LoopProgressCondition()
+    while self.hasProgressed(&loopProgress) {
+      if forDirective && self.atStartOfLine {
         return leadingExpr
       }
 
@@ -964,7 +964,7 @@ extension Parser {
             while !backtrack.at(.endOfFile) && !backtrack.currentToken.isAtStartOfLine {
               backtrack.skipSingle()
             }
-          } while backtrack.at(.poundIf) && loopProgress.evaluate(backtrack.currentToken)
+          } while backtrack.at(.poundIf) && backtrack.hasProgressed(&loopProgress)
 
           guard backtrack.isAtStartOfPostfixExprSuffix() else {
             break
@@ -1077,8 +1077,8 @@ extension Parser {
     }
 
     var components: [RawKeyPathComponentSyntax] = []
-    var loopCondition = LoopProgressCondition()
-    while loopCondition.evaluate(currentToken) {
+    var loopProgress = LoopProgressCondition()
+    while self.hasProgressed(&loopProgress) {
       // Check for a [] or .[] suffix. The latter is only permitted when there
       // are no components.
       if self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false))
@@ -1426,7 +1426,7 @@ extension Parser {
     }
     var unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
     var macroName: RawTokenSyntax
-    if !self.currentToken.isAtStartOfLine {
+    if !self.atStartOfLine {
       (unexpectedBeforeMacroName, macroName) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
       if macroName.leadingTriviaByteLength != 0 {
         // If there're whitespaces after '#' diagnose.
@@ -1683,8 +1683,8 @@ extension Parser {
     var elementKind: CollectionKind? = nil
     var elements = [RawSyntax]()
     do {
-      var collectionLoopCondition = LoopProgressCondition()
-      COLLECTION_LOOP: while collectionLoopCondition.evaluate(currentToken) {
+      var collectionProgress = LoopProgressCondition()
+      COLLECTION_LOOP: while self.hasProgressed(&collectionProgress) {
         elementKind = self.parseCollectionElement(elementKind)
 
         // Parse the ',' if exists.
@@ -1730,9 +1730,9 @@ extension Parser {
           break
         }
 
-        // If The next token is at the beginning of a new line and can never start
+        // If the next token is at the beginning of a new line and can never start
         // an element, break.
-        if self.currentToken.isAtStartOfLine
+        if self.atStartOfLine
           && (self.at(.rightBrace, .poundEndif) || self.atStartOfDeclaration() || self.atStartOfStatement())
         {
           break
@@ -1928,7 +1928,7 @@ extension Parser {
               arena: self.arena
             )
           )
-        } while keepGoing != nil && loopProgress.evaluate(currentToken)
+        } while keepGoing != nil && self.hasProgressed(&loopProgress)
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
@@ -1983,7 +1983,7 @@ extension Parser {
                 arena: self.arena
               )
             )
-          } while keepGoing != nil && loopProgress.evaluate(currentToken)
+          } while keepGoing != nil && self.hasProgressed(&loopProgress)
         }
 
         parameterClause = .simpleInput(RawClosureParamListSyntax(elements: params, arena: self.arena))
@@ -2122,7 +2122,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && loopProgress.evaluate(currentToken)
+    } while keepGoing != nil && self.hasProgressed(&loopProgress)
     return result
   }
 }
@@ -2143,7 +2143,7 @@ extension Parser {
     // Parse labeled trailing closures.
     var elements = [RawMultipleTrailingClosureElementSyntax]()
     var loopProgress = LoopProgressCondition()
-    while self.withLookahead({ $0.isStartOfLabelledTrailingClosure() }) && loopProgress.evaluate(currentToken) {
+    while self.withLookahead({ $0.isStartOfLabelledTrailingClosure() }) && self.hasProgressed(&loopProgress) {
       let (unexpectedBeforeLabel, label) = self.parseArgumentLabel()
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let closure = self.parseClosureExpression()
@@ -2240,7 +2240,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     while !backtrack.at(.endOfFile, .rightBrace)
       && !backtrack.at(.poundEndif, .poundElse, .poundElseif)
-      && loopProgress.evaluate(backtrack.currentToken)
+      && backtrack.hasProgressed(&loopProgress)
     {
       backtrack.skipSingle()
     }
@@ -2266,7 +2266,7 @@ extension Parser.Lookahead {
       TokenSpec(.equal),
       TokenSpec(.postfixOperator),
       TokenSpec(.binaryOperator):
-      return !backtrack.currentToken.isAtStartOfLine
+      return !backtrack.atStartOfLine
     default:
       return false
     }
@@ -2392,7 +2392,7 @@ extension Parser {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndif, .poundElseif, .poundElse)
-      && elementsProgress.evaluate(currentToken)
+      && self.hasProgressed(&elementsProgress)
     {
       if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
@@ -2556,7 +2556,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchCaseLabelSyntax(
@@ -2669,7 +2669,7 @@ extension Parser.Lookahead {
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
     while let (_, handle) = self.at(anyIn: EffectSpecifier.self),
-      loopProgress.evaluate(currentToken)
+      self.hasProgressed(&loopProgress)
     {
       self.eat(handle)
     }
@@ -2679,7 +2679,7 @@ extension Parser.Lookahead {
     // Consume attributes.
     var lookahead = self.lookahead()
     var attributesProgress = LoopProgressCondition()
-    while let _ = lookahead.consume(if: .atSign), attributesProgress.evaluate(lookahead.currentToken) {
+    while let _ = lookahead.consume(if: .atSign), lookahead.hasProgressed(&attributesProgress) {
       guard lookahead.at(.identifier) else {
         break
       }
@@ -2699,7 +2699,7 @@ extension Parser.Lookahead {
 
       // While we don't have '->' or ')', eat balanced tokens.
       var skipProgress = LoopProgressCondition()
-      while !lookahead.at(.endOfFile, .rightParen) && skipProgress.evaluate(lookahead.currentToken) {
+      while !lookahead.at(.endOfFile, .rightParen) && lookahead.hasProgressed(&skipProgress) {
         lookahead.skipSingle()
       }
 
@@ -2722,7 +2722,7 @@ extension Parser.Lookahead {
       lookahead.consumeAnyToken()
 
       var parametersProgress = LoopProgressCondition()
-      while lookahead.consume(if: .comma) != nil && parametersProgress.evaluate(lookahead.currentToken) {
+      while lookahead.consume(if: .comma) != nil && lookahead.hasProgressed(&parametersProgress) {
         if lookahead.at(.identifier) || lookahead.at(.wildcard) {
           lookahead.consumeAnyToken()
           continue

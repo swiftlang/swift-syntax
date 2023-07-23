@@ -211,7 +211,7 @@ extension Parser {
   ) -> T where T: NominalTypeDeclarationTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introucerHandle)
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
-    if unexpectedBeforeName == nil && name.isMissing && self.currentToken.isAtStartOfLine {
+    if unexpectedBeforeName == nil && name.isMissing && self.atStartOfLine {
       return T.init(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
@@ -311,7 +311,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
 
     let unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?
@@ -350,7 +350,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && loopProgress.evaluate(currentToken)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)
     return RawPrimaryAssociatedTypeClauseSyntax(

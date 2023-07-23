@@ -12,19 +12,16 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-/// A type that can be used in place of a `while true` loop.
-/// See `evaluate` for more detail.
+/// A type that can be used to make sure that a loop in the parser makes process.
+///
+/// See `TokenConsumer.hasProgressed` for details.
 struct LoopProgressCondition {
   var currentToken: Lexer.Lexeme?
 
   init() {}
 
-  /// Check that the loop has made progress since `evaluate` was called the last time.
-  /// `currentToken` is the current token of the parser.
-  /// In assert builds, this traps if the loop has not made any parser progress in between two iterations,
-  /// ie. it checks if the parser's `currentToken` has changed in between two calls to `evaluate`.
-  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made progress, thus aborting the loop.
-  mutating func evaluate(_ currentToken: Lexer.Lexeme) -> Bool {
+  /// Implementation of the above `evaluate` methods.
+  fileprivate mutating func evaluate(_ currentToken: Lexer.Lexeme) -> Bool {
     defer {
       self.currentToken = currentToken
     }
@@ -42,5 +39,38 @@ struct LoopProgressCondition {
       || (previousToken.byteLength == 0 && previousToken.rawTokenKind != currentToken.rawTokenKind)
     assert(hasMadeProgress, "Loop should always make progress")
     return hasMadeProgress
+  }
+}
+
+// Implementing the extension separately on `Parser` and `Parser.Lookahead` is
+// ~1.5% faster than implementing it on `TokenConsumer`.
+
+extension Parser {
+  /// Check that the token consumer has made progress since `hasProgress` was
+  /// called the last time with this `loopProgress`.
+  ///
+  /// In assert builds, this traps if the loop has not made any parser progress
+  /// in between two iterations, ie. it checks if the parser's `currentToken`
+  /// has changed in between two calls to `evaluate`.
+  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made
+  /// progress, thus aborting the loop.
+  @inline(__always)
+  func hasProgressed(_ loopProgress: inout LoopProgressCondition) -> Bool {
+    return loopProgress.evaluate(self.currentToken)
+  }
+}
+
+extension Parser.Lookahead {
+  /// Check that the token consumer has made progress since `hasProgress` was
+  /// called the last time with this `loopProgress`.
+  ///
+  /// In assert builds, this traps if the loop has not made any parser progress
+  /// in between two iterations, ie. it checks if the parser's `currentToken`
+  /// has changed in between two calls to `evaluate`.
+  /// In non-assert builds, `evaluate()` returns `false` if the loop has not made
+  /// progress, thus aborting the loop.
+  @inline(__always)
+  func hasProgressed(_ loopProgress: inout LoopProgressCondition) -> Bool {
+    return loopProgress.evaluate(self.currentToken)
   }
 }

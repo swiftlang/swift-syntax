@@ -284,13 +284,13 @@ extension Parser {
   /// Consumes remaining token on the line and returns a ``RawUnexpectedNodesSyntax``
   /// if there is any tokens consumed.
   mutating func consumeRemainingTokenOnLine() -> RawUnexpectedNodesSyntax? {
-    guard !self.currentToken.isAtStartOfLine else {
+    guard !self.atStartOfLine else {
       return nil
     }
 
     var unexpectedTokens = [RawTokenSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile), !currentToken.isAtStartOfLine, loopProgress.evaluate(self.currentToken) {
+    while !self.at(.endOfFile), !atStartOfLine, self.hasProgressed(&loopProgress) {
       unexpectedTokens += [self.consumeAnyToken()]
     }
 
@@ -525,8 +525,8 @@ extension Parser {
         self.missingToken(.identifier)
       )
     } else if keywordRecovery,
-      (self.currentToken.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .wildcard),
-      !self.currentToken.isAtStartOfLine
+      (self.currentToken.isLexerClassifiedKeyword || self.at(.wildcard)),
+      !self.atStartOfLine
     {
       let keyword = self.consumeAnyToken()
       return (

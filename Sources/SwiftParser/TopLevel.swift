@@ -65,8 +65,8 @@ extension Parser {
   ) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !stopCondition(&self), loopProgress.evaluate(currentToken) {
-      let newItemAtStartOfLine = self.currentToken.isAtStartOfLine
+    while !stopCondition(&self), self.hasProgressed(&loopProgress) {
+      let newItemAtStartOfLine = self.atStartOfLine
       guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) else {
         break
       }

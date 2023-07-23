@@ -487,7 +487,7 @@ extension Parser {
     /// Parse segments.
     var segments: [RawStringLiteralSegmentsSyntax.Element] = []
     var loopProgress = LoopProgressCondition()
-    while loopProgress.evaluate(self.currentToken) {
+    while self.hasProgressed(&loopProgress) {
       // If we encounter a token with leading trivia, we're no longer in the
       // string literal.
       guard currentToken.leadingTriviaText.isEmpty else { break }
@@ -504,7 +504,7 @@ extension Parser {
         var unexpectedBeforeRightParen: [RawTokenSyntax] = []
         var unexpectedProgress = LoopProgressCondition()
         while !self.at(.rightParen, .stringSegment, .backslash) && !self.at(TokenSpec(openQuoteKind), .endOfFile)
-          && unexpectedProgress.evaluate(self.currentToken)
+          && self.hasProgressed(&unexpectedProgress)
         {
           unexpectedBeforeRightParen.append(self.consumeAnyToken())
         }
@@ -512,7 +512,7 @@ extension Parser {
         // line if this is a single-line literal. Leading trivia is fine as
         // we allow e.g "\(foo )".
         let rightParen: Token
-        if self.at(.rightParen) && self.currentToken.isAtStartOfLine && openQuote.tokenKind != .multilineStringQuote {
+        if self.at(.rightParen) && self.atStartOfLine && openQuote.tokenKind != .multilineStringQuote {
           rightParen = missingToken(.rightParen)
         } else {
           rightParen = self.expectWithoutRecovery(.rightParen)

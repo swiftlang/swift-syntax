@@ -134,7 +134,7 @@ extension Parser {
         )
       )
     case nil:
-      if self.currentToken.isLexerClassifiedKeyword, !self.currentToken.isAtStartOfLine {
+      if self.currentToken.isLexerClassifiedKeyword, !self.atStartOfLine {
         // Recover if a keyword was used instead of an identifier
         let keyword = self.consumeAnyToken()
         return RawPatternSyntax(
@@ -171,7 +171,7 @@ extension Parser {
         arena: self.arena
       )
     } else if allowRecoveryFromMissingColon
-      && !self.currentToken.isAtStartOfLine
+      && !self.atStartOfLine
       && lookahead.canParseType()
     {
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -215,7 +215,7 @@ extension Parser {
     do {
       var keepGoing = true
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightParen) && keepGoing && loopProgress.evaluate(currentToken) {
+      while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
         // If the tuple element has a label, parse it.
         let labelAndColon = self.consume(if: .identifier, followedBy: .colon)
         var (label, colon) = (labelAndColon?.0, labelAndColon?.1)
@@ -368,7 +368,7 @@ extension Parser.Lookahead {
         guard self.canParsePattern() else {
           return false
         }
-      } while self.consume(if: .comma) != nil && loopProgress.evaluate(currentToken)
+      } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
     }
 
     return self.consume(if: .rightParen) != nil

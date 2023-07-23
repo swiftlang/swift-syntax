@@ -258,7 +258,13 @@ public extension SyntaxProtocol {
   }
 
   /// The index of this node in a ``SyntaxChildren`` collection.
+  @available(*, deprecated, message: "Use index(of:) on the collection that contains this node")
   var index: SyntaxChildrenIndex {
+    return indexInParent
+  }
+
+  /// The index of this node in a ``SyntaxChildren`` collection.
+  internal var indexInParent: SyntaxChildrenIndex {
     return SyntaxChildrenIndex(self.data.absoluteInfo)
   }
 
@@ -319,8 +325,8 @@ public extension SyntaxProtocol {
     let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
     // `self` could be a missing node at index 0 and `viewMode` be `.sourceAccurate`.
     // In that case `siblings` skips over the missing `self` node and has a `startIndex > 0`.
-    if self.index >= siblings.startIndex {
-      for absoluteRaw in siblings[..<self.index].reversed() {
+    if self.indexInParent >= siblings.startIndex {
+      for absoluteRaw in siblings[..<self.indexInParent].reversed() {
         let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
         if let token = child.lastToken(viewMode: viewMode) {
           return token
@@ -342,7 +348,7 @@ public extension SyntaxProtocol {
       return nil
     }
     let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
-    let nextSiblingIndex = siblings.index(after: self.index)
+    let nextSiblingIndex = siblings.index(after: self.indexInParent)
     for absoluteRaw in siblings[nextSiblingIndex...] {
       let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
       if let token = child.firstToken(viewMode: viewMode) {

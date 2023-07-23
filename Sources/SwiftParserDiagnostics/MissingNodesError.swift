@@ -269,7 +269,8 @@ public struct MissingNodesError: ParserError {
     if let missingExpr,
       let exprList = missingExpr.parent?.as(ExprListSyntax.self),
       exprList.parent?.is(SequenceExprSyntax.self) ?? false,
-      let previousSiblingIndex = exprList.index(missingExpr.index, offsetBy: -1, limitedBy: exprList.startIndex)
+      let missingExprIndex = exprList.index(of: missingExpr),
+      let previousSiblingIndex = exprList.index(missingExprIndex, offsetBy: -1, limitedBy: exprList.startIndex)
     {
       let previousSibling = exprList[previousSiblingIndex]
       if let previousSiblingName = previousSibling.nodeTypeNameForDiagnostics(allowBlockNames: false) {
@@ -359,17 +360,17 @@ extension ParseDiagnosticsGenerator {
     /// Ancestors that don't contain any tokens are not very interesting to merge diagnostics (because there can't be any missing tokens we can merge them with).
     /// Find the first ancestor that contains any tokens.
     var ancestorWithMoreTokens = node.parent
-    var index = node.index
+    var index = ancestorWithMoreTokens?.children(viewMode: .all).index(of: node)
     let nodeTokens = Array(node.tokens(viewMode: .all))
     while let unwrappedParent = ancestorWithMoreTokens, Array(unwrappedParent.tokens(viewMode: .all)) == nodeTokens {
       ancestorWithMoreTokens = unwrappedParent.parent
-      index = unwrappedParent.index
+      index = ancestorWithMoreTokens?.children(viewMode: .all).index(of: unwrappedParent)
     }
 
     // Walk all upcoming sibling to see if they are also missing to handle them in this diagnostic.
     // If this is the case, handle all of them in this diagnostic.
     var missingNodes = [Syntax(node)]
-    if let parentWithTokens = ancestorWithMoreTokens {
+    if let parentWithTokens = ancestorWithMoreTokens, let index {
       let siblings = parentWithTokens.children(viewMode: .all)
       let siblingsAfter = siblings[siblings.index(after: index)...]
       for sibling in siblingsAfter {

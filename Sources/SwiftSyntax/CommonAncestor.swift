@@ -18,7 +18,7 @@ public func findCommonAncestorOrSelf(_ lhs: Syntax, _ rhs: Syntax) -> Syntax? {
     if lhs == rhs {
       return lhs
     }
-    if let lhsIndex = lhs?.index.data?.indexInTree, let rhsIndex = rhs?.index.data?.indexInTree {
+    if let lhsIndex = lhs?.indexInParent.data?.indexInTree, let rhsIndex = rhs?.indexInParent.data?.indexInTree {
       if lhsIndex < rhsIndex {
         rhs = rhs?.parent
       } else {

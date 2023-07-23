@@ -65,6 +65,30 @@ extension SyntaxCollection {
     return Syntax(newData).cast(Self.self)
   }
 
+  /// Return the index of `node` within this collection.
+  ///
+  /// If `node` is not part of this collection, returns `nil`.
+  public func index(of node: some SyntaxProtocol) -> SyntaxChildrenIndex? {
+    guard let node = node as? Element else {
+      return nil
+    }
+    return index(of: node)
+  }
+
+  /// Return the index of `node` within this collection.
+  ///
+  /// If `node` is not part of this collection, returns `nil`.
+  ///
+  /// - Note: This method is functionally equivalent to the one that takes
+  ///   ``SyntaxProtocol``. It is provided because otherwise `Collection.index(of:)`
+  ///   is chosen, which is marked as deprecated and renamed to `firstIndex(of:)`.
+  public func index(of node: Element) -> SyntaxChildrenIndex? {
+    guard node.parent == Syntax(self) else {
+      return nil
+    }
+    return node.indexInParent
+  }
+
   /// Creates a new collection by appending the provided syntax element
   /// to the children.
   ///
@@ -232,7 +256,7 @@ extension SyntaxCollection {
       /// Make sure the index is a valid index for replacing
       precondition(
         (newLayout.startIndex..<newLayout.endIndex).contains(indexToReplace),
-        "replacing node at invalid index \(index)"
+        "replacing node at invalid index \(indexInParent)"
       )
       newLayout[indexToReplace] = newValue.raw
       self = replacingLayout(newLayout)

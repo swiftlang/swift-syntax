@@ -455,4 +455,25 @@ public struct SyntaxChildren: BidirectionalCollection {
     self.rawChildren = NonNilRawSyntaxChildren(node, viewMode: viewMode)
     self.parent = node
   }
+
+  /// Return the index of `node` within this collection.
+  ///
+  /// If `node` is not part of this collection, returns `nil`.
+  public func index(of node: some SyntaxProtocol) -> SyntaxChildrenIndex? {
+    return index(of: Syntax(node))
+  }
+
+  /// Return the index of `node` within this collection.
+  ///
+  /// If `node` is not part of this collection, returns `nil`.
+  ///
+  /// - Note: This method is functionally equivalent to the one that takes
+  ///   ``SyntaxProtocol``. It is provided because otherwise `Collection.index(of:)`
+  ///   is chosen, which is marked as deprecated and renamed to `firstIndex(of:)`.
+  public func index(of node: Syntax) -> SyntaxChildrenIndex? {
+    guard node.parent == parent else {
+      return nil
+    }
+    return node.indexInParent
+  }
 }

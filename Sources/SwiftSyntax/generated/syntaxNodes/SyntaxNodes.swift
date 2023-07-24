@@ -612,7 +612,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``AttributeListSyntax``
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Arguments: SyntaxChildChoices {
+  public enum Arguments: SyntaxChildChoices, SyntaxHashable {
     case `argumentList`(LabeledExprListSyntax)
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
@@ -1089,7 +1089,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``AvailabilityArgumentListSyntax``
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Argument: SyntaxChildChoices {
+  public enum Argument: SyntaxChildChoices, SyntaxHashable {
     case `token`(TokenSyntax)
     case `availabilityVersionRestriction`(PlatformVersionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
@@ -1479,7 +1479,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/argument``
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Value: SyntaxChildChoices {
+  public enum Value: SyntaxChildChoices, SyntaxHashable {
     case `string`(StringLiteralExprSyntax)
     case `version`(VersionTupleSyntax)
     
@@ -3419,7 +3419,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``ClosureExprSyntax``.``ClosureExprSyntax/signature``
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum ParameterClause: SyntaxChildChoices {
+  public enum ParameterClause: SyntaxChildChoices, SyntaxHashable {
     case `simpleInput`(ClosureShorthandParameterListSyntax)
     case `parameterClause`(ClosureParameterClauseSyntax)
     
@@ -3717,7 +3717,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``CodeBlockItemListSyntax``
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Item: SyntaxChildChoices {
+  public enum Item: SyntaxChildChoices, SyntaxHashable {
     case `decl`(DeclSyntax)
     case `stmt`(StmtSyntax)
     case `expr`(ExprSyntax)
@@ -4217,7 +4217,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``ConditionElementListSyntax``
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Condition: SyntaxChildChoices {
+  public enum Condition: SyntaxChildChoices, SyntaxHashable {
     case `expression`(ExprSyntax)
     case `availability`(AvailabilityConditionSyntax)
     case `matchingPattern`(MatchingPatternConditionSyntax)
@@ -6630,7 +6630,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``DerivativeAttributeArgumentsSyntax``.``DerivativeAttributeArgumentsSyntax/arguments``
 ///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/arguments``
 public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Arguments: SyntaxChildChoices {
+  public enum Arguments: SyntaxChildChoices, SyntaxHashable {
     case `argument`(DifferentiabilityArgumentSyntax)
     case `argumentList`(DifferentiabilityArgumentsSyntax)
     
@@ -7045,7 +7045,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 /// 
 ///  - ``DocumentationAttributeArgumentListSyntax``
 public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Value: SyntaxChildChoices {
+  public enum Value: SyntaxChildChoices, SyntaxHashable {
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
     
@@ -10085,7 +10085,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``GenericRequirementListSyntax``
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Requirement: SyntaxChildChoices {
+  public enum Requirement: SyntaxChildChoices, SyntaxHashable {
     case `sameTypeRequirement`(SameTypeRequirementSyntax)
     case `conformanceRequirement`(ConformanceRequirementSyntax)
     case `layoutRequirement`(LayoutRequirementSyntax)
@@ -10435,7 +10435,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``IfConfigClauseListSyntax``
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Elements: SyntaxChildChoices {
+  public enum Elements: SyntaxChildChoices, SyntaxHashable {
     case `statements`(CodeBlockItemListSyntax)
     case `switchCases`(SwitchCaseListSyntax)
     case `decls`(MemberBlockItemListSyntax)
@@ -11398,7 +11398,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``KeyPathComponentListSyntax``
 public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Component: SyntaxChildChoices {
+  public enum Component: SyntaxChildChoices, SyntaxHashable {
     case `property`(KeyPathPropertyComponentSyntax)
     case `subscript`(KeyPathSubscriptComponentSyntax)
     case `optional`(KeyPathOptionalComponentSyntax)
@@ -14274,7 +14274,7 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
 /// 
 ///  - ``PatternBindingListSyntax``
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Accessors: SyntaxChildChoices {
+  public enum Accessors: SyntaxChildChoices, SyntaxHashable {
     case `accessors`(AccessorBlockSyntax)
     case `getter`(CodeBlockSyntax)
     
@@ -17402,7 +17402,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``SwitchCaseListSyntax``
 public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Label: SyntaxChildChoices {
+  public enum Label: SyntaxChildChoices, SyntaxHashable {
     case `default`(SwitchDefaultLabelSyntax)
     case `case`(SwitchCaseLabelSyntax)
     

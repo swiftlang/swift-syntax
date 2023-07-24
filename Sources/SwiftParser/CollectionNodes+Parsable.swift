@@ -63,7 +63,6 @@ extension AccessorDeclListSyntax: SyntaxParseable {
         accessorSpecifier: RawTokenSyntax(missing: .keyword, text: "get", arena: arena),
         parameters: nil,
         effectSpecifiers: nil,
-        initEffects: nil,
         body: nil,
         arena: arena
       )

@@ -41,7 +41,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else {
         try EnumDeclSyntax(
           """
-          public enum Element: SyntaxChildChoices
+          public enum Element: SyntaxChildChoices, SyntaxHashable
           """
         ) {
           for choiceName in node.elementChoices {

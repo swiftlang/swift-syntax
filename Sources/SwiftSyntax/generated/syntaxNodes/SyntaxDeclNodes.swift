@@ -6290,7 +6290,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public enum Accessors: SyntaxChildChoices {
+  public enum Accessors: SyntaxChildChoices, SyntaxHashable {
     case `accessors`(AccessorBlockSyntax)
     case `getter`(CodeBlockSyntax)
     

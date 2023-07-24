@@ -90,7 +90,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/attributes``
 ///  - ``VariableDeclSyntax``.``VariableDeclSyntax/attributes``
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
-  public enum Element: SyntaxChildChoices {
+  public enum Element: SyntaxChildChoices, SyntaxHashable {
     case `attribute`(AttributeSyntax)
     case `ifConfigDecl`(IfConfigDeclSyntax)
     
@@ -930,7 +930,7 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
 /// 
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/groupAttributes``
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
-  public enum Element: SyntaxChildChoices {
+  public enum Element: SyntaxChildChoices, SyntaxHashable {
     case `precedenceGroupRelation`(PrecedenceGroupRelationSyntax)
     case `precedenceGroupAssignment`(PrecedenceGroupAssignmentSyntax)
     case `precedenceGroupAssociativity`(PrecedenceGroupAssociativitySyntax)
@@ -1052,7 +1052,7 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashable {
-  public enum Element: SyntaxChildChoices {
+  public enum Element: SyntaxChildChoices, SyntaxHashable {
     case `labeledSpecializeArgument`(LabeledSpecializeArgumentSyntax)
     case `specializeAvailabilityArgument`(SpecializeAvailabilityArgumentSyntax)
     case `specializeTargetFunctionArgument`(SpecializeTargetFunctionArgumentSyntax)
@@ -1141,7 +1141,7 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 /// 
 ///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/segments``
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
-  public enum Element: SyntaxChildChoices {
+  public enum Element: SyntaxChildChoices, SyntaxHashable {
     case `stringSegment`(StringSegmentSyntax)
     case `expressionSegment`(ExpressionSegmentSyntax)
     
@@ -1228,7 +1228,7 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``
 ///  - ``SwitchExprSyntax``.``SwitchExprSyntax/cases``
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
-  public enum Element: SyntaxChildChoices {
+  public enum Element: SyntaxChildChoices, SyntaxHashable {
     case `switchCase`(SwitchCaseSyntax)
     case `ifConfigDecl`(IfConfigDeclSyntax)
     

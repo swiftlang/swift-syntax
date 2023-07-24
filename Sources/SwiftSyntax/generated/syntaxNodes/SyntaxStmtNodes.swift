@@ -2215,7 +2215,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 ///  - `yieldKeyword`: `'yield'`
 ///  - `yieldedExpressions`: (``YieldedExpressionsClauseSyntax`` | ``ExprSyntax``)
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
-  public enum YieldedExpressions: SyntaxChildChoices {
+  public enum YieldedExpressions: SyntaxChildChoices, SyntaxHashable {
     case `multiple`(YieldedExpressionsClauseSyntax)
     case `single`(ExprSyntax)
     

@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 /// Represents the specification for a Token in the TokenSyntax file.
 public struct TokenSpec {
   public enum Kind {
@@ -19,14 +21,10 @@ public struct TokenSpec {
     case other
   }
 
-  public let name: String
+  public let varOrCaseName: TokenSyntax
   public let nameForDiagnostics: String
   public let text: String?
   public let kind: Kind
-
-  public var swiftKind: String {
-    return lowercaseFirstWord(name: self.name)
-  }
 
   fileprivate init(
     name: String,
@@ -34,7 +32,7 @@ public struct TokenSpec {
     text: String? = nil,
     kind: Kind
   ) {
-    self.name = name
+    self.varOrCaseName = .identifier(name)
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
     self.kind = kind
@@ -69,57 +67,57 @@ public struct TokenSpec {
 }
 
 public let SYNTAX_TOKENS: [TokenSpec] = [
-  .punctuator(name: "Arrow", text: "->"),
-  .punctuator(name: "AtSign", text: "@"),
-  .punctuator(name: "Backslash", text: "\\"),
-  .punctuator(name: "Backtick", text: "`"),
-  .other(name: "BinaryOperator", nameForDiagnostics: "binary operator"),
-  .punctuator(name: "Colon", text: ":"),
-  .punctuator(name: "Comma", text: ","),
-  .other(name: "DollarIdentifier", nameForDiagnostics: "dollar identifier"),
-  .punctuator(name: "Ellipsis", text: "..."),
-  .other(name: "EndOfFile", nameForDiagnostics: "end of file", text: ""),
-  .punctuator(name: "Equal", text: "="),
-  .punctuator(name: "ExclamationMark", text: "!"),
-  .other(name: "ExtendedRegexDelimiter", nameForDiagnostics: "extended delimiter"),
-  .other(name: "FloatingLiteral", nameForDiagnostics: "floating literal"),
-  .other(name: "Identifier", nameForDiagnostics: "identifier"),
-  .punctuator(name: "InfixQuestionMark", text: "?"),
-  .other(name: "IntegerLiteral", nameForDiagnostics: "integer literal"),
-  TokenSpec(name: "Keyword", nameForDiagnostics: "keyword", text: nil, kind: .keyword),
-  .punctuator(name: "LeftAngle", text: "<"),
-  .punctuator(name: "LeftBrace", text: "{"),
-  .punctuator(name: "LeftParen", text: "("),
-  .punctuator(name: "LeftSquare", text: "["),
-  .punctuator(name: "MultilineStringQuote", text: "\"\"\""),
-  .punctuator(name: "Period", text: "."),
-  .other(name: "PostfixOperator", nameForDiagnostics: "postfix operator"),
-  .punctuator(name: "PostfixQuestionMark", text: "?"),
-  .punctuator(name: "Pound", text: "#"),
-  .poundKeyword(name: "PoundAvailable", text: "#available"),
-  .poundKeyword(name: "PoundElse", text: "#else"),
-  .poundKeyword(name: "PoundElseif", text: "#elseif"),
-  .poundKeyword(name: "PoundEndif", text: "#endif"),
-  .poundKeyword(name: "PoundIf", text: "#if"),
-  .poundKeyword(name: "PoundSourceLocation", text: "#sourceLocation"),
-  .poundKeyword(name: "PoundUnavailable", text: "#unavailable"),
-  .punctuator(name: "PrefixAmpersand", text: "&"),
-  .other(name: "PrefixOperator", nameForDiagnostics: "prefix operator"),
-  .other(name: "RawStringDelimiter", nameForDiagnostics: "raw string delimiter"),
-  .other(name: "RegexLiteralPattern", nameForDiagnostics: "regex pattern"),
-  .punctuator(name: "RegexSlash", text: "/"),
-  .punctuator(name: "RightAngle", text: ">"),
-  .punctuator(name: "RightBrace", text: "}"),
-  .punctuator(name: "RightParen", text: ")"),
-  .punctuator(name: "RightSquare", text: "]"),
-  .punctuator(name: "Semicolon", text: ";"),
-  .punctuator(name: "SingleQuote", text: "\'"),
-  .punctuator(name: "StringQuote", text: "\""),
-  .other(name: "StringSegment", nameForDiagnostics: "string segment"),
-  .other(name: "Unknown", nameForDiagnostics: "token"),
-  .other(name: "Wildcard", nameForDiagnostics: "wildcard", text: "_"),
+  .punctuator(name: "arrow", text: "->"),
+  .punctuator(name: "atSign", text: "@"),
+  .punctuator(name: "backslash", text: "\\"),
+  .punctuator(name: "backtick", text: "`"),
+  .other(name: "binaryOperator", nameForDiagnostics: "binary operator"),
+  .punctuator(name: "colon", text: ":"),
+  .punctuator(name: "comma", text: ","),
+  .other(name: "dollarIdentifier", nameForDiagnostics: "dollar identifier"),
+  .punctuator(name: "ellipsis", text: "..."),
+  .other(name: "endOfFile", nameForDiagnostics: "end of file", text: ""),
+  .punctuator(name: "equal", text: "="),
+  .punctuator(name: "exclamationMark", text: "!"),
+  .other(name: "extendedRegexDelimiter", nameForDiagnostics: "extended delimiter"),
+  .other(name: "floatingLiteral", nameForDiagnostics: "floating literal"),
+  .other(name: "identifier", nameForDiagnostics: "identifier"),
+  .punctuator(name: "infixQuestionMark", text: "?"),
+  .other(name: "integerLiteral", nameForDiagnostics: "integer literal"),
+  TokenSpec(name: "keyword", nameForDiagnostics: "keyword", text: nil, kind: .keyword),
+  .punctuator(name: "leftAngle", text: "<"),
+  .punctuator(name: "leftBrace", text: "{"),
+  .punctuator(name: "leftParen", text: "("),
+  .punctuator(name: "leftSquare", text: "["),
+  .punctuator(name: "multilineStringQuote", text: "\"\"\""),
+  .punctuator(name: "period", text: "."),
+  .other(name: "postfixOperator", nameForDiagnostics: "postfix operator"),
+  .punctuator(name: "postfixQuestionMark", text: "?"),
+  .punctuator(name: "pound", text: "#"),
+  .poundKeyword(name: "poundAvailable", text: "#available"),
+  .poundKeyword(name: "poundElse", text: "#else"),
+  .poundKeyword(name: "poundElseif", text: "#elseif"),
+  .poundKeyword(name: "poundEndif", text: "#endif"),
+  .poundKeyword(name: "poundIf", text: "#if"),
+  .poundKeyword(name: "poundSourceLocation", text: "#sourceLocation"),
+  .poundKeyword(name: "poundUnavailable", text: "#unavailable"),
+  .punctuator(name: "prefixAmpersand", text: "&"),
+  .other(name: "prefixOperator", nameForDiagnostics: "prefix operator"),
+  .other(name: "rawStringDelimiter", nameForDiagnostics: "raw string delimiter"),
+  .other(name: "regexLiteralPattern", nameForDiagnostics: "regex pattern"),
+  .punctuator(name: "regexSlash", text: "/"),
+  .punctuator(name: "rightAngle", text: ">"),
+  .punctuator(name: "rightBrace", text: "}"),
+  .punctuator(name: "rightParen", text: ")"),
+  .punctuator(name: "rightSquare", text: "]"),
+  .punctuator(name: "semicolon", text: ";"),
+  .punctuator(name: "singleQuote", text: "\'"),
+  .punctuator(name: "stringQuote", text: "\""),
+  .other(name: "stringSegment", nameForDiagnostics: "string segment"),
+  .other(name: "unknown", nameForDiagnostics: "token"),
+  .other(name: "wildcard", nameForDiagnostics: "wildcard", text: "_"),
 ]
 
 public let SYNTAX_TOKEN_MAP = Dictionary(
-  uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.name)Token", $0) }
+  uniqueKeysWithValues: SYNTAX_TOKENS.map { ("\($0.varOrCaseName.description.withFirstCharacterUppercased)Token", $0) }
 )

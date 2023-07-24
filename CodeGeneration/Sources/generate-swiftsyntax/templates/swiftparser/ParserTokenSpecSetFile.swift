@@ -30,7 +30,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 DeclSyntax("case \(raw: keyword.escapedName)")
               case .token(let tokenText):
                 let token = SYNTAX_TOKEN_MAP[tokenText]!
-                DeclSyntax("case \(raw: token.swiftKind)")
+                DeclSyntax("case \(token.varOrCaseName)")
               }
             }
 
@@ -44,7 +44,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   case .token(let tokenText):
                     let token = SYNTAX_TOKEN_MAP[tokenText]!
                     SwitchCaseSyntax(
-                      "case TokenSpec(.\(raw: token.swiftKind)): self = .\(raw: token.swiftKind)"
+                      "case TokenSpec(.\(token.varOrCaseName)): self = .\(token.varOrCaseName)"
                     )
                   }
                 }
@@ -64,7 +64,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   case .token(let tokenText):
                     let token = SYNTAX_TOKEN_MAP[tokenText]!
                     SwitchCaseSyntax(
-                      "case .\(raw: token.swiftKind): return .\(raw: token.swiftKind)"
+                      "case .\(token.varOrCaseName): return .\(token.varOrCaseName)"
                     )
                   }
                 }

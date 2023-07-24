@@ -18,101 +18,101 @@ extension TokenKind {
   var nameForDiagnostics: String {
     switch self {
     case .arrow:
-      return #"->"#
+      return "->"
     case .atSign:
-      return #"@"#
+      return "@"
     case .backslash:
       return #"\"#
     case .backtick:
-      return #"`"#
+      return "`"
     case .binaryOperator:
-      return #"binary operator"#
+      return "binary operator"
     case .colon:
-      return #":"#
+      return ":"
     case .comma:
-      return #","#
+      return ","
     case .dollarIdentifier:
-      return #"dollar identifier"#
+      return "dollar identifier"
     case .ellipsis:
-      return #"..."#
+      return "..."
     case .endOfFile:
-      return #"end of file"#
+      return "end of file"
     case .equal:
-      return #"="#
+      return "="
     case .exclamationMark:
-      return #"!"#
+      return "!"
     case .extendedRegexDelimiter:
-      return #"extended delimiter"#
+      return "extended delimiter"
     case .floatingLiteral:
-      return #"floating literal"#
+      return "floating literal"
     case .identifier:
-      return #"identifier"#
+      return "identifier"
     case .infixQuestionMark:
-      return #"?"#
+      return "?"
     case .integerLiteral:
-      return #"integer literal"#
+      return "integer literal"
     case .leftAngle:
-      return #"<"#
+      return "<"
     case .leftBrace:
-      return #"{"#
+      return "{"
     case .leftParen:
-      return #"("#
+      return "("
     case .leftSquare:
-      return #"["#
+      return "["
     case .multilineStringQuote:
       return #"""""#
     case .period:
-      return #"."#
+      return "."
     case .postfixOperator:
-      return #"postfix operator"#
+      return "postfix operator"
     case .postfixQuestionMark:
-      return #"?"#
+      return "?"
     case .pound:
-      return #"#"#
+      return "#"
     case .poundAvailable:
-      return #"#available"#
+      return "#available"
     case .poundElse:
-      return #"#else"#
+      return "#else"
     case .poundElseif:
-      return #"#elseif"#
+      return "#elseif"
     case .poundEndif:
-      return #"#endif"#
+      return "#endif"
     case .poundIf:
-      return #"#if"#
+      return "#if"
     case .poundSourceLocation:
-      return #"#sourceLocation"#
+      return "#sourceLocation"
     case .poundUnavailable:
-      return #"#unavailable"#
+      return "#unavailable"
     case .prefixAmpersand:
-      return #"&"#
+      return "&"
     case .prefixOperator:
-      return #"prefix operator"#
+      return "prefix operator"
     case .rawStringDelimiter:
-      return #"raw string delimiter"#
+      return "raw string delimiter"
     case .regexLiteralPattern:
-      return #"regex pattern"#
+      return "regex pattern"
     case .regexSlash:
-      return #"/"#
+      return "/"
     case .rightAngle:
-      return #">"#
+      return ">"
     case .rightBrace:
-      return #"}"#
+      return "}"
     case .rightParen:
-      return #")"#
+      return ")"
     case .rightSquare:
-      return #"]"#
+      return "]"
     case .semicolon:
-      return #";"#
+      return ";"
     case .singleQuote:
-      return #"'"#
+      return "'"
     case .stringQuote:
       return #"""#
     case .stringSegment:
-      return #"string segment"#
+      return "string segment"
     case .unknown:
-      return #"token"#
+      return "token"
     case .wildcard:
-      return #"wildcard"#
+      return "wildcard"
     case .keyword(let keyword):
       return String(syntaxText: keyword.defaultText)
     }

@@ -5650,37 +5650,37 @@ extension PackExpansionTypeSyntax {
 }
 
 extension PatternBindingSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenInitializerAndAccessors")
+  @available(*, deprecated, renamed: "unexpectedBetweenInitializerAndAccessorBlock")
   public var unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenInitializerAndAccessors
+      return unexpectedBetweenInitializerAndAccessorBlock
     }
     set {
-      unexpectedBetweenInitializerAndAccessors = newValue
+      unexpectedBetweenInitializerAndAccessorBlock = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "accessors")
-  public var accessor: Accessors? {
+  @available(*, deprecated, renamed: "accessorBlock")
+  public var accessor: AccessorBlockSyntax? {
     get {
-      return accessors
+      return accessorBlock
     }
     set {
-      accessors = newValue
+      accessorBlock = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenAccessorsAndTrailingComma")
+  @available(*, deprecated, renamed: "unexpectedBetweenAccessorBlockAndTrailingComma")
   public var unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenAccessorsAndTrailingComma
+      return unexpectedBetweenAccessorBlockAndTrailingComma
     }
     set {
-      unexpectedBetweenAccessorsAndTrailingComma = newValue
+      unexpectedBetweenAccessorBlockAndTrailingComma = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessors argument(s).")
+  @available(*, deprecated, message: "Use an initializer with accessorBlock argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5691,7 +5691,7 @@ extension PatternBindingSyntax {
       _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: InitializerClauseSyntax? = nil,
       _ unexpectedBetweenInitializerAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessors? = nil,
+      accessor: AccessorBlockSyntax? = nil,
       _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -5707,7 +5707,7 @@ extension PatternBindingSyntax {
         unexpectedBetweenTypeAnnotationAndInitializer, 
         initializer: initializer, 
         unexpectedBetweenInitializerAndAccessor, 
-        accessors: accessor, 
+        accessorBlock: accessor, 
         unexpectedBetweenAccessorAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
@@ -7547,37 +7547,37 @@ extension SubscriptDeclSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenGenericWhereClauseAndAccessors")
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericWhereClauseAndAccessorBlock")
   public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenGenericWhereClauseAndAccessors
+      return unexpectedBetweenGenericWhereClauseAndAccessorBlock
     }
     set {
-      unexpectedBetweenGenericWhereClauseAndAccessors = newValue
+      unexpectedBetweenGenericWhereClauseAndAccessorBlock = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "accessors")
-  public var accessor: Accessors? {
+  @available(*, deprecated, renamed: "accessorBlock")
+  public var accessor: AccessorBlockSyntax? {
     get {
-      return accessors
+      return accessorBlock
     }
     set {
-      accessors = newValue
+      accessorBlock = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterAccessors")
+  @available(*, deprecated, renamed: "unexpectedAfterAccessorBlock")
   public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterAccessors
+      return unexpectedAfterAccessorBlock
     }
     set {
-      unexpectedAfterAccessors = newValue
+      unexpectedAfterAccessorBlock = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, accessors argument(s).")
+  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, accessorBlock argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7596,7 +7596,7 @@ extension SubscriptDeclSyntax {
       _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessors? = nil,
+      accessor: AccessorBlockSyntax? = nil,
       _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7618,7 +7618,7 @@ extension SubscriptDeclSyntax {
         unexpectedBetweenResultAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndAccessor, 
-        accessors: accessor, 
+        accessorBlock: accessor, 
         unexpectedAfterAccessor, 
         trailingTrivia: trailingTrivia
       )

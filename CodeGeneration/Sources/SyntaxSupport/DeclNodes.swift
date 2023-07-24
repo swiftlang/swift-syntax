@@ -57,7 +57,16 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Accessors",
-        kind: .collection(kind: .accessorDeclList, collectionElementName: "Accessor")
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "Accessors",
+            kind: .collection(kind: .accessorDeclList, collectionElementName: "Accessor")
+          ),
+          Child(
+            name: "Getter",
+            kind: .node(kind: .codeBlockItemList)
+          ),
+        ])
       ),
       Child(
         name: "RightBrace",
@@ -1630,18 +1639,9 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Accessors",
+        name: "AccessorBlock",
         deprecatedName: "Accessor",
-        kind: .nodeChoices(choices: [
-          Child(
-            name: "Accessors",
-            kind: .node(kind: .accessorBlock)
-          ),
-          Child(
-            name: "Getter",
-            kind: .node(kind: .codeBlock)
-          ),
-        ]),
+        kind: .node(kind: .accessorBlock),
         isOptional: true
       ),
       Child(
@@ -2191,18 +2191,9 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Accessors",
+        name: "AccessorBlock",
         deprecatedName: "Accessor",
-        kind: .nodeChoices(choices: [
-          Child(
-            name: "Accessors",
-            kind: .node(kind: .accessorBlock)
-          ),
-          Child(
-            name: "Getter",
-            kind: .node(kind: .codeBlock)
-          ),
-        ]),
+        kind: .node(kind: .accessorBlock),
         isOptional: true
       ),
     ]

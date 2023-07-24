@@ -285,12 +285,10 @@ final class BasicFormatTest: XCTestCase {
             colon: .colonToken(trailingTrivia: .space),
             type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))
           ),
-          accessors: PatternBindingSyntax.Accessors(
-            AccessorBlockSyntax(
-              leftBrace: .leftBraceToken(leadingTrivia: .space),
-              accessors: AccessorDeclListSyntax([]),
-              rightBrace: .rightBraceToken(leadingTrivia: .newline)
-            )
+          accessorBlock: AccessorBlockSyntax(
+            leftBrace: .leftBraceToken(leadingTrivia: .space),
+            accessors: .accessors(AccessorListSyntax([])),
+            rightBrace: .rightBraceToken(leadingTrivia: .newline)
           )
         )
       ])

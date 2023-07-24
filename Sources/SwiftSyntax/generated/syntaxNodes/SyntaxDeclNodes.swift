@@ -6288,50 +6288,8 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
+///  - `accessorBlock`: ``AccessorBlockSyntax``?
 public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
-  public enum Accessors: SyntaxChildChoices, SyntaxHashable {
-    case `accessors`(AccessorBlockSyntax)
-    case `getter`(CodeBlockSyntax)
-    
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .accessors(let node):
-        return node._syntaxNode
-      case .getter(let node):
-        return node._syntaxNode
-      }
-    }
-    
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
-    }
-    
-    public init(_ node: AccessorBlockSyntax) {
-      self = .accessors(node)
-    }
-    
-    public init(_ node: CodeBlockSyntax) {
-      self = .getter(node)
-    }
-    
-    public init?(_ node: some SyntaxProtocol) {
-      if let node = node.as(AccessorBlockSyntax.self) {
-        self = .accessors(node)
-        return
-      }
-      if let node = node.as(CodeBlockSyntax.self) {
-        self = .getter(node)
-        return
-      }
-      return nil
-    }
-    
-    public static var structure: SyntaxNodeStructure {
-      return .choices([.node(AccessorBlockSyntax.self), .node(CodeBlockSyntax.self)])
-    }
-  }
-  
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -6370,9 +6328,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       returnClause: ReturnClauseSyntax,
       _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
-      _ unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? = nil,
-      accessors: Accessors? = nil,
-      _ unexpectedAfterAccessors: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? = nil,
+      accessorBlock: AccessorBlockSyntax? = nil,
+      _ unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6393,9 +6351,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             returnClause, 
             unexpectedBetweenReturnClauseAndGenericWhereClause, 
             genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndAccessors, 
-            accessors, 
-            unexpectedAfterAccessors
+            unexpectedBetweenGenericWhereClauseAndAccessorBlock, 
+            accessorBlock, 
+            unexpectedAfterAccessorBlock
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -6412,9 +6370,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           returnClause.raw, 
           unexpectedBetweenReturnClauseAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndAccessors?.raw, 
-          accessors?.raw, 
-          unexpectedAfterAccessors?.raw
+          unexpectedBetweenGenericWhereClauseAndAccessorBlock?.raw, 
+          accessorBlock?.raw, 
+          unexpectedAfterAccessorBlock?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.subscriptDecl,
@@ -6605,7 +6563,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericWhereClauseAndAccessors: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6614,16 +6572,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessors: Accessors? {
+  public var accessorBlock: AccessorBlockSyntax? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(Accessors.init)
+      return data.child(at: 15, parent: Syntax(self)).map(AccessorBlockSyntax.init)
     }
     set(value) {
       self = SubscriptDeclSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterAccessors: UnexpectedNodesSyntax? {
+  public var unexpectedAfterAccessorBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6648,9 +6606,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.returnClause, 
           \Self.unexpectedBetweenReturnClauseAndGenericWhereClause, 
           \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndAccessors, 
-          \Self.accessors, 
-          \Self.unexpectedAfterAccessors
+          \Self.unexpectedBetweenGenericWhereClauseAndAccessorBlock, 
+          \Self.accessorBlock, 
+          \Self.unexpectedAfterAccessorBlock
         ])
   }
 }

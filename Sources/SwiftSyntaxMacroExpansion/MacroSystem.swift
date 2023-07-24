@@ -343,13 +343,11 @@ class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         visitedVarDecl.bindings.with(
           \.[visitedVarDecl.bindings.startIndex],
           binding.with(
-            \.accessors,
-            .accessors(
-              .init(
-                leftBrace: .leftBraceToken(leadingTrivia: .space),
-                accessors: .init(accessors),
-                rightBrace: .rightBraceToken(leadingTrivia: .newline)
-              )
+            \.accessorBlock,
+            AccessorBlockSyntax(
+              leftBrace: .leftBraceToken(leadingTrivia: .space),
+              accessors: .accessors(.init(accessors)),
+              rightBrace: .rightBraceToken(leadingTrivia: .newline)
             )
           )
         )

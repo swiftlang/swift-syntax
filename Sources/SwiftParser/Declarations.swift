@@ -1149,7 +1149,7 @@ extension Parser {
     }
 
     // Parse getter and setter.
-    let accessor: RawSubscriptDeclSyntax.Accessors?
+    let accessor: RawAccessorBlockSyntax?
     if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
       accessor = self.parseGetSet()
     } else {
@@ -1166,7 +1166,7 @@ extension Parser {
       parameterClause: parameterClause,
       returnClause: returnClause,
       genericWhereClause: genericWhereClause,
-      accessors: accessor,
+      accessorBlock: accessor,
       arena: self.arena
     )
   }
@@ -1263,14 +1263,9 @@ extension Parser {
           initializer = nil
         }
 
-        let accessors: RawPatternBindingSyntax.Accessors?
+        let accessors: RawAccessorBlockSyntax?
         if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil && !self.at(.keyword(.`init`))) {
-          switch self.parseGetSet() {
-          case .accessors(let parsedAccessors):
-            accessors = .accessors(parsedAccessors)
-          case .getter(let getter):
-            accessors = .getter(getter)
-          }
+          accessors = self.parseGetSet()
         } else {
           accessors = nil
         }
@@ -1281,7 +1276,7 @@ extension Parser {
             pattern: pattern,
             typeAnnotation: typeAnnotation,
             initializer: initializer,
-            accessors: accessors,
+            accessorBlock: accessors,
             trailingComma: keepGoing,
             arena: self.arena
           )
@@ -1413,7 +1408,7 @@ extension Parser {
 
   /// Parse the body of a variable declaration. This can include explicit
   /// getters, setters, and observers, or the body of a computed property.
-  mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessors {
+  mutating func parseGetSet() -> RawAccessorBlockSyntax {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax
@@ -1432,28 +1427,24 @@ extension Parser {
       let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
 
       let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-      return .getter(
-        RawCodeBlockSyntax(
-          unexpectedBeforeLBrace,
-          leftBrace: lbrace,
-          statements: body,
-          unexpectedBeforeRBrace,
-          rightBrace: rbrace,
-          arena: self.arena
-        )
-      )
-    }
-
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-    return .accessors(
-      RawAccessorBlockSyntax(
+      return RawAccessorBlockSyntax(
         unexpectedBeforeLBrace,
         leftBrace: lbrace,
-        accessors: accessorList,
+        accessors: .getter(body),
         unexpectedBeforeRBrace,
         rightBrace: rbrace,
         arena: self.arena
       )
+    }
+
+    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    return RawAccessorBlockSyntax(
+      unexpectedBeforeLBrace,
+      leftBrace: lbrace,
+      accessors: .accessors(accessorList),
+      unexpectedBeforeRBrace,
+      rightBrace: rbrace,
+      arena: self.arena
     )
   }
 }

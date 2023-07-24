@@ -354,7 +354,7 @@ public func collapse<Node: SyntaxProtocol>(
   if role == .accessor,
     let varDecl = declarationNode.as(VariableDeclSyntax.self),
     let binding = varDecl.bindings.first,
-    binding.accessors == nil
+    binding.accessorBlock == nil
   {
     let indentation = String(repeating: " ", count: 4)
 

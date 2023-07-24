@@ -286,6 +286,7 @@ public struct ClosureShorthandParameterListSyntax: SyntaxCollection, SyntaxHasha
 ///
 /// ### Contained in
 /// 
+///  - ``AccessorBlockSyntax``.``AccessorBlockSyntax/accessors``
 ///  - ``ClosureExprSyntax``.``ClosureExprSyntax/statements``
 ///  - ``CodeBlockSyntax``.``CodeBlockSyntax/statements``
 ///  - ``IfConfigClauseSyntax``.``IfConfigClauseSyntax/elements``

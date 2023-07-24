@@ -252,7 +252,7 @@ extension PropertyWrapper: AccessorMacro {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
       let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-      binding.accessors == nil
+      binding.accessorBlock == nil
     else {
       return []
     }
@@ -287,7 +287,7 @@ extension PropertyWrapper: PeerMacro {
       let binding = varDecl.bindings.first,
       let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
       let type = binding.typeAnnotation?.type,
-      binding.accessors == nil
+      binding.accessorBlock == nil
     else {
       return []
     }
@@ -497,11 +497,11 @@ public struct WrapStoredProperties: MemberAttributeMacro {
     }
 
     let binding = property.bindings.first!
-    switch binding.accessors {
+    switch binding.accessorBlock?.accessors {
     case .none:
       break
-    case .accessors(let node):
-      for accessor in node.accessors {
+    case .accessors(let accessorList):
+      for accessor in accessorList {
         switch accessor.accessorSpecifier.tokenKind {
         case .keyword(.get), .keyword(.set):
           return []
@@ -579,7 +579,7 @@ extension CustomTypeWrapperMacro: AccessorMacro {
     guard let property = declaration.as(VariableDeclSyntax.self),
       let binding = property.bindings.first,
       let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
-      binding.accessors == nil
+      binding.accessorBlock == nil
     else {
       return []
     }

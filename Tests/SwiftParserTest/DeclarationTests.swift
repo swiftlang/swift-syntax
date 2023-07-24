@@ -1011,11 +1011,13 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         AccessorBlockSyntax(
-          accessors: AccessorDeclListSyntax([
-            AccessorDeclSyntax(
-              accessorSpecifier: .keyword(.get)
-            )
-          ]),
+          accessors: .accessors(
+            AccessorListSyntax([
+              AccessorDeclSyntax(
+                accessorSpecifier: .keyword(.get)
+              )
+            ])
+          ),
           UnexpectedNodesSyntax([
             TokenSyntax.identifier("bogus"), TokenSyntax.keyword(.rethrows),
             TokenSyntax.identifier("set"),

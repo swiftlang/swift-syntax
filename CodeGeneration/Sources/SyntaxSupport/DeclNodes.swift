@@ -36,7 +36,7 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .importPath,
+    kind: .importPathComponentList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.importPathComponent]
@@ -1246,7 +1246,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Path",
-        kind: .collection(kind: .importPath, collectionElementName: "PathComponent"),
+        kind: .collection(kind: .importPathComponentList, collectionElementName: "PathComponent"),
         documentation: "The path to the module, submodule or symbol being imported."
       ),
     ]

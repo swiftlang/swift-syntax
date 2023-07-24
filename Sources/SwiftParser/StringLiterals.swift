@@ -164,7 +164,7 @@ extension Parser {
   private func reclassifyNewlineOfLastSegmentAsTrivia(
     rawStringDelimitersToken: RawTokenSyntax?,
     openQuoteHasTrailingNewline: Bool,
-    middleSegments: inout [RawStringLiteralSegmentsSyntax.Element]
+    middleSegments: inout [RawStringLiteralSegmentListSyntax.Element]
   ) -> Bool {
     switch middleSegments.last {
     case .stringSegment(let lastMiddleSegment):
@@ -229,7 +229,7 @@ extension Parser {
   /// attached to the string segment token.
   private func postProcessIndentationAndEscapedNewlineOfMiddleSegments(
     rawStringDelimitersToken: RawTokenSyntax?,
-    middleSegments: inout [RawStringLiteralSegmentsSyntax.Element],
+    middleSegments: inout [RawStringLiteralSegmentListSyntax.Element],
     isFirstSegmentOnNewLine: Bool,
     indentation: SyntaxText
   ) {
@@ -303,12 +303,12 @@ extension Parser {
   private func postProcessMultilineStringLiteral(
     rawStringDelimitersToken: RawTokenSyntax?,
     openQuote: RawTokenSyntax,
-    segments allSegments: [RawStringLiteralSegmentsSyntax.Element],
+    segments allSegments: [RawStringLiteralSegmentListSyntax.Element],
     closeQuote: RawTokenSyntax
   ) -> (
     unexpectedBeforeOpenQuote: [RawTokenSyntax],
     openQuote: RawTokenSyntax,
-    segments: [RawStringLiteralSegmentsSyntax.Element],
+    segments: [RawStringLiteralSegmentListSyntax.Element],
     unexpectedBeforeCloseQuote: [RawTokenSyntax],
     closeQuote: RawTokenSyntax
   ) {
@@ -485,7 +485,7 @@ extension Parser {
     }
 
     /// Parse segments.
-    var segments: [RawStringLiteralSegmentsSyntax.Element] = []
+    var segments: [RawStringLiteralSegmentListSyntax.Element] = []
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
       // If we encounter a token with leading trivia, we're no longer in the
@@ -574,7 +574,7 @@ extension Parser {
         openDelimiter: openDelimiter,
         RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, postProcessed.unexpectedBeforeOpenQuote, arena: self.arena),
         openQuote: postProcessed.openQuote,
-        segments: RawStringLiteralSegmentsSyntax(elements: postProcessed.segments, arena: self.arena),
+        segments: RawStringLiteralSegmentListSyntax(elements: postProcessed.segments, arena: self.arena),
         RawUnexpectedNodesSyntax(combining: postProcessed.unexpectedBeforeCloseQuote, unexpectedBeforeCloseQuote, arena: self.arena),
         closeQuote: postProcessed.closeQuote,
         unexpectedBeforeCloseDelimiter,
@@ -586,7 +586,7 @@ extension Parser {
         openDelimiter: openDelimiter,
         unexpectedBeforeOpenQuote,
         openQuote: openQuote,
-        segments: RawStringLiteralSegmentsSyntax(elements: segments, arena: self.arena),
+        segments: RawStringLiteralSegmentListSyntax(elements: segments, arena: self.arena),
         unexpectedBeforeCloseQuote,
         closeQuote: closeQuote,
         unexpectedBeforeCloseDelimiter,

@@ -383,19 +383,19 @@ public struct DifferentiabilityParamListSyntax: SyntaxCollection, SyntaxHashable
 /// ### Children
 /// 
 /// ``DocumentationAttributeArgumentSyntax`` `*`
-public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHashable {
+public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DocumentationAttributeArgumentSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .documentationAttributeArguments else {
+    guard node.raw.kind == .documentationAttributeArgumentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.documentationAttributeArguments
+  public static let syntaxKind = SyntaxKind.documentationAttributeArgumentList
 }
 
 /// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
@@ -403,19 +403,19 @@ public struct DocumentationAttributeArgumentsSyntax: SyntaxCollection, SyntaxHas
 /// ### Children
 /// 
 /// ``TokenSyntax`` `*`
-public struct EffectsArgumentsSyntax: SyntaxCollection, SyntaxHashable {
+public struct EffectsArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = TokenSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .effectsArguments else {
+    guard node.raw.kind == .effectsArgumentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.effectsArguments
+  public static let syntaxKind = SyntaxKind.effectsArgumentList
 }
 
 /// A collection of 0 or more `EnumCaseElement`s.
@@ -569,19 +569,19 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// ``ImportPathComponentSyntax`` `*`
-public struct ImportPathSyntax: SyntaxCollection, SyntaxHashable {
+public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ImportPathComponentSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .importPath else {
+    guard node.raw.kind == .importPathComponentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.importPath
+  public static let syntaxKind = SyntaxKind.importPathComponentList
 }
 
 /// ### Children
@@ -677,19 +677,19 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
 /// ### Children
 /// 
 /// ``ObjCSelectorPieceSyntax`` `*`
-public struct ObjCSelectorSyntax: SyntaxCollection, SyntaxHashable {
+public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = ObjCSelectorPieceSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .objCSelector else {
+    guard node.raw.kind == .objCSelectorPieceList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.objCSelector
+  public static let syntaxKind = SyntaxKind.objCSelectorPieceList
 }
 
 /// ### Children
@@ -908,7 +908,7 @@ public struct SpecializeAttributeSpecListSyntax: SyntaxCollection, SyntaxHashabl
 /// ### Children
 /// 
 /// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
-public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
+public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
     case `expressionSegment`(ExpressionSegmentSyntax)
@@ -956,13 +956,13 @@ public struct StringLiteralSegmentsSyntax: SyntaxCollection, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .stringLiteralSegments else {
+    guard node.raw.kind == .stringLiteralSegmentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.stringLiteralSegments
+  public static let syntaxKind = SyntaxKind.stringLiteralSegmentList
 }
 
 /// ### Children

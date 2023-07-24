@@ -13,12 +13,6 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-@available(*, deprecated, renamed: "ImportPathSyntax")
-public typealias AccessPathSyntax = ImportPathSyntax
-
-@available(*, deprecated, renamed: "ImportPathComponentSyntax")
-public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
-
 extension AttributeSyntax {
   @available(*, deprecated, renamed: "Arguments")
   public typealias Argument = Arguments

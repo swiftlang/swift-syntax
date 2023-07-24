@@ -107,12 +107,12 @@ public enum SyntaxKind: CaseIterable {
   case discardAssignmentExpr
   case discardStmt
   case doStmt
+  case documentationAttributeArgumentList
   case documentationAttributeArgument
-  case documentationAttributeArguments
   case dynamicReplacementArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case effectsArguments
+  case effectsArgumentList
   case enumCaseDecl
   case enumCaseElementList
   case enumCaseElement
@@ -156,8 +156,8 @@ public enum SyntaxKind: CaseIterable {
   case implementsAttributeArguments
   case implicitlyUnwrappedOptionalType
   case importDecl
+  case importPathComponentList
   case importPathComponent
-  case importPath
   case inOutExpr
   case infixOperatorExpr
   case inheritedTypeList
@@ -199,8 +199,8 @@ public enum SyntaxKind: CaseIterable {
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
   case nilLiteralExpr
+  case objCSelectorPieceList
   case objCSelectorPiece
-  case objCSelector
   case opaqueReturnTypeOfAttributeArguments
   case operatorDecl
   case operatorPrecedenceAndTypes
@@ -243,7 +243,7 @@ public enum SyntaxKind: CaseIterable {
   case specializeAttributeSpecList
   case specializeExpr
   case stringLiteralExpr
-  case stringLiteralSegments
+  case stringLiteralSegmentList
   case stringSegment
   case structDecl
   case subscriptDecl
@@ -332,9 +332,9 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .differentiabilityParamList:
       return true
-    case .documentationAttributeArguments:
+    case .documentationAttributeArgumentList:
       return true
-    case .effectsArguments:
+    case .effectsArgumentList:
       return true
     case .enumCaseElementList:
       return true
@@ -352,7 +352,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .ifConfigClauseList:
       return true
-    case .importPath:
+    case .importPathComponentList:
       return true
     case .inheritedTypeList:
       return true
@@ -364,7 +364,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .multipleTrailingClosureElementList:
       return true
-    case .objCSelector:
+    case .objCSelectorPieceList:
       return true
     case .patternBindingList:
       return true
@@ -376,7 +376,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .specializeAttributeSpecList:
       return true
-    case .stringLiteralSegments:
+    case .stringLiteralSegmentList:
       return true
     case .switchCaseList:
       return true
@@ -604,18 +604,18 @@ public enum SyntaxKind: CaseIterable {
       return DiscardStmtSyntax.self
     case .doStmt:
       return DoStmtSyntax.self
+    case .documentationAttributeArgumentList:
+      return DocumentationAttributeArgumentListSyntax.self
     case .documentationAttributeArgument:
       return DocumentationAttributeArgumentSyntax.self
-    case .documentationAttributeArguments:
-      return DocumentationAttributeArgumentsSyntax.self
     case .dynamicReplacementArguments:
       return DynamicReplacementArgumentsSyntax.self
     case .editorPlaceholderDecl:
       return EditorPlaceholderDeclSyntax.self
     case .editorPlaceholderExpr:
       return EditorPlaceholderExprSyntax.self
-    case .effectsArguments:
-      return EffectsArgumentsSyntax.self
+    case .effectsArgumentList:
+      return EffectsArgumentListSyntax.self
     case .enumCaseDecl:
       return EnumCaseDeclSyntax.self
     case .enumCaseElementList:
@@ -702,10 +702,10 @@ public enum SyntaxKind: CaseIterable {
       return ImplicitlyUnwrappedOptionalTypeSyntax.self
     case .importDecl:
       return ImportDeclSyntax.self
+    case .importPathComponentList:
+      return ImportPathComponentListSyntax.self
     case .importPathComponent:
       return ImportPathComponentSyntax.self
-    case .importPath:
-      return ImportPathSyntax.self
     case .inOutExpr:
       return InOutExprSyntax.self
     case .infixOperatorExpr:
@@ -788,10 +788,10 @@ public enum SyntaxKind: CaseIterable {
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr:
       return NilLiteralExprSyntax.self
+    case .objCSelectorPieceList:
+      return ObjCSelectorPieceListSyntax.self
     case .objCSelectorPiece:
       return ObjCSelectorPieceSyntax.self
-    case .objCSelector:
-      return ObjCSelectorSyntax.self
     case .opaqueReturnTypeOfAttributeArguments:
       return OpaqueReturnTypeOfAttributeArgumentsSyntax.self
     case .operatorDecl:
@@ -876,8 +876,8 @@ public enum SyntaxKind: CaseIterable {
       return SpecializeExprSyntax.self
     case .stringLiteralExpr:
       return StringLiteralExprSyntax.self
-    case .stringLiteralSegments:
-      return StringLiteralSegmentsSyntax.self
+    case .stringLiteralSegmentList:
+      return StringLiteralSegmentListSyntax.self
     case .stringSegment:
       return StringSegmentSyntax.self
     case .structDecl:

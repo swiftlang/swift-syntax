@@ -97,6 +97,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes.swift"], rawSyntaxNodesFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["RenamedChildrenCompatibility.swift"], renamedChildrenCompatibilityFile),
+        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["RenamedNodesCompatibility.swift"], renamedSyntaxNodesFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxAnyVisitor.swift"], syntaxAnyVisitorFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxBaseNodes.swift"], syntaxBaseNodesFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxCollections.swift"], syntaxCollectionsFile),

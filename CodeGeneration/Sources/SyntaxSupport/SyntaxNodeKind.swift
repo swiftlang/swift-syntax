@@ -114,11 +114,11 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case discardStmt
   case doStmt
   case documentationAttributeArgument
-  case documentationAttributeArguments
+  case documentationAttributeArgumentList
   case dynamicReplacementArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case effectsArguments
+  case effectsArgumentList
   case enumCaseDecl
   case enumCaseElementList
   case enumCaseElement
@@ -164,7 +164,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case implicitlyUnwrappedOptionalType
   case importDecl
   case importPathComponent
-  case importPath
+  case importPathComponentList
   case inOutExpr
   case infixOperatorExpr
   case inheritedTypeList
@@ -207,7 +207,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case namedOpaqueReturnType
   case nilLiteralExpr
   case objCSelectorPiece
-  case objCSelector
+  case objCSelectorPieceList
   case opaqueReturnTypeOfAttributeArguments
   case operatorDecl
   case operatorPrecedenceAndTypes
@@ -252,7 +252,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case specializeExpr
   case stmt
   case stringLiteralExpr
-  case stringLiteralSegments
+  case stringLiteralSegmentList
   case stringSegment
   case structDecl
   case subscriptDecl
@@ -367,6 +367,25 @@ public enum SyntaxNodeKind: String, CaseIterable {
       return "RawSyntaxNodeProtocol"
     default:
       return "Raw\(raw: rawValue.withFirstCharacterUppercased)SyntaxNodeProtocol"
+    }
+  }
+
+  public var deprecatedRawValue: String? {
+    switch self {
+    case .importPathComponentList:
+      return "accessPath"
+    case .importPathComponent:
+      return "accessPathComponent"
+    case .documentationAttributeArgumentList:
+      return "documentationAttributeArguments"
+    case .effectsArgumentList:
+      return "effectsArguments"
+    case .objCSelectorPieceList:
+      return "objCSelector"
+    case .stringLiteralSegmentList:
+      return "stringLiteralSegments"
+    default:
+      return nil
     }
   }
 }

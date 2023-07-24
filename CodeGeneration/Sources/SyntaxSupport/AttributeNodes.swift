@@ -80,7 +80,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "ObjCName",
-            kind: .node(kind: .objCSelector)
+            kind: .node(kind: .objCSelectorPieceList)
           ),
           Child(
             name: "ImplementsArguments",
@@ -132,11 +132,11 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "EffectsArguments",
-            kind: .node(kind: .effectsArguments)
+            kind: .node(kind: .effectsArgumentList)
           ),
           Child(
             name: "DocumentationArguments",
-            kind: .node(kind: .documentationAttributeArguments)
+            kind: .node(kind: .documentationAttributeArgumentList)
           ),
         ]),
         documentation: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
@@ -562,7 +562,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .documentationAttributeArguments,
+    kind: .documentationAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "@_documentation arguments",
     documentation: "The arguments of the '@_documentation' attribute",
@@ -592,7 +592,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .effectsArguments,
+    kind: .effectsArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "@_effects arguments",
     documentation: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
@@ -719,7 +719,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // objc-selector -> objc-selector-piece objc-selector?
   Node(
-    kind: .objCSelector,
+    kind: .objCSelectorPieceList,
     base: .syntaxCollection,
     nameForDiagnostics: "Objective-C selector",
     elementChoices: [.objCSelectorPiece]

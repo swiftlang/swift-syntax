@@ -29,7 +29,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
       let builder = StringLiteralExprSyntax(
         leadingTrivia: leadingTrivia,
         openQuote: .stringQuoteToken(),
-        segments: StringLiteralSegmentsSyntax([.stringSegment(segment)]),
+        segments: StringLiteralSegmentListSyntax([.stringSegment(segment)]),
         closeQuote: .stringQuoteToken()
       )
 
@@ -223,7 +223,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
   }
 
   func testStringLiteralSegmentWithCode() {
-    let buildable = StringLiteralSegmentsSyntax {
+    let buildable = StringLiteralSegmentListSyntax {
       StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
       StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
       StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
@@ -244,7 +244,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
   func testMultiLineStringWithResultBuilder() {
     let buildable = StringLiteralExprSyntax(
       openQuote: .multilineStringQuoteToken(),
-      segments: StringLiteralSegmentsSyntax {
+      segments: StringLiteralSegmentListSyntax {
         StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
@@ -366,7 +366,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
     assertBuildResult(
       StringLiteralExprSyntax(
         openQuote: .multilineStringQuoteToken(),
-        segments: StringLiteralSegmentsSyntax {
+        segments: StringLiteralSegmentListSyntax {
           .expressionSegment(
             ExpressionSegmentSyntax(
               expressions: TupleExprElementListSyntax {

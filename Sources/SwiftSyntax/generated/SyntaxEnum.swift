@@ -107,12 +107,12 @@ public enum SyntaxEnum {
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
   case discardStmt(DiscardStmtSyntax)
   case doStmt(DoStmtSyntax)
+  case documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax)
   case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
-  case documentationAttributeArguments(DocumentationAttributeArgumentsSyntax)
   case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
   case editorPlaceholderDecl(EditorPlaceholderDeclSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
-  case effectsArguments(EffectsArgumentsSyntax)
+  case effectsArgumentList(EffectsArgumentListSyntax)
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumCaseElementList(EnumCaseElementListSyntax)
   case enumCaseElement(EnumCaseElementSyntax)
@@ -156,8 +156,8 @@ public enum SyntaxEnum {
   case implementsAttributeArguments(ImplementsAttributeArgumentsSyntax)
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
   case importDecl(ImportDeclSyntax)
+  case importPathComponentList(ImportPathComponentListSyntax)
   case importPathComponent(ImportPathComponentSyntax)
-  case importPath(ImportPathSyntax)
   case inOutExpr(InOutExprSyntax)
   case infixOperatorExpr(InfixOperatorExprSyntax)
   case inheritedTypeList(InheritedTypeListSyntax)
@@ -199,8 +199,8 @@ public enum SyntaxEnum {
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case nilLiteralExpr(NilLiteralExprSyntax)
+  case objCSelectorPieceList(ObjCSelectorPieceListSyntax)
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
-  case objCSelector(ObjCSelectorSyntax)
   case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
   case operatorDecl(OperatorDeclSyntax)
   case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
@@ -243,7 +243,7 @@ public enum SyntaxEnum {
   case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
   case specializeExpr(SpecializeExprSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
-  case stringLiteralSegments(StringLiteralSegmentsSyntax)
+  case stringLiteralSegmentList(StringLiteralSegmentListSyntax)
   case stringSegment(StringSegmentSyntax)
   case structDecl(StructDeclSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
@@ -485,18 +485,18 @@ public extension Syntax {
       return .discardStmt(DiscardStmtSyntax(self)!)
     case .doStmt:
       return .doStmt(DoStmtSyntax(self)!)
+    case .documentationAttributeArgumentList:
+      return .documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax(self)!)
     case .documentationAttributeArgument:
       return .documentationAttributeArgument(DocumentationAttributeArgumentSyntax(self)!)
-    case .documentationAttributeArguments:
-      return .documentationAttributeArguments(DocumentationAttributeArgumentsSyntax(self)!)
     case .dynamicReplacementArguments:
       return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
     case .editorPlaceholderDecl:
       return .editorPlaceholderDecl(EditorPlaceholderDeclSyntax(self)!)
     case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
-    case .effectsArguments:
-      return .effectsArguments(EffectsArgumentsSyntax(self)!)
+    case .effectsArgumentList:
+      return .effectsArgumentList(EffectsArgumentListSyntax(self)!)
     case .enumCaseDecl:
       return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
     case .enumCaseElementList:
@@ -583,10 +583,10 @@ public extension Syntax {
       return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
     case .importDecl:
       return .importDecl(ImportDeclSyntax(self)!)
+    case .importPathComponentList:
+      return .importPathComponentList(ImportPathComponentListSyntax(self)!)
     case .importPathComponent:
       return .importPathComponent(ImportPathComponentSyntax(self)!)
-    case .importPath:
-      return .importPath(ImportPathSyntax(self)!)
     case .inOutExpr:
       return .inOutExpr(InOutExprSyntax(self)!)
     case .infixOperatorExpr:
@@ -669,10 +669,10 @@ public extension Syntax {
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
+    case .objCSelectorPieceList:
+      return .objCSelectorPieceList(ObjCSelectorPieceListSyntax(self)!)
     case .objCSelectorPiece:
       return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
-    case .objCSelector:
-      return .objCSelector(ObjCSelectorSyntax(self)!)
     case .opaqueReturnTypeOfAttributeArguments:
       return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
     case .operatorDecl:
@@ -757,8 +757,8 @@ public extension Syntax {
       return .specializeExpr(SpecializeExprSyntax(self)!)
     case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
-    case .stringLiteralSegments:
-      return .stringLiteralSegments(StringLiteralSegmentsSyntax(self)!)
+    case .stringLiteralSegmentList:
+      return .stringLiteralSegmentList(StringLiteralSegmentListSyntax(self)!)
     case .stringSegment:
       return .stringSegment(StringSegmentSyntax(self)!)
     case .structDecl:

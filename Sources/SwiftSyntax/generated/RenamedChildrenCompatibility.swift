@@ -3593,7 +3593,7 @@ extension ImportDeclSyntax {
       _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
       importKind: TokenSyntax? = nil,
       _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
-      path: ImportPathSyntax,
+      path: ImportPathComponentListSyntax,
       _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     

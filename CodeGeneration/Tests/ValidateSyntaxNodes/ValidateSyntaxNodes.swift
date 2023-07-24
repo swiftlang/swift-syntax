@@ -138,6 +138,28 @@ class ValidateSyntaxNodes: XCTestCase {
     )
   }
 
+  func testSyntaxCollectionsShouldEndWithList() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.collectionNode) {
+      if !node.kind.syntaxType.description.hasSuffix("ListSyntax") {
+        failures.append(
+          ValidationFailure(
+            node: node.kind,
+            message: "is a collection but does not end with ListSyntax"
+          )
+        )
+      }
+    }
+
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        ValidationFailure(node: .unexpectedNodes, message: "is a collection but does not end with ListSyntax")
+      ]
+    )
+  }
+
   /// Implementation detail of `testSingleTokenChoiceChildNaming`, validating a single child.
   ///
   /// - Returns: A failure message if validation failed, otherwise `nil`

@@ -789,19 +789,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: DocumentationAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DocumentationAttributeArgumentListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: DocumentationAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: DocumentationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: DocumentationAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -829,11 +829,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: EffectsArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: EffectsArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: EffectsArgumentsSyntax) {
+  override open func visitPost(_ node: EffectsArgumentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1181,19 +1181,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ImportPathComponentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ImportPathComponentListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: ImportPathComponentSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ImportPathSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ImportPathSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1525,19 +1525,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ObjCSelectorPieceListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ObjCSelectorPieceListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: ObjCSelectorPieceSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ObjCSelectorSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ObjCSelectorSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1877,11 +1877,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: StringLiteralSegmentsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: StringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: StringLiteralSegmentsSyntax) {
+  override open func visitPost(_ node: StringLiteralSegmentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

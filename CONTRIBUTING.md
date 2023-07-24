@@ -5,7 +5,7 @@ If you are seeing issues, it is generally a good idea to re-try with the latest 
 
 ## Building
 
-The easiest option to build SwiftSyntax it to open it in Xcode. 
+The easiest option to build SwiftSyntax is to open it in Xcode. 
 
 Alternatively you can also build it from the command line using `build-script.py`. To do this, perform the following steps
 

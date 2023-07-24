@@ -14,6 +14,8 @@
 
 import SwiftSyntax
 
+extension AccessorBlockSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
@@ -45,3 +47,11 @@ extension StmtSyntax: SyntaxExpressibleByStringInterpolation {}
 extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension AccessorDeclListSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension AttributeListSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension CodeBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
+
+extension MemberBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}

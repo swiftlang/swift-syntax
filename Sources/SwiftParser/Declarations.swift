@@ -712,12 +712,8 @@ extension Parser {
     return result
   }
 
-  /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
-  /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
-  /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
+  mutating func parseMemberDeclList() -> RawMemberBlockItemListSyntax {
     var elements = [RawMemberBlockItemSyntax]()
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
@@ -739,13 +735,16 @@ extension Parser {
         elements.append(newElement)
       }
     }
+    return RawMemberBlockItemListSyntax(elements: elements, arena: self.arena)
+  }
+
+  /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
+  /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
+  /// indented to close this code block or a surrounding context. See `expectRightBrace`.
+  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let members = parseMemberDeclList()
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
-    let members: RawMemberBlockItemListSyntax
-    if elements.isEmpty && (lbrace.isMissing || rbrace.isMissing) {
-      members = RawMemberBlockItemListSyntax(elements: [], arena: self.arena)
-    } else {
-      members = RawMemberBlockItemListSyntax(elements: elements, arena: self.arena)
-    }
 
     return RawMemberBlockSyntax(
       unexpectedBeforeLBrace,
@@ -1354,7 +1353,7 @@ extension Parser {
   }
 
   /// Parse an accessor once we know we have an introducer
-  private mutating func parseAccessorDecl(
+  mutating func parseAccessorDecl(
     introducer: AccessorIntroducer
   ) -> RawAccessorDeclSyntax {
     // 'set' and 'willSet' can have an optional name.  This isn't valid in a
@@ -1392,6 +1391,26 @@ extension Parser {
     )
   }
 
+  mutating func parseAccessorList() -> RawAccessorDeclListSyntax? {
+    // Collect all explicit accessors to a list.
+    var elements = [RawAccessorDeclSyntax]()
+    do {
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
+        guard let introducer = self.parseAccessorIntroducer() else {
+          break
+        }
+
+        elements.append(parseAccessorDecl(introducer: introducer))
+      }
+    }
+    if elements.isEmpty {
+      return nil
+    } else {
+      return RawAccessorDeclListSyntax(elements: elements, arena: self.arena)
+    }
+  }
+
   /// Parse the body of a variable declaration. This can include explicit
   /// getters, setters, and observers, or the body of a computed property.
   mutating func parseGetSet() -> RawSubscriptDeclSyntax.Accessors {
@@ -1404,45 +1423,25 @@ extension Parser {
     } else {
       (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     }
-    // Collect all explicit accessors to a list.
-    var elements = [RawAccessorDeclSyntax]()
-    do {
-      var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
-        guard let introducer = self.parseAccessorIntroducer() else {
-          // There can only be an implicit getter if no other accessors were
-          // seen before this one.
-          guard elements.isEmpty else {
-            let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-            return .accessors(
-              RawAccessorBlockSyntax(
-                unexpectedBeforeLBrace,
-                leftBrace: lbrace,
-                accessors: RawAccessorDeclListSyntax(elements: elements, arena: self.arena),
-                unexpectedBeforeRBrace,
-                rightBrace: rbrace,
-                arena: self.arena
-              )
-            )
-          }
 
-          let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+    let accessorList = parseAccessorList()
 
-          let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
-          return .getter(
-            RawCodeBlockSyntax(
-              unexpectedBeforeLBrace,
-              leftBrace: lbrace,
-              statements: body,
-              unexpectedBeforeRBrace,
-              rightBrace: rbrace,
-              arena: self.arena
-            )
-          )
-        }
+    // There can only be an implicit getter if no other accessors were
+    // seen before this one.
+    guard let accessorList else {
+      let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
 
-        elements.append(parseAccessorDecl(introducer: introducer))
-      }
+      let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+      return .getter(
+        RawCodeBlockSyntax(
+          unexpectedBeforeLBrace,
+          leftBrace: lbrace,
+          statements: body,
+          unexpectedBeforeRBrace,
+          rightBrace: rbrace,
+          arena: self.arena
+        )
+      )
     }
 
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -1450,7 +1449,7 @@ extension Parser {
       RawAccessorBlockSyntax(
         unexpectedBeforeLBrace,
         leftBrace: lbrace,
-        accessors: RawAccessorDeclListSyntax(elements: elements, arena: self.arena),
+        accessors: accessorList,
         unexpectedBeforeRBrace,
         rightBrace: rbrace,
         arena: self.arena

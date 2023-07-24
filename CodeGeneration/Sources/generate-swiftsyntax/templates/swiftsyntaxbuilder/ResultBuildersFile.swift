@@ -90,6 +90,11 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Add all the elements of `expression` to this result builder, effectively flattening them.
+        ///
+        /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+        ///   the elements are expressible by string interpolation. In that case we favor creating a
+        ///   single element from the string literal.
+        @_disfavoredOverload
         public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
           return expression.map { $0 }
         }

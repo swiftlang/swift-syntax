@@ -43,6 +43,11 @@ public struct AccessorDeclListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -123,6 +128,11 @@ public struct ArrayElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -218,6 +228,11 @@ public struct AttributeListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -298,6 +313,11 @@ public struct AvailabilityArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -381,6 +401,11 @@ public struct CatchClauseListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -461,6 +486,11 @@ public struct CatchItemListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -544,6 +574,11 @@ public struct ClosureCaptureListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -627,6 +662,11 @@ public struct ClosureParameterListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -710,6 +750,11 @@ public struct ClosureShorthandParameterListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -793,6 +838,11 @@ public struct CodeBlockItemListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -873,6 +923,11 @@ public struct CompositionTypeElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -953,6 +1008,11 @@ public struct ConditionElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1036,6 +1096,11 @@ public struct DeclModifierListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1116,6 +1181,11 @@ public struct DeclNameArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1196,6 +1266,11 @@ public struct DesignatedTypeListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1276,6 +1351,11 @@ public struct DictionaryElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1359,6 +1439,11 @@ public struct DifferentiabilityArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1442,6 +1527,11 @@ public struct DocumentationAttributeArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1525,6 +1615,11 @@ public struct EffectsAttributeArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1605,6 +1700,11 @@ public struct EnumCaseElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1688,6 +1788,11 @@ public struct EnumCaseParameterListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1771,6 +1876,11 @@ public struct ExprListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1851,6 +1961,11 @@ public struct FunctionParameterListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -1934,6 +2049,11 @@ public struct GenericArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2017,6 +2137,11 @@ public struct GenericParameterListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2100,6 +2225,11 @@ public struct GenericRequirementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2183,6 +2313,11 @@ public struct IfConfigClauseListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2263,6 +2398,11 @@ public struct ImportPathComponentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2343,6 +2483,11 @@ public struct InheritedTypeListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2426,6 +2571,11 @@ public struct KeyPathComponentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2506,6 +2656,11 @@ public struct LabeledExprListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2589,6 +2744,11 @@ public struct MemberBlockItemListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2669,6 +2829,11 @@ public struct MultipleTrailingClosureElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2749,6 +2914,11 @@ public struct ObjCSelectorPieceListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2829,6 +2999,11 @@ public struct PatternBindingListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -2912,6 +3087,11 @@ public struct PlatformVersionItemListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3013,6 +3193,11 @@ public struct PrecedenceGroupAttributeListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3093,6 +3278,11 @@ public struct PrecedenceGroupNameListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3176,6 +3366,11 @@ public struct PrimaryAssociatedTypeListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3283,6 +3478,11 @@ public struct SpecializeAttributeArgumentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3375,6 +3575,11 @@ public struct StringLiteralSegmentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3455,6 +3660,11 @@ public struct SwitchCaseItemListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3550,6 +3760,11 @@ public struct SwitchCaseListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3630,6 +3845,11 @@ public struct TuplePatternElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3713,6 +3933,11 @@ public struct TupleTypeElementListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3796,6 +4021,11 @@ public struct UnexpectedNodesBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3876,6 +4106,11 @@ public struct VersionComponentListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0
@@ -3956,6 +4191,11 @@ public struct YieldedExpressionListBuilder {
   }
   
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  ///
+  /// - Note: This overload is disfavored to resolve an ambiguity when both the final result and
+  ///   the elements are expressible by string interpolation. In that case we favor creating a
+  ///   single element from the string literal.
+  @_disfavoredOverload
   public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
     return expression.map {
       $0

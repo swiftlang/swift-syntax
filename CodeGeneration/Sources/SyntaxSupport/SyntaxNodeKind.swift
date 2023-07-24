@@ -369,4 +369,23 @@ public enum SyntaxNodeKind: String, CaseIterable {
       return "Raw\(raw: rawValue.withFirstCharacterUppercased)SyntaxNodeProtocol"
     }
   }
+
+  public var deprecatedRawValue: String? {
+    switch self {
+    case .importPathComponentList:
+      return "accessPath"
+    case .importPathComponent:
+      return "accessPathComponent"
+    case .documentationAttributeArgumentList:
+      return "documentationAttributeArguments"
+    case .effectsArgumentList:
+      return "effectsArguments"
+    case .objCSelectorPieceList:
+      return "objCSelector"
+    case .stringLiteralSegmentList:
+      return "stringLiteralSegments"
+    default:
+      return nil
+    }
+  }
 }

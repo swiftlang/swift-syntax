@@ -93,12 +93,10 @@ extension Parser {
 
     // Okay, let's look ahead and see if the next token is something that could
     // be in an arg label list...
-    let next = self.peek()
-
     // A close parenthesis, if empty lists are allowed.
-    let nextIsRParen = flags.contains(.zeroArgCompoundNames) && next.rawTokenKind == .rightParen
+    let nextIsRParen = flags.contains(.zeroArgCompoundNames) && peek(isAt: .rightParen)
     // An argument label.
-    let nextIsArgLabel = next.isArgumentLabel() || next.rawTokenKind == .colon
+    let nextIsArgLabel = peek().isArgumentLabel() || peek(isAt: .colon)
 
     guard nextIsRParen || nextIsArgLabel else {
       return nil
@@ -117,7 +115,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
         // Check to see if there is an argument label.
-        precondition(self.atArgumentLabel() && self.peek().rawTokenKind == .colon)
+        precondition(self.atArgumentLabel() && self.peek(isAt: .colon))
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(

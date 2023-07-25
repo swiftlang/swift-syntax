@@ -152,7 +152,7 @@ extension Parser {
       case (.star, _)?:
         entry = self.parseAvailabilitySpec()
       case (.identifier, let handle)?:
-        if self.peek().rawTokenKind == .comma {
+        if self.peek(isAt: .comma) {
           // An argument like `_iOS13Aligned` that isn't followed by a version.
           let version = self.eat(handle)
           entry = .token(version)

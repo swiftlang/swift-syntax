@@ -457,7 +457,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon {
+          } else if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek(isAt: .colon) {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {

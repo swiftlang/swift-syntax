@@ -252,8 +252,8 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case nil:
       if inMemberDeclList {
-        let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek().rawTokenKind.is(.colon, .equal, .comma)
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek().rawTokenKind.is(.identifier, .wildcard)
+        let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
+        let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
         if isProbablyVarDecl || isProbablyTupleDecl {
           return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
@@ -1036,7 +1036,7 @@ extension Parser {
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(.exclamationMark, .prefixAmpersand) {
       var name = self.currentToken.tokenText
-      if name.count > 1 && name.hasSuffix("<") && self.peek().rawTokenKind == .identifier {
+      if name.count > 1 && name.hasSuffix("<") && self.peek(isAt: .identifier) {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil
@@ -1121,7 +1121,7 @@ extension Parser {
     let (unexpectedBeforeSubscriptKeyword, subscriptKeyword) = self.eat(handle)
 
     let unexpectedName: RawTokenSyntax?
-    if self.at(.identifier) && self.peek().tokenText.hasPrefix("<") || self.peek().rawTokenKind == .leftParen {
+    if self.at(.identifier) && self.peek().tokenText.hasPrefix("<") || self.peek(isAt: .leftParen) {
       unexpectedName = self.consumeAnyToken()
     } else {
       unexpectedName = nil

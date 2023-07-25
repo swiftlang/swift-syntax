@@ -370,6 +370,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
     }
   }
 
+  /// If the syntax kind has been renamed, the previous raw value that is now
+  /// deprecated.
   public var deprecatedRawValue: String? {
     switch self {
     case .importPathComponentList:

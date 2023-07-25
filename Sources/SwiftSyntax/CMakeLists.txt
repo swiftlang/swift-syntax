@@ -40,6 +40,7 @@ add_swift_host_library(SwiftSyntax
   generated/ChildNameForKeyPath.swift
   generated/Keyword.swift
   generated/RenamedChildrenCompatibility.swift
+  generated/RenamedNodesCompatibility.swift
   generated/SyntaxAnyVisitor.swift
   generated/SyntaxBaseNodes.swift
   generated/SyntaxCollections.swift

@@ -198,5 +198,5 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecat
   if child.type.isBaseType && !child.kind.isNodeChoices {
     return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: childName))")
   }
-  return ExprSyntax("\(raw: childName)")
+  return ExprSyntax("\(raw: childName.backtickedIfNeeded)")
 }

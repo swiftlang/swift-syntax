@@ -52,7 +52,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! StructDeclSyntax(
       """
       @_spi(RawSyntax)
-      public struct \(node.kind.rawType): \(node.kind.isBase ? node.kind.rawProtocolType : node.base.rawProtocolType))
+      public struct \(node.kind.rawType): \(node.kind.isBase ? node.kind.rawProtocolType : node.base.rawProtocolType)
       """
     ) {
       for (name, choices) in node.childrenChoicesEnums {

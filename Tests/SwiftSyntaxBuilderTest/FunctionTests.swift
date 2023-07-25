@@ -186,11 +186,11 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             name: TokenSyntax.identifier("foo"),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {}
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: .identifier("String"))
+                type: IdentifierTypeSyntax(name: .identifier("String"))
               )
             ),
             bodyBuilder: {
@@ -210,14 +210,14 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: IdentifierTypeSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {
@@ -225,7 +225,7 @@ final class FunctionTests: XCTestCase {
                 expression: SequenceExprSyntax(
                   elements: ExprListSyntax {
                     IdentifierExprSyntax(identifier: .identifier("lhs"))
-                    BinaryOperatorExprSyntax(operator: .binaryOperator("<"))
+                    UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("<"))
                     IdentifierExprSyntax(identifier: .identifier("rhs"))
                   }
                 )
@@ -245,7 +245,7 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
@@ -254,7 +254,7 @@ final class FunctionTests: XCTestCase {
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: IdentifierTypeSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {
@@ -262,7 +262,7 @@ final class FunctionTests: XCTestCase {
                 expression: SequenceExprSyntax(
                   elements: ExprListSyntax {
                     ExprSyntax("(lhs1, lhs2)")
-                    BinaryOperatorExprSyntax(operator: .binaryOperator("<"))
+                    UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("<"))
                     ExprSyntax("(rhs1, rhs2)")
                   }
                 )

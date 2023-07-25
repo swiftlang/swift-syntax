@@ -96,17 +96,37 @@ extension AccessorDeclSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenAccessorSpecifierAndParameter")
+  @available(*, deprecated, renamed: "unexpectedBetweenAccessorSpecifierAndParameters")
   public var unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenAccessorSpecifierAndParameter
+      return unexpectedBetweenAccessorSpecifierAndParameters
     }
     set {
-      unexpectedBetweenAccessorSpecifierAndParameter = newValue
+      unexpectedBetweenAccessorSpecifierAndParameters = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessorSpecifier argument(s).")
+  @available(*, deprecated, renamed: "parameters")
+  public var parameter: AccessorParametersSyntax? {
+    get {
+      return parameters
+    }
+    set {
+      parameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndEffectSpecifiers")
+  public var unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParametersAndEffectSpecifiers
+    }
+    set {
+      unexpectedBetweenParametersAndEffectSpecifiers = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with accessorSpecifier, parameters argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -117,7 +137,7 @@ extension AccessorDeclSyntax {
       _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil,
       accessorKind: TokenSyntax,
       _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,
-      parameter: AccessorParameterSyntax? = nil,
+      parameter: AccessorParametersSyntax? = nil,
       _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil,
       _ unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil,
@@ -137,7 +157,7 @@ extension AccessorDeclSyntax {
         unexpectedBetweenModifierAndAccessorKind, 
         accessorSpecifier: accessorKind, 
         unexpectedBetweenAccessorKindAndParameter, 
-        parameter: parameter, 
+        parameters: parameter, 
         unexpectedBetweenParameterAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
         unexpectedBetweenEffectSpecifiersAndInitEffects, 
@@ -188,7 +208,7 @@ extension ActorDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
       actorKeyword: TokenSyntax = .keyword(.actor),
       _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -196,11 +216,11 @@ extension ActorDeclSyntax {
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberDeclBlockSyntax,
+      memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -417,61 +437,6 @@ extension ArrayTypeSyntax {
   }
 }
 
-extension ArrowExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndArrow")
-  public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenEffectSpecifiersAndArrow
-    }
-    set {
-      unexpectedBetweenEffectSpecifiersAndArrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "arrow")
-  public var arrowToken: TokenSyntax {
-    get {
-      return arrow
-    }
-    set {
-      arrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterArrow")
-  public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterArrow
-    }
-    set {
-      unexpectedAfterArrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with arrow argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
-      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
-      arrowToken: TokenSyntax = .arrowToken(),
-      _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeEffectSpecifiers, 
-        effectSpecifiers: effectSpecifiers, 
-        unexpectedBetweenEffectSpecifiersAndArrowToken, 
-        arrow: arrowToken, 
-        unexpectedAfterArrowToken, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension AsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenExpressionAndAsKeyword")
   public var unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? {
@@ -616,7 +581,7 @@ extension AssignmentExprSyntax {
   }
 }
 
-extension AssociatedtypeDeclSyntax {
+extension AssociatedTypeDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenAssociatedtypeKeywordAndName")
   public var unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
@@ -654,13 +619,13 @@ extension AssociatedtypeDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil,
       associatedtypeKeyword: TokenSyntax = .keyword(.associatedtype),
       _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
       _ unexpectedBetweenIdentifierAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: TypeInitializerClauseSyntax? = nil,
       _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
@@ -788,6 +753,61 @@ extension AttributeSyntax {
   }
 }
 
+extension AvailabilityArgumentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeArgument")
+  public var unexpectedBeforeEntry: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeArgument
+    }
+    set {
+      unexpectedBeforeArgument = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "argument")
+  public var entry: Argument {
+    get {
+      return argument
+    }
+    set {
+      argument = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentAndTrailingComma")
+  public var unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentAndTrailingComma
+    }
+    set {
+      unexpectedBetweenArgumentAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with argument argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEntry: UnexpectedNodesSyntax? = nil,
+      entry: Argument,
+      _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeEntry, 
+        argument: entry, 
+        unexpectedBetweenEntryAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension AvailabilityConditionSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndAvailabilityArguments")
   public var unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? {
@@ -800,7 +820,7 @@ extension AvailabilityConditionSyntax {
   }
   
   @available(*, deprecated, renamed: "availabilityArguments")
-  public var availabilitySpec: AvailabilitySpecListSyntax {
+  public var availabilitySpec: AvailabilityArgumentListSyntax {
     get {
       return availabilityArguments
     }
@@ -828,7 +848,7 @@ extension AvailabilityConditionSyntax {
       _ unexpectedBetweenAvailabilityKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndAvailabilitySpec: UnexpectedNodesSyntax? = nil,
-      availabilitySpec: AvailabilitySpecListSyntax,
+      availabilitySpec: AvailabilityArgumentListSyntax,
       _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -851,105 +871,7 @@ extension AvailabilityConditionSyntax {
   }
 }
 
-extension AvailabilityEntrySyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeAvailabilityLabel")
-  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBeforeAvailabilityLabel
-    }
-    set {
-      unexpectedBeforeAvailabilityLabel = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "availabilityLabel")
-  public var label: TokenSyntax {
-    get {
-      return availabilityLabel
-    }
-    set {
-      availabilityLabel = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenAvailabilityLabelAndColon")
-  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenAvailabilityLabelAndColon
-    }
-    set {
-      unexpectedBetweenAvailabilityLabelAndColon = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenColonAndAvailabilityArguments")
-  public var unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenColonAndAvailabilityArguments
-    }
-    set {
-      unexpectedBetweenColonAndAvailabilityArguments = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "availabilityArguments")
-  public var availabilityList: AvailabilitySpecListSyntax {
-    get {
-      return availabilityArguments
-    }
-    set {
-      availabilityArguments = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "addAvailabilityArgument")
-  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> AvailabilityEntrySyntax {
-    return addAvailabilityArgument(element)
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenAvailabilityArgumentsAndSemicolon")
-  public var unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenAvailabilityArgumentsAndSemicolon
-    }
-    set {
-      unexpectedBetweenAvailabilityArgumentsAndSemicolon = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with availabilityLabel, availabilityArguments argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax = .keyword(.availability),
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
-      availabilityList: AvailabilitySpecListSyntax,
-      _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
-      semicolon: TokenSyntax = .semicolonToken(),
-      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeLabel, 
-        availabilityLabel: label, 
-        unexpectedBetweenLabelAndColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndAvailabilityList, 
-        availabilityArguments: availabilityList, 
-        unexpectedBetweenAvailabilityListAndSemicolon, 
-        semicolon: semicolon, 
-        unexpectedAfterSemicolon, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension BackDeployedAttributeSpecListSyntax {
+extension BackDeployedAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenColonAndPlatforms")
   public var unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? {
     get {
@@ -961,7 +883,7 @@ extension BackDeployedAttributeSpecListSyntax {
   }
   
   @available(*, deprecated, renamed: "platforms")
-  public var versionList: AvailabilityVersionRestrictionListSyntax {
+  public var versionList: PlatformVersionItemListSyntax {
     get {
       return platforms
     }
@@ -971,7 +893,7 @@ extension BackDeployedAttributeSpecListSyntax {
   }
   
   @available(*, deprecated, renamed: "addPlatform")
-  public func addAvailability(_ element: AvailabilityVersionRestrictionListEntrySyntax) -> BackDeployedAttributeSpecListSyntax {
+  public func addAvailability(_ element: PlatformVersionItemSyntax) -> BackDeployedAttributeArgumentsSyntax {
     return addPlatform(element)
   }
   
@@ -994,7 +916,7 @@ extension BackDeployedAttributeSpecListSyntax {
       _ unexpectedBetweenBeforeLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
-      versionList: AvailabilityVersionRestrictionListSyntax,
+      versionList: PlatformVersionItemListSyntax,
       _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1008,57 +930,6 @@ extension BackDeployedAttributeSpecListSyntax {
         unexpectedBetweenColonAndVersionList, 
         platforms: versionList, 
         unexpectedAfterVersionList, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension BinaryOperatorExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeOperator")
-  public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBeforeOperator
-    }
-    set {
-      unexpectedBeforeOperator = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "operator")
-  public var operatorToken: TokenSyntax {
-    get {
-      return `operator`
-    }
-    set {
-      `operator` = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterOperator")
-  public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterOperator
-    }
-    set {
-      unexpectedAfterOperator = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
-      operatorToken: TokenSyntax,
-      _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeOperatorToken, 
-        operator: operatorToken, 
-        unexpectedAfterOperatorToken, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -1216,7 +1087,7 @@ extension ClassDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
       classKeyword: TokenSyntax = .keyword(.class),
       _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -1224,11 +1095,11 @@ extension ClassDeclSyntax {
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberDeclBlockSyntax,
+      memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -1257,7 +1128,7 @@ extension ClassDeclSyntax {
   }
 }
 
-extension ClosureCaptureItemSyntax {
+extension ClosureCaptureSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenNameAndEqual")
   public var unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? {
     get {
@@ -1293,7 +1164,7 @@ extension ClosureCaptureItemSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
-      specifier: ClosureCaptureItemSpecifierSyntax? = nil,
+      specifier: ClosureCaptureSpecifierSyntax? = nil,
       _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
       name: TokenSyntax? = nil,
       _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil,
@@ -1471,7 +1342,7 @@ extension ClosureSignatureSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
-      capture: ClosureCaptureSignatureSyntax? = nil,
+      capture: ClosureCaptureClauseSyntax? = nil,
       _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
       input: ParameterClause? = nil,
       _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
@@ -1593,6 +1464,61 @@ extension ConformanceRequirementSyntax {
   }
 }
 
+extension ConsumeExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeConsumeKeyword")
+  public var unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeConsumeKeyword
+    }
+    set {
+      unexpectedBeforeConsumeKeyword = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "consumeKeyword")
+  public var moveKeyword: TokenSyntax {
+    get {
+      return consumeKeyword
+    }
+    set {
+      consumeKeyword = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenConsumeKeywordAndExpression")
+  public var unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenConsumeKeywordAndExpression
+    }
+    set {
+      unexpectedBetweenConsumeKeywordAndExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with consumeKeyword argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
+      moveKeyword: TokenSyntax,
+      _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: some ExprSyntaxProtocol,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeMoveKeyword, 
+        consumeKeyword: moveKeyword, 
+        unexpectedBetweenMoveKeywordAndExpression, 
+        expression: expression, 
+        unexpectedAfterExpression, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension DeclNameSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
   public var unexpectedBeforeDeclBaseName: UnexpectedNodesSyntax? {
@@ -1668,7 +1594,7 @@ extension DeclNameSyntax {
   }
 }
 
-extension DerivativeRegistrationAttributeArgumentsSyntax {
+extension DerivativeAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndAccessorSpecifier")
   public var unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? {
     get {
@@ -1710,7 +1636,7 @@ extension DerivativeRegistrationAttributeArgumentsSyntax {
   }
   
   @available(*, deprecated, renamed: "parameters")
-  public var diffParams: DifferentiabilityParamsClauseSyntax? {
+  public var diffParams: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
       return parameters
     }
@@ -1746,7 +1672,7 @@ extension DerivativeRegistrationAttributeArgumentsSyntax {
       _ unexpectedBetweenAccessorKindAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax? = nil,
       _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
-      diffParams: DifferentiabilityParamsClauseSyntax? = nil,
+      diffParams: DifferentiabilityWithRespectToArgumentSyntax? = nil,
       _ unexpectedAfterDiffParams: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2055,7 +1981,7 @@ extension DifferentiableAttributeArgumentsSyntax {
   }
   
   @available(*, deprecated, renamed: "parameters")
-  public var diffParams: DifferentiabilityParamsClauseSyntax? {
+  public var diffParams: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
       return parameters
     }
@@ -2123,7 +2049,7 @@ extension DifferentiableAttributeArgumentsSyntax {
       _ unexpectedBetweenDiffKindAndDiffKindComma: UnexpectedNodesSyntax? = nil,
       diffKindComma: TokenSyntax? = nil,
       _ unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
-      diffParams: DifferentiabilityParamsClauseSyntax? = nil,
+      diffParams: DifferentiabilityWithRespectToArgumentSyntax? = nil,
       _ unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? = nil,
       diffParamsComma: TokenSyntax? = nil,
       _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil,
@@ -2150,7 +2076,7 @@ extension DifferentiableAttributeArgumentsSyntax {
   }
 }
 
-extension DynamicReplacementArgumentsSyntax {
+extension DynamicReplacementAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenColonAndDeclName")
   public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
     get {
@@ -2247,7 +2173,7 @@ extension EditorPlaceholderDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2340,17 +2266,37 @@ extension EnumCaseElementSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndAssociatedValue")
+  @available(*, deprecated, renamed: "unexpectedBetweenNameAndParameterClause")
   public var unexpectedBetweenIdentifierAndAssociatedValue: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndAssociatedValue
+      return unexpectedBetweenNameAndParameterClause
     }
     set {
-      unexpectedBetweenNameAndAssociatedValue = newValue
+      unexpectedBetweenNameAndParameterClause = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "parameterClause")
+  public var associatedValue: EnumCaseParameterClauseSyntax? {
+    get {
+      return parameterClause
+    }
+    set {
+      parameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndRawValue")
+  public var unexpectedBetweenAssociatedValueAndRawValue: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParameterClauseAndRawValue
+    }
+    set {
+      unexpectedBetweenParameterClauseAndRawValue = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with name, parameterClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2371,7 +2317,7 @@ extension EnumCaseElementSyntax {
         unexpectedBeforeIdentifier, 
         name: identifier, 
         unexpectedBetweenIdentifierAndAssociatedValue, 
-        associatedValue: associatedValue, 
+        parameterClause: associatedValue, 
         unexpectedBetweenAssociatedValueAndRawValue, 
         rawValue: rawValue, 
         unexpectedBetweenRawValueAndTrailingComma, 
@@ -2441,6 +2387,81 @@ extension EnumCaseParameterClauseSyntax {
   }
 }
 
+extension EnumCaseParameterSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenTypeAndDefaultValue")
+  public var unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenTypeAndDefaultValue
+    }
+    set {
+      unexpectedBetweenTypeAndDefaultValue = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "defaultValue")
+  public var defaultArgument: InitializerClauseSyntax? {
+    get {
+      return defaultValue
+    }
+    set {
+      defaultValue = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenDefaultValueAndTrailingComma")
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenDefaultValueAndTrailingComma
+    }
+    set {
+      unexpectedBetweenDefaultValueAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with defaultValue argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax? = nil,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: some TypeSyntaxProtocol,
+      _ unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? = nil,
+      defaultArgument: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndFirstName, 
+        firstName: firstName, 
+        unexpectedBetweenFirstNameAndSecondName, 
+        secondName: secondName, 
+        unexpectedBetweenSecondNameAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndType, 
+        type: type, 
+        unexpectedBetweenTypeAndDefaultArgument, 
+        defaultValue: defaultArgument, 
+        unexpectedBetweenDefaultArgumentAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension EnumDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenEnumKeywordAndName")
   public var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? {
@@ -2499,7 +2520,7 @@ extension EnumDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
       enumKeyword: TokenSyntax = .keyword(.enum),
       _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2507,11 +2528,11 @@ extension EnumDeclSyntax {
       _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil,
       genericParameters: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberDeclBlockSyntax,
+      memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2540,38 +2561,38 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExpressionSegmentSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenBackslashAndRawStringDelimiter")
+extension ExprSegmentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenBackslashAndPounds")
   public var unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenBackslashAndRawStringDelimiter
+      return unexpectedBetweenBackslashAndPounds
     }
     set {
-      unexpectedBetweenBackslashAndRawStringDelimiter = newValue
+      unexpectedBetweenBackslashAndPounds = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "rawStringDelimiter")
+  @available(*, deprecated, renamed: "pounds")
   public var delimiter: TokenSyntax? {
     get {
-      return rawStringDelimiter
+      return pounds
     }
     set {
-      rawStringDelimiter = newValue
+      pounds = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenRawStringDelimiterAndLeftParen")
+  @available(*, deprecated, renamed: "unexpectedBetweenPoundsAndLeftParen")
   public var unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenRawStringDelimiterAndLeftParen
+      return unexpectedBetweenPoundsAndLeftParen
     }
     set {
-      unexpectedBetweenRawStringDelimiterAndLeftParen = newValue
+      unexpectedBetweenPoundsAndLeftParen = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with rawStringDelimiter argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pounds argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2594,7 +2615,7 @@ extension ExpressionSegmentSyntax {
         unexpectedBeforeBackslash, 
         backslash: backslash, 
         unexpectedBetweenBackslashAndDelimiter, 
-        rawStringDelimiter: delimiter, 
+        pounds: delimiter, 
         unexpectedBetweenDelimiterAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndExpressions, 
@@ -2608,37 +2629,37 @@ extension ExpressionSegmentSyntax {
 }
 
 extension FloatLiteralExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeDigits")
+  @available(*, deprecated, renamed: "unexpectedBeforeLiteral")
   public var unexpectedBeforeFloatingDigits: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeDigits
+      return unexpectedBeforeLiteral
     }
     set {
-      unexpectedBeforeDigits = newValue
+      unexpectedBeforeLiteral = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "digits")
+  @available(*, deprecated, renamed: "literal")
   public var floatingDigits: TokenSyntax {
     get {
-      return digits
+      return literal
     }
     set {
-      digits = newValue
+      literal = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterDigits")
+  @available(*, deprecated, renamed: "unexpectedAfterLiteral")
   public var unexpectedAfterFloatingDigits: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterDigits
+      return unexpectedAfterLiteral
     }
     set {
-      unexpectedAfterDigits = newValue
+      unexpectedAfterLiteral = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with digits argument(s).")
+  @available(*, deprecated, message: "Use an initializer with literal argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2651,14 +2672,14 @@ extension FloatLiteralExprSyntax {
     self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeFloatingDigits, 
-        digits: floatingDigits, 
+        literal: floatingDigits, 
         unexpectedAfterFloatingDigits, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension ForInStmtSyntax {
+extension ForStmtSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenInKeywordAndSequence")
   public var unexpectedBetweenInKeywordAndSequenceExpr: UnexpectedNodesSyntax? {
     get {
@@ -2854,7 +2875,7 @@ extension FunctionDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil,
       funcKeyword: TokenSyntax = .keyword(.func),
       _ unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2895,6 +2916,148 @@ extension FunctionDeclSyntax {
   }
 }
 
+extension FunctionParameterClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
+  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndParameters
+    }
+    set {
+      unexpectedBetweenLeftParenAndParameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameters")
+  public var parameterList: FunctionParameterListSyntax {
+    get {
+      return parameters
+    }
+    set {
+      parameters = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
+  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParametersAndRightParen
+    }
+    set {
+      unexpectedBetweenParametersAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
+      parameterList: FunctionParameterListSyntax,
+      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndParameterList, 
+        parameters: parameterList, 
+        unexpectedBetweenParameterListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension FunctionParameterSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenEllipsisAndDefaultValue")
+  public var unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEllipsisAndDefaultValue
+    }
+    set {
+      unexpectedBetweenEllipsisAndDefaultValue = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "defaultValue")
+  public var defaultArgument: InitializerClauseSyntax? {
+    get {
+      return defaultValue
+    }
+    set {
+      defaultValue = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenDefaultValueAndTrailingComma")
+  public var unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenDefaultValueAndTrailingComma
+    }
+    set {
+      unexpectedBetweenDefaultValueAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with defaultValue argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+      firstName: TokenSyntax,
+      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+      secondName: TokenSyntax? = nil,
+      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+      type: some TypeSyntaxProtocol,
+      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+      ellipsis: TokenSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndDefaultArgument: UnexpectedNodesSyntax? = nil,
+      defaultArgument: InitializerClauseSyntax? = nil,
+      _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndFirstName, 
+        firstName: firstName, 
+        unexpectedBetweenFirstNameAndSecondName, 
+        secondName: secondName, 
+        unexpectedBetweenSecondNameAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndType, 
+        type: type, 
+        unexpectedBetweenTypeAndEllipsis, 
+        ellipsis: ellipsis, 
+        unexpectedBetweenEllipsisAndDefaultArgument, 
+        defaultValue: defaultArgument, 
+        unexpectedBetweenDefaultArgumentAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension FunctionSignatureSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeParameterClause")
   public var unexpectedBeforeInput: UnexpectedNodesSyntax? {
@@ -2907,7 +3070,7 @@ extension FunctionSignatureSyntax {
   }
   
   @available(*, deprecated, renamed: "parameterClause")
-  public var input: ParameterClauseSyntax {
+  public var input: FunctionParameterClauseSyntax {
     get {
       return parameterClause
     }
@@ -2961,7 +3124,7 @@ extension FunctionSignatureSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeInput: UnexpectedNodesSyntax? = nil,
-      input: ParameterClauseSyntax,
+      input: FunctionParameterClauseSyntax,
       _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
       _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
@@ -3587,7 +3750,7 @@ extension ImportDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil,
       importTok: TokenSyntax = .keyword(.import),
       _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
@@ -3730,6 +3893,61 @@ extension InfixOperatorExprSyntax {
   }
 }
 
+extension InheritanceClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndInheritedTypes")
+  public var unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndInheritedTypes
+    }
+    set {
+      unexpectedBetweenColonAndInheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "inheritedTypes")
+  public var inheritedTypeCollection: InheritedTypeListSyntax {
+    get {
+      return inheritedTypes
+    }
+    set {
+      inheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterInheritedTypes")
+  public var unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterInheritedTypes
+    }
+    set {
+      unexpectedAfterInheritedTypes = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with inheritedTypes argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
+      inheritedTypeCollection: InheritedTypeListSyntax,
+      _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndInheritedTypeCollection, 
+        inheritedTypes: inheritedTypeCollection, 
+        unexpectedAfterInheritedTypeCollection, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension InheritedTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeType")
   public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
@@ -3843,6 +4061,57 @@ extension InitializesEffectSyntax {
         unexpectedBetweenPropertyListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension IntegerLiteralExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeLiteral")
+  public var unexpectedBeforeDigits: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeLiteral
+    }
+    set {
+      unexpectedBeforeLiteral = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "literal")
+  public var digits: TokenSyntax {
+    get {
+      return literal
+    }
+    set {
+      literal = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterLiteral")
+  public var unexpectedAfterDigits: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterLiteral
+    }
+    set {
+      unexpectedAfterLiteral = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with literal argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil,
+      digits: TokenSyntax,
+      _ unexpectedAfterDigits: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeDigits, 
+        literal: digits, 
+        unexpectedAfterDigits, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -4195,7 +4464,37 @@ extension LayoutRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with type argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndLayoutSpecifier")
+  public var unexpectedBetweenColonAndLayoutConstraint: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndLayoutSpecifier
+    }
+    set {
+      unexpectedBetweenColonAndLayoutSpecifier = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "layoutSpecifier")
+  public var layoutConstraint: TokenSyntax {
+    get {
+      return layoutSpecifier
+    }
+    set {
+      layoutSpecifier = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenLayoutSpecifierAndLeftParen")
+  public var unexpectedBetweenLayoutConstraintAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLayoutSpecifierAndLeftParen
+    }
+    set {
+      unexpectedBetweenLayoutSpecifierAndLeftParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with type, layoutSpecifier argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4226,7 +4525,7 @@ extension LayoutRequirementSyntax {
         unexpectedBetweenTypeIdentifierAndColon, 
         colon: colon, 
         unexpectedBetweenColonAndLayoutConstraint, 
-        layoutConstraint: layoutConstraint, 
+        layoutSpecifier: layoutConstraint, 
         unexpectedBetweenLayoutConstraintAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndSize, 
@@ -4281,7 +4580,7 @@ extension MacroDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
       macroKeyword: TokenSyntax = .keyword(.macro),
       _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -4430,7 +4729,7 @@ extension MacroExpansionDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil,
       poundToken: TokenSyntax = .poundToken(),
       _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
@@ -4750,61 +5049,6 @@ extension MetatypeTypeSyntax {
   }
 }
 
-extension MoveExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeConsumeKeyword")
-  public var unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBeforeConsumeKeyword
-    }
-    set {
-      unexpectedBeforeConsumeKeyword = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "consumeKeyword")
-  public var moveKeyword: TokenSyntax {
-    get {
-      return consumeKeyword
-    }
-    set {
-      consumeKeyword = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenConsumeKeywordAndExpression")
-  public var unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenConsumeKeywordAndExpression
-    }
-    set {
-      unexpectedBetweenConsumeKeywordAndExpression = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with consumeKeyword argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeMoveKeyword: UnexpectedNodesSyntax? = nil,
-      moveKeyword: TokenSyntax,
-      _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: some ExprSyntaxProtocol,
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeMoveKeyword, 
-        consumeKeyword: moveKeyword, 
-        unexpectedBetweenMoveKeywordAndExpression, 
-        expression: expression, 
-        unexpectedAfterExpression, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension NamedOpaqueReturnTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeGenericParameterClause")
   public var unexpectedBeforeGenericParameters: UnexpectedNodesSyntax? {
@@ -4826,17 +5070,37 @@ extension NamedOpaqueReturnTypeSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndBaseType")
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndType")
   public var unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenGenericParameterClauseAndBaseType
+      return unexpectedBetweenGenericParameterClauseAndType
     }
     set {
-      unexpectedBetweenGenericParameterClauseAndBaseType = newValue
+      unexpectedBetweenGenericParameterClauseAndType = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with genericParameterClause argument(s).")
+  @available(*, deprecated, renamed: "type")
+  public var baseType: TypeSyntax {
+    get {
+      return type
+    }
+    set {
+      type = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterType")
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterType
+    }
+    set {
+      unexpectedAfterType = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with genericParameterClause, type argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4853,7 +5117,7 @@ extension NamedOpaqueReturnTypeSyntax {
         unexpectedBeforeGenericParameters, 
         genericParameterClause: genericParameters, 
         unexpectedBetweenGenericParametersAndBaseType, 
-        baseType: baseType, 
+        type: baseType, 
         unexpectedAfterBaseType, 
         trailingTrivia: trailingTrivia
       )
@@ -5017,37 +5281,37 @@ extension OptionalBindingConditionSyntax {
 }
 
 extension PackElementExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenEachKeywordAndPackReference")
+  @available(*, deprecated, renamed: "unexpectedBetweenEachKeywordAndPack")
   public var unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEachKeywordAndPackReference
+      return unexpectedBetweenEachKeywordAndPack
     }
     set {
-      unexpectedBetweenEachKeywordAndPackReference = newValue
+      unexpectedBetweenEachKeywordAndPack = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "packReference")
+  @available(*, deprecated, renamed: "pack")
   public var packRefExpr: ExprSyntax {
     get {
-      return packReference
+      return pack
     }
     set {
-      packReference = newValue
+      pack = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterPackReference")
+  @available(*, deprecated, renamed: "unexpectedAfterPack")
   public var unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterPackReference
+      return unexpectedAfterPack
     }
     set {
-      unexpectedAfterPackReference = newValue
+      unexpectedAfterPack = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with packReference argument(s).")
+  @available(*, deprecated, message: "Use an initializer with pack argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5064,124 +5328,14 @@ extension PackElementExprSyntax {
         unexpectedBeforeEachKeyword, 
         eachKeyword: eachKeyword, 
         unexpectedBetweenEachKeywordAndPackRefExpr, 
-        packReference: packRefExpr, 
+        pack: packRefExpr, 
         unexpectedAfterPackRefExpr, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension PackExpansionExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenRepeatKeywordAndPack")
-  public var unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenRepeatKeywordAndPack
-    }
-    set {
-      unexpectedBetweenRepeatKeywordAndPack = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "pack")
-  public var patternExpr: ExprSyntax {
-    get {
-      return pack
-    }
-    set {
-      pack = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterPack")
-  public var unexpectedAfterPatternExpr: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterPack
-    }
-    set {
-      unexpectedAfterPack = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with pack argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-      repeatKeyword: TokenSyntax = .keyword(.repeat),
-      _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
-      patternExpr: some ExprSyntaxProtocol,
-      _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeRepeatKeyword, 
-        repeatKeyword: repeatKeyword, 
-        unexpectedBetweenRepeatKeywordAndPatternExpr, 
-        pack: patternExpr, 
-        unexpectedAfterPatternExpr, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension PackExpansionTypeSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenRepeatKeywordAndPack")
-  public var unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenRepeatKeywordAndPack
-    }
-    set {
-      unexpectedBetweenRepeatKeywordAndPack = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "pack")
-  public var patternType: TypeSyntax {
-    get {
-      return pack
-    }
-    set {
-      pack = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterPack")
-  public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterPack
-    }
-    set {
-      unexpectedAfterPack = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with pack argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-      repeatKeyword: TokenSyntax = .keyword(.repeat),
-      _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
-      patternType: some TypeSyntaxProtocol,
-      _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeRepeatKeyword, 
-        repeatKeyword: repeatKeyword, 
-        unexpectedBetweenRepeatKeywordAndPatternType, 
-        pack: patternType, 
-        unexpectedAfterPatternType, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension PackReferenceTypeSyntax {
+extension PackElementTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenEachKeywordAndPack")
   public var unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? {
     get {
@@ -5236,60 +5390,111 @@ extension PackReferenceTypeSyntax {
   }
 }
 
-extension ParameterClauseSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
-  public var unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? {
+extension PackExpansionExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenRepeatKeywordAndRepetitionPattern")
+  public var unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenLeftParenAndParameters
+      return unexpectedBetweenRepeatKeywordAndRepetitionPattern
     }
     set {
-      unexpectedBetweenLeftParenAndParameters = newValue
+      unexpectedBetweenRepeatKeywordAndRepetitionPattern = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "parameters")
-  public var parameterList: FunctionParameterListSyntax {
+  @available(*, deprecated, renamed: "repetitionPattern")
+  public var patternExpr: ExprSyntax {
     get {
-      return parameters
+      return repetitionPattern
     }
     set {
-      parameters = newValue
+      repetitionPattern = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
-  public var unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedAfterRepetitionPattern")
+  public var unexpectedAfterPatternExpr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenParametersAndRightParen
+      return unexpectedAfterRepetitionPattern
     }
     set {
-      unexpectedBetweenParametersAndRightParen = newValue
+      unexpectedAfterRepetitionPattern = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @available(*, deprecated, message: "Use an initializer with repetitionPattern argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndParameterList: UnexpectedNodesSyntax? = nil,
-      parameterList: FunctionParameterListSyntax,
-      _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+      repeatKeyword: TokenSyntax = .keyword(.repeat),
+      _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
+      patternExpr: some ExprSyntaxProtocol,
+      _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndParameterList, 
-        parameters: parameterList, 
-        unexpectedBetweenParameterListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
+        unexpectedBeforeRepeatKeyword, 
+        repeatKeyword: repeatKeyword, 
+        unexpectedBetweenRepeatKeywordAndPatternExpr, 
+        repetitionPattern: patternExpr, 
+        unexpectedAfterPatternExpr, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension PackExpansionTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenRepeatKeywordAndRepetitionPattern")
+  public var unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenRepeatKeywordAndRepetitionPattern
+    }
+    set {
+      unexpectedBetweenRepeatKeywordAndRepetitionPattern = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "repetitionPattern")
+  public var patternType: TypeSyntax {
+    get {
+      return repetitionPattern
+    }
+    set {
+      repetitionPattern = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterRepetitionPattern")
+  public var unexpectedAfterPatternType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterRepetitionPattern
+    }
+    set {
+      unexpectedAfterRepetitionPattern = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with repetitionPattern argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+      repeatKeyword: TokenSyntax = .keyword(.repeat),
+      _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
+      patternType: some TypeSyntaxProtocol,
+      _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeRepeatKeyword, 
+        repeatKeyword: repeatKeyword, 
+        unexpectedBetweenRepeatKeywordAndPatternType, 
+        repetitionPattern: patternType, 
+        unexpectedAfterPatternType, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -5362,7 +5567,7 @@ extension PatternBindingSyntax {
   }
 }
 
-extension PostfixUnaryExprSyntax {
+extension PostfixOperatorExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenExpressionAndOperator")
   public var unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? {
     get {
@@ -5417,7 +5622,7 @@ extension PostfixUnaryExprSyntax {
   }
 }
 
-extension PoundSourceLocationArgsSyntax {
+extension PoundSourceLocationArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeFileLabel")
   public var unexpectedBeforeFileArgLabel: UnexpectedNodesSyntax? {
     get {
@@ -5574,7 +5779,7 @@ extension PoundSourceLocationSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var args: PoundSourceLocationArgsSyntax? {
+  public var args: PoundSourceLocationArgumentsSyntax? {
     get {
       return arguments
     }
@@ -5602,7 +5807,7 @@ extension PoundSourceLocationSyntax {
       _ unexpectedBetweenPoundSourceLocationAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndArgs: UnexpectedNodesSyntax? = nil,
-      args: PoundSourceLocationArgsSyntax? = nil,
+      args: PoundSourceLocationArgumentsSyntax? = nil,
       _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -5811,7 +6016,7 @@ extension PrecedenceGroupDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil,
       precedencegroupKeyword: TokenSyntax = .keyword(.precedencegroup),
       _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -5958,37 +6163,37 @@ extension PrefixOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenOperatorAndBase")
+  @available(*, deprecated, renamed: "unexpectedBetweenOperatorAndExpression")
   public var unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenOperatorAndBase
+      return unexpectedBetweenOperatorAndExpression
     }
     set {
-      unexpectedBetweenOperatorAndBase = newValue
+      unexpectedBetweenOperatorAndExpression = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "base")
+  @available(*, deprecated, renamed: "expression")
   public var postfixExpression: ExprSyntax {
     get {
-      return base
+      return expression
     }
     set {
-      base = newValue
+      expression = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterBase")
+  @available(*, deprecated, renamed: "unexpectedAfterExpression")
   public var unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterBase
+      return unexpectedAfterExpression
     }
     set {
-      unexpectedAfterBase = newValue
+      unexpectedAfterExpression = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator, base argument(s).")
+  @available(*, deprecated, message: "Use an initializer with operator, expression argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6005,7 +6210,7 @@ extension PrefixOperatorExprSyntax {
         unexpectedBeforeOperatorToken, 
         operator: operatorToken, 
         unexpectedBetweenOperatorTokenAndPostfixExpression, 
-        base: postfixExpression, 
+        expression: postfixExpression, 
         unexpectedAfterPostfixExpression, 
         trailingTrivia: trailingTrivia
       )
@@ -6149,7 +6354,7 @@ extension ProtocolDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
       protocolKeyword: TokenSyntax = .keyword(.protocol),
       _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -6157,11 +6362,11 @@ extension ProtocolDeclSyntax {
       _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
       primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
       _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberDeclBlockSyntax,
+      memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6254,13 +6459,33 @@ extension QualifiedDeclNameSyntax {
 }
 
 extension RegexLiteralExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenOpenSlashAndRegex")
-  public var unexpectedBetweenOpenSlashAndRegexPattern: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenOpeningPoundsAndOpeningSlash")
+  public var unexpectedBetweenOpeningPoundsAndOpenSlash: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenOpenSlashAndRegex
+      return unexpectedBetweenOpeningPoundsAndOpeningSlash
     }
     set {
-      unexpectedBetweenOpenSlashAndRegex = newValue
+      unexpectedBetweenOpeningPoundsAndOpeningSlash = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "openingSlash")
+  public var openSlash: TokenSyntax {
+    get {
+      return openingSlash
+    }
+    set {
+      openingSlash = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenOpeningSlashAndRegex")
+  public var unexpectedBetweenOpenSlashAndRegexPattern: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenOpeningSlashAndRegex
+    }
+    set {
+      unexpectedBetweenOpeningSlashAndRegex = newValue
     }
   }
   
@@ -6274,17 +6499,37 @@ extension RegexLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenRegexAndCloseSlash")
+  @available(*, deprecated, renamed: "unexpectedBetweenRegexAndClosingSlash")
   public var unexpectedBetweenRegexPatternAndCloseSlash: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenRegexAndCloseSlash
+      return unexpectedBetweenRegexAndClosingSlash
     }
     set {
-      unexpectedBetweenRegexAndCloseSlash = newValue
+      unexpectedBetweenRegexAndClosingSlash = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with regex argument(s).")
+  @available(*, deprecated, renamed: "closingSlash")
+  public var closeSlash: TokenSyntax {
+    get {
+      return closingSlash
+    }
+    set {
+      closingSlash = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenClosingSlashAndClosingPounds")
+  public var unexpectedBetweenCloseSlashAndClosingPounds: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenClosingSlashAndClosingPounds
+    }
+    set {
+      unexpectedBetweenClosingSlashAndClosingPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with openingSlash, regex, closingSlash argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6307,11 +6552,11 @@ extension RegexLiteralExprSyntax {
         unexpectedBeforeOpeningPounds, 
         openingPounds: openingPounds, 
         unexpectedBetweenOpeningPoundsAndOpenSlash, 
-        openSlash: openSlash, 
+        openingSlash: openSlash, 
         unexpectedBetweenOpenSlashAndRegexPattern, 
         regex: regexPattern, 
         unexpectedBetweenRegexPatternAndCloseSlash, 
-        closeSlash: closeSlash, 
+        closingSlash: closeSlash, 
         unexpectedBetweenCloseSlashAndClosingPounds, 
         closingPounds: closingPounds, 
         unexpectedAfterClosingPounds, 
@@ -6474,6 +6719,61 @@ extension SameTypeRequirementSyntax {
   }
 }
 
+extension SomeOrAnyTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenSomeOrAnySpecifierAndConstraint")
+  public var unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenSomeOrAnySpecifierAndConstraint
+    }
+    set {
+      unexpectedBetweenSomeOrAnySpecifierAndConstraint = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "constraint")
+  public var baseType: TypeSyntax {
+    get {
+      return constraint
+    }
+    set {
+      constraint = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterConstraint")
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterConstraint
+    }
+    set {
+      unexpectedAfterConstraint = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with constraint argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil,
+      someOrAnySpecifier: TokenSyntax,
+      _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil,
+      baseType: some TypeSyntaxProtocol,
+      _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeSomeOrAnySpecifier, 
+        someOrAnySpecifier: someOrAnySpecifier, 
+        unexpectedBetweenSomeOrAnySpecifierAndBaseType, 
+        constraint: baseType, 
+        unexpectedAfterBaseType, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension SourceFileSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenStatementsAndEndOfFileToken")
   public var unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? {
@@ -6529,6 +6829,334 @@ extension SourceFileSyntax {
   }
 }
 
+extension SpecializeAvailabilityArgumentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeAvailabilityLabel")
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeAvailabilityLabel
+    }
+    set {
+      unexpectedBeforeAvailabilityLabel = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "availabilityLabel")
+  public var label: TokenSyntax {
+    get {
+      return availabilityLabel
+    }
+    set {
+      availabilityLabel = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenAvailabilityLabelAndColon")
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenAvailabilityLabelAndColon
+    }
+    set {
+      unexpectedBetweenAvailabilityLabelAndColon = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndAvailabilityArguments")
+  public var unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndAvailabilityArguments
+    }
+    set {
+      unexpectedBetweenColonAndAvailabilityArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "availabilityArguments")
+  public var availabilityList: AvailabilityArgumentListSyntax {
+    get {
+      return availabilityArguments
+    }
+    set {
+      availabilityArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "addAvailabilityArgument")
+  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> SpecializeAvailabilityArgumentSyntax {
+    return addAvailabilityArgument(element)
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenAvailabilityArgumentsAndSemicolon")
+  public var unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenAvailabilityArgumentsAndSemicolon
+    }
+    set {
+      unexpectedBetweenAvailabilityArgumentsAndSemicolon = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with availabilityLabel, availabilityArguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax = .keyword(.availability),
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndAvailabilityList: UnexpectedNodesSyntax? = nil,
+      availabilityList: AvailabilityArgumentListSyntax,
+      _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
+      semicolon: TokenSyntax = .semicolonToken(),
+      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLabel, 
+        availabilityLabel: label, 
+        unexpectedBetweenLabelAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndAvailabilityList, 
+        availabilityArguments: availabilityList, 
+        unexpectedBetweenAvailabilityListAndSemicolon, 
+        semicolon: semicolon, 
+        unexpectedAfterSemicolon, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension SpecializeTargetFunctionArgumentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeTargetLabel")
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeTargetLabel
+    }
+    set {
+      unexpectedBeforeTargetLabel = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "targetLabel")
+  public var label: TokenSyntax {
+    get {
+      return targetLabel
+    }
+    set {
+      targetLabel = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenTargetLabelAndColon")
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenTargetLabelAndColon
+    }
+    set {
+      unexpectedBetweenTargetLabelAndColon = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndDeclName")
+  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndDeclName
+    }
+    set {
+      unexpectedBetweenColonAndDeclName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "declName")
+  public var declname: DeclNameSyntax {
+    get {
+      return declName
+    }
+    set {
+      declName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenDeclNameAndTrailingComma")
+  public var unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenDeclNameAndTrailingComma
+    }
+    set {
+      unexpectedBetweenDeclNameAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with targetLabel, declName argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax = .keyword(.target),
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
+      declname: DeclNameSyntax,
+      _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLabel, 
+        targetLabel: label, 
+        unexpectedBetweenLabelAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndDeclname, 
+        declName: declname, 
+        unexpectedBetweenDeclnameAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension StringLiteralExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeOpeningPounds")
+  public var unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeOpeningPounds
+    }
+    set {
+      unexpectedBeforeOpeningPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "openingPounds")
+  public var openDelimiter: TokenSyntax? {
+    get {
+      return openingPounds
+    }
+    set {
+      openingPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenOpeningPoundsAndOpeningQuote")
+  public var unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenOpeningPoundsAndOpeningQuote
+    }
+    set {
+      unexpectedBetweenOpeningPoundsAndOpeningQuote = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "openingQuote")
+  public var openQuote: TokenSyntax {
+    get {
+      return openingQuote
+    }
+    set {
+      openingQuote = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenOpeningQuoteAndSegments")
+  public var unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenOpeningQuoteAndSegments
+    }
+    set {
+      unexpectedBetweenOpeningQuoteAndSegments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenSegmentsAndClosingQuote")
+  public var unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenSegmentsAndClosingQuote
+    }
+    set {
+      unexpectedBetweenSegmentsAndClosingQuote = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "closingQuote")
+  public var closeQuote: TokenSyntax {
+    get {
+      return closingQuote
+    }
+    set {
+      closingQuote = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenClosingQuoteAndClosingPounds")
+  public var unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenClosingQuoteAndClosingPounds
+    }
+    set {
+      unexpectedBetweenClosingQuoteAndClosingPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "closingPounds")
+  public var closeDelimiter: TokenSyntax? {
+    get {
+      return closingPounds
+    }
+    set {
+      closingPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterClosingPounds")
+  public var unexpectedAfterCloseDelimiter: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterClosingPounds
+    }
+    set {
+      unexpectedAfterClosingPounds = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with openingPounds, openingQuote, closingQuote, closingPounds argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOpenDelimiter: UnexpectedNodesSyntax? = nil,
+      openDelimiter: TokenSyntax? = nil,
+      _ unexpectedBetweenOpenDelimiterAndOpenQuote: UnexpectedNodesSyntax? = nil,
+      openQuote: TokenSyntax,
+      _ unexpectedBetweenOpenQuoteAndSegments: UnexpectedNodesSyntax? = nil,
+      segments: StringLiteralSegmentListSyntax,
+      _ unexpectedBetweenSegmentsAndCloseQuote: UnexpectedNodesSyntax? = nil,
+      closeQuote: TokenSyntax,
+      _ unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? = nil,
+      closeDelimiter: TokenSyntax? = nil,
+      _ unexpectedAfterCloseDelimiter: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeOpenDelimiter, 
+        openingPounds: openDelimiter, 
+        unexpectedBetweenOpenDelimiterAndOpenQuote, 
+        openingQuote: openQuote, 
+        unexpectedBetweenOpenQuoteAndSegments, 
+        segments: segments, 
+        unexpectedBetweenSegmentsAndCloseQuote, 
+        closingQuote: closeQuote, 
+        unexpectedBetweenCloseQuoteAndCloseDelimiter, 
+        closingPounds: closeDelimiter, 
+        unexpectedAfterCloseDelimiter, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension StructDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenStructKeywordAndName")
   public var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? {
@@ -6567,7 +7195,7 @@ extension StructDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
       structKeyword: TokenSyntax = .keyword(.struct),
       _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -6575,11 +7203,11 @@ extension StructDeclSyntax {
       _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax? = nil,
       _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil,
+      inheritanceClause: InheritanceClauseSyntax? = nil,
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberDeclBlockSyntax,
+      memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6608,136 +7236,7 @@ extension StructDeclSyntax {
   }
 }
 
-extension SubscriptDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndParameterClause")
-  public var unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenGenericParameterClauseAndParameterClause
-    }
-    set {
-      unexpectedBetweenGenericParameterClauseAndParameterClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "parameterClause")
-  public var indices: ParameterClauseSyntax {
-    get {
-      return parameterClause
-    }
-    set {
-      parameterClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndReturnClause")
-  public var unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenParameterClauseAndReturnClause
-    }
-    set {
-      unexpectedBetweenParameterClauseAndReturnClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "returnClause")
-  public var result: ReturnClauseSyntax {
-    get {
-      return returnClause
-    }
-    set {
-      returnClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenReturnClauseAndGenericWhereClause")
-  public var unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenReturnClauseAndGenericWhereClause
-    }
-    set {
-      unexpectedBetweenReturnClauseAndGenericWhereClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenGenericWhereClauseAndAccessors")
-  public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenGenericWhereClauseAndAccessors
-    }
-    set {
-      unexpectedBetweenGenericWhereClauseAndAccessors = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "accessors")
-  public var accessor: Accessors? {
-    get {
-      return accessors
-    }
-    set {
-      accessors = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterAccessors")
-  public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterAccessors
-    }
-    set {
-      unexpectedAfterAccessors = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, accessors argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
-      _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
-      subscriptKeyword: TokenSyntax = .keyword(.subscript),
-      _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-      genericParameterClause: GenericParameterClauseSyntax? = nil,
-      _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil,
-      indices: ParameterClauseSyntax,
-      _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil,
-      result: ReturnClauseSyntax,
-      _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-      genericWhereClause: GenericWhereClauseSyntax? = nil,
-      _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
-      accessor: Accessors? = nil,
-      _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAttributes, 
-        attributes: attributes, 
-        unexpectedBetweenAttributesAndModifiers, 
-        modifiers: modifiers, 
-        unexpectedBetweenModifiersAndSubscriptKeyword, 
-        subscriptKeyword: subscriptKeyword, 
-        unexpectedBetweenSubscriptKeywordAndGenericParameterClause, 
-        genericParameterClause: genericParameterClause, 
-        unexpectedBetweenGenericParameterClauseAndIndices, 
-        parameterClause: indices, 
-        unexpectedBetweenIndicesAndResult, 
-        returnClause: result, 
-        unexpectedBetweenResultAndGenericWhereClause, 
-        genericWhereClause: genericWhereClause, 
-        unexpectedBetweenGenericWhereClauseAndAccessor, 
-        accessors: accessor, 
-        unexpectedAfterAccessor, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension SubscriptExprSyntax {
+extension SubscriptCallExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenCalledExpressionAndLeftSquare")
   public var unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? {
     get {
@@ -6848,6 +7347,135 @@ extension SubscriptExprSyntax {
   }
 }
 
+extension SubscriptDeclSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndParameterClause")
+  public var unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericParameterClauseAndParameterClause
+    }
+    set {
+      unexpectedBetweenGenericParameterClauseAndParameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "parameterClause")
+  public var indices: FunctionParameterClauseSyntax {
+    get {
+      return parameterClause
+    }
+    set {
+      parameterClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndReturnClause")
+  public var unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenParameterClauseAndReturnClause
+    }
+    set {
+      unexpectedBetweenParameterClauseAndReturnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "returnClause")
+  public var result: ReturnClauseSyntax {
+    get {
+      return returnClause
+    }
+    set {
+      returnClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenReturnClauseAndGenericWhereClause")
+  public var unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenReturnClauseAndGenericWhereClause
+    }
+    set {
+      unexpectedBetweenReturnClauseAndGenericWhereClause = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenGenericWhereClauseAndAccessors")
+  public var unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenGenericWhereClauseAndAccessors
+    }
+    set {
+      unexpectedBetweenGenericWhereClauseAndAccessors = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "accessors")
+  public var accessor: Accessors? {
+    get {
+      return accessors
+    }
+    set {
+      accessors = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterAccessors")
+  public var unexpectedAfterAccessor: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterAccessors
+    }
+    set {
+      unexpectedAfterAccessors = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, accessors argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax? = nil,
+      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
+      _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
+      subscriptKeyword: TokenSyntax = .keyword(.subscript),
+      _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+      genericParameterClause: GenericParameterClauseSyntax? = nil,
+      _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil,
+      indices: FunctionParameterClauseSyntax,
+      _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil,
+      result: ReturnClauseSyntax,
+      _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+      genericWhereClause: GenericWhereClauseSyntax? = nil,
+      _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
+      accessor: Accessors? = nil,
+      _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndModifiers, 
+        modifiers: modifiers, 
+        unexpectedBetweenModifiersAndSubscriptKeyword, 
+        subscriptKeyword: subscriptKeyword, 
+        unexpectedBetweenSubscriptKeywordAndGenericParameterClause, 
+        genericParameterClause: genericParameterClause, 
+        unexpectedBetweenGenericParameterClauseAndIndices, 
+        parameterClause: indices, 
+        unexpectedBetweenIndicesAndResult, 
+        returnClause: result, 
+        unexpectedBetweenResultAndGenericWhereClause, 
+        genericWhereClause: genericWhereClause, 
+        unexpectedBetweenGenericWhereClauseAndAccessor, 
+        accessors: accessor, 
+        unexpectedAfterAccessor, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension SuppressedTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenWithoutTildeAndType")
   public var unexpectedBetweenWithoutTildeAndPatternType: UnexpectedNodesSyntax? {
@@ -6903,94 +7531,127 @@ extension SuppressedTypeSyntax {
   }
 }
 
-extension TargetFunctionEntrySyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeTargetLabel")
-  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
+extension SwitchCaseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeUnknownAttribute")
+  public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeTargetLabel
+      return unexpectedBeforeUnknownAttribute
     }
     set {
-      unexpectedBeforeTargetLabel = newValue
+      unexpectedBeforeUnknownAttribute = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "targetLabel")
-  public var label: TokenSyntax {
+  @available(*, deprecated, renamed: "unknownAttribute")
+  public var unknownAttr: AttributeSyntax? {
     get {
-      return targetLabel
+      return unknownAttribute
     }
     set {
-      targetLabel = newValue
+      unknownAttribute = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenTargetLabelAndColon")
-  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenUnknownAttributeAndLabel")
+  public var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenTargetLabelAndColon
+      return unexpectedBetweenUnknownAttributeAndLabel
     }
     set {
-      unexpectedBetweenTargetLabelAndColon = newValue
+      unexpectedBetweenUnknownAttributeAndLabel = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenColonAndDeclName")
-  public var unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenColonAndDeclName
-    }
-    set {
-      unexpectedBetweenColonAndDeclName = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "declName")
-  public var declname: DeclNameSyntax {
-    get {
-      return declName
-    }
-    set {
-      declName = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenDeclNameAndTrailingComma")
-  public var unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenDeclNameAndTrailingComma
-    }
-    set {
-      unexpectedBetweenDeclNameAndTrailingComma = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with targetLabel, declName argument(s).")
+  @available(*, deprecated, message: "Use an initializer with unknownAttribute argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax = .keyword(.target),
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: DeclNameSyntax,
-      _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil,
+      unknownAttr: AttributeSyntax? = nil,
+      _ unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil,
+      label: Label,
+      _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
+      statements: CodeBlockItemListSyntax,
+      _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeLabel, 
-        targetLabel: label, 
-        unexpectedBetweenLabelAndColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndDeclname, 
-        declName: declname, 
-        unexpectedBetweenDeclnameAndTrailingComma, 
-        trailingComma: trailingComma, 
-        unexpectedAfterTrailingComma, 
+        unexpectedBeforeUnknownAttr, 
+        unknownAttribute: unknownAttr, 
+        unexpectedBetweenUnknownAttrAndLabel, 
+        label: label, 
+        unexpectedBetweenLabelAndStatements, 
+        statements: statements, 
+        unexpectedAfterStatements, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension SwitchExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenSwitchKeywordAndSubject")
+  public var unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenSwitchKeywordAndSubject
+    }
+    set {
+      unexpectedBetweenSwitchKeywordAndSubject = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "subject")
+  public var expression: ExprSyntax {
+    get {
+      return subject
+    }
+    set {
+      subject = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenSubjectAndLeftBrace")
+  public var unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenSubjectAndLeftBrace
+    }
+    set {
+      unexpectedBetweenSubjectAndLeftBrace = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with subject argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil,
+      switchKeyword: TokenSyntax = .keyword(.switch),
+      _ unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: some ExprSyntaxProtocol,
+      _ unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil,
+      leftBrace: TokenSyntax = .leftBraceToken(),
+      _ unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil,
+      cases: SwitchCaseListSyntax,
+      _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil,
+      rightBrace: TokenSyntax = .rightBraceToken(),
+      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeSwitchKeyword, 
+        switchKeyword: switchKeyword, 
+        unexpectedBetweenSwitchKeywordAndExpression, 
+        subject: expression, 
+        unexpectedBetweenExpressionAndLeftBrace, 
+        leftBrace: leftBrace, 
+        unexpectedBetweenLeftBraceAndCases, 
+        cases: cases, 
+        unexpectedBetweenCasesAndRightBrace, 
+        rightBrace: rightBrace, 
+        unexpectedAfterRightBrace, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -7027,13 +7688,33 @@ extension TernaryExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenFirstChoiceAndColon")
-  public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenQuestionMarkAndThenExpression")
+  public var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenFirstChoiceAndColon
+      return unexpectedBetweenQuestionMarkAndThenExpression
     }
     set {
-      unexpectedBetweenFirstChoiceAndColon = newValue
+      unexpectedBetweenQuestionMarkAndThenExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "thenExpression")
+  public var firstChoice: ExprSyntax {
+    get {
+      return thenExpression
+    }
+    set {
+      thenExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenThenExpressionAndColon")
+  public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenThenExpressionAndColon
+    }
+    set {
+      unexpectedBetweenThenExpressionAndColon = newValue
     }
   }
   
@@ -7047,17 +7728,37 @@ extension TernaryExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenColonAndSecondChoice")
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndElseExpression")
   public var unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenColonAndSecondChoice
+      return unexpectedBetweenColonAndElseExpression
     }
     set {
-      unexpectedBetweenColonAndSecondChoice = newValue
+      unexpectedBetweenColonAndElseExpression = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with condition, colon argument(s).")
+  @available(*, deprecated, renamed: "elseExpression")
+  public var secondChoice: ExprSyntax {
+    get {
+      return elseExpression
+    }
+    set {
+      elseExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterElseExpression")
+  public var unexpectedAfterSecondChoice: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterElseExpression
+    }
+    set {
+      unexpectedAfterElseExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with condition, thenExpression, colon, elseExpression argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7082,11 +7783,11 @@ extension TernaryExprSyntax {
         unexpectedBetweenConditionExpressionAndQuestionMark, 
         questionMark: questionMark, 
         unexpectedBetweenQuestionMarkAndFirstChoice, 
-        firstChoice: firstChoice, 
+        thenExpression: firstChoice, 
         unexpectedBetweenFirstChoiceAndColonMark, 
         colon: colonMark, 
         unexpectedBetweenColonMarkAndSecondChoice, 
-        secondChoice: secondChoice, 
+        elseExpression: secondChoice, 
         unexpectedAfterSecondChoice, 
         trailingTrivia: trailingTrivia
       )
@@ -7256,17 +7957,37 @@ extension TupleTypeElementSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenInoutKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBetweenInoutKeywordAndFirstName")
   public var unexpectedBetweenInOutAndName: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenInoutKeywordAndName
+      return unexpectedBetweenInoutKeywordAndFirstName
     }
     set {
-      unexpectedBetweenInoutKeywordAndName = newValue
+      unexpectedBetweenInoutKeywordAndFirstName = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with inoutKeyword argument(s).")
+  @available(*, deprecated, renamed: "firstName")
+  public var name: TokenSyntax? {
+    get {
+      return firstName
+    }
+    set {
+      firstName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenFirstNameAndSecondName")
+  public var unexpectedBetweenNameAndSecondName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenFirstNameAndSecondName
+    }
+    set {
+      unexpectedBetweenFirstNameAndSecondName = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with inoutKeyword, firstName argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7295,7 +8016,7 @@ extension TupleTypeElementSyntax {
         unexpectedBeforeInOut, 
         inoutKeyword: inOut, 
         unexpectedBetweenInOutAndName, 
-        name: name, 
+        firstName: name, 
         unexpectedBetweenNameAndSecondName, 
         secondName: secondName, 
         unexpectedBetweenSecondNameAndColon, 
@@ -7314,62 +8035,7 @@ extension TupleTypeElementSyntax {
   }
 }
 
-extension TypeInheritanceClauseSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenColonAndInheritedTypes")
-  public var unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenColonAndInheritedTypes
-    }
-    set {
-      unexpectedBetweenColonAndInheritedTypes = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "inheritedTypes")
-  public var inheritedTypeCollection: InheritedTypeListSyntax {
-    get {
-      return inheritedTypes
-    }
-    set {
-      inheritedTypes = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterInheritedTypes")
-  public var unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterInheritedTypes
-    }
-    set {
-      unexpectedAfterInheritedTypes = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with inheritedTypes argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
-      inheritedTypeCollection: InheritedTypeListSyntax,
-      _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndInheritedTypeCollection, 
-        inheritedTypes: inheritedTypeCollection, 
-        unexpectedAfterInheritedTypeCollection, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension TypealiasDeclSyntax {
+extension TypeAliasDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenTypealiasKeywordAndName")
   public var unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
@@ -7407,7 +8073,7 @@ extension TypealiasDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
       typealiasKeyword: TokenSyntax = .keyword(.typealias),
       _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -7439,6 +8105,61 @@ extension TypealiasDeclSyntax {
         unexpectedBetweenInitializerAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedAfterGenericWhereClause, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension UnresolvedArrowExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndArrow")
+  public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEffectSpecifiersAndArrow
+    }
+    set {
+      unexpectedBetweenEffectSpecifiersAndArrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arrow")
+  public var arrowToken: TokenSyntax {
+    get {
+      return arrow
+    }
+    set {
+      arrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterArrow")
+  public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterArrow
+    }
+    set {
+      unexpectedAfterArrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arrow argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
+      arrowToken: TokenSyntax = .arrowToken(),
+      _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeEffectSpecifiers, 
+        effectSpecifiers: effectSpecifiers, 
+        unexpectedBetweenEffectSpecifiersAndArrowToken, 
+        arrow: arrowToken, 
+        unexpectedAfterArrowToken, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -7499,6 +8220,57 @@ extension UnresolvedAsExprSyntax {
   }
 }
 
+extension UnresolvedInfixOperatorExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeOperator")
+  public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeOperator
+    }
+    set {
+      unexpectedBeforeOperator = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "operator")
+  public var operatorToken: TokenSyntax {
+    get {
+      return `operator`
+    }
+    set {
+      `operator` = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterOperator")
+  public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterOperator
+    }
+    set {
+      unexpectedAfterOperator = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
+      operatorToken: TokenSyntax,
+      _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeOperatorToken, 
+        operator: operatorToken, 
+        unexpectedAfterOperatorToken, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension UnresolvedIsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeIsKeyword")
   public var unexpectedBeforeIsTok: UnexpectedNodesSyntax? {
@@ -7551,13 +8323,33 @@ extension UnresolvedIsExprSyntax {
 }
 
 extension UnresolvedTernaryExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenFirstChoiceAndColon")
-  public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenQuestionMarkAndThenExpression")
+  public var unexpectedBetweenQuestionMarkAndFirstChoice: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenFirstChoiceAndColon
+      return unexpectedBetweenQuestionMarkAndThenExpression
     }
     set {
-      unexpectedBetweenFirstChoiceAndColon = newValue
+      unexpectedBetweenQuestionMarkAndThenExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "thenExpression")
+  public var firstChoice: ExprSyntax {
+    get {
+      return thenExpression
+    }
+    set {
+      thenExpression = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenThenExpressionAndColon")
+  public var unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenThenExpressionAndColon
+    }
+    set {
+      unexpectedBetweenThenExpressionAndColon = newValue
     }
   }
   
@@ -7581,7 +8373,7 @@ extension UnresolvedTernaryExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with colon argument(s).")
+  @available(*, deprecated, message: "Use an initializer with thenExpression, colon argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7600,7 +8392,7 @@ extension UnresolvedTernaryExprSyntax {
         unexpectedBeforeQuestionMark, 
         questionMark: questionMark, 
         unexpectedBetweenQuestionMarkAndFirstChoice, 
-        firstChoice: firstChoice, 
+        thenExpression: firstChoice, 
         unexpectedBetweenFirstChoiceAndColonMark, 
         colon: colonMark, 
         unexpectedAfterColonMark, 
@@ -7722,7 +8514,7 @@ extension VariableDeclSyntax {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: ModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax? = nil,
       _ unexpectedBetweenModifiersAndBindingKeyword: UnexpectedNodesSyntax? = nil,
       bindingKeyword: TokenSyntax,
       _ unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? = nil,
@@ -7802,7 +8594,7 @@ extension WhereClauseSyntax {
   }
 }
 
-extension YieldListSyntax {
+extension YieldStmtArgumentClauseSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
   public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
     get {
@@ -7814,7 +8606,7 @@ extension YieldListSyntax {
   }
   
   @available(*, deprecated, renamed: "elements")
-  public var elementList: YieldExprListSyntax {
+  public var elementList: YieldStmtArgumentListSyntax {
     get {
       return elements
     }
@@ -7840,7 +8632,7 @@ extension YieldListSyntax {
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-      elementList: YieldExprListSyntax,
+      elementList: YieldStmtArgumentListSyntax,
       _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -7856,6 +8648,61 @@ extension YieldListSyntax {
         unexpectedBetweenElementListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension YieldStmtSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenYieldKeywordAndYieldedExpressions")
+  public var unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenYieldKeywordAndYieldedExpressions
+    }
+    set {
+      unexpectedBetweenYieldKeywordAndYieldedExpressions = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "yieldedExpressions")
+  public var yields: YieldedExpressions {
+    get {
+      return yieldedExpressions
+    }
+    set {
+      yieldedExpressions = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterYieldedExpressions")
+  public var unexpectedAfterYields: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterYieldedExpressions
+    }
+    set {
+      unexpectedAfterYieldedExpressions = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with yieldedExpressions argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeYieldKeyword: UnexpectedNodesSyntax? = nil,
+      yieldKeyword: TokenSyntax = .keyword(.yield),
+      _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
+      yields: YieldedExpressions,
+      _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeYieldKeyword, 
+        yieldKeyword: yieldKeyword, 
+        unexpectedBetweenYieldKeywordAndYields, 
+        yieldedExpressions: yields, 
+        unexpectedAfterYields, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -110,8 +110,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               label: .case(
                 SwitchCaseLabelSyntax {
                   for childNode in SYNTAX_NODES where childNode.base == node.kind {
-                    CaseItemSyntax(
-                      pattern: ExpressionPatternSyntax(
+                    SwitchCaseItemSyntax(
+                      pattern: ExprPatternSyntax(
                         expression: ExprSyntax(".\(childNode.varOrCaseName)")
                       )
                     )
@@ -143,8 +143,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               label: .case(
                 SwitchCaseLabelSyntax {
                   for childNode in SYNTAX_NODES where childNode.base == node.kind {
-                    CaseItemSyntax(
-                      pattern: ExpressionPatternSyntax(
+                    SwitchCaseItemSyntax(
+                      pattern: ExprPatternSyntax(
                         expression: ExprSyntax(".\(childNode.varOrCaseName)")
                       )
                     )

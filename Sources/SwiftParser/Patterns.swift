@@ -242,7 +242,7 @@ extension Parser {
       // Fall back to expression parsing for ambiguous forms. Name lookup will
       // disambiguate.
       let patternSyntax = self.parseSequenceExpression(.basic, pattern: context)
-      if let pat = patternSyntax.as(RawUnresolvedPatternExprSyntax.self) {
+      if let pat = patternSyntax.as(RawPatternExprSyntax.self) {
         // The most common case here is to parse something that was a lexically
         // obvious pattern, which will come back wrapped in an immediate
         // RawUnresolvedPatternExprSyntax.
@@ -252,7 +252,7 @@ extension Parser {
         return RawPatternSyntax(pat.pattern)
       }
       let expr = RawExprSyntax(patternSyntax)
-      return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
+      return RawPatternSyntax(RawExprPatternSyntax(expression: expr, arena: self.arena))
     }
   }
 }

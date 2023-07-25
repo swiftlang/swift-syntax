@@ -193,7 +193,7 @@ public class SyntaxComparisonTests: XCTestCase {
       funcBody = makeBody()
     }
     let emptySignature = FunctionSignatureSyntax(
-      parameterClause: ParameterClauseSyntax(
+      parameterClause: FunctionParameterClauseSyntax(
         leftParen: .leftParenToken(),
         parameters: FunctionParameterListSyntax([]),
         rightParen: .rightParenToken()
@@ -223,7 +223,7 @@ public class SyntaxComparisonTests: XCTestCase {
   private func makeBody(statementCount: Int = 0) -> CodeBlockSyntax {
     var items = [CodeBlockItemSyntax]()
     for i in 0..<statementCount {
-      let literal = IntegerLiteralExprSyntax(digits: .integerLiteral(String(i)))
+      let literal = IntegerLiteralExprSyntax(literal: .integerLiteral(String(i)))
       items.append(CodeBlockItemSyntax(item: .init(literal)))
     }
     let block = CodeBlockItemListSyntax(items)

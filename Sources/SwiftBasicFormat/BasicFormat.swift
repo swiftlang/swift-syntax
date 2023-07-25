@@ -109,7 +109,7 @@ open class BasicFormat: SyntaxRewriter {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if ancestor.is(ExpressionSegmentSyntax.self) {
+      if ancestor.is(ExprSegmentSyntax.self) {
         return true
       }
     }
@@ -117,8 +117,8 @@ open class BasicFormat: SyntaxRewriter {
   }
 
   private func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
-    switch node.as(SyntaxEnum.self) {
-    case .accessorList:
+    switch node.kind {
+    case .accessorDeclList:
       return true
     case .codeBlockItemList:
       return true
@@ -330,8 +330,8 @@ open class BasicFormat: SyntaxRewriter {
     case \ExpressionSegmentSyntax.backslash,
       \ExpressionSegmentSyntax.rightParen,
       \DeclNameArgumentSyntax.colon,
-      \StringLiteralExprSyntax.openQuote,
-      \RegexLiteralExprSyntax.openSlash:
+      \StringLiteralExprSyntax.openingQuote,
+      \RegexLiteralExprSyntax.openingSlash:
       return false
     default:
       break

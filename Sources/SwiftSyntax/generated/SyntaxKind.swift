@@ -17,57 +17,49 @@ public enum SyntaxKind: CaseIterable {
   case token
   case accessesEffect
   case accessorBlock
+  case accessorDeclList
   case accessorDecl
   case accessorEffectSpecifiers
   case accessorInitEffects
-  case accessorList
-  case accessorParameter
+  case accessorParameters
   case actorDecl
   case arrayElementList
   case arrayElement
   case arrayExpr
   case arrayType
-  case arrowExpr
   case asExpr
   case assignmentExpr
-  case associatedtypeDecl
+  case associatedTypeDecl
   case attributeList
   case attribute
   case attributedType
+  case availabilityArgumentList
   case availabilityArgument
   case availabilityCondition
-  case availabilityEntry
   case availabilityLabeledArgument
-  case availabilitySpecList
-  case availabilityVersionRestrictionListEntry
-  case availabilityVersionRestrictionList
-  case availabilityVersionRestriction
   case awaitExpr
-  case backDeployedAttributeSpecList
-  case binaryOperatorExpr
+  case backDeployedAttributeArguments
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
   case canImportExpr
   case canImportVersionInfo
-  case caseItemList
-  case caseItem
   case catchClauseList
   case catchClause
   case catchItemList
   case catchItem
   case classDecl
   case classRestrictionType
-  case closureCaptureItemList
-  case closureCaptureItemSpecifier
-  case closureCaptureItem
-  case closureCaptureSignature
+  case closureCaptureClause
+  case closureCaptureList
+  case closureCaptureSpecifier
+  case closureCapture
   case closureExpr
-  case closureParamList
-  case closureParam
   case closureParameterClause
   case closureParameterList
   case closureParameter
+  case closureShorthandParameterList
+  case closureShorthandParameter
   case closureSignature
   case codeBlockItemList
   case codeBlockItem
@@ -78,41 +70,42 @@ public enum SyntaxKind: CaseIterable {
   case conditionElementList
   case conditionElement
   case conformanceRequirement
-  case constrainedSugarType
+  case consumeExpr
   case continueStmt
   case conventionAttributeArguments
   case conventionWitnessMethodAttributeArguments
   case copyExpr
   case declModifierDetail
+  case declModifierList
   case declModifier
   case declNameArgumentList
   case declNameArgument
   case declNameArguments
   case declName
   case deferStmt
-  case deinitEffectSpecifiers
   case deinitializerDecl
-  case derivativeRegistrationAttributeArguments
-  case designatedTypeElement
+  case deinitializerEffectSpecifiers
+  case derivativeAttributeArguments
   case designatedTypeList
+  case designatedType
   case dictionaryElementList
   case dictionaryElement
   case dictionaryExpr
   case dictionaryType
-  case differentiabilityParamList
-  case differentiabilityParam
-  case differentiabilityParamsClause
-  case differentiabilityParams
+  case differentiabilityArgument
+  case differentiabilityArguments
+  case differentiabilityParameterList
+  case differentiabilityWithRespectToArgument
   case differentiableAttributeArguments
   case discardAssignmentExpr
   case discardStmt
   case doStmt
   case documentationAttributeArgumentList
   case documentationAttributeArgument
-  case dynamicReplacementArguments
+  case dynamicReplacementAttributeArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case effectsArgumentList
+  case effectsAttributeArgumentList
   case enumCaseDecl
   case enumCaseElementList
   case enumCaseElement
@@ -122,17 +115,18 @@ public enum SyntaxKind: CaseIterable {
   case enumDecl
   case exposeAttributeArguments
   case exprList
-  case expressionPattern
-  case expressionSegment
+  case exprPattern
+  case exprSegment
   case expressionStmt
   case extensionDecl
-  case fallthroughStmt
+  case fallThroughtStmt
   case floatLiteralExpr
-  case forInStmt
-  case forcedValueExpr
+  case forStmt
+  case forceUnwrapExpr
   case functionCallExpr
   case functionDecl
   case functionEffectSpecifiers
+  case functionParameterClause
   case functionParameterList
   case functionParameter
   case functionSignature
@@ -145,10 +139,12 @@ public enum SyntaxKind: CaseIterable {
   case genericParameter
   case genericRequirementList
   case genericRequirement
+  case genericSpecializationExpr
   case genericWhereClause
   case guardStmt
   case identifierExpr
   case identifierPattern
+  case identifierType
   case ifConfigClauseList
   case ifConfigClause
   case ifConfigDecl
@@ -160,6 +156,7 @@ public enum SyntaxKind: CaseIterable {
   case importPathComponent
   case inOutExpr
   case infixOperatorExpr
+  case inheritanceClause
   case inheritedTypeList
   case inheritedType
   case initializerClause
@@ -174,7 +171,7 @@ public enum SyntaxKind: CaseIterable {
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
-  case labeledSpecializeEntry
+  case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
   case macroDecl
@@ -182,10 +179,10 @@ public enum SyntaxKind: CaseIterable {
   case macroExpansionExpr
   case matchingPatternCondition
   case memberAccessExpr
-  case memberDeclBlock
-  case memberDeclListItem
-  case memberDeclList
-  case memberTypeIdentifier
+  case memberBlockItemList
+  case memberBlockItem
+  case memberBlock
+  case memberType
   case metatypeType
   case missingDecl
   case missingExpr
@@ -193,8 +190,6 @@ public enum SyntaxKind: CaseIterable {
   case missingStmt
   case missing
   case missingType
-  case modifierList
-  case moveExpr
   case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
@@ -207,24 +202,27 @@ public enum SyntaxKind: CaseIterable {
   case optionalBindingCondition
   case optionalChainingExpr
   case optionalType
-  case originallyDefinedInArguments
+  case originallyDefinedInAttributeArguments
   case packElementExpr
+  case packElementType
   case packExpansionExpr
   case packExpansionType
-  case packReferenceType
-  case parameterClause
   case patternBindingList
   case patternBinding
+  case patternExpr
+  case platformVersionItemList
+  case platformVersionItem
+  case platformVersion
   case postfixIfConfigExpr
-  case postfixUnaryExpr
-  case poundSourceLocationArgs
+  case postfixOperatorExpr
+  case poundSourceLocationArguments
   case poundSourceLocation
   case precedenceGroupAssignment
   case precedenceGroupAssociativity
   case precedenceGroupAttributeList
   case precedenceGroupDecl
-  case precedenceGroupNameElement
   case precedenceGroupNameList
+  case precedenceGroupName
   case precedenceGroupRelation
   case prefixOperatorExpr
   case primaryAssociatedTypeClause
@@ -233,29 +231,31 @@ public enum SyntaxKind: CaseIterable {
   case protocolDecl
   case qualifiedDeclName
   case regexLiteralExpr
-  case repeatWhileStmt
+  case repeatStmt
   case returnClause
   case returnStmt
   case sameTypeRequirement
   case sequenceExpr
-  case simpleTypeIdentifier
+  case someOrAnyType
   case sourceFile
-  case specializeAttributeSpecList
-  case specializeExpr
+  case specializeAttributeArgumentList
+  case specializeAvailabilityArgument
+  case specializeTargetFunctionArgument
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
   case structDecl
+  case subscriptCallExpr
   case subscriptDecl
-  case subscriptExpr
-  case superRefExpr
+  case superExpr
   case suppressedType
+  case switchCaseItemList
+  case switchCaseItem
   case switchCaseLabel
   case switchCaseList
   case switchCase
   case switchDefaultLabel
   case switchExpr
-  case targetFunctionEntry
   case ternaryExpr
   case throwStmt
   case tryExpr
@@ -268,18 +268,18 @@ public enum SyntaxKind: CaseIterable {
   case tupleTypeElementList
   case tupleTypeElement
   case tupleType
+  case typeAliasDecl
   case typeAnnotation
   case typeEffectSpecifiers
   case typeExpr
-  case typeInheritanceClause
   case typeInitializerClause
-  case typealiasDecl
-  case unavailableFromAsyncArguments
+  case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
+  case unresolvedArrowExpr
   case unresolvedAsExpr
+  case unresolvedInfixOperatorExpr
   case unresolvedIsExpr
-  case unresolvedPatternExpr
   case unresolvedTernaryExpr
   case valueBindingPattern
   case variableDecl
@@ -289,34 +289,30 @@ public enum SyntaxKind: CaseIterable {
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldExprListElement
-  case yieldExprList
-  case yieldList
+  case yieldStmtArgumentClause
+  case yieldStmtArgumentList
+  case yieldStmtArgument
   case yieldStmt
   
   public var isSyntaxCollection: Bool {
     switch self {
-    case .accessorList:
+    case .accessorDeclList:
       return true
     case .arrayElementList:
       return true
     case .attributeList:
       return true
-    case .availabilitySpecList:
-      return true
-    case .availabilityVersionRestrictionList:
-      return true
-    case .caseItemList:
+    case .availabilityArgumentList:
       return true
     case .catchClauseList:
       return true
     case .catchItemList:
       return true
-    case .closureCaptureItemList:
-      return true
-    case .closureParamList:
+    case .closureCaptureList:
       return true
     case .closureParameterList:
+      return true
+    case .closureShorthandParameterList:
       return true
     case .codeBlockItemList:
       return true
@@ -324,17 +320,19 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .conditionElementList:
       return true
+    case .declModifierList:
+      return true
     case .declNameArgumentList:
       return true
     case .designatedTypeList:
       return true
     case .dictionaryElementList:
       return true
-    case .differentiabilityParamList:
+    case .differentiabilityParameterList:
       return true
     case .documentationAttributeArgumentList:
       return true
-    case .effectsArgumentList:
+    case .effectsAttributeArgumentList:
       return true
     case .enumCaseElementList:
       return true
@@ -358,9 +356,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .keyPathComponentList:
       return true
-    case .memberDeclList:
-      return true
-    case .modifierList:
+    case .memberBlockItemList:
       return true
     case .multipleTrailingClosureElementList:
       return true
@@ -368,15 +364,19 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .patternBindingList:
       return true
+    case .platformVersionItemList:
+      return true
     case .precedenceGroupAttributeList:
       return true
     case .precedenceGroupNameList:
       return true
     case .primaryAssociatedTypeList:
       return true
-    case .specializeAttributeSpecList:
+    case .specializeAttributeArgumentList:
       return true
     case .stringLiteralSegmentList:
+      return true
+    case .switchCaseItemList:
       return true
     case .switchCaseList:
       return true
@@ -390,7 +390,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .versionComponentList:
       return true
-    case .yieldExprList:
+    case .yieldStmtArgumentList:
       return true
     default:
       return false
@@ -424,16 +424,16 @@ public enum SyntaxKind: CaseIterable {
       return AccessesEffectSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
+    case .accessorDeclList:
+      return AccessorDeclListSyntax.self
     case .accessorDecl:
       return AccessorDeclSyntax.self
     case .accessorEffectSpecifiers:
       return AccessorEffectSpecifiersSyntax.self
     case .accessorInitEffects:
       return AccessorInitEffectsSyntax.self
-    case .accessorList:
-      return AccessorListSyntax.self
-    case .accessorParameter:
-      return AccessorParameterSyntax.self
+    case .accessorParameters:
+      return AccessorParametersSyntax.self
     case .actorDecl:
       return ActorDeclSyntax.self
     case .arrayElementList:
@@ -444,42 +444,30 @@ public enum SyntaxKind: CaseIterable {
       return ArrayExprSyntax.self
     case .arrayType:
       return ArrayTypeSyntax.self
-    case .arrowExpr:
-      return ArrowExprSyntax.self
     case .asExpr:
       return AsExprSyntax.self
     case .assignmentExpr:
       return AssignmentExprSyntax.self
-    case .associatedtypeDecl:
-      return AssociatedtypeDeclSyntax.self
+    case .associatedTypeDecl:
+      return AssociatedTypeDeclSyntax.self
     case .attributeList:
       return AttributeListSyntax.self
     case .attribute:
       return AttributeSyntax.self
     case .attributedType:
       return AttributedTypeSyntax.self
+    case .availabilityArgumentList:
+      return AvailabilityArgumentListSyntax.self
     case .availabilityArgument:
       return AvailabilityArgumentSyntax.self
     case .availabilityCondition:
       return AvailabilityConditionSyntax.self
-    case .availabilityEntry:
-      return AvailabilityEntrySyntax.self
     case .availabilityLabeledArgument:
       return AvailabilityLabeledArgumentSyntax.self
-    case .availabilitySpecList:
-      return AvailabilitySpecListSyntax.self
-    case .availabilityVersionRestrictionListEntry:
-      return AvailabilityVersionRestrictionListEntrySyntax.self
-    case .availabilityVersionRestrictionList:
-      return AvailabilityVersionRestrictionListSyntax.self
-    case .availabilityVersionRestriction:
-      return AvailabilityVersionRestrictionSyntax.self
     case .awaitExpr:
       return AwaitExprSyntax.self
-    case .backDeployedAttributeSpecList:
-      return BackDeployedAttributeSpecListSyntax.self
-    case .binaryOperatorExpr:
-      return BinaryOperatorExprSyntax.self
+    case .backDeployedAttributeArguments:
+      return BackDeployedAttributeArgumentsSyntax.self
     case .booleanLiteralExpr:
       return BooleanLiteralExprSyntax.self
     case .borrowExpr:
@@ -490,10 +478,6 @@ public enum SyntaxKind: CaseIterable {
       return CanImportExprSyntax.self
     case .canImportVersionInfo:
       return CanImportVersionInfoSyntax.self
-    case .caseItemList:
-      return CaseItemListSyntax.self
-    case .caseItem:
-      return CaseItemSyntax.self
     case .catchClauseList:
       return CatchClauseListSyntax.self
     case .catchClause:
@@ -506,26 +490,26 @@ public enum SyntaxKind: CaseIterable {
       return ClassDeclSyntax.self
     case .classRestrictionType:
       return ClassRestrictionTypeSyntax.self
-    case .closureCaptureItemList:
-      return ClosureCaptureItemListSyntax.self
-    case .closureCaptureItemSpecifier:
-      return ClosureCaptureItemSpecifierSyntax.self
-    case .closureCaptureItem:
-      return ClosureCaptureItemSyntax.self
-    case .closureCaptureSignature:
-      return ClosureCaptureSignatureSyntax.self
+    case .closureCaptureClause:
+      return ClosureCaptureClauseSyntax.self
+    case .closureCaptureList:
+      return ClosureCaptureListSyntax.self
+    case .closureCaptureSpecifier:
+      return ClosureCaptureSpecifierSyntax.self
+    case .closureCapture:
+      return ClosureCaptureSyntax.self
     case .closureExpr:
       return ClosureExprSyntax.self
-    case .closureParamList:
-      return ClosureParamListSyntax.self
-    case .closureParam:
-      return ClosureParamSyntax.self
     case .closureParameterClause:
       return ClosureParameterClauseSyntax.self
     case .closureParameterList:
       return ClosureParameterListSyntax.self
     case .closureParameter:
       return ClosureParameterSyntax.self
+    case .closureShorthandParameterList:
+      return ClosureShorthandParameterListSyntax.self
+    case .closureShorthandParameter:
+      return ClosureShorthandParameterSyntax.self
     case .closureSignature:
       return ClosureSignatureSyntax.self
     case .codeBlockItemList:
@@ -546,8 +530,8 @@ public enum SyntaxKind: CaseIterable {
       return ConditionElementSyntax.self
     case .conformanceRequirement:
       return ConformanceRequirementSyntax.self
-    case .constrainedSugarType:
-      return ConstrainedSugarTypeSyntax.self
+    case .consumeExpr:
+      return ConsumeExprSyntax.self
     case .continueStmt:
       return ContinueStmtSyntax.self
     case .conventionAttributeArguments:
@@ -558,6 +542,8 @@ public enum SyntaxKind: CaseIterable {
       return CopyExprSyntax.self
     case .declModifierDetail:
       return DeclModifierDetailSyntax.self
+    case .declModifierList:
+      return DeclModifierListSyntax.self
     case .declModifier:
       return DeclModifierSyntax.self
     case .declNameArgumentList:
@@ -570,16 +556,16 @@ public enum SyntaxKind: CaseIterable {
       return DeclNameSyntax.self
     case .deferStmt:
       return DeferStmtSyntax.self
-    case .deinitEffectSpecifiers:
-      return DeinitEffectSpecifiersSyntax.self
     case .deinitializerDecl:
       return DeinitializerDeclSyntax.self
-    case .derivativeRegistrationAttributeArguments:
-      return DerivativeRegistrationAttributeArgumentsSyntax.self
-    case .designatedTypeElement:
-      return DesignatedTypeElementSyntax.self
+    case .deinitializerEffectSpecifiers:
+      return DeinitializerEffectSpecifiersSyntax.self
+    case .derivativeAttributeArguments:
+      return DerivativeAttributeArgumentsSyntax.self
     case .designatedTypeList:
       return DesignatedTypeListSyntax.self
+    case .designatedType:
+      return DesignatedTypeSyntax.self
     case .dictionaryElementList:
       return DictionaryElementListSyntax.self
     case .dictionaryElement:
@@ -588,14 +574,14 @@ public enum SyntaxKind: CaseIterable {
       return DictionaryExprSyntax.self
     case .dictionaryType:
       return DictionaryTypeSyntax.self
-    case .differentiabilityParamList:
-      return DifferentiabilityParamListSyntax.self
-    case .differentiabilityParam:
-      return DifferentiabilityParamSyntax.self
-    case .differentiabilityParamsClause:
-      return DifferentiabilityParamsClauseSyntax.self
-    case .differentiabilityParams:
-      return DifferentiabilityParamsSyntax.self
+    case .differentiabilityArgument:
+      return DifferentiabilityArgumentSyntax.self
+    case .differentiabilityArguments:
+      return DifferentiabilityArgumentsSyntax.self
+    case .differentiabilityParameterList:
+      return DifferentiabilityParameterListSyntax.self
+    case .differentiabilityWithRespectToArgument:
+      return DifferentiabilityWithRespectToArgumentSyntax.self
     case .differentiableAttributeArguments:
       return DifferentiableAttributeArgumentsSyntax.self
     case .discardAssignmentExpr:
@@ -608,14 +594,14 @@ public enum SyntaxKind: CaseIterable {
       return DocumentationAttributeArgumentListSyntax.self
     case .documentationAttributeArgument:
       return DocumentationAttributeArgumentSyntax.self
-    case .dynamicReplacementArguments:
-      return DynamicReplacementArgumentsSyntax.self
+    case .dynamicReplacementAttributeArguments:
+      return DynamicReplacementAttributeArgumentsSyntax.self
     case .editorPlaceholderDecl:
       return EditorPlaceholderDeclSyntax.self
     case .editorPlaceholderExpr:
       return EditorPlaceholderExprSyntax.self
-    case .effectsArgumentList:
-      return EffectsArgumentListSyntax.self
+    case .effectsAttributeArgumentList:
+      return EffectsAttributeArgumentListSyntax.self
     case .enumCaseDecl:
       return EnumCaseDeclSyntax.self
     case .enumCaseElementList:
@@ -634,28 +620,30 @@ public enum SyntaxKind: CaseIterable {
       return ExposeAttributeArgumentsSyntax.self
     case .exprList:
       return ExprListSyntax.self
-    case .expressionPattern:
-      return ExpressionPatternSyntax.self
-    case .expressionSegment:
-      return ExpressionSegmentSyntax.self
+    case .exprPattern:
+      return ExprPatternSyntax.self
+    case .exprSegment:
+      return ExprSegmentSyntax.self
     case .expressionStmt:
       return ExpressionStmtSyntax.self
     case .extensionDecl:
       return ExtensionDeclSyntax.self
-    case .fallthroughStmt:
-      return FallthroughStmtSyntax.self
+    case .fallThroughtStmt:
+      return FallThroughtStmtSyntax.self
     case .floatLiteralExpr:
       return FloatLiteralExprSyntax.self
-    case .forInStmt:
-      return ForInStmtSyntax.self
-    case .forcedValueExpr:
-      return ForcedValueExprSyntax.self
+    case .forStmt:
+      return ForStmtSyntax.self
+    case .forceUnwrapExpr:
+      return ForceUnwrapExprSyntax.self
     case .functionCallExpr:
       return FunctionCallExprSyntax.self
     case .functionDecl:
       return FunctionDeclSyntax.self
     case .functionEffectSpecifiers:
       return FunctionEffectSpecifiersSyntax.self
+    case .functionParameterClause:
+      return FunctionParameterClauseSyntax.self
     case .functionParameterList:
       return FunctionParameterListSyntax.self
     case .functionParameter:
@@ -680,6 +668,8 @@ public enum SyntaxKind: CaseIterable {
       return GenericRequirementListSyntax.self
     case .genericRequirement:
       return GenericRequirementSyntax.self
+    case .genericSpecializationExpr:
+      return GenericSpecializationExprSyntax.self
     case .genericWhereClause:
       return GenericWhereClauseSyntax.self
     case .guardStmt:
@@ -688,6 +678,8 @@ public enum SyntaxKind: CaseIterable {
       return IdentifierExprSyntax.self
     case .identifierPattern:
       return IdentifierPatternSyntax.self
+    case .identifierType:
+      return IdentifierTypeSyntax.self
     case .ifConfigClauseList:
       return IfConfigClauseListSyntax.self
     case .ifConfigClause:
@@ -710,6 +702,8 @@ public enum SyntaxKind: CaseIterable {
       return InOutExprSyntax.self
     case .infixOperatorExpr:
       return InfixOperatorExprSyntax.self
+    case .inheritanceClause:
+      return InheritanceClauseSyntax.self
     case .inheritedTypeList:
       return InheritedTypeListSyntax.self
     case .inheritedType:
@@ -738,8 +732,8 @@ public enum SyntaxKind: CaseIterable {
       return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent:
       return KeyPathSubscriptComponentSyntax.self
-    case .labeledSpecializeEntry:
-      return LabeledSpecializeEntrySyntax.self
+    case .labeledSpecializeArgument:
+      return LabeledSpecializeArgumentSyntax.self
     case .labeledStmt:
       return LabeledStmtSyntax.self
     case .layoutRequirement:
@@ -754,14 +748,14 @@ public enum SyntaxKind: CaseIterable {
       return MatchingPatternConditionSyntax.self
     case .memberAccessExpr:
       return MemberAccessExprSyntax.self
-    case .memberDeclBlock:
-      return MemberDeclBlockSyntax.self
-    case .memberDeclListItem:
-      return MemberDeclListItemSyntax.self
-    case .memberDeclList:
-      return MemberDeclListSyntax.self
-    case .memberTypeIdentifier:
-      return MemberTypeIdentifierSyntax.self
+    case .memberBlockItemList:
+      return MemberBlockItemListSyntax.self
+    case .memberBlockItem:
+      return MemberBlockItemSyntax.self
+    case .memberBlock:
+      return MemberBlockSyntax.self
+    case .memberType:
+      return MemberTypeSyntax.self
     case .metatypeType:
       return MetatypeTypeSyntax.self
     case .missingDecl:
@@ -776,10 +770,6 @@ public enum SyntaxKind: CaseIterable {
       return MissingSyntax.self
     case .missingType:
       return MissingTypeSyntax.self
-    case .modifierList:
-      return ModifierListSyntax.self
-    case .moveExpr:
-      return MoveExprSyntax.self
     case .multipleTrailingClosureElementList:
       return MultipleTrailingClosureElementListSyntax.self
     case .multipleTrailingClosureElement:
@@ -804,28 +794,34 @@ public enum SyntaxKind: CaseIterable {
       return OptionalChainingExprSyntax.self
     case .optionalType:
       return OptionalTypeSyntax.self
-    case .originallyDefinedInArguments:
-      return OriginallyDefinedInArgumentsSyntax.self
+    case .originallyDefinedInAttributeArguments:
+      return OriginallyDefinedInAttributeArgumentsSyntax.self
     case .packElementExpr:
       return PackElementExprSyntax.self
+    case .packElementType:
+      return PackElementTypeSyntax.self
     case .packExpansionExpr:
       return PackExpansionExprSyntax.self
     case .packExpansionType:
       return PackExpansionTypeSyntax.self
-    case .packReferenceType:
-      return PackReferenceTypeSyntax.self
-    case .parameterClause:
-      return ParameterClauseSyntax.self
     case .patternBindingList:
       return PatternBindingListSyntax.self
     case .patternBinding:
       return PatternBindingSyntax.self
+    case .patternExpr:
+      return PatternExprSyntax.self
+    case .platformVersionItemList:
+      return PlatformVersionItemListSyntax.self
+    case .platformVersionItem:
+      return PlatformVersionItemSyntax.self
+    case .platformVersion:
+      return PlatformVersionSyntax.self
     case .postfixIfConfigExpr:
       return PostfixIfConfigExprSyntax.self
-    case .postfixUnaryExpr:
-      return PostfixUnaryExprSyntax.self
-    case .poundSourceLocationArgs:
-      return PoundSourceLocationArgsSyntax.self
+    case .postfixOperatorExpr:
+      return PostfixOperatorExprSyntax.self
+    case .poundSourceLocationArguments:
+      return PoundSourceLocationArgumentsSyntax.self
     case .poundSourceLocation:
       return PoundSourceLocationSyntax.self
     case .precedenceGroupAssignment:
@@ -836,10 +832,10 @@ public enum SyntaxKind: CaseIterable {
       return PrecedenceGroupAttributeListSyntax.self
     case .precedenceGroupDecl:
       return PrecedenceGroupDeclSyntax.self
-    case .precedenceGroupNameElement:
-      return PrecedenceGroupNameElementSyntax.self
     case .precedenceGroupNameList:
       return PrecedenceGroupNameListSyntax.self
+    case .precedenceGroupName:
+      return PrecedenceGroupNameSyntax.self
     case .precedenceGroupRelation:
       return PrecedenceGroupRelationSyntax.self
     case .prefixOperatorExpr:
@@ -856,8 +852,8 @@ public enum SyntaxKind: CaseIterable {
       return QualifiedDeclNameSyntax.self
     case .regexLiteralExpr:
       return RegexLiteralExprSyntax.self
-    case .repeatWhileStmt:
-      return RepeatWhileStmtSyntax.self
+    case .repeatStmt:
+      return RepeatStmtSyntax.self
     case .returnClause:
       return ReturnClauseSyntax.self
     case .returnStmt:
@@ -866,14 +862,16 @@ public enum SyntaxKind: CaseIterable {
       return SameTypeRequirementSyntax.self
     case .sequenceExpr:
       return SequenceExprSyntax.self
-    case .simpleTypeIdentifier:
-      return SimpleTypeIdentifierSyntax.self
+    case .someOrAnyType:
+      return SomeOrAnyTypeSyntax.self
     case .sourceFile:
       return SourceFileSyntax.self
-    case .specializeAttributeSpecList:
-      return SpecializeAttributeSpecListSyntax.self
-    case .specializeExpr:
-      return SpecializeExprSyntax.self
+    case .specializeAttributeArgumentList:
+      return SpecializeAttributeArgumentListSyntax.self
+    case .specializeAvailabilityArgument:
+      return SpecializeAvailabilityArgumentSyntax.self
+    case .specializeTargetFunctionArgument:
+      return SpecializeTargetFunctionArgumentSyntax.self
     case .stringLiteralExpr:
       return StringLiteralExprSyntax.self
     case .stringLiteralSegmentList:
@@ -882,14 +880,18 @@ public enum SyntaxKind: CaseIterable {
       return StringSegmentSyntax.self
     case .structDecl:
       return StructDeclSyntax.self
+    case .subscriptCallExpr:
+      return SubscriptCallExprSyntax.self
     case .subscriptDecl:
       return SubscriptDeclSyntax.self
-    case .subscriptExpr:
-      return SubscriptExprSyntax.self
-    case .superRefExpr:
-      return SuperRefExprSyntax.self
+    case .superExpr:
+      return SuperExprSyntax.self
     case .suppressedType:
       return SuppressedTypeSyntax.self
+    case .switchCaseItemList:
+      return SwitchCaseItemListSyntax.self
+    case .switchCaseItem:
+      return SwitchCaseItemSyntax.self
     case .switchCaseLabel:
       return SwitchCaseLabelSyntax.self
     case .switchCaseList:
@@ -900,8 +902,6 @@ public enum SyntaxKind: CaseIterable {
       return SwitchDefaultLabelSyntax.self
     case .switchExpr:
       return SwitchExprSyntax.self
-    case .targetFunctionEntry:
-      return TargetFunctionEntrySyntax.self
     case .ternaryExpr:
       return TernaryExprSyntax.self
     case .throwStmt:
@@ -926,30 +926,30 @@ public enum SyntaxKind: CaseIterable {
       return TupleTypeElementSyntax.self
     case .tupleType:
       return TupleTypeSyntax.self
+    case .typeAliasDecl:
+      return TypeAliasDeclSyntax.self
     case .typeAnnotation:
       return TypeAnnotationSyntax.self
     case .typeEffectSpecifiers:
       return TypeEffectSpecifiersSyntax.self
     case .typeExpr:
       return TypeExprSyntax.self
-    case .typeInheritanceClause:
-      return TypeInheritanceClauseSyntax.self
     case .typeInitializerClause:
       return TypeInitializerClauseSyntax.self
-    case .typealiasDecl:
-      return TypealiasDeclSyntax.self
-    case .unavailableFromAsyncArguments:
-      return UnavailableFromAsyncArgumentsSyntax.self
+    case .unavailableFromAsyncAttributeArguments:
+      return UnavailableFromAsyncAttributeArgumentsSyntax.self
     case .underscorePrivateAttributeArguments:
       return UnderscorePrivateAttributeArgumentsSyntax.self
     case .unexpectedNodes:
       return UnexpectedNodesSyntax.self
+    case .unresolvedArrowExpr:
+      return UnresolvedArrowExprSyntax.self
     case .unresolvedAsExpr:
       return UnresolvedAsExprSyntax.self
+    case .unresolvedInfixOperatorExpr:
+      return UnresolvedInfixOperatorExprSyntax.self
     case .unresolvedIsExpr:
       return UnresolvedIsExprSyntax.self
-    case .unresolvedPatternExpr:
-      return UnresolvedPatternExprSyntax.self
     case .unresolvedTernaryExpr:
       return UnresolvedTernaryExprSyntax.self
     case .valueBindingPattern:
@@ -968,12 +968,12 @@ public enum SyntaxKind: CaseIterable {
       return WhileStmtSyntax.self
     case .wildcardPattern:
       return WildcardPatternSyntax.self
-    case .yieldExprListElement:
-      return YieldExprListElementSyntax.self
-    case .yieldExprList:
-      return YieldExprListSyntax.self
-    case .yieldList:
-      return YieldListSyntax.self
+    case .yieldStmtArgumentClause:
+      return YieldStmtArgumentClauseSyntax.self
+    case .yieldStmtArgumentList:
+      return YieldStmtArgumentListSyntax.self
+    case .yieldStmtArgument:
+      return YieldStmtArgumentSyntax.self
     case .yieldStmt:
       return YieldStmtSyntax.self
     }

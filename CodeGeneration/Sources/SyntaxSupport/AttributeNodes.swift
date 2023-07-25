@@ -72,11 +72,11 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "Availability",
-            kind: .node(kind: .availabilitySpecList)
+            kind: .node(kind: .availabilityArgumentList)
           ),
           Child(
             name: "SpecializeArguments",
-            kind: .node(kind: .specializeAttributeSpecList)
+            kind: .node(kind: .specializeAttributeArgumentList)
           ),
           Child(
             name: "ObjCName",
@@ -92,11 +92,11 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "DerivativeRegistrationArguments",
-            kind: .node(kind: .derivativeRegistrationAttributeArguments)
+            kind: .node(kind: .derivativeAttributeArguments)
           ),
           Child(
             name: "BackDeployedArguments",
-            kind: .node(kind: .backDeployedAttributeSpecList)
+            kind: .node(kind: .backDeployedAttributeArguments)
           ),
           Child(
             name: "ConventionArguments",
@@ -116,7 +116,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "OriginallyDefinedInArguments",
-            kind: .node(kind: .originallyDefinedInArguments)
+            kind: .node(kind: .originallyDefinedInAttributeArguments)
           ),
           Child(
             name: "UnderscorePrivateAttributeArguments",
@@ -124,15 +124,15 @@ public let ATTRIBUTE_NODES: [Node] = [
           ),
           Child(
             name: "DynamicReplacementArguments",
-            kind: .node(kind: .dynamicReplacementArguments)
+            kind: .node(kind: .dynamicReplacementAttributeArguments)
           ),
           Child(
             name: "UnavailableFromAsyncArguments",
-            kind: .node(kind: .unavailableFromAsyncArguments)
+            kind: .node(kind: .unavailableFromAsyncAttributeArguments)
           ),
           Child(
             name: "EffectsArguments",
-            kind: .node(kind: .effectsArgumentList)
+            kind: .node(kind: .effectsAttributeArgumentList)
           ),
           Child(
             name: "DocumentationArguments",
@@ -152,7 +152,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .availabilityEntry,
+    kind: .specializeAvailabilityArgument,
     base: .syntax,
     nameForDiagnostics: "availability entry",
     documentation: "The availability argument for the _specialize attribute",
@@ -172,7 +172,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "AvailabilityArguments",
         deprecatedName: "AvailabilityList",
-        kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument", deprecatedCollectionElementName: "Availability")
+        kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument", deprecatedCollectionElementName: "Availability")
       ),
       Child(
         name: "Semicolon",
@@ -183,7 +183,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // back-deploy-version-entry -> availability-version-restriction ','?
   Node(
-    kind: .availabilityVersionRestrictionListEntry,
+    kind: .platformVersionItem,
     base: .syntax,
     nameForDiagnostics: "version",
     documentation: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
@@ -191,7 +191,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "AvailabilityVersionRestriction",
-        kind: .node(kind: .availabilityVersionRestriction)
+        kind: .node(kind: .platformVersion)
       ),
       Child(
         name: "TrailingComma",
@@ -205,16 +205,16 @@ public let ATTRIBUTE_NODES: [Node] = [
   // back-deploy-version-list ->
   //   back-deploy-version-entry back-deploy-version-list?
   Node(
-    kind: .availabilityVersionRestrictionList,
+    kind: .platformVersionItemList,
     base: .syntaxCollection,
     nameForDiagnostics: "version list",
-    elementChoices: [.availabilityVersionRestrictionListEntry]
+    elementChoices: [.platformVersionItem]
   ),
 
   // The arguments of '@backDeployed(...)'
   // back-deployed-attr-spec-list -> 'before' ':' back-deployed-version-list
   Node(
-    kind: .backDeployedAttributeSpecList,
+    kind: .backDeployedAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "'@backDeployed' arguments",
     documentation: "A collection of arguments for the `@backDeployed` attribute",
@@ -232,7 +232,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Platforms",
         deprecatedName: "VersionList",
-        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Platform", deprecatedCollectionElementName: "Availability"),
+        kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform", deprecatedCollectionElementName: "Availability"),
         documentation: "The list of OS versions in which the declaration became ABI stable."
       ),
     ]
@@ -331,7 +331,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   // derivative-registration-attr-arguments ->
   //     'of' ':' func-decl-name ','? differentiability-params-clause?
   Node(
-    kind: .derivativeRegistrationAttributeArguments,
+    kind: .derivativeAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "attribute arguments",
     documentation:
@@ -373,7 +373,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Parameters",
         deprecatedName: "DiffParams",
-        kind: .node(kind: .differentiabilityParamsClause),
+        kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
       ),
     ]
@@ -382,15 +382,15 @@ public let ATTRIBUTE_NODES: [Node] = [
   // differentiability-param-list ->
   //     differentiability-param differentiability-param-list?
   Node(
-    kind: .differentiabilityParamList,
+    kind: .differentiabilityParameterList,
     base: .syntaxCollection,
     nameForDiagnostics: "differentiability parameters",
-    elementChoices: [.differentiabilityParam]
+    elementChoices: [.differentiabilityArgument]
   ),
 
   // differentiability-param -> ('self' | identifier | integer-literal) ','?
   Node(
-    kind: .differentiabilityParam,
+    kind: .differentiabilityArgument,
     base: .syntax,
     nameForDiagnostics: "differentiability parameter",
     documentation: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
@@ -413,7 +413,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   // differentiability-params-clause ->
   //     'wrt' ':' (differentiability-param | differentiability-params)
   Node(
-    kind: .differentiabilityParamsClause,
+    kind: .differentiabilityWithRespectToArgument,
     base: .syntax,
     nameForDiagnostics: "'@differentiable' argument",
     documentation: "A clause containing differentiability parameters.",
@@ -433,11 +433,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "Parameter",
-            kind: .node(kind: .differentiabilityParam)
+            kind: .node(kind: .differentiabilityArgument)
           ),
           Child(
             name: "ParameterList",
-            kind: .node(kind: .differentiabilityParams)
+            kind: .node(kind: .differentiabilityArguments)
           ),
         ]),
         nameForDiagnostics: "parameters"
@@ -447,7 +447,7 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   // differentiability-params -> '(' differentiability-param-list ')'
   Node(
-    kind: .differentiabilityParams,
+    kind: .differentiabilityArguments,
     base: .syntax,
     nameForDiagnostics: "differentiability parameters",
     documentation: "The differentiability parameters.",
@@ -458,7 +458,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "DifferentiabilityParameters",
-        kind: .collection(kind: .differentiabilityParamList, collectionElementName: "DifferentiabilityParam"),
+        kind: .collection(kind: .differentiabilityParameterList, collectionElementName: "DifferentiabilityParam"),
         documentation: "The parameters for differentiation."
       ),
       Child(
@@ -495,7 +495,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Parameters",
         deprecatedName: "DiffParams",
-        kind: .node(kind: .differentiabilityParamsClause),
+        kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
       ),
       Child(
@@ -570,7 +570,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .dynamicReplacementArguments,
+    kind: .dynamicReplacementAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@_dynamicReplacement argument",
     documentation: "The arguments for the '@_dynamicReplacement' attribute",
@@ -592,7 +592,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .effectsArgumentList,
+    kind: .effectsAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "@_effects arguments",
     documentation: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
@@ -661,7 +661,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   // Representation of e.g. 'exported: true,'
   // labeled-specialize-entry -> identifier ':' token ','?
   Node(
-    kind: .labeledSpecializeEntry,
+    kind: .labeledSpecializeArgument,
     base: .syntax,
     nameForDiagnostics: "attribute argument",
     documentation: "A labeled argument for the `@_specialize` attribute like `exported: true`",
@@ -750,7 +750,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .originallyDefinedInArguments,
+    kind: .originallyDefinedInAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@_originallyDefinedIn arguments",
     documentation: "The arguments for the '@_originallyDefinedIn' attribute",
@@ -773,7 +773,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Platforms",
-        kind: .collection(kind: .availabilityVersionRestrictionList, collectionElementName: "Platform")
+        kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform")
       ),
     ]
   ),
@@ -834,17 +834,17 @@ public let ATTRIBUTE_NODES: [Node] = [
   //                            | generic-where-clause
   //                                  specialize-spec-attr-list?
   Node(
-    kind: .specializeAttributeSpecList,
+    kind: .specializeAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "argument to '@_specialize",
     documentation: "A collection of arguments for the `@_specialize` attribute",
-    elementChoices: [.labeledSpecializeEntry, .availabilityEntry, .targetFunctionEntry, .genericWhereClause]
+    elementChoices: [.labeledSpecializeArgument, .specializeAvailabilityArgument, .specializeTargetFunctionArgument, .genericWhereClause]
   ),
 
   // Representation of e.g. 'exported: true,'
   // labeled-specialize-entry -> identifier ':' token ','?
   Node(
-    kind: .targetFunctionEntry,
+    kind: .specializeTargetFunctionArgument,
     base: .syntax,
     nameForDiagnostics: "attribute argument",
     documentation: "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
@@ -881,7 +881,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .unavailableFromAsyncArguments,
+    kind: .unavailableFromAsyncAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@_unavailableFromAsync argument",
     documentation: "The arguments for the '@_unavailableFromAsync' attribute",

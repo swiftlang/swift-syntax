@@ -44,8 +44,8 @@ extension ConditionElementListBuilder {
   }
 }
 
-extension MemberDeclListBuilder {
+extension MemberBlockItemListBuilder {
   public static func buildExpression(_ expression: some DeclSyntaxProtocol) -> Component {
-    return buildExpression(MemberDeclListItemSyntax(decl: expression))
+    return buildExpression(MemberBlockItemSyntax(decl: expression))
   }
 }

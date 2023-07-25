@@ -170,9 +170,9 @@ extension FunctionTypeSyntax {
   fileprivate var closureExpansion: ClosureExprSyntax {
     let closureSignature: ClosureSignatureSyntax?
     if !parameters.isEmpty {
-      let args = ClosureParamListSyntax {
+      let args = ClosureShorthandParameterListSyntax {
         for arg in parameters {
-          ClosureParamSyntax(name: arg.expansionNameToken())
+          ClosureShorthandParameterSyntax(name: arg.expansionNameToken())
         }
       }
       closureSignature = ClosureSignatureSyntax(parameterClause: .simpleInput(args))
@@ -216,8 +216,8 @@ extension TupleTypeElementSyntax {
       return secondName
     }
 
-    if let name = name, name.tokenKind != .wildcard {
-      return name
+    if let firstName, firstName.tokenKind != .wildcard {
+      return firstName
     }
 
     return .identifier(ExpandEditorPlaceholder.wrapInPlaceholder(type.description))

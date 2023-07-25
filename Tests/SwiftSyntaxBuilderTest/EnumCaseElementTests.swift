@@ -20,13 +20,13 @@ final class EnumCaseElementTests: XCTestCase {
     let buildable = EnumDeclSyntax(
       leadingTrivia: leadingTrivia,
       name: "Greeting",
-      inheritanceClause: TypeInheritanceClauseSyntax {
+      inheritanceClause: InheritanceClauseSyntax {
         InheritedTypeSyntax(type: TypeSyntax("String"))
         InheritedTypeSyntax(type: TypeSyntax("Codable"))
         InheritedTypeSyntax(type: TypeSyntax("Equatable"))
       }
     ) {
-      MemberDeclListItemSyntax(
+      MemberBlockItemSyntax(
         decl: EnumCaseDeclSyntax {
           EnumCaseElementSyntax(
             name: "goodMorning",

@@ -34,7 +34,7 @@ import SwiftSyntax
 /// ```
 public struct AddSeparatorsToIntegerLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: IntegerLiteralExprSyntax, in context: Void) -> IntegerLiteralExprSyntax? {
-    if lit.digits.text.contains("_") {
+    if lit.literal.text.contains("_") {
       guard let strippedLiteral = RemoveSeparatorsFromIntegerLiteral.refactor(syntax: lit) else {
         return nil
       }
@@ -51,7 +51,7 @@ public struct AddSeparatorsToIntegerLiteral: SyntaxRefactoringProvider {
     formattedText += value.byAddingGroupSeparators(at: lit.idealGroupSize)
     return
       lit
-      .with(\.digits, lit.digits.with(\.tokenKind, .integerLiteral(formattedText)))
+      .with(\.literal, lit.literal.with(\.tokenKind, .integerLiteral(formattedText)))
   }
 }
 

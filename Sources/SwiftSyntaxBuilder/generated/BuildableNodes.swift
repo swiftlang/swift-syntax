@@ -55,9 +55,9 @@ extension AccessorDeclSyntax {
       modifier: DeclModifierSyntax? = nil, 
       unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil, 
       accessorSpecifier: TokenSyntax, 
-      unexpectedBetweenAccessorSpecifierAndParameter: UnexpectedNodesSyntax? = nil, 
-      parameter: AccessorParameterSyntax? = nil, 
-      unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenAccessorSpecifierAndParameters: UnexpectedNodesSyntax? = nil, 
+      parameters: AccessorParametersSyntax? = nil, 
+      unexpectedBetweenParametersAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
       unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil, 
       initEffects: AccessorInitEffectsSyntax? = nil, 
@@ -74,9 +74,9 @@ extension AccessorDeclSyntax {
         modifier: modifier, 
         unexpectedBetweenModifierAndAccessorSpecifier, 
         accessorSpecifier: accessorSpecifier, 
-        unexpectedBetweenAccessorSpecifierAndParameter, 
-        parameter: parameter, 
-        unexpectedBetweenParameterAndEffectSpecifiers, 
+        unexpectedBetweenAccessorSpecifierAndParameters, 
+        parameters: parameters, 
+        unexpectedBetweenParametersAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
         unexpectedBetweenEffectSpecifiersAndInitEffects, 
         initEffects: initEffects, 
@@ -97,7 +97,7 @@ extension ActorDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, 
       actorKeyword: TokenSyntax = .keyword(.actor), 
       unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -105,12 +105,12 @@ extension ActorDeclSyntax {
       unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -130,7 +130,7 @@ extension ActorDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
@@ -198,7 +198,7 @@ extension ClassDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, 
       classKeyword: TokenSyntax = .keyword(.class), 
       unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -206,12 +206,12 @@ extension ClassDeclSyntax {
       unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -231,14 +231,14 @@ extension ClassDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension ClosureCaptureSignatureSyntax {
+extension ClosureCaptureClauseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -248,7 +248,7 @@ extension ClosureCaptureSignatureSyntax {
       unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, 
       rightSquare: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
-      @ClosureCaptureItemListBuilder itemsBuilder: () throws -> ClosureCaptureItemListSyntax?, 
+      @ClosureCaptureListBuilder itemsBuilder: () throws -> ClosureCaptureListSyntax?, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -353,11 +353,11 @@ extension DeinitializerDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil, 
       deinitKeyword: TokenSyntax = .keyword(.deinit), 
       unexpectedBetweenDeinitKeywordAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
-      effectSpecifiers: DeinitEffectSpecifiersSyntax? = nil, 
+      effectSpecifiers: DeinitializerEffectSpecifiersSyntax? = nil, 
       unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax?, 
@@ -417,7 +417,7 @@ extension EnumCaseDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil, 
       caseKeyword: TokenSyntax = .keyword(.case), 
       unexpectedBetweenCaseKeywordAndElements: UnexpectedNodesSyntax? = nil, 
@@ -448,7 +448,7 @@ extension EnumDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, 
       enumKeyword: TokenSyntax = .keyword(.enum), 
       unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -456,12 +456,12 @@ extension EnumDeclSyntax {
       unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -481,22 +481,22 @@ extension EnumDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension ExpressionSegmentSyntax {
+extension ExprSegmentSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeBackslash: UnexpectedNodesSyntax? = nil, 
       backslash: TokenSyntax = .backslashToken(), 
-      unexpectedBetweenBackslashAndRawStringDelimiter: UnexpectedNodesSyntax? = nil, 
-      rawStringDelimiter: TokenSyntax? = nil, 
-      unexpectedBetweenRawStringDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenBackslashAndPounds: UnexpectedNodesSyntax? = nil, 
+      pounds: TokenSyntax? = nil, 
+      unexpectedBetweenPoundsAndLeftParen: UnexpectedNodesSyntax? = nil, 
       leftParen: TokenSyntax = .leftParenToken(), 
       unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, 
@@ -509,9 +509,9 @@ extension ExpressionSegmentSyntax {
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeBackslash, 
         backslash: backslash, 
-        unexpectedBetweenBackslashAndRawStringDelimiter, 
-        rawStringDelimiter: rawStringDelimiter, 
-        unexpectedBetweenRawStringDelimiterAndLeftParen, 
+        unexpectedBetweenBackslashAndPounds, 
+        pounds: pounds, 
+        unexpectedBetweenPoundsAndLeftParen, 
         leftParen: leftParen, 
         unexpectedBetweenLeftParenAndExpressions, 
         expressions: expressionsBuilder(), 
@@ -530,18 +530,18 @@ extension ExtensionDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil, 
       extensionKeyword: TokenSyntax = .keyword(.extension), 
       unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil, 
       extendedType: TypeSyntaxProtocol, 
       unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -559,14 +559,14 @@ extension ExtensionDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension ForInStmtSyntax {
+extension ForStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -667,7 +667,7 @@ extension FunctionDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil, 
       funcKeyword: TokenSyntax = .keyword(.func), 
       unexpectedBetweenFuncKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -704,6 +704,33 @@ extension FunctionDeclSyntax {
           CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension FunctionParameterClauseSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
+      leftParen: TokenSyntax = .leftParenToken(), 
+      unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil, 
+      rightParen: TokenSyntax = .rightParenToken(), 
+      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
+      @FunctionParameterListBuilder parametersBuilder: () throws -> FunctionParameterListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndParameters, 
+        parameters: parametersBuilder(), 
+        unexpectedBetweenParametersAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -856,6 +883,29 @@ extension IfExprSyntax {
   }
 }
 
+extension InheritanceClauseSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
+      colon: TokenSyntax = .colonToken(), 
+      unexpectedBetweenColonAndInheritedTypes: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterInheritedTypes: UnexpectedNodesSyntax? = nil, 
+      @InheritedTypeListBuilder inheritedTypesBuilder: () throws -> InheritedTypeListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndInheritedTypes, 
+        inheritedTypes: inheritedTypesBuilder(), 
+        unexpectedAfterInheritedTypes, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension InitializerDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -863,7 +913,7 @@ extension InitializerDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, 
       initKeyword: TokenSyntax = .keyword(.`init`), 
       unexpectedBetweenInitKeywordAndOptionalMark: UnexpectedNodesSyntax? = nil, 
@@ -970,7 +1020,7 @@ extension MacroExpansionDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil, 
       pound: TokenSyntax = .poundToken(), 
       unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil, 
@@ -1065,7 +1115,7 @@ extension MacroExpansionExprSyntax {
   }
 }
 
-extension MemberDeclBlockSyntax {
+extension MemberBlockSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -1075,7 +1125,7 @@ extension MemberDeclBlockSyntax {
       unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? = nil, 
       rightBrace: TokenSyntax = .rightBraceToken(), 
       unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1092,33 +1142,6 @@ extension MemberDeclBlockSyntax {
   }
 }
 
-extension ParameterClauseSyntax {
-  /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil, 
-      unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @FunctionParameterListBuilder parametersBuilder: () throws -> FunctionParameterListSyntax, 
-      trailingTrivia: Trivia? = nil
-    ) rethrows {
-    try self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndParameters, 
-        parameters: parametersBuilder(), 
-        unexpectedBetweenParametersAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension ProtocolDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -1126,7 +1149,7 @@ extension ProtocolDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, 
       protocolKeyword: TokenSyntax = .keyword(.protocol), 
       unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -1134,12 +1157,12 @@ extension ProtocolDeclSyntax {
       unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil, 
       primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil, 
       unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1159,14 +1182,14 @@ extension ProtocolDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension RepeatWhileStmtSyntax {
+extension RepeatStmtSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -1246,7 +1269,7 @@ extension StructDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, 
       structKeyword: TokenSyntax = .keyword(.struct), 
       unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil, 
@@ -1254,12 +1277,12 @@ extension StructDeclSyntax {
       unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil, 
       genericParameterClause: GenericParameterClauseSyntax? = nil, 
       unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil, 
-      inheritanceClause: TypeInheritanceClauseSyntax? = nil, 
+      inheritanceClause: InheritanceClauseSyntax? = nil, 
       unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil, 
       genericWhereClause: GenericWhereClauseSyntax? = nil, 
       unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil, 
-      @MemberDeclListBuilder memberBlockBuilder: () throws -> MemberDeclListSyntax, 
+      @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1279,14 +1302,14 @@ extension StructDeclSyntax {
         unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        memberBlock: MemberDeclBlockSyntax(members: memberBlockBuilder()), 
+        memberBlock: MemberBlockSyntax(members: memberBlockBuilder()), 
         unexpectedAfterMemberBlock, 
         trailingTrivia: trailingTrivia
       )
   }
 }
 
-extension SubscriptExprSyntax {
+extension SubscriptCallExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -1335,7 +1358,7 @@ extension SwitchCaseLabelSyntax {
       unexpectedBetweenCaseItemsAndColon: UnexpectedNodesSyntax? = nil, 
       colon: TokenSyntax = .colonToken(), 
       unexpectedAfterColon: UnexpectedNodesSyntax? = nil, 
-      @CaseItemListBuilder caseItemsBuilder: () throws -> CaseItemListSyntax, 
+      @SwitchCaseItemListBuilder caseItemsBuilder: () throws -> SwitchCaseItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1356,9 +1379,9 @@ extension SwitchCaseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? = nil, 
-      unknownAttr: AttributeSyntax? = nil, 
-      unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? = nil, 
+      unexpectedBeforeUnknownAttribute: UnexpectedNodesSyntax? = nil, 
+      unknownAttribute: AttributeSyntax? = nil, 
+      unexpectedBetweenUnknownAttributeAndLabel: UnexpectedNodesSyntax? = nil, 
       label: Label, 
       unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterStatements: UnexpectedNodesSyntax? = nil, 
@@ -1367,9 +1390,9 @@ extension SwitchCaseSyntax {
     ) rethrows {
     try self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeUnknownAttr, 
-        unknownAttr: unknownAttr, 
-        unexpectedBetweenUnknownAttrAndLabel, 
+        unexpectedBeforeUnknownAttribute, 
+        unknownAttribute: unknownAttribute, 
+        unexpectedBetweenUnknownAttributeAndLabel, 
         label: label, 
         unexpectedBetweenLabelAndStatements, 
         statements: statementsBuilder(), 
@@ -1385,9 +1408,9 @@ extension SwitchExprSyntax {
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeSwitchKeyword: UnexpectedNodesSyntax? = nil, 
       switchKeyword: TokenSyntax = .keyword(.switch), 
-      unexpectedBetweenSwitchKeywordAndExpression: UnexpectedNodesSyntax? = nil, 
-      expression: ExprSyntaxProtocol, 
-      unexpectedBetweenExpressionAndLeftBrace: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenSwitchKeywordAndSubject: UnexpectedNodesSyntax? = nil, 
+      subject: ExprSyntaxProtocol, 
+      unexpectedBetweenSubjectAndLeftBrace: UnexpectedNodesSyntax? = nil, 
       leftBrace: TokenSyntax = .leftBraceToken(), 
       unexpectedBetweenLeftBraceAndCases: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil, 
@@ -1400,9 +1423,9 @@ extension SwitchExprSyntax {
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeSwitchKeyword, 
         switchKeyword: switchKeyword, 
-        unexpectedBetweenSwitchKeywordAndExpression, 
-        expression: ExprSyntax(fromProtocol: expression), 
-        unexpectedBetweenExpressionAndLeftBrace, 
+        unexpectedBetweenSwitchKeywordAndSubject, 
+        subject: ExprSyntax(fromProtocol: subject), 
+        unexpectedBetweenSubjectAndLeftBrace, 
         leftBrace: leftBrace, 
         unexpectedBetweenLeftBraceAndCases, 
         cases: casesBuilder(), 
@@ -1468,29 +1491,6 @@ extension TuplePatternSyntax {
   }
 }
 
-extension TypeInheritanceClauseSyntax {
-  /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeColon: UnexpectedNodesSyntax? = nil, 
-      colon: TokenSyntax = .colonToken(), 
-      unexpectedBetweenColonAndInheritedTypes: UnexpectedNodesSyntax? = nil, 
-      unexpectedAfterInheritedTypes: UnexpectedNodesSyntax? = nil, 
-      @InheritedTypeListBuilder inheritedTypesBuilder: () throws -> InheritedTypeListSyntax, 
-      trailingTrivia: Trivia? = nil
-    ) rethrows {
-    try self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeColon, 
-        colon: colon, 
-        unexpectedBetweenColonAndInheritedTypes, 
-        inheritedTypes: inheritedTypesBuilder(), 
-        unexpectedAfterInheritedTypes, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension VariableDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -1498,7 +1498,7 @@ extension VariableDeclSyntax {
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
       attributes: AttributeListSyntax? = nil, 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
-      modifiers: ModifierListSyntax? = nil, 
+      modifiers: DeclModifierListSyntax? = nil, 
       unexpectedBetweenModifiersAndBindingSpecifier: UnexpectedNodesSyntax? = nil, 
       bindingSpecifier: TokenSyntax, 
       unexpectedBetweenBindingSpecifierAndBindings: UnexpectedNodesSyntax? = nil, 

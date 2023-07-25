@@ -17,15 +17,15 @@ protocol NominalTypeDeclarationTrait {
 
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: PrimaryOrGenerics?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   )
 
@@ -35,15 +35,15 @@ protocol NominalTypeDeclarationTrait {
 extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -69,15 +69,15 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
 extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -103,15 +103,15 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
 extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -137,15 +137,15 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
 extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -171,15 +171,15 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
 extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
   init(
     attributes: RawAttributeListSyntax?,
-    modifiers: RawModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax?,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
-    inheritanceClause: RawTypeInheritanceClauseSyntax?,
+    inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberDeclBlockSyntax,
+    memberBlock: RawMemberBlockSyntax,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -222,9 +222,9 @@ extension Parser {
         primaryOrGenerics: nil,
         inheritanceClause: nil,
         genericWhereClause: nil,
-        memberBlock: RawMemberDeclBlockSyntax(
+        memberBlock: RawMemberBlockSyntax(
           leftBrace: missingToken(.leftBrace),
-          members: RawMemberDeclListSyntax(elements: [], arena: self.arena),
+          members: RawMemberBlockItemListSyntax(elements: [], arena: self.arena),
           rightBrace: missingToken(.rightBrace),
           arena: self.arena
         ),
@@ -239,7 +239,7 @@ extension Parser {
       primaryOrGenerics = nil
     }
 
-    let inheritance: RawTypeInheritanceClauseSyntax?
+    let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) || self.isAtPythonStyleInheritanceClause() {
       inheritance = self.parseInheritance()
     } else {
@@ -271,7 +271,7 @@ extension Parser {
   }
 
   /// Parse an inheritance clause.
-  mutating func parseInheritance() -> RawTypeInheritanceClauseSyntax {
+  mutating func parseInheritance() -> RawInheritanceClauseSyntax {
     let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
     let colon: RawTokenSyntax
 
@@ -323,7 +323,7 @@ extension Parser {
       unexpectedAfterInheritedTypeCollection = nil
     }
 
-    return RawTypeInheritanceClauseSyntax(
+    return RawInheritanceClauseSyntax(
       unexpectedBeforeColon,
       colon: colon,
       inheritedTypes: RawInheritedTypeListSyntax(elements: elements, arena: self.arena),

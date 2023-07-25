@@ -62,7 +62,7 @@ extension PrecedenceRelation {
       colon: .colonToken(),
       precedenceGroups: PrecedenceGroupNameListSyntax(
         [
-          PrecedenceGroupNameElementSyntax(
+          PrecedenceGroupNameSyntax(
             name: .identifier(groupName, leadingTrivia: .space)
           )
         ]

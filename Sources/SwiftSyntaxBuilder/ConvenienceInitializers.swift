@@ -60,7 +60,7 @@ extension AttributeSyntax {
 
 // MARK: - BinaryOperatorExpr
 
-extension BinaryOperatorExprSyntax {
+extension UnresolvedInfixOperatorExprSyntax {
   public init(text: String) {
     self.init(operator: .binaryOperator(text))
   }
@@ -155,7 +155,7 @@ extension ExprSyntax {
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
-    self.init(digits: .floatingLiteral(String(value)))
+    self.init(literal: .floatingLiteral(String(value)))
   }
 
   public init(floatLiteral value: Float) {
@@ -192,7 +192,7 @@ extension FunctionCallExprSyntax {
 
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
   public init(_ value: Int) {
-    self.init(digits: .integerLiteral(String(value)))
+    self.init(literal: .integerLiteral(String(value)))
   }
 
   public init(integerLiteral value: Int) {
@@ -303,37 +303,37 @@ extension StringLiteralExprSyntax {
   /// the number of `#`s needed to express the string as-is without any escapes.
   public init(
     openDelimiter: TokenSyntax? = nil,
-    openQuote: TokenSyntax = .stringQuoteToken(),
+    openingQuote: TokenSyntax = .stringQuoteToken(),
     content: String,
-    closeQuote: TokenSyntax = .stringQuoteToken(),
+    closingQuote: TokenSyntax = .stringQuoteToken(),
     closeDelimiter: TokenSyntax? = nil
   ) {
-    var openDelimiter = openDelimiter
-    var closeDelimiter = closeDelimiter
-    if openDelimiter == nil, closeDelimiter == nil {
+    var openingPounds = openDelimiter
+    var closingPounds = closeDelimiter
+    if openingPounds == nil, closingPounds == nil {
       // Match potential escapes in the string
       let (requiresEscaping, poundCount) = Self.requiresEscaping(content)
       if requiresEscaping {
         // Use a delimiter that is exactly one longer
-        openDelimiter = TokenSyntax.rawStringDelimiter(String(repeating: "#", count: poundCount + 1))
-        closeDelimiter = openDelimiter
+        openingPounds = TokenSyntax.rawStringDelimiter(String(repeating: "#", count: poundCount + 1))
+        closingPounds = openingPounds
       }
     }
 
     let escapedContent = content.escapingForStringLiteral(
-      usingDelimiter: closeDelimiter?.text ?? "",
-      isMultiline: openQuote.tokenView.rawKind == .multilineStringQuote
+      usingDelimiter: closingPounds?.text ?? "",
+      isMultiline: openingQuote.tokenView.rawKind == .multilineStringQuote
     )
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
     let segments = StringLiteralSegmentListSyntax([.stringSegment(segment)])
 
     self.init(
-      openDelimiter: openDelimiter,
-      openQuote: openQuote,
+      openingPounds: openingPounds,
+      openingQuote: openingQuote,
       segments: segments,
-      closeQuote: closeQuote,
-      closeDelimiter: closeDelimiter
+      closingQuote: closingQuote,
+      closingPounds: closingPounds
     )
   }
 }
@@ -359,7 +359,7 @@ extension VariableDeclSyntax {
   public init(
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
-    modifiers: ModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax? = nil,
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,

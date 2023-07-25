@@ -28,9 +28,9 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
       let segment = StringSegmentSyntax(content: string)
       let builder = StringLiteralExprSyntax(
         leadingTrivia: leadingTrivia,
-        openQuote: .stringQuoteToken(),
+        openingQuote: .stringQuoteToken(),
         segments: StringLiteralSegmentListSyntax([.stringSegment(segment)]),
-        closeQuote: .stringQuoteToken()
+        closingQuote: .stringQuoteToken()
       )
 
       assertBuildResult(builder, expected, line: line)
@@ -186,9 +186,9 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
     // Tab should not be escaped in single-line string literals
     assertBuildResult(
       StringLiteralExprSyntax(
-        openQuote: .multilineStringQuoteToken(),
+        openingQuote: .multilineStringQuoteToken(),
         content: "a\tb",
-        closeQuote: .multilineStringQuoteToken()
+        closingQuote: .multilineStringQuoteToken()
       ),
       #"""
       """
@@ -243,18 +243,18 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
   func testMultiLineStringWithResultBuilder() {
     let buildable = StringLiteralExprSyntax(
-      openQuote: .multilineStringQuoteToken(),
+      openingQuote: .multilineStringQuoteToken(),
       segments: StringLiteralSegmentListSyntax {
         StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
-        ExpressionSegmentSyntax(
+        ExprSegmentSyntax(
           expressions: TupleExprElementListSyntax {
             TupleExprElementSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
           }
         )
       },
-      closeQuote: .multilineStringQuoteToken()
+      closingQuote: .multilineStringQuoteToken()
     )
 
     assertBuildResult(
@@ -355,7 +355,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
   func testMultiStringOpeningQuote() {
     assertBuildResult(
-      StringLiteralExprSyntax(openQuote: .multilineStringQuoteToken(), content: "a", closeQuote: .multilineStringQuoteToken()),
+      StringLiteralExprSyntax(openingQuote: .multilineStringQuoteToken(), content: "a", closingQuote: .multilineStringQuoteToken()),
       #"""
       """
       a
@@ -365,23 +365,23 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
     assertBuildResult(
       StringLiteralExprSyntax(
-        openQuote: .multilineStringQuoteToken(),
+        openingQuote: .multilineStringQuoteToken(),
         segments: StringLiteralSegmentListSyntax {
-          .expressionSegment(
-            ExpressionSegmentSyntax(
+          .exprSegment(
+            ExprSegmentSyntax(
               expressions: TupleExprElementListSyntax {
                 TupleExprElementSyntax(
                   expression: StringLiteralExprSyntax(
-                    openQuote: .multilineStringQuoteToken(),
+                    openingQuote: .multilineStringQuoteToken(),
                     content: "a",
-                    closeQuote: .multilineStringQuoteToken()
+                    closingQuote: .multilineStringQuoteToken()
                   )
                 )
               }
             )
           )
         },
-        closeQuote: .multilineStringQuoteToken()
+        closingQuote: .multilineStringQuoteToken()
       ),
       #"""
       """

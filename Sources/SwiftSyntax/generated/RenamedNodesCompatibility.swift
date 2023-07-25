@@ -12,25 +12,212 @@
 //
 //===----------------------------------------------------------------------===//
 
+@available(*, deprecated, renamed: "PlatformVersionItemSyntax")
+public typealias  availabilityVersionRestrictionListEntrySyntax = PlatformVersionItemSyntax
+
 @available(*, deprecated, renamed: "ImportPathComponentListSyntax")
 public typealias AccessPathSyntax = ImportPathComponentListSyntax
 
 @available(*, deprecated, renamed: "ImportPathComponentSyntax")
 public typealias AccessPathComponentSyntax = ImportPathComponentSyntax
 
+@available(*, deprecated, renamed: "AccessorDeclListSyntax")
+public typealias AccessorListSyntax = AccessorDeclListSyntax
+
+@available(*, deprecated, renamed: "AccessorParametersSyntax")
+public typealias AccessorParameterSyntax = AccessorParametersSyntax
+
+@available(*, deprecated, renamed: "UnresolvedArrowExprSyntax")
+public typealias ArrowExprSyntax = UnresolvedArrowExprSyntax
+
+@available(*, deprecated, renamed: "AssociatedTypeDeclSyntax")
+public typealias AssociatedtypeDeclSyntax = AssociatedTypeDeclSyntax
+
+@available(*, deprecated, renamed: "SpecializeAvailabilityArgumentSyntax")
+public typealias AvailabilityEntrySyntax = SpecializeAvailabilityArgumentSyntax
+
+@available(*, deprecated, renamed: "AvailabilityArgumentListSyntax")
+public typealias AvailabilitySpecListSyntax = AvailabilityArgumentListSyntax
+
+@available(*, deprecated, renamed: "PlatformVersionSyntax")
+public typealias AvailabilityVersionRestrictionSyntax = PlatformVersionSyntax
+
+@available(*, deprecated, renamed: "PlatformVersionItemListSyntax")
+public typealias AvailabilityVersionRestrictionListSyntax = PlatformVersionItemListSyntax
+
+@available(*, deprecated, renamed: "BackDeployedAttributeArgumentsSyntax")
+public typealias BackDeployedAttributeSpecListSyntax = BackDeployedAttributeArgumentsSyntax
+
+@available(*, deprecated, renamed: "UnresolvedInfixOperatorExprSyntax")
+public typealias BinaryOperatorExprSyntax = UnresolvedInfixOperatorExprSyntax
+
+@available(*, deprecated, renamed: "SwitchCaseItemSyntax")
+public typealias CaseItemSyntax = SwitchCaseItemSyntax
+
+@available(*, deprecated, renamed: "SwitchCaseItemListSyntax")
+public typealias CaseItemListSyntax = SwitchCaseItemListSyntax
+
+@available(*, deprecated, renamed: "ClosureCaptureSyntax")
+public typealias ClosureCaptureItemSyntax = ClosureCaptureSyntax
+
+@available(*, deprecated, renamed: "ClosureCaptureListSyntax")
+public typealias ClosureCaptureItemListSyntax = ClosureCaptureListSyntax
+
+@available(*, deprecated, renamed: "ClosureCaptureSpecifierSyntax")
+public typealias ClosureCaptureItemSpecifierSyntax = ClosureCaptureSpecifierSyntax
+
+@available(*, deprecated, renamed: "ClosureCaptureClauseSyntax")
+public typealias ClosureCaptureSignatureSyntax = ClosureCaptureClauseSyntax
+
+@available(*, deprecated, renamed: "ClosureShorthandParameterSyntax")
+public typealias ClosureParamSyntax = ClosureShorthandParameterSyntax
+
+@available(*, deprecated, renamed: "ClosureShorthandParameterListSyntax")
+public typealias ClosureParamListSyntax = ClosureShorthandParameterListSyntax
+
+@available(*, deprecated, renamed: "SomeOrAnyTypeSyntax")
+public typealias ConstrainedSugarTypeSyntax = SomeOrAnyTypeSyntax
+
+@available(*, deprecated, renamed: "DeinitializerEffectSpecifiersSyntax")
+public typealias DeinitEffectSpecifiersSyntax = DeinitializerEffectSpecifiersSyntax
+
+@available(*, deprecated, renamed: "DerivativeAttributeArgumentsSyntax")
+public typealias DerivativeRegistrationAttributeArgumentsSyntax = DerivativeAttributeArgumentsSyntax
+
+@available(*, deprecated, renamed: "DesignatedTypeSyntax")
+public typealias DesignatedTypeElementSyntax = DesignatedTypeSyntax
+
+@available(*, deprecated, renamed: "DifferentiabilityArgumentSyntax")
+public typealias DifferentiabilityParamSyntax = DifferentiabilityArgumentSyntax
+
+@available(*, deprecated, renamed: "DifferentiabilityParameterListSyntax")
+public typealias DifferentiabilityParamListSyntax = DifferentiabilityParameterListSyntax
+
+@available(*, deprecated, renamed: "DifferentiabilityArgumentsSyntax")
+public typealias DifferentiabilityParamsSyntax = DifferentiabilityArgumentsSyntax
+
+@available(*, deprecated, renamed: "DifferentiabilityWithRespectToArgumentSyntax")
+public typealias DifferentiabilityParamsClauseSyntax = DifferentiabilityWithRespectToArgumentSyntax
+
 @available(*, deprecated, renamed: "DocumentationAttributeArgumentListSyntax")
 public typealias DocumentationAttributeArgumentsSyntax = DocumentationAttributeArgumentListSyntax
 
-@available(*, deprecated, renamed: "EffectsArgumentListSyntax")
-public typealias EffectsArgumentsSyntax = EffectsArgumentListSyntax
+@available(*, deprecated, renamed: "DynamicReplacementAttributeArgumentsSyntax")
+public typealias DynamicReplacementArgumentsSyntax = DynamicReplacementAttributeArgumentsSyntax
+
+@available(*, deprecated, renamed: "EffectsAttributeArgumentListSyntax")
+public typealias EffectsArgumentsSyntax = EffectsAttributeArgumentListSyntax
+
+@available(*, deprecated, renamed: "EnumCaseParameterClauseSyntax")
+public typealias EnumCaseAssociatedValueSyntax = EnumCaseParameterClauseSyntax
+
+@available(*, deprecated, renamed: "ExprPatternSyntax")
+public typealias ExpressionPatternSyntax = ExprPatternSyntax
+
+@available(*, deprecated, renamed: "ExprSegmentSyntax")
+public typealias ExpressionSegmentSyntax = ExprSegmentSyntax
+
+@available(*, deprecated, renamed: "FallThroughtStmtSyntax")
+public typealias FallthroughStmtSyntax = FallThroughtStmtSyntax
+
+@available(*, deprecated, renamed: "ForStmtSyntax")
+public typealias ForInStmtSyntax = ForStmtSyntax
+
+@available(*, deprecated, renamed: "ForceUnwrapExprSyntax")
+public typealias ForcedValueExprSyntax = ForceUnwrapExprSyntax
+
+@available(*, deprecated, renamed: "LabeledSpecializeArgumentSyntax")
+public typealias LabeledSpecializeEntrySyntax = LabeledSpecializeArgumentSyntax
+
+@available(*, deprecated, renamed: "MemberBlockSyntax")
+public typealias MemberDeclBlockSyntax = MemberBlockSyntax
+
+@available(*, deprecated, renamed: "MemberBlockItemListSyntax")
+public typealias MemberDeclListSyntax = MemberBlockItemListSyntax
+
+@available(*, deprecated, renamed: "MemberBlockItemSyntax")
+public typealias MemberDeclListItemSyntax = MemberBlockItemSyntax
+
+@available(*, deprecated, renamed: "MemberTypeSyntax")
+public typealias MemberTypeIdentifierSyntax = MemberTypeSyntax
+
+@available(*, deprecated, renamed: "DeclModifierListSyntax")
+public typealias ModifierListSyntax = DeclModifierListSyntax
+
+@available(*, deprecated, renamed: "ConsumeExprSyntax")
+public typealias MoveExprSyntax = ConsumeExprSyntax
 
 @available(*, deprecated, renamed: "ObjCSelectorPieceListSyntax")
 public typealias ObjCSelectorSyntax = ObjCSelectorPieceListSyntax
 
+@available(*, deprecated, renamed: "OriginallyDefinedInAttributeArgumentsSyntax")
+public typealias OriginallyDefinedInArgumentsSyntax = OriginallyDefinedInAttributeArgumentsSyntax
+
+@available(*, deprecated, renamed: "PackElementTypeSyntax")
+public typealias PackReferenceTypeSyntax = PackElementTypeSyntax
+
+@available(*, deprecated, renamed: "FunctionParameterClauseSyntax")
+public typealias ParameterClauseSyntax = FunctionParameterClauseSyntax
+
+@available(*, deprecated, renamed: "PostfixOperatorExprSyntax")
+public typealias PostfixUnaryExprSyntax = PostfixOperatorExprSyntax
+
+@available(*, deprecated, renamed: "PoundSourceLocationArgumentsSyntax")
+public typealias PoundSourceLocationArgsSyntax = PoundSourceLocationArgumentsSyntax
+
+@available(*, deprecated, renamed: "PrecedenceGroupNameSyntax")
+public typealias PrecedenceGroupNameElementSyntax = PrecedenceGroupNameSyntax
+
+@available(*, deprecated, renamed: "RepeatStmtSyntax")
+public typealias RepeatWhileStmtSyntax = RepeatStmtSyntax
+
+@available(*, deprecated, renamed: "IdentifierTypeSyntax")
+public typealias SimpleTypeIdentifierSyntax = IdentifierTypeSyntax
+
+@available(*, deprecated, renamed: "SpecializeAttributeArgumentListSyntax")
+public typealias SpecializeAttributeSpecListSyntax = SpecializeAttributeArgumentListSyntax
+
+@available(*, deprecated, renamed: "GenericSpecializationExprSyntax")
+public typealias SpecializeExprSyntax = GenericSpecializationExprSyntax
+
 @available(*, deprecated, renamed: "StringLiteralSegmentListSyntax")
 public typealias StringLiteralSegmentsSyntax = StringLiteralSegmentListSyntax
 
+@available(*, deprecated, renamed: "SubscriptCallExprSyntax")
+public typealias SubscriptExprSyntax = SubscriptCallExprSyntax
+
+@available(*, deprecated, renamed: "SuperExprSyntax")
+public typealias SuperRefExprSyntax = SuperExprSyntax
+
+@available(*, deprecated, renamed: "SpecializeTargetFunctionArgumentSyntax")
+public typealias TargetFunctionEntrySyntax = SpecializeTargetFunctionArgumentSyntax
+
+@available(*, deprecated, renamed: "InheritanceClauseSyntax")
+public typealias TypeInheritanceClauseSyntax = InheritanceClauseSyntax
+
+@available(*, deprecated, renamed: "TypeAliasDeclSyntax")
+public typealias TypealiasDeclSyntax = TypeAliasDeclSyntax
+
+@available(*, deprecated, renamed: "UnavailableFromAsyncAttributeArgumentsSyntax")
+public typealias UnavailableFromAsyncArgumentsSyntax = UnavailableFromAsyncAttributeArgumentsSyntax
+
+@available(*, deprecated, renamed: "PatternExprSyntax")
+public typealias UnresolvedPatternExprSyntax = PatternExprSyntax
+
+@available(*, deprecated, renamed: "YieldStmtArgumentListSyntax")
+public typealias YieldExprListSyntax = YieldStmtArgumentListSyntax
+
+@available(*, deprecated, renamed: "YieldStmtArgumentSyntax")
+public typealias YieldExprListElementSyntax = YieldStmtArgumentSyntax
+
+@available(*, deprecated, renamed: "YieldStmtArgumentClauseSyntax")
+public typealias YieldListSyntax = YieldStmtArgumentClauseSyntax
+
 public extension SyntaxKind {
+  static var  availabilityVersionRestrictionListEntry: Self {
+    return .platformVersionItem
+  }
+  
   static var accessPath: Self {
     return .importPathComponentList
   }
@@ -39,19 +226,259 @@ public extension SyntaxKind {
     return .importPathComponent
   }
   
+  static var accessorList: Self {
+    return .accessorDeclList
+  }
+  
+  static var accessorParameter: Self {
+    return .accessorParameters
+  }
+  
+  static var arrowExpr: Self {
+    return .unresolvedArrowExpr
+  }
+  
+  static var associatedtypeDecl: Self {
+    return .associatedTypeDecl
+  }
+  
+  static var availabilityEntry: Self {
+    return .specializeAvailabilityArgument
+  }
+  
+  static var availabilitySpecList: Self {
+    return .availabilityArgumentList
+  }
+  
+  static var availabilityVersionRestriction: Self {
+    return .platformVersion
+  }
+  
+  static var availabilityVersionRestrictionList: Self {
+    return .platformVersionItemList
+  }
+  
+  static var backDeployedAttributeSpecList: Self {
+    return .backDeployedAttributeArguments
+  }
+  
+  static var binaryOperatorExpr: Self {
+    return .unresolvedInfixOperatorExpr
+  }
+  
+  static var caseItem: Self {
+    return .switchCaseItem
+  }
+  
+  static var caseItemList: Self {
+    return .switchCaseItemList
+  }
+  
+  static var closureCaptureItem: Self {
+    return .closureCapture
+  }
+  
+  static var closureCaptureItemList: Self {
+    return .closureCaptureList
+  }
+  
+  static var closureCaptureItemSpecifier: Self {
+    return .closureCaptureSpecifier
+  }
+  
+  static var closureCaptureSignature: Self {
+    return .closureCaptureClause
+  }
+  
+  static var closureParam: Self {
+    return .closureShorthandParameter
+  }
+  
+  static var closureParamList: Self {
+    return .closureShorthandParameterList
+  }
+  
+  static var constrainedSugarType: Self {
+    return .someOrAnyType
+  }
+  
+  static var deinitEffectSpecifiers: Self {
+    return .deinitializerEffectSpecifiers
+  }
+  
+  static var derivativeRegistrationAttributeArguments: Self {
+    return .derivativeAttributeArguments
+  }
+  
+  static var designatedTypeElement: Self {
+    return .designatedType
+  }
+  
+  static var differentiabilityParam: Self {
+    return .differentiabilityArgument
+  }
+  
+  static var differentiabilityParamList: Self {
+    return .differentiabilityParameterList
+  }
+  
+  static var differentiabilityParams: Self {
+    return .differentiabilityArguments
+  }
+  
+  static var differentiabilityParamsClause: Self {
+    return .differentiabilityWithRespectToArgument
+  }
+  
   static var documentationAttributeArguments: Self {
     return .documentationAttributeArgumentList
   }
   
+  static var dynamicReplacementArguments: Self {
+    return .dynamicReplacementAttributeArguments
+  }
+  
   static var effectsArguments: Self {
-    return .effectsArgumentList
+    return .effectsAttributeArgumentList
+  }
+  
+  static var enumCaseAssociatedValue: Self {
+    return .enumCaseParameterClause
+  }
+  
+  static var expressionPattern: Self {
+    return .exprPattern
+  }
+  
+  static var expressionSegment: Self {
+    return .exprSegment
+  }
+  
+  static var fallthroughStmt: Self {
+    return .fallThroughtStmt
+  }
+  
+  static var forInStmt: Self {
+    return .forStmt
+  }
+  
+  static var forcedValueExpr: Self {
+    return .forceUnwrapExpr
+  }
+  
+  static var labeledSpecializeEntry: Self {
+    return .labeledSpecializeArgument
+  }
+  
+  static var memberDeclBlock: Self {
+    return .memberBlock
+  }
+  
+  static var memberDeclList: Self {
+    return .memberBlockItemList
+  }
+  
+  static var memberDeclListItem: Self {
+    return .memberBlockItem
+  }
+  
+  static var memberTypeIdentifier: Self {
+    return .memberType
+  }
+  
+  static var modifierList: Self {
+    return .declModifierList
+  }
+  
+  static var moveExpr: Self {
+    return .consumeExpr
   }
   
   static var objCSelector: Self {
     return .objCSelectorPieceList
   }
   
+  static var originallyDefinedInArguments: Self {
+    return .originallyDefinedInAttributeArguments
+  }
+  
+  static var packReferenceType: Self {
+    return .packElementType
+  }
+  
+  static var parameterClause: Self {
+    return .functionParameterClause
+  }
+  
+  static var postfixUnaryExpr: Self {
+    return .postfixOperatorExpr
+  }
+  
+  static var poundSourceLocationArgs: Self {
+    return .poundSourceLocationArguments
+  }
+  
+  static var precedenceGroupNameElement: Self {
+    return .precedenceGroupName
+  }
+  
+  static var repeatWhileStmt: Self {
+    return .repeatStmt
+  }
+  
+  static var simpleTypeIdentifier: Self {
+    return .identifierType
+  }
+  
+  static var specializeAttributeSpecList: Self {
+    return .specializeAttributeArgumentList
+  }
+  
+  static var specializeExpr: Self {
+    return .genericSpecializationExpr
+  }
+  
   static var stringLiteralSegments: Self {
     return .stringLiteralSegmentList
+  }
+  
+  static var subscriptExpr: Self {
+    return .subscriptCallExpr
+  }
+  
+  static var superRefExpr: Self {
+    return .superExpr
+  }
+  
+  static var targetFunctionEntry: Self {
+    return .specializeTargetFunctionArgument
+  }
+  
+  static var typeInheritanceClause: Self {
+    return .inheritanceClause
+  }
+  
+  static var typealiasDecl: Self {
+    return .typeAliasDecl
+  }
+  
+  static var unavailableFromAsyncArguments: Self {
+    return .unavailableFromAsyncAttributeArguments
+  }
+  
+  static var unresolvedPatternExpr: Self {
+    return .patternExpr
+  }
+  
+  static var yieldExprList: Self {
+    return .yieldStmtArgumentList
+  }
+  
+  static var yieldExprListElement: Self {
+    return .yieldStmtArgument
+  }
+  
+  static var yieldList: Self {
+    return .yieldStmtArgumentClause
   }
 }

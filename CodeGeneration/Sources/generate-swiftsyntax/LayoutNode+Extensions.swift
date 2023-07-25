@@ -32,7 +32,7 @@ extension LayoutNode {
       }
 
       if child.isOptional {
-        if paramType.is(ConstrainedSugarTypeSyntax.self) {
+        if paramType.is(SomeOrAnyTypeSyntax.self) {
           paramType = "(\(paramType))?"
         } else {
           paramType = "\(paramType)?"
@@ -53,7 +53,7 @@ extension LayoutNode {
         secondName: child.isUnexpectedNodes ? parameterName : nil,
         colon: .colonToken(),
         type: paramType,
-        defaultArgument: child.defaultInitialization
+        defaultValue: child.defaultInitialization
       )
     }
 
@@ -145,7 +145,7 @@ extension LayoutNode {
             firstName: childName,
             colon: .colonToken(),
             type: child.parameterType,
-            defaultArgument: child.defaultInitialization
+            defaultValue: child.defaultInitialization
           )
         )
       }
@@ -162,7 +162,7 @@ extension LayoutNode {
       return nil
     }
 
-    let params = ParameterClauseSyntax {
+    let params = FunctionParameterClauseSyntax {
       FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
       for param in normalParameters + builderParameters {
         param
@@ -196,7 +196,7 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecat
   }
 
   if child.type.isBaseType && !child.kind.isNodeChoices {
-    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(raw: childName))")
+    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
   }
   return ExprSyntax("\(raw: childName.backtickedIfNeeded)")
 }

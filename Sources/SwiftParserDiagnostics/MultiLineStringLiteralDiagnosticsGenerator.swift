@@ -30,7 +30,7 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
   // MARK: Entry
 
   public static func diagnose(_ node: StringLiteralExprSyntax) -> [(diagnostic: Diagnostic, handledNodes: [SyntaxIdentifier])] {
-    let visitor = MultiLineStringLiteralIndentationDiagnosticsGenerator(closeQuote: node.closeQuote)
+    let visitor = MultiLineStringLiteralIndentationDiagnosticsGenerator(closeQuote: node.closingQuote)
     visitor.walk(node)
     visitor.finishInProgressDiagnostic()
     return visitor.finishedDiagnostics

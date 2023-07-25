@@ -71,7 +71,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -83,7 +83,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedtypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typealiasDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
       break
     default:
       preconditionFailure("Unable to create DeclSyntax from \(data.raw.kind)")
@@ -121,7 +121,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     return .choices([
           .node(AccessorDeclSyntax.self),
           .node(ActorDeclSyntax.self),
-          .node(AssociatedtypeDeclSyntax.self),
+          .node(AssociatedTypeDeclSyntax.self),
           .node(ClassDeclSyntax.self),
           .node(DeinitializerDeclSyntax.self),
           .node(EditorPlaceholderDeclSyntax.self),
@@ -141,7 +141,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           .node(ProtocolDeclSyntax.self),
           .node(StructDeclSyntax.self),
           .node(SubscriptDeclSyntax.self),
-          .node(TypealiasDeclSyntax.self),
+          .node(TypeAliasDeclSyntax.self),
           .node(VariableDeclSyntax.self)
         ])
   }
@@ -206,7 +206,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .asExpr, .assignmentExpr, .awaitExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedArrowExpr, .unresolvedAsExpr, .unresolvedInfixOperatorExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -218,7 +218,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forcedValueExpr, .functionCallExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .moveExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .postfixIfConfigExpr, .postfixUnaryExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .specializeExpr, .stringLiteralExpr, .subscriptExpr, .superRefExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedPatternExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .asExpr, .assignmentExpr, .awaitExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedArrowExpr, .unresolvedAsExpr, .unresolvedInfixOperatorExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       break
     default:
       preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
@@ -255,23 +255,23 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .choices([
           .node(ArrayExprSyntax.self),
-          .node(ArrowExprSyntax.self),
           .node(AsExprSyntax.self),
           .node(AssignmentExprSyntax.self),
           .node(AwaitExprSyntax.self),
-          .node(BinaryOperatorExprSyntax.self),
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
           .node(CanImportExprSyntax.self),
           .node(CanImportVersionInfoSyntax.self),
           .node(ClosureExprSyntax.self),
+          .node(ConsumeExprSyntax.self),
           .node(CopyExprSyntax.self),
           .node(DictionaryExprSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
           .node(FloatLiteralExprSyntax.self),
-          .node(ForcedValueExprSyntax.self),
+          .node(ForceUnwrapExprSyntax.self),
           .node(FunctionCallExprSyntax.self),
+          .node(GenericSpecializationExprSyntax.self),
           .node(IdentifierExprSyntax.self),
           .node(IfExprSyntax.self),
           .node(InOutExprSyntax.self),
@@ -282,28 +282,28 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(MacroExpansionExprSyntax.self),
           .node(MemberAccessExprSyntax.self),
           .node(MissingExprSyntax.self),
-          .node(MoveExprSyntax.self),
           .node(NilLiteralExprSyntax.self),
           .node(OptionalChainingExprSyntax.self),
           .node(PackElementExprSyntax.self),
           .node(PackExpansionExprSyntax.self),
+          .node(PatternExprSyntax.self),
           .node(PostfixIfConfigExprSyntax.self),
-          .node(PostfixUnaryExprSyntax.self),
+          .node(PostfixOperatorExprSyntax.self),
           .node(PrefixOperatorExprSyntax.self),
           .node(RegexLiteralExprSyntax.self),
           .node(SequenceExprSyntax.self),
-          .node(SpecializeExprSyntax.self),
           .node(StringLiteralExprSyntax.self),
-          .node(SubscriptExprSyntax.self),
-          .node(SuperRefExprSyntax.self),
+          .node(SubscriptCallExprSyntax.self),
+          .node(SuperExprSyntax.self),
           .node(SwitchExprSyntax.self),
           .node(TernaryExprSyntax.self),
           .node(TryExprSyntax.self),
           .node(TupleExprSyntax.self),
           .node(TypeExprSyntax.self),
+          .node(UnresolvedArrowExprSyntax.self),
           .node(UnresolvedAsExprSyntax.self),
+          .node(UnresolvedInfixOperatorExprSyntax.self),
           .node(UnresolvedIsExprSyntax.self),
-          .node(UnresolvedPatternExprSyntax.self),
           .node(UnresolvedTernaryExprSyntax.self)
         ])
   }
@@ -368,7 +368,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .exprPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -380,7 +380,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .exprPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       break
     default:
       preconditionFailure("Unable to create PatternSyntax from \(data.raw.kind)")
@@ -416,7 +416,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .choices([
-          .node(ExpressionPatternSyntax.self),
+          .node(ExprPatternSyntax.self),
           .node(IdentifierPatternSyntax.self),
           .node(IsTypePatternSyntax.self),
           .node(MissingPatternSyntax.self),
@@ -486,7 +486,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughtStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -498,7 +498,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallthroughStmt, .forInStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatWhileStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughtStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
       preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -540,12 +540,12 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(DiscardStmtSyntax.self),
           .node(DoStmtSyntax.self),
           .node(ExpressionStmtSyntax.self),
-          .node(FallthroughStmtSyntax.self),
-          .node(ForInStmtSyntax.self),
+          .node(FallThroughtStmtSyntax.self),
+          .node(ForStmtSyntax.self),
           .node(GuardStmtSyntax.self),
           .node(LabeledStmtSyntax.self),
           .node(MissingStmtSyntax.self),
-          .node(RepeatWhileStmtSyntax.self),
+          .node(RepeatStmtSyntax.self),
           .node(ReturnStmtSyntax.self),
           .node(ThrowStmtSyntax.self),
           .node(WhileStmtSyntax.self),
@@ -613,7 +613,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -625,7 +625,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .constrainedSugarType, .dictionaryType, .functionType, .implicitlyUnwrappedOptionalType, .memberTypeIdentifier, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packExpansionType, .packReferenceType, .simpleTypeIdentifier, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       break
     default:
       preconditionFailure("Unable to create TypeSyntax from \(data.raw.kind)")
@@ -665,18 +665,18 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(AttributedTypeSyntax.self),
           .node(ClassRestrictionTypeSyntax.self),
           .node(CompositionTypeSyntax.self),
-          .node(ConstrainedSugarTypeSyntax.self),
           .node(DictionaryTypeSyntax.self),
           .node(FunctionTypeSyntax.self),
+          .node(IdentifierTypeSyntax.self),
           .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
-          .node(MemberTypeIdentifierSyntax.self),
+          .node(MemberTypeSyntax.self),
           .node(MetatypeTypeSyntax.self),
           .node(MissingTypeSyntax.self),
           .node(NamedOpaqueReturnTypeSyntax.self),
           .node(OptionalTypeSyntax.self),
+          .node(PackElementTypeSyntax.self),
           .node(PackExpansionTypeSyntax.self),
-          .node(PackReferenceTypeSyntax.self),
-          .node(SimpleTypeIdentifierSyntax.self),
+          .node(SomeOrAnyTypeSyntax.self),
           .node(SuppressedTypeSyntax.self),
           .node(TupleTypeSyntax.self)
         ])
@@ -689,57 +689,49 @@ extension Syntax {
           .node(TokenSyntax.self),
           .node(AccessesEffectSyntax.self),
           .node(AccessorBlockSyntax.self),
+          .node(AccessorDeclListSyntax.self),
           .node(AccessorDeclSyntax.self),
           .node(AccessorEffectSpecifiersSyntax.self),
           .node(AccessorInitEffectsSyntax.self),
-          .node(AccessorListSyntax.self),
-          .node(AccessorParameterSyntax.self),
+          .node(AccessorParametersSyntax.self),
           .node(ActorDeclSyntax.self),
           .node(ArrayElementListSyntax.self),
           .node(ArrayElementSyntax.self),
           .node(ArrayExprSyntax.self),
           .node(ArrayTypeSyntax.self),
-          .node(ArrowExprSyntax.self),
           .node(AsExprSyntax.self),
           .node(AssignmentExprSyntax.self),
-          .node(AssociatedtypeDeclSyntax.self),
+          .node(AssociatedTypeDeclSyntax.self),
           .node(AttributeListSyntax.self),
           .node(AttributeSyntax.self),
           .node(AttributedTypeSyntax.self),
+          .node(AvailabilityArgumentListSyntax.self),
           .node(AvailabilityArgumentSyntax.self),
           .node(AvailabilityConditionSyntax.self),
-          .node(AvailabilityEntrySyntax.self),
           .node(AvailabilityLabeledArgumentSyntax.self),
-          .node(AvailabilitySpecListSyntax.self),
-          .node(AvailabilityVersionRestrictionListEntrySyntax.self),
-          .node(AvailabilityVersionRestrictionListSyntax.self),
-          .node(AvailabilityVersionRestrictionSyntax.self),
           .node(AwaitExprSyntax.self),
-          .node(BackDeployedAttributeSpecListSyntax.self),
-          .node(BinaryOperatorExprSyntax.self),
+          .node(BackDeployedAttributeArgumentsSyntax.self),
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
           .node(BreakStmtSyntax.self),
           .node(CanImportExprSyntax.self),
           .node(CanImportVersionInfoSyntax.self),
-          .node(CaseItemListSyntax.self),
-          .node(CaseItemSyntax.self),
           .node(CatchClauseListSyntax.self),
           .node(CatchClauseSyntax.self),
           .node(CatchItemListSyntax.self),
           .node(CatchItemSyntax.self),
           .node(ClassDeclSyntax.self),
           .node(ClassRestrictionTypeSyntax.self),
-          .node(ClosureCaptureItemListSyntax.self),
-          .node(ClosureCaptureItemSpecifierSyntax.self),
-          .node(ClosureCaptureItemSyntax.self),
-          .node(ClosureCaptureSignatureSyntax.self),
+          .node(ClosureCaptureClauseSyntax.self),
+          .node(ClosureCaptureListSyntax.self),
+          .node(ClosureCaptureSpecifierSyntax.self),
+          .node(ClosureCaptureSyntax.self),
           .node(ClosureExprSyntax.self),
-          .node(ClosureParamListSyntax.self),
-          .node(ClosureParamSyntax.self),
           .node(ClosureParameterClauseSyntax.self),
           .node(ClosureParameterListSyntax.self),
           .node(ClosureParameterSyntax.self),
+          .node(ClosureShorthandParameterListSyntax.self),
+          .node(ClosureShorthandParameterSyntax.self),
           .node(ClosureSignatureSyntax.self),
           .node(CodeBlockItemListSyntax.self),
           .node(CodeBlockItemSyntax.self),
@@ -750,41 +742,42 @@ extension Syntax {
           .node(ConditionElementListSyntax.self),
           .node(ConditionElementSyntax.self),
           .node(ConformanceRequirementSyntax.self),
-          .node(ConstrainedSugarTypeSyntax.self),
+          .node(ConsumeExprSyntax.self),
           .node(ContinueStmtSyntax.self),
           .node(ConventionAttributeArgumentsSyntax.self),
           .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
           .node(CopyExprSyntax.self),
           .node(DeclModifierDetailSyntax.self),
+          .node(DeclModifierListSyntax.self),
           .node(DeclModifierSyntax.self),
           .node(DeclNameArgumentListSyntax.self),
           .node(DeclNameArgumentSyntax.self),
           .node(DeclNameArgumentsSyntax.self),
           .node(DeclNameSyntax.self),
           .node(DeferStmtSyntax.self),
-          .node(DeinitEffectSpecifiersSyntax.self),
           .node(DeinitializerDeclSyntax.self),
-          .node(DerivativeRegistrationAttributeArgumentsSyntax.self),
-          .node(DesignatedTypeElementSyntax.self),
+          .node(DeinitializerEffectSpecifiersSyntax.self),
+          .node(DerivativeAttributeArgumentsSyntax.self),
           .node(DesignatedTypeListSyntax.self),
+          .node(DesignatedTypeSyntax.self),
           .node(DictionaryElementListSyntax.self),
           .node(DictionaryElementSyntax.self),
           .node(DictionaryExprSyntax.self),
           .node(DictionaryTypeSyntax.self),
-          .node(DifferentiabilityParamListSyntax.self),
-          .node(DifferentiabilityParamSyntax.self),
-          .node(DifferentiabilityParamsClauseSyntax.self),
-          .node(DifferentiabilityParamsSyntax.self),
+          .node(DifferentiabilityArgumentSyntax.self),
+          .node(DifferentiabilityArgumentsSyntax.self),
+          .node(DifferentiabilityParameterListSyntax.self),
+          .node(DifferentiabilityWithRespectToArgumentSyntax.self),
           .node(DifferentiableAttributeArgumentsSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
           .node(DiscardStmtSyntax.self),
           .node(DoStmtSyntax.self),
           .node(DocumentationAttributeArgumentListSyntax.self),
           .node(DocumentationAttributeArgumentSyntax.self),
-          .node(DynamicReplacementArgumentsSyntax.self),
+          .node(DynamicReplacementAttributeArgumentsSyntax.self),
           .node(EditorPlaceholderDeclSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
-          .node(EffectsArgumentListSyntax.self),
+          .node(EffectsAttributeArgumentListSyntax.self),
           .node(EnumCaseDeclSyntax.self),
           .node(EnumCaseElementListSyntax.self),
           .node(EnumCaseElementSyntax.self),
@@ -794,17 +787,18 @@ extension Syntax {
           .node(EnumDeclSyntax.self),
           .node(ExposeAttributeArgumentsSyntax.self),
           .node(ExprListSyntax.self),
-          .node(ExpressionPatternSyntax.self),
-          .node(ExpressionSegmentSyntax.self),
+          .node(ExprPatternSyntax.self),
+          .node(ExprSegmentSyntax.self),
           .node(ExpressionStmtSyntax.self),
           .node(ExtensionDeclSyntax.self),
-          .node(FallthroughStmtSyntax.self),
+          .node(FallThroughtStmtSyntax.self),
           .node(FloatLiteralExprSyntax.self),
-          .node(ForInStmtSyntax.self),
-          .node(ForcedValueExprSyntax.self),
+          .node(ForStmtSyntax.self),
+          .node(ForceUnwrapExprSyntax.self),
           .node(FunctionCallExprSyntax.self),
           .node(FunctionDeclSyntax.self),
           .node(FunctionEffectSpecifiersSyntax.self),
+          .node(FunctionParameterClauseSyntax.self),
           .node(FunctionParameterListSyntax.self),
           .node(FunctionParameterSyntax.self),
           .node(FunctionSignatureSyntax.self),
@@ -817,10 +811,12 @@ extension Syntax {
           .node(GenericParameterSyntax.self),
           .node(GenericRequirementListSyntax.self),
           .node(GenericRequirementSyntax.self),
+          .node(GenericSpecializationExprSyntax.self),
           .node(GenericWhereClauseSyntax.self),
           .node(GuardStmtSyntax.self),
           .node(IdentifierExprSyntax.self),
           .node(IdentifierPatternSyntax.self),
+          .node(IdentifierTypeSyntax.self),
           .node(IfConfigClauseListSyntax.self),
           .node(IfConfigClauseSyntax.self),
           .node(IfConfigDeclSyntax.self),
@@ -832,6 +828,7 @@ extension Syntax {
           .node(ImportPathComponentSyntax.self),
           .node(InOutExprSyntax.self),
           .node(InfixOperatorExprSyntax.self),
+          .node(InheritanceClauseSyntax.self),
           .node(InheritedTypeListSyntax.self),
           .node(InheritedTypeSyntax.self),
           .node(InitializerClauseSyntax.self),
@@ -846,7 +843,7 @@ extension Syntax {
           .node(KeyPathOptionalComponentSyntax.self),
           .node(KeyPathPropertyComponentSyntax.self),
           .node(KeyPathSubscriptComponentSyntax.self),
-          .node(LabeledSpecializeEntrySyntax.self),
+          .node(LabeledSpecializeArgumentSyntax.self),
           .node(LabeledStmtSyntax.self),
           .node(LayoutRequirementSyntax.self),
           .node(MacroDeclSyntax.self),
@@ -854,10 +851,10 @@ extension Syntax {
           .node(MacroExpansionExprSyntax.self),
           .node(MatchingPatternConditionSyntax.self),
           .node(MemberAccessExprSyntax.self),
-          .node(MemberDeclBlockSyntax.self),
-          .node(MemberDeclListItemSyntax.self),
-          .node(MemberDeclListSyntax.self),
-          .node(MemberTypeIdentifierSyntax.self),
+          .node(MemberBlockItemListSyntax.self),
+          .node(MemberBlockItemSyntax.self),
+          .node(MemberBlockSyntax.self),
+          .node(MemberTypeSyntax.self),
           .node(MetatypeTypeSyntax.self),
           .node(MissingDeclSyntax.self),
           .node(MissingExprSyntax.self),
@@ -865,8 +862,6 @@ extension Syntax {
           .node(MissingStmtSyntax.self),
           .node(MissingSyntax.self),
           .node(MissingTypeSyntax.self),
-          .node(ModifierListSyntax.self),
-          .node(MoveExprSyntax.self),
           .node(MultipleTrailingClosureElementListSyntax.self),
           .node(MultipleTrailingClosureElementSyntax.self),
           .node(NamedOpaqueReturnTypeSyntax.self),
@@ -879,24 +874,27 @@ extension Syntax {
           .node(OptionalBindingConditionSyntax.self),
           .node(OptionalChainingExprSyntax.self),
           .node(OptionalTypeSyntax.self),
-          .node(OriginallyDefinedInArgumentsSyntax.self),
+          .node(OriginallyDefinedInAttributeArgumentsSyntax.self),
           .node(PackElementExprSyntax.self),
+          .node(PackElementTypeSyntax.self),
           .node(PackExpansionExprSyntax.self),
           .node(PackExpansionTypeSyntax.self),
-          .node(PackReferenceTypeSyntax.self),
-          .node(ParameterClauseSyntax.self),
           .node(PatternBindingListSyntax.self),
           .node(PatternBindingSyntax.self),
+          .node(PatternExprSyntax.self),
+          .node(PlatformVersionItemListSyntax.self),
+          .node(PlatformVersionItemSyntax.self),
+          .node(PlatformVersionSyntax.self),
           .node(PostfixIfConfigExprSyntax.self),
-          .node(PostfixUnaryExprSyntax.self),
-          .node(PoundSourceLocationArgsSyntax.self),
+          .node(PostfixOperatorExprSyntax.self),
+          .node(PoundSourceLocationArgumentsSyntax.self),
           .node(PoundSourceLocationSyntax.self),
           .node(PrecedenceGroupAssignmentSyntax.self),
           .node(PrecedenceGroupAssociativitySyntax.self),
           .node(PrecedenceGroupAttributeListSyntax.self),
           .node(PrecedenceGroupDeclSyntax.self),
-          .node(PrecedenceGroupNameElementSyntax.self),
           .node(PrecedenceGroupNameListSyntax.self),
+          .node(PrecedenceGroupNameSyntax.self),
           .node(PrecedenceGroupRelationSyntax.self),
           .node(PrefixOperatorExprSyntax.self),
           .node(PrimaryAssociatedTypeClauseSyntax.self),
@@ -905,29 +903,31 @@ extension Syntax {
           .node(ProtocolDeclSyntax.self),
           .node(QualifiedDeclNameSyntax.self),
           .node(RegexLiteralExprSyntax.self),
-          .node(RepeatWhileStmtSyntax.self),
+          .node(RepeatStmtSyntax.self),
           .node(ReturnClauseSyntax.self),
           .node(ReturnStmtSyntax.self),
           .node(SameTypeRequirementSyntax.self),
           .node(SequenceExprSyntax.self),
-          .node(SimpleTypeIdentifierSyntax.self),
+          .node(SomeOrAnyTypeSyntax.self),
           .node(SourceFileSyntax.self),
-          .node(SpecializeAttributeSpecListSyntax.self),
-          .node(SpecializeExprSyntax.self),
+          .node(SpecializeAttributeArgumentListSyntax.self),
+          .node(SpecializeAvailabilityArgumentSyntax.self),
+          .node(SpecializeTargetFunctionArgumentSyntax.self),
           .node(StringLiteralExprSyntax.self),
           .node(StringLiteralSegmentListSyntax.self),
           .node(StringSegmentSyntax.self),
           .node(StructDeclSyntax.self),
+          .node(SubscriptCallExprSyntax.self),
           .node(SubscriptDeclSyntax.self),
-          .node(SubscriptExprSyntax.self),
-          .node(SuperRefExprSyntax.self),
+          .node(SuperExprSyntax.self),
           .node(SuppressedTypeSyntax.self),
+          .node(SwitchCaseItemListSyntax.self),
+          .node(SwitchCaseItemSyntax.self),
           .node(SwitchCaseLabelSyntax.self),
           .node(SwitchCaseListSyntax.self),
           .node(SwitchCaseSyntax.self),
           .node(SwitchDefaultLabelSyntax.self),
           .node(SwitchExprSyntax.self),
-          .node(TargetFunctionEntrySyntax.self),
           .node(TernaryExprSyntax.self),
           .node(ThrowStmtSyntax.self),
           .node(TryExprSyntax.self),
@@ -940,18 +940,18 @@ extension Syntax {
           .node(TupleTypeElementListSyntax.self),
           .node(TupleTypeElementSyntax.self),
           .node(TupleTypeSyntax.self),
+          .node(TypeAliasDeclSyntax.self),
           .node(TypeAnnotationSyntax.self),
           .node(TypeEffectSpecifiersSyntax.self),
           .node(TypeExprSyntax.self),
-          .node(TypeInheritanceClauseSyntax.self),
           .node(TypeInitializerClauseSyntax.self),
-          .node(TypealiasDeclSyntax.self),
-          .node(UnavailableFromAsyncArgumentsSyntax.self),
+          .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
           .node(UnderscorePrivateAttributeArgumentsSyntax.self),
           .node(UnexpectedNodesSyntax.self),
+          .node(UnresolvedArrowExprSyntax.self),
           .node(UnresolvedAsExprSyntax.self),
+          .node(UnresolvedInfixOperatorExprSyntax.self),
           .node(UnresolvedIsExprSyntax.self),
-          .node(UnresolvedPatternExprSyntax.self),
           .node(UnresolvedTernaryExprSyntax.self),
           .node(ValueBindingPatternSyntax.self),
           .node(VariableDeclSyntax.self),
@@ -961,9 +961,9 @@ extension Syntax {
           .node(WhereClauseSyntax.self),
           .node(WhileStmtSyntax.self),
           .node(WildcardPatternSyntax.self),
-          .node(YieldExprListElementSyntax.self),
-          .node(YieldExprListSyntax.self),
-          .node(YieldListSyntax.self),
+          .node(YieldStmtArgumentClauseSyntax.self),
+          .node(YieldStmtArgumentListSyntax.self),
+          .node(YieldStmtArgumentSyntax.self),
           .node(YieldStmtSyntax.self)
         ])
   }

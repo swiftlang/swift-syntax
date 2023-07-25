@@ -69,6 +69,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: AccessorDeclListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: AccessorDeclListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -93,19 +101,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: AccessorParametersSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: AccessorListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AccessorParameterSyntax) {
+  override open func visitPost(_ node: AccessorParametersSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -149,14 +149,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ArrowExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -173,11 +165,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: AssociatedtypeDeclSyntax) {
+  override open func visitPost(_ node: AssociatedTypeDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -205,6 +197,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: AvailabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: AvailabilityArgumentListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -221,51 +221,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: AvailabilityEntrySyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AvailabilityEntrySyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AvailabilitySpecListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AvailabilityVersionRestrictionListEntrySyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AvailabilityVersionRestrictionListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -277,19 +237,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: BinaryOperatorExprSyntax) {
+  override open func visitPost(_ node: BackDeployedAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -330,22 +282,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: CanImportVersionInfoSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: CaseItemListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: CaseItemSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -397,35 +333,35 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ClosureCaptureClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ClosureCaptureItemListSyntax) {
+  override open func visitPost(_ node: ClosureCaptureClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ClosureCaptureListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
+  override open func visitPost(_ node: ClosureCaptureListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ClosureCaptureSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ClosureCaptureItemSyntax) {
+  override open func visitPost(_ node: ClosureCaptureSpecifierSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ClosureCaptureSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ClosureCaptureSignatureSyntax) {
+  override open func visitPost(_ node: ClosureCaptureSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -434,22 +370,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: ClosureExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ClosureParamListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ClosureParamSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -474,6 +394,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: ClosureParameterSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: ClosureShorthandParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureShorthandParameterListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: ClosureShorthandParameterSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ClosureShorthandParameterSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -557,11 +493,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ConstrainedSugarTypeSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ConsumeExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ConstrainedSugarTypeSyntax) {
+  override open func visitPost(_ node: ConsumeExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -602,6 +538,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: DeclModifierDetailSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: DeclModifierListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DeclModifierListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -653,14 +597,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DeinitEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: DeinitEffectSpecifiersSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -669,19 +605,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DeinitializerEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
+  override open func visitPost(_ node: DeinitializerEffectSpecifiersSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DerivativeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DesignatedTypeElementSyntax) {
+  override open func visitPost(_ node: DerivativeAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -690,6 +626,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: DesignatedTypeListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: DesignatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DesignatedTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -725,35 +669,35 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DifferentiabilityParamListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DifferentiabilityParamListSyntax) {
+  override open func visitPost(_ node: DifferentiabilityArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DifferentiabilityParamSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DifferentiabilityParamSyntax) {
+  override open func visitPost(_ node: DifferentiabilityArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityParameterListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {
+  override open func visitPost(_ node: DifferentiabilityParameterListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DifferentiabilityParamsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DifferentiabilityParamsSyntax) {
+  override open func visitPost(_ node: DifferentiabilityWithRespectToArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -805,11 +749,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: DynamicReplacementArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: DynamicReplacementAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: DynamicReplacementArgumentsSyntax) {
+  override open func visitPost(_ node: DynamicReplacementAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -829,11 +773,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: EffectsArgumentListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: EffectsAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: EffectsArgumentListSyntax) {
+  override open func visitPost(_ node: EffectsAttributeArgumentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -909,19 +853,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ExprPatternSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ExpressionPatternSyntax) {
+  override open func visitPost(_ node: ExprPatternSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ExprSegmentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ExpressionSegmentSyntax) {
+  override open func visitPost(_ node: ExprSegmentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -941,11 +885,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: FallThroughtStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: FallthroughStmtSyntax) {
+  override open func visitPost(_ node: FallThroughtStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -957,19 +901,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ForStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ForInStmtSyntax) {
+  override open func visitPost(_ node: ForStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ForceUnwrapExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ForcedValueExprSyntax) {
+  override open func visitPost(_ node: ForceUnwrapExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -994,6 +938,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: FunctionEffectSpecifiersSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: FunctionParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: FunctionParameterClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1093,6 +1045,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: GenericSpecializationExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: GenericSpecializationExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1122,6 +1082,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: IdentifierPatternSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: IdentifierTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: IdentifierTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1210,6 +1178,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: InfixOperatorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: InheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: InheritanceClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1325,11 +1301,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: LabeledSpecializeArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: LabeledSpecializeEntrySyntax) {
+  override open func visitPost(_ node: LabeledSpecializeArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1389,35 +1365,35 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: MemberBlockItemListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: MemberDeclBlockSyntax) {
+  override open func visitPost(_ node: MemberBlockItemListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: MemberBlockItemSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: MemberDeclListItemSyntax) {
+  override open func visitPost(_ node: MemberBlockItemSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: MemberBlockSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: MemberDeclListSyntax) {
+  override open func visitPost(_ node: MemberBlockSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: MemberTypeSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: MemberTypeIdentifierSyntax) {
+  override open func visitPost(_ node: MemberTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1474,22 +1450,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: MissingTypeSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ModifierListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: MoveExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: MoveExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1589,11 +1549,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: OriginallyDefinedInArgumentsSyntax) {
+  override open func visitPost(_ node: OriginallyDefinedInAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1602,6 +1562,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: PackElementExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: PackElementTypeSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PackElementTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1621,22 +1589,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: PackReferenceTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: PackReferenceTypeSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: ParameterClauseSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1653,6 +1605,38 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: PatternExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PatternExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: PlatformVersionItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PlatformVersionItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: PlatformVersionItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PlatformVersionItemSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: PlatformVersionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PlatformVersionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: PostfixIfConfigExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1661,19 +1645,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: PostfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: PostfixUnaryExprSyntax) {
+  override open func visitPost(_ node: PostfixOperatorExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: PoundSourceLocationArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: PoundSourceLocationArgsSyntax) {
+  override open func visitPost(_ node: PoundSourceLocationArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1717,19 +1701,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: PrecedenceGroupNameListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: PrecedenceGroupNameSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: PrecedenceGroupNameSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1797,11 +1781,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: RepeatStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: RepeatWhileStmtSyntax) {
+  override open func visitPost(_ node: RepeatStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1837,11 +1821,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: SomeOrAnyTypeSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+  override open func visitPost(_ node: SomeOrAnyTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1853,19 +1837,27 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: SpecializeAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
+  override open func visitPost(_ node: SpecializeAttributeArgumentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: SpecializeAvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: SpecializeExprSyntax) {
+  override open func visitPost(_ node: SpecializeAvailabilityArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: SpecializeTargetFunctionArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SpecializeTargetFunctionArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1901,6 +1893,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: SubscriptCallExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SubscriptCallExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1909,19 +1909,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: SuperExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: SubscriptExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: SuperRefExprSyntax) {
+  override open func visitPost(_ node: SuperExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1930,6 +1922,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: SuppressedTypeSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: SwitchCaseItemListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SwitchCaseItemListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: SwitchCaseItemSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: SwitchCaseItemSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1970,14 +1978,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: SwitchExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: TargetFunctionEntrySyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: TargetFunctionEntrySyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -2077,6 +2077,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: TypeAliasDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2101,14 +2109,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: TypeInheritanceClauseSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2117,19 +2117,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: TypealiasDeclSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: UnavailableFromAsyncArgumentsSyntax) {
+  override open func visitPost(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -2149,6 +2141,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: UnresolvedArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: UnresolvedArrowExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: UnresolvedAsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2157,19 +2157,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: UnresolvedInfixOperatorExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: UnresolvedIsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: UnresolvedIsExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: UnresolvedPatternExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -2245,27 +2245,27 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: YieldExprListElementSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: YieldStmtArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: YieldExprListElementSyntax) {
+  override open func visitPost(_ node: YieldStmtArgumentClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: YieldStmtArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: YieldExprListSyntax) {
+  override open func visitPost(_ node: YieldStmtArgumentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: YieldStmtArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: YieldListSyntax) {
+  override open func visitPost(_ node: YieldStmtArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

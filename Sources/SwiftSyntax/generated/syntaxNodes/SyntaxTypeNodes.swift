@@ -524,128 +524,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - ConstrainedSugarTypeSyntax
-
-/// ### Children
-/// 
-///  - `someOrAnySpecifier`: (`'some'` | `'any'`)
-///  - `baseType`: ``TypeSyntax``
-public struct ConstrainedSugarTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .constrainedSugarType else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``ConstrainedSugarTypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .constrainedSugarType)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil,
-      someOrAnySpecifier: TokenSyntax,
-      _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: some TypeSyntaxProtocol,
-      _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeSomeOrAnySpecifier, 
-            someOrAnySpecifier, 
-            unexpectedBetweenSomeOrAnySpecifierAndBaseType, 
-            baseType, 
-            unexpectedAfterBaseType
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeSomeOrAnySpecifier?.raw, 
-          someOrAnySpecifier.raw, 
-          unexpectedBetweenSomeOrAnySpecifierAndBaseType?.raw, 
-          baseType.raw, 
-          unexpectedAfterBaseType?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.constrainedSugarType,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ConstrainedSugarTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var someOrAnySpecifier: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = ConstrainedSugarTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ConstrainedSugarTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var baseType: TypeSyntax {
-    get {
-      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = ConstrainedSugarTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ConstrainedSugarTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeSomeOrAnySpecifier, 
-          \Self.someOrAnySpecifier, 
-          \Self.unexpectedBetweenSomeOrAnySpecifierAndBaseType, 
-          \Self.baseType, 
-          \Self.unexpectedAfterBaseType
-        ])
-  }
-}
-
 // MARK: - DictionaryTypeSyntax
 
 /// ### Children
@@ -1076,6 +954,128 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - IdentifierTypeSyntax
+
+/// ### Children
+/// 
+///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'Any'` | `'_'`)
+///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
+public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .identifierType else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``IdentifierTypeSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .identifierType)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+      _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeName, 
+            name, 
+            unexpectedBetweenNameAndGenericArgumentClause, 
+            genericArgumentClause, 
+            unexpectedAfterGenericArgumentClause
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeName?.raw, 
+          name.raw, 
+          unexpectedBetweenNameAndGenericArgumentClause?.raw, 
+          genericArgumentClause?.raw, 
+          unexpectedAfterGenericArgumentClause?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.identifierType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IdentifierTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var name: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = IdentifierTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IdentifierTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var genericArgumentClause: GenericArgumentClauseSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+    }
+    set(value) {
+      self = IdentifierTypeSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = IdentifierTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeName, 
+          \Self.name, 
+          \Self.unexpectedBetweenNameAndGenericArgumentClause, 
+          \Self.genericArgumentClause, 
+          \Self.unexpectedAfterGenericArgumentClause
+        ])
+  }
+}
+
 // MARK: - ImplicitlyUnwrappedOptionalTypeSyntax
 
 /// ### Children
@@ -1198,7 +1198,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
   }
 }
 
-// MARK: - MemberTypeIdentifierSyntax
+// MARK: - MemberTypeSyntax
 
 /// ### Children
 /// 
@@ -1206,21 +1206,21 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 ///  - `period`: `'.'`
 ///  - `name`: (`<identifier>` | `'self'` | `'Self'`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
-public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .memberTypeIdentifier else {
+    guard node.raw.kind == .memberType else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MemberTypeIdentifierSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``MemberTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .memberTypeIdentifier)
+    precondition(data.raw.kind == .memberType)
     self._syntaxNode = Syntax(data)
   }
   
@@ -1266,7 +1266,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
           unexpectedAfterGenericArgumentClause?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.memberTypeIdentifier,
+        kind: SyntaxKind.memberType,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -1283,7 +1283,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1292,7 +1292,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1301,7 +1301,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1310,7 +1310,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1319,7 +1319,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1328,7 +1328,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1337,7 +1337,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1346,7 +1346,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 7, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1355,7 +1355,7 @@ public struct MemberTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = MemberTypeIdentifierSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
+      self = MemberTypeSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -1617,7 +1617,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``
-///  - `baseType`: ``TypeSyntax``
+///  - `type`: ``TypeSyntax``
 public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1644,9 +1644,9 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeGenericParameterClause: UnexpectedNodesSyntax? = nil,
       genericParameterClause: GenericParameterClauseSyntax,
-      _ unexpectedBetweenGenericParameterClauseAndBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: some TypeSyntaxProtocol,
-      _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenGenericParameterClauseAndType: UnexpectedNodesSyntax? = nil,
+      type: some TypeSyntaxProtocol,
+      _ unexpectedAfterType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -1655,16 +1655,16 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeGenericParameterClause, 
             genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndBaseType, 
-            baseType, 
-            unexpectedAfterBaseType
+            unexpectedBetweenGenericParameterClauseAndType, 
+            type, 
+            unexpectedAfterType
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeGenericParameterClause?.raw, 
           genericParameterClause.raw, 
-          unexpectedBetweenGenericParameterClauseAndBaseType?.raw, 
-          baseType.raw, 
-          unexpectedAfterBaseType?.raw
+          unexpectedBetweenGenericParameterClauseAndType?.raw, 
+          type.raw, 
+          unexpectedAfterType?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.namedOpaqueReturnType,
@@ -1698,7 +1698,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenGenericParameterClauseAndBaseType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1707,7 +1707,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var baseType: TypeSyntax {
+  public var type: TypeSyntax {
     get {
       return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -1716,7 +1716,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+  public var unexpectedAfterType: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -1729,9 +1729,9 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeGenericParameterClause, 
           \Self.genericParameterClause, 
-          \Self.unexpectedBetweenGenericParameterClauseAndBaseType, 
-          \Self.baseType, 
-          \Self.unexpectedAfterBaseType
+          \Self.unexpectedBetweenGenericParameterClauseAndType, 
+          \Self.type, 
+          \Self.unexpectedAfterType
         ])
   }
 }
@@ -1858,149 +1858,27 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - PackExpansionTypeSyntax
-
-/// ### Children
-/// 
-///  - `repeatKeyword`: `'repeat'`
-///  - `pack`: ``TypeSyntax``
-public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .packExpansionType else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``PackExpansionTypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .packExpansionType)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
-      repeatKeyword: TokenSyntax = .keyword(.repeat),
-      _ unexpectedBetweenRepeatKeywordAndPack: UnexpectedNodesSyntax? = nil,
-      pack: some TypeSyntaxProtocol,
-      _ unexpectedAfterPack: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeRepeatKeyword, 
-            repeatKeyword, 
-            unexpectedBetweenRepeatKeywordAndPack, 
-            pack, 
-            unexpectedAfterPack
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeRepeatKeyword?.raw, 
-          repeatKeyword.raw, 
-          unexpectedBetweenRepeatKeywordAndPack?.raw, 
-          pack.raw, 
-          unexpectedAfterPack?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.packExpansionType,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackExpansionTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var repeatKeyword: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = PackExpansionTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenRepeatKeywordAndPack: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackExpansionTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var pack: TypeSyntax {
-    get {
-      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = PackExpansionTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterPack: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = PackExpansionTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeRepeatKeyword, 
-          \Self.repeatKeyword, 
-          \Self.unexpectedBetweenRepeatKeywordAndPack, 
-          \Self.pack, 
-          \Self.unexpectedAfterPack
-        ])
-  }
-}
-
-// MARK: - PackReferenceTypeSyntax
+// MARK: - PackElementTypeSyntax
 
 /// ### Children
 /// 
 ///  - `eachKeyword`: `'each'`
 ///  - `pack`: ``TypeSyntax``
-public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct PackElementTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .packReferenceType else {
+    guard node.raw.kind == .packElementType else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PackReferenceTypeSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``PackElementTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .packReferenceType)
+    precondition(data.raw.kind == .packElementType)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2034,7 +1912,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           unexpectedAfterPack?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.packReferenceType,
+        kind: SyntaxKind.packElementType,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -2051,7 +1929,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackReferenceTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = PackElementTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2060,7 +1938,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackReferenceTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = PackElementTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2069,7 +1947,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackReferenceTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = PackElementTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2078,7 +1956,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = PackReferenceTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+      self = PackElementTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2087,7 +1965,7 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = PackReferenceTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+      self = PackElementTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -2102,27 +1980,27 @@ public struct PackReferenceTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - SimpleTypeIdentifierSyntax
+// MARK: - PackExpansionTypeSyntax
 
 /// ### Children
 /// 
-///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'Any'` | `'_'`)
-///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
-public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
+///  - `repeatKeyword`: `'repeat'`
+///  - `repetitionPattern`: ``TypeSyntax``
+public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .simpleTypeIdentifier else {
+    guard node.raw.kind == .packExpansionType else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SimpleTypeIdentifierSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``PackExpansionTypeSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .simpleTypeIdentifier)
+    precondition(data.raw.kind == .packExpansionType)
     self._syntaxNode = Syntax(data)
   }
   
@@ -2131,32 +2009,32 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
-      genericArgumentClause: GenericArgumentClauseSyntax? = nil,
-      _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? = nil,
+      repeatKeyword: TokenSyntax = .keyword(.repeat),
+      _ unexpectedBetweenRepeatKeywordAndRepetitionPattern: UnexpectedNodesSyntax? = nil,
+      repetitionPattern: some TypeSyntaxProtocol,
+      _ unexpectedAfterRepetitionPattern: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeName, 
-            name, 
-            unexpectedBetweenNameAndGenericArgumentClause, 
-            genericArgumentClause, 
-            unexpectedAfterGenericArgumentClause
+            unexpectedBeforeRepeatKeyword, 
+            repeatKeyword, 
+            unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
+            repetitionPattern, 
+            unexpectedAfterRepetitionPattern
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndGenericArgumentClause?.raw, 
-          genericArgumentClause?.raw, 
-          unexpectedAfterGenericArgumentClause?.raw
+          unexpectedBeforeRepeatKeyword?.raw, 
+          repeatKeyword.raw, 
+          unexpectedBetweenRepeatKeywordAndRepetitionPattern?.raw, 
+          repetitionPattern.raw, 
+          unexpectedAfterRepetitionPattern?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.simpleTypeIdentifier,
+        kind: SyntaxKind.packExpansionType,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -2168,58 +2046,180 @@ public struct SimpleTypeIdentifierSyntax: TypeSyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeRepeatKeyword: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SimpleTypeIdentifierSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = PackExpansionTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var name: TokenSyntax {
+  public var repeatKeyword: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SimpleTypeIdentifierSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = PackExpansionTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenRepeatKeywordAndRepetitionPattern: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SimpleTypeIdentifierSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = PackExpansionTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var genericArgumentClause: GenericArgumentClauseSyntax? {
+  public var repetitionPattern: TypeSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = SimpleTypeIdentifierSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = PackExpansionTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedAfterRepetitionPattern: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = SimpleTypeIdentifierSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+      self = PackExpansionTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndGenericArgumentClause, 
-          \Self.genericArgumentClause, 
-          \Self.unexpectedAfterGenericArgumentClause
+          \Self.unexpectedBeforeRepeatKeyword, 
+          \Self.repeatKeyword, 
+          \Self.unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
+          \Self.repetitionPattern, 
+          \Self.unexpectedAfterRepetitionPattern
+        ])
+  }
+}
+
+// MARK: - SomeOrAnyTypeSyntax
+
+/// ### Children
+/// 
+///  - `someOrAnySpecifier`: (`'some'` | `'any'`)
+///  - `constraint`: ``TypeSyntax``
+public struct SomeOrAnyTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .someOrAnyType else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``SomeOrAnyTypeSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .someOrAnyType)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? = nil,
+      someOrAnySpecifier: TokenSyntax,
+      _ unexpectedBetweenSomeOrAnySpecifierAndConstraint: UnexpectedNodesSyntax? = nil,
+      constraint: some TypeSyntaxProtocol,
+      _ unexpectedAfterConstraint: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeSomeOrAnySpecifier, 
+            someOrAnySpecifier, 
+            unexpectedBetweenSomeOrAnySpecifierAndConstraint, 
+            constraint, 
+            unexpectedAfterConstraint
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeSomeOrAnySpecifier?.raw, 
+          someOrAnySpecifier.raw, 
+          unexpectedBetweenSomeOrAnySpecifierAndConstraint?.raw, 
+          constraint.raw, 
+          unexpectedAfterConstraint?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.someOrAnyType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeSomeOrAnySpecifier: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SomeOrAnyTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var someOrAnySpecifier: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SomeOrAnyTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenSomeOrAnySpecifierAndConstraint: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SomeOrAnyTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var constraint: TypeSyntax {
+    get {
+      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SomeOrAnyTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterConstraint: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SomeOrAnyTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeSomeOrAnySpecifier, 
+          \Self.someOrAnySpecifier, 
+          \Self.unexpectedBetweenSomeOrAnySpecifierAndConstraint, 
+          \Self.constraint, 
+          \Self.unexpectedAfterConstraint
         ])
   }
 }

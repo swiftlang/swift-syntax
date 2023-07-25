@@ -63,12 +63,12 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set
   }
   
-  var modifiers: ModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax? {
     get
     set
   }
   
-  var inheritanceClause: TypeInheritanceClauseSyntax? {
+  var inheritanceClause: InheritanceClauseSyntax? {
     get
     set
   }
@@ -79,7 +79,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set
   }
   
-  var memberBlock: MemberDeclBlockSyntax {
+  var memberBlock: MemberBlockSyntax {
     get
     set
   }
@@ -484,7 +484,7 @@ public extension SyntaxProtocol {
 
 
 public protocol WithModifiersSyntax: SyntaxProtocol {
-  var modifiers: ModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax? {
     get
     set
   }
@@ -597,21 +597,17 @@ extension AccessorDeclSyntax: WithAttributesSyntax {}
 
 extension AccessorEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
-extension AccessorParameterSyntax: ParenthesizedSyntax {}
+extension AccessorParametersSyntax: ParenthesizedSyntax {}
 
 extension ActorDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension ArrayElementSyntax: WithTrailingCommaSyntax {}
 
-extension AssociatedtypeDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension AssociatedTypeDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension AttributedTypeSyntax: WithAttributesSyntax {}
 
 extension AvailabilityArgumentSyntax: WithTrailingCommaSyntax {}
-
-extension AvailabilityVersionRestrictionListEntrySyntax: WithTrailingCommaSyntax {}
-
-extension CaseItemSyntax: WithTrailingCommaSyntax {}
 
 extension CatchClauseSyntax: WithCodeBlockSyntax {}
 
@@ -619,15 +615,15 @@ extension CatchItemSyntax: WithTrailingCommaSyntax {}
 
 extension ClassDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
-extension ClosureCaptureItemSyntax: WithTrailingCommaSyntax {}
+extension ClosureCaptureSyntax: WithTrailingCommaSyntax {}
 
 extension ClosureExprSyntax: BracedSyntax, WithStatementsSyntax {}
-
-extension ClosureParamSyntax: WithTrailingCommaSyntax {}
 
 extension ClosureParameterClauseSyntax: ParenthesizedSyntax {}
 
 extension ClosureParameterSyntax: WithTrailingCommaSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+
+extension ClosureShorthandParameterSyntax: WithTrailingCommaSyntax {}
 
 extension ClosureSignatureSyntax: WithAttributesSyntax {}
 
@@ -645,7 +641,7 @@ extension DeinitializerDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 
 extension DictionaryElementSyntax: WithTrailingCommaSyntax {}
 
-extension DifferentiabilityParamSyntax: WithTrailingCommaSyntax {}
+extension DifferentiabilityArgumentSyntax: WithTrailingCommaSyntax {}
 
 extension DoStmtSyntax: WithCodeBlockSyntax {}
 
@@ -663,15 +659,17 @@ extension EnumCaseParameterSyntax: WithTrailingCommaSyntax, WithModifiersSyntax 
 
 extension EnumDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
-extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
+extension ExprSegmentSyntax: ParenthesizedSyntax {}
 
 extension ExtensionDeclSyntax: DeclGroupSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
-extension ForInStmtSyntax: WithCodeBlockSyntax {}
+extension ForStmtSyntax: WithCodeBlockSyntax {}
 
 extension FunctionDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension FunctionEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
+
+extension FunctionParameterClauseSyntax: ParenthesizedSyntax {}
 
 extension FunctionParameterSyntax: WithTrailingCommaSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
@@ -693,7 +691,7 @@ extension InheritedTypeSyntax: WithTrailingCommaSyntax {}
 
 extension InitializerDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
-extension LabeledSpecializeEntrySyntax: WithTrailingCommaSyntax {}
+extension LabeledSpecializeArgumentSyntax: WithTrailingCommaSyntax {}
 
 extension MacroDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
@@ -701,7 +699,7 @@ extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax, WithAttrib
 
 extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {}
 
-extension MemberDeclBlockSyntax: BracedSyntax {}
+extension MemberBlockSyntax: BracedSyntax {}
 
 extension MissingDeclSyntax: MissingNodeSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
@@ -717,33 +715,35 @@ extension MissingTypeSyntax: MissingNodeSyntax {}
 
 extension OperatorDeclSyntax: NamedDeclSyntax {}
 
-extension ParameterClauseSyntax: ParenthesizedSyntax {}
-
 extension PatternBindingSyntax: WithTrailingCommaSyntax {}
+
+extension PlatformVersionItemSyntax: WithTrailingCommaSyntax {}
 
 extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 
 extension PrecedenceGroupDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
-extension PrecedenceGroupNameElementSyntax: WithTrailingCommaSyntax {}
+extension PrecedenceGroupNameSyntax: WithTrailingCommaSyntax {}
 
 extension PrimaryAssociatedTypeSyntax: WithTrailingCommaSyntax {}
 
 extension ProtocolDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
-extension RepeatWhileStmtSyntax: WithCodeBlockSyntax {}
+extension RepeatStmtSyntax: WithCodeBlockSyntax {}
 
 extension SourceFileSyntax: WithStatementsSyntax {}
+
+extension SpecializeTargetFunctionArgumentSyntax: WithTrailingCommaSyntax {}
 
 extension StructDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
 extension SubscriptDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
+extension SwitchCaseItemSyntax: WithTrailingCommaSyntax {}
+
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 
 extension SwitchExprSyntax: BracedSyntax {}
-
-extension TargetFunctionEntrySyntax: WithTrailingCommaSyntax {}
 
 extension TupleExprElementSyntax: WithTrailingCommaSyntax {}
 
@@ -757,9 +757,9 @@ extension TupleTypeElementSyntax: WithTrailingCommaSyntax {}
 
 extension TupleTypeSyntax: ParenthesizedSyntax {}
 
-extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
+extension TypeAliasDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
-extension TypealiasDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension TypeEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
 extension VariableDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 

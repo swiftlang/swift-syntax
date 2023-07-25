@@ -22,9 +22,9 @@ fileprivate class StringLiteralExpressionIndentationChecker {
     self.arena = arena
   }
 
-  func checkIndentation(of expressionSegment: RawExpressionSegmentSyntax) -> RawExpressionSegmentSyntax? {
+  func checkIndentation(of expressionSegment: RawExprSegmentSyntax) -> RawExprSegmentSyntax? {
     if let rewrittenSegment = self.visit(node: RawSyntax(expressionSegment)) {
-      return rewrittenSegment.as(RawExpressionSegmentSyntax.self)
+      return rewrittenSegment.as(RawExprSegmentSyntax.self)
     } else {
       return nil
     }
@@ -215,7 +215,7 @@ extension Parser {
       } else {
         return false
       }
-    case .expressionSegment:
+    case .exprSegment:
       return false
     case nil:
       return openQuoteHasTrailingNewline
@@ -275,11 +275,11 @@ extension Parser {
           || (segment.content.trailingTriviaPieces.last?.isNewline ?? false)
 
         middleSegments[index] = .stringSegment(segment)
-      case .expressionSegment(let segment):
+      case .exprSegment(let segment):
         isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
 
         if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
-          middleSegments[index] = .expressionSegment(rewrittenSegment)
+          middleSegments[index] = .exprSegment(rewrittenSegment)
         }
       }
     }
@@ -531,11 +531,11 @@ extension Parser {
           self.lexemes.perform(stateTransition: .pop, currentToken: &self.currentToken)
         }
         segments.append(
-          .expressionSegment(
-            RawExpressionSegmentSyntax(
+          .exprSegment(
+            RawExprSegmentSyntax(
               backslash: backslash,
               unexpectedBeforeDelimiter,
-              rawStringDelimiter: delimiter,
+              pounds: delimiter,
               leftParen: leftParen,
               expressions: expressions,
               RawUnexpectedNodesSyntax(unexpectedBeforeRightParen, arena: self.arena),
@@ -571,26 +571,26 @@ extension Parser {
         closeQuote: closeQuote
       )
       return RawStringLiteralExprSyntax(
-        openDelimiter: openDelimiter,
+        openingPounds: openDelimiter,
         RawUnexpectedNodesSyntax(combining: unexpectedBeforeOpenQuote, postProcessed.unexpectedBeforeOpenQuote, arena: self.arena),
-        openQuote: postProcessed.openQuote,
+        openingQuote: postProcessed.openQuote,
         segments: RawStringLiteralSegmentListSyntax(elements: postProcessed.segments, arena: self.arena),
         RawUnexpectedNodesSyntax(combining: postProcessed.unexpectedBeforeCloseQuote, unexpectedBeforeCloseQuote, arena: self.arena),
-        closeQuote: postProcessed.closeQuote,
+        closingQuote: postProcessed.closeQuote,
         unexpectedBeforeCloseDelimiter,
-        closeDelimiter: closeDelimiter,
+        closingPounds: closeDelimiter,
         arena: self.arena
       )
     } else {
       return RawStringLiteralExprSyntax(
-        openDelimiter: openDelimiter,
+        openingPounds: openDelimiter,
         unexpectedBeforeOpenQuote,
-        openQuote: openQuote,
+        openingQuote: openQuote,
         segments: RawStringLiteralSegmentListSyntax(elements: segments, arena: self.arena),
         unexpectedBeforeCloseQuote,
-        closeQuote: closeQuote,
+        closingQuote: closeQuote,
         unexpectedBeforeCloseDelimiter,
-        closeDelimiter: closeDelimiter,
+        closingPounds: closeDelimiter,
         arena: self.arena
       )
     }

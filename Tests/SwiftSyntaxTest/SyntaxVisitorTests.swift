@@ -35,7 +35,7 @@ public class SyntaxVisitorTests: XCTestCase {
         CodeBlockItemSyntax(
           item: CodeBlockItemSyntax.Item(
             IntegerLiteralExprSyntax(
-              digits: .integerLiteral(
+              literal: .integerLiteral(
                 "0xG",
                 leadingTrivia: [
                   .newlines(1),
@@ -58,7 +58,7 @@ public class SyntaxVisitorTests: XCTestCase {
               funcKeyword: .keyword(.func, trailingTrivia: .space),
               name: .identifier("foo"),
               signature: FunctionSignatureSyntax(
-                parameterClause: ParameterClauseSyntax(
+                parameterClause: FunctionParameterClauseSyntax(
                   leftParen: .leftParenToken(),
                   parameters: FunctionParameterListSyntax([]),
                   rightParen: .rightParenToken(trailingTrivia: .space)
@@ -70,13 +70,13 @@ public class SyntaxVisitorTests: XCTestCase {
                   CodeBlockItemSyntax(
                     item: CodeBlockItemSyntax.Item(
                       FunctionDeclSyntax(
-                        modifiers: ModifierListSyntax([
+                        modifiers: DeclModifierListSyntax([
                           DeclModifierSyntax(name: .keyword(.public, leadingTrivia: [.newlines(1), .spaces(2)], trailingTrivia: .space))
                         ]),
                         funcKeyword: .keyword(.func, trailingTrivia: .space),
                         name: .identifier("foo"),
                         signature: FunctionSignatureSyntax(
-                          parameterClause: ParameterClauseSyntax(
+                          parameterClause: FunctionParameterClauseSyntax(
                             leftParen: .leftParenToken(),
                             parameters: FunctionParameterListSyntax([]),
                             rightParen: .rightParenToken(trailingTrivia: .space)
@@ -91,7 +91,7 @@ public class SyntaxVisitorTests: XCTestCase {
                                   funcKeyword: .keyword(.func, leadingTrivia: [.newlines(1), .spaces(4)], trailingTrivia: .space),
                                   name: .identifier("foo"),
                                   signature: FunctionSignatureSyntax(
-                                    parameterClause: ParameterClauseSyntax(
+                                    parameterClause: FunctionParameterClauseSyntax(
                                       leftParen: .leftParenToken(),
                                       parameters: FunctionParameterListSyntax([]),
                                       rightParen: .rightParenToken(trailingTrivia: .space)
@@ -230,7 +230,7 @@ public class SyntaxVisitorTests: XCTestCase {
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("a", trailingTrivia: .space))),
           initializer: InitializerClauseSyntax(
             equal: .equalToken(trailingTrivia: .space),
-            value: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("5")))
+            value: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("5")))
           )
         )
       ])

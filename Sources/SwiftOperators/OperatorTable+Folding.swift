@@ -60,7 +60,7 @@ extension OperatorTable {
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     // A binary operator.
-    if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
+    if let binaryExpr = expr.as(UnresolvedInfixOperatorExprSyntax.self) {
       let operatorName = binaryExpr.operator.text
       return try lookupOperatorPrecedenceGroupName(
         operatorName,
@@ -85,7 +85,7 @@ extension OperatorTable {
     }
 
     // The arrow operator has fixed precedence.
-    if expr.is(ArrowExprSyntax.self) {
+    if expr.is(UnresolvedArrowExprSyntax.self) {
       return "FunctionArrowPrecedence"
     }
 
@@ -137,7 +137,7 @@ extension OperatorTable {
     // which will be one of the unresolved infix operators.
 
     // An operator such as '+'.
-    if let binaryOperatorExpr = op.as(BinaryOperatorExprSyntax.self) {
+    if let binaryOperatorExpr = op.as(UnresolvedInfixOperatorExprSyntax.self) {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
@@ -154,11 +154,11 @@ extension OperatorTable {
           condition: lhs,
           ternaryExpr.unexpectedBeforeQuestionMark,
           questionMark: ternaryExpr.questionMark,
-          ternaryExpr.unexpectedBetweenQuestionMarkAndFirstChoice,
-          firstChoice: ternaryExpr.firstChoice,
-          ternaryExpr.unexpectedBetweenFirstChoiceAndColon,
+          ternaryExpr.unexpectedBetweenQuestionMarkAndThenExpression,
+          thenExpression: ternaryExpr.thenExpression,
+          ternaryExpr.unexpectedBetweenThenExpressionAndColon,
           colon: ternaryExpr.colon,
-          secondChoice: rhs
+          elseExpression: rhs
         )
       )
     }
@@ -205,7 +205,7 @@ extension OperatorTable {
     }
 
     // An arrow expression (->).
-    if let arrowExpr = op.as(ArrowExprSyntax.self) {
+    if let arrowExpr = op.as(UnresolvedArrowExprSyntax.self) {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,

@@ -54,7 +54,7 @@ public extension Child {
   }
 
   var parameterType: TypeSyntax {
-    return self.type.optionalWrapped(type: SimpleTypeIdentifierSyntax(name: .identifier(parameterBaseType)))
+    return self.type.optionalWrapped(type: IdentifierTypeSyntax(name: .identifier(parameterBaseType)))
   }
 
   var defaultValue: ExprSyntax? {
@@ -132,7 +132,7 @@ public extension Child {
         ExprSyntax(
           SequenceExprSyntax {
             IdentifierExprSyntax(identifier: .identifier(varName))
-            BinaryOperatorExprSyntax(text: "==")
+            UnresolvedInfixOperatorExprSyntax(text: "==")
             NilLiteralExprSyntax()
           }
         )
@@ -143,13 +143,13 @@ public extension Child {
         ExprSyntax(
           SequenceExprSyntax {
             MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
-            BinaryOperatorExprSyntax(text: "==")
+            UnresolvedInfixOperatorExprSyntax(text: "==")
             StringLiteralExprSyntax(content: textChoice)
           }
         )
       )
     }
-    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
+    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(UnresolvedInfixOperatorExprSyntax(text: "||"))] }.dropLast())
     return FunctionCallExprSyntax(callee: ExprSyntax("precondition")) {
       TupleExprElementSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }

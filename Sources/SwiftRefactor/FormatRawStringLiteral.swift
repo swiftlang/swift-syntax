@@ -35,8 +35,8 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
     var maximumHashes = 0
     for segment in lit.segments {
       switch segment {
-      case .expressionSegment(let expr):
-        if let rawStringDelimiter = expr.rawStringDelimiter {
+      case .exprSegment(let expr):
+        if let rawStringDelimiter = expr.pounds {
           // Pick up any delimiters in interpolation segments \#...#(...)
           maximumHashes = max(maximumHashes, rawStringDelimiter.text.longestRun(of: "#"))
         }
@@ -49,15 +49,15 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
     guard maximumHashes > 0 else {
       return
         lit
-        .with(\.openDelimiter, lit.openDelimiter?.with(\.tokenKind, .rawStringDelimiter("")))
-        .with(\.closeDelimiter, lit.closeDelimiter?.with(\.tokenKind, .rawStringDelimiter("")))
+        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringDelimiter("")))
+        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringDelimiter("")))
     }
 
     let delimiters = String(repeating: "#", count: maximumHashes + 1)
     return
       lit
-      .with(\.openDelimiter, lit.openDelimiter?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
-      .with(\.closeDelimiter, lit.closeDelimiter?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
+      .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
+      .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
   }
 }
 

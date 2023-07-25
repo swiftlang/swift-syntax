@@ -206,7 +206,8 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "ColonToken")])
       ),
       Child(
-        name: "LayoutConstraint",
+        name: "LayoutSpecifier",
+        deprecatedName: "LayoutConstraint",
         kind: .token(choices: [
           .keyword(text: "_Trivial"),
           .keyword(text: "_TrivialAtMost"),

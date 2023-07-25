@@ -89,7 +89,7 @@ final class DeclarationTests: XCTestCase {
           firstName: .wildcardToken(),
           secondName: .identifier("default"),
           colon: .colonToken(),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+          type: IdentifierTypeSyntax(name: .identifier("Int"))
         )
       )
     )
@@ -812,7 +812,7 @@ final class DeclarationTests: XCTestCase {
           funcKeyword: .keyword(.func),
           name: .identifier("withoutParameters"),
           signature: FunctionSignatureSyntax(
-            parameterClause: ParameterClauseSyntax(
+            parameterClause: FunctionParameterClauseSyntax(
               leftParen: .leftParenToken(presence: .missing),
               parameters: FunctionParameterListSyntax([]),
               rightParen: .rightParenToken(presence: .missing)
@@ -1053,7 +1053,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         AccessorBlockSyntax(
-          accessors: AccessorListSyntax([
+          accessors: AccessorDeclListSyntax([
             AccessorDeclSyntax(
               accessorSpecifier: .keyword(.get)
             )
@@ -1153,7 +1153,7 @@ final class DeclarationTests: XCTestCase {
           secondName: .identifier("second"),
           UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
           colon: .colonToken(),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+          type: IdentifierTypeSyntax(name: .identifier("Int"))
         )
       ),
       diagnostics: [
@@ -1171,7 +1171,7 @@ final class DeclarationTests: XCTestCase {
           secondName: .identifier("second"),
           UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
           colon: .colonToken(),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+          type: IdentifierTypeSyntax(name: .identifier("Int"))
         )
       ),
       diagnostics: [
@@ -1188,7 +1188,7 @@ final class DeclarationTests: XCTestCase {
           firstName: .identifier("first"),
           secondName: .identifier("second"),
           colon: .colonToken(presence: .missing),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
+          type: IdentifierTypeSyntax(name: .identifier("third"))
         )
       ),
       diagnostics: [
@@ -1233,7 +1233,7 @@ final class DeclarationTests: XCTestCase {
             TokenSyntax.rightSquareToken(),
           ]),
           colon: .colonToken(),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("Int"))
+          type: IdentifierTypeSyntax(name: .identifier("Int"))
         )
       ),
       diagnostics: [
@@ -1252,7 +1252,7 @@ final class DeclarationTests: XCTestCase {
           colon: .colonToken(presence: .missing),
           type: ArrayTypeSyntax(
             leftSquare: .leftSquareToken(),
-            element: SimpleTypeIdentifierSyntax(name: .identifier("third")),
+            element: IdentifierTypeSyntax(name: .identifier("third")),
             rightSquare: .rightSquareToken(presence: .missing)
           )
         )
@@ -1291,7 +1291,7 @@ final class DeclarationTests: XCTestCase {
           firstName: .identifier("first"),
           secondName: .identifier("second"),
           colon: .colonToken(presence: .missing),
-          type: SimpleTypeIdentifierSyntax(name: .identifier("third"))
+          type: IdentifierTypeSyntax(name: .identifier("third"))
         )
       ),
       diagnostics: [
@@ -2063,16 +2063,16 @@ final class DeclarationTests: XCTestCase {
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
                 name: .identifier("A"),
-                memberBlock: MemberDeclBlockSyntax(
+                memberBlock: MemberBlockSyntax(
                   leftBrace: .leftBraceToken(),
-                  members: MemberDeclListSyntax([
-                    MemberDeclListItemSyntax(
+                  members: MemberBlockItemListSyntax([
+                    MemberBlockItemSyntax(
                       decl: DeclSyntax(
                         FunctionDeclSyntax(
                           funcKeyword: .keyword(.func, presence: .missing),
                           name: .binaryOperator("^"),
                           signature: FunctionSignatureSyntax(
-                            parameterClause: ParameterClauseSyntax(
+                            parameterClause: FunctionParameterClauseSyntax(
                               leftParen: .leftParenToken(presence: .missing),
                               parameters: FunctionParameterListSyntax([]),
                               rightParen: .rightParenToken(presence: .missing)
@@ -2092,9 +2092,9 @@ final class DeclarationTests: XCTestCase {
               ClassDeclSyntax(
                 classKeyword: .keyword(.class),
                 name: .identifier("B"),
-                memberBlock: MemberDeclBlockSyntax(
+                memberBlock: MemberBlockSyntax(
                   leftBrace: .leftBraceToken(),
-                  members: MemberDeclListSyntax([]),
+                  members: MemberBlockItemListSyntax([]),
                   rightBrace: .rightBraceToken()
                 )
               )
@@ -2200,7 +2200,7 @@ final class DeclarationTests: XCTestCase {
       }
       """,
       substructure: Syntax(
-        MemberDeclListItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>")))
+        MemberBlockItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>")))
       ),
       diagnostics: [
         DiagnosticSpec(message: "editor placeholder in source file")
@@ -2268,7 +2268,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         VariableDeclSyntax(
-          modifiers: ModifierListSyntax([
+          modifiers: DeclModifierListSyntax([
             DeclModifierSyntax(name: .keyword(.open))
           ]),
           bindingSpecifier: .keyword(.var),
@@ -2276,7 +2276,7 @@ final class DeclarationTests: XCTestCase {
             PatternBindingSyntax(
               pattern: IdentifierPatternSyntax(identifier: .identifier("foo")),
               initializer: InitializerClauseSyntax(
-                value: IntegerLiteralExprSyntax(digits: .integerLiteral("2"))
+                value: IntegerLiteralExprSyntax(literal: .integerLiteral("2"))
               )
             )
           ])
@@ -2391,7 +2391,7 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure:
         Syntax(
-          TypeInheritanceClauseSyntax(
+          InheritanceClauseSyntax(
             colon: .colonToken(),
             inheritedTypes: InheritedTypeListSyntax([
               InheritedTypeSyntax(
@@ -2572,7 +2572,7 @@ final class DeclarationTests: XCTestCase {
         InitializerDeclSyntax(
           initKeyword: .keyword(.`init`),
           signature: FunctionSignatureSyntax(
-            parameterClause: ParameterClauseSyntax(
+            parameterClause: FunctionParameterClauseSyntax(
               leftParen: .leftParenToken(),
               parameters: FunctionParameterListSyntax([
                 FunctionParameterSyntax(

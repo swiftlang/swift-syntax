@@ -50,7 +50,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
 
           try VariableDeclSyntax("public var _syntaxNode: Syntax") {
-            SwitchExprSyntax(switchKeyword: .keyword(.switch), expression: ExprSyntax("self")) {
+            SwitchExprSyntax(switchKeyword: .keyword(.switch), subject: ExprSyntax("self")) {
               for choiceName in node.elementChoices {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
                 SwitchCaseSyntax("case .\(choice.varOrCaseName)(let node):") {

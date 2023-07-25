@@ -67,7 +67,7 @@ extension SyntaxClassification {
     switch keyPath {
     case \AttributeSyntax.attributeName:
       return (.attribute, false)
-    case \AvailabilityVersionRestrictionListEntrySyntax.availabilityVersionRestriction:
+    case \PlatformVersionItemSyntax.availabilityVersionRestriction:
       return (.keyword, false)
     case \AvailabilityVersionRestrictionSyntax.platform:
       return (.keyword, false)

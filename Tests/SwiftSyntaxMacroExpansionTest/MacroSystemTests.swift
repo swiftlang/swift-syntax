@@ -470,7 +470,7 @@ public struct WrapAllProperties: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("Wrapper")
         )
       )
@@ -516,7 +516,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("Wrapper")
         )
       )
@@ -558,7 +558,7 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
   ) throws -> [AttributeSyntax] {
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("customTypeWrapper")
         )
       )

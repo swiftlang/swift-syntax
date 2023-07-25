@@ -221,10 +221,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftBrace)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawAccessorListSyntax.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawAccessorDeclListSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .accessorDeclList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawAccessorDeclSyntax.self))
+    }
   case .accessorDecl:
     assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -248,7 +252,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("init")
           ]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawAccessorParameterSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawAccessorParametersSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawAccessorEffectSpecifiersSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
@@ -270,11 +274,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawAccessesEffectSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .accessorList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawAccessorDeclSyntax.self))
-    }
-  case .accessorParameter:
+  case .accessorParameters:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
@@ -288,7 +288,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("actor")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -296,11 +296,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .arrayElementList:
     for (index, element) in layout.enumerated() {
@@ -331,13 +331,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightSquare)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .arrowExpr:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTypeEffectSpecifiersSyntax?.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.arrow)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .asExpr:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -354,18 +347,18 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.equal)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .associatedtypeDecl:
+  case .associatedTypeDecl:
     assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("associatedtype")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawTypeInitializerClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
@@ -408,6 +401,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTypeSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .availabilityArgumentList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawAvailabilityArgumentSyntax.self))
+    }
   case .availabilityArgument:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -423,20 +420,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilitySpecListSyntax.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilityArgumentListSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .availabilityEntry:
-    assert(layout.count == 9)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("availability")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilitySpecListSyntax.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.semicolon)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   case .availabilityLabeledArgument:
     assert(layout.count == 7)
@@ -454,28 +440,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertAnyHasNoError(kind, 5, [
         verify(layout[5], as: RawSyntax.self)])
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .availabilitySpecList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawAvailabilityArgumentSyntax.self))
-    }
-  case .availabilityVersionRestrictionListEntry:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawAvailabilityVersionRestrictionSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .availabilityVersionRestrictionList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawAvailabilityVersionRestrictionListEntrySyntax.self))
-    }
-  case .availabilityVersionRestriction:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawVersionTupleSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .awaitExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -483,20 +447,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .backDeployedAttributeSpecList:
+  case .backDeployedAttributeArguments:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("before")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilityVersionRestrictionListSyntax.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawPlatformVersionItemListSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .binaryOperatorExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.binaryOperator)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .booleanLiteralExpr:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -540,19 +499,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawVersionTupleSyntax.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .caseItemList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawCaseItemSyntax.self))
-    }
-  case .caseItem:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawWhereClauseSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .catchClauseList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawCatchClauseSyntax.self))
@@ -584,7 +530,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("class")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -592,22 +538,31 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .classRestrictionType:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("class")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .closureCaptureItemList:
+  case .closureCaptureClause:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftSquare)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawClosureCaptureListSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightSquare)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .closureCaptureList:
     for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawClosureCaptureItemSyntax.self))
+      assertNoError(kind, index, verify(element, as: RawClosureCaptureSyntax.self))
     }
-  case .closureCaptureItemSpecifier:
+  case .closureCaptureSpecifier:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("weak"), .keyword("unowned")]))
@@ -618,10 +573,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.rightParen)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .closureCaptureItem:
+  case .closureCapture:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawClosureCaptureItemSpecifierSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawClosureCaptureSpecifierSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
@@ -631,15 +586,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-  case .closureCaptureSignature:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftSquare)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawClosureCaptureItemListSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightSquare)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .closureExpr:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -651,17 +597,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .closureParamList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawClosureParamSyntax.self))
-    }
-  case .closureParam:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.wildcard)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .closureParameterClause:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -680,7 +615,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.wildcard)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -694,12 +629,23 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 15, verify(layout[15], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
+  case .closureShorthandParameterList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawClosureShorthandParameterSyntax.self))
+    }
+  case .closureShorthandParameter:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.wildcard)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .closureSignature:
     assert(layout.count == 13)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawClosureCaptureSignatureSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawClosureCaptureClauseSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertAnyHasNoError(kind, 5, [
         verify(layout[5], as: RawSyntax?.self)])
@@ -768,12 +714,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTypeSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .constrainedSugarType:
+  case .consumeExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("some"), .keyword("any")]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("_move"), .keyword("consume")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .continueStmt:
     assert(layout.count == 5)
@@ -820,6 +766,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .declModifierList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawDeclModifierSyntax.self))
+    }
   case .declModifier:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -903,25 +853,25 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawCodeBlockSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .deinitEffectSpecifiers:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax?.self, tokenChoices: [.keyword("async")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .deinitializerDecl:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("deinit")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawDeinitEffectSpecifiersSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawDeinitializerEffectSpecifiersSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawCodeBlockSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-  case .derivativeRegistrationAttributeArguments:
+  case .deinitializerEffectSpecifiers:
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax?.self, tokenChoices: [.keyword("async")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+  case .derivativeAttributeArguments:
     assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("of")]))
@@ -936,19 +886,19 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawDifferentiabilityParamsClauseSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawDifferentiabilityWithRespectToArgumentSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-  case .designatedTypeElement:
+  case .designatedTypeList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawDesignatedTypeSyntax.self))
+    }
+  case .designatedType:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .designatedTypeList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawDesignatedTypeElementSyntax.self))
-    }
   case .dictionaryElementList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawDictionaryElementSyntax.self))
@@ -987,18 +937,27 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightSquare)]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-  case .differentiabilityParamList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawDifferentiabilityParamSyntax.self))
-    }
-  case .differentiabilityParam:
+  case .differentiabilityArgument:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.integerLiteral), .keyword("self")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .differentiabilityParamsClause:
+  case .differentiabilityArguments:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDifferentiabilityParameterListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .differentiabilityParameterList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawDifferentiabilityArgumentSyntax.self))
+    }
+  case .differentiabilityWithRespectToArgument:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("wrt")]))
@@ -1008,15 +967,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertAnyHasNoError(kind, 5, [
         verify(layout[5], as: RawSyntax.self)])
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .differentiabilityParams:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawDifferentiabilityParamListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .differentiableAttributeArguments:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -1024,7 +974,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawDifferentiabilityParamsClauseSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawDifferentiabilityWithRespectToArgumentSyntax?.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
@@ -1067,7 +1017,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .dynamicReplacementArguments:
+  case .dynamicReplacementAttributeArguments:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("for")]))
@@ -1081,7 +1031,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1090,7 +1040,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .effectsArgumentList:
+  case .effectsAttributeArgumentList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawTokenSyntax.self))
     }
@@ -1099,7 +1049,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("case")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1136,7 +1086,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .enumCaseParameter:
     assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.wildcard)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
@@ -1155,7 +1105,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("enum")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1163,11 +1113,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .exposeAttributeArguments:
     assert(layout.count == 7)
@@ -1182,12 +1132,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawExprSyntax.self))
     }
-  case .expressionPattern:
+  case .exprPattern:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .expressionSegment:
+  case .exprSegment:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.backslash)]))
@@ -1210,19 +1160,19 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("extension")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTypeSyntax.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-  case .fallthroughStmt:
+  case .fallThroughtStmt:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("fallthrough")]))
@@ -1232,7 +1182,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.floatingLiteral)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .forInStmt:
+  case .forStmt:
     assert(layout.count == 21)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("for")]))
@@ -1255,7 +1205,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 18, verify(layout[18], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 19, verify(layout[19], as: RawCodeBlockSyntax.self))
     assertNoError(kind, 20, verify(layout[20], as: RawUnexpectedNodesSyntax?.self))
-  case .forcedValueExpr:
+  case .forceUnwrapExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
@@ -1282,7 +1232,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("func")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1308,6 +1258,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.keyword("throws"), .keyword("rethrows")]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .functionParameterClause:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawFunctionParameterListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .functionParameterList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawFunctionParameterSyntax.self))
@@ -1317,7 +1276,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .tokenKind(.wildcard)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1336,7 +1295,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .functionSignature:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawParameterClauseSyntax.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawFunctionParameterClauseSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawFunctionEffectSpecifiersSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
@@ -1417,6 +1376,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .genericSpecializationExpr:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentClauseSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .genericWhereClause:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -1454,6 +1420,19 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .keyword("self"), .keyword("init")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+  case .identifierType:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
+            .tokenKind(.identifier), 
+            .keyword("self"), 
+            .keyword("Self"), 
+            .keyword("Any"), 
+            .tokenKind(.wildcard)
+          ]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentClauseSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .ifConfigClauseList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawIfConfigClauseSyntax.self))
@@ -1512,7 +1491,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("import")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1562,6 +1541,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawExprSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .inheritanceClause:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawInheritedTypeListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .inheritedTypeList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawInheritedTypeSyntax.self))
@@ -1585,7 +1571,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("init")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1683,7 +1669,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightSquare)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .labeledSpecializeEntry:
+  case .labeledSpecializeArgument:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self))
@@ -1735,7 +1721,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("macro")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1754,7 +1740,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.pound)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1813,27 +1799,27 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawDeclNameArgumentsSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-  case .memberDeclBlock:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftBrace)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawMemberDeclListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-  case .memberDeclListItem:
+  case .memberBlockItemList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawMemberBlockItemSyntax.self))
+    }
+  case .memberBlockItem:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawDeclSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.semicolon)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .memberDeclList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawMemberDeclListItemSyntax.self))
-    }
-  case .memberTypeIdentifier:
+  case .memberBlock:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftBrace)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawMemberBlockItemListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .memberType:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTypeSyntax.self))
@@ -1858,7 +1844,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -1887,17 +1873,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .modifierList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawDeclModifierSyntax.self))
-    }
-  case .moveExpr:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("_move"), .keyword("consume")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .multipleTrailingClosureElementList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawMultipleTrailingClosureElementSyntax.self))
@@ -1988,7 +1963,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.postfixQuestionMark)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .originallyDefinedInArguments:
+  case .originallyDefinedInAttributeArguments:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("module")]))
@@ -1999,7 +1974,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawAvailabilityVersionRestrictionListSyntax.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawPlatformVersionItemListSyntax.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
   case .packElementExpr:
     assert(layout.count == 5)
@@ -2007,6 +1982,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("each")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .packElementType:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("each")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .packExpansionExpr:
     assert(layout.count == 5)
@@ -2022,22 +2004,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .packReferenceType:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("each")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .parameterClause:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawFunctionParameterListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .patternBindingList:
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawPatternBindingSyntax.self))
@@ -2056,6 +2022,29 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+  case .patternExpr:
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+  case .platformVersionItemList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawPlatformVersionItemSyntax.self))
+    }
+  case .platformVersionItem:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawPlatformVersionSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .platformVersion:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawVersionTupleSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .postfixIfConfigExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2063,14 +2052,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawIfConfigDeclSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .postfixUnaryExpr:
+  case .postfixOperatorExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.postfixOperator)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .poundSourceLocationArgs:
+  case .poundSourceLocationArguments:
     assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("file")]))
@@ -2094,7 +2083,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawPoundSourceLocationArgsSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawPoundSourceLocationArgumentsSyntax?.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
@@ -2128,7 +2117,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("precedencegroup")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -2140,17 +2129,17 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-  case .precedenceGroupNameElement:
+  case .precedenceGroupNameList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawPrecedenceGroupNameSyntax.self))
+    }
+  case .precedenceGroupName:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .precedenceGroupNameList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawPrecedenceGroupNameElementSyntax.self))
-    }
   case .precedenceGroupRelation:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2192,7 +2181,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("protocol")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -2200,11 +2189,11 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawPrimaryAssociatedTypeClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .qualifiedDeclName:
     assert(layout.count == 9)
@@ -2236,7 +2225,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.extendedRegexDelimiter)]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-  case .repeatWhileStmt:
+  case .repeatStmt:
     assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("repeat")]))
@@ -2275,18 +2264,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprListSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .simpleTypeIdentifier:
+  case .someOrAnyType:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
-            .tokenKind(.identifier), 
-            .keyword("self"), 
-            .keyword("Self"), 
-            .keyword("Any"), 
-            .tokenKind(.wildcard)
-          ]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("some"), .keyword("any")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentClauseSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .sourceFile:
     assert(layout.count == 5)
@@ -2295,22 +2278,37 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .specializeAttributeSpecList:
+  case .specializeAttributeArgumentList:
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
-            verify(element, as: RawLabeledSpecializeEntrySyntax.self),
-            verify(element, as: RawAvailabilityEntrySyntax.self),
-            verify(element, as: RawTargetFunctionEntrySyntax.self),
+            verify(element, as: RawLabeledSpecializeArgumentSyntax.self),
+            verify(element, as: RawSpecializeAvailabilityArgumentSyntax.self),
+            verify(element, as: RawSpecializeTargetFunctionArgumentSyntax.self),
             verify(element, as: RawGenericWhereClauseSyntax.self)
           ])
     }
-  case .specializeExpr:
-    assert(layout.count == 5)
+  case .specializeAvailabilityArgument:
+    assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("availability")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentClauseSyntax.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilityArgumentListSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.semicolon)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+  case .specializeTargetFunctionArgument:
+    assert(layout.count == 9)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("target")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawDeclNameSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   case .stringLiteralExpr:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2328,7 +2326,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
           verify(element, as: RawStringSegmentSyntax.self),
-          verify(element, as: RawExpressionSegmentSyntax.self)])
+          verify(element, as: RawExprSegmentSyntax.self)])
     }
   case .stringSegment:
     assert(layout.count == 3)
@@ -2340,7 +2338,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("struct")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -2348,33 +2346,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInheritanceClauseSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawInheritanceClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberDeclBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
-  case .subscriptDecl:
-    assert(layout.count == 17)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("subscript")]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawGenericParameterClauseSyntax?.self))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawParameterClauseSyntax.self))
-    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawReturnClauseSyntax.self))
-    assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
-    assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertAnyHasNoError(kind, 15, [
-        verify(layout[15], as: RawSyntax?.self)])
-    assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
-  case .subscriptExpr:
+  case .subscriptCallExpr:
     assert(layout.count == 13)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
@@ -2389,7 +2367,27 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawMultipleTrailingClosureElementListSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-  case .superRefExpr:
+  case .subscriptDecl:
+    assert(layout.count == 17)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("subscript")]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawGenericParameterClauseSyntax?.self))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawFunctionParameterClauseSyntax.self))
+    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawReturnClauseSyntax.self))
+    assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
+    assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 15, [
+        verify(layout[15], as: RawSyntax?.self)])
+    assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
+  case .superExpr:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("super")]))
@@ -2401,12 +2399,25 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .switchCaseItemList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawSwitchCaseItemSyntax.self))
+    }
+  case .switchCaseItem:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawWhereClauseSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .switchCaseLabel:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("case")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawCaseItemListSyntax.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawSwitchCaseItemListSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -2446,17 +2457,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightBrace)]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-  case .targetFunctionEntry:
-    assert(layout.count == 9)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("target")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawDeclNameSyntax.self))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   case .ternaryExpr:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2566,6 +2566,23 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .typeAliasDecl:
+    assert(layout.count == 15)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("typealias")]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
+    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawTypeInitializerClauseSyntax.self))
+    assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
+    assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
   case .typeAnnotation:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2585,13 +2602,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTypeSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .typeInheritanceClause:
-    assert(layout.count == 5)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawInheritedTypeListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .typeInitializerClause:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2599,24 +2609,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTypeSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .typealiasDecl:
-    assert(layout.count == 15)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("typealias")]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier)]))
-    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawGenericParameterClauseSyntax?.self))
-    assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTypeInitializerClauseSyntax.self))
-    assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
-    assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-  case .unavailableFromAsyncArguments:
+  case .unavailableFromAsyncAttributeArguments:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("message")]))
@@ -2638,6 +2631,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawSyntax.self))
     }
+  case .unresolvedArrowExpr:
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTypeEffectSpecifiersSyntax?.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.arrow)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   case .unresolvedAsExpr:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -2645,15 +2645,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.postfixQuestionMark), .tokenKind(.exclamationMark)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  case .unresolvedInfixOperatorExpr:
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.binaryOperator)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .unresolvedIsExpr:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("is")]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .unresolvedPatternExpr:
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawPatternSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .unresolvedTernaryExpr:
     assert(layout.count == 7)
@@ -2676,7 +2676,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawModifierListSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("let"), .keyword("var"), .keyword("inout")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
@@ -2723,26 +2723,26 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTypeAnnotationSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .yieldExprListElement:
+  case .yieldStmtArgumentClause:
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawYieldStmtArgumentListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  case .yieldStmtArgumentList:
+    for (index, element) in layout.enumerated() {
+      assertNoError(kind, index, verify(element, as: RawYieldStmtArgumentSyntax.self))
+    }
+  case .yieldStmtArgument:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-  case .yieldExprList:
-    for (index, element) in layout.enumerated() {
-      assertNoError(kind, index, verify(element, as: RawYieldExprListElementSyntax.self))
-    }
-  case .yieldList:
-    assert(layout.count == 7)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawYieldExprListSyntax.self))
-    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
-    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   case .yieldStmt:
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))

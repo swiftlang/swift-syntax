@@ -62,7 +62,7 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+  public override func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
     if node.members.count == 0 {
       return node.with(\.leftBrace, .leftBraceToken())
     } else {
@@ -70,9 +70,9 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+  public override func visit(_ node: MemberBlockItemSyntax) -> MemberBlockItemSyntax {
     let formatted = super.visit(node)
-    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberDeclListItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
+    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberBlockItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return formatted

@@ -126,7 +126,7 @@ public let COMMON_NODES: [Node] = [
 
   // deinit-effect-specifiers -> async?
   Node(
-    kind: .deinitEffectSpecifiers,
+    kind: .deinitializerEffectSpecifiers,
     base: .syntax,
     nameForDiagnostics: "effect specifiers",
     traits: [],
@@ -172,7 +172,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .modifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
         documentation: "If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.",
         isOptional: true
       ),

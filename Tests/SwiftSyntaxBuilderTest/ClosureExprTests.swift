@@ -19,8 +19,8 @@ final class ClosureExprTests: XCTestCase {
     let buildable = ClosureExprSyntax(
       signature: ClosureSignatureSyntax(
         parameterClause: .simpleInput(
-          ClosureParamListSyntax {
-            ClosureParamSyntax(name: .identifier("area"))
+          ClosureShorthandParameterListSyntax {
+            ClosureShorthandParameterSyntax(name: .identifier("area"))
           }
         )
       )
@@ -38,8 +38,8 @@ final class ClosureExprTests: XCTestCase {
     let buildable = ClosureExprSyntax(
       signature: ClosureSignatureSyntax(
         parameterClause: .simpleInput(
-          ClosureParamListSyntax {
-            ClosureParamSyntax(name: .identifier("area"))
+          ClosureShorthandParameterListSyntax {
+            ClosureShorthandParameterSyntax(name: .identifier("area"))
           }
         ),
         effectSpecifiers: TypeEffectSpecifiersSyntax(

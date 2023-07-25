@@ -124,7 +124,7 @@ public let TYPE_NODES: [Node] = [
 
   // constrained-sugar-type -> ('some'|'any') type
   Node(
-    kind: .constrainedSugarType,
+    kind: .someOrAnyType,
     base: .type,
     nameForDiagnostics: "type",
     children: [
@@ -133,7 +133,8 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "some"), .keyword(text: "any")])
       ),
       Child(
-        name: "BaseType",
+        name: "Constraint",
+        deprecatedName: "BaseType",
         kind: .node(kind: .type)
       ),
     ]
@@ -285,7 +286,7 @@ public let TYPE_NODES: [Node] = [
 
   // member-type-identifier -> type '.' identifier generic-argument-clause?
   Node(
-    kind: .memberTypeIdentifier,
+    kind: .memberType,
     base: .type,
     nameForDiagnostics: "member type",
     children: [
@@ -347,7 +348,8 @@ public let TYPE_NODES: [Node] = [
         documentation: "The parameter clause that defines the generic parameters."
       ),
       Child(
-        name: "BaseType",
+        name: "Type",
+        deprecatedName: "BaseType",
         kind: .node(kind: .type)
       ),
     ]
@@ -399,7 +401,7 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "repeat")])
       ),
       Child(
-        name: "Pack",
+        name: "RepetitionPattern",
         deprecatedName: "PatternType",
         kind: .node(kind: .type)
       ),
@@ -408,9 +410,9 @@ public let TYPE_NODES: [Node] = [
 
   // pack-reference-type -> 'each' type
   Node(
-    kind: .packReferenceType,
+    kind: .packElementType,
     base: .type,
-    nameForDiagnostics: "pack reference",
+    nameForDiagnostics: "pack element",
     children: [
       Child(
         name: "EachKeyword",
@@ -426,7 +428,7 @@ public let TYPE_NODES: [Node] = [
 
   // simple-type-identifier -> identifier generic-argument-clause?
   Node(
-    kind: .simpleTypeIdentifier,
+    kind: .identifierType,
     base: .type,
     nameForDiagnostics: "type",
     children: [
@@ -472,7 +474,8 @@ public let TYPE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Name",
+        name: "FirstName",
+        deprecatedName: "Name",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
         nameForDiagnostics: "name",
         isOptional: true

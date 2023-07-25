@@ -15,9 +15,9 @@
 /// type and synthesize all other members to form the node.
 public let BUILDER_INITIALIZABLE_TYPES: [SyntaxNodeKind: SyntaxNodeKind?] = [
   .codeBlock: .codeBlockItemList,
-  .memberDeclBlock: .memberDeclList,
+  .memberBlock: .memberBlockItemList,
   .codeBlockItemList: nil,
-  .memberDeclList: nil,
+  .memberBlockItemList: nil,
   .patternBindingList: nil,
   .switchCaseList: nil,
   .arrayElementList: nil,
@@ -27,8 +27,8 @@ public let BUILDER_INITIALIZABLE_TYPES: [SyntaxNodeKind: SyntaxNodeKind?] = [
   .genericParameterList: nil,
   .genericRequirementList: nil,
   .inheritedTypeList: nil,
-  .closureCaptureItemList: nil,
-  .caseItemList: nil,
+  .closureCaptureList: nil,
+  .switchCaseItemList: nil,
   .genericArgumentList: nil,
   .tuplePatternElementList: nil,
   .exprList: nil,

@@ -14,17 +14,17 @@
 
 extension Parser {
   /// Parse a list of availability arguments.
-  mutating func parseAvailabilitySpecList() -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilitySpecList() -> RawAvailabilityArgumentListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     do {
       var keepGoing: RawTokenSyntax? = nil
       var availabilityArgumentProgress = LoopProgressCondition()
       repeat {
-        let entry: RawAvailabilityArgumentSyntax.Entry
+        let argument: RawAvailabilityArgumentSyntax.Argument
         if self.at(.identifier) {
-          entry = .availabilityVersionRestriction(self.parseAvailabilityMacro())
+          argument = .availabilityVersionRestriction(self.parseAvailabilityMacro())
         } else {
-          entry = self.parseAvailabilitySpec()
+          argument = self.parseAvailabilitySpec()
         }
 
         let unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax?
@@ -37,7 +37,7 @@ extension Parser {
         }
         elements.append(
           RawAvailabilityArgumentSyntax(
-            entry: entry,
+            argument: argument,
             unexpectedBeforeKeepGoing,
             trailingComma: keepGoing,
             arena: self.arena
@@ -46,7 +46,7 @@ extension Parser {
       } while keepGoing != nil && self.hasProgressed(&availabilityArgumentProgress)
     }
 
-    return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
   }
 
   enum AvailabilityArgumentKind: TokenSpecSet {
@@ -90,13 +90,13 @@ extension Parser {
     }
   }
 
-  mutating func parseAvailabilityArgumentSpecList() -> RawAvailabilitySpecListSyntax {
+  mutating func parseAvailabilityArgumentSpecList() -> RawAvailabilityArgumentListSyntax {
     var elements = [RawAvailabilityArgumentSyntax]()
     var keepGoing: RawTokenSyntax? = nil
 
     var loopProgress = LoopProgressCondition()
     LOOP: repeat {
-      let entry: RawAvailabilityArgumentSyntax.Entry
+      let entry: RawAvailabilityArgumentSyntax.Argument
       switch self.at(anyIn: AvailabilityArgumentKind.self) {
       case (.message, let handle)?,
         (.renamed, let handle)?:
@@ -166,17 +166,17 @@ extension Parser {
       keepGoing = self.consume(if: .comma)
       elements.append(
         RawAvailabilityArgumentSyntax(
-          entry: entry,
+          argument: entry,
           trailingComma: keepGoing,
           arena: self.arena
         )
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
-    return RawAvailabilitySpecListSyntax(elements: elements, arena: self.arena)
+    return RawAvailabilityArgumentListSyntax(elements: elements, arena: self.arena)
   }
 
   /// Parse an availability argument.
-  mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Entry {
+  mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Argument {
     if let star = self.consumeIfContextualPunctuator("*") {
       // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
       // doesn't expect it.
@@ -192,7 +192,7 @@ extension Parser {
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
   /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
-  mutating func parseAvailabilityMacro(allowStarAsVersionNumber: Bool = false) -> RawAvailabilityVersionRestrictionSyntax {
+  mutating func parseAvailabilityMacro(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
     let unexpectedBeforePlatform: RawUnexpectedNodesSyntax?
     let platform: RawTokenSyntax
     if allowStarAsVersionNumber, self.atContextualPunctuator("*") {
@@ -216,7 +216,7 @@ extension Parser {
       version = nil
     }
 
-    return RawAvailabilityVersionRestrictionSyntax(
+    return RawPlatformVersionSyntax(
       unexpectedBeforePlatform,
       platform: platform,
       unexpectedComparison,

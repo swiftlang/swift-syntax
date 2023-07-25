@@ -108,9 +108,9 @@ public class DebugDescriptionTests: XCTestCase {
       }(),
       #line: {
         let token1 = TokenSyntax.integerLiteral("1")
-        let expr1 = IntegerLiteralExprSyntax(digits: token1)
+        let expr1 = IntegerLiteralExprSyntax(literal: token1)
         let token2 = TokenSyntax.integerLiteral("2")
-        let expr2 = IntegerLiteralExprSyntax(digits: token2)
+        let expr2 = IntegerLiteralExprSyntax(literal: token2)
         let elements = [
           TupleExprElementSyntax(expression: expr1),
           TupleExprElementSyntax(expression: expr2),
@@ -122,19 +122,19 @@ public class DebugDescriptionTests: XCTestCase {
             - TupleExprElementListSyntax
             ├─[0]: TupleExprElementSyntax
             │ ╰─expression: IntegerLiteralExprSyntax
-            │   ╰─digits: integerLiteral("1")
+            │   ╰─literal: integerLiteral("1")
             ╰─[1]: TupleExprElementSyntax
               ╰─expression: IntegerLiteralExprSyntax
-                ╰─digits: integerLiteral("2")
+                ╰─literal: integerLiteral("2")
 
             """
         )
       }(),
       #line: {
         let token1 = TokenSyntax.integerLiteral("1")
-        let expr1 = IntegerLiteralExprSyntax(digits: token1)
+        let expr1 = IntegerLiteralExprSyntax(literal: token1)
         let token2 = TokenSyntax.integerLiteral("2")
-        let expr2 = IntegerLiteralExprSyntax(digits: token2)
+        let expr2 = IntegerLiteralExprSyntax(literal: token2)
         let elements = [
           TupleExprElementSyntax(expression: expr1),
           TupleExprElementSyntax(expression: expr2),
@@ -147,10 +147,10 @@ public class DebugDescriptionTests: XCTestCase {
               - _base: TupleExprElementListSyntax
             ├─[0]: TupleExprElementSyntax
             │ ╰─expression: IntegerLiteralExprSyntax
-            │   ╰─digits: integerLiteral("1")
+            │   ╰─literal: integerLiteral("1")
             ╰─[1]: TupleExprElementSyntax
               ╰─expression: IntegerLiteralExprSyntax
-                ╰─digits: integerLiteral("2")
+                ╰─literal: integerLiteral("2")
 
             """
         )
@@ -187,10 +187,10 @@ public class DebugDescriptionTests: XCTestCase {
                         leftParen: .leftParenToken(),
                         arguments: TupleExprElementListSyntax([
                               TupleExprElementSyntax(
-                                  expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
+                                  expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
                                   trailingComma: .commaToken(trailingTrivia: .space)
                                 ),
-                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("2"))))
+                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
                         rightParen: .rightParenToken()
                       )))
@@ -210,10 +210,10 @@ public class DebugDescriptionTests: XCTestCase {
                         leftParen: .leftParenToken(),
                         arguments: TupleExprElementListSyntax([
                               TupleExprElementSyntax(
-                                  expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("1"))),
+                                  expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
                                   trailingComma: .commaToken()
                                 ),
-                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(digits: .integerLiteral("2"))))
+                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
                         rightParen: .rightParenToken()
                       )))

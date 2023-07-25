@@ -25,51 +25,50 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case accessorDecl
   case accessorEffectSpecifiers
   case accessorInitEffects
-  case accessorList
-  case accessorParameter
+  case accessorDeclList
+  case accessorParameters
   case actorDecl
   case arrayElementList
   case arrayElement
   case arrayExpr
   case arrayType
-  case arrowExpr
+  case unresolvedArrowExpr
   case asExpr
   case assignmentExpr
-  case associatedtypeDecl
+  case associatedTypeDecl
   case attributeList
   case attribute
   case attributedType
   case availabilityArgument
   case availabilityCondition
-  case availabilityEntry
   case availabilityLabeledArgument
-  case availabilitySpecList
-  case availabilityVersionRestrictionListEntry
-  case availabilityVersionRestrictionList
-  case availabilityVersionRestriction
+  case availabilityArgumentList
+  case platformVersionItem
+  case platformVersionItemList
+  case platformVersion
   case awaitExpr
-  case backDeployedAttributeSpecList
-  case binaryOperatorExpr
+  case backDeployedAttributeArguments
+  case unresolvedInfixOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
   case canImportExpr
   case canImportVersionInfo
-  case caseItemList
-  case caseItem
+  case switchCaseItemList
+  case switchCaseItem
   case catchClauseList
   case catchClause
   case catchItemList
   case catchItem
   case classDecl
   case classRestrictionType
-  case closureCaptureItemList
-  case closureCaptureItemSpecifier
-  case closureCaptureItem
-  case closureCaptureSignature
+  case closureCaptureList
+  case closureCaptureSpecifier
+  case closureCapture
+  case closureCaptureClause
   case closureExpr
-  case closureParamList
-  case closureParam
+  case closureShorthandParameterList
+  case closureShorthandParameter
   case closureParameterClause
   case closureParameterList
   case closureParameter
@@ -83,7 +82,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case conditionElementList
   case conditionElement
   case conformanceRequirement
-  case constrainedSugarType
+  case someOrAnyType
   case continueStmt
   case conventionAttributeArguments
   case conventionWitnessMethodAttributeArguments
@@ -96,29 +95,29 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case declName
   case decl
   case deferStmt
-  case deinitEffectSpecifiers
+  case deinitializerEffectSpecifiers
   case deinitializerDecl
-  case derivativeRegistrationAttributeArguments
-  case designatedTypeElement
+  case derivativeAttributeArguments
+  case designatedType
   case designatedTypeList
   case dictionaryElementList
   case dictionaryElement
   case dictionaryExpr
   case dictionaryType
-  case differentiabilityParamList
-  case differentiabilityParam
-  case differentiabilityParamsClause
-  case differentiabilityParams
+  case differentiabilityParameterList
+  case differentiabilityArgument
+  case differentiabilityWithRespectToArgument
+  case differentiabilityArguments
   case differentiableAttributeArguments
   case discardAssignmentExpr
   case discardStmt
   case doStmt
   case documentationAttributeArgument
   case documentationAttributeArgumentList
-  case dynamicReplacementArguments
+  case dynamicReplacementAttributeArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case effectsArgumentList
+  case effectsAttributeArgumentList
   case enumCaseDecl
   case enumCaseElementList
   case enumCaseElement
@@ -129,14 +128,14 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case exposeAttributeArguments
   case exprList
   case expr
-  case expressionPattern
-  case expressionSegment
+  case exprPattern
+  case exprSegment
   case expressionStmt
   case extensionDecl
-  case fallthroughStmt
+  case fallThroughtStmt
   case floatLiteralExpr
-  case forInStmt
-  case forcedValueExpr
+  case forStmt
+  case forceUnwrapExpr
   case functionCallExpr
   case functionDecl
   case functionEffectSpecifiers
@@ -181,7 +180,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
-  case labeledSpecializeEntry
+  case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
   case macroDecl
@@ -189,10 +188,10 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case macroExpansionExpr
   case matchingPatternCondition
   case memberAccessExpr
-  case memberDeclBlock
-  case memberDeclListItem
-  case memberDeclList
-  case memberTypeIdentifier
+  case memberBlock
+  case memberBlockItem
+  case memberBlockItemList
+  case memberType
   case metatypeType
   case missingDecl
   case missingExpr
@@ -200,8 +199,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case missingStmt
   case missing
   case missingType
-  case modifierList
-  case moveExpr
+  case declModifierList
+  case consumeExpr
   case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
@@ -214,24 +213,24 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case optionalBindingCondition
   case optionalChainingExpr
   case optionalType
-  case originallyDefinedInArguments
+  case originallyDefinedInAttributeArguments
   case packElementExpr
   case packExpansionExpr
   case packExpansionType
-  case packReferenceType
-  case parameterClause
+  case packElementType
+  case functionParameterClause
   case patternBindingList
   case patternBinding
   case pattern
   case postfixIfConfigExpr
-  case postfixUnaryExpr
-  case poundSourceLocationArgs
+  case postfixOperatorExpr
+  case poundSourceLocationArguments
   case poundSourceLocation
   case precedenceGroupAssignment
   case precedenceGroupAssociativity
   case precedenceGroupAttributeList
   case precedenceGroupDecl
-  case precedenceGroupNameElement
+  case precedenceGroupName
   case precedenceGroupNameList
   case precedenceGroupRelation
   case prefixOperatorExpr
@@ -241,30 +240,31 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case protocolDecl
   case qualifiedDeclName
   case regexLiteralExpr
-  case repeatWhileStmt
+  case repeatStmt
   case returnClause
   case returnStmt
   case sameTypeRequirement
   case sequenceExpr
-  case simpleTypeIdentifier
+  case identifierType
   case sourceFile
-  case specializeAttributeSpecList
-  case specializeExpr
+  case specializeAttributeArgumentList
+  case specializeAvailabilityArgument
+  case genericSpecializationExpr
   case stmt
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
   case structDecl
   case subscriptDecl
-  case subscriptExpr
-  case superRefExpr
+  case subscriptCallExpr
+  case superExpr
   case suppressedType
   case switchCaseLabel
   case switchCaseList
   case switchCase
   case switchDefaultLabel
   case switchExpr
-  case targetFunctionEntry
+  case specializeTargetFunctionArgument
   case ternaryExpr
   case throwStmt
   case tryExpr
@@ -280,16 +280,16 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case typeAnnotation
   case typeEffectSpecifiers
   case typeExpr
-  case typeInheritanceClause
+  case inheritanceClause
   case typeInitializerClause
   case type
-  case typealiasDecl
-  case unavailableFromAsyncArguments
+  case typeAliasDecl
+  case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
-  case unresolvedPatternExpr
+  case patternExpr
   case unresolvedTernaryExpr
   case valueBindingPattern
   case variableDecl
@@ -299,9 +299,9 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldExprListElement
-  case yieldExprList
-  case yieldList
+  case yieldStmtArgument
+  case yieldStmtArgumentList
+  case yieldStmtArgumentClause
   case yieldStmt
 
   // Nodes that have special handling throughout the codebase
@@ -374,20 +374,74 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// deprecated.
   public var deprecatedRawValue: String? {
     switch self {
-    case .importPathComponentList:
-      return "accessPath"
-    case .importPathComponent:
-      return "accessPathComponent"
-    case .documentationAttributeArgumentList:
-      return "documentationAttributeArguments"
-    case .effectsArgumentList:
-      return "effectsArguments"
-    case .objCSelectorPieceList:
-      return "objCSelector"
-    case .stringLiteralSegmentList:
-      return "stringLiteralSegments"
-    default:
-      return nil
+    case .memberBlock: return "memberDeclBlock"
+    case .memberBlockItemList: return "memberDeclList"
+    case .memberBlockItem: return "memberDeclListItem"
+    case .packElementType: return "packReferenceType"
+    case .functionParameterClause: return "parameterClause"
+    case .associatedTypeDecl: return "associatedtypeDecl"
+    case .enumCaseParameterClause: return "enumCaseAssociatedValue"
+    case .closureShorthandParameterList: return "closureParamList"
+    case .closureShorthandParameter: return "closureParam"
+    case .accessorDeclList: return "accessorList"
+    case .importPathComponentList: return "accessPath"
+    case .importPathComponent: return "accessPathComponent"
+    case .documentationAttributeArgumentList: return "documentationAttributeArguments"
+    case .effectsAttributeArgumentList: return "effectsArguments"
+    case .objCSelectorPieceList: return "objCSelector"
+    case .stringLiteralSegmentList: return "stringLiteralSegments"
+    case .accessorParameters: return "accessorParameter"
+    case .specializeAvailabilityArgument: return "availabilityEntry"
+    case .availabilityArgumentList: return "availabilitySpecList"
+    case .backDeployedAttributeArguments: return "backDeployedAttributeSpecList"
+    case .deinitializerEffectSpecifiers: return "deinitEffectSpecifiers"
+    case .derivativeAttributeArguments: return "derivativeRegistrationAttributeArguments"
+    case .differentiabilityParameterList: return "differentiabilityParamList"
+    case .differentiabilityWithRespectToArgument: return "differentiabilityParamsClause"
+    case .differentiabilityArguments: return "differentiabilityParams"
+    case .differentiabilityArgument: return "differentiabilityParam"
+    case .dynamicReplacementAttributeArguments: return "dynamicReplacementArguments"
+    case .exprPattern: return "expressionPattern"
+    case .exprSegment: return "expressionSegment"
+    case .forceUnwrapExpr: return "forcedValueExpr"
+    case .forStmt: return "forInStmt"
+    case .labeledSpecializeArgument: return "labeledSpecializeEntry"
+    case .memberType: return "memberTypeIdentifier"
+    case .declModifierList: return "modifierList"
+    case .consumeExpr: return "moveExpr"
+    case .originallyDefinedInAttributeArguments: return "originallyDefinedInArguments"
+    case .postfixOperatorExpr: return "postfixUnaryExpr"
+    case .poundSourceLocationArguments: return "poundSourceLocationArgs"
+    case .precedenceGroupName: return "precedenceGroupNameElement"
+    case .repeatStmt: return "repeatWhileStmt"
+    case .identifierType: return "simpleTypeIdentifier"
+    case .specializeAttributeArgumentList: return "specializeAttributeSpecList"
+    case .genericSpecializationExpr: return "specializeExpr"
+    case .superExpr: return "superRefExpr"
+    case .specializeTargetFunctionArgument: return "targetFunctionEntry"
+    case .inheritanceClause: return "typeInheritanceClause"
+    case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
+    case .yieldStmtArgument: return "yieldExprListElement"
+    case .yieldStmtArgumentList: return "yieldExprList"
+    case .yieldStmtArgumentClause: return "yieldList"
+    case .unresolvedArrowExpr: return "arrowExpr"
+    case .platformVersionItem: return " availabilityVersionRestrictionListEntry"
+    case .platformVersionItemList: return "availabilityVersionRestrictionList"
+    case .platformVersion: return "availabilityVersionRestriction"
+    case .switchCaseItemList: return "caseItemList"
+    case .switchCaseItem: return "caseItem"
+    case .closureCaptureClause: return "closureCaptureSignature"
+    case .designatedType: return "designatedTypeElement"
+    case .fallThroughtStmt: return "fallthroughStmt"
+    case .patternExpr: return "unresolvedPatternExpr"
+    case .subscriptCallExpr: return "subscriptExpr"
+    case .unresolvedInfixOperatorExpr: return "binaryOperatorExpr"
+    case .typeAliasDecl: return "typealiasDecl"
+    case .closureCaptureList: return "closureCaptureItemList"
+    case .closureCaptureSpecifier: return "closureCaptureItemSpecifier"
+    case .closureCapture: return "closureCaptureItem"
+    case .someOrAnyType: return "constrainedSugarType"
+    default: return nil
     }
   }
 }

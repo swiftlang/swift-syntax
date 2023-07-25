@@ -485,12 +485,12 @@ extension Parser {
 
 extension Parser {
   /// Parse a repeat-while statement.
-  mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatWhileStmtSyntax {
+  mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
     let condition = self.parseExpression()
-    return RawRepeatWhileStmtSyntax(
+    return RawRepeatStmtSyntax(
       unexpectedBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,
       body: body,
@@ -506,7 +506,7 @@ extension Parser {
 
 extension Parser {
   /// Parse a for-in statement.
-  mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
+  mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .keyword(.try))
     let awaitKeyword = self.consume(if: .keyword(.await))
@@ -560,7 +560,7 @@ extension Parser {
 
     // stmt-brace
     let body = self.parseCodeBlock(introducer: forKeyword)
-    return RawForInStmtSyntax(
+    return RawForStmtSyntax(
       unexpectedBeforeForKeyword,
       forKeyword: forKeyword,
       tryKeyword: tryKeyword,
@@ -678,18 +678,18 @@ extension Parser {
   mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
 
-    let yields: RawYieldStmtSyntax.Yields
+    let yieldedExpressions: RawYieldStmtSyntax.YieldedExpressions
     if let lparen = self.consume(if: .leftParen) {
-      let exprList: RawYieldExprListSyntax
+      let exprList: RawYieldStmtArgumentListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawYieldExprListElementSyntax]()
+        var elementList = [RawYieldStmtArgumentSyntax]()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(
-            RawYieldExprListElementSyntax(
+            RawYieldStmtArgumentSyntax(
               expression: expr,
               comma: comma,
               arena: self.arena
@@ -698,11 +698,11 @@ extension Parser {
 
           keepGoing = (comma != nil)
         }
-        exprList = RawYieldExprListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldStmtArgumentListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      yields = .yieldList(
-        RawYieldListSyntax(
+      yieldedExpressions = .yieldList(
+        RawYieldStmtArgumentClauseSyntax(
           leftParen: lparen,
           elements: exprList,
           unexpectedBeforeRParen,
@@ -711,13 +711,13 @@ extension Parser {
         )
       )
     } else {
-      yields = .simpleYield(self.parseExpression())
+      yieldedExpressions = .simpleYield(self.parseExpression())
     }
 
     return RawYieldStmtSyntax(
       unexpectedBeforeYield,
       yieldKeyword: yield,
-      yields: yields,
+      yieldedExpressions: yieldedExpressions,
       arena: self.arena
     )
   }
@@ -776,9 +776,9 @@ extension Parser {
   }
 
   /// Parse a fallthrough statement.
-  mutating func parseFallthroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallthroughStmtSyntax {
+  mutating func parseFallthroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughtStmtSyntax {
     let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(fallthroughHandle)
-    return RawFallthroughStmtSyntax(
+    return RawFallThroughtStmtSyntax(
       unexpectedBeforeFallthroughKeyword,
       fallthroughKeyword: fallthroughKeyword,
       arena: self.arena

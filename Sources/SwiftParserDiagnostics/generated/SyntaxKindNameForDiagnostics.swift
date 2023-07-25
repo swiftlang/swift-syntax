@@ -37,7 +37,7 @@ extension SyntaxKind {
       return "array type"
     case .asExpr:
       return "'as'"
-    case .associatedtypeDecl:
+    case .associatedTypeDecl:
       return "associatedtype declaration"
     case .attributeList:
       return "attributes"
@@ -45,28 +45,18 @@ extension SyntaxKind {
       return "attribute"
     case .attributedType:
       return "type"
+    case .availabilityArgumentList:
+      return "'@availability' arguments"
     case .availabilityArgument:
       return "availability argument"
     case .availabilityCondition:
       return "availability condition"
-    case .availabilityEntry:
-      return "availability entry"
     case .availabilityLabeledArgument:
       return "availability argument"
-    case .availabilitySpecList:
-      return "'@availability' arguments"
-    case .availabilityVersionRestrictionListEntry:
-      return "version"
-    case .availabilityVersionRestrictionList:
-      return "version list"
-    case .availabilityVersionRestriction:
-      return "version restriction"
     case .awaitExpr:
       return "'await' expression"
-    case .backDeployedAttributeSpecList:
+    case .backDeployedAttributeArguments:
       return "'@backDeployed' arguments"
-    case .binaryOperatorExpr:
-      return "operator"
     case .booleanLiteralExpr:
       return "bool literal"
     case .borrowExpr:
@@ -81,22 +71,22 @@ extension SyntaxKind {
       return "'catch' clause"
     case .classDecl:
       return "class"
-    case .closureCaptureItemSpecifier:
-      return "closure capture specifier"
-    case .closureCaptureItem:
-      return "closure capture item"
-    case .closureCaptureSignature:
+    case .closureCaptureClause:
       return "closure capture signature"
+    case .closureCaptureSpecifier:
+      return "closure capture specifier"
+    case .closureCapture:
+      return "closure capture item"
     case .closureExpr:
       return "closure"
-    case .closureParam:
-      return "closure parameter"
     case .closureParameterClause:
       return "parameter clause"
     case .closureParameterList:
       return "parameter list"
     case .closureParameter:
       return "parameter"
+    case .closureShorthandParameter:
+      return "closure parameter"
     case .closureSignature:
       return "closure signature"
     case .codeBlock:
@@ -105,8 +95,8 @@ extension SyntaxKind {
       return "type composition"
     case .conformanceRequirement:
       return "conformance requirement"
-    case .constrainedSugarType:
-      return "type"
+    case .consumeExpr:
+      return "'consume' expression"
     case .continueStmt:
       return "'continue' statement"
     case .conventionAttributeArguments:
@@ -121,11 +111,11 @@ extension SyntaxKind {
       return "declaration name"
     case .deferStmt:
       return "'defer' statement"
-    case .deinitEffectSpecifiers:
-      return "effect specifiers"
     case .deinitializerDecl:
       return "deinitializer"
-    case .derivativeRegistrationAttributeArguments:
+    case .deinitializerEffectSpecifiers:
+      return "effect specifiers"
+    case .derivativeAttributeArguments:
       return "attribute arguments"
     case .dictionaryElement:
       return "dictionary element"
@@ -133,14 +123,14 @@ extension SyntaxKind {
       return "dictionary"
     case .dictionaryType:
       return "dictionary type"
-    case .differentiabilityParamList:
-      return "differentiability parameters"
-    case .differentiabilityParam:
+    case .differentiabilityArgument:
       return "differentiability parameter"
-    case .differentiabilityParamsClause:
-      return "'@differentiable' argument"
-    case .differentiabilityParams:
+    case .differentiabilityArguments:
       return "differentiability parameters"
+    case .differentiabilityParameterList:
+      return "differentiability parameters"
+    case .differentiabilityWithRespectToArgument:
+      return "'@differentiable' argument"
     case .differentiableAttributeArguments:
       return "'@differentiable' arguments"
     case .discardStmt:
@@ -151,13 +141,13 @@ extension SyntaxKind {
       return "@_documentation arguments"
     case .documentationAttributeArgument:
       return "@_documentation argument"
-    case .dynamicReplacementArguments:
+    case .dynamicReplacementAttributeArguments:
       return "@_dynamicReplacement argument"
     case .editorPlaceholderDecl:
       return "editor placeholder"
     case .editorPlaceholderExpr:
       return "editor placeholder"
-    case .effectsArgumentList:
+    case .effectsAttributeArgumentList:
       return "@_effects arguments"
     case .enumCaseDecl:
       return "enum case"
@@ -171,19 +161,19 @@ extension SyntaxKind {
       return "enum"
     case .exposeAttributeArguments:
       return "@_expose arguments"
-    case .expressionPattern:
+    case .exprPattern:
       return "pattern"
     case .expressionStmt:
       return "expression"
     case .extensionDecl:
       return "extension"
-    case .fallthroughStmt:
+    case .fallThroughtStmt:
       return "'fallthrough' statement"
     case .floatLiteralExpr:
       return "floating literal"
-    case .forInStmt:
+    case .forStmt:
       return "'for' statement"
-    case .forcedValueExpr:
+    case .forceUnwrapExpr:
       return "force unwrap"
     case .functionCallExpr:
       return "function call"
@@ -191,6 +181,8 @@ extension SyntaxKind {
       return "function"
     case .functionEffectSpecifiers:
       return "effect specifiers"
+    case .functionParameterClause:
+      return "parameter clause"
     case .functionParameterList:
       return "parameter list"
     case .functionParameter:
@@ -213,6 +205,8 @@ extension SyntaxKind {
       return "'guard' statement"
     case .identifierPattern:
       return "pattern"
+    case .identifierType:
+      return "type"
     case .ifConfigClause:
       return "conditional compilation clause"
     case .ifConfigDecl:
@@ -227,6 +221,8 @@ extension SyntaxKind {
       return "import"
     case .inOutExpr:
       return "inout expression"
+    case .inheritanceClause:
+      return "inheritance clause"
     case .inheritedType:
       return "inherited type"
     case .initializerDecl:
@@ -249,7 +245,7 @@ extension SyntaxKind {
       return "key path property component"
     case .keyPathSubscriptComponent:
       return "key path subscript component"
-    case .labeledSpecializeEntry:
+    case .labeledSpecializeArgument:
       return "attribute argument"
     case .labeledStmt:
       return "labeled statement"
@@ -265,9 +261,9 @@ extension SyntaxKind {
       return "pattern matching"
     case .memberAccessExpr:
       return "member access"
-    case .memberDeclBlock:
+    case .memberBlock:
       return "member block"
-    case .memberTypeIdentifier:
+    case .memberType:
       return "member type"
     case .metatypeType:
       return "metatype"
@@ -281,8 +277,6 @@ extension SyntaxKind {
       return "statement"
     case .missingType:
       return "type"
-    case .moveExpr:
-      return "'consume' expression"
     case .multipleTrailingClosureElement:
       return "trailing closure"
     case .namedOpaqueReturnType:
@@ -301,17 +295,21 @@ extension SyntaxKind {
       return "optional chaining"
     case .optionalType:
       return "optional type"
-    case .originallyDefinedInArguments:
+    case .originallyDefinedInAttributeArguments:
       return "@_originallyDefinedIn arguments"
+    case .packElementType:
+      return "pack element"
     case .packExpansionType:
       return "variadic expansion"
-    case .packReferenceType:
-      return "pack reference"
-    case .parameterClause:
-      return "parameter clause"
-    case .postfixUnaryExpr:
+    case .platformVersionItemList:
+      return "version list"
+    case .platformVersionItem:
+      return "version"
+    case .platformVersion:
+      return "version restriction"
+    case .postfixOperatorExpr:
       return "postfix expression"
-    case .poundSourceLocationArgs:
+    case .poundSourceLocationArguments:
       return "'#sourceLocation' arguments"
     case .poundSourceLocation:
       return "'#sourceLocation' directive"
@@ -333,25 +331,29 @@ extension SyntaxKind {
       return "declaration name"
     case .regexLiteralExpr:
       return "regex literal"
-    case .repeatWhileStmt:
+    case .repeatStmt:
       return "'repeat' statement"
     case .returnStmt:
       return "'return' statement"
     case .sameTypeRequirement:
       return "same type requirement"
-    case .simpleTypeIdentifier:
+    case .someOrAnyType:
       return "type"
     case .sourceFile:
       return "source file"
-    case .specializeAttributeSpecList:
+    case .specializeAttributeArgumentList:
       return "argument to '@_specialize"
+    case .specializeAvailabilityArgument:
+      return "availability entry"
+    case .specializeTargetFunctionArgument:
+      return "attribute argument"
     case .stringLiteralExpr:
       return "string literal"
     case .structDecl:
       return "struct"
-    case .subscriptDecl:
+    case .subscriptCallExpr:
       return "subscript"
-    case .subscriptExpr:
+    case .subscriptDecl:
       return "subscript"
     case .suppressedType:
       return "suppressed type conformance"
@@ -359,8 +361,6 @@ extension SyntaxKind {
       return "switch case"
     case .switchExpr:
       return "'switch' statement"
-    case .targetFunctionEntry:
-      return "attribute argument"
     case .ternaryExpr:
       return "ternay expression"
     case .throwStmt:
@@ -373,20 +373,20 @@ extension SyntaxKind {
       return "tuple pattern"
     case .tupleType:
       return "tuple type"
+    case .typeAliasDecl:
+      return "typealias declaration"
     case .typeAnnotation:
       return "type annotation"
     case .typeEffectSpecifiers:
       return "effect specifiers"
-    case .typeInheritanceClause:
-      return "inheritance clause"
-    case .typealiasDecl:
-      return "typealias declaration"
-    case .unavailableFromAsyncArguments:
+    case .unavailableFromAsyncAttributeArguments:
       return "@_unavailableFromAsync argument"
     case .underscorePrivateAttributeArguments:
       return "@_private argument"
     case .unresolvedAsExpr:
       return "'as'"
+    case .unresolvedInfixOperatorExpr:
+      return "operator"
     case .unresolvedIsExpr:
       return "'is'"
     case .unresolvedTernaryExpr:
@@ -403,7 +403,7 @@ extension SyntaxKind {
       return "'while' statement"
     case .wildcardPattern:
       return "wildcard pattern"
-    case .yieldExprList:
+    case .yieldStmtArgumentList:
       return "yield list"
     case .yieldStmt:
       return "'yield' statement"

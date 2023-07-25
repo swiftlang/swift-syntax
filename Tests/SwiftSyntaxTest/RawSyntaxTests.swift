@@ -46,9 +46,9 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
     presence: .present,
     arena: arena
   )
-  let memberBlock = RawMemberDeclBlockSyntax(
+  let memberBlock = RawMemberBlockSyntax(
     leftBrace: lBrace,
-    members: RawMemberDeclListSyntax(elements: [], arena: arena),
+    members: RawMemberBlockItemListSyntax(elements: [], arena: arena),
     rightBrace: rBrace,
     arena: arena
   )

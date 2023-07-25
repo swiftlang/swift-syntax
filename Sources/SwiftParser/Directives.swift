@@ -192,7 +192,7 @@ extension Parser {
   mutating func parsePoundSourceLocationDirective() -> RawPoundSourceLocationSyntax {
     let line = self.consumeAnyToken()
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let arguments: RawPoundSourceLocationArgsSyntax?
+    let arguments: RawPoundSourceLocationArgumentsSyntax?
     if !self.at(.rightParen) {
       let (unexpectedBeforeFile, file) = self.expect(.keyword(.file))
       let (unexpectedBeforeFileColon, fileColon) = self.expect(.colon)
@@ -203,7 +203,7 @@ extension Parser {
       let (unexpectedBeforeLineColon, lineColon) = self.expect(.colon)
       let lineNumber = self.expectWithoutRecovery(.integerLiteral)
 
-      arguments = RawPoundSourceLocationArgsSyntax(
+      arguments = RawPoundSourceLocationArgumentsSyntax(
         unexpectedBeforeFile,
         fileLabel: file,
         unexpectedBeforeFileColon,

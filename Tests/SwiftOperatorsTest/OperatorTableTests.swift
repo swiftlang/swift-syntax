@@ -86,7 +86,7 @@ extension OperatorTable {
 
     // Parse and "fold" the parenthesized version.
     let parenthesizedParsed = Parser.parse(source: fullyParenthesizedSource)
-    let parenthesizedSyntax = ExplicitParenFolder(viewMode: .sourceAccurate).visit(parenthesizedParsed)
+    let parenthesizedSyntax = ExplicitParenFolder(viewMode: .sourceAccurate).rewrite(parenthesizedParsed)
     XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
 
     // Make sure the two have the same structure.

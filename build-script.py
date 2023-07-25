@@ -465,7 +465,10 @@ def run_xctests(
     env["SWIFTCI_USE_LOCAL_DEPS"] = "1"
     env["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] = \
         os.path.join(toolchain, "lib", "swift", "macosx")
-    env["BASELINE_FILE"] = os.path.join(TESTS_DIR, "PerformanceTest", "ci-baselines.json") 
+    if platform.system() == "Darwin" and platform.machine() == "i386":
+        # Only perform performance testing on Intel macOS machines because that’s what 
+        # the baselines are written for.
+        env["BASELINE_FILE"] = os.path.join(TESTS_DIR, "PerformanceTest", "ci-baselines.json") 
 
     check_call(swiftpm_call, env=env, verbose=verbose)
 

@@ -20,6 +20,10 @@
 ///  - `leftParen`: `'('`
 ///  - `properties`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorInitEffectsSyntax``.``AccessorInitEffectsSyntax/accessesEffect``
 public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -219,6 +223,11 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftBrace`: `'{'`
 ///  - `accessors`: ``AccessorListSyntax``
 ///  - `rightBrace`: `'}'`
+///
+/// ### Contained in
+/// 
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/accessors``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessors``
 public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -391,6 +400,10 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `asyncSpecifier`: `'async'`?
 ///  - `throwsSpecifier`: `'throws'`?
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/effectSpecifiers``
 public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -513,6 +526,10 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `initializesEffect`: ``InitializesEffectSyntax``?
 ///  - `accessesEffect`: ``AccessesEffectSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/initEffects``
 public struct AccessorInitEffectsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -636,6 +653,10 @@ public struct AccessorInitEffectsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `name`: `<identifier>`
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/parameter``
 public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -784,6 +805,10 @@ public struct AccessorParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `expression`: ``ExprSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``ArrayElementListSyntax``
 public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -911,6 +936,11 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`?
 ///  - `arguments`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilitySpecListSyntax`` | ``SpecializeAttributeSpecListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeRegistrationAttributeArgumentsSyntax`` | ``BackDeployedAttributeSpecListSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementArgumentsSyntax`` | ``UnavailableFromAsyncArgumentsSyntax`` | ``EffectsArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
 ///  - `rightParen`: `')'`?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeListSyntax``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unknownAttr``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Arguments: SyntaxChildChoices {
     case `argumentList`(TupleExprElementListSyntax)
@@ -1384,6 +1414,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `entry`: ((`<binaryOperator>` | `<identifier>`) | ``AvailabilityVersionRestrictionSyntax`` | ``AvailabilityLabeledArgumentSyntax``)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilitySpecListSyntax``
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Entry: SyntaxChildChoices {
     case `token`(TokenSyntax)
@@ -1565,6 +1599,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `availabilityArguments`: ``AvailabilitySpecListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/condition``
 public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1767,6 +1805,10 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`
 ///  - `availabilityArguments`: ``AvailabilitySpecListSyntax``
 ///  - `semicolon`: `';'`
+///
+/// ### Contained in
+/// 
+///  - ``SpecializeAttributeSpecListSyntax``
 public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1972,6 +2014,10 @@ public struct AvailabilityEntrySyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `label`: (`'message'` | `'renamed'` | `'introduced'` | `'obsoleted'` | `'deprecated'`)
 ///  - `colon`: `':'`
 ///  - `value`: (``StringLiteralExprSyntax`` | ``VersionTupleSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/entry``
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Value: SyntaxChildChoices {
     case `string`(StringLiteralExprSyntax)
@@ -2170,6 +2216,10 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
 /// 
 ///  - `availabilityVersionRestriction`: ``AvailabilityVersionRestrictionSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilityVersionRestrictionListSyntax``
 public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2296,6 +2346,11 @@ public struct AvailabilityVersionRestrictionListEntrySyntax: SyntaxProtocol, Syn
 /// 
 ///  - `platform`: `<identifier>`
 ///  - `version`: ``VersionTupleSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/entry``
+///  - ``AvailabilityVersionRestrictionListEntrySyntax``.``AvailabilityVersionRestrictionListEntrySyntax/availabilityVersionRestriction``
 public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2423,6 +2478,10 @@ public struct AvailabilityVersionRestrictionSyntax: SyntaxProtocol, SyntaxHashab
 ///  - `beforeLabel`: `'before'`
 ///  - `colon`: `':'`
 ///  - `platforms`: ``AvailabilityVersionRestrictionListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2602,6 +2661,10 @@ public struct BackDeployedAttributeSpecListSyntax: SyntaxProtocol, SyntaxHashabl
 ///  - `pattern`: ``PatternSyntax``
 ///  - `whereClause`: ``WhereClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``CaseItemListSyntax``
 public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2751,6 +2814,10 @@ public struct CaseItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `catchKeyword`: `'catch'`
 ///  - `catchItems`: ``CatchItemListSyntax``
 ///  - `body`: ``CodeBlockSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``CatchClauseListSyntax``
 public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -2924,6 +2991,10 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `pattern`: ``PatternSyntax``?
 ///  - `whereClause`: ``WhereClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``CatchItemListSyntax``
 public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3074,6 +3145,10 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`?
 ///  - `detail`: (`'safe'` | `'unsafe'`)?
 ///  - `rightParen`: `')'`?
+///
+/// ### Contained in
+/// 
+///  - ``ClosureCaptureItemSyntax``.``ClosureCaptureItemSyntax/specifier``
 public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3251,6 +3326,10 @@ public struct ClosureCaptureItemSpecifierSyntax: SyntaxProtocol, SyntaxHashable 
 ///  - `equal`: `'='`?
 ///  - `expression`: ``ExprSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``ClosureCaptureItemListSyntax``
 public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3452,6 +3531,10 @@ public struct ClosureCaptureItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftSquare`: `'['`
 ///  - `items`: ``ClosureCaptureItemListSyntax``
 ///  - `rightSquare`: `']'`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/capture``
 public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3624,6 +3707,10 @@ public struct ClosureCaptureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `name`: (`<identifier>` | `'_'`)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``ClosureParamListSyntax``
 public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3747,6 +3834,10 @@ public struct ClosureParamSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `parameters`: ``ClosureParameterListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/parameterClause``
 public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3931,6 +4022,10 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `type`: ``TypeSyntax``?
 ///  - `ellipsis`: `'...'`?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``ClosureParameterListSyntax``
 public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4273,6 +4368,10 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///  - `inKeyword`: `'in'`
+///
+/// ### Contained in
+/// 
+///  - ``ClosureExprSyntax``.``ClosureExprSyntax/signature``
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public enum ParameterClause: SyntaxChildChoices {
     case `simpleInput`(ClosureParamListSyntax)
@@ -4567,6 +4666,10 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `item`: (``DeclSyntax`` | ``StmtSyntax`` | ``ExprSyntax``)
 ///  - `semicolon`: `';'`?
+///
+/// ### Contained in
+/// 
+///  - ``CodeBlockItemListSyntax``
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Item: SyntaxChildChoices {
     case `decl`(DeclSyntax)
@@ -4747,6 +4850,24 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftBrace`: `'{'`
 ///  - `statements`: ``CodeBlockItemListSyntax``
 ///  - `rightBrace`: `'}'`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/body``
+///  - ``CatchClauseSyntax``.``CatchClauseSyntax/body``
+///  - ``DeferStmtSyntax``.``DeferStmtSyntax/body``
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/body``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/body``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/body``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/body``
+///  - ``GuardStmtSyntax``.``GuardStmtSyntax/body``
+///  - ``IfExprSyntax``.``IfExprSyntax/body``
+///  - ``IfExprSyntax``.``IfExprSyntax/elseBody``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/body``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/accessors``
+///  - ``RepeatWhileStmtSyntax``.``RepeatWhileStmtSyntax/body``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessors``
+///  - ``WhileStmtSyntax``.``WhileStmtSyntax/body``
 public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4919,6 +5040,10 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `type`: ``TypeSyntax``
 ///  - `ampersand`: ``TokenSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``CompositionTypeElementListSyntax``
 public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5041,6 +5166,10 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `condition`: (``ExprSyntax`` | ``AvailabilityConditionSyntax`` | ``MatchingPatternConditionSyntax`` | ``OptionalBindingConditionSyntax``)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``ConditionElementListSyntax``
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Condition: SyntaxChildChoices {
     case `expression`(ExprSyntax)
@@ -5233,6 +5362,10 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftType`: ``TypeSyntax``
 ///  - `colon`: `':'`
 ///  - `rightType`: ``TypeSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
 public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5386,6 +5519,10 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `cTypeLabel`: `'cType'`?
 ///  - `colon`: `':'`?
 ///  - `cTypeString`: ``StringLiteralExprSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5591,6 +5728,10 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 ///  - `witnessMethodLabel`: `'witness_method'`
 ///  - `colon`: `':'`
 ///  - `protocolName`: `<identifier>`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5740,6 +5881,10 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
 ///  - `leftParen`: `'('`
 ///  - `detail`: `<identifier>`
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``DeclModifierSyntax``.``DeclModifierSyntax/detail``
 public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5888,6 +6033,11 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `name`: (`'__consuming'` | `'__setter_access'` | `'_const'` | `'_local'` | `'actor'` | `'async'` | `'borrowing'` | `'class'` | `'consuming'` | `'convenience'` | `'distributed'` | `'dynamic'` | `'fileprivate'` | `'final'` | `'indirect'` | `'infix'` | `'internal'` | `'isolated'` | `'lazy'` | `'mutating'` | `'nonisolated'` | `'nonmutating'` | `'open'` | `'optional'` | `'override'` | `'package'` | `'postfix'` | `'prefix'` | `'private'` | `'public'` | `'reasync'` | `'required'` | `'static'` | `'unowned'` | `'weak'`)
 ///  - `detail`: ``DeclModifierDetailSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/modifier``
+///  - ``ModifierListSyntax``
 public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6010,6 +6160,10 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `name`: ``TokenSyntax``
 ///  - `colon`: `':'`
+///
+/// ### Contained in
+/// 
+///  - ``DeclNameArgumentListSyntax``
 public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6133,6 +6287,15 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `arguments`: ``DeclNameArgumentListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``DeclNameSyntax``.``DeclNameSyntax/arguments``
+///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/declNameArguments``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declNameArguments``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declNameArguments``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declNameArguments``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/arguments``
 public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6305,6 +6468,11 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `baseName`: (`<identifier>` | `<binaryOperator>` | `'init'` | `'self'` | `'Self'`)
 ///  - `arguments`: ``DeclNameArgumentsSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``DynamicReplacementArgumentsSyntax``.``DynamicReplacementArgumentsSyntax/declName``
+///  - ``TargetFunctionEntrySyntax``.``TargetFunctionEntrySyntax/declName``
 public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6430,6 +6598,10 @@ public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `asyncSpecifier`: `'async'`?
+///
+/// ### Contained in
+/// 
+///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/effectSpecifiers``
 public struct DeinitEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6521,6 +6693,10 @@ public struct DeinitEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `accessorSpecifier`: (`'get'` | `'set'`)?
 ///  - `comma`: `','`?
 ///  - `parameters`: ``DifferentiabilityParamsClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6783,6 +6959,10 @@ public struct DerivativeRegistrationAttributeArgumentsSyntax: SyntaxProtocol, Sy
 /// 
 ///  - `leadingComma`: `','`
 ///  - `name`: ``TokenSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``DesignatedTypeListSyntax``
 public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6907,6 +7087,10 @@ public struct DesignatedTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`
 ///  - `value`: ``ExprSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``DictionaryElementListSyntax``
 public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -7083,6 +7267,11 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `parameter`: (`<identifier>` | `<integerLiteral>` | `'self'`)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``DifferentiabilityParamListSyntax``
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/parameters``
 public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -7208,6 +7397,11 @@ public struct DifferentiabilityParamSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `wrtLabel`: `'wrt'`
 ///  - `colon`: `':'`
 ///  - `parameters`: (``DifferentiabilityParamSyntax`` | ``DifferentiabilityParamsSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/parameters``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/parameters``
 public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Parameters: SyntaxChildChoices {
     case `parameter`(DifferentiabilityParamSyntax)
@@ -7405,6 +7599,10 @@ public struct DifferentiabilityParamsClauseSyntax: SyntaxProtocol, SyntaxHashabl
 ///  - `leftParen`: `'('`
 ///  - `differentiabilityParameters`: ``DifferentiabilityParamListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``DifferentiabilityParamsClauseSyntax``.``DifferentiabilityParamsClauseSyntax/parameters``
 public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -7584,6 +7782,10 @@ public struct DifferentiabilityParamsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `parameters`: ``DifferentiabilityParamsClauseSyntax``?
 ///  - `parametersComma`: `','`?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -7792,6 +7994,10 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 ///  - `colon`: `':'`
 ///  - `value`: ((`<identifier>` | `'private'` | `'fileprivate'` | `'internal'` | `'public'` | `'open'`) | ``StringLiteralExprSyntax``)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``DocumentationAttributeArgumentListSyntax``
 public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Value: SyntaxChildChoices {
     case `token`(TokenSyntax)
@@ -8013,6 +8219,10 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
 ///  - `forLabel`: `'for'`
 ///  - `colon`: `':'`
 ///  - `declName`: ``DeclNameSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8165,6 +8375,10 @@ public struct DynamicReplacementArgumentsSyntax: SyntaxProtocol, SyntaxHashable 
 ///  - `associatedValue`: ``EnumCaseParameterClauseSyntax``?
 ///  - `rawValue`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseElementListSyntax``
 public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8348,6 +8562,10 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `parameters`: ``EnumCaseParameterListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/associatedValue``
 public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8531,6 +8749,10 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `type`: ``TypeSyntax``
 ///  - `defaultArgument`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseParameterListSyntax``
 public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8818,6 +9040,10 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `language`: ``TokenSyntax``
 ///  - `comma`: `','`?
 ///  - `cxxName`: ``StringLiteralExprSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -8969,6 +9195,10 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `expressions`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``StringLiteralSegmentListSyntax``
 public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -9193,6 +9423,10 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `asyncSpecifier`: (`'async'` | `'reasync'`)?
 ///  - `throwsSpecifier`: (`'throws'` | `'rethrows'`)?
+///
+/// ### Contained in
+/// 
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/effectSpecifiers``
 public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -9322,6 +9556,10 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `ellipsis`: `'...'`?
 ///  - `defaultArgument`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``FunctionParameterListSyntax``
 public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -9675,6 +9913,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `parameterClause`: ``ParameterClauseSyntax``
 ///  - `effectSpecifiers`: ``FunctionEffectSpecifiersSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/signature``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/signature``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/signature``
 public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -9824,6 +10068,15 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftAngle`: `'<'`
 ///  - `arguments`: ``GenericArgumentListSyntax``
 ///  - `rightAngle`: `'>'`
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/genericArgumentClause``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/genericArgumentClause``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/genericArgumentClause``
+///  - ``MemberTypeIdentifierSyntax``.``MemberTypeIdentifierSyntax/genericArgumentClause``
+///  - ``SimpleTypeIdentifierSyntax``.``SimpleTypeIdentifierSyntax/genericArgumentClause``
+///  - ``SpecializeExprSyntax``.``SpecializeExprSyntax/genericArgumentClause``
 public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -9996,6 +10249,10 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `argument`: ``TypeSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``GenericArgumentListSyntax``
 public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -10122,6 +10379,19 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `parameters`: ``GenericParameterListSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `rightAngle`: `'>'`
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/genericParameterClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/genericParameterClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/genericParameterClause``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/genericParameterClause``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericParameterClause``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericParameterClause``
+///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/genericParameterClause``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/genericParameterClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericParameterClause``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/genericParameterClause``
 public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -10332,6 +10602,10 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`?
 ///  - `inheritedType`: ``TypeSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``GenericParameterListSyntax``
 public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -10582,6 +10856,10 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `requirement`: (``SameTypeRequirementSyntax`` | ``ConformanceRequirementSyntax`` | ``LayoutRequirementSyntax``)
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``GenericRequirementListSyntax``
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Requirement: SyntaxChildChoices {
     case `sameTypeRequirement`(SameTypeRequirementSyntax)
@@ -10759,6 +11037,24 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `whereKeyword`: `'where'`
 ///  - `requirements`: ``GenericRequirementListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/genericWhereClause``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/genericWhereClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/genericWhereClause``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/genericWhereClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/genericWhereClause``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/genericWhereClause``
+///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/genericWhereClause``
+///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/genericWhereClause``
+///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericWhereClause``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericWhereClause``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/genericWhereClause``
+///  - ``SpecializeAttributeSpecListSyntax``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/genericWhereClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericWhereClause``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/genericWhereClause``
 public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -10910,6 +11206,10 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `poundKeyword`: (`'#if'` | `'#elseif'` | `'#else'`)
 ///  - `condition`: ``ExprSyntax``?
 ///  - `elements`: (``CodeBlockItemListSyntax`` | ``SwitchCaseListSyntax`` | ``MemberDeclListSyntax`` | ``ExprSyntax`` | ``AttributeListSyntax``)?
+///
+/// ### Contained in
+/// 
+///  - ``IfConfigClauseListSyntax``
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Elements: SyntaxChildChoices {
     case `statements`(CodeBlockItemListSyntax)
@@ -11143,6 +11443,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `comma`: `','`
 ///  - `declBaseName`: ``TokenSyntax``
 ///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -11325,6 +11629,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 /// 
 ///  - `name`: (`<identifier>` | `<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
 ///  - `trailingPeriod`: `'.'`?
+///
+/// ### Contained in
+/// 
+///  - ``ImportPathComponentListSyntax``
 public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -11447,6 +11755,10 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `type`: ``TypeSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``InheritedTypeListSyntax``
 public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -11569,6 +11881,17 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `equal`: `'='`
 ///  - `value`: ``ExprSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/rawValue``
+///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/defaultArgument``
+///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/defaultArgument``
+///  - ``MacroDeclSyntax``.``MacroDeclSyntax/definition``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/initializer``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/initializer``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/initializer``
+///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/initializer``
 public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -11693,6 +12016,10 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `properties`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``AccessorInitEffectsSyntax``.``AccessorInitEffectsSyntax/initializesEffect``
 public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -11891,6 +12218,10 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `period`: `'.'`?
 ///  - `component`: (``KeyPathPropertyComponentSyntax`` | ``KeyPathSubscriptComponentSyntax`` | ``KeyPathOptionalComponentSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathComponentListSyntax``
 public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Component: SyntaxChildChoices {
     case `property`(KeyPathPropertyComponentSyntax)
@@ -12065,6 +12396,10 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `questionOrExclamationMark`: (`'?'` | `'!'`)
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
 public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -12150,6 +12485,10 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `property`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
 public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -12299,6 +12638,10 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftSquare`: `'['`
 ///  - `arguments`: ``TupleExprElementListSyntax``
 ///  - `rightSquare`: `']'`
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
 public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -12475,6 +12818,10 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`
 ///  - `value`: ``TokenSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``SpecializeAttributeSpecListSyntax``
 public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -12663,6 +13010,10 @@ public struct LabeledSpecializeEntrySyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `comma`: `','`?
 ///  - `alignment`: `<integerLiteral>`?
 ///  - `rightParen`: `')'`?
+///
+/// ### Contained in
+/// 
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
 public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -12943,6 +13294,10 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `initializer`: ``InitializerClauseSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/condition``
 public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13118,6 +13473,15 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftBrace`: `'{'`
 ///  - `members`: ``MemberDeclListSyntax``
 ///  - `rightBrace`: `'}'`
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/memberBlock``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/memberBlock``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/memberBlock``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/memberBlock``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/memberBlock``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/memberBlock``
 public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13292,6 +13656,10 @@ public struct MemberDeclBlockSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `decl`: ``DeclSyntax``
 ///  - `semicolon`: `';'`?
+///
+/// ### Contained in
+/// 
+///  - ``MemberDeclListSyntax``
 public struct MemberDeclListItemSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13508,6 +13876,10 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `label`: (`<identifier>` | `'_'`)
 ///  - `colon`: `':'`
 ///  - `closure`: ``ClosureExprSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``MultipleTrailingClosureElementListSyntax``
 public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13658,6 +14030,10 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `name`: ``TokenSyntax``?
 ///  - `colon`: `':'`?
+///
+/// ### Contained in
+/// 
+///  - ``ObjCSelectorPieceListSyntax``
 public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13783,6 +14159,10 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `mangledName`: ``StringLiteralExprSyntax``
 ///  - `comma`: `','`
 ///  - `ordinal`: `<integerLiteral>`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -13938,6 +14318,10 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
 ///  - `colon`: `':'`
 ///  - `precedenceGroup`: `<identifier>`
 ///  - `designatedTypes`: ``DesignatedTypeListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``OperatorDeclSyntax``.``OperatorDeclSyntax/operatorPrecedenceAndTypes``
 public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -14116,6 +14500,10 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `initializer`: ``InitializerClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``ConditionElementSyntax``.``ConditionElementSyntax/condition``
 public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -14295,6 +14683,10 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `moduleName`: ``StringLiteralExprSyntax``
 ///  - `comma`: `','`
 ///  - `platforms`: ``AvailabilityVersionRestrictionListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -14520,6 +14912,11 @@ public struct OriginallyDefinedInArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 ///  - `leftParen`: `'('`
 ///  - `parameters`: ``FunctionParameterListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/parameterClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/parameterClause``
 public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -14695,6 +15092,10 @@ public struct ParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `initializer`: ``InitializerClauseSyntax``?
 ///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``PatternBindingListSyntax``
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Accessors: SyntaxChildChoices {
     case `accessors`(AccessorBlockSyntax)
@@ -14942,6 +15343,10 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `lineLabel`: `'line'`
 ///  - `lineColon`: `':'`
 ///  - `lineNumber`: `<integerLiteral>`
+///
+/// ### Contained in
+/// 
+///  - ``PoundSourceLocationSyntax``.``PoundSourceLocationSyntax/arguments``
 public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15197,6 +15602,10 @@ public struct PoundSourceLocationArgsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `assignmentLabel`: `'assignment'`
 ///  - `colon`: `':'`
 ///  - `value`: (`'true'` | `'false'`)
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupAttributeListSyntax``
 public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15350,6 +15759,10 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `associativityLabel`: `'associativity'`
 ///  - `colon`: `':'`
 ///  - `value`: (`'left'` | `'right'` | `'none'`)
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupAttributeListSyntax``
 public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15500,6 +15913,10 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
 /// 
 ///  - `name`: `<identifier>`
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupNameListSyntax``
 public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15625,6 +16042,10 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `higherThanOrLowerThanLabel`: (`'higherThan'` | `'lowerThan'`)
 ///  - `colon`: `':'`
 ///  - `otherNames`: ``PrecedenceGroupNameListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``PrecedenceGroupAttributeListSyntax``
 public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15802,6 +16223,10 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftAngle`: `'<'`
 ///  - `primaryAssociatedTypes`: ``PrimaryAssociatedTypeListSyntax``
 ///  - `rightAngle`: `'>'`
+///
+/// ### Contained in
+/// 
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/primaryAssociatedTypeClause``
 public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15974,6 +16399,10 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
 /// 
 ///  - `name`: `<identifier>`
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``PrimaryAssociatedTypeListSyntax``
 public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16100,6 +16529,10 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `period`: `'.'`?
 ///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<binaryOperator>`)
 ///  - `arguments`: ``DeclNameArgumentsSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``DerivativeRegistrationAttributeArgumentsSyntax``.``DerivativeRegistrationAttributeArgumentsSyntax/originalDeclName``
 public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16280,6 +16713,13 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `arrow`: `'->'`
 ///  - `type`: ``TypeSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/returnClause``
+///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/returnClause``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/returnClause``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/returnClause``
 public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16403,6 +16843,10 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftType`: ``TypeSyntax``
 ///  - `equal`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
 ///  - `rightType`: ``TypeSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
 public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16696,6 +17140,10 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `content`: `<stringSegment>`
+///
+/// ### Contained in
+/// 
+///  - ``StringLiteralSegmentListSyntax``
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16781,6 +17229,10 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `caseKeyword`: `'case'`
 ///  - `caseItems`: ``CaseItemListSyntax``
 ///  - `colon`: `':'`
+///
+/// ### Contained in
+/// 
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/label``
 public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -16954,6 +17406,10 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `unknownAttr`: ``AttributeSyntax``?
 ///  - `label`: (``SwitchDefaultLabelSyntax`` | ``SwitchCaseLabelSyntax``)
 ///  - `statements`: ``CodeBlockItemListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``SwitchCaseListSyntax``
 public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Label: SyntaxChildChoices {
     case `default`(SwitchDefaultLabelSyntax)
@@ -17168,6 +17624,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `defaultKeyword`: `'default'`
 ///  - `colon`: `':'`
+///
+/// ### Contained in
+/// 
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/label``
 public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17294,6 +17754,10 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`
 ///  - `declName`: ``DeclNameSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``SpecializeAttributeSpecListSyntax``
 public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17478,6 +17942,10 @@ public struct TargetFunctionEntrySyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`?
 ///  - `expression`: ``ExprSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``TupleExprElementListSyntax``
 public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17654,6 +18122,10 @@ public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`?
 ///  - `pattern`: ``PatternSyntax``
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``TuplePatternElementListSyntax``
 public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -17834,6 +18306,10 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `ellipsis`: `'...'`?
 ///  - `initializer`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``TupleTypeElementListSyntax``
 public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18112,6 +18588,14 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `colon`: `':'`
 ///  - `type`: ``TypeSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/typeAnnotation``
+///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/typeAnnotation``
+///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/typeAnnotation``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/typeAnnotation``
+///  - ``WildcardPatternSyntax``.``WildcardPatternSyntax/typeAnnotation``
 public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18234,6 +18718,12 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `asyncSpecifier`: `'async'`?
 ///  - `throwsSpecifier`: `'throws'`?
+///
+/// ### Contained in
+/// 
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/effectSpecifiers``
+///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/effectSpecifiers``
+///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/effectSpecifiers``
 public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18356,6 +18846,16 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `colon`: `':'`
 ///  - `inheritedTypes`: ``InheritedTypeListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/inheritanceClause``
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/inheritanceClause``
+///  - ``ClassDeclSyntax``.``ClassDeclSyntax/inheritanceClause``
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/inheritanceClause``
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/inheritanceClause``
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/inheritanceClause``
+///  - ``StructDeclSyntax``.``StructDeclSyntax/inheritanceClause``
 public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18502,6 +19002,11 @@ public struct TypeInheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `equal`: `'='`
 ///  - `value`: ``TypeSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AssociatedtypeDeclSyntax``.``AssociatedtypeDeclSyntax/initializer``
+///  - ``TypealiasDeclSyntax``.``TypealiasDeclSyntax/initializer``
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18627,6 +19132,10 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `messageLabel`: `'message'`
 ///  - `colon`: `':'`
 ///  - `message`: ``StringLiteralExprSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18778,6 +19287,10 @@ public struct UnavailableFromAsyncArgumentsSyntax: SyntaxProtocol, SyntaxHashabl
 ///  - `sourceFileLabel`: `'sourceFile'`
 ///  - `colon`: `':'`
 ///  - `filename`: ``StringLiteralExprSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18928,6 +19441,10 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 /// 
 ///  - `period`: `'.'`
 ///  - `number`: `<integerLiteral>`
+///
+/// ### Contained in
+/// 
+///  - ``VersionComponentListSyntax``
 public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -19056,6 +19573,12 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `major`: `<integerLiteral>`
 ///  - `components`: ``VersionComponentListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
+///  - ``AvailabilityVersionRestrictionSyntax``.``AvailabilityVersionRestrictionSyntax/version``
+///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/version``
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -19206,6 +19729,12 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `whereKeyword`: `'where'`
 ///  - `guardResult`: ``ExprSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``CaseItemSyntax``.``CaseItemSyntax/whereClause``
+///  - ``CatchItemSyntax``.``CatchItemSyntax/whereClause``
+///  - ``ForInStmtSyntax``.``ForInStmtSyntax/whereClause``
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -19328,6 +19857,10 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `expression`: ``ExprSyntax``
 ///  - `comma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``YieldExprListSyntax``
 public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -19451,6 +19984,10 @@ public struct YieldExprListElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `leftParen`: `'('`
 ///  - `elements`: ``YieldExprListSyntax``
 ///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``YieldStmtSyntax``.``YieldStmtSyntax/yields``
 public struct YieldListSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

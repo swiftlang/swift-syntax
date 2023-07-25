@@ -23,6 +23,10 @@
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
 ///  - `initEffects`: ``AccessorInitEffectsSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``AccessorListSyntax``
 public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -3070,6 +3074,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `clauses`: ``IfConfigClauseListSyntax``
 ///  - `poundEndif`: `'#endif'`
+///
+/// ### Contained in
+/// 
+///  - ``AttributeListSyntax``
+///  - ``PostfixIfConfigExprSyntax``.``PostfixIfConfigExprSyntax/config``
+///  - ``SwitchCaseListSyntax``
 public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

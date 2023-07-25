@@ -3051,7 +3051,7 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `leftOperand`: ``ExprSyntax``
-///  - `operatorOperand`: ``ExprSyntax``
+///  - `operator`: ``ExprSyntax``
 ///  - `rightOperand`: ``ExprSyntax``
 public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -3078,9 +3078,9 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? = nil,
       leftOperand: some ExprSyntaxProtocol,
-      _ unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? = nil,
-      operatorOperand: some ExprSyntaxProtocol,
-      _ unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftOperandAndOperator: UnexpectedNodesSyntax? = nil,
+      operator: some ExprSyntaxProtocol,
+      _ unexpectedBetweenOperatorAndRightOperand: UnexpectedNodesSyntax? = nil,
       rightOperand: some ExprSyntaxProtocol,
       _ unexpectedAfterRightOperand: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -3091,18 +3091,18 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftOperand, 
             leftOperand, 
-            unexpectedBetweenLeftOperandAndOperatorOperand, 
-            operatorOperand, 
-            unexpectedBetweenOperatorOperandAndRightOperand, 
+            unexpectedBetweenLeftOperandAndOperator, 
+            `operator`, 
+            unexpectedBetweenOperatorAndRightOperand, 
             rightOperand, 
             unexpectedAfterRightOperand
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftOperand?.raw, 
           leftOperand.raw, 
-          unexpectedBetweenLeftOperandAndOperatorOperand?.raw, 
-          operatorOperand.raw, 
-          unexpectedBetweenOperatorOperandAndRightOperand?.raw, 
+          unexpectedBetweenLeftOperandAndOperator?.raw, 
+          `operator`.raw, 
+          unexpectedBetweenOperatorAndRightOperand?.raw, 
           rightOperand.raw, 
           unexpectedAfterRightOperand?.raw
         ]
@@ -3137,7 +3137,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftOperandAndOperator: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3146,7 +3146,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var operatorOperand: ExprSyntax {
+  public var `operator`: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -3155,7 +3155,7 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenOperatorAndRightOperand: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -3186,9 +3186,9 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftOperand, 
           \Self.leftOperand, 
-          \Self.unexpectedBetweenLeftOperandAndOperatorOperand, 
-          \Self.operatorOperand, 
-          \Self.unexpectedBetweenOperatorOperandAndRightOperand, 
+          \Self.unexpectedBetweenLeftOperandAndOperator, 
+          \Self.operator, 
+          \Self.unexpectedBetweenOperatorAndRightOperand, 
           \Self.rightOperand, 
           \Self.unexpectedAfterRightOperand
         ])

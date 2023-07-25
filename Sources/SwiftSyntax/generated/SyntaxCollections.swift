@@ -997,7 +997,7 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
 ///
 /// ### Contained in
 /// 
-///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/otherNames``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/precedenceGroups``
 public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = PrecedenceGroupNameElementSyntax
   
@@ -1843,8 +1843,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``InOutExprSyntax``.``InOutExprSyntax/unexpectedBetweenAmpersandAndExpression``
 ///  - ``InOutExprSyntax``.``InOutExprSyntax/unexpectedAfterExpression``
 ///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBeforeLeftOperand``
-///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenLeftOperandAndOperatorOperand``
-///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenOperatorOperandAndRightOperand``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenLeftOperandAndOperator``
+///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedBetweenOperatorAndRightOperand``
 ///  - ``InfixOperatorExprSyntax``.``InfixOperatorExprSyntax/unexpectedAfterRightOperand``
 ///  - ``InheritedTypeSyntax``.``InheritedTypeSyntax/unexpectedBeforeType``
 ///  - ``InheritedTypeSyntax``.``InheritedTypeSyntax/unexpectedBetweenTypeAndTrailingComma``
@@ -2086,8 +2086,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``PrecedenceGroupNameElementSyntax``.``PrecedenceGroupNameElementSyntax/unexpectedAfterTrailingComma``
 ///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBeforeHigherThanOrLowerThanLabel``
 ///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBetweenHigherThanOrLowerThanLabelAndColon``
-///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBetweenColonAndOtherNames``
-///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedAfterOtherNames``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedBetweenColonAndPrecedenceGroups``
+///  - ``PrecedenceGroupRelationSyntax``.``PrecedenceGroupRelationSyntax/unexpectedAfterPrecedenceGroups``
 ///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedBeforeOperator``
 ///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedBetweenOperatorAndBase``
 ///  - ``PrefixOperatorExprSyntax``.``PrefixOperatorExprSyntax/unexpectedAfterBase``
@@ -2304,8 +2304,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``VersionTupleSyntax``.``VersionTupleSyntax/unexpectedBetweenMajorAndComponents``
 ///  - ``VersionTupleSyntax``.``VersionTupleSyntax/unexpectedAfterComponents``
 ///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedBeforeWhereKeyword``
-///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedBetweenWhereKeywordAndGuardResult``
-///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedAfterGuardResult``
+///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedBetweenWhereKeywordAndCondition``
+///  - ``WhereClauseSyntax``.``WhereClauseSyntax/unexpectedAfterCondition``
 ///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBeforeWhileKeyword``
 ///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBetweenWhileKeywordAndConditions``
 ///  - ``WhileStmtSyntax``.``WhileStmtSyntax/unexpectedBetweenConditionsAndBody``

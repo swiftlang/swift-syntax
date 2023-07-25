@@ -3671,6 +3671,65 @@ extension ImportPathComponentSyntax {
   }
 }
 
+extension InfixOperatorExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftOperandAndOperator")
+  public var unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftOperandAndOperator
+    }
+    set {
+      unexpectedBetweenLeftOperandAndOperator = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "operator")
+  public var operatorOperand: ExprSyntax {
+    get {
+      return `operator`
+    }
+    set {
+      `operator` = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenOperatorAndRightOperand")
+  public var unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenOperatorAndRightOperand
+    }
+    set {
+      unexpectedBetweenOperatorAndRightOperand = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftOperand: UnexpectedNodesSyntax? = nil,
+      leftOperand: some ExprSyntaxProtocol,
+      _ unexpectedBetweenLeftOperandAndOperatorOperand: UnexpectedNodesSyntax? = nil,
+      operatorOperand: some ExprSyntaxProtocol,
+      _ unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? = nil,
+      rightOperand: some ExprSyntaxProtocol,
+      _ unexpectedAfterRightOperand: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftOperand, 
+        leftOperand: leftOperand, 
+        unexpectedBetweenLeftOperandAndOperatorOperand, 
+        operator: operatorOperand, 
+        unexpectedBetweenOperatorOperandAndRightOperand, 
+        rightOperand: rightOperand, 
+        unexpectedAfterRightOperand, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension InheritedTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeType")
   public var unexpectedBeforeTypeName: UnexpectedNodesSyntax? {
@@ -5820,7 +5879,37 @@ extension PrecedenceGroupRelationSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with higherThanOrLowerThanLabel argument(s).")
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndPrecedenceGroups")
+  public var unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndPrecedenceGroups
+    }
+    set {
+      unexpectedBetweenColonAndPrecedenceGroups = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "precedenceGroups")
+  public var otherNames: PrecedenceGroupNameListSyntax {
+    get {
+      return precedenceGroups
+    }
+    set {
+      precedenceGroups = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterPrecedenceGroups")
+  public var unexpectedAfterOtherNames: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterPrecedenceGroups
+    }
+    set {
+      unexpectedAfterPrecedenceGroups = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with higherThanOrLowerThanLabel, precedenceGroups argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5841,7 +5930,7 @@ extension PrecedenceGroupRelationSyntax {
         unexpectedBetweenHigherThanOrLowerThanAndColon, 
         colon: colon, 
         unexpectedBetweenColonAndOtherNames, 
-        otherNames: otherNames, 
+        precedenceGroups: otherNames, 
         unexpectedAfterOtherNames, 
         trailingTrivia: trailingTrivia
       )
@@ -7653,6 +7742,61 @@ extension VariableDeclSyntax {
         unexpectedBetweenBindingKeywordAndBindings, 
         bindings: bindings, 
         unexpectedAfterBindings, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension WhereClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenWhereKeywordAndCondition")
+  public var unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenWhereKeywordAndCondition
+    }
+    set {
+      unexpectedBetweenWhereKeywordAndCondition = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "condition")
+  public var guardResult: ExprSyntax {
+    get {
+      return condition
+    }
+    set {
+      condition = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterCondition")
+  public var unexpectedAfterGuardResult: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterCondition
+    }
+    set {
+      unexpectedAfterCondition = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with condition argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
+      whereKeyword: TokenSyntax = .keyword(.where),
+      _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
+      guardResult: some ExprSyntaxProtocol,
+      _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeWhereKeyword, 
+        whereKeyword: whereKeyword, 
+        unexpectedBetweenWhereKeywordAndGuardResult, 
+        condition: guardResult, 
+        unexpectedAfterGuardResult, 
         trailingTrivia: trailingTrivia
       )
   }

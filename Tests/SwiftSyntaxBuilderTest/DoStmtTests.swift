@@ -35,7 +35,7 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {
@@ -85,7 +85,7 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {
@@ -135,7 +135,7 @@ final class DoStmtTests: XCTestCase {
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {

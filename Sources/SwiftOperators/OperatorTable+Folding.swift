@@ -141,7 +141,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(binaryOperatorExpr),
+          operator: ExprSyntax(binaryOperatorExpr),
           rightOperand: rhs
         )
       )
@@ -168,7 +168,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(assignExpr),
+          operator: ExprSyntax(assignExpr),
           rightOperand: rhs
         )
       )
@@ -209,7 +209,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(arrowExpr),
+          operator: ExprSyntax(arrowExpr),
           rightOperand: rhs
         )
       )

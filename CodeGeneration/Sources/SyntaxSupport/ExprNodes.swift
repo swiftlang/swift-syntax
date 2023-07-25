@@ -941,7 +941,8 @@ public let EXPR_NODES: [Node] = [
         kind: .node(kind: .expr)
       ),
       Child(
-        name: "OperatorOperand",
+        name: "Operator",
+        deprecatedName: "OperatorOperand",
         kind: .node(kind: .expr)
       ),
       Child(

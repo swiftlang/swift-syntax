@@ -1803,12 +1803,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftOperand"
   case \InfixOperatorExprSyntax.leftOperand:
     return "leftOperand"
-  case \InfixOperatorExprSyntax.unexpectedBetweenLeftOperandAndOperatorOperand:
-    return "unexpectedBetweenLeftOperandAndOperatorOperand"
-  case \InfixOperatorExprSyntax.operatorOperand:
-    return "operatorOperand"
-  case \InfixOperatorExprSyntax.unexpectedBetweenOperatorOperandAndRightOperand:
-    return "unexpectedBetweenOperatorOperandAndRightOperand"
+  case \InfixOperatorExprSyntax.unexpectedBetweenLeftOperandAndOperator:
+    return "unexpectedBetweenLeftOperandAndOperator"
+  case \InfixOperatorExprSyntax.operator:
+    return "operator"
+  case \InfixOperatorExprSyntax.unexpectedBetweenOperatorAndRightOperand:
+    return "unexpectedBetweenOperatorAndRightOperand"
   case \InfixOperatorExprSyntax.rightOperand:
     return "rightOperand"
   case \InfixOperatorExprSyntax.unexpectedAfterRightOperand:
@@ -2661,12 +2661,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenHigherThanOrLowerThanLabelAndColon"
   case \PrecedenceGroupRelationSyntax.colon:
     return "colon"
-  case \PrecedenceGroupRelationSyntax.unexpectedBetweenColonAndOtherNames:
-    return "unexpectedBetweenColonAndOtherNames"
-  case \PrecedenceGroupRelationSyntax.otherNames:
-    return "otherNames"
-  case \PrecedenceGroupRelationSyntax.unexpectedAfterOtherNames:
-    return "unexpectedAfterOtherNames"
+  case \PrecedenceGroupRelationSyntax.unexpectedBetweenColonAndPrecedenceGroups:
+    return "unexpectedBetweenColonAndPrecedenceGroups"
+  case \PrecedenceGroupRelationSyntax.precedenceGroups:
+    return "precedenceGroups"
+  case \PrecedenceGroupRelationSyntax.unexpectedAfterPrecedenceGroups:
+    return "unexpectedAfterPrecedenceGroups"
   case \PrefixOperatorExprSyntax.unexpectedBeforeOperator:
     return "unexpectedBeforeOperator"
   case \PrefixOperatorExprSyntax.operator:
@@ -3429,12 +3429,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeWhereKeyword"
   case \WhereClauseSyntax.whereKeyword:
     return "whereKeyword"
-  case \WhereClauseSyntax.unexpectedBetweenWhereKeywordAndGuardResult:
-    return "unexpectedBetweenWhereKeywordAndGuardResult"
-  case \WhereClauseSyntax.guardResult:
-    return "guardResult"
-  case \WhereClauseSyntax.unexpectedAfterGuardResult:
-    return "unexpectedAfterGuardResult"
+  case \WhereClauseSyntax.unexpectedBetweenWhereKeywordAndCondition:
+    return "unexpectedBetweenWhereKeywordAndCondition"
+  case \WhereClauseSyntax.condition:
+    return "condition"
+  case \WhereClauseSyntax.unexpectedAfterCondition:
+    return "unexpectedAfterCondition"
   case \WhileStmtSyntax.unexpectedBeforeWhileKeyword:
     return "unexpectedBeforeWhileKeyword"
   case \WhileStmtSyntax.whileKeyword:

@@ -437,10 +437,10 @@ extension Parser {
     // Parse the optional 'where' guard.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let guardExpr = self.parseExpression(.basic)
+      let condition = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
-        guardResult: guardExpr,
+        condition: condition,
         arena: self.arena
       )
     } else {
@@ -548,10 +548,10 @@ extension Parser {
     // Parse the 'where' expression if present.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let guardExpr = self.parseExpression(.basic)
+      let condition = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
-        guardResult: guardExpr,
+        condition: condition,
         arena: self.arena
       )
     } else {

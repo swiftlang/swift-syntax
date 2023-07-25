@@ -534,7 +534,8 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "where")])
       ),
       Child(
-        name: "GuardResult",
+        name: "Condition",
+        deprecatedName: "GuardResult",
         kind: .node(kind: .expr)
       ),
     ]

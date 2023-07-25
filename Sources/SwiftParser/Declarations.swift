@@ -1810,7 +1810,7 @@ extension Parser {
                 higherThanOrLowerThanLabel: level,
                 unexpectedBeforeColon,
                 colon: colon,
-                otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
+                precedenceGroups: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
                 arena: self.arena
               )
             )

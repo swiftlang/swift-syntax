@@ -24,7 +24,7 @@ extension PrecedenceGroup {
       // Relation (lowerThan, higherThan)
       case .precedenceGroupRelation(let relation):
         let isLowerThan = relation.higherThanOrLowerThanLabel.text == "lowerThan"
-        for otherGroup in relation.otherNames {
+        for otherGroup in relation.precedenceGroups {
           let otherGroupName = otherGroup.name.text
           let relationKind: PrecedenceRelation.Kind =
             isLowerThan

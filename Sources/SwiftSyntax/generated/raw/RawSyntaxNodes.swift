@@ -12105,9 +12105,9 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftOperand: RawUnexpectedNodesSyntax? = nil, 
       leftOperand: RawExprSyntax, 
-      _ unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax? = nil, 
-      operatorOperand: RawExprSyntax, 
-      _ unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftOperandAndOperator: RawUnexpectedNodesSyntax? = nil, 
+      operator: RawExprSyntax, 
+      _ unexpectedBetweenOperatorAndRightOperand: RawUnexpectedNodesSyntax? = nil, 
       rightOperand: RawExprSyntax, 
       _ unexpectedAfterRightOperand: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -12117,9 +12117,9 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftOperand?.raw
       layout[1] = leftOperand.raw
-      layout[2] = unexpectedBetweenLeftOperandAndOperatorOperand?.raw
-      layout[3] = operatorOperand.raw
-      layout[4] = unexpectedBetweenOperatorOperandAndRightOperand?.raw
+      layout[2] = unexpectedBetweenLeftOperandAndOperator?.raw
+      layout[3] = `operator`.raw
+      layout[4] = unexpectedBetweenOperatorAndRightOperand?.raw
       layout[5] = rightOperand.raw
       layout[6] = unexpectedAfterRightOperand?.raw
     }
@@ -12134,15 +12134,15 @@ public struct RawInfixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[1].map(RawExprSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftOperandAndOperatorOperand: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftOperandAndOperator: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var operatorOperand: RawExprSyntax {
+  public var `operator`: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenOperatorOperandAndRightOperand: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenOperatorAndRightOperand: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -17542,9 +17542,9 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
       higherThanOrLowerThanLabel: RawTokenSyntax, 
       _ unexpectedBetweenHigherThanOrLowerThanLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
-      _ unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? = nil, 
-      otherNames: RawPrecedenceGroupNameListSyntax, 
-      _ unexpectedAfterOtherNames: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenColonAndPrecedenceGroups: RawUnexpectedNodesSyntax? = nil, 
+      precedenceGroups: RawPrecedenceGroupNameListSyntax, 
+      _ unexpectedAfterPrecedenceGroups: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -17554,9 +17554,9 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
       layout[1] = higherThanOrLowerThanLabel.raw
       layout[2] = unexpectedBetweenHigherThanOrLowerThanLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = unexpectedBetweenColonAndOtherNames?.raw
-      layout[5] = otherNames.raw
-      layout[6] = unexpectedAfterOtherNames?.raw
+      layout[4] = unexpectedBetweenColonAndPrecedenceGroups?.raw
+      layout[5] = precedenceGroups.raw
+      layout[6] = unexpectedAfterPrecedenceGroups?.raw
     }
     self.init(unchecked: raw)
   }
@@ -17577,15 +17577,15 @@ public struct RawPrecedenceGroupRelationSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenColonAndOtherNames: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndPrecedenceGroups: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var otherNames: RawPrecedenceGroupNameListSyntax {
+  public var precedenceGroups: RawPrecedenceGroupNameListSyntax {
     layoutView.children[5].map(RawPrecedenceGroupNameListSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterOtherNames: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterPrecedenceGroups: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -22628,9 +22628,9 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeWhereKeyword: RawUnexpectedNodesSyntax? = nil, 
       whereKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax? = nil, 
-      guardResult: RawExprSyntax, 
-      _ unexpectedAfterGuardResult: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenWhereKeywordAndCondition: RawUnexpectedNodesSyntax? = nil, 
+      condition: RawExprSyntax, 
+      _ unexpectedAfterCondition: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -22638,9 +22638,9 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWhereKeyword?.raw
       layout[1] = whereKeyword.raw
-      layout[2] = unexpectedBetweenWhereKeywordAndGuardResult?.raw
-      layout[3] = guardResult.raw
-      layout[4] = unexpectedAfterGuardResult?.raw
+      layout[2] = unexpectedBetweenWhereKeywordAndCondition?.raw
+      layout[3] = condition.raw
+      layout[4] = unexpectedAfterCondition?.raw
     }
     self.init(unchecked: raw)
   }
@@ -22653,15 +22653,15 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenWhereKeywordAndGuardResult: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenWhereKeywordAndCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var guardResult: RawExprSyntax {
+  public var condition: RawExprSyntax {
     layoutView.children[3].map(RawExprSyntax.init(raw:))!
   }
   
-  public var unexpectedAfterGuardResult: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterCondition: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

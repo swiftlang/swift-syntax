@@ -16041,7 +16041,7 @@ public struct PrecedenceGroupNameElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `higherThanOrLowerThanLabel`: (`'higherThan'` | `'lowerThan'`)
 ///  - `colon`: `':'`
-///  - `otherNames`: ``PrecedenceGroupNameListSyntax``
+///  - `precedenceGroups`: ``PrecedenceGroupNameListSyntax``
 ///
 /// ### Contained in
 /// 
@@ -16067,7 +16067,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - higherThanOrLowerThanLabel: The relation to specified other precedence groups.
-  ///   - otherNames: The name of other precedence group to which this precedence group relates.
+  ///   - precedenceGroups: The name of other precedence group to which this precedence group relates.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -16075,9 +16075,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
       higherThanOrLowerThanLabel: TokenSyntax,
       _ unexpectedBetweenHigherThanOrLowerThanLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
-      otherNames: PrecedenceGroupNameListSyntax,
-      _ unexpectedAfterOtherNames: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndPrecedenceGroups: UnexpectedNodesSyntax? = nil,
+      precedenceGroups: PrecedenceGroupNameListSyntax,
+      _ unexpectedAfterPrecedenceGroups: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -16088,18 +16088,18 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
             higherThanOrLowerThanLabel, 
             unexpectedBetweenHigherThanOrLowerThanLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndOtherNames, 
-            otherNames, 
-            unexpectedAfterOtherNames
+            unexpectedBetweenColonAndPrecedenceGroups, 
+            precedenceGroups, 
+            unexpectedAfterPrecedenceGroups
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeHigherThanOrLowerThanLabel?.raw, 
           higherThanOrLowerThanLabel.raw, 
           unexpectedBetweenHigherThanOrLowerThanLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndOtherNames?.raw, 
-          otherNames.raw, 
-          unexpectedAfterOtherNames?.raw
+          unexpectedBetweenColonAndPrecedenceGroups?.raw, 
+          precedenceGroups.raw, 
+          unexpectedAfterPrecedenceGroups?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.precedenceGroupRelation,
@@ -16151,7 +16151,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndPrecedenceGroups: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -16161,7 +16161,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The name of other precedence group to which this precedence group relates.
-  public var otherNames: PrecedenceGroupNameListSyntax {
+  public var precedenceGroups: PrecedenceGroupNameListSyntax {
     get {
       return PrecedenceGroupNameListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
@@ -16170,12 +16170,12 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Adds the provided `element` to the node's `otherNames`
+  /// Adds the provided `element` to the node's `precedenceGroups`
   /// collection.
   /// - param element: The new `OtherName` to add to the node's
-  ///                  `otherNames` collection.
+  ///                  `precedenceGroups` collection.
   /// - returns: A copy of the receiver with the provided `OtherName`
-  ///            appended to its `otherNames` collection.
+  ///            appended to its `precedenceGroups` collection.
   public func addOtherName(_ element: PrecedenceGroupNameElementSyntax) -> PrecedenceGroupRelationSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -16194,7 +16194,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     return PrecedenceGroupRelationSyntax(newData)
   }
   
-  public var unexpectedAfterOtherNames: UnexpectedNodesSyntax? {
+  public var unexpectedAfterPrecedenceGroups: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -16209,9 +16209,9 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.higherThanOrLowerThanLabel, 
           \Self.unexpectedBetweenHigherThanOrLowerThanLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndOtherNames, 
-          \Self.otherNames, 
-          \Self.unexpectedAfterOtherNames
+          \Self.unexpectedBetweenColonAndPrecedenceGroups, 
+          \Self.precedenceGroups, 
+          \Self.unexpectedAfterPrecedenceGroups
         ])
   }
 }
@@ -19728,7 +19728,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `whereKeyword`: `'where'`
-///  - `guardResult`: ``ExprSyntax``
+///  - `condition`: ``ExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -19760,9 +19760,9 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWhereKeyword: UnexpectedNodesSyntax? = nil,
       whereKeyword: TokenSyntax = .keyword(.where),
-      _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
-      guardResult: some ExprSyntaxProtocol,
-      _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenWhereKeywordAndCondition: UnexpectedNodesSyntax? = nil,
+      condition: some ExprSyntaxProtocol,
+      _ unexpectedAfterCondition: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -19771,16 +19771,16 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeWhereKeyword, 
             whereKeyword, 
-            unexpectedBetweenWhereKeywordAndGuardResult, 
-            guardResult, 
-            unexpectedAfterGuardResult
+            unexpectedBetweenWhereKeywordAndCondition, 
+            condition, 
+            unexpectedAfterCondition
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWhereKeyword?.raw, 
           whereKeyword.raw, 
-          unexpectedBetweenWhereKeywordAndGuardResult?.raw, 
-          guardResult.raw, 
-          unexpectedAfterGuardResult?.raw
+          unexpectedBetweenWhereKeywordAndCondition?.raw, 
+          condition.raw, 
+          unexpectedAfterCondition?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.whereClause,
@@ -19813,7 +19813,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenWhereKeywordAndCondition: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19822,7 +19822,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var guardResult: ExprSyntax {
+  public var condition: ExprSyntax {
     get {
       return ExprSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
@@ -19831,7 +19831,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedAfterGuardResult: UnexpectedNodesSyntax? {
+  public var unexpectedAfterCondition: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -19844,9 +19844,9 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeWhereKeyword, 
           \Self.whereKeyword, 
-          \Self.unexpectedBetweenWhereKeywordAndGuardResult, 
-          \Self.guardResult, 
-          \Self.unexpectedAfterGuardResult
+          \Self.unexpectedBetweenWhereKeywordAndCondition, 
+          \Self.condition, 
+          \Self.unexpectedAfterCondition
         ])
   }
 }

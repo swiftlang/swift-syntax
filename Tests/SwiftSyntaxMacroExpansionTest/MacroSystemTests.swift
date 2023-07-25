@@ -33,12 +33,9 @@ enum CustomError: Error, CustomStringConvertible {
 
 // MARK: Example macros
 public struct StringifyMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {
       throw CustomError.message("missing argument")
@@ -65,12 +62,9 @@ private func replaceFirstLabel(
 }
 
 public struct ColorLiteralMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -82,12 +76,9 @@ public struct ColorLiteralMacro: ExpressionMacro {
 }
 
 public struct FileLiteralMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -99,12 +90,9 @@ public struct FileLiteralMacro: ExpressionMacro {
 }
 
 public struct ImageLiteralMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
       of: macro.argumentList,
@@ -116,12 +104,9 @@ public struct ImageLiteralMacro: ExpressionMacro {
 }
 
 public struct ColumnMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
     guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
     else {
@@ -132,12 +117,9 @@ public struct ColumnMacro: ExpressionMacro {
 }
 
 public struct FileIDMacro: ExpressionMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  public static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
     guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
     else {
@@ -150,12 +132,9 @@ public struct FileIDMacro: ExpressionMacro {
 /// Macro whose only purpose is to ensure that we cannot see "out" of the
 /// macro expansion syntax node we were given.
 struct CheckContextIndependenceMacro: ExpressionMacro {
-  static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of macro: Node,
-    in context: Context
+  static func expansion(
+    of macro: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) -> ExprSyntax {
 
     // Should not have a parent.
@@ -179,12 +158,9 @@ extension SimpleDiagnosticMessage: FixItMessage {
 }
 
 public struct ErrorMacro: DeclarationMacro {
-  public static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of node: Node,
-    in context: Context
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
@@ -211,12 +187,9 @@ public struct ErrorMacro: DeclarationMacro {
 }
 
 struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
-  static func expansion<
-    Node: FreestandingMacroExpansionSyntax,
-    Context: MacroExpansionContext
-  >(
-    of node: Node,
-    in context: Context
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     guard let firstElement = node.argumentList.first,
       let stringLiteral = firstElement.expression
@@ -238,16 +211,29 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
   }
 }
 
+public struct ConstantOneGetter: AccessorMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [AccessorDeclSyntax] {
+    return [
+      """
+      get {
+        return 1
+      }
+      """
+    ]
+  }
+}
+
 public struct PropertyWrapper {}
 
 extension PropertyWrapper: AccessorMacro {
-  public static func expansion<
-    Context: MacroExpansionContext,
-    Declaration: DeclSyntaxProtocol
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    providingAccessorsOf declaration: Declaration,
-    in context: Context
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -259,29 +245,24 @@ extension PropertyWrapper: AccessorMacro {
 
     return [
       """
-
-        get {
-          _\(identifier).wrappedValue
-        }
+      get {
+        _\(identifier).wrappedValue
+      }
       """,
       """
-
-        set {
-          _\(identifier).wrappedValue = newValue
-        }
+      set {
+        _\(identifier).wrappedValue = newValue
+      }
       """,
     ]
   }
 }
 
 extension PropertyWrapper: PeerMacro {
-  public static func expansion<
-    Context: MacroExpansionContext,
-    Declaration: DeclSyntaxProtocol
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    providingPeersOf declaration: Declaration,
-    in context: Context
+    providingPeersOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [SwiftSyntax.DeclSyntax] {
     guard let varDecl = declaration.as(VariableDeclSyntax.self),
       let binding = varDecl.bindings.first,
@@ -315,13 +296,10 @@ extension PropertyWrapper: PeerMacro {
 }
 
 public struct AddCompletionHandler: PeerMacro {
-  public static func expansion<
-    Context: MacroExpansionContext,
-    Declaration: DeclSyntaxProtocol
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    providingPeersOf declaration: Declaration,
-    in context: Context
+    providingPeersOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     // Only on functions at the moment. We could handle initializers as well
     // with a bit of work.
@@ -397,8 +375,7 @@ public struct AddCompletionHandler: PeerMacro {
         guard case let .attribute(attribute) = $0 else {
           return true
         }
-
-        return attribute != node
+        return attribute.attributeName.as(IdentifierTypeSyntax.self)?.name == "addCompletionHandler"
       } ?? []
     )
 
@@ -436,13 +413,10 @@ public struct AddCompletionHandler: PeerMacro {
 }
 
 public struct AddBackingStorage: MemberMacro {
-  public static func expansion<
-    Declaration: DeclGroupSyntax,
-    Context: MacroExpansionContext
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    providingMembersOf decl: Declaration,
-    in context: Context
+    providingMembersOf decl: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
   )
     throws -> [DeclSyntax]
   {
@@ -454,15 +428,11 @@ public struct AddBackingStorage: MemberMacro {
 }
 
 public struct WrapAllProperties: MemberAttributeMacro {
-  public static func expansion<
-    Declaration: DeclGroupSyntax,
-    MemberDeclaration: DeclSyntaxProtocol,
-    Context: MacroExpansionContext
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    attachedTo decl: Declaration,
-    providingAttributesFor member: MemberDeclaration,
-    in context: Context
+    attachedTo decl: some DeclGroupSyntax,
+    providingAttributesFor member: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [AttributeSyntax] {
     guard member.is(VariableDeclSyntax.self) else {
       return []
@@ -480,15 +450,11 @@ public struct WrapAllProperties: MemberAttributeMacro {
 }
 
 public struct WrapStoredProperties: MemberAttributeMacro {
-  public static func expansion<
-    Declaration: DeclGroupSyntax,
-    MemberDeclaration: DeclSyntaxProtocol,
-    Context: MacroExpansionContext
-  >(
+  public static func expansion(
     of node: AttributeSyntax,
-    attachedTo decl: Declaration,
-    providingAttributesFor member: MemberDeclaration,
-    in context: Context
+    attachedTo decl: some DeclGroupSyntax,
+    providingAttributesFor member: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [AttributeSyntax] {
     guard let property = member.as(VariableDeclSyntax.self),
       property.bindings.count == 1
@@ -500,8 +466,8 @@ public struct WrapStoredProperties: MemberAttributeMacro {
     switch binding.accessorBlock?.accessors {
     case .none:
       break
-    case .accessors(let accessorList):
-      for accessor in accessorList {
+    case .accessors(let node):
+      for accessor in node {
         switch accessor.accessorSpecifier.tokenKind {
         case .keyword(.get), .keyword(.set):
           return []
@@ -536,25 +502,16 @@ extension CustomTypeWrapperMacro: MemberMacro {
     providingMembersOf declaration: Declaration,
     in context: Context
   ) throws -> [DeclSyntax] {
-    return [
-      """
-
-        var _storage: Wrapper<Self>
-      """
-    ]
+    return ["var _storage: Wrapper<Self>"]
   }
 }
 
 extension CustomTypeWrapperMacro: MemberAttributeMacro {
-  static func expansion<
-    Declaration: DeclGroupSyntax,
-    MemberDeclaration: DeclSyntaxProtocol,
-    Context: MacroExpansionContext
-  >(
+  static func expansion(
     of node: AttributeSyntax,
-    attachedTo declaration: Declaration,
-    providingAttributesFor member: MemberDeclaration,
-    in context: Context
+    attachedTo declaration: some DeclGroupSyntax,
+    providingAttributesFor member: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [AttributeSyntax] {
     return [
       AttributeSyntax(
@@ -568,13 +525,10 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
 }
 
 extension CustomTypeWrapperMacro: AccessorMacro {
-  static func expansion<
-    Context: MacroExpansionContext,
-    Declaration: DeclSyntaxProtocol
-  >(
+  static func expansion(
     of node: AttributeSyntax,
-    providingAccessorsOf declaration: Declaration,
-    in context: Context
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
     guard let property = declaration.as(VariableDeclSyntax.self),
       let binding = property.bindings.first,
@@ -588,16 +542,14 @@ extension CustomTypeWrapperMacro: AccessorMacro {
 
     return [
       """
-
-          get {
-            _storage[wrappedKeyPath: \\.\(identifier)]
-          }
+      get {
+        _storage[wrappedKeyPath: \\.\(identifier)]
+      }
       """,
       """
-
-          set {
-            _storage[wrappedKeyPath: \\.\(identifier)] = newValue
-          }
+      set {
+        _storage[wrappedKeyPath: \\.\(identifier)] = newValue
+      }
       """,
     ]
   }
@@ -739,6 +691,7 @@ public let testMacros: [String: Macro.Type] = [
   "checkContext": CheckContextIndependenceMacro.self,
   "colorLiteral": ColorLiteralMacro.self,
   "column": ColumnMacro.self,
+  "constantOne": ConstantOneGetter.self,
   "fileID": FileIDMacro.self,
   "imageLiteral": ImageLiteralMacro.self,
   "stringify": StringifyMacro.self,
@@ -767,6 +720,21 @@ final class MacroSystemTests: XCTestCase {
       expandedSource: """
         let b = (x + y, "x + y")
         .init(_colorLiteralRed: 0.5, green: 0.5, blue: 0.25, alpha: 1.0)
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testCommentsOnExpressionMacro() {
+    assertMacroExpansion(
+      """
+      let b = 
+      /*leading */ #stringify(x + y) /*trailing*/
+      """,
+      expandedSource: """
+        let b = 
+        (x + y, "x + y")
         """,
       macros: testMacros,
       indentationWidth: indentationWidth
@@ -846,8 +814,8 @@ final class MacroSystemTests: XCTestCase {
       """,
       expandedSource: """
         struct X {
-          func f() {
-          }
+          func f() { }
+          #myError(bad)
           func g() {
           }
         }
@@ -889,7 +857,8 @@ final class MacroSystemTests: XCTestCase {
       var x: Int
       """,
       expandedSource: """
-        var x: Int {
+        var x: Int
+        {
           get {
             _x.wrappedValue
           }
@@ -897,7 +866,232 @@ final class MacroSystemTests: XCTestCase {
             _x.wrappedValue = newValue
           }
         }
+
         private var _x: MyWrapperType<Int>
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnVariableDeclWithExistingGetter() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int {
+        return 42
+      }
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 42
+          }
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @constantOne
+        var x: Int {
+          return 42
+        }
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int {
+            get {
+              return 42
+            }
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int {
+        get {
+          return 42
+        }
+      }
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 42
+          }
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnSubscript() {
+    // Adding an accessor to a subscript without an accessor isn't supported by
+    // the compiler (it complains that the subscript should have a body) but we
+    // can stil make the most reasonable syntactic expansion.
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @constantOne
+        subscript() -> Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          subscript() -> Int
+          {
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnSubscriptDeclWithExistingGetter() {
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @constantOne
+        subscript() -> Int {
+          return 42
+        }
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          subscript() -> Int {
+            get {
+              return 42
+            }
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @constantOne
+        subscript() -> Int {
+          return 42
+        }
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          subscript() -> Int {
+            get {
+              return 42
+            }
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @constantOne
+        subscript() -> Int {
+          get {
+            return 42
+          }
+        }
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          subscript() -> Int {
+            get {
+              return 42
+            }
+            get {
+              return 1
+            }
+          }
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnVariableDeclWithMultipleBindings() {
+    assertMacroExpansion(
+      """
+      @wrapProperty("MyWrapperType")
+      var x: Int, y: Int
+      """,
+      expandedSource: """
+        var x: Int, y: Int
+
+        private var _x: MyWrapperType<Int>
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message:
+            "swift-syntax applies macros syntactically but there is no way to represent a variable declaration with multiple bindings that have accessors syntactically. While the compiler allows this expansion, swift-syntax cannot represent it and thus disallows it.",
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ],
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testMultipleAccessorMacros() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      @constantOne
+      var x: Int
+      """,
+      expandedSource: """
+        var x: Int
+        {
+          get {
+            return 1
+          }
+          get {
+            return 1
+          }
+        }
         """,
       macros: testMacros,
       indentationWidth: indentationWidth
@@ -911,8 +1105,7 @@ final class MacroSystemTests: XCTestCase {
       func f(a: Int, for b: String, _ value: Double) async -> String { }
       """,
       expandedSource: """
-        func f(a: Int, for b: String, _ value: Double) async -> String {
-        }
+        func f(a: Int, for b: String, _ value: Double) async -> String { }
 
         func f(a: Int, for b: String, _ value: Double, completionHandler: (String) -> Void) {
           Task {
@@ -936,6 +1129,30 @@ final class MacroSystemTests: XCTestCase {
       expandedSource: """
         struct S {
           var value: Int
+
+          var _storage: Storage<Self>
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testCommentAroundeAttachedMacro() {
+    assertMacroExpansion(
+      """
+      /// Some doc comment
+      @addBackingStorage /* trailing */
+      struct S {
+        var value: Int
+      }
+      """,
+      expandedSource: """
+        /// Some doc comment
+        /* trailing */
+        struct S {
+          var value: Int
+
           var _storage: Storage<Self>
         }
         """,
@@ -967,20 +1184,14 @@ final class MacroSystemTests: XCTestCase {
           @Wrapper
           var y: Int
           @Wrapper
-          var description: String {
-            ""
-          }
+          var description: String { "" }
           @Wrapper
           var computed: Int {
-            get {
-              0
-            }
-            set {
-            }
+            get { 0 }
+            set {}
           }
 
-          func test() {
-          }
+          func test() {}
         }
         """,
       macros: testMacros,
@@ -1011,20 +1222,14 @@ final class MacroSystemTests: XCTestCase {
           @Wrapper
           var y: Int
 
-          var description: String {
-            ""
-          }
+          var description: String { "" }
 
           var computed: Int {
-            get {
-              0
-            }
-            set {
-            }
+            get { 0 }
+            set {}
           }
 
-          func test() {
-          }
+          func test() {}
         }
         """,
       macros: testMacros,
@@ -1044,7 +1249,8 @@ final class MacroSystemTests: XCTestCase {
       expandedSource: """
 
         struct Point {
-          var x: Int {
+          var x: Int
+          {
             get {
               _storage[wrappedKeyPath: \\.x]
             }
@@ -1052,7 +1258,8 @@ final class MacroSystemTests: XCTestCase {
               _storage[wrappedKeyPath: \\.x] = newValue
             }
           }
-          var y: Int {
+          var y: Int
+          {
             get {
               _storage[wrappedKeyPath: \\.y]
             }
@@ -1060,6 +1267,7 @@ final class MacroSystemTests: XCTestCase {
               _storage[wrappedKeyPath: \\.y] = newValue
             }
           }
+
           var _storage: Wrapper<Self>
         }
         """,
@@ -1115,6 +1323,28 @@ final class MacroSystemTests: XCTestCase {
   }
 
   func testDeclsFromStringLiterals() {
+    assertMacroExpansion(
+      #"""
+      #decls(
+        """
+        static func foo() {
+        print("value") }
+        """,
+        "struct Inner {\n\n}"
+      )
+      """#,
+      expandedSource: #"""
+        static func foo() {
+          print("value")
+        }
+        struct Inner {
+
+        }
+        """#,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+
     assertMacroExpansion(
       #"""
       struct S {
@@ -1185,7 +1415,94 @@ final class MacroSystemTests: XCTestCase {
       macros: ["decls": DeclsFromStringsMacroNoAttrs.self],
       indentationWidth: indentationWidth
     )
+  }
 
+  func testIndentationOfMultipleModifiers() {
+    assertMacroExpansion(
+      """
+      struct Foo {
+        public
+        static #decls("func foo() {}")
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          public
+          static func foo() {
+          }
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testCommentsOnFreestandingDeclsExpansions() {
+    assertMacroExpansion(
+      """
+      // some comment
+      #decls(
+        "func foo() {}",
+        "func bar() {}"
+      ) /* trailing comment */
+      """,
+      expandedSource: """
+        func foo() {
+        }
+        func bar() {
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testCommentsOnFreestandingDeclsExpansionsInMemberDeclList() {
+    assertMacroExpansion(
+      """
+      struct Foo {
+        // some comment
+        #decls(
+          "func foo() {}",
+          "func bar() {}"
+        ) /* trailing comment */
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          func foo() {
+          }
+          func bar() {
+          }
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testFreestandingDeclThatIncludesDocComment() {
+    assertMacroExpansion(
+      #"""
+      struct Foo {
+        #decls(
+          """
+          /// Some doc comment
+          func foo() {}
+          """
+        )
+      }
+      """#,
+      expandedSource: """
+        struct Foo {
+          /// Some doc comment
+          func foo() {
+          }
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
+      indentationWidth: indentationWidth
+    )
   }
 
   func testConformanceExpansion() {
@@ -1199,6 +1516,7 @@ final class MacroSystemTests: XCTestCase {
 
         struct MyType {
         }
+
         extension MyType: Sendable {
         }
         """,
@@ -1216,6 +1534,7 @@ final class MacroSystemTests: XCTestCase {
 
         extension A.B {
         }
+
         extension A.B: Sendable {
         }
         """,
@@ -1235,6 +1554,7 @@ final class MacroSystemTests: XCTestCase {
 
         struct MyType {
         }
+
         extension MyType: Sendable {
         }
         """,
@@ -1242,4 +1562,48 @@ final class MacroSystemTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testNestedExtensionExpansion() {
+    assertMacroExpansion(
+      """
+      struct Wrapper {
+        @AddSendableExtension
+        struct MyType {
+        }
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {
+          struct MyType {
+          }
+        }
+
+        extension MyType: Sendable {
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAttributeWithComment() {
+    assertMacroExpansion(
+      """
+      @wrapAllProperties struct S {
+        // Var value
+        var value = 1
+      }
+      """,
+      expandedSource: """
+        struct S {
+          @Wrapper
+          // Var value
+          var value = 1
+        }
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
 }

@@ -62,11 +62,11 @@ public struct NoteSpec {
 
 func assertNote(
   _ note: Note,
-  in tree: some SyntaxProtocol,
+  in expansionContext: BasicMacroExpansionContext,
   expected spec: NoteSpec
 ) {
   assertStringsEqualWithDiff(note.message, spec.message, "message of note does not match", file: spec.originatorFile, line: spec.originatorLine)
-  let location = note.location(converter: SourceLocationConverter(file: "", tree: tree))
+  let location = expansionContext.location(for: note.position, anchoredAt: note.node, fileName: "")
   XCTAssertEqual(location.line, spec.line, "line of note does not match", file: spec.originatorFile, line: spec.originatorLine)
   XCTAssertEqual(location.column, spec.column, "column of note does not match", file: spec.originatorFile, line: spec.originatorLine)
 }
@@ -181,14 +181,14 @@ public struct DiagnosticSpec {
 
 func assertDiagnostic(
   _ diag: Diagnostic,
-  in tree: some SyntaxProtocol,
+  in expansionContext: BasicMacroExpansionContext,
   expected spec: DiagnosticSpec
 ) {
   if let id = spec.id {
     XCTAssertEqual(diag.diagnosticID, id, "diagnostic ID does not match", file: spec.originatorFile, line: spec.originatorLine)
   }
   assertStringsEqualWithDiff(diag.message, spec.message, "message does not match", file: spec.originatorFile, line: spec.originatorLine)
-  let location = diag.location(converter: SourceLocationConverter(file: "", tree: tree))
+  let location = expansionContext.location(for: diag.position, anchoredAt: diag.node, fileName: "")
   XCTAssertEqual(location.line, spec.line, "line does not match", file: spec.originatorFile, line: spec.originatorLine)
   XCTAssertEqual(location.column, spec.column, "column does not match", file: spec.originatorFile, line: spec.originatorLine)
 
@@ -223,7 +223,7 @@ func assertDiagnostic(
     )
   } else {
     for (note, expectedNote) in zip(diag.notes, spec.notes) {
-      assertNote(note, in: tree, expected: expectedNote)
+      assertNote(note, in: expansionContext, expected: expectedNote)
     }
   }
   if diag.fixIts.count != spec.fixIts.count {
@@ -275,7 +275,7 @@ public func assertMacroExpansion(
     sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
 
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context)
+  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context, indentationWidth: indentationWidth)
   let diags = ParseDiagnosticsGenerator.diagnostics(for: expandedSourceFile)
   if !diags.isEmpty {
     XCTFail(
@@ -291,13 +291,12 @@ public func assertMacroExpansion(
     )
   }
 
-  let formattedSourceFile = expandedSourceFile.formatted(using: BasicFormat(indentationWidth: indentationWidth))
   assertStringsEqualWithDiff(
-    formattedSourceFile.description.trimmingCharacters(in: .newlines),
+    expandedSourceFile.description.trimmingCharacters(in: .newlines),
     expectedExpandedSource.trimmingCharacters(in: .newlines),
     additionalInfo: """
       Actual expanded source:
-      \(formattedSourceFile)
+      \(expandedSourceFile)
       """,
     file: file,
     line: line
@@ -314,7 +313,7 @@ public func assertMacroExpansion(
     )
   } else {
     for (actualDiag, expectedDiag) in zip(context.diagnostics, diagnostics) {
-      assertDiagnostic(actualDiag, in: origSourceFile, expected: expectedDiag)
+      assertDiagnostic(actualDiag, in: context, expected: expectedDiag)
     }
   }
 }

@@ -287,7 +287,7 @@ final class BasicFormatTest: XCTestCase {
           ),
           accessorBlock: AccessorBlockSyntax(
             leftBrace: .leftBraceToken(leadingTrivia: .space),
-            accessors: .accessors(AccessorListSyntax([])),
+            accessors: .accessors(AccessorDeclListSyntax([])),
             rightBrace: .rightBraceToken(leadingTrivia: .newline)
           )
         )

@@ -1012,7 +1012,7 @@ final class DeclarationTests: XCTestCase {
       substructure: Syntax(
         AccessorBlockSyntax(
           accessors: .accessors(
-            AccessorListSyntax([
+            AccessorDeclListSyntax([
               AccessorDeclSyntax(
                 accessorSpecifier: .keyword(.get)
               )

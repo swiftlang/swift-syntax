@@ -48,11 +48,13 @@ public class BasicMacroExpansionContext {
   /// information about that source file.
   private var sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
 
-  /// Mapping from intentionally-disconnected syntax node roots to the
-  /// absolute offsets that have within a given source file, which is used
-  /// to establish the link between a node that been intentionally disconnected
-  /// from a source file to hide information from the macro implementation.
-  private var disconnectedNodes: [Syntax: (SourceFileSyntax, Int)] = [:]
+  /// Mapping from intentionally-disconnected syntax nodes to the corresponding
+  /// nodes in the original source file.
+  ///
+  /// This is used to establish the link between a node that been intentionally
+  /// disconnected from a source file to hide information from the macro
+  /// implementation.
+  private var detachedNodes: [Syntax: Syntax] = [:]
 
   /// The macro expansion discriminator, which is used to form unique names
   /// when requested.
@@ -69,24 +71,10 @@ public class BasicMacroExpansionContext {
 }
 
 extension BasicMacroExpansionContext {
-  /// Note that the given node that was at the given position in the provided
-  /// source file has been disconnected and is now a new root.
-  private func addDisconnected(
-    _ node: some SyntaxProtocol,
-    at offset: AbsolutePosition,
-    in sourceFile: SourceFileSyntax
-  ) {
-    disconnectedNodes[Syntax(node)] = (sourceFile, offset.utf8Offset)
-  }
-
   /// Detach the given node, and record where it came from.
   public func detach<Node: SyntaxProtocol>(_ node: Node) -> Node {
     let detached = node.detached
-
-    if let rootSourceFile = node.root.as(SourceFileSyntax.self) {
-      addDisconnected(detached, at: node.position, in: rootSourceFile)
-    }
-
+    detachedNodes[Syntax(detached)] = Syntax(node)
     return detached
   }
 }
@@ -136,6 +124,27 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     diagnostics.append(diagnostic)
   }
 
+  /// Translates a position from a detached node to the corresponding location
+  /// in the original source file.
+  ///
+  /// - Parameters:
+  ///   - position: The position to translate
+  ///   - node: The node at which the position is anchored. This node is used to
+  ///     find the offset in the original source file
+  ///   - fileName: The file name that should be used in the `SourceLocation`
+  /// - Returns: The location in the original source file
+  public func location(
+    for position: AbsolutePosition,
+    anchoredAt node: Syntax,
+    fileName: String
+  ) -> SourceLocation {
+    guard let nodeInOriginalTree = detachedNodes[node.root] else {
+      return SourceLocationConverter(file: fileName, tree: node.root).location(for: position)
+    }
+    let adjustedPosition = position + SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)
+    return SourceLocationConverter(file: fileName, tree: nodeInOriginalTree.root).location(for: adjustedPosition)
+  }
+
   public func location(
     of node: some SyntaxProtocol,
     at position: PositionInSyntaxNode,
@@ -143,21 +152,21 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
   ) -> AbstractSourceLocation? {
     // Dig out the root source file and figure out how we need to adjust the
     // offset of the given syntax node to adjust for it.
-    let rootSourceFile: SourceFileSyntax
-    let offsetAdjustment: Int
+    let rootSourceFile: SourceFileSyntax?
+    let offsetAdjustment: SourceLength
     if let directRootSourceFile = node.root.as(SourceFileSyntax.self) {
       // The syntax node came from the source file itself.
       rootSourceFile = directRootSourceFile
-      offsetAdjustment = 0
-    } else if let (adjustedSourceFile, offset) = disconnectedNodes[Syntax(node)] {
+      offsetAdjustment = .zero
+    } else if let nodeInOriginalTree = detachedNodes[Syntax(node)] {
       // The syntax node came from a disconnected root, so adjust for that.
-      rootSourceFile = adjustedSourceFile
-      offsetAdjustment = offset
+      rootSourceFile = nodeInOriginalTree.root.as(SourceFileSyntax.self)
+      offsetAdjustment = SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)
     } else {
       return nil
     }
 
-    guard let knownRoot = sourceFiles[rootSourceFile] else {
+    guard let rootSourceFile, let knownRoot = sourceFiles[rootSourceFile] else {
       return nil
     }
 
@@ -189,6 +198,6 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
 
     // Do the location lookup.
     let converter = SourceLocationConverter(file: fileName, tree: rootSourceFile)
-    return AbstractSourceLocation(converter.location(for: rawPosition.advanced(by: offsetAdjustment)))
+    return AbstractSourceLocation(converter.location(for: rawPosition + offsetAdjustment))
   }
 }

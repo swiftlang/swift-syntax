@@ -403,7 +403,7 @@ public func collapse<Node: SyntaxProtocol>(
   }
 
   var expansions = expansions
-  var separator = "\n"
+  var separator = "\n\n"
 
   switch role {
   case .accessor:
@@ -427,6 +427,7 @@ public func collapse<Node: SyntaxProtocol>(
       expansions = expansions.map({ $0.indented(by: indentationWidth ?? .spaces(4)) })
       expansions[0] = "{\n" + expansions[0]
       expansions[expansions.count - 1] += "\n}"
+      separator = "\n"
     }
   case .memberAttribute:
     separator = " "

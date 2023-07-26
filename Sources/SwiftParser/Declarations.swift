@@ -1151,7 +1151,7 @@ extension Parser {
     // Parse getter and setter.
     let accessor: RawAccessorBlockSyntax?
     if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
-      accessor = self.parseGetSet()
+      accessor = self.parseAccessorBlock()
     } else {
       accessor = nil
     }
@@ -1265,7 +1265,7 @@ extension Parser {
 
         let accessors: RawAccessorBlockSyntax?
         if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil && !self.at(.keyword(.`init`))) {
-          accessors = self.parseGetSet()
+          accessors = self.parseAccessorBlock()
         } else {
           accessors = nil
         }
@@ -1408,7 +1408,7 @@ extension Parser {
 
   /// Parse the body of a variable declaration. This can include explicit
   /// getters, setters, and observers, or the body of a computed property.
-  mutating func parseGetSet() -> RawAccessorBlockSyntax {
+  mutating func parseAccessorBlock() -> RawAccessorBlockSyntax {
     // Parse getter and setter.
     let unexpectedBeforeLBrace: RawUnexpectedNodesSyntax?
     let lbrace: RawTokenSyntax

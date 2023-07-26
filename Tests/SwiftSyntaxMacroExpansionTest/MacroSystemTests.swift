@@ -608,13 +608,10 @@ public struct UnwrapMacro: CodeItemMacro {
   }
 }
 
-public struct DeclsFromStringsMacro: DeclarationMacro {
-  public static func expansion(
-    of node: some FreestandingMacroExpansionSyntax,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
+public struct DeclsFromStringsMacro: DeclarationMacro, MemberMacro {
+  private static func decls(from arguments: LabeledExprListSyntax) -> [DeclSyntax] {
     var strings: [String] = []
-    for arg in node.argumentList {
+    for arg in arguments {
       guard
         let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue
       else {
@@ -626,6 +623,24 @@ public struct DeclsFromStringsMacro: DeclarationMacro {
     return strings.map {
       "\(raw: $0)"
     }
+  }
+
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    return decls(from: node.argumentList)
+  }
+
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingMembersOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    guard case .argumentList(let arguments) = node.arguments else {
+      return []
+    }
+    return decls(from: arguments)
   }
 }
 
@@ -857,8 +872,7 @@ final class MacroSystemTests: XCTestCase {
       var x: Int
       """,
       expandedSource: """
-        var x: Int
-        {
+        var x: Int {
           get {
             _x.wrappedValue
           }
@@ -958,8 +972,7 @@ final class MacroSystemTests: XCTestCase {
       """,
       expandedSource: """
         struct Foo {
-          subscript() -> Int
-          {
+          subscript() -> Int {
             get {
               return 1
             }
@@ -1064,7 +1077,7 @@ final class MacroSystemTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message:
-            "swift-syntax applies macros syntactically but there is no way to represent a variable declaration with multiple bindings that have accessors syntactically. While the compiler allows this expansion, swift-syntax cannot represent it and thus disallows it.",
+            "swift-syntax applies macros syntactically and there is no way to represent a variable declaration with multiple bindings that have accessors syntactically. While the compiler allows this expansion, swift-syntax cannot represent it and thus disallows it.",
           line: 1,
           column: 1,
           severity: .error
@@ -1083,8 +1096,7 @@ final class MacroSystemTests: XCTestCase {
       var x: Int
       """,
       expandedSource: """
-        var x: Int
-        {
+        var x: Int {
           get {
             return 1
           }
@@ -1249,8 +1261,7 @@ final class MacroSystemTests: XCTestCase {
       expandedSource: """
 
         struct Point {
-          var x: Int
-          {
+          var x: Int {
             get {
               _storage[wrappedKeyPath: \\.x]
             }
@@ -1258,8 +1269,7 @@ final class MacroSystemTests: XCTestCase {
               _storage[wrappedKeyPath: \\.x] = newValue
             }
           }
-          var y: Int
-          {
+          var y: Int {
             get {
               _storage[wrappedKeyPath: \\.y]
             }
@@ -1413,6 +1423,30 @@ final class MacroSystemTests: XCTestCase {
         }
         """#,
       macros: ["decls": DeclsFromStringsMacroNoAttrs.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testMemberDeclsFromStringLiterals() {
+    assertMacroExpansion(
+      """
+      @decls("func foo() {}", "func bar() {}"
+      struct Foo {
+        var member: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var member: Int
+
+          func foo() {
+          }
+
+          func bar() {
+          }
+        }
+        """,
+      macros: ["decls": DeclsFromStringsMacro.self],
       indentationWidth: indentationWidth
     )
   }

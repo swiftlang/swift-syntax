@@ -46,7 +46,7 @@ public let DECL_NODES: [Node] = [
     kind: .accessorBlock,
     base: .syntax,
     nameForDiagnostics: nil,
-    parserFunction: "parseGetSet",
+    parserFunction: "parseAccessorBlock",
     traits: [
       "Braced"
     ],

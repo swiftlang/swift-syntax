@@ -27,7 +27,7 @@ extension SyntaxProtocol {
 // MARK: String.indented
 
 extension String {
-  /// Indents every new line in this string literal by `indentation`.
+  /// Indents every new line in this string by `indentation`.
   ///
   /// - Note: The first line in the string gets indented as well.
   func indented(by indentation: Trivia) -> String {

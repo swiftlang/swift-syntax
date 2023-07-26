@@ -119,7 +119,8 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
 
 //==========================================================================//
 // IMPORTANT: When adding a new conformance, also add a corrsponding        //
-// conformance to SyntaxExpressibleByStringInterpolation.                   //
+// conformance to SyntaxExpressibleByStringInterpolation in                 //
+// SyntaxExpressibleByStringInterpolationConformances.swift                 //
 //==========================================================================//
 
 //==========================================================================//

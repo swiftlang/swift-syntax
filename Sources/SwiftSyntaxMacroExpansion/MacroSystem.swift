@@ -263,9 +263,11 @@ private func expandAccessorMacroWithoutExistingAccessors(
     return nil
   }
 
-  // `expandAttachedMacro` adds the `{` and `}` to wrap the accessor block.
-  // Since the entire block is indented, we start it on a new line.
-  let indentedSource = "\n" + expanded.indented(by: attachedTo.indentationOfFirstLine)
+  // `expandAttachedMacro` adds the `{` and `}` to wrap the accessor block and
+  // then indents it.
+  // Remove any indentaiton from the first line using `drop(while:)` and then
+  // prepend a space to separate it from the variable declaration
+  let indentedSource = " " + expanded.indented(by: attachedTo.indentationOfFirstLine).drop(while: { $0.isWhitespace })
   return "\(raw: indentedSource)"
 }
 
@@ -434,14 +436,14 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
     switch self {
     case .accessorMacroOnVariableWithMultipleBindings:
       return """
-        swift-syntax applies macros syntactically but there is no way to represent a variable \
+        swift-syntax applies macros syntactically and there is no way to represent a variable \
         declaration with multiple bindings that have accessors syntactically. \
         While the compiler allows this expansion, swift-syntax cannot represent it and thus \
         disallows it.
         """
     case .malformedAccessor:
       return """
-        Macro returned a mal-formed accessor. Accessors should start with an introducer like 'get' or 'set'.
+        Macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
         """
     }
   }
@@ -452,8 +454,8 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   let macroSystem: MacroSystem
   var context: Context
   var indentationWidth: Trivia
-  /// Nodes that we have already handled in `visitAny` and that should be visited
-  /// in the node-specific handling function.
+  /// Nodes that we are currently handling in `visitAny` and that should be
+  /// visited using the node-specific handling function.
   var skipVisitAnyHandling: Set<Syntax> = []
 
   /// Store expanded extension while visiting member decls. This should be
@@ -481,8 +483,8 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
     // Expand 'MacroExpansionExpr'.
     // Note that 'MacroExpansionExpr'/'MacroExpansionExprDecl' at code item
-    // position are handled by 'visit(_:CodeBlockItemListSyntax)'. Here's only
-    // expression inside other syntax node.
+    // position are handled by 'visit(_:CodeBlockItemListSyntax)'.
+    // Only expression expansions inside other syntax nodes is handled here.
     if let expanded = expandExpr(node: node) {
       return Syntax(visit(expanded))
     }
@@ -632,7 +634,7 @@ extension MacroApplication {
 
     return attributes.compactMap {
       guard case let .attribute(attribute) = $0,
-            let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
+        let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
         let macro = macroSystem.lookup(attributeName)
       else {
         return nil
@@ -673,13 +675,13 @@ extension MacroApplication {
   ) -> [ExpandedNode] {
     var result: [ExpandedNode] = []
 
-    for peerMacro in macroAttributes(attachedTo: decl, ofType: ofType) {
+    for macroAttribute in macroAttributes(attachedTo: decl, ofType: ofType) {
       do {
-        if let expanded = try expandMacro(peerMacro.attributeNode, peerMacro.definition) {
+        if let expanded = try expandMacro(macroAttribute.attributeNode, macroAttribute.definition) {
           result += expanded
         }
       } catch {
-        context.addDiagnostics(from: error, node: peerMacro.attributeNode)
+        context.addDiagnostics(from: error, node: macroAttribute.attributeNode)
       }
     }
     return result

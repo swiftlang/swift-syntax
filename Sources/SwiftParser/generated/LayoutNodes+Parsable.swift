@@ -30,7 +30,7 @@ extension AccessorBlockSyntax: SyntaxParseable {
       withExtendedLifetime(parser) {
       }
     }
-    let node = parser.parseGetSet()
+    let node = parser.parseAccessorBlock()
     let raw = RawSyntax(parser.parseRemainder(into: node))
     return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }

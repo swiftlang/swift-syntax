@@ -5353,7 +5353,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/declNameArguments``
-///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declNameArguments``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declNameArguments``
 ///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declNameArguments``
 ///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/arguments``
@@ -10549,8 +10548,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `type`: ``TypeSyntax``
 ///  - `comma`: `','`
-///  - `declBaseName`: ``TokenSyntax``
-///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
+///  - `declName`: ``IdentifierExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -10577,8 +10575,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - type: The type for which the method with this attribute implements a requirement.
   ///   - comma: The comma separating the type and method name
-  ///   - declBaseName: The base name of the protocol's requirement.
-  ///   - declNameArguments: The argument labels of the protocol's requirement if it is a function requirement.
+  ///   - declName: The value for this argument
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -10586,11 +10583,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       type: some TypeSyntaxProtocol,
       _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax = .commaToken(),
-      _ unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? = nil,
-      declBaseName: TokenSyntax,
-      _ unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenCommaAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: IdentifierExprSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -10601,22 +10596,18 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             type, 
             unexpectedBetweenTypeAndComma, 
             comma, 
-            unexpectedBetweenCommaAndDeclBaseName, 
-            declBaseName, 
-            unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
-            declNameArguments, 
-            unexpectedAfterDeclNameArguments
+            unexpectedBetweenCommaAndDeclName, 
+            declName, 
+            unexpectedAfterDeclName
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
           type.raw, 
           unexpectedBetweenTypeAndComma?.raw, 
           comma.raw, 
-          unexpectedBetweenCommaAndDeclBaseName?.raw, 
-          declBaseName.raw, 
-          unexpectedBetweenDeclBaseNameAndDeclNameArguments?.raw, 
-          declNameArguments?.raw, 
-          unexpectedAfterDeclNameArguments?.raw
+          unexpectedBetweenCommaAndDeclName?.raw, 
+          declName.raw, 
+          unexpectedAfterDeclName?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.implementsAttributeArguments,
@@ -10669,7 +10660,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public var unexpectedBetweenCommaAndDeclBaseName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenCommaAndDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -10678,41 +10669,22 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  /// The base name of the protocol's requirement.
-  public var declBaseName: TokenSyntax {
+  /// The value for this argument
+  public var declName: IdentifierExprSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = ImplementsAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenDeclBaseNameAndDeclNameArguments: UnexpectedNodesSyntax? {
+  public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = ImplementsAttributeArgumentsSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The argument labels of the protocol's requirement if it is a function requirement.
-  public var declNameArguments: DeclNameArgumentsSyntax? {
-    get {
-      return data.child(at: 7, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
-    }
-    set(value) {
-      self = ImplementsAttributeArgumentsSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = ImplementsAttributeArgumentsSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -10722,11 +10694,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           \Self.type, 
           \Self.unexpectedBetweenTypeAndComma, 
           \Self.comma, 
-          \Self.unexpectedBetweenCommaAndDeclBaseName, 
-          \Self.declBaseName, 
-          \Self.unexpectedBetweenDeclBaseNameAndDeclNameArguments, 
-          \Self.declNameArguments, 
-          \Self.unexpectedAfterDeclNameArguments
+          \Self.unexpectedBetweenCommaAndDeclName, 
+          \Self.declName, 
+          \Self.unexpectedAfterDeclName
         ])
   }
 }

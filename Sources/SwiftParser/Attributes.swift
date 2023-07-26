@@ -827,12 +827,16 @@ extension Parser {
       .zeroArgCompoundNames,
       .operators,
     ])
+    let declName = RawIdentifierExprSyntax(
+      identifier: name,
+      declNameArguments: args,
+      arena: self.arena
+    )
     return RawImplementsAttributeArgumentsSyntax(
       type: type,
       unexpectedBeforeComma,
       comma: comma,
-      declBaseName: name,
-      declNameArguments: args,
+      declName: declName,
       arena: self.arena
     )
   }

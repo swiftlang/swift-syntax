@@ -619,17 +619,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The comma separating the type and method name"
       ),
       Child(
-        name: "DeclBaseName",
-        kind: .node(kind: .token),
-        nameForDiagnostics: "declaration base name",
-        documentation: "The base name of the protocol's requirement."
-      ),
-      Child(
-        name: "DeclNameArguments",
-        kind: .node(kind: .declNameArguments),
-        nameForDiagnostics: "declaration name arguments",
-        documentation: "The argument labels of the protocol's requirement if it is a function requirement.",
-        isOptional: true
+        name: "DeclName",
+        deprecatedName: "Declname",
+        kind: .node(kind: .identifierExpr),
+        nameForDiagnostics: "declaration name",
+        documentation: "The value for this argument"
       ),
     ]
   ),

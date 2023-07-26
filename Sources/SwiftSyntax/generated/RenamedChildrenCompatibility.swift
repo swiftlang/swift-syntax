@@ -3829,6 +3829,65 @@ extension GenericWhereClauseSyntax {
   }
 }
 
+extension ImplementsAttributeArgumentsSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenCommaAndDeclName")
+  public var unexpectedBetweenCommaAndDeclname: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenCommaAndDeclName
+    }
+    set {
+      unexpectedBetweenCommaAndDeclName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "declName")
+  public var declname: IdentifierExprSyntax {
+    get {
+      return declName
+    }
+    set {
+      declName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterDeclName")
+  public var unexpectedAfterDeclname: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterDeclName
+    }
+    set {
+      unexpectedAfterDeclName = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with declName argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+      type: some TypeSyntaxProtocol,
+      _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
+      comma: TokenSyntax = .commaToken(),
+      _ unexpectedBetweenCommaAndDeclname: UnexpectedNodesSyntax? = nil,
+      declname: IdentifierExprSyntax,
+      _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeType, 
+        type: type, 
+        unexpectedBetweenTypeAndComma, 
+        comma: comma, 
+        unexpectedBetweenCommaAndDeclname, 
+        declName: declname, 
+        unexpectedAfterDeclname, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension ImportDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndImportKeyword")
   public var unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? {

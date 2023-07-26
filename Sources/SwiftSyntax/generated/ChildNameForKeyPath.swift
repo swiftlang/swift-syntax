@@ -1677,16 +1677,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTypeAndComma"
   case \ImplementsAttributeArgumentsSyntax.comma:
     return "comma"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenCommaAndDeclBaseName:
-    return "unexpectedBetweenCommaAndDeclBaseName"
-  case \ImplementsAttributeArgumentsSyntax.declBaseName:
-    return "declBaseName"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenDeclBaseNameAndDeclNameArguments:
-    return "unexpectedBetweenDeclBaseNameAndDeclNameArguments"
-  case \ImplementsAttributeArgumentsSyntax.declNameArguments:
-    return "declNameArguments"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
+  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenCommaAndDeclName:
+    return "unexpectedBetweenCommaAndDeclName"
+  case \ImplementsAttributeArgumentsSyntax.declName:
+    return "declName"
+  case \ImplementsAttributeArgumentsSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \ImplicitlyUnwrappedOptionalTypeSyntax.unexpectedBeforeWrappedType:
     return "unexpectedBeforeWrappedType"
   case \ImplicitlyUnwrappedOptionalTypeSyntax.wrappedType:

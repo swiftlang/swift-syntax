@@ -180,10 +180,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "else body"
   case \ImplementsAttributeArgumentsSyntax.type:
     return "type"
-  case \ImplementsAttributeArgumentsSyntax.declBaseName:
-    return "declaration base name"
-  case \ImplementsAttributeArgumentsSyntax.declNameArguments:
-    return "declaration name arguments"
+  case \ImplementsAttributeArgumentsSyntax.declName:
+    return "declaration name"
   case \ImportDeclSyntax.attributes:
     return "attributes"
   case \ImportDeclSyntax.modifiers:

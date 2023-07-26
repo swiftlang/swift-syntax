@@ -491,11 +491,11 @@ extension Parser {
       }
 
       let each = self.eat(handle)
-      let packReference = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+      let pack = self.parseSequenceExpressionElement(flavor, pattern: pattern)
       return RawExprSyntax(
         RawPackElementExprSyntax(
           eachKeyword: each,
-          pack: packReference,
+          pack: pack,
           arena: self.arena
         )
       )
@@ -1368,11 +1368,11 @@ extension Parser {
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
     let repeatKeyword = self.eat(repeatHandle)
-    let pack = self.parseExpression(flavor, pattern: pattern)
+    let repetitionPattern = self.parseExpression(flavor, pattern: pattern)
 
     return RawPackExpansionExprSyntax(
       repeatKeyword: repeatKeyword,
-      repetitionPattern: pack,
+      repetitionPattern: repetitionPattern,
       arena: self.arena
     )
   }
@@ -1384,33 +1384,33 @@ extension Parser {
   /// The broad structure of the regular expression is validated by the lexer.
   mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
     // See if we have an opening set of pounds.
-    let openPounds = self.consume(if: .regexPoundDelimiter)
+    let openingPounds = self.consume(if: .regexPoundDelimiter)
 
     // Parse the opening slash.
-    let (unexpectedBeforeSlash, openSlash) = self.expect(.regexSlash)
+    let (unexpectedBeforeSlash, openingSlash) = self.expect(.regexSlash)
 
     // If we had opening pounds, there should be no trivia for the slash.
-    if let openPounds {
-      precondition(openPounds.trailingTriviaByteLength == 0 && openSlash.leadingTriviaByteLength == 0)
+    if let openingPounds {
+      precondition(openingPounds.trailingTriviaByteLength == 0 && openingSlash.leadingTriviaByteLength == 0)
     }
 
     // Parse the pattern and closing slash, avoiding recovery or leading trivia
     // as the lexer should provide the tokens exactly in order without trivia,
     // otherwise they should be treated as missing.
     let regex = self.expectWithoutRecoveryOrLeadingTrivia(.regexLiteralPattern)
-    let closeSlash = self.expectWithoutRecoveryOrLeadingTrivia(.regexSlash)
+    let closingSlash = self.expectWithoutRecoveryOrLeadingTrivia(.regexSlash)
 
     // Finally, parse a closing set of pounds.
-    let (unexpectedBeforeClosePounds, closePounds) = parsePoundDelimiter(.regexPoundDelimiter, matching: openPounds)
+    let (unexpectedBeforeClosePounds, closingPounds) = parsePoundDelimiter(.regexPoundDelimiter, matching: openingPounds)
 
     return RawRegexLiteralExprSyntax(
-      openingPounds: openPounds,
+      openingPounds: openingPounds,
       unexpectedBeforeSlash,
-      openingSlash: openSlash,
+      openingSlash: openingSlash,
       regex: regex,
-      closingSlash: closeSlash,
+      closingSlash: closingSlash,
       unexpectedBeforeClosePounds,
-      closingPounds: closePounds,
+      closingPounds: closingPounds,
       arena: self.arena
     )
   }

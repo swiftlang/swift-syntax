@@ -1511,7 +1511,7 @@ public let DECL_NODES: [Node] = [
     kind: .memberBlock,
     base: .syntax,
     nameForDiagnostics: "member block",
-    parserFunction: "parseMemberDeclList",
+    parserFunction: "parseMemberBlock",
     traits: ["Braced"],
     children: [
       Child(

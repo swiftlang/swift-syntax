@@ -65,11 +65,11 @@ extension Parser {
     let optLabel = self.parseOptionalStatementLabel()
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
     case (.for, let handle)?:
-      return label(self.parseForEachStatement(forHandle: handle), with: optLabel)
+      return label(self.parseForStatement(forHandle: handle), with: optLabel)
     case (.while, let handle)?:
       return label(self.parseWhileStatement(whileHandle: handle), with: optLabel)
     case (.repeat, let handle)?:
-      return label(self.parseRepeatWhileStatement(repeatHandle: handle), with: optLabel)
+      return label(self.parseRepeatStatement(repeatHandle: handle), with: optLabel)
 
     case (.if, let handle)?:
       let ifExpr = self.parseIfExpression(ifHandle: handle)
@@ -92,7 +92,7 @@ extension Parser {
     case (.continue, let handle)?:
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
     case (.fallthrough, let handle)?:
-      return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
+      return label(self.parseFallThroughStatement(fallthroughHandle: handle), with: optLabel)
     case (._forget, let handle)?, (.discard, let handle)?:  // NOTE: support for deprecated _forget
       return label(self.parseDiscardStatement(discardHandle: handle), with: optLabel)
     case (.return, let handle)?:
@@ -485,7 +485,7 @@ extension Parser {
 
 extension Parser {
   /// Parse a repeat-while statement.
-  mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatStmtSyntax {
+  mutating func parseRepeatStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
@@ -506,7 +506,7 @@ extension Parser {
 
 extension Parser {
   /// Parse a for-in statement.
-  mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForStmtSyntax {
+  mutating func parseForStatement(forHandle: RecoveryConsumptionHandle) -> RawForStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .keyword(.try))
     let awaitKeyword = self.consume(if: .keyword(.await))
@@ -776,7 +776,7 @@ extension Parser {
   }
 
   /// Parse a fallthrough statement.
-  mutating func parseFallthroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughtStmtSyntax {
+  mutating func parseFallThroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughtStmtSyntax {
     let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(fallthroughHandle)
     return RawFallThroughtStmtSyntax(
       unexpectedBeforeFallthroughKeyword,

@@ -17,11 +17,11 @@ extension Parser {
   mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
-      let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+      let repetitionPattern = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
           repeatKeyword: repeatKeyword,
-          repetitionPattern: type,
+          repetitionPattern: repetitionPattern,
           arena: self.arena
         )
       )

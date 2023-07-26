@@ -230,7 +230,7 @@ extension Parser {
       }
     case .backDeployed, ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
-        return .backDeployedArguments(parser.parseBackDeployedArguments())
+        return .backDeployedArguments(parser.parseBackDeployedAttributeArguments())
       }
     case .differentiable:
       return parseAttribute(argumentMode: .required) { parser in
@@ -246,7 +246,7 @@ extension Parser {
       }
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
-        return .specializeArguments(parser.parseSpecializeAttributeSpecList())
+        return .specializeArguments(parser.parseSpecializeAttributeArgumentList())
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in
@@ -254,7 +254,7 @@ extension Parser {
       }
     case ._dynamicReplacement:
       return parseAttribute(argumentMode: .required) { parser in
-        return .dynamicReplacementArguments(parser.parseDynamicReplacementArguments())
+        return .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments())
       }
     case ._documentation:
       return parseAttribute(argumentMode: .required) { parser in
@@ -310,11 +310,11 @@ extension Parser {
       }
     case ._originallyDefinedIn:
       return parseAttribute(argumentMode: .required) { parser in
-        return .originallyDefinedInArguments(parser.parseOriginallyDefinedInArguments())
+        return .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments())
       }
     case ._unavailableFromAsync:
       return parseAttribute(argumentMode: .optional) { parser in
-        return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncArguments())
+        return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncAttributeArguments())
       }
     case .attached:
       return parseAttribute(argumentMode: .customAttribute) { parser in
@@ -405,7 +405,7 @@ extension Parser {
     let parameters: RawDifferentiabilityWithRespectToArgumentSyntax?
     let parametersComma: RawTokenSyntax?
     if self.at(.keyword(.wrt)) {
-      parameters = self.parseDifferentiabilityParameters()
+      parameters = self.parseDifferentiabilityWithRespectToArgument()
       parametersComma = self.consume(if: .comma)
     } else {
       parameters = nil
@@ -428,14 +428,14 @@ extension Parser {
     )
   }
 
-  mutating func parseDifferentiabilityParameters() -> RawDifferentiabilityWithRespectToArgumentSyntax {
+  mutating func parseDifferentiabilityWithRespectToArgument() -> RawDifferentiabilityWithRespectToArgumentSyntax {
     let (unexpectedBeforeWrt, wrt) = self.expect(.keyword(.wrt))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
     guard let leftParen = self.consume(if: .leftParen) else {
       // If no opening '(' for parameter list, parse a single parameter.
       let param =
-        self.parseDifferentiabilityParameter()
+        self.parseDifferentiabilityArgument()
         ?? RawDifferentiabilityArgumentSyntax(
           parameter: missingToken(.identifier),
           trailingComma: nil,
@@ -454,7 +454,7 @@ extension Parser {
     var elements = [RawDifferentiabilityArgumentSyntax]()
     var loopProgress = LoopProgressCondition()
     while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
-      guard let param = self.parseDifferentiabilityParameter() else {
+      guard let param = self.parseDifferentiabilityArgument() else {
         break
       }
       elements.append(param)
@@ -478,7 +478,7 @@ extension Parser {
     )
   }
 
-  mutating func parseDifferentiabilityParameter() -> RawDifferentiabilityArgumentSyntax? {
+  mutating func parseDifferentiabilityArgument() -> RawDifferentiabilityArgumentSyntax? {
     switch self.at(anyIn: DifferentiabilityArgumentSyntax.ParameterOptions.self) {
     case (.identifier, let handle)?:
       let token = self.eat(handle)
@@ -570,7 +570,7 @@ extension Parser {
     let comma = self.consume(if: .comma)
     let parameters: RawDifferentiabilityWithRespectToArgumentSyntax?
     if comma != nil {
-      parameters = self.parseDifferentiabilityParameters()
+      parameters = self.parseDifferentiabilityWithRespectToArgument()
     } else {
       parameters = nil
     }
@@ -672,7 +672,7 @@ extension Parser {
       }
     }
   }
-  mutating func parseSpecializeAttributeSpecList() -> RawSpecializeAttributeArgumentListSyntax {
+  mutating func parseSpecializeAttributeArgumentList() -> RawSpecializeAttributeArgumentListSyntax {
     var elements = [RawSpecializeAttributeArgumentListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
@@ -910,13 +910,13 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseBackDeployedArguments() -> RawBackDeployedAttributeArgumentsSyntax {
+  mutating func parseBackDeployedAttributeArguments() -> RawBackDeployedAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     var elements: [RawPlatformVersionItemSyntax] = []
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let versionRestriction = self.parseAvailabilityMacro()
+      let versionRestriction = self.parsePlatformVersion()
       keepGoing = self.consume(if: .comma)
       elements.append(
         RawPlatformVersionItemSyntax(
@@ -967,7 +967,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseOriginallyDefinedInArguments() -> RawOriginallyDefinedInAttributeArgumentsSyntax {
+  mutating func parseOriginallyDefinedInAttributeArguments() -> RawOriginallyDefinedInAttributeArgumentsSyntax {
     let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let moduleName = self.parseStringLiteral()
@@ -976,7 +976,7 @@ extension Parser {
     var platforms: [RawPlatformVersionItemSyntax] = []
     var keepGoing: RawTokenSyntax?
     repeat {
-      let restriction = self.parseAvailabilityMacro(allowStarAsVersionNumber: true)
+      let restriction = self.parsePlatformVersion(allowStarAsVersionNumber: true)
       keepGoing = self.consume(if: .comma)
       platforms.append(
         RawPlatformVersionItemSyntax(
@@ -1018,7 +1018,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseDynamicReplacementArguments() -> RawDynamicReplacementAttributeArgumentsSyntax {
+  mutating func parseDynamicReplacementAttributeArguments() -> RawDynamicReplacementAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     let base: RawTokenSyntax
@@ -1044,7 +1044,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseUnavailableFromAsyncArguments() -> RawUnavailableFromAsyncAttributeArgumentsSyntax {
+  mutating func parseUnavailableFromAsyncAttributeArguments() -> RawUnavailableFromAsyncAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
 

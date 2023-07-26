@@ -203,7 +203,7 @@ extension Parser {
 
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
-      modifiers: self.parseModifierList()
+      modifiers: self.parseDeclModifierList()
     )
 
     // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
@@ -353,7 +353,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let memberBlock = self.parseMemberDeclList(introducer: extensionKeyword)
+    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -534,9 +534,9 @@ extension Parser {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
           // A conformance-requirement.
-          if let (layoutConstraint, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutSpecifierOptions.self) {
+          if let (layoutSpecifier, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutSpecifierOptions.self) {
             // Parse a layout constraint.
-            let constraint = self.eat(handle)
+            let specifier = self.eat(handle)
 
             let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
             let leftParen: RawTokenSyntax?
@@ -547,7 +547,7 @@ extension Parser {
             let rightParen: RawTokenSyntax?
 
             var hasArguments: Bool {
-              switch layoutConstraint {
+              switch layoutSpecifier {
               case ._Trivial,
                 ._TrivialAtMost:
                 return true
@@ -563,7 +563,7 @@ extension Parser {
 
             // Unlike the other layout constraints, _Trivial's argument list
             // is optional.
-            if hasArguments && (layoutConstraint != ._Trivial || self.at(.leftParen)) {
+            if hasArguments && (layoutSpecifier != ._Trivial || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
               size = self.expectWithoutRecovery(.integerLiteral)
               comma = self.consume(if: .comma)
@@ -587,7 +587,7 @@ extension Parser {
               RawLayoutRequirementSyntax(
                 type: firstType,
                 colon: colon,
-                layoutSpecifier: constraint,
+                layoutSpecifier: specifier,
                 unexpectedBeforeLeftParen,
                 leftParen: leftParen,
                 size: size,
@@ -667,7 +667,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseMemberDeclListItem() -> RawMemberBlockItemSyntax? {
+  mutating func parseMemberBlockItem() -> RawMemberBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberDeclListItem) {
       self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
@@ -715,14 +715,14 @@ extension Parser {
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseMemberDeclList(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
+  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
     var elements = [RawMemberBlockItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
         let newItemAtStartOfLine = self.atStartOfLine
-        guard let newElement = self.parseMemberDeclListItem() else {
+        guard let newElement = self.parseMemberBlockItem() else {
           break
         }
         if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
@@ -1361,11 +1361,11 @@ extension Parser {
     // protocol, but we parse and then reject it for better QoI.
     //
     //     set-name    ::= '(' identifier ')'
-    let parameter: RawAccessorParametersSyntax?
+    let parameters: RawAccessorParametersSyntax?
     if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      parameter = RawAccessorParametersSyntax(
+      parameters = RawAccessorParametersSyntax(
         leftParen: lparen,
         unexpectedBeforeName,
         name: name,
@@ -1374,7 +1374,7 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      parameter = nil
+      parameters = nil
     }
 
     let effectSpecifiers = self.parseAccessorEffectSpecifiers()
@@ -1386,7 +1386,7 @@ extension Parser {
       modifier: introducer.modifier,
       introducer.unexpectedBeforeToken,
       accessorSpecifier: introducer.token,
-      parameters: parameter,
+      parameters: parameters,
       effectSpecifiers: effectSpecifiers,
       initEffects: initEffects,
       body: body,

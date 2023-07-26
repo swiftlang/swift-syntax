@@ -22,7 +22,7 @@ extension Parser {
       repeat {
         let argument: RawAvailabilityArgumentSyntax.Argument
         if self.at(.identifier) {
-          argument = .availabilityVersionRestriction(self.parseAvailabilityMacro())
+          argument = .availabilityVersionRestriction(self.parsePlatformVersion())
         } else {
           argument = self.parseAvailabilitySpec()
         }
@@ -183,7 +183,7 @@ extension Parser {
       return .token(star)
     }
 
-    return .availabilityVersionRestriction(self.parseAvailabilityMacro())
+    return .availabilityVersionRestriction(self.parsePlatformVersion())
   }
 
   /// Parse an availability macro.
@@ -192,7 +192,7 @@ extension Parser {
   ///
   /// If `allowStarAsVersionNumber` is `true`, versions like `* 13.0` are accepted.
   /// This is to match the behavior of `@_originallyDefinedIn` in the old parser that accepted such versions
-  mutating func parseAvailabilityMacro(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
+  mutating func parsePlatformVersion(allowStarAsVersionNumber: Bool = false) -> RawPlatformVersionSyntax {
     let unexpectedBeforePlatform: RawUnexpectedNodesSyntax?
     let platform: RawTokenSyntax
     if allowStarAsVersionNumber, self.atContextualPunctuator("*") {

@@ -113,7 +113,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           let cases = SwitchCaseItemListSyntax {
             for n in SYNTAX_NODES where n.base == node.kind {
               SwitchCaseItemSyntax(
-                pattern: ExprPatternSyntax(
+                pattern: ExpressionPatternSyntax(
                   expression: ExprSyntax(".\(raw: n.varOrCaseName)")
                 )
               )

@@ -3287,7 +3287,7 @@ public struct StringLiteralSegmentListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: ExprSegmentSyntax) -> Self.Component {
+  public static func buildExpression(_ expression: ExpressionSegmentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   

@@ -2561,7 +2561,7 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExprSegmentSyntax {
+extension ExpressionSegmentSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenBackslashAndPounds")
   public var unexpectedBetweenBackslashAndDelimiter: UnexpectedNodesSyntax? {
     get {
@@ -7532,37 +7532,37 @@ extension SuppressedTypeSyntax {
 }
 
 extension SwitchCaseSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeUnknownAttribute")
+  @available(*, deprecated, renamed: "unexpectedBeforeAttribute")
   public var unexpectedBeforeUnknownAttr: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeUnknownAttribute
+      return unexpectedBeforeAttribute
     }
     set {
-      unexpectedBeforeUnknownAttribute = newValue
+      unexpectedBeforeAttribute = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unknownAttribute")
+  @available(*, deprecated, renamed: "attribute")
   public var unknownAttr: AttributeSyntax? {
     get {
-      return unknownAttribute
+      return attribute
     }
     set {
-      unknownAttribute = newValue
+      attribute = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenUnknownAttributeAndLabel")
+  @available(*, deprecated, renamed: "unexpectedBetweenAttributeAndLabel")
   public var unexpectedBetweenUnknownAttrAndLabel: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenUnknownAttributeAndLabel
+      return unexpectedBetweenAttributeAndLabel
     }
     set {
-      unexpectedBetweenUnknownAttributeAndLabel = newValue
+      unexpectedBetweenAttributeAndLabel = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with unknownAttribute argument(s).")
+  @available(*, deprecated, message: "Use an initializer with attribute argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7579,7 +7579,7 @@ extension SwitchCaseSyntax {
     self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeUnknownAttr, 
-        unknownAttribute: unknownAttr, 
+        attribute: unknownAttr, 
         unexpectedBetweenUnknownAttrAndLabel, 
         label: label, 
         unexpectedBetweenLabelAndStatements, 

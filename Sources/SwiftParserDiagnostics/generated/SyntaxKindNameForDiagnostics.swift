@@ -161,13 +161,13 @@ extension SyntaxKind {
       return "enum"
     case .exposeAttributeArguments:
       return "@_expose arguments"
-    case .exprPattern:
+    case .expressionPattern:
       return "pattern"
     case .expressionStmt:
       return "expression"
     case .extensionDecl:
       return "extension"
-    case .fallThroughtStmt:
+    case .fallThroughStmt:
       return "'fallthrough' statement"
     case .floatLiteralExpr:
       return "floating literal"

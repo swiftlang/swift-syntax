@@ -780,18 +780,18 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(ExprListSyntax.self)
   }
   
-  /// Visit a ``ExprPatternSyntax``.
+  /// Visit a ``ExpressionPatternSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ExprPatternSyntax) -> PatternSyntax {
+  open func visit(_ node: ExpressionPatternSyntax) -> PatternSyntax {
     return PatternSyntax(visitChildren(node))
   }
   
-  /// Visit a ``ExprSegmentSyntax``.
+  /// Visit a ``ExpressionSegmentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: ExprSegmentSyntax) -> ExprSegmentSyntax {
-    return Syntax(visitChildren(node)).cast(ExprSegmentSyntax.self)
+  open func visit(_ node: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
+    return Syntax(visitChildren(node)).cast(ExpressionSegmentSyntax.self)
   }
   
   /// Visit a ``ExpressionStmtSyntax``.
@@ -808,10 +808,10 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
   
-  /// Visit a ``FallThroughtStmtSyntax``.
+  /// Visit a ``FallThroughStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: FallThroughtStmtSyntax) -> StmtSyntax {
+  open func visit(_ node: FallThroughStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
   }
   
@@ -3462,8 +3462,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExprPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExprPatternSyntax(data)
+  private func visitImplExpressionPatternSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExpressionPatternSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -3476,8 +3476,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExprSegmentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExprSegmentSyntax(data)
+  private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ExpressionSegmentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -3518,8 +3518,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFallThroughtStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FallThroughtStmtSyntax(data)
+  private func visitImplFallThroughStmtSyntax(_ data: SyntaxData) -> Syntax {
+    let node = FallThroughStmtSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6195,16 +6195,16 @@ open class SyntaxRewriter {
       return visitImplExposeAttributeArgumentsSyntax
     case .exprList:
       return visitImplExprListSyntax
-    case .exprPattern:
-      return visitImplExprPatternSyntax
-    case .exprSegment:
-      return visitImplExprSegmentSyntax
+    case .expressionPattern:
+      return visitImplExpressionPatternSyntax
+    case .expressionSegment:
+      return visitImplExpressionSegmentSyntax
     case .expressionStmt:
       return visitImplExpressionStmtSyntax
     case .extensionDecl:
       return visitImplExtensionDeclSyntax
-    case .fallThroughtStmt:
-      return visitImplFallThroughtStmtSyntax
+    case .fallThroughStmt:
+      return visitImplFallThroughStmtSyntax
     case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax
     case .forStmt:
@@ -6761,16 +6761,16 @@ open class SyntaxRewriter {
       return visitImplExposeAttributeArgumentsSyntax(data)
     case .exprList:
       return visitImplExprListSyntax(data)
-    case .exprPattern:
-      return visitImplExprPatternSyntax(data)
-    case .exprSegment:
-      return visitImplExprSegmentSyntax(data)
+    case .expressionPattern:
+      return visitImplExpressionPatternSyntax(data)
+    case .expressionSegment:
+      return visitImplExpressionSegmentSyntax(data)
     case .expressionStmt:
       return visitImplExpressionStmtSyntax(data)
     case .extensionDecl:
       return visitImplExtensionDeclSyntax(data)
-    case .fallThroughtStmt:
-      return visitImplFallThroughtStmtSyntax(data)
+    case .fallThroughStmt:
+      return visitImplFallThroughStmtSyntax(data)
     case .floatLiteralExpr:
       return visitImplFloatLiteralExprSyntax(data)
     case .forStmt:

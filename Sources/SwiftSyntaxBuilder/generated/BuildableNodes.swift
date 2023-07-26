@@ -488,7 +488,7 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExprSegmentSyntax {
+extension ExpressionSegmentSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
@@ -1379,9 +1379,9 @@ extension SwitchCaseSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeUnknownAttribute: UnexpectedNodesSyntax? = nil, 
-      unknownAttribute: AttributeSyntax? = nil, 
-      unexpectedBetweenUnknownAttributeAndLabel: UnexpectedNodesSyntax? = nil, 
+      unexpectedBeforeAttribute: UnexpectedNodesSyntax? = nil, 
+      attribute: AttributeSyntax? = nil, 
+      unexpectedBetweenAttributeAndLabel: UnexpectedNodesSyntax? = nil, 
       label: Label, 
       unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterStatements: UnexpectedNodesSyntax? = nil, 
@@ -1390,9 +1390,9 @@ extension SwitchCaseSyntax {
     ) rethrows {
     try self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeUnknownAttribute, 
-        unknownAttribute: unknownAttribute, 
-        unexpectedBetweenUnknownAttributeAndLabel, 
+        unexpectedBeforeAttribute, 
+        attribute: attribute, 
+        unexpectedBetweenAttributeAndLabel, 
         label: label, 
         unexpectedBetweenLabelAndStatements, 
         statements: statementsBuilder(), 

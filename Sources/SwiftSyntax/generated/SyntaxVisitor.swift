@@ -1234,28 +1234,28 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ExprListSyntax) {
   }
   
-  /// Visiting ``ExprPatternSyntax`` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ExprPatternSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExprPatternSyntax`` and its descendants.
+  /// The function called after visiting ``ExpressionPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ExprPatternSyntax) {
+  open func visitPost(_ node: ExpressionPatternSyntax) {
   }
   
-  /// Visiting ``ExprSegmentSyntax`` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ExprSegmentSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ExprSegmentSyntax`` and its descendants.
+  /// The function called after visiting ``ExpressionSegmentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ExprSegmentSyntax) {
+  open func visitPost(_ node: ExpressionSegmentSyntax) {
   }
   
   /// Visiting ``ExpressionStmtSyntax`` specifically.
@@ -1282,16 +1282,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ExtensionDeclSyntax) {
   }
   
-  /// Visiting ``FallThroughtStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: FallThroughtStmtSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: FallThroughStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FallThroughtStmtSyntax`` and its descendants.
+  /// The function called after visiting ``FallThroughStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: FallThroughtStmtSyntax) {
+  open func visitPost(_ node: FallThroughStmtSyntax) {
   }
   
   /// Visiting ``FloatLiteralExprSyntax`` specifically.
@@ -4483,8 +4483,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExprPatternSyntax(_ data: SyntaxData) {
-    let node = ExprPatternSyntax(data)
+  private func visitImplExpressionPatternSyntax(_ data: SyntaxData) {
+    let node = ExpressionPatternSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4494,8 +4494,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExprSegmentSyntax(_ data: SyntaxData) {
-    let node = ExprSegmentSyntax(data)
+  private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) {
+    let node = ExpressionSegmentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4527,8 +4527,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFallThroughtStmtSyntax(_ data: SyntaxData) {
-    let node = FallThroughtStmtSyntax(data)
+  private func visitImplFallThroughStmtSyntax(_ data: SyntaxData) {
+    let node = FallThroughStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6647,16 +6647,16 @@ open class SyntaxVisitor {
       visitImplExposeAttributeArgumentsSyntax(data)
     case .exprList:
       visitImplExprListSyntax(data)
-    case .exprPattern:
-      visitImplExprPatternSyntax(data)
-    case .exprSegment:
-      visitImplExprSegmentSyntax(data)
+    case .expressionPattern:
+      visitImplExpressionPatternSyntax(data)
+    case .expressionSegment:
+      visitImplExpressionSegmentSyntax(data)
     case .expressionStmt:
       visitImplExpressionStmtSyntax(data)
     case .extensionDecl:
       visitImplExtensionDeclSyntax(data)
-    case .fallThroughtStmt:
-      visitImplFallThroughtStmtSyntax(data)
+    case .fallThroughStmt:
+      visitImplFallThroughStmtSyntax(data)
     case .floatLiteralExpr:
       visitImplFloatLiteralExprSyntax(data)
     case .forStmt:

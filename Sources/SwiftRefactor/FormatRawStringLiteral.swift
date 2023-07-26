@@ -35,7 +35,7 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
     var maximumHashes = 0
     for segment in lit.segments {
       switch segment {
-      case .exprSegment(let expr):
+      case .expressionSegment(let expr):
         if let rawStringDelimiter = expr.pounds {
           // Pick up any delimiters in interpolation segments \#...#(...)
           maximumHashes = max(maximumHashes, rawStringDelimiter.text.longestRun(of: "#"))

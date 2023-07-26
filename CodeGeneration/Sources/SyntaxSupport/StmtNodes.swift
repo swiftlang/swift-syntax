@@ -261,7 +261,7 @@ public let STMT_NODES: [Node] = [
 
   // fallthrough-stmt -> 'fallthrough' ';'?
   Node(
-    kind: .fallThroughtStmt,
+    kind: .fallThroughStmt,
     base: .stmt,
     nameForDiagnostics: "'fallthrough' statement",
     children: [

@@ -1132,12 +1132,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawExprSyntax.self))
     }
-  case .exprPattern:
+  case .expressionPattern:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawExprSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-  case .exprSegment:
+  case .expressionSegment:
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.backslash)]))
@@ -1172,7 +1172,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawMemberBlockSyntax.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-  case .fallThroughtStmt:
+  case .fallThroughStmt:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("fallthrough")]))
@@ -2326,7 +2326,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
           verify(element, as: RawStringSegmentSyntax.self),
-          verify(element, as: RawExprSegmentSyntax.self)])
+          verify(element, as: RawExpressionSegmentSyntax.self)])
     }
   case .stringSegment:
     assert(layout.count == 3)

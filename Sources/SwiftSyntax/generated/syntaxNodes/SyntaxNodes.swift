@@ -940,7 +940,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AttributeListSyntax``
-///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unknownAttribute``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Arguments: SyntaxChildChoices {
     case `argumentList`(TupleExprElementListSyntax)
@@ -8562,7 +8562,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - ExprSegmentSyntax
+// MARK: - ExpressionSegmentSyntax
 
 /// ### Children
 /// 
@@ -8575,21 +8575,21 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``StringLiteralSegmentListSyntax``
-public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .exprSegment else {
+    guard node.raw.kind == .expressionSegment else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExprSegmentSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``ExpressionSegmentSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .exprSegment)
+    precondition(data.raw.kind == .expressionSegment)
     self._syntaxNode = Syntax(data)
   }
   
@@ -8641,7 +8641,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.exprSegment,
+        kind: SyntaxKind.expressionSegment,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -8658,7 +8658,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8667,7 +8667,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8676,7 +8676,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8685,7 +8685,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8694,7 +8694,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8703,7 +8703,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8712,7 +8712,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8721,7 +8721,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return TupleExprElementListSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8731,7 +8731,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `expressions` collection.
   /// - returns: A copy of the receiver with the provided `Expression`
   ///            appended to its `expressions` collection.
-  public func addExpression(_ element: TupleExprElementSyntax) -> ExprSegmentSyntax {
+  public func addExpression(_ element: TupleExprElementSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[7] {
@@ -8746,7 +8746,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
         rawNodeArena: arena, 
         allocationArena: arena
       )
-    return ExprSegmentSyntax(newData)
+    return ExpressionSegmentSyntax(newData)
   }
   
   public var unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? {
@@ -8754,7 +8754,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -8763,7 +8763,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8772,7 +8772,7 @@ public struct ExprSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprSegmentSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionSegmentSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -17749,7 +17749,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `unknownAttribute`: ``AttributeSyntax``?
+///  - `attribute`: ``AttributeSyntax``?
 ///  - `label`: (``SwitchDefaultLabelSyntax`` | ``SwitchCaseLabelSyntax``)
 ///  - `statements`: ``CodeBlockItemListSyntax``
 ///
@@ -17818,12 +17818,13 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - attribute: The `@unknown` attribute of a default label, if present.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeUnknownAttribute: UnexpectedNodesSyntax? = nil,
-      unknownAttribute: AttributeSyntax? = nil,
-      _ unexpectedBetweenUnknownAttributeAndLabel: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeAttribute: UnexpectedNodesSyntax? = nil,
+      attribute: AttributeSyntax? = nil,
+      _ unexpectedBetweenAttributeAndLabel: UnexpectedNodesSyntax? = nil,
       label: Label,
       _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
@@ -17834,18 +17835,18 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeUnknownAttribute, 
-            unknownAttribute, 
-            unexpectedBetweenUnknownAttributeAndLabel, 
+            unexpectedBeforeAttribute, 
+            attribute, 
+            unexpectedBetweenAttributeAndLabel, 
             label, 
             unexpectedBetweenLabelAndStatements, 
             statements, 
             unexpectedAfterStatements
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeUnknownAttribute?.raw, 
-          unknownAttribute?.raw, 
-          unexpectedBetweenUnknownAttributeAndLabel?.raw, 
+          unexpectedBeforeAttribute?.raw, 
+          attribute?.raw, 
+          unexpectedBetweenAttributeAndLabel?.raw, 
           label.raw, 
           unexpectedBetweenLabelAndStatements?.raw, 
           statements.raw, 
@@ -17864,7 +17865,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeUnknownAttribute: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeAttribute: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17873,7 +17874,8 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unknownAttribute: AttributeSyntax? {
+  /// The `@unknown` attribute of a default label, if present.
+  public var attribute: AttributeSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(AttributeSyntax.init)
     }
@@ -17882,7 +17884,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenUnknownAttributeAndLabel: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributeAndLabel: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -17953,9 +17955,9 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeUnknownAttribute, 
-          \Self.unknownAttribute, 
-          \Self.unexpectedBetweenUnknownAttributeAndLabel, 
+          \Self.unexpectedBeforeAttribute, 
+          \Self.attribute, 
+          \Self.unexpectedBetweenAttributeAndLabel, 
           \Self.label, 
           \Self.unexpectedBetweenLabelAndStatements, 
           \Self.statements, 

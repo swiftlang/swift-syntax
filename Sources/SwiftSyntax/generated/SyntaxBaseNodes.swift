@@ -368,7 +368,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .exprPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -380,7 +380,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .exprPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       break
     default:
       preconditionFailure("Unable to create PatternSyntax from \(data.raw.kind)")
@@ -416,7 +416,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .choices([
-          .node(ExprPatternSyntax.self),
+          .node(ExpressionPatternSyntax.self),
           .node(IdentifierPatternSyntax.self),
           .node(IsTypePatternSyntax.self),
           .node(MissingPatternSyntax.self),
@@ -486,7 +486,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughtStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -498,7 +498,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughtStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
       preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -540,7 +540,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(DiscardStmtSyntax.self),
           .node(DoStmtSyntax.self),
           .node(ExpressionStmtSyntax.self),
-          .node(FallThroughtStmtSyntax.self),
+          .node(FallThroughStmtSyntax.self),
           .node(ForStmtSyntax.self),
           .node(GuardStmtSyntax.self),
           .node(LabeledStmtSyntax.self),
@@ -787,11 +787,11 @@ extension Syntax {
           .node(EnumDeclSyntax.self),
           .node(ExposeAttributeArgumentsSyntax.self),
           .node(ExprListSyntax.self),
-          .node(ExprPatternSyntax.self),
-          .node(ExprSegmentSyntax.self),
+          .node(ExpressionPatternSyntax.self),
+          .node(ExpressionSegmentSyntax.self),
           .node(ExpressionStmtSyntax.self),
           .node(ExtensionDeclSyntax.self),
-          .node(FallThroughtStmtSyntax.self),
+          .node(FallThroughStmtSyntax.self),
           .node(FloatLiteralExprSyntax.self),
           .node(ForStmtSyntax.self),
           .node(ForceUnwrapExprSyntax.self),

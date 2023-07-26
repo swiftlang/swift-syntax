@@ -128,11 +128,11 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case exposeAttributeArguments
   case exprList
   case expr
-  case exprPattern
-  case exprSegment
+  case expressionPattern
+  case expressionSegment
   case expressionStmt
   case extensionDecl
-  case fallThroughtStmt
+  case fallThroughStmt
   case floatLiteralExpr
   case forStmt
   case forceUnwrapExpr
@@ -401,8 +401,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .differentiabilityArguments: return "differentiabilityParams"
     case .differentiabilityArgument: return "differentiabilityParam"
     case .dynamicReplacementAttributeArguments: return "dynamicReplacementArguments"
-    case .exprPattern: return "expressionPattern"
-    case .exprSegment: return "expressionSegment"
     case .forceUnwrapExpr: return "forcedValueExpr"
     case .forStmt: return "forInStmt"
     case .labeledSpecializeArgument: return "labeledSpecializeEntry"
@@ -432,7 +430,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .switchCaseItem: return "caseItem"
     case .closureCaptureClause: return "closureCaptureSignature"
     case .designatedType: return "designatedTypeElement"
-    case .fallThroughtStmt: return "fallthroughStmt"
+    case .fallThroughStmt: return "fallthroughStmt"
     case .patternExpr: return "unresolvedPatternExpr"
     case .subscriptCallExpr: return "subscriptExpr"
     case .unresolvedInfixOperatorExpr: return "binaryOperatorExpr"

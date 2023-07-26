@@ -1627,7 +1627,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.unknownAttribute?.isMissingAllTokens != false && node.label.isMissingAllTokens {
+    if node.attribute?.isMissingAllTokens != false && node.label.isMissingAllTokens {
       addDiagnostic(
         node.statements,
         .allStatementsInSwitchMustBeCoveredByCase,

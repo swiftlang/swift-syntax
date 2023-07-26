@@ -776,9 +776,9 @@ extension Parser {
   }
 
   /// Parse a fallthrough statement.
-  mutating func parseFallThroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughtStmtSyntax {
+  mutating func parseFallThroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughStmtSyntax {
     let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(fallthroughHandle)
-    return RawFallThroughtStmtSyntax(
+    return RawFallThroughStmtSyntax(
       unexpectedBeforeFallthroughKeyword,
       fallthroughKeyword: fallthroughKeyword,
       arena: self.arena

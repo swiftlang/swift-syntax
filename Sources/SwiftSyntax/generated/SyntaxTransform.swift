@@ -519,15 +519,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExprListSyntax) -> ResultType
   
-  /// Visiting ``ExprPatternSyntax`` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExprPatternSyntax) -> ResultType
+  func visit(_ node: ExpressionPatternSyntax) -> ResultType
   
-  /// Visiting ``ExprSegmentSyntax`` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ExprSegmentSyntax) -> ResultType
+  func visit(_ node: ExpressionSegmentSyntax) -> ResultType
   
   /// Visiting ``ExpressionStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -539,10 +539,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExtensionDeclSyntax) -> ResultType
   
-  /// Visiting ``FallThroughtStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FallThroughtStmtSyntax) -> ResultType
+  func visit(_ node: FallThroughStmtSyntax) -> ResultType
   
   /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -2115,17 +2115,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ExprPatternSyntax`` specifically.
+  /// Visiting ``ExpressionPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExprPatternSyntax) -> ResultType {
+  public func visit(_ node: ExpressionPatternSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ExprSegmentSyntax`` specifically.
+  /// Visiting ``ExpressionSegmentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ExprSegmentSyntax) -> ResultType {
+  public func visit(_ node: ExpressionSegmentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2143,10 +2143,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``FallThroughtStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FallThroughtStmtSyntax) -> ResultType {
+  public func visit(_ node: FallThroughStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3565,15 +3565,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .exprList(let derived):
       return visit(derived)
-    case .exprPattern(let derived):
+    case .expressionPattern(let derived):
       return visit(derived)
-    case .exprSegment(let derived):
+    case .expressionSegment(let derived):
       return visit(derived)
     case .expressionStmt(let derived):
       return visit(derived)
     case .extensionDecl(let derived):
       return visit(derived)
-    case .fallThroughtStmt(let derived):
+    case .fallThroughStmt(let derived):
       return visit(derived)
     case .floatLiteralExpr(let derived):
       return visit(derived)

@@ -111,14 +111,8 @@ public typealias EffectsArgumentsSyntax = EffectsAttributeArgumentListSyntax
 @available(*, deprecated, renamed: "EnumCaseParameterClauseSyntax")
 public typealias EnumCaseAssociatedValueSyntax = EnumCaseParameterClauseSyntax
 
-@available(*, deprecated, renamed: "ExprPatternSyntax")
-public typealias ExpressionPatternSyntax = ExprPatternSyntax
-
-@available(*, deprecated, renamed: "ExprSegmentSyntax")
-public typealias ExpressionSegmentSyntax = ExprSegmentSyntax
-
-@available(*, deprecated, renamed: "FallThroughtStmtSyntax")
-public typealias FallthroughStmtSyntax = FallThroughtStmtSyntax
+@available(*, deprecated, renamed: "FallThroughStmtSyntax")
+public typealias FallthroughStmtSyntax = FallThroughStmtSyntax
 
 @available(*, deprecated, renamed: "ForStmtSyntax")
 public typealias ForInStmtSyntax = ForStmtSyntax
@@ -346,16 +340,8 @@ public extension SyntaxKind {
     return .enumCaseParameterClause
   }
   
-  static var expressionPattern: Self {
-    return .exprPattern
-  }
-  
-  static var expressionSegment: Self {
-    return .exprSegment
-  }
-  
   static var fallthroughStmt: Self {
-    return .fallThroughtStmt
+    return .fallThroughStmt
   }
   
   static var forInStmt: Self {

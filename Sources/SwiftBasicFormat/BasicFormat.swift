@@ -109,7 +109,7 @@ open class BasicFormat: SyntaxRewriter {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
-      if ancestor.is(ExprSegmentSyntax.self) {
+      if ancestor.is(ExpressionSegmentSyntax.self) {
         return true
       }
     }

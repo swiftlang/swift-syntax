@@ -248,7 +248,7 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
         StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
-        ExprSegmentSyntax(
+        ExpressionSegmentSyntax(
           expressions: TupleExprElementListSyntax {
             TupleExprElementSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
           }
@@ -367,8 +367,8 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
       StringLiteralExprSyntax(
         openingQuote: .multilineStringQuoteToken(),
         segments: StringLiteralSegmentListSyntax {
-          .exprSegment(
-            ExprSegmentSyntax(
+          .expressionSegment(
+            ExpressionSegmentSyntax(
               expressions: TupleExprElementListSyntax {
                 TupleExprElementSyntax(
                   expression: StringLiteralExprSyntax(

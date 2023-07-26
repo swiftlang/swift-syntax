@@ -216,7 +216,7 @@ public class SyntaxCreationTests: XCTestCase {
   }
 
   func testTriviaInInitializxerDoesNotOverrideFirstNode() {
-    let node = ExprPatternSyntax(
+    let node = ExpressionPatternSyntax(
       leadingTrivia: .lineComment("// Outer leading") + .newline,
       expression: IntegerLiteralExprSyntax(
         leadingTrivia: .lineComment("// Inner leading") + .newline,

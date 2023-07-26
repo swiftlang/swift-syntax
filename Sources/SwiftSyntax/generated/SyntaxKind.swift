@@ -115,11 +115,11 @@ public enum SyntaxKind: CaseIterable {
   case enumDecl
   case exposeAttributeArguments
   case exprList
-  case exprPattern
-  case exprSegment
+  case expressionPattern
+  case expressionSegment
   case expressionStmt
   case extensionDecl
-  case fallThroughtStmt
+  case fallThroughStmt
   case floatLiteralExpr
   case forStmt
   case forceUnwrapExpr
@@ -620,16 +620,16 @@ public enum SyntaxKind: CaseIterable {
       return ExposeAttributeArgumentsSyntax.self
     case .exprList:
       return ExprListSyntax.self
-    case .exprPattern:
-      return ExprPatternSyntax.self
-    case .exprSegment:
-      return ExprSegmentSyntax.self
+    case .expressionPattern:
+      return ExpressionPatternSyntax.self
+    case .expressionSegment:
+      return ExpressionSegmentSyntax.self
     case .expressionStmt:
       return ExpressionStmtSyntax.self
     case .extensionDecl:
       return ExtensionDeclSyntax.self
-    case .fallThroughtStmt:
-      return FallThroughtStmtSyntax.self
+    case .fallThroughStmt:
+      return FallThroughStmtSyntax.self
     case .floatLiteralExpr:
       return FloatLiteralExprSyntax.self
     case .forStmt:

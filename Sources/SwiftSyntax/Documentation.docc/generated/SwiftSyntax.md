@@ -149,7 +149,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PatternSyntax>
 - <doc:SwiftSyntax/PatternSyntaxProtocol>
 - <doc:SwiftSyntax/MissingPatternSyntax>
-- <doc:SwiftSyntax/ExprPatternSyntax>
+- <doc:SwiftSyntax/ExpressionPatternSyntax>
 - <doc:SwiftSyntax/IdentifierPatternSyntax>
 - <doc:SwiftSyntax/IsTypePatternSyntax>
 - <doc:SwiftSyntax/TuplePatternSyntax>
@@ -167,7 +167,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/DiscardStmtSyntax>
 - <doc:SwiftSyntax/DoStmtSyntax>
 - <doc:SwiftSyntax/ExpressionStmtSyntax>
-- <doc:SwiftSyntax/FallThroughtStmtSyntax>
+- <doc:SwiftSyntax/FallThroughStmtSyntax>
 - <doc:SwiftSyntax/ForStmtSyntax>
 - <doc:SwiftSyntax/GuardStmtSyntax>
 - <doc:SwiftSyntax/LabeledStmtSyntax>
@@ -286,7 +286,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/GenericWhereClauseSyntax>
 - <doc:SwiftSyntax/StringLiteralSegmentListSyntax>
 - <doc:SwiftSyntax/StringSegmentSyntax>
-- <doc:SwiftSyntax/ExprSegmentSyntax>
+- <doc:SwiftSyntax/ExpressionSegmentSyntax>
 - <doc:SwiftSyntax/SwitchCaseItemListSyntax>
 - <doc:SwiftSyntax/SwitchCaseItemSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>

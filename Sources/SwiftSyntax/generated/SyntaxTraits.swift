@@ -659,7 +659,7 @@ extension EnumCaseParameterSyntax: WithTrailingCommaSyntax, WithModifiersSyntax 
 
 extension EnumDeclSyntax: DeclGroupSyntax, NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
-extension ExprSegmentSyntax: ParenthesizedSyntax {}
+extension ExpressionSegmentSyntax: ParenthesizedSyntax {}
 
 extension ExtensionDeclSyntax: DeclGroupSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 

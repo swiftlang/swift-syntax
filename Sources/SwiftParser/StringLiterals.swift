@@ -22,9 +22,9 @@ fileprivate class StringLiteralExpressionIndentationChecker {
     self.arena = arena
   }
 
-  func checkIndentation(of expressionSegment: RawExprSegmentSyntax) -> RawExprSegmentSyntax? {
+  func checkIndentation(of expressionSegment: RawExpressionSegmentSyntax) -> RawExpressionSegmentSyntax? {
     if let rewrittenSegment = self.visit(node: RawSyntax(expressionSegment)) {
-      return rewrittenSegment.as(RawExprSegmentSyntax.self)
+      return rewrittenSegment.as(RawExpressionSegmentSyntax.self)
     } else {
       return nil
     }
@@ -215,7 +215,7 @@ extension Parser {
       } else {
         return false
       }
-    case .exprSegment:
+    case .expressionSegment:
       return false
     case nil:
       return openQuoteHasTrailingNewline
@@ -275,11 +275,11 @@ extension Parser {
           || (segment.content.trailingTriviaPieces.last?.isNewline ?? false)
 
         middleSegments[index] = .stringSegment(segment)
-      case .exprSegment(let segment):
+      case .expressionSegment(let segment):
         isSegmentOnNewLine = segment.rightParen.trailingTriviaPieces.contains(where: { $0.isNewline })
 
         if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
-          middleSegments[index] = .exprSegment(rewrittenSegment)
+          middleSegments[index] = .expressionSegment(rewrittenSegment)
         }
       }
     }
@@ -531,8 +531,8 @@ extension Parser {
           self.lexemes.perform(stateTransition: .pop, currentToken: &self.currentToken)
         }
         segments.append(
-          .exprSegment(
-            RawExprSegmentSyntax(
+          .expressionSegment(
+            RawExpressionSegmentSyntax(
               backslash: backslash,
               unexpectedBeforeDelimiter,
               pounds: delimiter,

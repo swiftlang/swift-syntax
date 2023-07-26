@@ -292,7 +292,7 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'RawStringPoundDelimiter'"
         ),
         ValidationFailure(
-          node: .exprSegment,
+          node: .expressionSegment,
           message: "child 'Pounds' has a token as its only token choice and should thus be named 'RawStringPoundDelimiter'"
         ),
 

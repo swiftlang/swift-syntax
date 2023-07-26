@@ -1548,7 +1548,7 @@ final class StatementExpressionTests: XCTestCase {
             .init(
               label: .case(
                 .init(caseItems: [
-                  .init(pattern: ExprPatternSyntax(expression: BooleanLiteralExprSyntax(true)))
+                  .init(pattern: ExpressionPatternSyntax(expression: BooleanLiteralExprSyntax(true)))
                 ])
               ),
               statements: [
@@ -1560,7 +1560,7 @@ final class StatementExpressionTests: XCTestCase {
             .init(
               label: .case(
                 .init(caseItems: [
-                  .init(pattern: ExprPatternSyntax(expression: BooleanLiteralExprSyntax(false)))
+                  .init(pattern: ExpressionPatternSyntax(expression: BooleanLiteralExprSyntax(false)))
                 ])
               ),
               statements: [

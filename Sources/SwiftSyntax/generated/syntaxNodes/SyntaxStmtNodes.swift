@@ -756,26 +756,26 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - FallThroughtStmtSyntax
+// MARK: - FallThroughStmtSyntax
 
 /// ### Children
 /// 
 ///  - `fallthroughKeyword`: `'fallthrough'`
-public struct FallThroughtStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .fallThroughtStmt else {
+    guard node.raw.kind == .fallThroughStmt else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FallThroughtStmtSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``FallThroughStmtSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .fallThroughtStmt)
+    precondition(data.raw.kind == .fallThroughStmt)
     self._syntaxNode = Syntax(data)
   }
   
@@ -795,7 +795,7 @@ public struct FallThroughtStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeFallthroughKeyword?.raw, fallthroughKeyword.raw, unexpectedAfterFallthroughKeyword?.raw]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.fallThroughtStmt,
+        kind: SyntaxKind.fallThroughStmt,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -812,7 +812,7 @@ public struct FallThroughtStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FallThroughtStmtSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = FallThroughStmtSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -821,7 +821,7 @@ public struct FallThroughtStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FallThroughtStmtSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = FallThroughStmtSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -830,7 +830,7 @@ public struct FallThroughtStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = FallThroughtStmtSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = FallThroughStmtSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   

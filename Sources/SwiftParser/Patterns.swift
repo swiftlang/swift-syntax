@@ -252,7 +252,7 @@ extension Parser {
         return RawPatternSyntax(pat.pattern)
       }
       let expr = RawExprSyntax(patternSyntax)
-      return RawPatternSyntax(RawExprPatternSyntax(expression: expr, arena: self.arena))
+      return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
     }
   }
 }

@@ -726,7 +726,7 @@ public let EXPR_NODES: [Node] = [
 
   // expression segment in a string interpolation expression.
   Node(
-    kind: .exprSegment,
+    kind: .expressionSegment,
     base: .syntax,
     nameForDiagnostics: nil,
     traits: [
@@ -1514,7 +1514,7 @@ public let EXPR_NODES: [Node] = [
     kind: .stringLiteralSegmentList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.stringSegment, .exprSegment]
+    elementChoices: [.stringSegment, .expressionSegment]
   ),
 
   // string literal segment in a string interpolation expression.
@@ -1624,9 +1624,10 @@ public let EXPR_NODES: [Node] = [
     traits: ["WithStatements"],
     children: [
       Child(
-        name: "UnknownAttribute",
+        name: "Attribute",
         deprecatedName: "UnknownAttr",
         kind: .node(kind: .attribute),
+        documentation: "The `@unknown` attribute of a default label, if present.",
         isOptional: true
       ),
       Child(

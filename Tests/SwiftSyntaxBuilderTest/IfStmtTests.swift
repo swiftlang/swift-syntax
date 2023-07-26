@@ -183,7 +183,7 @@ final class IfStmtTests: XCTestCase {
     let buildable = IfExprSyntax(
       conditions: ConditionElementListSyntax {
         MatchingPatternConditionSyntax(
-          pattern: ExprPatternSyntax(expression: MemberAccessExprSyntax(name: "x")),
+          pattern: ExpressionPatternSyntax(expression: MemberAccessExprSyntax(name: "x")),
           initializer: InitializerClauseSyntax(value: ExprSyntax("y"))
         )
       }

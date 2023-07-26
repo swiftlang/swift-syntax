@@ -2196,7 +2196,7 @@ extension Parser {
         elements.append(
           .switchCase(
             RawSwitchCaseSyntax(
-              unknownAttribute: nil,
+              attribute: nil,
               label: .case(
                 RawSwitchCaseLabelSyntax(
                   caseKeyword: missingToken(.case),
@@ -2290,7 +2290,7 @@ extension Parser {
     let statements = parseSwitchCaseBody()
 
     return RawSwitchCaseSyntax(
-      unknownAttribute: unknownAttr,
+      attribute: unknownAttr,
       label: label,
       statements: statements,
       arena: self.arena

@@ -138,7 +138,7 @@ extension ParseDiagnosticsGenerator {
   ) -> Bool {
     let isTooMany = invalidToken.trimmedLength > missingToken.trimmedLength
     let message: DiagnosticMessage
-    if missingToken.parent?.is(ExprSegmentSyntax.self) == true {
+    if missingToken.parent?.is(ExpressionSegmentSyntax.self) == true {
       message = .tooManyRawStringDelimitersToStartInterpolation
     } else {
       let parent = missingToken.parent!

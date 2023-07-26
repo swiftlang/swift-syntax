@@ -36,7 +36,7 @@ extension StringLiteralExprSyntax {
           delimiterLength: delimiterLength,
           to: &result
         )
-      case .exprSegment:
+      case .expressionSegment:
         // Bail out if there are any interpolation segments.
         return nil
       }

@@ -13,7 +13,7 @@
 public let PATTERN_NODES: [Node] = [
   // expr-pattern -> expr
   Node(
-    kind: .exprPattern,
+    kind: .expressionPattern,
     base: .pattern,
     nameForDiagnostics: "pattern",
     children: [

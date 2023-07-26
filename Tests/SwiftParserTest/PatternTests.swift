@@ -20,7 +20,7 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        pattern: ExprPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
               base: GenericSpecializationExprSyntax(
@@ -74,7 +74,7 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        pattern: ExprPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: TupleExprSyntax(
             elements: .init([
               .init(
@@ -126,7 +126,7 @@ final class PatternTests: XCTestCase {
     Syntax(
       ValueBindingPatternSyntax(
         bindingSpecifier: .keyword(.let),
-        pattern: ExprPatternSyntax(
+        pattern: ExpressionPatternSyntax(
           expression: SubscriptCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
             leftSquare: .leftSquareToken(),

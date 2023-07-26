@@ -12,26 +12,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-// MARK: - ExprPatternSyntax
+// MARK: - ExpressionPatternSyntax
 
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
-public struct ExprPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .exprPattern else {
+    guard node.raw.kind == .expressionPattern else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExprPatternSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``ExpressionPatternSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .exprPattern)
+    precondition(data.raw.kind == .expressionPattern)
     self._syntaxNode = Syntax(data)
   }
   
@@ -51,7 +51,7 @@ public struct ExprPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeExpression?.raw, expression.raw, unexpectedAfterExpression?.raw]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.exprPattern,
+        kind: SyntaxKind.expressionPattern,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -68,7 +68,7 @@ public struct ExprPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -77,7 +77,7 @@ public struct ExprPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExprPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -86,7 +86,7 @@ public struct ExprPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = ExprPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = ExpressionPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   

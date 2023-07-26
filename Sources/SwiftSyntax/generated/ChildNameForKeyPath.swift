@@ -1221,33 +1221,33 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "cxxName"
   case \ExposeAttributeArgumentsSyntax.unexpectedAfterCxxName:
     return "unexpectedAfterCxxName"
-  case \ExprPatternSyntax.unexpectedBeforeExpression:
+  case \ExpressionPatternSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
-  case \ExprPatternSyntax.expression:
+  case \ExpressionPatternSyntax.expression:
     return "expression"
-  case \ExprPatternSyntax.unexpectedAfterExpression:
+  case \ExpressionPatternSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \ExprSegmentSyntax.unexpectedBeforeBackslash:
+  case \ExpressionSegmentSyntax.unexpectedBeforeBackslash:
     return "unexpectedBeforeBackslash"
-  case \ExprSegmentSyntax.backslash:
+  case \ExpressionSegmentSyntax.backslash:
     return "backslash"
-  case \ExprSegmentSyntax.unexpectedBetweenBackslashAndPounds:
+  case \ExpressionSegmentSyntax.unexpectedBetweenBackslashAndPounds:
     return "unexpectedBetweenBackslashAndPounds"
-  case \ExprSegmentSyntax.pounds:
+  case \ExpressionSegmentSyntax.pounds:
     return "pounds"
-  case \ExprSegmentSyntax.unexpectedBetweenPoundsAndLeftParen:
+  case \ExpressionSegmentSyntax.unexpectedBetweenPoundsAndLeftParen:
     return "unexpectedBetweenPoundsAndLeftParen"
-  case \ExprSegmentSyntax.leftParen:
+  case \ExpressionSegmentSyntax.leftParen:
     return "leftParen"
-  case \ExprSegmentSyntax.unexpectedBetweenLeftParenAndExpressions:
+  case \ExpressionSegmentSyntax.unexpectedBetweenLeftParenAndExpressions:
     return "unexpectedBetweenLeftParenAndExpressions"
-  case \ExprSegmentSyntax.expressions:
+  case \ExpressionSegmentSyntax.expressions:
     return "expressions"
-  case \ExprSegmentSyntax.unexpectedBetweenExpressionsAndRightParen:
+  case \ExpressionSegmentSyntax.unexpectedBetweenExpressionsAndRightParen:
     return "unexpectedBetweenExpressionsAndRightParen"
-  case \ExprSegmentSyntax.rightParen:
+  case \ExpressionSegmentSyntax.rightParen:
     return "rightParen"
-  case \ExprSegmentSyntax.unexpectedAfterRightParen:
+  case \ExpressionSegmentSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
   case \ExpressionStmtSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
@@ -1285,11 +1285,11 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "memberBlock"
   case \ExtensionDeclSyntax.unexpectedAfterMemberBlock:
     return "unexpectedAfterMemberBlock"
-  case \FallThroughtStmtSyntax.unexpectedBeforeFallthroughKeyword:
+  case \FallThroughStmtSyntax.unexpectedBeforeFallthroughKeyword:
     return "unexpectedBeforeFallthroughKeyword"
-  case \FallThroughtStmtSyntax.fallthroughKeyword:
+  case \FallThroughStmtSyntax.fallthroughKeyword:
     return "fallthroughKeyword"
-  case \FallThroughtStmtSyntax.unexpectedAfterFallthroughKeyword:
+  case \FallThroughStmtSyntax.unexpectedAfterFallthroughKeyword:
     return "unexpectedAfterFallthroughKeyword"
   case \FloatLiteralExprSyntax.unexpectedBeforeLiteral:
     return "unexpectedBeforeLiteral"
@@ -3033,12 +3033,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "colon"
   case \SwitchCaseLabelSyntax.unexpectedAfterColon:
     return "unexpectedAfterColon"
-  case \SwitchCaseSyntax.unexpectedBeforeUnknownAttribute:
-    return "unexpectedBeforeUnknownAttribute"
-  case \SwitchCaseSyntax.unknownAttribute:
-    return "unknownAttribute"
-  case \SwitchCaseSyntax.unexpectedBetweenUnknownAttributeAndLabel:
-    return "unexpectedBetweenUnknownAttributeAndLabel"
+  case \SwitchCaseSyntax.unexpectedBeforeAttribute:
+    return "unexpectedBeforeAttribute"
+  case \SwitchCaseSyntax.attribute:
+    return "attribute"
+  case \SwitchCaseSyntax.unexpectedBetweenAttributeAndLabel:
+    return "unexpectedBetweenAttributeAndLabel"
   case \SwitchCaseSyntax.label:
     return "label"
   case \SwitchCaseSyntax.unexpectedBetweenLabelAndStatements:

@@ -853,19 +853,19 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ExprPatternSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ExprPatternSyntax) {
+  override open func visitPost(_ node: ExpressionPatternSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ExprSegmentSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ExprSegmentSyntax) {
+  override open func visitPost(_ node: ExpressionSegmentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -885,11 +885,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: FallThroughtStmtSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: FallThroughStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: FallThroughtStmtSyntax) {
+  override open func visitPost(_ node: FallThroughStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

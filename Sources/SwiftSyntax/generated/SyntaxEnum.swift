@@ -115,11 +115,11 @@ public enum SyntaxEnum {
   case enumDecl(EnumDeclSyntax)
   case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
   case exprList(ExprListSyntax)
-  case exprPattern(ExprPatternSyntax)
-  case exprSegment(ExprSegmentSyntax)
+  case expressionPattern(ExpressionPatternSyntax)
+  case expressionSegment(ExpressionSegmentSyntax)
   case expressionStmt(ExpressionStmtSyntax)
   case extensionDecl(ExtensionDeclSyntax)
-  case fallThroughtStmt(FallThroughtStmtSyntax)
+  case fallThroughStmt(FallThroughStmtSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
   case forStmt(ForStmtSyntax)
   case forceUnwrapExpr(ForceUnwrapExprSyntax)
@@ -501,16 +501,16 @@ public extension Syntax {
       return .exposeAttributeArguments(ExposeAttributeArgumentsSyntax(self)!)
     case .exprList:
       return .exprList(ExprListSyntax(self)!)
-    case .exprPattern:
-      return .exprPattern(ExprPatternSyntax(self)!)
-    case .exprSegment:
-      return .exprSegment(ExprSegmentSyntax(self)!)
+    case .expressionPattern:
+      return .expressionPattern(ExpressionPatternSyntax(self)!)
+    case .expressionSegment:
+      return .expressionSegment(ExpressionSegmentSyntax(self)!)
     case .expressionStmt:
       return .expressionStmt(ExpressionStmtSyntax(self)!)
     case .extensionDecl:
       return .extensionDecl(ExtensionDeclSyntax(self)!)
-    case .fallThroughtStmt:
-      return .fallThroughtStmt(FallThroughtStmtSyntax(self)!)
+    case .fallThroughStmt:
+      return .fallThroughStmt(FallThroughStmtSyntax(self)!)
     case .floatLiteralExpr:
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
     case .forStmt:

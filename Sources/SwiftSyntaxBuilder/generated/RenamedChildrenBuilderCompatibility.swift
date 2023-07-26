@@ -270,7 +270,7 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExprSegmentSyntax {
+extension ExpressionSegmentSyntax {
   @available(*, deprecated, message: "Use an initializer with pounds argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
@@ -930,7 +930,7 @@ extension SubscriptCallExprSyntax {
 }
 
 extension SwitchCaseSyntax {
-  @available(*, deprecated, message: "Use an initializer with unknownAttribute argument(s).")
+  @available(*, deprecated, message: "Use an initializer with attribute argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -947,7 +947,7 @@ extension SwitchCaseSyntax {
     try self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeUnknownAttr, 
-        unknownAttribute: unknownAttr, 
+        attribute: unknownAttr, 
         unexpectedBetweenUnknownAttrAndLabel, 
         label: label, 
         unexpectedBetweenLabelAndStatements, 

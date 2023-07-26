@@ -1106,7 +1106,7 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 
 /// ### Children
 /// 
-/// (``StringSegmentSyntax`` | ``ExprSegmentSyntax``) `*`
+/// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
 ///
 /// ### Contained in
 /// 
@@ -1114,13 +1114,13 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices {
     case `stringSegment`(StringSegmentSyntax)
-    case `exprSegment`(ExprSegmentSyntax)
+    case `expressionSegment`(ExpressionSegmentSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
       case .stringSegment(let node):
         return node._syntaxNode
-      case .exprSegment(let node):
+      case .expressionSegment(let node):
         return node._syntaxNode
       }
     }
@@ -1133,8 +1133,8 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       self = .stringSegment(node)
     }
     
-    public init(_ node: ExprSegmentSyntax) {
-      self = .exprSegment(node)
+    public init(_ node: ExpressionSegmentSyntax) {
+      self = .expressionSegment(node)
     }
     
     public init?(_ node: some SyntaxProtocol) {
@@ -1142,8 +1142,8 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
         self = .stringSegment(node)
         return
       }
-      if let node = node.as(ExprSegmentSyntax.self) {
-        self = .exprSegment(node)
+      if let node = node.as(ExpressionSegmentSyntax.self) {
+        self = .expressionSegment(node)
         return
       }
       return nil
@@ -1152,7 +1152,7 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
     public static var structure: SyntaxNodeStructure {
       return .choices([
           .node(StringSegmentSyntax.self),
-          .node(ExprSegmentSyntax.self)])
+          .node(ExpressionSegmentSyntax.self)])
     }
   }
   
@@ -1263,7 +1263,7 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
 /// 
 ///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/properties``
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/expressions``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
 ///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
 ///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/properties``
 ///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/arguments``
@@ -1679,14 +1679,14 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedBetweenLanguageAndComma``
 ///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedBetweenCommaAndCxxName``
 ///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/unexpectedAfterCxxName``
-///  - ``ExprPatternSyntax``.``ExprPatternSyntax/unexpectedBeforeExpression``
-///  - ``ExprPatternSyntax``.``ExprPatternSyntax/unexpectedAfterExpression``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedBeforeBackslash``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedBetweenBackslashAndPounds``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedBetweenPoundsAndLeftParen``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedBetweenLeftParenAndExpressions``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedBetweenExpressionsAndRightParen``
-///  - ``ExprSegmentSyntax``.``ExprSegmentSyntax/unexpectedAfterRightParen``
+///  - ``ExpressionPatternSyntax``.``ExpressionPatternSyntax/unexpectedBeforeExpression``
+///  - ``ExpressionPatternSyntax``.``ExpressionPatternSyntax/unexpectedAfterExpression``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBeforeBackslash``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenBackslashAndPounds``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenPoundsAndLeftParen``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenLeftParenAndExpressions``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedBetweenExpressionsAndRightParen``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/unexpectedAfterRightParen``
 ///  - ``ExpressionStmtSyntax``.``ExpressionStmtSyntax/unexpectedBeforeExpression``
 ///  - ``ExpressionStmtSyntax``.``ExpressionStmtSyntax/unexpectedAfterExpression``
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBeforeAttributes``
@@ -1697,8 +1697,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenInheritanceClauseAndGenericWhereClause``
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedBetweenGenericWhereClauseAndMemberBlock``
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/unexpectedAfterMemberBlock``
-///  - ``FallThroughtStmtSyntax``.``FallThroughtStmtSyntax/unexpectedBeforeFallthroughKeyword``
-///  - ``FallThroughtStmtSyntax``.``FallThroughtStmtSyntax/unexpectedAfterFallthroughKeyword``
+///  - ``FallThroughStmtSyntax``.``FallThroughStmtSyntax/unexpectedBeforeFallthroughKeyword``
+///  - ``FallThroughStmtSyntax``.``FallThroughStmtSyntax/unexpectedAfterFallthroughKeyword``
 ///  - ``FloatLiteralExprSyntax``.``FloatLiteralExprSyntax/unexpectedBeforeLiteral``
 ///  - ``FloatLiteralExprSyntax``.``FloatLiteralExprSyntax/unexpectedAfterLiteral``
 ///  - ``ForStmtSyntax``.``ForStmtSyntax/unexpectedBeforeForKeyword``
@@ -2191,8 +2191,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedBetweenCaseKeywordAndCaseItems``
 ///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedBetweenCaseItemsAndColon``
 ///  - ``SwitchCaseLabelSyntax``.``SwitchCaseLabelSyntax/unexpectedAfterColon``
-///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBeforeUnknownAttribute``
-///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBetweenUnknownAttributeAndLabel``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBeforeAttribute``
+///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBetweenAttributeAndLabel``
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedBetweenLabelAndStatements``
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/unexpectedAfterStatements``
 ///  - ``SwitchDefaultLabelSyntax``.``SwitchDefaultLabelSyntax/unexpectedBeforeDefaultKeyword``

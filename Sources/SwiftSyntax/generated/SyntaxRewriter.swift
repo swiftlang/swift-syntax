@@ -542,13 +542,6 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(DeclNameArgumentsSyntax.self)
   }
   
-  /// Visit a ``DeclNameSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameSyntax) -> DeclNameSyntax {
-    return Syntax(visitChildren(node)).cast(DeclNameSyntax.self)
-  }
-  
   /// Visit a ``DeferStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2953,20 +2946,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = DeclNameArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclNameSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclNameSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6064,8 +6043,6 @@ open class SyntaxRewriter {
       return visitImplDeclNameArgumentSyntax
     case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax
-    case .declName:
-      return visitImplDeclNameSyntax
     case .deferStmt:
       return visitImplDeferStmtSyntax
     case .deinitializerDecl:
@@ -6624,8 +6601,6 @@ open class SyntaxRewriter {
       return visitImplDeclNameArgumentSyntax(data)
     case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax(data)
-    case .declName:
-      return visitImplDeclNameSyntax(data)
     case .deferStmt:
       return visitImplDeferStmtSyntax(data)
     case .deinitializerDecl:

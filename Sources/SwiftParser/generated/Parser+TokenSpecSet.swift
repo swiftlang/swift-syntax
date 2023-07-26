@@ -652,48 +652,6 @@ extension DeclModifierSyntax {
   }
 }
 
-extension DeclNameSyntax {
-  enum BaseNameOptions: TokenSpecSet {
-    case identifier
-    case binaryOperator
-    case `init`
-    case `self`
-    case `Self`
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .binaryOperator:
-        return .binaryOperator
-      case .`init`:
-        return .keyword(.`init`)
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      }
-    }
-  }
-}
-
 extension DerivativeAttributeArgumentsSyntax {
   enum AccessorSpecifierOptions: TokenSpecSet {
     case get

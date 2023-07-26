@@ -321,7 +321,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DeclModifierDetailSyntax>
 - <doc:SwiftSyntax/DeclNameArgumentsSyntax>
-- <doc:SwiftSyntax/DeclNameSyntax>
 - <doc:SwiftSyntax/DeinitializerEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/DerivativeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DifferentiabilityArgumentsSyntax>

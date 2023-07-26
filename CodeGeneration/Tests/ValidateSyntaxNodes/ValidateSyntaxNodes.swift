@@ -464,11 +464,6 @@ class ValidateSyntaxNodes: XCTestCase {
           message:
             "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
         ),
-        ValidationFailure(
-          node: .declName,
-          message:
-            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
-        ),
         // MARK: Alternate names for InitializerClauseSyntax
         // The cases below don’t have intializers but just a syntactic element that happens to be spelled the same
         ValidationFailure(

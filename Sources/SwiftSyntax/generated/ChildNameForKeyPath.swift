@@ -793,16 +793,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \DeclNameArgumentsSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \DeclNameSyntax.unexpectedBeforeBaseName:
-    return "unexpectedBeforeBaseName"
-  case \DeclNameSyntax.baseName:
-    return "baseName"
-  case \DeclNameSyntax.unexpectedBetweenBaseNameAndArguments:
-    return "unexpectedBetweenBaseNameAndArguments"
-  case \DeclNameSyntax.arguments:
-    return "arguments"
-  case \DeclNameSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
   case \DeferStmtSyntax.unexpectedBeforeDeferKeyword:
     return "unexpectedBeforeDeferKeyword"
   case \DeferStmtSyntax.deferKeyword:

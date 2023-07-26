@@ -826,18 +826,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DeclNameArgumentsSyntax) {
   }
   
-  /// Visiting ``DeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``DeclNameSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DeclNameSyntax) {
-  }
-  
   /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4073,17 +4061,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclNameSyntax(_ data: SyntaxData) {
-    let node = DeclNameSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeferStmtSyntax(_ data: SyntaxData) {
     let node = DeferStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6510,8 +6487,6 @@ open class SyntaxVisitor {
       visitImplDeclNameArgumentSyntax(data)
     case .declNameArguments:
       visitImplDeclNameArgumentsSyntax(data)
-    case .declName:
-      visitImplDeclNameSyntax(data)
     case .deferStmt:
       visitImplDeferStmtSyntax(data)
     case .deinitializerDecl:

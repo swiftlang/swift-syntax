@@ -81,7 +81,6 @@ public enum SyntaxEnum {
   case declNameArgumentList(DeclNameArgumentListSyntax)
   case declNameArgument(DeclNameArgumentSyntax)
   case declNameArguments(DeclNameArgumentsSyntax)
-  case declName(DeclNameSyntax)
   case deferStmt(DeferStmtSyntax)
   case deinitializerDecl(DeinitializerDeclSyntax)
   case deinitializerEffectSpecifiers(DeinitializerEffectSpecifiersSyntax)
@@ -430,8 +429,6 @@ public extension Syntax {
       return .declNameArgument(DeclNameArgumentSyntax(self)!)
     case .declNameArguments:
       return .declNameArguments(DeclNameArgumentsSyntax(self)!)
-    case .declName:
-      return .declName(DeclNameSyntax(self)!)
     case .deferStmt:
       return .deferStmt(DeferStmtSyntax(self)!)
     case .deinitializerDecl:

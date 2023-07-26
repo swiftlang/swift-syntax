@@ -81,7 +81,6 @@ public enum SyntaxKind: CaseIterable {
   case declNameArgumentList
   case declNameArgument
   case declNameArguments
-  case declName
   case deferStmt
   case deinitializerDecl
   case deinitializerEffectSpecifiers
@@ -549,8 +548,6 @@ public enum SyntaxKind: CaseIterable {
       return DeclNameArgumentSyntax.self
     case .declNameArguments:
       return DeclNameArgumentsSyntax.self
-    case .declName:
-      return DeclNameSyntax.self
     case .deferStmt:
       return DeferStmtSyntax.self
     case .deinitializerDecl:

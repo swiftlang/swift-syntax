@@ -5352,7 +5352,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``DeclNameSyntax``.``DeclNameSyntax/arguments``
 ///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/declNameArguments``
 ///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declNameArguments``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declNameArguments``
@@ -5520,137 +5519,6 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
-        ])
-  }
-}
-
-// MARK: - DeclNameSyntax
-
-/// ### Children
-/// 
-///  - `baseName`: (`<identifier>` | `<binaryOperator>` | `'init'` | `'self'` | `'Self'`)
-///  - `arguments`: ``DeclNameArgumentsSyntax``?
-///
-/// ### Contained in
-/// 
-///  - ``DynamicReplacementAttributeArgumentsSyntax``.``DynamicReplacementAttributeArgumentsSyntax/declName``
-///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
-public struct DeclNameSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .declName else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``DeclNameSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .declName)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - baseName: The base name of the protocol's requirement.
-  ///   - arguments: The argument labels of the protocol's requirement if it is a function requirement.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBaseName: UnexpectedNodesSyntax? = nil,
-      baseName: TokenSyntax,
-      _ unexpectedBetweenBaseNameAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBaseName, 
-            baseName, 
-            unexpectedBetweenBaseNameAndArguments, 
-            arguments, 
-            unexpectedAfterArguments
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeBaseName?.raw, 
-          baseName.raw, 
-          unexpectedBetweenBaseNameAndArguments?.raw, 
-          arguments?.raw, 
-          unexpectedAfterArguments?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.declName,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclNameSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The base name of the protocol's requirement.
-  public var baseName: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = DeclNameSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenBaseNameAndArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclNameSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The argument labels of the protocol's requirement if it is a function requirement.
-  public var arguments: DeclNameArgumentsSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
-    }
-    set(value) {
-      self = DeclNameSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = DeclNameSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeBaseName, 
-          \Self.baseName, 
-          \Self.unexpectedBetweenBaseNameAndArguments, 
-          \Self.arguments, 
-          \Self.unexpectedAfterArguments
         ])
   }
 }
@@ -7280,7 +7148,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `forLabel`: `'for'`
 ///  - `colon`: `':'`
-///  - `declName`: ``DeclNameSyntax``
+///  - `declName`: ``IdentifierExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -7313,7 +7181,7 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
       _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: DeclNameSyntax,
+      declName: IdentifierExprSyntax,
       _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7396,9 +7264,9 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
     }
   }
   
-  public var declName: DeclNameSyntax {
+  public var declName: IdentifierExprSyntax {
     get {
-      return DeclNameSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = DynamicReplacementAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -16765,7 +16633,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `targetLabel`: `'target'`
 ///  - `colon`: `':'`
-///  - `declName`: ``DeclNameSyntax``
+///  - `declName`: ``IdentifierExprSyntax``
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
@@ -16803,7 +16671,7 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
       _ unexpectedBetweenTargetLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: DeclNameSyntax,
+      declName: IdentifierExprSyntax,
       _ unexpectedBetweenDeclNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -16895,9 +16763,9 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
   }
   
   /// The value for this argument
-  public var declName: DeclNameSyntax {
+  public var declName: IdentifierExprSyntax {
     get {
-      return DeclNameSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = SpecializeTargetFunctionArgumentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))

@@ -84,7 +84,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case declModifier
   case declModifierDetail
   case declModifierList
-  case declName
   case declNameArgument
   case declNameArgumentList
   case declNameArguments

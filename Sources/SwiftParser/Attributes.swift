@@ -682,9 +682,9 @@ extension Parser {
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (targetFunction, args) = self.parseDeclNameRef([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
-        let declName = RawDeclNameSyntax(
-          baseName: targetFunction,
-          arguments: args,
+        let declName = RawIdentifierExprSyntax(
+          identifier: targetFunction,
+          declNameArguments: args,
           arena: self.arena
         )
         let comma = self.consume(if: .comma)
@@ -1031,7 +1031,7 @@ extension Parser {
         .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
       ])
     }
-    let method = RawDeclNameSyntax(baseName: base, arguments: args, arena: self.arena)
+    let method = RawIdentifierExprSyntax(identifier: base, declNameArguments: args, arena: self.arena)
     return RawDynamicReplacementAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
       forLabel: label,

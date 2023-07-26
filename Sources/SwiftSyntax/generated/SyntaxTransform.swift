@@ -349,11 +349,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameArgumentsSyntax) -> ResultType
   
-  /// Visiting ``DeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeclNameSyntax) -> ResultType
-  
   /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1859,13 +1854,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclNameArgumentsSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``DeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DeclNameSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3460,8 +3448,6 @@ extension SyntaxTransformVisitor {
     case .declNameArgument(let derived):
       return visit(derived)
     case .declNameArguments(let derived):
-      return visit(derived)
-    case .declName(let derived):
       return visit(derived)
     case .deferStmt(let derived):
       return visit(derived)

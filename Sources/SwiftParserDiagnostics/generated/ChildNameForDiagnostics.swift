@@ -78,10 +78,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "statements"
   case \ContinueStmtSyntax.label:
     return "label"
-  case \DeclNameSyntax.baseName:
-    return "base name"
-  case \DeclNameSyntax.arguments:
-    return "arguments"
   case \DeinitializerDeclSyntax.attributes:
     return "attributes"
   case \DeinitializerDeclSyntax.modifiers:

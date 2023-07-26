@@ -33,7 +33,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   case \ActorDeclSyntax.genericParameterClause:
     return "generic parameter clause"
   case \ActorDeclSyntax.inheritanceClause:
-    return "type inheritance clause"
+    return "inheritance clause"
   case \ActorDeclSyntax.genericWhereClause:
     return "generic where clause"
   case \ArrayElementSyntax.expression:
@@ -117,7 +117,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   case \EnumCaseParameterSyntax.type:
     return "type"
   case \EnumCaseParameterSyntax.defaultValue:
-    return "default argument"
+    return "default value"
   case \EnumDeclSyntax.attributes:
     return "attributes"
   case \EnumDeclSyntax.modifiers:
@@ -167,7 +167,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   case \FunctionParameterSyntax.type:
     return "type"
   case \FunctionParameterSyntax.defaultValue:
-    return "default argument"
+    return "default value"
   case \GenericParameterSyntax.eachKeyword:
     return "parameter pack specifier"
   case \GenericParameterSyntax.name:
@@ -317,7 +317,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   case \StructDeclSyntax.genericParameterClause:
     return "generic parameter clause"
   case \StructDeclSyntax.inheritanceClause:
-    return "type inheritance clause"
+    return "inheritance clause"
   case \StructDeclSyntax.genericWhereClause:
     return "generic where clause"
   case \SubscriptCallExprSyntax.calledExpression:

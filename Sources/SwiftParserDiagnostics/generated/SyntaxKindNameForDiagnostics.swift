@@ -72,11 +72,11 @@ extension SyntaxKind {
     case .classDecl:
       return "class"
     case .closureCaptureClause:
-      return "closure capture signature"
+      return "closure capture clause"
     case .closureCaptureSpecifier:
       return "closure capture specifier"
     case .closureCapture:
-      return "closure capture item"
+      return "closure capture"
     case .closureExpr:
       return "closure"
     case .closureParameterClause:

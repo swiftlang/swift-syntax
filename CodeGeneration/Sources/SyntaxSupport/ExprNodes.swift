@@ -310,7 +310,7 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .closureCapture,
     base: .syntax,
-    nameForDiagnostics: "closure capture item",
+    nameForDiagnostics: "closure capture",
     traits: [
       "WithTrailingComma"
     ],
@@ -346,7 +346,7 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .closureCaptureClause,
     base: .syntax,
-    nameForDiagnostics: "closure capture signature",
+    nameForDiagnostics: "closure capture clause",
     children: [
       Child(
         name: "LeftSquare",

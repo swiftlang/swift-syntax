@@ -280,7 +280,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "InheritanceClause",
         kind: .node(kind: .inheritanceClause),
-        nameForDiagnostics: "type inheritance clause",
+        nameForDiagnostics: "inheritance clause",
         isOptional: true
       ),
       Child(
@@ -742,7 +742,7 @@ public let DECL_NODES: [Node] = [
         name: "DefaultValue",
         deprecatedName: "DefaultArgument",
         kind: .node(kind: .initializerClause),
-        nameForDiagnostics: "default argument",
+        nameForDiagnostics: "default value",
         documentation: "If the parameter has a default value, the initializer clause describing the default value.",
         isOptional: true
       ),
@@ -1087,7 +1087,7 @@ public let DECL_NODES: [Node] = [
         name: "DefaultValue",
         deprecatedName: "DefaultArgument",
         kind: .node(kind: .initializerClause),
-        nameForDiagnostics: "default argument",
+        nameForDiagnostics: "default value",
         isOptional: true
       ),
       Child(
@@ -2194,7 +2194,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "InheritanceClause",
         kind: .node(kind: .inheritanceClause),
-        nameForDiagnostics: "type inheritance clause",
+        nameForDiagnostics: "inheritance clause",
         documentation: "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
         isOptional: true
       ),

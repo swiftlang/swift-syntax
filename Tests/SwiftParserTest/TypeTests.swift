@@ -99,12 +99,12 @@ final class TypeTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected identifier in closure capture item",
+          message: "expected identifier in closure capture",
           fixIts: ["insert identifier"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "unexpected 'class' keyword in closure capture signature"
+          message: "unexpected 'class' keyword in closure capture clause"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -123,7 +123,7 @@ final class TypeTests: XCTestCase {
       "{[n1️⃣`]in}",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '`' in closure capture signature")
+        DiagnosticSpec(message: "unexpected code '`' in closure capture clause")
       ]
     )
 
@@ -131,8 +131,8 @@ final class TypeTests: XCTestCase {
       "{[weak1️⃣^]in}",
       { ExprSyntax.parse(from: &$0) },
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier in closure capture item", fixIts: ["insert identifier"]),
-        DiagnosticSpec(message: "unexpected code '^' in closure capture signature"),
+        DiagnosticSpec(message: "expected identifier in closure capture", fixIts: ["insert identifier"]),
+        DiagnosticSpec(message: "unexpected code '^' in closure capture clause"),
       ],
       fixedSource: """
         {[weak <#identifier#>^]in}

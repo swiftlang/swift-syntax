@@ -265,7 +265,7 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(
           node: .regexLiteralExpr,
-          message: "child 'OpeningPounds' has a token as its only token choice and should thus be named 'ExtendedRegexDelimiter'"
+          message: "child 'OpeningPounds' has a token as its only token choice and should thus be named 'RegexPoundDelimiter'"
         ),
         ValidationFailure(
           node: .regexLiteralExpr,
@@ -278,22 +278,22 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(
           node: .regexLiteralExpr,
-          message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'ExtendedRegexDelimiter'"
+          message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'RegexPoundDelimiter'"
             // There are the opening and closing ExtendedRegexDelimiter in the node
         ),
         // We should explicitly mention token here because it’s not obvious that the end of a file is represented by a token
         ValidationFailure(node: .sourceFile, message: "child 'EndOfFileToken' has a token as its only token choice and should thus be named 'EndOfFile'"),
         ValidationFailure(
           node: .stringLiteralExpr,
-          message: "child 'OpeningPounds' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
+          message: "child 'OpeningPounds' has a token as its only token choice and should thus be named 'RawStringPoundDelimiter'"
         ),
         ValidationFailure(
           node: .stringLiteralExpr,
-          message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
+          message: "child 'ClosingPounds' has a token as its only token choice and should thus be named 'RawStringPoundDelimiter'"
         ),
         ValidationFailure(
           node: .exprSegment,
-          message: "child 'Pounds' has a token as its only token choice and should thus be named 'RawStringDelimiter'"
+          message: "child 'Pounds' has a token as its only token choice and should thus be named 'RawStringPoundDelimiter'"
         ),
 
         // MARK: Tokens that contain underscores

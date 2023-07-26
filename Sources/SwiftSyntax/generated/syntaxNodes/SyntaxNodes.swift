@@ -8567,7 +8567,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `backslash`: `'\'`
-///  - `pounds`: `<rawStringDelimiter>`?
+///  - `pounds`: `<rawStringPoundDelimiter>`?
 ///  - `leftParen`: `'('`
 ///  - `expressions`: ``TupleExprElementListSyntax``
 ///  - `rightParen`: `')'`

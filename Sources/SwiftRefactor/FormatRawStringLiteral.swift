@@ -49,15 +49,15 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
     guard maximumHashes > 0 else {
       return
         lit
-        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringDelimiter("")))
-        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringDelimiter("")))
+        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
+        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
     }
 
     let delimiters = String(repeating: "#", count: maximumHashes + 1)
     return
       lit
-      .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
-      .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringDelimiter(delimiters)))
+      .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))
+      .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))
   }
 }
 

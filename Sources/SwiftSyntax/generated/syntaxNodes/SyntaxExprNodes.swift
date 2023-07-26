@@ -5154,11 +5154,11 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `openingPounds`: `<extendedRegexDelimiter>`?
+///  - `openingPounds`: `<regexPoundDelimiter>`?
 ///  - `openingSlash`: `'/'`
 ///  - `regex`: `<regexLiteralPattern>`
 ///  - `closingSlash`: `'/'`
-///  - `closingPounds`: `<extendedRegexDelimiter>`?
+///  - `closingPounds`: `<regexPoundDelimiter>`?
 public struct RegexLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5464,11 +5464,11 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `openingPounds`: `<rawStringDelimiter>`?
+///  - `openingPounds`: `<rawStringPoundDelimiter>`?
 ///  - `openingQuote`: (`'"'` | `'"""'` | `'''`)
 ///  - `segments`: ``StringLiteralSegmentListSyntax``
 ///  - `closingQuote`: (`'"'` | `'"""'` | `'''`)
-///  - `closingPounds`: `<rawStringDelimiter>`?
+///  - `closingPounds`: `<rawStringPoundDelimiter>`?
 ///
 /// ### Contained in
 /// 

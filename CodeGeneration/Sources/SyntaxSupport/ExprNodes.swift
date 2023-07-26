@@ -740,7 +740,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Pounds",
         deprecatedName: "Delimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
         isOptional: true
       ),
       Child(
@@ -1419,7 +1419,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "OpeningPounds",
-        kind: .token(choices: [.token(tokenKind: "ExtendedRegexDelimiterToken")]),
+        kind: .token(choices: [.token(tokenKind: "RegexPoundDelimiterToken")]),
         isOptional: true
       ),
       Child(
@@ -1439,7 +1439,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ClosingPounds",
-        kind: .token(choices: [.token(tokenKind: "ExtendedRegexDelimiterToken")]),
+        kind: .token(choices: [.token(tokenKind: "RegexPoundDelimiterToken")]),
         isOptional: true
       ),
     ]
@@ -1484,7 +1484,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "OpeningPounds",
         deprecatedName: "OpenDelimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
         isOptional: true
       ),
       Child(
@@ -1504,7 +1504,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "ClosingPounds",
         deprecatedName: "CloseDelimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringDelimiterToken")]),
+        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
         isOptional: true
       ),
     ]

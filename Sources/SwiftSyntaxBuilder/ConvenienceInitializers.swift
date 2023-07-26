@@ -315,7 +315,7 @@ extension StringLiteralExprSyntax {
       let (requiresEscaping, poundCount) = Self.requiresEscaping(content)
       if requiresEscaping {
         // Use a delimiter that is exactly one longer
-        openingPounds = TokenSyntax.rawStringDelimiter(String(repeating: "#", count: poundCount + 1))
+        openingPounds = TokenSyntax.rawStringPoundDelimiter(String(repeating: "#", count: poundCount + 1))
         closingPounds = openingPounds
       }
     }

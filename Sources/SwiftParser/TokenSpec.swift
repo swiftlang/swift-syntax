@@ -172,15 +172,15 @@ public struct TokenSpec {
     switch rawTokenKind {
     case .binaryOperator: return .binaryOperator("+")
     case .dollarIdentifier: return .dollarIdentifier("$0")
-    case .extendedRegexDelimiter: return .extendedRegexDelimiter("#")
     case .floatingLiteral: return .floatingLiteral("1.0")
     case .identifier: return .identifier("myIdent")
     case .integerLiteral: return .integerLiteral("1")
     case .keyword: return .keyword(keyword!)
     case .postfixOperator: return .postfixOperator("++")
     case .prefixOperator: return .prefixOperator("!")
-    case .rawStringDelimiter: return .rawStringDelimiter("#")
+    case .rawStringPoundDelimiter: return .rawStringPoundDelimiter("#")
     case .regexLiteralPattern: return .regexLiteralPattern(".*")
+    case .regexPoundDelimiter: return .regexPoundDelimiter("#")
     case .stringSegment: return .stringSegment("abc")
     default: return TokenKind.fromRaw(kind: rawTokenKind, text: "")
     }

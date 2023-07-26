@@ -470,7 +470,7 @@ extension Parser {
   /// Parse a string literal expression.
   mutating func parseStringLiteral() -> RawStringLiteralExprSyntax {
     /// Parse opening raw string delimiter if exist.
-    let openDelimiter = self.consume(if: .rawStringDelimiter)
+    let openDelimiter = self.consume(if: .rawStringPoundDelimiter)
 
     /// Try to parse @ in order to recover from Objective-C style literals
     let unexpectedAtSign = self.consume(if: .atSign)
@@ -495,7 +495,7 @@ extension Parser {
       if let stringSegment = self.consume(if: .stringSegment, TokenSpec(.identifier, remapping: .stringSegment)) {
         segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
       } else if let backslash = self.consume(if: .backslash) {
-        let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)
+        let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(.rawStringPoundDelimiter, matching: openDelimiter)
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
         let expressions = RawTupleExprElementListSyntax(elements: self.parseArgumentListElements(pattern: .none), arena: self.arena)
 
@@ -561,7 +561,7 @@ extension Parser {
       closeQuote = self.expectWithoutRecoveryOrLeadingTrivia(TokenSpec(openQuote.tokenKind))
     }
 
-    let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parsePoundDelimiter(.rawStringDelimiter, matching: openDelimiter)
+    let (unexpectedBeforeCloseDelimiter, closeDelimiter) = self.parsePoundDelimiter(.rawStringPoundDelimiter, matching: openDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {
       let postProcessed = postProcessMultilineStringLiteral(

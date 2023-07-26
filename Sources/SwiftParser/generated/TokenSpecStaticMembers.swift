@@ -63,10 +63,6 @@ extension TokenSpec {
     return TokenSpec(.exclamationMark)
   }
   
-  static var extendedRegexDelimiter: TokenSpec {
-    return TokenSpec(.extendedRegexDelimiter)
-  }
-  
   static var floatingLiteral: TokenSpec {
     return TokenSpec(.floatingLiteral)
   }
@@ -155,12 +151,16 @@ extension TokenSpec {
     return TokenSpec(.prefixOperator)
   }
   
-  static var rawStringDelimiter: TokenSpec {
-    return TokenSpec(.rawStringDelimiter)
+  static var rawStringPoundDelimiter: TokenSpec {
+    return TokenSpec(.rawStringPoundDelimiter)
   }
   
   static var regexLiteralPattern: TokenSpec {
     return TokenSpec(.regexLiteralPattern)
+  }
+  
+  static var regexPoundDelimiter: TokenSpec {
+    return TokenSpec(.regexPoundDelimiter)
   }
   
   static var regexSlash: TokenSpec {

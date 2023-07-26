@@ -259,8 +259,8 @@ open class BasicFormat: SyntaxRewriter {
       (.endOfFile, _),
       (.exclamationMark, .leftParen),  // myOptionalClosure!()
       (.exclamationMark, .period),  // myOptionalBar!.foo()
-      (.extendedRegexDelimiter, .leftParen),  // opening extended regex delimiter should never be separate by a space
-      (.extendedRegexDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
+      (.regexPoundDelimiter, .leftParen),  // opening extended regex delimiter should never be separate by a space
+      (.regexPoundDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
       (.identifier, .leftAngle),  // MyType<Int>
       (.identifier, .leftParen),  // foo()
       (.identifier, .leftSquare),  // myArray[1]
@@ -277,7 +277,7 @@ open class BasicFormat: SyntaxRewriter {
       (.leftBrace, .rightBrace),  // {}
       (.leftParen, _),
       (.leftSquare, _),
-      (.multilineStringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.multilineStringQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
       (.period, _),
       (.postfixQuestionMark, .leftAngle),  // init?<T>()
       (.postfixQuestionMark, .leftParen),  // init?() or myOptionalClosure?()
@@ -286,19 +286,19 @@ open class BasicFormat: SyntaxRewriter {
       (.poundUnavailable, .leftParen),  // #unavailable(...)
       (.prefixAmpersand, _),
       (.prefixOperator, _),
-      (.rawStringDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space
-      (.rawStringDelimiter, .multilineStringQuote),  // opening raw string delimiter should never be separate by a space
-      (.rawStringDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
-      (.rawStringDelimiter, .stringQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .multilineStringQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .stringQuote),  // opening raw string delimiter should never be separate by a space
       (.regexLiteralPattern, _),
-      (.regexSlash, .extendedRegexDelimiter),  // closing extended regex delimiter should never be separate by a space
+      (.regexSlash, .regexPoundDelimiter),  // closing extended regex delimiter should never be separate by a space
       (.rightAngle, .leftParen),  // func foo<T>(x: T)
       (.rightBrace, .leftParen),  // { return 1 }()
       (.rightParen, .leftParen),  // returnsClosure()()
       (.rightParen, .period),  // foo().bar
       (.rightSquare, .period),  // myArray[1].someProperty
-      (.singleQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
-      (.stringQuote, .rawStringDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.singleQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.stringQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringSegment, _),
       (_, .comma),
       (_, .ellipsis),

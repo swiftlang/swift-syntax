@@ -1384,7 +1384,7 @@ extension Parser {
   /// The broad structure of the regular expression is validated by the lexer.
   mutating func parseRegexLiteral() -> RawRegexLiteralExprSyntax {
     // See if we have an opening set of pounds.
-    let openPounds = self.consume(if: .extendedRegexDelimiter)
+    let openPounds = self.consume(if: .regexPoundDelimiter)
 
     // Parse the opening slash.
     let (unexpectedBeforeSlash, openSlash) = self.expect(.regexSlash)
@@ -1401,7 +1401,7 @@ extension Parser {
     let closeSlash = self.expectWithoutRecoveryOrLeadingTrivia(.regexSlash)
 
     // Finally, parse a closing set of pounds.
-    let (unexpectedBeforeClosePounds, closePounds) = parsePoundDelimiter(.extendedRegexDelimiter, matching: openPounds)
+    let (unexpectedBeforeClosePounds, closePounds) = parsePoundDelimiter(.regexPoundDelimiter, matching: openPounds)
 
     return RawRegexLiteralExprSyntax(
       openingPounds: openPounds,

@@ -817,12 +817,12 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.poundAvailable): self = .poundAvailable
     case TokenSpec(.poundUnavailable): self = .poundUnavailable
     case TokenSpec(.regexSlash): self = .regexSlash
-    case TokenSpec(.extendedRegexDelimiter): self = .extendedRegexDelimiter
+    case TokenSpec(.regexPoundDelimiter): self = .extendedRegexDelimiter
     case TokenSpec(.self): self = .self
     case TokenSpec(.super): self = .super
     case TokenSpec(.true): self = .true
     case TokenSpec(.wildcard): self = .wildcard
-    case TokenSpec(.rawStringDelimiter): self = .rawStringDelimiter
+    case TokenSpec(.rawStringPoundDelimiter): self = .rawStringDelimiter
     case TokenSpec(.stringQuote): self = .stringQuote
     case TokenSpec(.multilineStringQuote): self = .multilineStringQuote
     case TokenSpec(.singleQuote): self = .singleQuote
@@ -850,12 +850,12 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .poundAvailable: return .poundAvailable
     case .poundUnavailable: return .poundUnavailable
     case .regexSlash: return .regexSlash
-    case .extendedRegexDelimiter: return .extendedRegexDelimiter
+    case .extendedRegexDelimiter: return .regexPoundDelimiter
     case .self: return .keyword(.self)
     case .super: return .keyword(.super)
     case .true: return .keyword(.true)
     case .wildcard: return .wildcard
-    case .rawStringDelimiter: return .rawStringDelimiter
+    case .rawStringDelimiter: return .rawStringPoundDelimiter
     case .stringQuote: return .stringQuote
     case .multilineStringQuote: return .multilineStringQuote
     case .singleQuote: return .singleQuote

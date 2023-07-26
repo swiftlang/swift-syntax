@@ -141,8 +141,8 @@ enum TokenPrecedence: Comparable {
       self = .weakBracketed(closingDelimiter: .rightSquare)
     case .leftAngle:
       self = .weakBracketed(closingDelimiter: .rightAngle)
-    case .multilineStringQuote, .rawStringDelimiter, .singleQuote, .stringQuote,
-      .regexSlash, .extendedRegexDelimiter:
+    case .multilineStringQuote, .rawStringPoundDelimiter, .singleQuote, .stringQuote,
+      .regexSlash, .regexPoundDelimiter:
       self = .weakBracketed(closingDelimiter: tokenKind)
     case  // Chaining punctuators
     .infixQuestionMark, .period, .postfixQuestionMark, .exclamationMark,

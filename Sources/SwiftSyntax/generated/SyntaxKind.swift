@@ -399,6 +399,8 @@ public enum SyntaxKind: CaseIterable {
   
   public var isMissing: Bool {
     switch self {
+    case .missing:
+      return true
     case .missingDecl:
       return true
     case .missingExpr:
@@ -406,8 +408,6 @@ public enum SyntaxKind: CaseIterable {
     case .missingPattern:
       return true
     case .missingStmt:
-      return true
-    case .missing:
       return true
     case .missingType:
       return true

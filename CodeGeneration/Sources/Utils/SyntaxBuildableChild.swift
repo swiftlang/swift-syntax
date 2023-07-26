@@ -69,9 +69,9 @@ public extension Child {
       return type.defaultValue
     }
     if token.text != nil {
-      return ExprSyntax(".\(raw: token.swiftKind)Token()")
+      return ExprSyntax(".\(token.varOrCaseName)Token()")
     }
-    guard case .token(let choices, _, _) = kind, choices.count == 1, token.associatedValueClass != nil else {
+    guard case .token(let choices, _, _) = kind, choices.count == 1, token.kind == .keyword else {
       return nil
     }
     var textChoice: String
@@ -82,7 +82,7 @@ public extension Child {
     if textChoice == "init" {
       textChoice = "`init`"
     }
-    return ExprSyntax(".\(raw: token.swiftKind)(.\(raw: textChoice))")
+    return ExprSyntax(".\(token.varOrCaseName)(.\(raw: textChoice))")
   }
 
   /// If the child node has a default value, return an expression of the form

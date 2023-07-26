@@ -23,7 +23,7 @@ struct GrammarGenerator {
       if let tokenText = token.text {
         return "`'\(tokenText)'`"
       } else {
-        return "`<\(token.swiftKind)>`"
+        return "`<\(token.varOrCaseName)>`"
       }
     }
   }

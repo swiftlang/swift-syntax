@@ -178,6 +178,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ArrayTypeSyntax) {
   }
   
+  /// Visiting ``ArrowExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``ArrowExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ArrowExprSyntax) {
+  }
+  
   /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -320,6 +332,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``BackDeployedAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: BackDeployedAttributeArgumentsSyntax) {
+  }
+  
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``BinaryOperatorExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: BinaryOperatorExprSyntax) {
   }
   
   /// Visiting ``BooleanLiteralExprSyntax`` specifically.
@@ -3166,18 +3190,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: UnexpectedNodesSyntax) {
   }
   
-  /// Visiting ``UnresolvedArrowExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnresolvedArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``UnresolvedArrowExprSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnresolvedArrowExprSyntax) {
-  }
-  
   /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3188,18 +3200,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``UnresolvedAsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedAsExprSyntax) {
-  }
-  
-  /// Visiting ``UnresolvedInfixOperatorExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``UnresolvedInfixOperatorExprSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnresolvedInfixOperatorExprSyntax) {
   }
   
   /// Visiting ``UnresolvedIsExprSyntax`` specifically.
@@ -3515,6 +3515,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplArrowExprSyntax(_ data: SyntaxData) {
+    let node = ArrowExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAsExprSyntax(_ data: SyntaxData) {
     let node = AsExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3638,6 +3649,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplBackDeployedAttributeArgumentsSyntax(_ data: SyntaxData) {
     let node = BackDeployedAttributeArgumentsSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) {
+    let node = BinaryOperatorExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6254,30 +6276,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedArrowExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedArrowExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) {
     let node = UnresolvedAsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedInfixOperatorExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedInfixOperatorExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6471,6 +6471,8 @@ open class SyntaxVisitor {
       visitImplArrayExprSyntax(data)
     case .arrayType:
       visitImplArrayTypeSyntax(data)
+    case .arrowExpr:
+      visitImplArrowExprSyntax(data)
     case .asExpr:
       visitImplAsExprSyntax(data)
     case .assignmentExpr:
@@ -6495,6 +6497,8 @@ open class SyntaxVisitor {
       visitImplAwaitExprSyntax(data)
     case .backDeployedAttributeArguments:
       visitImplBackDeployedAttributeArgumentsSyntax(data)
+    case .binaryOperatorExpr:
+      visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr:
       visitImplBooleanLiteralExprSyntax(data)
     case .borrowExpr:
@@ -6969,12 +6973,8 @@ open class SyntaxVisitor {
       visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
     case .unexpectedNodes:
       visitImplUnexpectedNodesSyntax(data)
-    case .unresolvedArrowExpr:
-      visitImplUnresolvedArrowExprSyntax(data)
     case .unresolvedAsExpr:
       visitImplUnresolvedAsExprSyntax(data)
-    case .unresolvedInfixOperatorExpr:
-      visitImplUnresolvedInfixOperatorExprSyntax(data)
     case .unresolvedIsExpr:
       visitImplUnresolvedIsExprSyntax(data)
     case .unresolvedTernaryExpr:

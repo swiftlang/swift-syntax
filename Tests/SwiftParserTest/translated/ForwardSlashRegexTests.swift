@@ -266,7 +266,7 @@ final class ForwardSlashRegexTests: XCTestCase {
           .blah
       }
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/?")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/?")))
     )
   }
 
@@ -371,7 +371,7 @@ final class ForwardSlashRegexTests: XCTestCase {
                 expression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("x"))
               )
             ),
-            UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")),
+            BinaryOperatorExprSyntax(operator: .binaryOperator("/")),
             PostfixOperatorExprSyntax(expression: IdentifierExprSyntax(identifier: "x"), operator: .postfixOperator("/")),
           ])
         )
@@ -393,7 +393,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x/.../y/
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator(".../")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator(".../")))
     )
   }
 
@@ -740,7 +740,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         2
       }
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/")))
     )
   }
 
@@ -763,7 +763,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       _ = 2
       / 1 / .bitWidth
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/")))
     )
   }
 
@@ -786,7 +786,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       / 1 /
         .bitWidth
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/")))
     )
   }
 
@@ -798,7 +798,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       /1 /
         .bitWidth
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/")))
     )
   }
 
@@ -826,7 +826,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = !!/1 / .bitWidth
       """,
-      substructure: Syntax(UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("/")))
+      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/")))
     )
   }
 

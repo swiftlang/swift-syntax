@@ -27,6 +27,7 @@ public enum SyntaxKind: CaseIterable {
   case arrayElement
   case arrayExpr
   case arrayType
+  case arrowExpr
   case asExpr
   case assignmentExpr
   case associatedTypeDecl
@@ -39,6 +40,7 @@ public enum SyntaxKind: CaseIterable {
   case availabilityLabeledArgument
   case awaitExpr
   case backDeployedAttributeArguments
+  case binaryOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
@@ -276,9 +278,7 @@ public enum SyntaxKind: CaseIterable {
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
-  case unresolvedArrowExpr
   case unresolvedAsExpr
-  case unresolvedInfixOperatorExpr
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case valueBindingPattern
@@ -444,6 +444,8 @@ public enum SyntaxKind: CaseIterable {
       return ArrayExprSyntax.self
     case .arrayType:
       return ArrayTypeSyntax.self
+    case .arrowExpr:
+      return ArrowExprSyntax.self
     case .asExpr:
       return AsExprSyntax.self
     case .assignmentExpr:
@@ -468,6 +470,8 @@ public enum SyntaxKind: CaseIterable {
       return AwaitExprSyntax.self
     case .backDeployedAttributeArguments:
       return BackDeployedAttributeArgumentsSyntax.self
+    case .binaryOperatorExpr:
+      return BinaryOperatorExprSyntax.self
     case .booleanLiteralExpr:
       return BooleanLiteralExprSyntax.self
     case .borrowExpr:
@@ -942,12 +946,8 @@ public enum SyntaxKind: CaseIterable {
       return UnderscorePrivateAttributeArgumentsSyntax.self
     case .unexpectedNodes:
       return UnexpectedNodesSyntax.self
-    case .unresolvedArrowExpr:
-      return UnresolvedArrowExprSyntax.self
     case .unresolvedAsExpr:
       return UnresolvedAsExprSyntax.self
-    case .unresolvedInfixOperatorExpr:
-      return UnresolvedInfixOperatorExprSyntax.self
     case .unresolvedIsExpr:
       return UnresolvedIsExprSyntax.self
     case .unresolvedTernaryExpr:

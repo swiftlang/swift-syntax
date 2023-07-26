@@ -57,6 +57,8 @@ extension SyntaxKind {
       return "'await' expression"
     case .backDeployedAttributeArguments:
       return "'@backDeployed' arguments"
+    case .binaryOperatorExpr:
+      return "operator"
     case .booleanLiteralExpr:
       return "bool literal"
     case .borrowExpr:
@@ -385,8 +387,6 @@ extension SyntaxKind {
       return "@_private argument"
     case .unresolvedAsExpr:
       return "'as'"
-    case .unresolvedInfixOperatorExpr:
-      return "operator"
     case .unresolvedIsExpr:
       return "'is'"
     case .unresolvedTernaryExpr:

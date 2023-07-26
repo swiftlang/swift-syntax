@@ -60,7 +60,7 @@ extension AttributeSyntax {
 
 // MARK: - BinaryOperatorExpr
 
-extension UnresolvedInfixOperatorExprSyntax {
+extension BinaryOperatorExprSyntax {
   public init(text: String) {
     self.init(operator: .binaryOperator(text))
   }

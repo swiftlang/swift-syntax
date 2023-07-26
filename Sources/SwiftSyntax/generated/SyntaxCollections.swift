@@ -1386,6 +1386,9 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedBetweenLeftSquareAndElement``
 ///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedBetweenElementAndRightSquare``
 ///  - ``ArrayTypeSyntax``.``ArrayTypeSyntax/unexpectedAfterRightSquare``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedBeforeEffectSpecifiers``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedBetweenEffectSpecifiersAndArrow``
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/unexpectedAfterArrow``
 ///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBeforeExpression``
 ///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBetweenExpressionAndAsKeyword``
 ///  - ``AsExprSyntax``.``AsExprSyntax/unexpectedBetweenAsKeywordAndQuestionOrExclamationMark``
@@ -1430,6 +1433,8 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``BackDeployedAttributeArgumentsSyntax``.``BackDeployedAttributeArgumentsSyntax/unexpectedBetweenBeforeLabelAndColon``
 ///  - ``BackDeployedAttributeArgumentsSyntax``.``BackDeployedAttributeArgumentsSyntax/unexpectedBetweenColonAndPlatforms``
 ///  - ``BackDeployedAttributeArgumentsSyntax``.``BackDeployedAttributeArgumentsSyntax/unexpectedAfterPlatforms``
+///  - ``BinaryOperatorExprSyntax``.``BinaryOperatorExprSyntax/unexpectedBeforeOperator``
+///  - ``BinaryOperatorExprSyntax``.``BinaryOperatorExprSyntax/unexpectedAfterOperator``
 ///  - ``BooleanLiteralExprSyntax``.``BooleanLiteralExprSyntax/unexpectedBeforeLiteral``
 ///  - ``BooleanLiteralExprSyntax``.``BooleanLiteralExprSyntax/unexpectedAfterLiteral``
 ///  - ``BorrowExprSyntax``.``BorrowExprSyntax/unexpectedBeforeBorrowKeyword``
@@ -2275,14 +2280,9 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedBetweenSourceFileLabelAndColon``
 ///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedBetweenColonAndFilename``
 ///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/unexpectedAfterFilename``
-///  - ``UnresolvedArrowExprSyntax``.``UnresolvedArrowExprSyntax/unexpectedBeforeEffectSpecifiers``
-///  - ``UnresolvedArrowExprSyntax``.``UnresolvedArrowExprSyntax/unexpectedBetweenEffectSpecifiersAndArrow``
-///  - ``UnresolvedArrowExprSyntax``.``UnresolvedArrowExprSyntax/unexpectedAfterArrow``
 ///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedBeforeAsKeyword``
 ///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedBetweenAsKeywordAndQuestionOrExclamationMark``
 ///  - ``UnresolvedAsExprSyntax``.``UnresolvedAsExprSyntax/unexpectedAfterQuestionOrExclamationMark``
-///  - ``UnresolvedInfixOperatorExprSyntax``.``UnresolvedInfixOperatorExprSyntax/unexpectedBeforeOperator``
-///  - ``UnresolvedInfixOperatorExprSyntax``.``UnresolvedInfixOperatorExprSyntax/unexpectedAfterOperator``
 ///  - ``UnresolvedIsExprSyntax``.``UnresolvedIsExprSyntax/unexpectedBeforeIsKeyword``
 ///  - ``UnresolvedIsExprSyntax``.``UnresolvedIsExprSyntax/unexpectedAfterIsKeyword``
 ///  - ``UnresolvedTernaryExprSyntax``.``UnresolvedTernaryExprSyntax/unexpectedBeforeQuestionMark``

@@ -18879,9 +18879,9 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
+///  - ``ArrowExprSyntax``.``ArrowExprSyntax/effectSpecifiers``
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/effectSpecifiers``
 ///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/effectSpecifiers``
-///  - ``UnresolvedArrowExprSyntax``.``UnresolvedArrowExprSyntax/effectSpecifiers``
 public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

@@ -185,6 +185,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightSquare"
   case \ArrayTypeSyntax.unexpectedAfterRightSquare:
     return "unexpectedAfterRightSquare"
+  case \ArrowExprSyntax.unexpectedBeforeEffectSpecifiers:
+    return "unexpectedBeforeEffectSpecifiers"
+  case \ArrowExprSyntax.effectSpecifiers:
+    return "effectSpecifiers"
+  case \ArrowExprSyntax.unexpectedBetweenEffectSpecifiersAndArrow:
+    return "unexpectedBetweenEffectSpecifiersAndArrow"
+  case \ArrowExprSyntax.arrow:
+    return "arrow"
+  case \ArrowExprSyntax.unexpectedAfterArrow:
+    return "unexpectedAfterArrow"
   case \AsExprSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
   case \AsExprSyntax.expression:
@@ -341,6 +351,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "platforms"
   case \BackDeployedAttributeArgumentsSyntax.unexpectedAfterPlatforms:
     return "unexpectedAfterPlatforms"
+  case \BinaryOperatorExprSyntax.unexpectedBeforeOperator:
+    return "unexpectedBeforeOperator"
+  case \BinaryOperatorExprSyntax.operator:
+    return "operator"
+  case \BinaryOperatorExprSyntax.unexpectedAfterOperator:
+    return "unexpectedAfterOperator"
   case \BooleanLiteralExprSyntax.unexpectedBeforeLiteral:
     return "unexpectedBeforeLiteral"
   case \BooleanLiteralExprSyntax.literal:
@@ -3331,16 +3347,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "filename"
   case \UnderscorePrivateAttributeArgumentsSyntax.unexpectedAfterFilename:
     return "unexpectedAfterFilename"
-  case \UnresolvedArrowExprSyntax.unexpectedBeforeEffectSpecifiers:
-    return "unexpectedBeforeEffectSpecifiers"
-  case \UnresolvedArrowExprSyntax.effectSpecifiers:
-    return "effectSpecifiers"
-  case \UnresolvedArrowExprSyntax.unexpectedBetweenEffectSpecifiersAndArrow:
-    return "unexpectedBetweenEffectSpecifiersAndArrow"
-  case \UnresolvedArrowExprSyntax.arrow:
-    return "arrow"
-  case \UnresolvedArrowExprSyntax.unexpectedAfterArrow:
-    return "unexpectedAfterArrow"
   case \UnresolvedAsExprSyntax.unexpectedBeforeAsKeyword:
     return "unexpectedBeforeAsKeyword"
   case \UnresolvedAsExprSyntax.asKeyword:
@@ -3351,12 +3357,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "questionOrExclamationMark"
   case \UnresolvedAsExprSyntax.unexpectedAfterQuestionOrExclamationMark:
     return "unexpectedAfterQuestionOrExclamationMark"
-  case \UnresolvedInfixOperatorExprSyntax.unexpectedBeforeOperator:
-    return "unexpectedBeforeOperator"
-  case \UnresolvedInfixOperatorExprSyntax.operator:
-    return "operator"
-  case \UnresolvedInfixOperatorExprSyntax.unexpectedAfterOperator:
-    return "unexpectedAfterOperator"
   case \UnresolvedIsExprSyntax.unexpectedBeforeIsKeyword:
     return "unexpectedBeforeIsKeyword"
   case \UnresolvedIsExprSyntax.isKeyword:

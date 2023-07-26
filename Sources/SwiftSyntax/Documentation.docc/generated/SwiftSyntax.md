@@ -94,9 +94,11 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ExprSyntaxProtocol>
 - <doc:SwiftSyntax/MissingExprSyntax>
 - <doc:SwiftSyntax/ArrayExprSyntax>
+- <doc:SwiftSyntax/ArrowExprSyntax>
 - <doc:SwiftSyntax/AsExprSyntax>
 - <doc:SwiftSyntax/AssignmentExprSyntax>
 - <doc:SwiftSyntax/AwaitExprSyntax>
+- <doc:SwiftSyntax/BinaryOperatorExprSyntax>
 - <doc:SwiftSyntax/BooleanLiteralExprSyntax>
 - <doc:SwiftSyntax/BorrowExprSyntax>
 - <doc:SwiftSyntax/CanImportExprSyntax>
@@ -138,9 +140,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/TryExprSyntax>
 - <doc:SwiftSyntax/TupleExprSyntax>
 - <doc:SwiftSyntax/TypeExprSyntax>
-- <doc:SwiftSyntax/UnresolvedArrowExprSyntax>
 - <doc:SwiftSyntax/UnresolvedAsExprSyntax>
-- <doc:SwiftSyntax/UnresolvedInfixOperatorExprSyntax>
 - <doc:SwiftSyntax/UnresolvedIsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedTernaryExprSyntax>
 

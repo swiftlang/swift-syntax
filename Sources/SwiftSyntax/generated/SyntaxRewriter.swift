@@ -164,6 +164,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
   
+  /// Visit a ``ArrowExprSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ArrowExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
   /// Visit a ``AsExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -246,6 +253,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> BackDeployedAttributeArgumentsSyntax {
     return Syntax(visitChildren(node)).cast(BackDeployedAttributeArgumentsSyntax.self)
+  }
+  
+  /// Visit a ``BinaryOperatorExprSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: BinaryOperatorExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
   }
   
   /// Visit a ``BooleanLiteralExprSyntax``.
@@ -1907,24 +1921,10 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(UnexpectedNodesSyntax.self)
   }
   
-  /// Visit a ``UnresolvedArrowExprSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnresolvedArrowExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-  
   /// Visit a ``UnresolvedAsExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnresolvedAsExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
-  }
-  
-  /// Visit a ``UnresolvedInfixOperatorExprSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
   
@@ -2230,6 +2230,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplArrowExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = ArrowExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAsExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = AsExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2386,6 +2400,20 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplBackDeployedAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = BackDeployedAttributeArgumentsSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = BinaryOperatorExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -5716,36 +5744,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnresolvedArrowExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnresolvedArrowExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = UnresolvedAsExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnresolvedInfixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnresolvedInfixOperatorExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6019,6 +6019,8 @@ open class SyntaxRewriter {
       return visitImplArrayExprSyntax
     case .arrayType:
       return visitImplArrayTypeSyntax
+    case .arrowExpr:
+      return visitImplArrowExprSyntax
     case .asExpr:
       return visitImplAsExprSyntax
     case .assignmentExpr:
@@ -6043,6 +6045,8 @@ open class SyntaxRewriter {
       return visitImplAwaitExprSyntax
     case .backDeployedAttributeArguments:
       return visitImplBackDeployedAttributeArgumentsSyntax
+    case .binaryOperatorExpr:
+      return visitImplBinaryOperatorExprSyntax
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax
     case .borrowExpr:
@@ -6517,12 +6521,8 @@ open class SyntaxRewriter {
       return visitImplUnderscorePrivateAttributeArgumentsSyntax
     case .unexpectedNodes:
       return visitImplUnexpectedNodesSyntax
-    case .unresolvedArrowExpr:
-      return visitImplUnresolvedArrowExprSyntax
     case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax
-    case .unresolvedInfixOperatorExpr:
-      return visitImplUnresolvedInfixOperatorExprSyntax
     case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax
     case .unresolvedTernaryExpr:
@@ -6585,6 +6585,8 @@ open class SyntaxRewriter {
       return visitImplArrayExprSyntax(data)
     case .arrayType:
       return visitImplArrayTypeSyntax(data)
+    case .arrowExpr:
+      return visitImplArrowExprSyntax(data)
     case .asExpr:
       return visitImplAsExprSyntax(data)
     case .assignmentExpr:
@@ -6609,6 +6611,8 @@ open class SyntaxRewriter {
       return visitImplAwaitExprSyntax(data)
     case .backDeployedAttributeArguments:
       return visitImplBackDeployedAttributeArgumentsSyntax(data)
+    case .binaryOperatorExpr:
+      return visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr:
       return visitImplBooleanLiteralExprSyntax(data)
     case .borrowExpr:
@@ -7083,12 +7087,8 @@ open class SyntaxRewriter {
       return visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
     case .unexpectedNodes:
       return visitImplUnexpectedNodesSyntax(data)
-    case .unresolvedArrowExpr:
-      return visitImplUnresolvedArrowExprSyntax(data)
     case .unresolvedAsExpr:
       return visitImplUnresolvedAsExprSyntax(data)
-    case .unresolvedInfixOperatorExpr:
-      return visitImplUnresolvedInfixOperatorExprSyntax(data)
     case .unresolvedIsExpr:
       return visitImplUnresolvedIsExprSyntax(data)
     case .unresolvedTernaryExpr:

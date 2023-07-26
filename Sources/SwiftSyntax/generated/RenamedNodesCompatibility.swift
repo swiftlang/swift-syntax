@@ -27,9 +27,6 @@ public typealias AccessorListSyntax = AccessorDeclListSyntax
 @available(*, deprecated, renamed: "AccessorParametersSyntax")
 public typealias AccessorParameterSyntax = AccessorParametersSyntax
 
-@available(*, deprecated, renamed: "UnresolvedArrowExprSyntax")
-public typealias ArrowExprSyntax = UnresolvedArrowExprSyntax
-
 @available(*, deprecated, renamed: "AssociatedTypeDeclSyntax")
 public typealias AssociatedtypeDeclSyntax = AssociatedTypeDeclSyntax
 
@@ -47,9 +44,6 @@ public typealias AvailabilityVersionRestrictionListSyntax = PlatformVersionItemL
 
 @available(*, deprecated, renamed: "BackDeployedAttributeArgumentsSyntax")
 public typealias BackDeployedAttributeSpecListSyntax = BackDeployedAttributeArgumentsSyntax
-
-@available(*, deprecated, renamed: "UnresolvedInfixOperatorExprSyntax")
-public typealias BinaryOperatorExprSyntax = UnresolvedInfixOperatorExprSyntax
 
 @available(*, deprecated, renamed: "SwitchCaseItemSyntax")
 public typealias CaseItemSyntax = SwitchCaseItemSyntax
@@ -228,10 +222,6 @@ public extension SyntaxKind {
     return .accessorParameters
   }
   
-  static var arrowExpr: Self {
-    return .unresolvedArrowExpr
-  }
-  
   static var associatedtypeDecl: Self {
     return .associatedTypeDecl
   }
@@ -254,10 +244,6 @@ public extension SyntaxKind {
   
   static var backDeployedAttributeSpecList: Self {
     return .backDeployedAttributeArguments
-  }
-  
-  static var binaryOperatorExpr: Self {
-    return .unresolvedInfixOperatorExpr
   }
   
   static var caseItem: Self {

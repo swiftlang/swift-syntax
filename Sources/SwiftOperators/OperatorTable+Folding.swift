@@ -60,7 +60,7 @@ extension OperatorTable {
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> PrecedenceGroupName? {
     // A binary operator.
-    if let binaryExpr = expr.as(UnresolvedInfixOperatorExprSyntax.self) {
+    if let binaryExpr = expr.as(BinaryOperatorExprSyntax.self) {
       let operatorName = binaryExpr.operator.text
       return try lookupOperatorPrecedenceGroupName(
         operatorName,
@@ -85,7 +85,7 @@ extension OperatorTable {
     }
 
     // The arrow operator has fixed precedence.
-    if expr.is(UnresolvedArrowExprSyntax.self) {
+    if expr.is(ArrowExprSyntax.self) {
       return "FunctionArrowPrecedence"
     }
 
@@ -137,7 +137,7 @@ extension OperatorTable {
     // which will be one of the unresolved infix operators.
 
     // An operator such as '+'.
-    if let binaryOperatorExpr = op.as(UnresolvedInfixOperatorExprSyntax.self) {
+    if let binaryOperatorExpr = op.as(BinaryOperatorExprSyntax.self) {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
@@ -205,7 +205,7 @@ extension OperatorTable {
     }
 
     // An arrow expression (->).
-    if let arrowExpr = op.as(UnresolvedArrowExprSyntax.self) {
+    if let arrowExpr = op.as(ArrowExprSyntax.self) {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,

@@ -206,7 +206,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .asExpr, .assignmentExpr, .awaitExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedArrowExpr, .unresolvedAsExpr, .unresolvedInfixOperatorExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -218,7 +218,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .arrayExpr, .asExpr, .assignmentExpr, .awaitExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedArrowExpr, .unresolvedAsExpr, .unresolvedInfixOperatorExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       break
     default:
       preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
@@ -255,9 +255,11 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public static var structure: SyntaxNodeStructure {
     return .choices([
           .node(ArrayExprSyntax.self),
+          .node(ArrowExprSyntax.self),
           .node(AsExprSyntax.self),
           .node(AssignmentExprSyntax.self),
           .node(AwaitExprSyntax.self),
+          .node(BinaryOperatorExprSyntax.self),
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
           .node(CanImportExprSyntax.self),
@@ -300,9 +302,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(TryExprSyntax.self),
           .node(TupleExprSyntax.self),
           .node(TypeExprSyntax.self),
-          .node(UnresolvedArrowExprSyntax.self),
           .node(UnresolvedAsExprSyntax.self),
-          .node(UnresolvedInfixOperatorExprSyntax.self),
           .node(UnresolvedIsExprSyntax.self),
           .node(UnresolvedTernaryExprSyntax.self)
         ])
@@ -699,6 +699,7 @@ extension Syntax {
           .node(ArrayElementSyntax.self),
           .node(ArrayExprSyntax.self),
           .node(ArrayTypeSyntax.self),
+          .node(ArrowExprSyntax.self),
           .node(AsExprSyntax.self),
           .node(AssignmentExprSyntax.self),
           .node(AssociatedTypeDeclSyntax.self),
@@ -711,6 +712,7 @@ extension Syntax {
           .node(AvailabilityLabeledArgumentSyntax.self),
           .node(AwaitExprSyntax.self),
           .node(BackDeployedAttributeArgumentsSyntax.self),
+          .node(BinaryOperatorExprSyntax.self),
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
           .node(BreakStmtSyntax.self),
@@ -948,9 +950,7 @@ extension Syntax {
           .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
           .node(UnderscorePrivateAttributeArgumentsSyntax.self),
           .node(UnexpectedNodesSyntax.self),
-          .node(UnresolvedArrowExprSyntax.self),
           .node(UnresolvedAsExprSyntax.self),
-          .node(UnresolvedInfixOperatorExprSyntax.self),
           .node(UnresolvedIsExprSyntax.self),
           .node(UnresolvedTernaryExprSyntax.self),
           .node(ValueBindingPatternSyntax.self),

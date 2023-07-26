@@ -563,7 +563,7 @@ final class StatementTests: XCTestCase {
         SequenceExprSyntax(
           elements: ExprListSyntax([
             IdentifierExprSyntax(identifier: .identifier("yield")),
-            UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("&")),
+            BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
         )
@@ -581,7 +581,7 @@ final class StatementTests: XCTestCase {
         SequenceExprSyntax(
           elements: ExprListSyntax([
             IdentifierExprSyntax(identifier: .identifier("yield")),
-            UnresolvedInfixOperatorExprSyntax(operator: .binaryOperator("&")),
+            BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
         )

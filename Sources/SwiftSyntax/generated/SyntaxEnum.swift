@@ -27,6 +27,7 @@ public enum SyntaxEnum {
   case arrayElement(ArrayElementSyntax)
   case arrayExpr(ArrayExprSyntax)
   case arrayType(ArrayTypeSyntax)
+  case arrowExpr(ArrowExprSyntax)
   case asExpr(AsExprSyntax)
   case assignmentExpr(AssignmentExprSyntax)
   case associatedTypeDecl(AssociatedTypeDeclSyntax)
@@ -39,6 +40,7 @@ public enum SyntaxEnum {
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
   case awaitExpr(AwaitExprSyntax)
   case backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax)
+  case binaryOperatorExpr(BinaryOperatorExprSyntax)
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
   case breakStmt(BreakStmtSyntax)
@@ -276,9 +278,7 @@ public enum SyntaxEnum {
   case unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
   case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
-  case unresolvedArrowExpr(UnresolvedArrowExprSyntax)
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
-  case unresolvedInfixOperatorExpr(UnresolvedInfixOperatorExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
@@ -325,6 +325,8 @@ public extension Syntax {
       return .arrayExpr(ArrayExprSyntax(self)!)
     case .arrayType:
       return .arrayType(ArrayTypeSyntax(self)!)
+    case .arrowExpr:
+      return .arrowExpr(ArrowExprSyntax(self)!)
     case .asExpr:
       return .asExpr(AsExprSyntax(self)!)
     case .assignmentExpr:
@@ -349,6 +351,8 @@ public extension Syntax {
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployedAttributeArguments:
       return .backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax(self)!)
+    case .binaryOperatorExpr:
+      return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr:
       return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
     case .borrowExpr:
@@ -823,12 +827,8 @@ public extension Syntax {
       return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
     case .unexpectedNodes:
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
-    case .unresolvedArrowExpr:
-      return .unresolvedArrowExpr(UnresolvedArrowExprSyntax(self)!)
     case .unresolvedAsExpr:
       return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
-    case .unresolvedInfixOperatorExpr:
-      return .unresolvedInfixOperatorExpr(UnresolvedInfixOperatorExprSyntax(self)!)
     case .unresolvedIsExpr:
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
     case .unresolvedTernaryExpr:

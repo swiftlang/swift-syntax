@@ -468,7 +468,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
   // MARK: - Specialized diagnostic generation
 
-  public override func visit(_ node: UnresolvedArrowExprSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }

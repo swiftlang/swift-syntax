@@ -264,7 +264,7 @@ extension Parser {
     case (.binaryOperator, let handle)?:
       // Parse the operator.
       let operatorToken = self.eat(handle)
-      let op = RawUnresolvedInfixOperatorExprSyntax(operator: operatorToken, arena: arena)
+      let op = RawBinaryOperatorExprSyntax(operator: operatorToken, arena: arena)
       return (RawExprSyntax(op), nil)
 
     case (.infixQuestionMark, let handle)?:
@@ -332,7 +332,7 @@ extension Parser {
 
       let unexpectedAfterArrow = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
 
-      let op = RawUnresolvedArrowExprSyntax(
+      let op = RawArrowExprSyntax(
         effectSpecifiers: effectSpecifiers,
         unexpectedBeforeArrow,
         arrow: arrow,

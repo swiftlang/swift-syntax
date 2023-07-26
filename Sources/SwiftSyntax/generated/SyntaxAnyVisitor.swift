@@ -149,6 +149,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: ArrowExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -242,6 +250,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: BackDeployedAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
+  override open func visit(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: BinaryOperatorExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -2141,27 +2157,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: UnresolvedArrowExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: UnresolvedArrowExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: UnresolvedAsExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
   override open func visitPost(_ node: UnresolvedAsExprSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: UnresolvedInfixOperatorExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

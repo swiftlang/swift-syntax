@@ -241,7 +241,7 @@ final class VariableTests: XCTestCase {
         VariableDeclSyntax("var test: Int") {
           SequenceExprSyntax {
             IntegerLiteralExprSyntax(4)
-            UnresolvedInfixOperatorExprSyntax(text: "+")
+            BinaryOperatorExprSyntax(text: "+")
             IntegerLiteralExprSyntax(5)
           }
         },
@@ -274,7 +274,7 @@ final class VariableTests: XCTestCase {
       AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
         SequenceExprSyntax {
           IntegerLiteralExprSyntax(4)
-          UnresolvedInfixOperatorExprSyntax(text: "+")
+          BinaryOperatorExprSyntax(text: "+")
           IntegerLiteralExprSyntax(5)
         }
       }

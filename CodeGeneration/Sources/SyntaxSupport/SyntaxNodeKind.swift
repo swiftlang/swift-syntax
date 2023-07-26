@@ -32,6 +32,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case arrayElementList
   case arrayExpr
   case arrayType
+  case arrowExpr
   case asExpr
   case assignmentExpr
   case associatedTypeDecl
@@ -44,6 +45,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case availabilityLabeledArgument
   case awaitExpr
   case backDeployedAttributeArguments
+  case binaryOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
@@ -286,9 +288,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
-  case unresolvedArrowExpr
   case unresolvedAsExpr
-  case unresolvedInfixOperatorExpr
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case valueBindingPattern
@@ -434,8 +434,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .switchCaseItemList: return "caseItemList"
     case .typeAliasDecl: return "typealiasDecl"
     case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
-    case .unresolvedArrowExpr: return "arrowExpr"
-    case .unresolvedInfixOperatorExpr: return "binaryOperatorExpr"
     case .yieldStmtArgument: return "yieldExprListElement"
     case .yieldStmtArgumentClause: return "yieldList"
     case .yieldStmtArgumentList: return "yieldExprList"

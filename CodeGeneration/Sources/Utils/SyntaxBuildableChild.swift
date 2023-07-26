@@ -132,7 +132,7 @@ public extension Child {
         ExprSyntax(
           SequenceExprSyntax {
             IdentifierExprSyntax(identifier: .identifier(varName))
-            UnresolvedInfixOperatorExprSyntax(text: "==")
+            BinaryOperatorExprSyntax(text: "==")
             NilLiteralExprSyntax()
           }
         )
@@ -143,13 +143,13 @@ public extension Child {
         ExprSyntax(
           SequenceExprSyntax {
             MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
-            UnresolvedInfixOperatorExprSyntax(text: "==")
+            BinaryOperatorExprSyntax(text: "==")
             StringLiteralExprSyntax(content: textChoice)
           }
         )
       )
     }
-    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(UnresolvedInfixOperatorExprSyntax(text: "||"))] }.dropLast())
+    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
     return FunctionCallExprSyntax(callee: ExprSyntax("precondition")) {
       TupleExprElementSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }

@@ -437,6 +437,61 @@ extension ArrayTypeSyntax {
   }
 }
 
+extension ArrowExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndArrow")
+  public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEffectSpecifiersAndArrow
+    }
+    set {
+      unexpectedBetweenEffectSpecifiersAndArrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arrow")
+  public var arrowToken: TokenSyntax {
+    get {
+      return arrow
+    }
+    set {
+      arrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterArrow")
+  public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterArrow
+    }
+    set {
+      unexpectedAfterArrow = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arrow argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
+      arrowToken: TokenSyntax = .arrowToken(),
+      _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeEffectSpecifiers, 
+        effectSpecifiers: effectSpecifiers, 
+        unexpectedBetweenEffectSpecifiersAndArrowToken, 
+        arrow: arrowToken, 
+        unexpectedAfterArrowToken, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension AsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenExpressionAndAsKeyword")
   public var unexpectedBetweenExpressionAndAsTok: UnexpectedNodesSyntax? {
@@ -930,6 +985,57 @@ extension BackDeployedAttributeArgumentsSyntax {
         unexpectedBetweenColonAndVersionList, 
         platforms: versionList, 
         unexpectedAfterVersionList, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension BinaryOperatorExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeOperator")
+  public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeOperator
+    }
+    set {
+      unexpectedBeforeOperator = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "operator")
+  public var operatorToken: TokenSyntax {
+    get {
+      return `operator`
+    }
+    set {
+      `operator` = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterOperator")
+  public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterOperator
+    }
+    set {
+      unexpectedAfterOperator = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
+      operatorToken: TokenSyntax,
+      _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeOperatorToken, 
+        operator: operatorToken, 
+        unexpectedAfterOperatorToken, 
         trailingTrivia: trailingTrivia
       )
   }
@@ -8110,61 +8216,6 @@ extension TypeAliasDeclSyntax {
   }
 }
 
-extension UnresolvedArrowExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndArrow")
-  public var unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenEffectSpecifiersAndArrow
-    }
-    set {
-      unexpectedBetweenEffectSpecifiersAndArrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "arrow")
-  public var arrowToken: TokenSyntax {
-    get {
-      return arrow
-    }
-    set {
-      arrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterArrow")
-  public var unexpectedAfterArrowToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterArrow
-    }
-    set {
-      unexpectedAfterArrow = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with arrow argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
-      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
-      arrowToken: TokenSyntax = .arrowToken(),
-      _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeEffectSpecifiers, 
-        effectSpecifiers: effectSpecifiers, 
-        unexpectedBetweenEffectSpecifiersAndArrowToken, 
-        arrow: arrowToken, 
-        unexpectedAfterArrowToken, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension UnresolvedAsExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeAsKeyword")
   public var unexpectedBeforeAsTok: UnexpectedNodesSyntax? {
@@ -8215,57 +8266,6 @@ extension UnresolvedAsExprSyntax {
         unexpectedBetweenAsTokAndQuestionOrExclamationMark, 
         questionOrExclamationMark: questionOrExclamationMark, 
         unexpectedAfterQuestionOrExclamationMark, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension UnresolvedInfixOperatorExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeOperator")
-  public var unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBeforeOperator
-    }
-    set {
-      unexpectedBeforeOperator = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "operator")
-  public var operatorToken: TokenSyntax {
-    get {
-      return `operator`
-    }
-    set {
-      `operator` = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedAfterOperator")
-  public var unexpectedAfterOperatorToken: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedAfterOperator
-    }
-    set {
-      unexpectedAfterOperator = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
-      operatorToken: TokenSyntax,
-      _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeOperatorToken, 
-        operator: operatorToken, 
-        unexpectedAfterOperatorToken, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -79,6 +79,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ArrayTypeSyntax) -> ResultType
   
+  /// Visiting ``ArrowExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ArrowExprSyntax) -> ResultType
+  
   /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -138,6 +143,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> ResultType
+  
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: BinaryOperatorExprSyntax) -> ResultType
   
   /// Visiting ``BooleanLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1324,20 +1334,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnexpectedNodesSyntax) -> ResultType
   
-  /// Visiting ``UnresolvedArrowExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedArrowExprSyntax) -> ResultType
-  
   /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedAsExprSyntax) -> ResultType
-  
-  /// Visiting ``UnresolvedInfixOperatorExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> ResultType
   
   /// Visiting ``UnresolvedIsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1499,6 +1499,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``ArrowExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ArrowExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``AsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1580,6 +1587,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``BinaryOperatorExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: BinaryOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3242,24 +3256,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``UnresolvedArrowExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedArrowExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``UnresolvedAsExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedAsExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``UnresolvedInfixOperatorExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedInfixOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3389,6 +3389,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .arrayType(let derived):
       return visit(derived)
+    case .arrowExpr(let derived):
+      return visit(derived)
     case .asExpr(let derived):
       return visit(derived)
     case .assignmentExpr(let derived):
@@ -3412,6 +3414,8 @@ extension SyntaxTransformVisitor {
     case .awaitExpr(let derived):
       return visit(derived)
     case .backDeployedAttributeArguments(let derived):
+      return visit(derived)
+    case .binaryOperatorExpr(let derived):
       return visit(derived)
     case .booleanLiteralExpr(let derived):
       return visit(derived)
@@ -3887,11 +3891,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .unexpectedNodes(let derived):
       return visit(derived)
-    case .unresolvedArrowExpr(let derived):
-      return visit(derived)
     case .unresolvedAsExpr(let derived):
-      return visit(derived)
-    case .unresolvedInfixOperatorExpr(let derived):
       return visit(derived)
     case .unresolvedIsExpr(let derived):
       return visit(derived)

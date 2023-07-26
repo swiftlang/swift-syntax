@@ -185,6 +185,128 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - ArrowExprSyntax
+
+/// ### Children
+/// 
+///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
+///  - `arrow`: `'->'`
+public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .arrowExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``ArrowExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .arrowExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndArrow: UnexpectedNodesSyntax? = nil,
+      arrow: TokenSyntax = .arrowToken(),
+      _ unexpectedAfterArrow: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeEffectSpecifiers, 
+            effectSpecifiers, 
+            unexpectedBetweenEffectSpecifiersAndArrow, 
+            arrow, 
+            unexpectedAfterArrow
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeEffectSpecifiers?.raw, 
+          effectSpecifiers?.raw, 
+          unexpectedBetweenEffectSpecifiersAndArrow?.raw, 
+          arrow.raw, 
+          unexpectedAfterArrow?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.arrowExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ArrowExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(TypeEffectSpecifiersSyntax.init)
+    }
+    set(value) {
+      self = ArrowExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenEffectSpecifiersAndArrow: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ArrowExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var arrow: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = ArrowExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterArrow: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ArrowExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeEffectSpecifiers, 
+          \Self.effectSpecifiers, 
+          \Self.unexpectedBetweenEffectSpecifiersAndArrow, 
+          \Self.arrow, 
+          \Self.unexpectedAfterArrow
+        ])
+  }
+}
+
 // MARK: - AsExprSyntax
 
 /// ### Children
@@ -563,6 +685,89 @@ public struct AwaitExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.expression, 
           \Self.unexpectedAfterExpression
         ])
+  }
+}
+
+// MARK: - BinaryOperatorExprSyntax
+
+/// ### Children
+/// 
+///  - `operator`: `<binaryOperator>`
+public struct BinaryOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .binaryOperatorExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``BinaryOperatorExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .binaryOperatorExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
+      operator: TokenSyntax,
+      _ unexpectedAfterOperator: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeOperator, `operator`, unexpectedAfterOperator))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeOperator?.raw, `operator`.raw, unexpectedAfterOperator?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.binaryOperatorExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeOperator: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var `operator`: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterOperator: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = BinaryOperatorExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([\Self.unexpectedBeforeOperator, \Self.operator, \Self.unexpectedAfterOperator])
   }
 }
 
@@ -6896,128 +7101,6 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - UnresolvedArrowExprSyntax
-
-/// ### Children
-/// 
-///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `arrow`: `'->'`
-public struct UnresolvedArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .unresolvedArrowExpr else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``UnresolvedArrowExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .unresolvedArrowExpr)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
-      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndArrow: UnexpectedNodesSyntax? = nil,
-      arrow: TokenSyntax = .arrowToken(),
-      _ unexpectedAfterArrow: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeEffectSpecifiers, 
-            effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndArrow, 
-            arrow, 
-            unexpectedAfterArrow
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeEffectSpecifiers?.raw, 
-          effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndArrow?.raw, 
-          arrow.raw, 
-          unexpectedAfterArrow?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.unresolvedArrowExpr,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedArrowExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
-    get {
-      return data.child(at: 1, parent: Syntax(self)).map(TypeEffectSpecifiersSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedArrowExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenEffectSpecifiersAndArrow: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedArrowExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var arrow: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = UnresolvedArrowExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterArrow: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedArrowExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeEffectSpecifiers, 
-          \Self.effectSpecifiers, 
-          \Self.unexpectedBetweenEffectSpecifiersAndArrow, 
-          \Self.arrow, 
-          \Self.unexpectedAfterArrow
-        ])
-  }
-}
-
 // MARK: - UnresolvedAsExprSyntax
 
 /// ### Children
@@ -7137,89 +7220,6 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.questionOrExclamationMark, 
           \Self.unexpectedAfterQuestionOrExclamationMark
         ])
-  }
-}
-
-// MARK: - UnresolvedInfixOperatorExprSyntax
-
-/// ### Children
-/// 
-///  - `operator`: `<binaryOperator>`
-public struct UnresolvedInfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .unresolvedInfixOperatorExpr else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``UnresolvedInfixOperatorExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .unresolvedInfixOperatorExpr)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
-      operator: TokenSyntax,
-      _ unexpectedAfterOperator: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeOperator, `operator`, unexpectedAfterOperator))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeOperator?.raw, `operator`.raw, unexpectedAfterOperator?.raw]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.unresolvedInfixOperatorExpr,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeOperator: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedInfixOperatorExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var `operator`: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = UnresolvedInfixOperatorExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterOperator: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = UnresolvedInfixOperatorExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeOperator, \Self.operator, \Self.unexpectedAfterOperator])
   }
 }
 

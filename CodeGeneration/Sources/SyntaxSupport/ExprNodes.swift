@@ -66,7 +66,7 @@ public let EXPR_NODES: [Node] = [
   // arrow-expr -> 'async'? 'throws'? '->'
   // NOTE: This appears only in SequenceExpr.
   Node(
-    kind: .unresolvedArrowExpr,
+    kind: .arrowExpr,
     base: .expr,
     nameForDiagnostics: nil,
     children: [
@@ -149,7 +149,7 @@ public let EXPR_NODES: [Node] = [
   // An operator like + or -.
   // NOTE: This appears only in SequenceExpr.
   Node(
-    kind: .unresolvedInfixOperatorExpr,
+    kind: .binaryOperatorExpr,
     base: .expr,
     nameForDiagnostics: "operator",
     children: [

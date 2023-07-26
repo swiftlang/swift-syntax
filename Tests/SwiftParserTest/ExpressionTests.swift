@@ -392,14 +392,14 @@ final class ExpressionTests: XCTestCase {
           key: MacroExpansionExprSyntax(
             pound: .poundToken(),
             macroName: .identifier("line"),
-            arguments: TupleExprElementListSyntax([])
+            arguments: LabeledExprListSyntax([])
           ),
           colon: .colonToken(),
           value: FunctionCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
             leftParen: .leftParenToken(),
-            arguments: TupleExprElementListSyntax([
-              TupleExprElementSyntax(
+            arguments: LabeledExprListSyntax([
+              LabeledExprSyntax(
                 label: .identifier("identifier"),
                 colon: .colonToken(),
                 expression: MemberAccessExprSyntax(
@@ -1158,7 +1158,7 @@ final class ExpressionTests: XCTestCase {
         MacroExpansionExprSyntax(
           pound: .poundToken(),
           macroName: .identifier("case"),
-          arguments: TupleExprElementListSyntax([])
+          arguments: LabeledExprListSyntax([])
         )
       )
     )
@@ -2600,7 +2600,7 @@ final class StatementExpressionTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       )

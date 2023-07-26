@@ -1664,7 +1664,7 @@ final class DeclarationTests: XCTestCase {
         MacroExpansionDeclSyntax(
           pound: .poundToken(),
           macroName: .identifier("case"),
-          arguments: TupleExprElementListSyntax([])
+          arguments: LabeledExprListSyntax([])
         )
       )
     )
@@ -2245,8 +2245,8 @@ final class DeclarationTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("open")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("set"))
             )
           ]),

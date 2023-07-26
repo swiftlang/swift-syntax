@@ -180,6 +180,12 @@ public typealias SuperRefExprSyntax = SuperExprSyntax
 @available(*, deprecated, renamed: "SpecializeTargetFunctionArgumentSyntax")
 public typealias TargetFunctionEntrySyntax = SpecializeTargetFunctionArgumentSyntax
 
+@available(*, deprecated, renamed: "LabeledExprSyntax")
+public typealias TupleExprElementSyntax = LabeledExprSyntax
+
+@available(*, deprecated, renamed: "LabeledExprListSyntax")
+public typealias TupleExprElementListSyntax = LabeledExprListSyntax
+
 @available(*, deprecated, renamed: "InheritanceClauseSyntax")
 public typealias TypeInheritanceClauseSyntax = InheritanceClauseSyntax
 
@@ -424,6 +430,14 @@ public extension SyntaxKind {
   
   static var targetFunctionEntry: Self {
     return .specializeTargetFunctionArgument
+  }
+  
+  static var tupleExprElement: Self {
+    return .labeledExpr
+  }
+  
+  static var tupleExprElementList: Self {
+    return .labeledExprList
   }
   
   static var typeInheritanceClause: Self {

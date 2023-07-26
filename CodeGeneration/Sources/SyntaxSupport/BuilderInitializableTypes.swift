@@ -25,11 +25,11 @@ public let BUILDER_INITIALIZABLE_TYPES: [SyntaxNodeKind: SyntaxNodeKind?] = [
   .genericParameterList: nil,
   .genericRequirementList: nil,
   .inheritedTypeList: nil,
+  .labeledExprList: nil,
   .memberBlock: .memberBlockItemList,
   .memberBlockItemList: nil,
   .patternBindingList: nil,
   .switchCaseItemList: nil,
   .switchCaseList: nil,
-  .tupleExprElementList: nil,
   .tuplePatternElementList: nil,
 ]

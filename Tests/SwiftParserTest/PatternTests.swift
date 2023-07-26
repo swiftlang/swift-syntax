@@ -34,7 +34,7 @@ final class PatternTests: XCTestCase {
               name: .identifier("e")
             ),
             leftParen: .leftParenToken(),
-            arguments: TupleExprElementListSyntax([
+            arguments: LabeledExprListSyntax([
               .init(
                 expression: PatternExprSyntax(
                   pattern: IdentifierPatternSyntax(identifier: .identifier("y"))
@@ -81,7 +81,7 @@ final class PatternTests: XCTestCase {
                 expression: SubscriptCallExprSyntax(
                   calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
                   leftSquare: .leftSquareToken(),
-                  arguments: TupleExprElementListSyntax([
+                  arguments: LabeledExprListSyntax([
                     .init(expression: IntegerLiteralExprSyntax(literal: .integerLiteral("0")))
                   ]),
                   rightSquare: .rightSquareToken()
@@ -130,7 +130,7 @@ final class PatternTests: XCTestCase {
           expression: SubscriptCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
             leftSquare: .leftSquareToken(),
-            arguments: TupleExprElementListSyntax([
+            arguments: LabeledExprListSyntax([
               .init(
                 expression: PatternExprSyntax(
                   pattern: IdentifierPatternSyntax(identifier: .identifier("z"))

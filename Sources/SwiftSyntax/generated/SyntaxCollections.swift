@@ -780,6 +780,37 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
 /// ### Children
 /// 
+/// ``LabeledExprSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/properties``
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
+///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
+///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/properties``
+///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/arguments``
+///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/arguments``
+///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/arguments``
+///  - ``SubscriptCallExprSyntax``.``SubscriptCallExprSyntax/arguments``
+///  - ``TupleExprSyntax``.``TupleExprSyntax/elements``
+public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = LabeledExprSyntax
+  
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .labeledExprList else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  public static let syntaxKind = SyntaxKind.labeledExprList
+}
+
+/// ### Children
+/// 
 /// ``MemberBlockItemSyntax`` `*`
 ///
 /// ### Contained in
@@ -1253,37 +1284,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   }
   
   public static let syntaxKind = SyntaxKind.switchCaseList
-}
-
-/// ### Children
-/// 
-/// ``TupleExprElementSyntax`` `*`
-///
-/// ### Contained in
-/// 
-///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/properties``
-///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
-///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
-///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/properties``
-///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/arguments``
-///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/arguments``
-///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/arguments``
-///  - ``SubscriptCallExprSyntax``.``SubscriptCallExprSyntax/arguments``
-///  - ``TupleExprSyntax``.``TupleExprSyntax/elements``
-public struct TupleExprElementListSyntax: SyntaxCollection, SyntaxHashable {
-  public typealias Element = TupleExprElementSyntax
-  
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .tupleExprElementList else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  public static let syntaxKind = SyntaxKind.tupleExprElementList
 }
 
 /// ### Children
@@ -1890,6 +1890,11 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedBetweenLeftSquareAndArguments``
 ///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedBetweenArgumentsAndRightSquare``
 ///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/unexpectedAfterRightSquare``
+///  - ``LabeledExprSyntax``.``LabeledExprSyntax/unexpectedBeforeLabel``
+///  - ``LabeledExprSyntax``.``LabeledExprSyntax/unexpectedBetweenLabelAndColon``
+///  - ``LabeledExprSyntax``.``LabeledExprSyntax/unexpectedBetweenColonAndExpression``
+///  - ``LabeledExprSyntax``.``LabeledExprSyntax/unexpectedBetweenExpressionAndTrailingComma``
+///  - ``LabeledExprSyntax``.``LabeledExprSyntax/unexpectedAfterTrailingComma``
 ///  - ``LabeledSpecializeArgumentSyntax``.``LabeledSpecializeArgumentSyntax/unexpectedBeforeLabel``
 ///  - ``LabeledSpecializeArgumentSyntax``.``LabeledSpecializeArgumentSyntax/unexpectedBetweenLabelAndColon``
 ///  - ``LabeledSpecializeArgumentSyntax``.``LabeledSpecializeArgumentSyntax/unexpectedBetweenColonAndValue``
@@ -2222,11 +2227,6 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedBetweenTryKeywordAndQuestionOrExclamationMark``
 ///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedBetweenQuestionOrExclamationMarkAndExpression``
 ///  - ``TryExprSyntax``.``TryExprSyntax/unexpectedAfterExpression``
-///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBeforeLabel``
-///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenLabelAndColon``
-///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenColonAndExpression``
-///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedBetweenExpressionAndTrailingComma``
-///  - ``TupleExprElementSyntax``.``TupleExprElementSyntax/unexpectedAfterTrailingComma``
 ///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBeforeLeftParen``
 ///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBetweenLeftParenAndElements``
 ///  - ``TupleExprSyntax``.``TupleExprSyntax/unexpectedBetweenElementsAndRightParen``

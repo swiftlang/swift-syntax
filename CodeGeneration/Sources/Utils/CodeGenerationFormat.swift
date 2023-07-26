@@ -79,11 +79,11 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+  public override func visit(_ node: LabeledExprListSyntax) -> LabeledExprListSyntax {
     let children = node.children(viewMode: .all)
     // Short tuple element list literals are presented on one line, list each element on a different line.
     if children.count > 3 {
-      return TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self))
+      return LabeledExprListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self))
     } else {
       return super.visit(node)
     }

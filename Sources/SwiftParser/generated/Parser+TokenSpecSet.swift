@@ -1401,6 +1401,33 @@ extension KeyPathPropertyComponentSyntax {
   }
 }
 
+extension LabeledExprSyntax {
+  enum LabelOptions: TokenSpecSet {
+    case identifier
+    case wildcard
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.wildcard):
+        self = .wildcard
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .identifier:
+        return .identifier
+      case .wildcard:
+        return .wildcard
+      }
+    }
+  }
+}
+
 extension LayoutRequirementSyntax {
   enum LayoutSpecifierOptions: TokenSpecSet {
     case _Trivial
@@ -1908,33 +1935,6 @@ extension TryExprSyntax {
         return .postfixQuestionMark
       case .exclamationMark:
         return .exclamationMark
-      }
-    }
-  }
-}
-
-extension TupleExprElementSyntax {
-  enum LabelOptions: TokenSpecSet {
-    case identifier
-    case wildcard
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.wildcard):
-        self = .wildcard
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .wildcard:
-        return .wildcard
       }
     }
   }

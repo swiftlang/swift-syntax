@@ -355,7 +355,7 @@ final class VariableTests: XCTestCase {
         VariableDeclSyntax(
           attributes: AttributeListSyntax {
             AttributeSyntax("WithArgs") {
-              TupleExprElementSyntax(expression: ExprSyntax("value"))
+              LabeledExprSyntax(expression: ExprSyntax("value"))
             }
           },
           modifiers: [DeclModifierSyntax(name: .keyword(.public))],

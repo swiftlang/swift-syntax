@@ -249,8 +249,8 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
         StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
         ExpressionSegmentSyntax(
-          expressions: TupleExprElementListSyntax {
-            TupleExprElementSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
+          expressions: LabeledExprListSyntax {
+            LabeledExprSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
           }
         )
       },
@@ -369,8 +369,8 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
         segments: StringLiteralSegmentListSyntax {
           .expressionSegment(
             ExpressionSegmentSyntax(
-              expressions: TupleExprElementListSyntax {
-                TupleExprElementSyntax(
+              expressions: LabeledExprListSyntax {
+                LabeledExprSyntax(
                   expression: StringLiteralExprSyntax(
                     openingQuote: .multilineStringQuoteToken(),
                     content: "a",

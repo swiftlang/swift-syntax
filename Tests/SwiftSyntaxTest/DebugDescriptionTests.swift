@@ -112,18 +112,18 @@ public class DebugDescriptionTests: XCTestCase {
         let token2 = TokenSyntax.integerLiteral("2")
         let expr2 = IntegerLiteralExprSyntax(literal: token2)
         let elements = [
-          TupleExprElementSyntax(expression: expr1),
-          TupleExprElementSyntax(expression: expr2),
+          LabeledExprSyntax(expression: expr1),
+          LabeledExprSyntax(expression: expr2),
         ]
-        let tuples = TupleExprElementListSyntax(elements)
+        let tuples = LabeledExprListSyntax(elements)
         return .init(
           syntax: tuples,
           expectedDumped: """
-            - TupleExprElementListSyntax
-            ├─[0]: TupleExprElementSyntax
+            - LabeledExprListSyntax
+            ├─[0]: LabeledExprSyntax
             │ ╰─expression: IntegerLiteralExprSyntax
             │   ╰─literal: integerLiteral("1")
-            ╰─[1]: TupleExprElementSyntax
+            ╰─[1]: LabeledExprSyntax
               ╰─expression: IntegerLiteralExprSyntax
                 ╰─literal: integerLiteral("2")
 
@@ -136,19 +136,19 @@ public class DebugDescriptionTests: XCTestCase {
         let token2 = TokenSyntax.integerLiteral("2")
         let expr2 = IntegerLiteralExprSyntax(literal: token2)
         let elements = [
-          TupleExprElementSyntax(expression: expr1),
-          TupleExprElementSyntax(expression: expr2),
+          LabeledExprSyntax(expression: expr1),
+          LabeledExprSyntax(expression: expr2),
         ]
-        let tuples = TupleExprElementListSyntax(elements)
+        let tuples = LabeledExprListSyntax(elements)
         return .init(
           syntax: tuples.reversed(),
           expectedDumped: """
-            ▿ Swift.ReversedCollection<SwiftSyntax.TupleExprElementListSyntax>
-              - _base: TupleExprElementListSyntax
-            ├─[0]: TupleExprElementSyntax
+            ▿ Swift.ReversedCollection<SwiftSyntax.LabeledExprListSyntax>
+              - _base: LabeledExprListSyntax
+            ├─[0]: LabeledExprSyntax
             │ ╰─expression: IntegerLiteralExprSyntax
             │   ╰─literal: integerLiteral("1")
-            ╰─[1]: TupleExprElementSyntax
+            ╰─[1]: LabeledExprSyntax
               ╰─expression: IntegerLiteralExprSyntax
                 ╰─literal: integerLiteral("2")
 
@@ -185,12 +185,12 @@ public class DebugDescriptionTests: XCTestCase {
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
                         calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
                         leftParen: .leftParenToken(),
-                        arguments: TupleExprElementListSyntax([
-                              TupleExprElementSyntax(
+                        arguments: LabeledExprListSyntax([
+                              LabeledExprSyntax(
                                   expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
                                   trailingComma: .commaToken(trailingTrivia: .space)
                                 ),
-                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
+                              LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
                         rightParen: .rightParenToken()
                       )))
@@ -208,12 +208,12 @@ public class DebugDescriptionTests: XCTestCase {
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
                         calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
                         leftParen: .leftParenToken(),
-                        arguments: TupleExprElementListSyntax([
-                              TupleExprElementSyntax(
+                        arguments: LabeledExprListSyntax([
+                              LabeledExprSyntax(
                                   expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
                                   trailingComma: .commaToken()
                                 ),
-                              TupleExprElementSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
+                              LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
                         rightParen: .rightParenToken()
                       )))

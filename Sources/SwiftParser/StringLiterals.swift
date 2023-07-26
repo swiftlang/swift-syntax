@@ -497,7 +497,7 @@ extension Parser {
       } else if let backslash = self.consume(if: .backslash) {
         let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(.rawStringPoundDelimiter, matching: openingPounds)
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
-        let expressions = RawTupleExprElementListSyntax(elements: self.parseArgumentListElements(pattern: .none), arena: self.arena)
+        let expressions = RawLabeledExprListSyntax(elements: self.parseArgumentListElements(pattern: .none), arena: self.arena)
 
         // For recovery, eat anything up to the next token that either starts a new string segment or terminates the string.
         // This allows us to skip over extraneous identifiers etc. in an unterminated string interpolation.

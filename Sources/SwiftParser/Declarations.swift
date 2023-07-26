@@ -1915,7 +1915,7 @@ extension Parser {
 
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
-    let args: [RawTupleExprElementSyntax]
+    let args: [RawLabeledExprSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
@@ -1949,7 +1949,7 @@ extension Parser {
       macroName: macro,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      arguments: RawTupleExprElementListSyntax(
+      arguments: RawLabeledExprListSyntax(
         elements: args,
         arena: self.arena
       ),

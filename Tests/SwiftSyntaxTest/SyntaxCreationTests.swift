@@ -114,11 +114,11 @@ public class SyntaxCreationTests: XCTestCase {
       closingQuote: .stringQuoteToken()
     )
     let printID = IdentifierExprSyntax(identifier: .identifier("print"))
-    let arg = TupleExprElementSyntax(expression: string)
+    let arg = LabeledExprSyntax(expression: string)
     let call = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      arguments: TupleExprElementListSyntax([arg]),
+      arguments: LabeledExprListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
@@ -128,14 +128,14 @@ public class SyntaxCreationTests: XCTestCase {
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment(" ")))]),
       closingQuote: .stringQuoteToken()
     )
-    let terminatorArg = TupleExprElementSyntax(
+    let terminatorArg = LabeledExprSyntax(
       label: .identifier("terminator"),
       colon: .colonToken(trailingTrivia: .space),
       expression: emptyString
     )
     let callWithTerminator = call.with(
       \.arguments,
-      TupleExprElementListSyntax([
+      LabeledExprListSyntax([
         arg.with(
           \.trailingComma,
           .commaToken(trailingTrivia: .space)
@@ -159,11 +159,11 @@ public class SyntaxCreationTests: XCTestCase {
       closingPounds: nil
     )
     let printID = IdentifierExprSyntax(identifier: .identifier("print"))
-    let arg = TupleExprElementSyntax(expression: string)
+    let arg = LabeledExprSyntax(expression: string)
     let call1 = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      arguments: TupleExprElementListSyntax([arg]),
+      arguments: LabeledExprListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertNotNil(call1.leftParen)
@@ -175,7 +175,7 @@ public class SyntaxCreationTests: XCTestCase {
 
     let call3 = FunctionCallExprSyntax(
       calledExpression: printID,
-      arguments: TupleExprElementListSyntax([arg])
+      arguments: LabeledExprListSyntax([arg])
     )
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)

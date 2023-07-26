@@ -261,6 +261,8 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/InheritedTypeSyntax>
 - <doc:SwiftSyntax/KeyPathComponentListSyntax>
 - <doc:SwiftSyntax/KeyPathComponentSyntax>
+- <doc:SwiftSyntax/LabeledExprListSyntax>
+- <doc:SwiftSyntax/LabeledExprSyntax>
 - <doc:SwiftSyntax/MemberBlockItemListSyntax>
 - <doc:SwiftSyntax/MemberBlockItemSyntax>
 - <doc:SwiftSyntax/MultipleTrailingClosureElementListSyntax>
@@ -291,8 +293,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/SwitchCaseItemSyntax>
 - <doc:SwiftSyntax/SwitchCaseListSyntax>
 - <doc:SwiftSyntax/SwitchCaseSyntax>
-- <doc:SwiftSyntax/TupleExprElementListSyntax>
-- <doc:SwiftSyntax/TupleExprElementSyntax>
 - <doc:SwiftSyntax/TuplePatternElementListSyntax>
 - <doc:SwiftSyntax/TuplePatternElementSyntax>
 - <doc:SwiftSyntax/TupleTypeElementListSyntax>

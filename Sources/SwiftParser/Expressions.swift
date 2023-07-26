@@ -744,7 +744,7 @@ extension Parser {
           RawFunctionCallExprSyntax(
             calledExpression: leadingExpr,
             leftParen: lparen,
-            arguments: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
+            arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
             unexpectedBeforeRParen,
             rightParen: rparen,
             trailingClosure: trailingClosure,
@@ -758,7 +758,7 @@ extension Parser {
       // Check for a [expr] suffix.
       // Note that this cannot be the start of a new line.
       if let lsquare = self.consume(if: TokenSpec(.leftSquare, allowAtStartOfLine: false)) {
-        let args: [RawTupleExprElementSyntax]
+        let args: [RawLabeledExprSyntax]
         if self.at(.rightSquare) {
           args = []
         } else {
@@ -780,7 +780,7 @@ extension Parser {
           RawSubscriptCallExprSyntax(
             calledExpression: leadingExpr,
             leftSquare: lsquare,
-            arguments: RawTupleExprElementListSyntax(elements: args, arena: self.arena),
+            arguments: RawLabeledExprListSyntax(elements: args, arena: self.arena),
             unexpectedBeforeRSquare,
             rightSquare: rsquare,
             trailingClosure: trailingClosure,
@@ -795,7 +795,7 @@ extension Parser {
       if self.at(.leftBrace) && self.withLookahead({ $0.isValidTrailingClosure(flavor) }) {
         // FIXME: if Result has a trailing closure, break out.
         // Add dummy blank argument list to the call expression syntax.
-        let list = RawTupleExprElementListSyntax(elements: [], arena: self.arena)
+        let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
         let (first, rest) = self.parseTrailingClosures(flavor)
 
         leadingExpr = RawExprSyntax(
@@ -990,7 +990,7 @@ extension Parser {
 
         precondition(self.at(.leftSquare))
         let lsquare = self.consumeAnyToken()
-        let args: [RawTupleExprElementSyntax]
+        let args: [RawLabeledExprSyntax]
         if self.at(.rightSquare) {
           args = []
         } else {
@@ -1004,7 +1004,7 @@ extension Parser {
             component: .subscript(
               RawKeyPathSubscriptComponentSyntax(
                 leftSquare: lsquare,
-                arguments: RawTupleExprElementListSyntax(
+                arguments: RawLabeledExprListSyntax(
                   elements: args,
                   arena: self.arena
                 ),
@@ -1318,7 +1318,7 @@ extension Parser {
 
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
-    let args: [RawTupleExprElementSyntax]
+    let args: [RawLabeledExprSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
@@ -1347,7 +1347,7 @@ extension Parser {
       macroName: macroName,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      arguments: RawTupleExprElementListSyntax(
+      arguments: RawLabeledExprListSyntax(
         elements: args,
         arena: self.arena
       ),
@@ -1438,7 +1438,7 @@ extension Parser {
     return RawTupleExprSyntax(
       unexpectedBeforeLParen,
       leftParen: lparen,
-      elements: RawTupleExprElementListSyntax(elements: elements, arena: self.arena),
+      elements: RawLabeledExprListSyntax(elements: elements, arena: self.arena),
       unexpectedBeforeRParen,
       rightParen: rparen,
       arena: self.arena
@@ -1859,10 +1859,10 @@ extension Parser {
   ///
   /// This is currently the same as parsing a tuple expression. In the future,
   /// this will be a dedicated argument list type.
-  mutating func parseArgumentListElements(pattern: PatternContext) -> [RawTupleExprElementSyntax] {
+  mutating func parseArgumentListElements(pattern: PatternContext) -> [RawLabeledExprSyntax] {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return [
-        RawTupleExprElementSyntax(
+        RawLabeledExprSyntax(
           remainingTokens,
           label: nil,
           colon: nil,
@@ -1877,7 +1877,7 @@ extension Parser {
       return []
     }
 
-    var result = [RawTupleExprElementSyntax]()
+    var result = [RawLabeledExprSyntax]()
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
@@ -1911,7 +1911,7 @@ extension Parser {
       }
       keepGoing = self.consume(if: .comma)
       result.append(
-        RawTupleExprElementSyntax(
+        RawLabeledExprSyntax(
           unexpectedBeforeLabel,
           label: label,
           colon: colon,

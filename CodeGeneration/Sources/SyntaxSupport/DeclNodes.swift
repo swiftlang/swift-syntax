@@ -81,7 +81,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Properties",
         deprecatedName: "PropertyList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Property"),
         nameForDiagnostics: "properties"
       ),
       Child(
@@ -107,7 +107,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Properties",
         deprecatedName: "PropertyList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Property"),
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Property"),
         nameForDiagnostics: "properties"
       ),
       Child(
@@ -1487,7 +1487,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Arguments",
         deprecatedName: "ArgumentList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument")
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument")
       ),
       Child(
         name: "RightParen",

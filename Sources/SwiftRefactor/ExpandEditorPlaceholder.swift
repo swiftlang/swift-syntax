@@ -136,8 +136,8 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
 public struct ExpandEditorPlaceholders: EditRefactoringProvider {
   public static func textRefactor(syntax token: TokenSyntax, in context: Void) -> [SourceEdit] {
     guard let placeholder = token.parent?.as(EditorPlaceholderExprSyntax.self),
-      let arg = placeholder.parent?.as(TupleExprElementSyntax.self),
-      let argList = arg.parent?.as(TupleExprElementListSyntax.self),
+      let arg = placeholder.parent?.as(LabeledExprSyntax.self),
+      let argList = arg.parent?.as(LabeledExprListSyntax.self),
       let call = argList.parent?.as(FunctionCallExprSyntax.self)
     else {
       return ExpandEditorPlaceholder.textRefactor(syntax: token)
@@ -230,7 +230,7 @@ extension FunctionCallExprSyntax {
   /// closure, then return a replacement of this call with one that uses
   /// closures based on the function types provided by each editor placeholder.
   /// Otherwise return nil.
-  fileprivate func expandTrailingClosurePlaceholders(ifIncluded: TupleExprElementSyntax) -> (expr: FunctionCallExprSyntax, numClosures: Int)? {
+  fileprivate func expandTrailingClosurePlaceholders(ifIncluded: LabeledExprSyntax) -> (expr: FunctionCallExprSyntax, numClosures: Int)? {
     var includedArg = false
     var argsToExpand = 0
     for arg in arguments.reversed() {
@@ -251,7 +251,7 @@ extension FunctionCallExprSyntax {
       return nil
     }
 
-    var expandedArgs = [TupleExprElementSyntax]()
+    var expandedArgs = [LabeledExprSyntax]()
     for arg in arguments.suffix(argsToExpand) {
       let edits = ExpandEditorPlaceholder.textRefactor(syntax: arg.expression.cast(EditorPlaceholderExprSyntax.self).placeholder)
       guard edits.count == 1, let edit = edits.first, !edit.replacement.isEmpty else {
@@ -267,7 +267,7 @@ extension FunctionCallExprSyntax {
 
     let originalArgs = arguments.dropLast(argsToExpand)
     return (
-      detached.with(\.arguments, TupleExprElementListSyntax(originalArgs + expandedArgs)),
+      detached.with(\.arguments, LabeledExprListSyntax(originalArgs + expandedArgs)),
       expandedArgs.count
     )
   }

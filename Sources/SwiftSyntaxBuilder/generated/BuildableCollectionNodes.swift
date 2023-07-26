@@ -230,6 +230,13 @@ extension KeyPathComponentListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
+/// `LabeledExprListSyntax` represents a collection of `LabeledExprSyntax`
+extension LabeledExprListSyntax: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 /// `MemberBlockItemListSyntax` represents a collection of `MemberBlockItemSyntax`
 extension MemberBlockItemListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
@@ -309,13 +316,6 @@ extension SwitchCaseItemListSyntax: ExpressibleByArrayLiteral {
 
 /// `SwitchCaseListSyntax` represents a collection of `Syntax`
 extension SwitchCaseListSyntax: ExpressibleByArrayLiteral {
-  public init(arrayLiteral elements: Element...) {
-    self.init(elements)
-  }
-}
-
-/// `TupleExprElementListSyntax` represents a collection of `TupleExprElementSyntax`
-extension TupleExprElementListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

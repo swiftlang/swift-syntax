@@ -4214,7 +4214,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
-///  - `arguments`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -4255,7 +4255,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleExprElementListSyntax,
+      arguments: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -4493,9 +4493,9 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleExprElementListSyntax {
+  public var arguments: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 13, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 13, parent: Syntax(self))!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 13, with: value.data, arena: SyntaxArena()))
@@ -4508,13 +4508,13 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionDeclSyntax {
+  public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[13] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(

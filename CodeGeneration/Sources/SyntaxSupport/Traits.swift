@@ -66,7 +66,7 @@ public let TRAITS: [Trait] = [
       Child(name: "Macro", kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
       Child(name: "GenericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
       Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")]), isOptional: true),
-      Child(name: "ArgumentList", kind: .node(kind: .tupleExprElementList)),
+      Child(name: "ArgumentList", kind: .node(kind: .labeledExprList)),
       Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")]), isOptional: true),
       Child(name: "TrailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
       Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList), isOptional: true),

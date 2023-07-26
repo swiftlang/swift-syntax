@@ -472,12 +472,12 @@ final class StatementTests: XCTestCase {
               expression: SubscriptCallExprSyntax(
                 calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
                 leftSquare: .leftSquareToken(),
-                arguments: TupleExprElementListSyntax([
-                  TupleExprElementSyntax(
+                arguments: LabeledExprListSyntax([
+                  LabeledExprSyntax(
                     expression: IdentifierExprSyntax(identifier: .identifier("key")),
                     trailingComma: .commaToken()
                   ),
-                  TupleExprElementSyntax(
+                  LabeledExprSyntax(
                     label: .identifier("isUnique"),
                     colon: .colonToken(),
                     expression: BooleanLiteralExprSyntax(literal: .keyword(.true))
@@ -505,7 +505,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -524,7 +524,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -539,8 +539,8 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: ArrayExprSyntax(
                 leftSquare: .leftSquareToken(),
                 elements: ArrayElementListSyntax([]),
@@ -668,8 +668,8 @@ final class StatementTests: XCTestCase {
             identifier: .identifier("discard")
           ),
           argumentList: {
-            TupleExprElementListSyntax([
-              TupleExprElementSyntax(
+            LabeledExprListSyntax([
+              LabeledExprSyntax(
                 expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
               )
             ])
@@ -692,12 +692,12 @@ final class StatementTests: XCTestCase {
         SubscriptCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
           leftSquare: .leftSquareToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("position")),
               trailingComma: .commaToken()
             ),
-            TupleExprElementSyntax(
+            LabeledExprSyntax(
               label: .identifier("default"),
               colon: .colonToken(),
               expression: IntegerLiteralExprSyntax(0)

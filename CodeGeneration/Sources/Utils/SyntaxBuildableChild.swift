@@ -151,7 +151,7 @@ public extension Child {
     }
     let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
     return FunctionCallExprSyntax(callee: ExprSyntax("precondition")) {
-      TupleExprElementSyntax(expression: SequenceExprSyntax(elements: disjunction))
+      LabeledExprSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }
   }
 }

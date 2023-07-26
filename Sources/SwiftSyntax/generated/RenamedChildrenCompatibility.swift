@@ -24,7 +24,7 @@ extension AccessesEffectSyntax {
   }
   
   @available(*, deprecated, renamed: "properties")
-  public var propertyList: TupleExprElementListSyntax {
+  public var propertyList: LabeledExprListSyntax {
     get {
       return properties
     }
@@ -52,7 +52,7 @@ extension AccessesEffectSyntax {
       _ unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
-      propertyList: TupleExprElementListSyntax,
+      propertyList: LabeledExprListSyntax,
       _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -2709,7 +2709,7 @@ extension ExpressionSegmentSyntax {
       _ unexpectedBetweenDelimiterAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil,
-      expressions: TupleExprElementListSyntax,
+      expressions: LabeledExprListSyntax,
       _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -2884,7 +2884,7 @@ extension FunctionCallExprSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: TupleExprElementListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -2912,7 +2912,7 @@ extension FunctionCallExprSyntax {
       _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
+      argumentList: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -4121,7 +4121,7 @@ extension InitializesEffectSyntax {
   }
   
   @available(*, deprecated, renamed: "properties")
-  public var propertyList: TupleExprElementListSyntax {
+  public var propertyList: LabeledExprListSyntax {
     get {
       return properties
     }
@@ -4149,7 +4149,7 @@ extension InitializesEffectSyntax {
       _ unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
-      propertyList: TupleExprElementListSyntax,
+      propertyList: LabeledExprListSyntax,
       _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -4393,7 +4393,7 @@ extension KeyPathSubscriptComponentSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: TupleExprElementListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -4439,7 +4439,7 @@ extension KeyPathSubscriptComponentSyntax {
       _ unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? = nil,
       leftBracket: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
+      argumentList: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
       rightBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil,
@@ -4809,7 +4809,7 @@ extension MacroExpansionDeclSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: TupleExprElementListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -4845,7 +4845,7 @@ extension MacroExpansionDeclSyntax {
       _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
+      argumentList: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -4966,7 +4966,7 @@ extension MacroExpansionExprSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: TupleExprElementListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -4998,7 +4998,7 @@ extension MacroExpansionExprSyntax {
       _ unexpectedBetweenGenericArgumentsAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
+      argumentList: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -7374,7 +7374,7 @@ extension SubscriptCallExprSyntax {
   }
   
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: TupleExprElementListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -7422,7 +7422,7 @@ extension SubscriptCallExprSyntax {
       _ unexpectedBetweenCalledExpressionAndLeftBracket: UnexpectedNodesSyntax? = nil,
       leftBracket: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftBracketAndArgumentList: UnexpectedNodesSyntax? = nil,
-      argumentList: TupleExprElementListSyntax,
+      argumentList: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
       rightBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -7912,7 +7912,7 @@ extension TupleExprSyntax {
   }
   
   @available(*, deprecated, renamed: "elements")
-  public var elementList: TupleExprElementListSyntax {
+  public var elementList: LabeledExprListSyntax {
     get {
       return elements
     }
@@ -7938,7 +7938,7 @@ extension TupleExprSyntax {
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-      elementList: TupleExprElementListSyntax,
+      elementList: LabeledExprListSyntax,
       _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,

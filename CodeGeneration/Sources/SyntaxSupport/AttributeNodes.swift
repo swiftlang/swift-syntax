@@ -60,7 +60,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "ArgumentList",
-            kind: .node(kind: .tupleExprElementList)
+            kind: .node(kind: .labeledExprList)
           ),
           Child(
             name: "Token",

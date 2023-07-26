@@ -783,7 +783,7 @@ extension Parser {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let args = parseArgumentListElements(pattern: .none)
-    let argumentList = RawTupleExprElementListSyntax(
+    let argumentList = RawLabeledExprListSyntax(
       elements: args,
       arena: self.arena
     )
@@ -809,7 +809,7 @@ extension Parser {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let args = parseArgumentListElements(pattern: .none)
-    let argumentList = RawTupleExprElementListSyntax(
+    let argumentList = RawLabeledExprListSyntax(
       elements: args,
       arena: self.arena
     )

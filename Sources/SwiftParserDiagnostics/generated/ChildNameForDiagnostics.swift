@@ -212,6 +212,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "root"
   case \KeyPathSubscriptComponentSyntax.arguments:
     return "arguments"
+  case \LabeledExprSyntax.label:
+    return "label"
+  case \LabeledExprSyntax.expression:
+    return "value"
   case \LabeledSpecializeArgumentSyntax.label:
     return "label"
   case \LabeledSpecializeArgumentSyntax.value:
@@ -344,10 +348,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "first choice"
   case \TernaryExprSyntax.elseExpression:
     return "second choice"
-  case \TupleExprElementSyntax.label:
-    return "label"
-  case \TupleExprElementSyntax.expression:
-    return "value"
   case \TuplePatternElementSyntax.label:
     return "label"
   case \TupleTypeElementSyntax.firstName:

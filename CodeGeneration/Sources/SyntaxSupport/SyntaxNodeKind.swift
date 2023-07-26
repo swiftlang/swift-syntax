@@ -180,6 +180,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
+  case labeledExpr
+  case labeledExprList
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
@@ -271,8 +273,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case throwStmt
   case tryExpr
   case tupleExpr
-  case tupleExprElement
-  case tupleExprElementList
   case tuplePattern
   case tuplePatternElement
   case tuplePatternElementList
@@ -407,6 +407,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .importPathComponent: return "accessPathComponent"
     case .importPathComponentList: return "accessPath"
     case .inheritanceClause: return "typeInheritanceClause"
+    case .labeledExpr: return "tupleExprElement"
+    case .labeledExprList: return "tupleExprElementList"
     case .labeledSpecializeArgument: return "labeledSpecializeEntry"
     case .memberBlock: return "memberDeclBlock"
     case .memberBlockItem: return "memberDeclListItem"

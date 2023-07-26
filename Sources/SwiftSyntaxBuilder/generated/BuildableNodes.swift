@@ -26,7 +26,7 @@ extension AccessesEffectSyntax {
       unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder propertiesBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder propertiesBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -502,7 +502,7 @@ extension ExpressionSegmentSyntax {
       unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder expressionsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder expressionsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -637,7 +637,7 @@ extension FunctionCallExprSyntax {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder argumentsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -967,7 +967,7 @@ extension InitializesEffectSyntax {
       unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder propertiesBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder propertiesBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -996,7 +996,7 @@ extension KeyPathSubscriptComponentSyntax {
       unexpectedBetweenArgumentsAndRightSquare: UnexpectedNodesSyntax? = nil, 
       rightSquare: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder argumentsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1037,7 +1037,7 @@ extension MacroExpansionDeclSyntax {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder argumentsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1088,7 +1088,7 @@ extension MacroExpansionExprSyntax {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder argumentsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1325,7 +1325,7 @@ extension SubscriptCallExprSyntax {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder argumentsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -1447,7 +1447,7 @@ extension TupleExprSyntax {
       unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil, 
       rightParen: TokenSyntax = .rightParenToken(), 
       unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @TupleExprElementListBuilder elementsBuilder: () throws -> TupleExprElementListSyntax, 
+      @LabeledExprListBuilder elementsBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(

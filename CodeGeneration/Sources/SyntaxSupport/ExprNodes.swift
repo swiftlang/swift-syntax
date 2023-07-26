@@ -749,7 +749,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Expressions",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Expression")
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Expression")
       ),
       Child(
         name: "RightParen",
@@ -812,7 +812,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Arguments",
         deprecatedName: "ArgumentList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1128,7 +1128,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Arguments",
         deprecatedName: "ArgumentList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1173,7 +1173,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Arguments",
         deprecatedName: "ArgumentList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument")
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument")
       ),
       Child(
         name: "RightParen",
@@ -1549,7 +1549,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Arguments",
         deprecatedName: "ArgumentList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1770,15 +1770,15 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    kind: .tupleExprElementList,
+    kind: .labeledExprList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.tupleExprElement]
+    elementChoices: [.labeledExpr]
   ),
 
   // An element inside a tuple element list
   Node(
-    kind: .tupleExprElement,
+    kind: .labeledExpr,
     base: .syntax,
     nameForDiagnostics: nil,
     traits: [
@@ -1824,7 +1824,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Elements",
         deprecatedName: "ElementList",
-        kind: .collection(kind: .tupleExprElementList, collectionElementName: "Element")
+        kind: .collection(kind: .labeledExprList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",

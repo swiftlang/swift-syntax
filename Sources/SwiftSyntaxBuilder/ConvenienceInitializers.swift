@@ -46,7 +46,7 @@ extension AttributeSyntax {
   /// initializer for ``FunctionCallExprSyntax``.
   public init(
     _ attributeName: TypeSyntax,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
+    @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax? = { nil }
   ) {
     let argumentList = argumentList()
     self.init(
@@ -173,7 +173,7 @@ extension FunctionCallExprSyntax {
     callee: some ExprSyntaxProtocol,
     trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax = { [] }
+    @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax = { [] }
   ) {
     let argumentList = argumentList()
     let shouldOmitParens = argumentList.isEmpty && trailingClosure != nil
@@ -340,7 +340,7 @@ extension StringLiteralExprSyntax {
 
 // MARK: - TupleExprElement
 
-extension TupleExprElementSyntax {
+extension LabeledExprSyntax {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
   public init(label: String? = nil, expression: some ExprSyntaxProtocol) {

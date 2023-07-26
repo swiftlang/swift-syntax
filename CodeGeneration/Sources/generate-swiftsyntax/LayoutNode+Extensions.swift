@@ -106,7 +106,7 @@ extension LayoutNode {
     // they can use trailing closure syntax.
     var normalParameters: [FunctionParameterSyntax] = []
     var builderParameters: [FunctionParameterSyntax] = []
-    var delegatedInitArgs: [TupleExprElementSyntax] = []
+    var delegatedInitArgs: [LabeledExprSyntax] = []
 
     for child in children {
       /// The expression that is used to call the default initializer defined above.
@@ -150,7 +150,7 @@ extension LayoutNode {
         )
       }
       delegatedInitArgs.append(
-        TupleExprElementSyntax(
+        LabeledExprSyntax(
           label: child.isUnexpectedNodes ? nil : child.varOrCaseName,
           colon: child.isUnexpectedNodes ? nil : .colonToken(),
           expression: produceExpr
@@ -177,11 +177,11 @@ extension LayoutNode {
       """
     ) {
       FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
-        TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
+        LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
         for arg in delegatedInitArgs {
           arg
         }
-        TupleExprElementSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
+        LabeledExprSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
       }
     }
   }

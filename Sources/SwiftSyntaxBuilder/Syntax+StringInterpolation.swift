@@ -399,7 +399,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       if containsNil(wrappedExpr) {
         return ExprSyntax(
           FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: "some")) {
-            TupleExprElementSyntax(expression: wrappedExpr)
+            LabeledExprSyntax(expression: wrappedExpr)
           }
         )
       }

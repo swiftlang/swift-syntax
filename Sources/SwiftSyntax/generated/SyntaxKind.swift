@@ -173,6 +173,8 @@ public enum SyntaxKind: CaseIterable {
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
+  case labeledExprList
+  case labeledExpr
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
@@ -261,8 +263,6 @@ public enum SyntaxKind: CaseIterable {
   case ternaryExpr
   case throwStmt
   case tryExpr
-  case tupleExprElementList
-  case tupleExprElement
   case tupleExpr
   case tuplePatternElementList
   case tuplePatternElement
@@ -356,6 +356,8 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .keyPathComponentList:
       return true
+    case .labeledExprList:
+      return true
     case .memberBlockItemList:
       return true
     case .multipleTrailingClosureElementList:
@@ -379,8 +381,6 @@ public enum SyntaxKind: CaseIterable {
     case .switchCaseItemList:
       return true
     case .switchCaseList:
-      return true
-    case .tupleExprElementList:
       return true
     case .tuplePatternElementList:
       return true
@@ -736,6 +736,10 @@ public enum SyntaxKind: CaseIterable {
       return KeyPathPropertyComponentSyntax.self
     case .keyPathSubscriptComponent:
       return KeyPathSubscriptComponentSyntax.self
+    case .labeledExprList:
+      return LabeledExprListSyntax.self
+    case .labeledExpr:
+      return LabeledExprSyntax.self
     case .labeledSpecializeArgument:
       return LabeledSpecializeArgumentSyntax.self
     case .labeledStmt:
@@ -912,10 +916,6 @@ public enum SyntaxKind: CaseIterable {
       return ThrowStmtSyntax.self
     case .tryExpr:
       return TryExprSyntax.self
-    case .tupleExprElementList:
-      return TupleExprElementListSyntax.self
-    case .tupleExprElement:
-      return TupleExprElementSyntax.self
     case .tupleExpr:
       return TupleExprSyntax.self
     case .tuplePatternElementList:

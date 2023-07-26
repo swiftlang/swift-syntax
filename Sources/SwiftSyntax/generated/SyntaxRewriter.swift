@@ -1186,6 +1186,20 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(KeyPathSubscriptComponentSyntax.self)
   }
   
+  /// Visit a ``LabeledExprListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: LabeledExprListSyntax) -> LabeledExprListSyntax {
+    return Syntax(visitChildren(node)).cast(LabeledExprListSyntax.self)
+  }
+  
+  /// Visit a ``LabeledExprSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: LabeledExprSyntax) -> LabeledExprSyntax {
+    return Syntax(visitChildren(node)).cast(LabeledExprSyntax.self)
+  }
+  
   /// Visit a ``LabeledSpecializeArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1800,20 +1814,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: TryExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
-  }
-  
-  /// Visit a ``TupleExprElementListSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
-    return Syntax(visitChildren(node)).cast(TupleExprElementListSyntax.self)
-  }
-  
-  /// Visit a ``TupleExprElementSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: TupleExprElementSyntax) -> TupleExprElementSyntax {
-    return Syntax(visitChildren(node)).cast(TupleExprElementSyntax.self)
   }
   
   /// Visit a ``TupleExprSyntax``.
@@ -4274,6 +4274,34 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplLabeledExprListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = LabeledExprListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplLabeledExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = LabeledExprSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplLabeledSpecializeArgumentSyntax(_ data: SyntaxData) -> Syntax {
     let node = LabeledSpecializeArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5506,34 +5534,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleExprElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleExprElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleExprElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplTupleExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = TupleExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -6311,6 +6311,10 @@ open class SyntaxRewriter {
       return visitImplKeyPathPropertyComponentSyntax
     case .keyPathSubscriptComponent:
       return visitImplKeyPathSubscriptComponentSyntax
+    case .labeledExprList:
+      return visitImplLabeledExprListSyntax
+    case .labeledExpr:
+      return visitImplLabeledExprSyntax
     case .labeledSpecializeArgument:
       return visitImplLabeledSpecializeArgumentSyntax
     case .labeledStmt:
@@ -6487,10 +6491,6 @@ open class SyntaxRewriter {
       return visitImplThrowStmtSyntax
     case .tryExpr:
       return visitImplTryExprSyntax
-    case .tupleExprElementList:
-      return visitImplTupleExprElementListSyntax
-    case .tupleExprElement:
-      return visitImplTupleExprElementSyntax
     case .tupleExpr:
       return visitImplTupleExprSyntax
     case .tuplePatternElementList:
@@ -6877,6 +6877,10 @@ open class SyntaxRewriter {
       return visitImplKeyPathPropertyComponentSyntax(data)
     case .keyPathSubscriptComponent:
       return visitImplKeyPathSubscriptComponentSyntax(data)
+    case .labeledExprList:
+      return visitImplLabeledExprListSyntax(data)
+    case .labeledExpr:
+      return visitImplLabeledExprSyntax(data)
     case .labeledSpecializeArgument:
       return visitImplLabeledSpecializeArgumentSyntax(data)
     case .labeledStmt:
@@ -7053,10 +7057,6 @@ open class SyntaxRewriter {
       return visitImplThrowStmtSyntax(data)
     case .tryExpr:
       return visitImplTryExprSyntax(data)
-    case .tupleExprElementList:
-      return visitImplTupleExprElementListSyntax(data)
-    case .tupleExprElement:
-      return visitImplTupleExprElementSyntax(data)
     case .tupleExpr:
       return visitImplTupleExprSyntax(data)
     case .tuplePatternElementList:

@@ -2379,7 +2379,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `calledExpression`: ``ExprSyntax``
 ///  - `leftParen`: `'('`?
-///  - `arguments`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -2411,7 +2411,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleExprElementListSyntax,
+      arguments: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -2512,9 +2512,9 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleExprElementListSyntax {
+  public var arguments: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = FunctionCallExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -2527,13 +2527,13 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleExprElementSyntax) -> FunctionCallExprSyntax {
+  public func addArgument(_ element: LabeledExprSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -3866,7 +3866,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `'('`?
-///  - `arguments`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -3903,7 +3903,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleExprElementListSyntax,
+      arguments: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -4049,9 +4049,9 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleExprElementListSyntax {
+  public var arguments: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 9, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 9, parent: Syntax(self))!)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
@@ -4064,13 +4064,13 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleExprElementSyntax) -> MacroExpansionExprSyntax {
+  public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[9] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -5911,7 +5911,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `calledExpression`: ``ExprSyntax``
 ///  - `leftSquare`: `'['`
-///  - `arguments`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``LabeledExprListSyntax``
 ///  - `rightSquare`: `']'`
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
@@ -5943,7 +5943,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenCalledExpressionAndLeftSquare: UnexpectedNodesSyntax? = nil,
       leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleExprElementListSyntax,
+      arguments: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentsAndRightSquare: UnexpectedNodesSyntax? = nil,
       rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedBetweenRightSquareAndTrailingClosure: UnexpectedNodesSyntax? = nil,
@@ -6044,9 +6044,9 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleExprElementListSyntax {
+  public var arguments: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = SubscriptCallExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -6059,13 +6059,13 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleExprElementSyntax) -> SubscriptCallExprSyntax {
+  public func addArgument(_ element: LabeledExprSyntax) -> SubscriptCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -6850,7 +6850,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
-///  - `elements`: ``TupleExprElementListSyntax``
+///  - `elements`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -6878,7 +6878,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil,
-      elements: TupleExprElementListSyntax,
+      elements: LabeledExprListSyntax,
       _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -6945,9 +6945,9 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var elements: TupleExprElementListSyntax {
+  public var elements: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
       self = TupleExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -6960,13 +6960,13 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
-  public func addElement(_ element: TupleExprElementSyntax) -> TupleExprSyntax {
+  public func addElement(_ element: LabeledExprSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(

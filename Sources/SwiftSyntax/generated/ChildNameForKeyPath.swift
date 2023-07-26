@@ -1965,6 +1965,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightSquare"
   case \KeyPathSubscriptComponentSyntax.unexpectedAfterRightSquare:
     return "unexpectedAfterRightSquare"
+  case \LabeledExprSyntax.unexpectedBeforeLabel:
+    return "unexpectedBeforeLabel"
+  case \LabeledExprSyntax.label:
+    return "label"
+  case \LabeledExprSyntax.unexpectedBetweenLabelAndColon:
+    return "unexpectedBetweenLabelAndColon"
+  case \LabeledExprSyntax.colon:
+    return "colon"
+  case \LabeledExprSyntax.unexpectedBetweenColonAndExpression:
+    return "unexpectedBetweenColonAndExpression"
+  case \LabeledExprSyntax.expression:
+    return "expression"
+  case \LabeledExprSyntax.unexpectedBetweenExpressionAndTrailingComma:
+    return "unexpectedBetweenExpressionAndTrailingComma"
+  case \LabeledExprSyntax.trailingComma:
+    return "trailingComma"
+  case \LabeledExprSyntax.unexpectedAfterTrailingComma:
+    return "unexpectedAfterTrailingComma"
   case \LabeledSpecializeArgumentSyntax.unexpectedBeforeLabel:
     return "unexpectedBeforeLabel"
   case \LabeledSpecializeArgumentSyntax.label:
@@ -3141,24 +3159,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \TryExprSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \TupleExprElementSyntax.unexpectedBeforeLabel:
-    return "unexpectedBeforeLabel"
-  case \TupleExprElementSyntax.label:
-    return "label"
-  case \TupleExprElementSyntax.unexpectedBetweenLabelAndColon:
-    return "unexpectedBetweenLabelAndColon"
-  case \TupleExprElementSyntax.colon:
-    return "colon"
-  case \TupleExprElementSyntax.unexpectedBetweenColonAndExpression:
-    return "unexpectedBetweenColonAndExpression"
-  case \TupleExprElementSyntax.expression:
-    return "expression"
-  case \TupleExprElementSyntax.unexpectedBetweenExpressionAndTrailingComma:
-    return "unexpectedBetweenExpressionAndTrailingComma"
-  case \TupleExprElementSyntax.trailingComma:
-    return "trailingComma"
-  case \TupleExprElementSyntax.unexpectedAfterTrailingComma:
-    return "unexpectedAfterTrailingComma"
   case \TupleExprSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \TupleExprSyntax.leftParen:

@@ -1087,7 +1087,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       baz(/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")), trailingComma: .commaToken()),
           .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
         ])
@@ -1107,7 +1107,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       baz((/), /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: TupleExprSyntax(
               elements: .init([
@@ -1128,7 +1128,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       baz(/^, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")), trailingComma: .commaToken()),
           .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
         ])
@@ -1148,7 +1148,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       baz((/^), /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: TupleExprSyntax(
               elements: .init([

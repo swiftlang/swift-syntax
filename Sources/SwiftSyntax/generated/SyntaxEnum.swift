@@ -173,6 +173,8 @@ public enum SyntaxEnum {
   case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
   case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
+  case labeledExprList(LabeledExprListSyntax)
+  case labeledExpr(LabeledExprSyntax)
   case labeledSpecializeArgument(LabeledSpecializeArgumentSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case layoutRequirement(LayoutRequirementSyntax)
@@ -261,8 +263,6 @@ public enum SyntaxEnum {
   case ternaryExpr(TernaryExprSyntax)
   case throwStmt(ThrowStmtSyntax)
   case tryExpr(TryExprSyntax)
-  case tupleExprElementList(TupleExprElementListSyntax)
-  case tupleExprElement(TupleExprElementSyntax)
   case tupleExpr(TupleExprSyntax)
   case tuplePatternElementList(TuplePatternElementListSyntax)
   case tuplePatternElement(TuplePatternElementSyntax)
@@ -617,6 +617,10 @@ public extension Syntax {
       return .keyPathPropertyComponent(KeyPathPropertyComponentSyntax(self)!)
     case .keyPathSubscriptComponent:
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
+    case .labeledExprList:
+      return .labeledExprList(LabeledExprListSyntax(self)!)
+    case .labeledExpr:
+      return .labeledExpr(LabeledExprSyntax(self)!)
     case .labeledSpecializeArgument:
       return .labeledSpecializeArgument(LabeledSpecializeArgumentSyntax(self)!)
     case .labeledStmt:
@@ -793,10 +797,6 @@ public extension Syntax {
       return .throwStmt(ThrowStmtSyntax(self)!)
     case .tryExpr:
       return .tryExpr(TryExprSyntax(self)!)
-    case .tupleExprElementList:
-      return .tupleExprElementList(TupleExprElementListSyntax(self)!)
-    case .tupleExprElement:
-      return .tupleExprElement(TupleExprElementSyntax(self)!)
     case .tupleExpr:
       return .tupleExpr(TupleExprSyntax(self)!)
     case .tuplePatternElementList:

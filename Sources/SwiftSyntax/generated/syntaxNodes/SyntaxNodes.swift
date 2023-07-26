@@ -18,7 +18,7 @@
 /// 
 ///  - `accessesKeyword`: `'accesses'`
 ///  - `leftParen`: `'('`
-///  - `properties`: ``TupleExprElementListSyntax``
+///  - `properties`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`
 ///
 /// ### Contained in
@@ -52,7 +52,7 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndProperties: UnexpectedNodesSyntax? = nil,
-      properties: TupleExprElementListSyntax,
+      properties: LabeledExprListSyntax,
       _ unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -141,9 +141,9 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var properties: TupleExprElementListSyntax {
+  public var properties: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = AccessesEffectSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -156,13 +156,13 @@ public struct AccessesEffectSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `properties` collection.
   /// - returns: A copy of the receiver with the provided `Property`
   ///            appended to its `properties` collection.
-  public func addProperty(_ element: TupleExprElementSyntax) -> AccessesEffectSyntax {
+  public func addProperty(_ element: LabeledExprSyntax) -> AccessesEffectSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -934,7 +934,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `atSign`: `'@'`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `'('`?
-///  - `arguments`: (``TupleExprElementListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
 ///  - `rightParen`: `')'`?
 ///
 /// ### Contained in
@@ -943,7 +943,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   public enum Arguments: SyntaxChildChoices {
-    case `argumentList`(TupleExprElementListSyntax)
+    case `argumentList`(LabeledExprListSyntax)
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
     case `availability`(AvailabilityArgumentListSyntax)
@@ -1013,7 +1013,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
       self.init(Syntax(data))!
     }
     
-    public init(_ node: TupleExprElementListSyntax) {
+    public init(_ node: LabeledExprListSyntax) {
       self = .argumentList(node)
     }
     
@@ -1094,7 +1094,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
     
     public init?(_ node: some SyntaxProtocol) {
-      if let node = node.as(TupleExprElementListSyntax.self) {
+      if let node = node.as(LabeledExprListSyntax.self) {
         self = .argumentList(node)
         return
       }
@@ -1179,7 +1179,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-            .node(TupleExprElementListSyntax.self), 
+            .node(LabeledExprListSyntax.self), 
             .node(TokenSyntax.self), 
             .node(StringLiteralExprSyntax.self), 
             .node(AvailabilityArgumentListSyntax.self), 
@@ -8569,7 +8569,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `backslash`: `'\'`
 ///  - `pounds`: `<rawStringPoundDelimiter>`?
 ///  - `leftParen`: `'('`
-///  - `expressions`: ``TupleExprElementListSyntax``
+///  - `expressions`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`
 ///
 /// ### Contained in
@@ -8605,7 +8605,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenPoundsAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndExpressions: UnexpectedNodesSyntax? = nil,
-      expressions: TupleExprElementListSyntax,
+      expressions: LabeledExprListSyntax,
       _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -8716,9 +8716,9 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var expressions: TupleExprElementListSyntax {
+  public var expressions: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 7, parent: Syntax(self))!)
     }
     set(value) {
       self = ExpressionSegmentSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
@@ -8731,13 +8731,13 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `expressions` collection.
   /// - returns: A copy of the receiver with the provided `Expression`
   ///            appended to its `expressions` collection.
-  public func addExpression(_ element: TupleExprElementSyntax) -> ExpressionSegmentSyntax {
+  public func addExpression(_ element: LabeledExprSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[7] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -11724,7 +11724,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `initializesKeyword`: `'initializes'`
 ///  - `leftParen`: `'('`
-///  - `properties`: ``TupleExprElementListSyntax``
+///  - `properties`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `')'`
 ///
 /// ### Contained in
@@ -11758,7 +11758,7 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
       _ unexpectedBetweenLeftParenAndProperties: UnexpectedNodesSyntax? = nil,
-      properties: TupleExprElementListSyntax,
+      properties: LabeledExprListSyntax,
       _ unexpectedBetweenPropertiesAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -11847,9 +11847,9 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var properties: TupleExprElementListSyntax {
+  public var properties: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = InitializesEffectSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -11862,13 +11862,13 @@ public struct InitializesEffectSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `properties` collection.
   /// - returns: A copy of the receiver with the provided `Property`
   ///            appended to its `properties` collection.
-  public func addProperty(_ element: TupleExprElementSyntax) -> InitializesEffectSyntax {
+  public func addProperty(_ element: LabeledExprSyntax) -> InitializesEffectSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[5] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -12346,7 +12346,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
-///  - `arguments`: ``TupleExprElementListSyntax``
+///  - `arguments`: ``LabeledExprListSyntax``
 ///  - `rightSquare`: `']'`
 ///
 /// ### Contained in
@@ -12378,7 +12378,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
       leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: TupleExprElementListSyntax,
+      arguments: LabeledExprListSyntax,
       _ unexpectedBetweenArgumentsAndRightSquare: UnexpectedNodesSyntax? = nil,
       rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
@@ -12445,9 +12445,9 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var arguments: TupleExprElementListSyntax {
+  public var arguments: LabeledExprListSyntax {
     get {
-      return TupleExprElementListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -12460,13 +12460,13 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
-  public func addArgument(_ element: TupleExprElementSyntax) -> KeyPathSubscriptComponentSyntax {
+  public func addArgument(_ element: LabeledExprSyntax) -> KeyPathSubscriptComponentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleExprElementList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -12514,6 +12514,186 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenArgumentsAndRightSquare, 
           \Self.rightSquare, 
           \Self.unexpectedAfterRightSquare
+        ])
+  }
+}
+
+// MARK: - LabeledExprSyntax
+
+/// ### Children
+/// 
+///  - `label`: (`<identifier>` | `'_'`)?
+///  - `colon`: `':'`?
+///  - `expression`: ``ExprSyntax``
+///  - `trailingComma`: `','`?
+///
+/// ### Contained in
+/// 
+///  - ``LabeledExprListSyntax``
+public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .labeledExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``LabeledExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .labeledExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
+      label: TokenSyntax? = nil,
+      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: some ExprSyntaxProtocol,
+      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeLabel, 
+            label, 
+            unexpectedBetweenLabelAndColon, 
+            colon, 
+            unexpectedBetweenColonAndExpression, 
+            expression, 
+            unexpectedBetweenExpressionAndTrailingComma, 
+            trailingComma, 
+            unexpectedAfterTrailingComma
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeLabel?.raw, 
+          label?.raw, 
+          unexpectedBetweenLabelAndColon?.raw, 
+          colon?.raw, 
+          unexpectedBetweenColonAndExpression?.raw, 
+          expression.raw, 
+          unexpectedBetweenExpressionAndTrailingComma?.raw, 
+          trailingComma?.raw, 
+          unexpectedAfterTrailingComma?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.labeledExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var label: TokenSyntax? {
+    get {
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var colon: TokenSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var trailingComma: TokenSyntax? {
+    get {
+      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = LabeledExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeLabel, 
+          \Self.label, 
+          \Self.unexpectedBetweenLabelAndColon, 
+          \Self.colon, 
+          \Self.unexpectedBetweenColonAndExpression, 
+          \Self.expression, 
+          \Self.unexpectedBetweenExpressionAndTrailingComma, 
+          \Self.trailingComma, 
+          \Self.unexpectedAfterTrailingComma
         ])
   }
 }
@@ -18088,186 +18268,6 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenDefaultKeywordAndColon, 
           \Self.colon, 
           \Self.unexpectedAfterColon
-        ])
-  }
-}
-
-// MARK: - TupleExprElementSyntax
-
-/// ### Children
-/// 
-///  - `label`: (`<identifier>` | `'_'`)?
-///  - `colon`: `':'`?
-///  - `expression`: ``ExprSyntax``
-///  - `trailingComma`: `','`?
-///
-/// ### Contained in
-/// 
-///  - ``TupleExprElementListSyntax``
-public struct TupleExprElementSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .tupleExprElement else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``TupleExprElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .tupleExprElement)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax? = nil,
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: some ExprSyntaxProtocol,
-      _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndExpression, 
-            expression, 
-            unexpectedBetweenExpressionAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLabel?.raw, 
-          label?.raw, 
-          unexpectedBetweenLabelAndColon?.raw, 
-          colon?.raw, 
-          unexpectedBetweenColonAndExpression?.raw, 
-          expression.raw, 
-          unexpectedBetweenExpressionAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.tupleExprElement,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var label: TokenSyntax? {
-    get {
-      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var colon: TokenSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var expression: ExprSyntax {
-    get {
-      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var trailingComma: TokenSyntax? {
-    get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleExprElementSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLabel, 
-          \Self.label, 
-          \Self.unexpectedBetweenLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedBetweenExpressionAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
         ])
   }
 }

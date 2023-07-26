@@ -809,6 +809,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
   
+  /// Visiting ``LabeledExprListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LabeledExprListSyntax) -> ResultType
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LabeledExprSyntax) -> ResultType
+  
   /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1248,16 +1258,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TryExprSyntax) -> ResultType
-  
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementListSyntax) -> ResultType
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementSyntax) -> ResultType
   
   /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -2521,6 +2521,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``LabeledExprListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LabeledExprListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LabeledExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3137,20 +3151,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3681,6 +3681,10 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .keyPathSubscriptComponent(let derived):
       return visit(derived)
+    case .labeledExprList(let derived):
+      return visit(derived)
+    case .labeledExpr(let derived):
+      return visit(derived)
     case .labeledSpecializeArgument(let derived):
       return visit(derived)
     case .labeledStmt(let derived):
@@ -3856,10 +3860,6 @@ extension SyntaxTransformVisitor {
     case .throwStmt(let derived):
       return visit(derived)
     case .tryExpr(let derived):
-      return visit(derived)
-    case .tupleExprElementList(let derived):
-      return visit(derived)
-    case .tupleExprElement(let derived):
       return visit(derived)
     case .tupleExpr(let derived):
       return visit(derived)

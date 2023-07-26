@@ -319,7 +319,7 @@ extension Parser {
     case .attached:
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseAttachedArguments()
-        return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
+        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
@@ -339,17 +339,17 @@ extension Parser {
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(pattern: .none)
-        return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
+        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     }
   }
 }
 
 extension Parser {
-  mutating func parseAttachedArguments() -> [RawTupleExprElementSyntax] {
+  mutating func parseAttachedArguments() -> [RawLabeledExprSyntax] {
     let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
     let roleTrailingComma = self.consume(if: .comma)
-    let roleElement = RawTupleExprElementSyntax(
+    let roleElement = RawLabeledExprSyntax(
       label: nil,
       colon: nil,
       expression: RawExprSyntax(

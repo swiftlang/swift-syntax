@@ -143,7 +143,7 @@ final class VariadicGenericsTests: XCTestCase {
         identifier: .identifier("each")
       ),
       leftParen: .leftParenToken(),
-      arguments: TupleExprElementListSyntax([
+      arguments: LabeledExprListSyntax([
         .init(
           expression:
             IdentifierExprSyntax(
@@ -207,7 +207,7 @@ final class VariadicGenericsTests: XCTestCase {
               base: ExprSyntax(
                 TupleExprSyntax(
                   elements: .init([
-                    TupleExprElementSyntax(
+                    LabeledExprSyntax(
                       expression: PackElementExprSyntax(
                         eachKeyword: .keyword(.each),
                         pack: IdentifierExprSyntax(

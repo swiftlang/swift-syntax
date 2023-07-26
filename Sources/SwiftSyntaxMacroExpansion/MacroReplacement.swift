@@ -248,7 +248,7 @@ extension MacroDeclSyntax {
   /// Expand the definition of this macro when provided with the given
   /// argument list.
   private func expand(
-    argumentList: TupleExprElementListSyntax?,
+    argumentList: LabeledExprListSyntax?,
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement]
   ) -> ExprSyntax {
@@ -293,7 +293,7 @@ extension MacroDeclSyntax {
     replacements: [MacroDefinition.Replacement]
   ) -> ExprSyntax {
     // Dig out the argument list.
-    let argumentList: TupleExprElementListSyntax?
+    let argumentList: LabeledExprListSyntax?
     if case let .argumentList(argList) = node.arguments {
       argumentList = argList
     } else {

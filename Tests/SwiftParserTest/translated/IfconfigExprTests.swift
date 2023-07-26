@@ -657,8 +657,8 @@ final class IfconfigExprTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("compiler")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: PrefixOperatorExprSyntax(
                 operator: .prefixOperator("<"),
                 expression: FloatLiteralExprSyntax(literal: .floatingLiteral("10.0"))
@@ -713,8 +713,8 @@ final class IfconfigExprTests: XCTestCase {
           condition: FunctionCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("hasFeature")),
             leftParen: .leftParenToken(),
-            arguments: TupleExprElementListSyntax([
-              TupleExprElementSyntax(
+            arguments: LabeledExprListSyntax([
+              LabeledExprSyntax(
                 expression: IntegerLiteralExprSyntax(literal: .integerLiteral("17"))
               )
             ]),

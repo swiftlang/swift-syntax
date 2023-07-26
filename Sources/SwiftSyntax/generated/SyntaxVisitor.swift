@@ -1930,6 +1930,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
   }
   
+  /// Visiting ``LabeledExprListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LabeledExprListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``LabeledExprListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LabeledExprListSyntax) {
+  }
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LabeledExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``LabeledExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LabeledExprSyntax) {
+  }
+  
   /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2984,30 +3008,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``TryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TryExprSyntax) {
-  }
-  
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TupleExprElementListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TupleExprElementListSyntax) {
-  }
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TupleExprElementSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TupleExprElementSyntax) {
   }
   
   /// Visiting ``TupleExprSyntax`` specifically.
@@ -5121,6 +5121,28 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledExprListSyntax(_ data: SyntaxData) {
+    let node = LabeledExprListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledExprSyntax(_ data: SyntaxData) {
+    let node = LabeledExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplLabeledSpecializeArgumentSyntax(_ data: SyntaxData) {
     let node = LabeledSpecializeArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6089,28 +6111,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) {
-    let node = TupleExprElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleExprElementSyntax(_ data: SyntaxData) {
-    let node = TupleExprElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTupleExprSyntax(_ data: SyntaxData) {
     let node = TupleExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6763,6 +6763,10 @@ open class SyntaxVisitor {
       visitImplKeyPathPropertyComponentSyntax(data)
     case .keyPathSubscriptComponent:
       visitImplKeyPathSubscriptComponentSyntax(data)
+    case .labeledExprList:
+      visitImplLabeledExprListSyntax(data)
+    case .labeledExpr:
+      visitImplLabeledExprSyntax(data)
     case .labeledSpecializeArgument:
       visitImplLabeledSpecializeArgumentSyntax(data)
     case .labeledStmt:
@@ -6939,10 +6943,6 @@ open class SyntaxVisitor {
       visitImplThrowStmtSyntax(data)
     case .tryExpr:
       visitImplTryExprSyntax(data)
-    case .tupleExprElementList:
-      visitImplTupleExprElementListSyntax(data)
-    case .tupleExprElement:
-      visitImplTupleExprElementSyntax(data)
     case .tupleExpr:
       visitImplTupleExprSyntax(data)
     case .tuplePatternElementList:

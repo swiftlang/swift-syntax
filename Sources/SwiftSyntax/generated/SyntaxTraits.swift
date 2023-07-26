@@ -193,7 +193,7 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
   
-  var argumentList: TupleExprElementListSyntax {
+  var argumentList: LabeledExprListSyntax {
     get
     set
   }
@@ -691,6 +691,8 @@ extension InheritedTypeSyntax: WithTrailingCommaSyntax {}
 
 extension InitializerDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
 
+extension LabeledExprSyntax: WithTrailingCommaSyntax {}
+
 extension LabeledSpecializeArgumentSyntax: WithTrailingCommaSyntax {}
 
 extension MacroDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
@@ -744,8 +746,6 @@ extension SwitchCaseItemSyntax: WithTrailingCommaSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 
 extension SwitchExprSyntax: BracedSyntax {}
-
-extension TupleExprElementSyntax: WithTrailingCommaSyntax {}
 
 extension TupleExprSyntax: ParenthesizedSyntax {}
 

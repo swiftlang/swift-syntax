@@ -28,7 +28,7 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
@@ -43,7 +43,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]
@@ -78,7 +78,7 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
@@ -93,7 +93,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]
@@ -128,7 +128,7 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
@@ -143,7 +143,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]

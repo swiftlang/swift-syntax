@@ -92,7 +92,7 @@ public func expandFreestandingMacro(
   macroRole: MacroRole,
   node: FreestandingMacroExpansionSyntax,
   in context: some MacroExpansionContext,
-  indentationWidth: Trivia = .spaces(4)
+  indentationWidth: Trivia? = nil
 ) -> String? {
   do {
     let expandedSyntax: Syntax
@@ -192,7 +192,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,
   in context: Context,
-  indentationWidth: Trivia = .spaces(4)
+  indentationWidth: Trivia? = nil
 ) -> [String]? {
   do {
     switch (definition, macroRole) {
@@ -320,7 +320,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,
   in context: Context,
-  indentationWidth: Trivia = .spaces(4)
+  indentationWidth: Trivia? = nil
 ) -> String? {
   let expandedSources = expandAttachedMacroWithoutCollapsing(
     definition: definition,
@@ -341,7 +341,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
 fileprivate extension SyntaxProtocol {
   /// Perform a format if required and then trim any leading/trailing
   /// whitespace.
-  func formattedExpansion(_ mode: FormatMode, indentationWidth: Trivia) -> String {
+  func formattedExpansion(_ mode: FormatMode, indentationWidth: Trivia?) -> String {
     let formatted: Syntax
     switch mode {
     case .auto:
@@ -396,7 +396,7 @@ public func collapse<Node: SyntaxProtocol>(
   expansions: [String],
   for role: MacroRole,
   attachedTo declarationNode: Node,
-  indentationWidth: Trivia = .spaces(4)
+  indentationWidth: Trivia? = nil
 ) -> String {
   if expansions.isEmpty {
     return ""
@@ -421,7 +421,10 @@ public func collapse<Node: SyntaxProtocol>(
       onDeclarationWithoutAccessor = false
     }
     if onDeclarationWithoutAccessor {
-      expansions = expansions.map({ $0.indented(by: indentationWidth) })
+      // Default to 4 spaces if no indentation was passed.
+      // In the future, we could consider inferring the indentation width from
+      // the expansions to collapse.
+      expansions = expansions.map({ $0.indented(by: indentationWidth ?? .spaces(4)) })
       expansions[0] = "{\n" + expansions[0]
       expansions[expansions.count - 1] += "\n}"
     }

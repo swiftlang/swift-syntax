@@ -49,11 +49,14 @@ open class BasicFormat: SyntaxRewriter {
   private var previousToken: TokenSyntax? = nil
 
   public init(
-    indentationWidth: Trivia = .spaces(4),
+    indentationWidth: Trivia? = nil,
     initialIndentation: Trivia = [],
     viewMode: SyntaxTreeViewMode = .sourceAccurate
   ) {
-    self.indentationWidth = indentationWidth
+    // Default to 4 spaces if no indentation was passed.
+    // In the future, we could consider inferring the indentation width from the
+    // source file to format in case it is already partially formatted.
+    self.indentationWidth = indentationWidth ?? .spaces(4)
     self.indentationStack = [(indentation: initialIndentation, isUserDefined: false)]
     super.init(viewMode: viewMode)
   }

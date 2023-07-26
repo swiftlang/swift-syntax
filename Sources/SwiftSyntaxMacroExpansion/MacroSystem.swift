@@ -23,7 +23,7 @@ extension SyntaxProtocol {
   public func expand(
     macros: [String: Macro.Type],
     in context: some MacroExpansionContext,
-    indentationWidth: Trivia = .spaces(4)
+    indentationWidth: Trivia? = nil
   ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()
@@ -463,11 +463,14 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   init(
     macroSystem: MacroSystem,
     context: Context,
-    indentationWidth: Trivia
+    indentationWidth: Trivia?
   ) {
     self.macroSystem = macroSystem
     self.context = context
-    self.indentationWidth = indentationWidth
+    // Default to 4 spaces if no indentation was passed.
+    // In the future, we could consider inferring the indentation width from the
+    // source file in which we expand the macros.
+    self.indentationWidth = indentationWidth ?? .spaces(4)
     super.init(viewMode: .sourceAccurate)
   }
 

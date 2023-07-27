@@ -126,8 +126,8 @@ extension DictionaryElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `DifferentiabilityParameterListSyntax` represents a collection of `DifferentiabilityArgumentSyntax`
-extension DifferentiabilityParameterListSyntax: ExpressibleByArrayLiteral {
+/// `DifferentiabilityArgumentListSyntax` represents a collection of `DifferentiabilityArgumentSyntax`
+extension DifferentiabilityArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }
@@ -140,7 +140,7 @@ extension DocumentationAttributeArgumentListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+/// The arguments of the '@_effects' attribute. These will be parsed during the SIL stage.
 extension EffectsAttributeArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)

@@ -125,12 +125,12 @@ extension SyntaxKind {
       return "dictionary"
     case .dictionaryType:
       return "dictionary type"
+    case .differentiabilityArgumentList:
+      return "differentiability parameters"
     case .differentiabilityArgument:
-      return "differentiability parameter"
+      return "differentiability argument"
     case .differentiabilityArguments:
-      return "differentiability parameters"
-    case .differentiabilityParameterList:
-      return "differentiability parameters"
+      return "differentiability arguments"
     case .differentiabilityWithRespectToArgument:
       return "'@differentiable' argument"
     case .differentiableAttributeArguments:

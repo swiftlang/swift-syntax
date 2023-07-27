@@ -897,12 +897,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenAccessorSpecifierAndComma"
   case \DerivativeAttributeArgumentsSyntax.comma:
     return "comma"
-  case \DerivativeAttributeArgumentsSyntax.unexpectedBetweenCommaAndParameters:
-    return "unexpectedBetweenCommaAndParameters"
-  case \DerivativeAttributeArgumentsSyntax.parameters:
-    return "parameters"
-  case \DerivativeAttributeArgumentsSyntax.unexpectedAfterParameters:
-    return "unexpectedAfterParameters"
+  case \DerivativeAttributeArgumentsSyntax.unexpectedBetweenCommaAndArguments:
+    return "unexpectedBetweenCommaAndArguments"
+  case \DerivativeAttributeArgumentsSyntax.arguments:
+    return "arguments"
+  case \DerivativeAttributeArgumentsSyntax.unexpectedAfterArguments:
+    return "unexpectedAfterArguments"
   case \DesignatedTypeSyntax.unexpectedBeforeLeadingComma:
     return "unexpectedBeforeLeadingComma"
   case \DesignatedTypeSyntax.leadingComma:
@@ -967,12 +967,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightSquare"
   case \DictionaryTypeSyntax.unexpectedAfterRightSquare:
     return "unexpectedAfterRightSquare"
-  case \DifferentiabilityArgumentSyntax.unexpectedBeforeParameter:
-    return "unexpectedBeforeParameter"
-  case \DifferentiabilityArgumentSyntax.parameter:
-    return "parameter"
-  case \DifferentiabilityArgumentSyntax.unexpectedBetweenParameterAndTrailingComma:
-    return "unexpectedBetweenParameterAndTrailingComma"
+  case \DifferentiabilityArgumentSyntax.unexpectedBeforeArgument:
+    return "unexpectedBeforeArgument"
+  case \DifferentiabilityArgumentSyntax.argument:
+    return "argument"
+  case \DifferentiabilityArgumentSyntax.unexpectedBetweenArgumentAndTrailingComma:
+    return "unexpectedBetweenArgumentAndTrailingComma"
   case \DifferentiabilityArgumentSyntax.trailingComma:
     return "trailingComma"
   case \DifferentiabilityArgumentSyntax.unexpectedAfterTrailingComma:
@@ -981,12 +981,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeLeftParen"
   case \DifferentiabilityArgumentsSyntax.leftParen:
     return "leftParen"
-  case \DifferentiabilityArgumentsSyntax.unexpectedBetweenLeftParenAndDifferentiabilityParameters:
-    return "unexpectedBetweenLeftParenAndDifferentiabilityParameters"
-  case \DifferentiabilityArgumentsSyntax.differentiabilityParameters:
-    return "differentiabilityParameters"
-  case \DifferentiabilityArgumentsSyntax.unexpectedBetweenDifferentiabilityParametersAndRightParen:
-    return "unexpectedBetweenDifferentiabilityParametersAndRightParen"
+  case \DifferentiabilityArgumentsSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \DifferentiabilityArgumentsSyntax.arguments:
+    return "arguments"
+  case \DifferentiabilityArgumentsSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
   case \DifferentiabilityArgumentsSyntax.rightParen:
     return "rightParen"
   case \DifferentiabilityArgumentsSyntax.unexpectedAfterRightParen:
@@ -999,12 +999,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenWrtLabelAndColon"
   case \DifferentiabilityWithRespectToArgumentSyntax.colon:
     return "colon"
-  case \DifferentiabilityWithRespectToArgumentSyntax.unexpectedBetweenColonAndParameters:
-    return "unexpectedBetweenColonAndParameters"
-  case \DifferentiabilityWithRespectToArgumentSyntax.parameters:
-    return "parameters"
-  case \DifferentiabilityWithRespectToArgumentSyntax.unexpectedAfterParameters:
-    return "unexpectedAfterParameters"
+  case \DifferentiabilityWithRespectToArgumentSyntax.unexpectedBetweenColonAndArguments:
+    return "unexpectedBetweenColonAndArguments"
+  case \DifferentiabilityWithRespectToArgumentSyntax.arguments:
+    return "arguments"
+  case \DifferentiabilityWithRespectToArgumentSyntax.unexpectedAfterArguments:
+    return "unexpectedAfterArguments"
   case \DifferentiableAttributeArgumentsSyntax.unexpectedBeforeKindSpecifier:
     return "unexpectedBeforeKindSpecifier"
   case \DifferentiableAttributeArgumentsSyntax.kindSpecifier:
@@ -1013,16 +1013,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenKindSpecifierAndKindSpecifierComma"
   case \DifferentiableAttributeArgumentsSyntax.kindSpecifierComma:
     return "kindSpecifierComma"
-  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenKindSpecifierCommaAndParameters:
-    return "unexpectedBetweenKindSpecifierCommaAndParameters"
-  case \DifferentiableAttributeArgumentsSyntax.parameters:
-    return "parameters"
-  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenParametersAndParametersComma:
-    return "unexpectedBetweenParametersAndParametersComma"
-  case \DifferentiableAttributeArgumentsSyntax.parametersComma:
-    return "parametersComma"
-  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenParametersCommaAndGenericWhereClause:
-    return "unexpectedBetweenParametersCommaAndGenericWhereClause"
+  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenKindSpecifierCommaAndArguments:
+    return "unexpectedBetweenKindSpecifierCommaAndArguments"
+  case \DifferentiableAttributeArgumentsSyntax.arguments:
+    return "arguments"
+  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenArgumentsAndArgumentsComma:
+    return "unexpectedBetweenArgumentsAndArgumentsComma"
+  case \DifferentiableAttributeArgumentsSyntax.argumentsComma:
+    return "argumentsComma"
+  case \DifferentiableAttributeArgumentsSyntax.unexpectedBetweenArgumentsCommaAndGenericWhereClause:
+    return "unexpectedBetweenArgumentsCommaAndGenericWhereClause"
   case \DifferentiableAttributeArgumentsSyntax.genericWhereClause:
     return "genericWhereClause"
   case \DifferentiableAttributeArgumentsSyntax.unexpectedAfterGenericWhereClause:

@@ -371,7 +371,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Parameters",
+        name: "Arguments",
         deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
@@ -382,7 +382,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   // differentiability-param-list ->
   //     differentiability-param differentiability-param-list?
   Node(
-    kind: .differentiabilityParameterList,
+    kind: .differentiabilityArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "differentiability parameters",
     elementChoices: [.differentiabilityArgument]
@@ -392,14 +392,15 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .differentiabilityArgument,
     base: .syntax,
-    nameForDiagnostics: "differentiability parameter",
-    documentation: "A differentiability parameter: either the \"self\" identifier, a function parameter name, or a function parameter index.",
+    nameForDiagnostics: "differentiability argument",
+    documentation: "A differentiability argument: either the \"self\" identifier, a function parameter name, or a function parameter index.",
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
-        name: "Parameter",
+        name: "Argument",
+        deprecatedName: "Parameter",
         kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .keyword(text: "self")])
       ),
       Child(
@@ -429,18 +430,21 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The colon separating \"wrt\" and the parameter list."
       ),
       Child(
-        name: "Parameters",
+        name: "Arguments",
+        deprecatedName: "Parameters",
         kind: .nodeChoices(choices: [
           Child(
-            name: "Parameter",
+            name: "Argument",
+            deprecatedName: "Parameter",
             kind: .node(kind: .differentiabilityArgument)
           ),
           Child(
-            name: "ParameterList",
+            name: "ArgumentList",
+            deprecatedName: "ParameterList",
             kind: .node(kind: .differentiabilityArguments)
           ),
         ]),
-        nameForDiagnostics: "parameters"
+        nameForDiagnostics: "arguments"
       ),
     ]
   ),
@@ -449,16 +453,17 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .differentiabilityArguments,
     base: .syntax,
-    nameForDiagnostics: "differentiability parameters",
-    documentation: "The differentiability parameters.",
+    nameForDiagnostics: "differentiability arguments",
+    documentation: "The differentiability arguments.",
     children: [
       Child(
         name: "LeftParen",
         kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
       ),
       Child(
-        name: "DifferentiabilityParameters",
-        kind: .collection(kind: .differentiabilityParameterList, collectionElementName: "DifferentiabilityParam"),
+        name: "Arguments",
+        deprecatedName: "DifferentiabilityParameters",
+        kind: .collection(kind: .differentiabilityArgumentList, collectionElementName: "Argument"),
         documentation: "The parameters for differentiation."
       ),
       Child(
@@ -493,16 +498,16 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Parameters",
+        name: "Arguments",
         deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
       ),
       Child(
-        name: "ParametersComma",
+        name: "ArgumentsComma",
         deprecatedName: "DiffParamsComma",
         kind: .token(choices: [.token(tokenKind: "CommaToken")]),
-        documentation: "The comma following the differentiability parameters clause, if it exists.",
+        documentation: "The comma following the differentiability arguments clause, if it exists.",
         isOptional: true
       ),
       Child(
@@ -595,7 +600,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     kind: .effectsAttributeArgumentList,
     base: .syntaxCollection,
     nameForDiagnostics: "@_effects arguments",
-    documentation: "The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.",
+    documentation: "The arguments of the '@_effects' attribute. These will be parsed during the SIL stage.",
     elementChoices: [.token]
   ),
 

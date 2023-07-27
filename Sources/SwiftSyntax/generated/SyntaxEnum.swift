@@ -94,9 +94,9 @@ public enum SyntaxEnum {
   case dictionaryElement(DictionaryElementSyntax)
   case dictionaryExpr(DictionaryExprSyntax)
   case dictionaryType(DictionaryTypeSyntax)
+  case differentiabilityArgumentList(DifferentiabilityArgumentListSyntax)
   case differentiabilityArgument(DifferentiabilityArgumentSyntax)
   case differentiabilityArguments(DifferentiabilityArgumentsSyntax)
-  case differentiabilityParameterList(DifferentiabilityParameterListSyntax)
   case differentiabilityWithRespectToArgument(DifferentiabilityWithRespectToArgumentSyntax)
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
@@ -459,12 +459,12 @@ public extension Syntax {
       return .dictionaryExpr(DictionaryExprSyntax(self)!)
     case .dictionaryType:
       return .dictionaryType(DictionaryTypeSyntax(self)!)
+    case .differentiabilityArgumentList:
+      return .differentiabilityArgumentList(DifferentiabilityArgumentListSyntax(self)!)
     case .differentiabilityArgument:
       return .differentiabilityArgument(DifferentiabilityArgumentSyntax(self)!)
     case .differentiabilityArguments:
       return .differentiabilityArguments(DifferentiabilityArgumentsSyntax(self)!)
-    case .differentiabilityParameterList:
-      return .differentiabilityParameterList(DifferentiabilityParameterListSyntax(self)!)
     case .differentiabilityWithRespectToArgument:
       return .differentiabilityWithRespectToArgument(DifferentiabilityWithRespectToArgumentSyntax(self)!)
     case .differentiableAttributeArguments:

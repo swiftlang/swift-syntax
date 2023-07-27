@@ -468,20 +468,20 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``DifferentiabilityArgumentsSyntax``.``DifferentiabilityArgumentsSyntax/differentiabilityParameters``
-public struct DifferentiabilityParameterListSyntax: SyntaxCollection, SyntaxHashable {
+///  - ``DifferentiabilityArgumentsSyntax``.``DifferentiabilityArgumentsSyntax/arguments``
+public struct DifferentiabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = DifferentiabilityArgumentSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .differentiabilityParameterList else {
+    guard node.raw.kind == .differentiabilityArgumentList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.differentiabilityParameterList
+  public static let syntaxKind = SyntaxKind.differentiabilityArgumentList
 }
 
 /// The arguments of the '@_documentation' attribute
@@ -508,7 +508,7 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
   public static let syntaxKind = SyntaxKind.documentationAttributeArgumentList
 }
 
-/// The arguments of the '@_effect' attribute. These will be parsed during the SIL stage.
+/// The arguments of the '@_effects' attribute. These will be parsed during the SIL stage.
 ///
 /// ### Children
 /// 

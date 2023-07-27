@@ -982,6 +982,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DictionaryTypeSyntax) {
   }
   
+  /// Visiting ``DifferentiabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DifferentiabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``DifferentiabilityArgumentListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DifferentiabilityArgumentListSyntax) {
+  }
+  
   /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1004,18 +1016,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``DifferentiabilityArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DifferentiabilityArgumentsSyntax) {
-  }
-  
-  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiabilityParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``DifferentiabilityParameterListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiabilityParameterListSyntax) {
   }
   
   /// Visiting ``DifferentiabilityWithRespectToArgumentSyntax`` specifically.
@@ -4252,6 +4252,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDifferentiabilityArgumentListSyntax(_ data: SyntaxData) {
+    let node = DifferentiabilityArgumentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityArgumentSyntax(_ data: SyntaxData) {
     let node = DifferentiabilityArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4265,17 +4276,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDifferentiabilityArgumentsSyntax(_ data: SyntaxData) {
     let node = DifferentiabilityArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityParameterListSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityParameterListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6605,12 +6605,12 @@ open class SyntaxVisitor {
       visitImplDictionaryExprSyntax(data)
     case .dictionaryType:
       visitImplDictionaryTypeSyntax(data)
+    case .differentiabilityArgumentList:
+      visitImplDifferentiabilityArgumentListSyntax(data)
     case .differentiabilityArgument:
       visitImplDifferentiabilityArgumentSyntax(data)
     case .differentiabilityArguments:
       visitImplDifferentiabilityArgumentsSyntax(data)
-    case .differentiabilityParameterList:
-      visitImplDifferentiabilityParameterListSyntax(data)
     case .differentiabilityWithRespectToArgument:
       visitImplDifferentiabilityWithRespectToArgumentSyntax(data)
     case .differentiableAttributeArguments:

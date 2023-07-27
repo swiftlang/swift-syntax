@@ -6060,9 +6060,9 @@ public struct RawDerivativeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       accessorSpecifier: RawTokenSyntax?, 
       _ unexpectedBetweenAccessorSpecifierAndComma: RawUnexpectedNodesSyntax? = nil, 
       comma: RawTokenSyntax?, 
-      _ unexpectedBetweenCommaAndParameters: RawUnexpectedNodesSyntax? = nil, 
-      parameters: RawDifferentiabilityWithRespectToArgumentSyntax?, 
-      _ unexpectedAfterParameters: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenCommaAndArguments: RawUnexpectedNodesSyntax? = nil, 
+      arguments: RawDifferentiabilityWithRespectToArgumentSyntax?, 
+      _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -6080,9 +6080,9 @@ public struct RawDerivativeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       layout[9] = accessorSpecifier?.raw
       layout[10] = unexpectedBetweenAccessorSpecifierAndComma?.raw
       layout[11] = comma?.raw
-      layout[12] = unexpectedBetweenCommaAndParameters?.raw
-      layout[13] = parameters?.raw
-      layout[14] = unexpectedAfterParameters?.raw
+      layout[12] = unexpectedBetweenCommaAndArguments?.raw
+      layout[13] = arguments?.raw
+      layout[14] = unexpectedAfterArguments?.raw
     }
     self.init(unchecked: raw)
   }
@@ -6135,15 +6135,15 @@ public struct RawDerivativeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenCommaAndParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenCommaAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parameters: RawDifferentiabilityWithRespectToArgumentSyntax? {
+  public var arguments: RawDifferentiabilityWithRespectToArgumentSyntax? {
     layoutView.children[13].map(RawDifferentiabilityWithRespectToArgumentSyntax.init(raw:))
   }
   
-  public var unexpectedAfterParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -6631,6 +6631,56 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
+public struct RawDifferentiabilityArgumentListSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+  
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .differentiabilityArgumentList
+  }
+  
+  public var raw: RawSyntax
+  
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+  
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+  
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+  
+  public init(elements: [RawDifferentiabilityArgumentSyntax], arena: __shared SyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .differentiabilityArgumentList, uninitializedCount: elements.count, arena: arena) { layout in
+        guard var ptr = layout.baseAddress else {
+          return
+        }
+        for elem in elements {
+          ptr.initialize(to: elem.raw)
+          ptr += 1
+        }
+    }
+    self.init(unchecked: raw)
+  }
+  
+  public var elements: [RawDifferentiabilityArgumentSyntax] {
+    layoutView.children.map {
+      RawDifferentiabilityArgumentSyntax(raw: $0!)
+    }
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawDifferentiabilityArgumentSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -6660,9 +6710,9 @@ public struct RawDifferentiabilityArgumentSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeParameter: RawUnexpectedNodesSyntax? = nil, 
-      parameter: RawTokenSyntax, 
-      _ unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeArgument: RawUnexpectedNodesSyntax? = nil, 
+      argument: RawTokenSyntax, 
+      _ unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
       _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -6670,24 +6720,24 @@ public struct RawDifferentiabilityArgumentSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .differentiabilityArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeParameter?.raw
-      layout[1] = parameter.raw
-      layout[2] = unexpectedBetweenParameterAndTrailingComma?.raw
+      layout[0] = unexpectedBeforeArgument?.raw
+      layout[1] = argument.raw
+      layout[2] = unexpectedBetweenArgumentAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
       layout[4] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeParameter: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeArgument: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parameter: RawTokenSyntax {
+  public var argument: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenParameterAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -6732,9 +6782,9 @@ public struct RawDifferentiabilityArgumentsSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndDifferentiabilityParameters: RawUnexpectedNodesSyntax? = nil, 
-      differentiabilityParameters: RawDifferentiabilityParameterListSyntax, 
-      _ unexpectedBetweenDifferentiabilityParametersAndRightParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil, 
+      arguments: RawDifferentiabilityArgumentListSyntax, 
+      _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -6744,9 +6794,9 @@ public struct RawDifferentiabilityArgumentsSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
-      layout[2] = unexpectedBetweenLeftParenAndDifferentiabilityParameters?.raw
-      layout[3] = differentiabilityParameters.raw
-      layout[4] = unexpectedBetweenDifferentiabilityParametersAndRightParen?.raw
+      layout[2] = unexpectedBetweenLeftParenAndArguments?.raw
+      layout[3] = arguments.raw
+      layout[4] = unexpectedBetweenArgumentsAndRightParen?.raw
       layout[5] = rightParen.raw
       layout[6] = unexpectedAfterRightParen?.raw
     }
@@ -6761,15 +6811,15 @@ public struct RawDifferentiabilityArgumentsSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndDifferentiabilityParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var differentiabilityParameters: RawDifferentiabilityParameterListSyntax {
-    layoutView.children[3].map(RawDifferentiabilityParameterListSyntax.init(raw:))!
+  public var arguments: RawDifferentiabilityArgumentListSyntax {
+    layoutView.children[3].map(RawDifferentiabilityArgumentListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenDifferentiabilityParametersAndRightParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -6783,60 +6833,10 @@ public struct RawDifferentiabilityArgumentsSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawDifferentiabilityParameterListSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-  
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .differentiabilityParameterList
-  }
-  
-  public var raw: RawSyntax
-  
-  init(raw: RawSyntax) {
-    precondition(Self.isKindOf(raw))
-    self.raw = raw
-  }
-  
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-  
-  public init?(_ other: some RawSyntaxNodeProtocol) {
-    guard Self.isKindOf(other.raw) else {
-      return nil
-    }
-    self.init(unchecked: other.raw)
-  }
-  
-  public init(elements: [RawDifferentiabilityArgumentSyntax], arena: __shared SyntaxArena) {
-    let raw = RawSyntax.makeLayout(
-      kind: .differentiabilityParameterList, uninitializedCount: elements.count, arena: arena) { layout in
-        guard var ptr = layout.baseAddress else {
-          return
-        }
-        for elem in elements {
-          ptr.initialize(to: elem.raw)
-          ptr += 1
-        }
-    }
-    self.init(unchecked: raw)
-  }
-  
-  public var elements: [RawDifferentiabilityArgumentSyntax] {
-    layoutView.children.map {
-      RawDifferentiabilityArgumentSyntax(raw: $0!)
-    }
-  }
-}
-
-@_spi(RawSyntax)
 public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProtocol {
-  public enum Parameters: RawSyntaxNodeProtocol {
-    case `parameter`(RawDifferentiabilityArgumentSyntax)
-    case `parameterList`(RawDifferentiabilityArgumentsSyntax)
+  public enum Arguments: RawSyntaxNodeProtocol {
+    case `argument`(RawDifferentiabilityArgumentSyntax)
+    case `argumentList`(RawDifferentiabilityArgumentsSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawDifferentiabilityArgumentSyntax.isKindOf(raw) || RawDifferentiabilityArgumentsSyntax.isKindOf(raw)
@@ -6844,20 +6844,20 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
     
     public var raw: RawSyntax {
       switch self {
-      case .parameter(let node):
+      case .argument(let node):
         return node.raw
-      case .parameterList(let node):
+      case .argumentList(let node):
         return node.raw
       }
     }
     
     public init?(_ other: some RawSyntaxNodeProtocol) {
       if let node = RawDifferentiabilityArgumentSyntax(other) {
-        self = .parameter(node)
+        self = .argument(node)
         return
       }
       if let node = RawDifferentiabilityArgumentsSyntax(other) {
-        self = .parameterList(node)
+        self = .argumentList(node)
         return
       }
       return nil
@@ -6896,9 +6896,9 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
       wrtLabel: RawTokenSyntax, 
       _ unexpectedBetweenWrtLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
-      _ unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? = nil, 
-      parameters: Parameters, 
-      _ unexpectedAfterParameters: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenColonAndArguments: RawUnexpectedNodesSyntax? = nil, 
+      arguments: Arguments, 
+      _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -6908,9 +6908,9 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
       layout[1] = wrtLabel.raw
       layout[2] = unexpectedBetweenWrtLabelAndColon?.raw
       layout[3] = colon.raw
-      layout[4] = unexpectedBetweenColonAndParameters?.raw
-      layout[5] = parameters.raw
-      layout[6] = unexpectedAfterParameters?.raw
+      layout[4] = unexpectedBetweenColonAndArguments?.raw
+      layout[5] = arguments.raw
+      layout[6] = unexpectedAfterArguments?.raw
     }
     self.init(unchecked: raw)
   }
@@ -6931,15 +6931,15 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenColonAndParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parameters: RawSyntax {
+  public var arguments: RawSyntax {
     layoutView.children[5]!
   }
   
-  public var unexpectedAfterParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
@@ -6978,11 +6978,11 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       kindSpecifier: RawTokenSyntax?, 
       _ unexpectedBetweenKindSpecifierAndKindSpecifierComma: RawUnexpectedNodesSyntax? = nil, 
       kindSpecifierComma: RawTokenSyntax?, 
-      _ unexpectedBetweenKindSpecifierCommaAndParameters: RawUnexpectedNodesSyntax? = nil, 
-      parameters: RawDifferentiabilityWithRespectToArgumentSyntax?, 
-      _ unexpectedBetweenParametersAndParametersComma: RawUnexpectedNodesSyntax? = nil, 
-      parametersComma: RawTokenSyntax?, 
-      _ unexpectedBetweenParametersCommaAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenKindSpecifierCommaAndArguments: RawUnexpectedNodesSyntax? = nil, 
+      arguments: RawDifferentiabilityWithRespectToArgumentSyntax?, 
+      _ unexpectedBetweenArgumentsAndArgumentsComma: RawUnexpectedNodesSyntax? = nil, 
+      argumentsComma: RawTokenSyntax?, 
+      _ unexpectedBetweenArgumentsCommaAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       genericWhereClause: RawGenericWhereClauseSyntax?, 
       _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -6994,11 +6994,11 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       layout[1] = kindSpecifier?.raw
       layout[2] = unexpectedBetweenKindSpecifierAndKindSpecifierComma?.raw
       layout[3] = kindSpecifierComma?.raw
-      layout[4] = unexpectedBetweenKindSpecifierCommaAndParameters?.raw
-      layout[5] = parameters?.raw
-      layout[6] = unexpectedBetweenParametersAndParametersComma?.raw
-      layout[7] = parametersComma?.raw
-      layout[8] = unexpectedBetweenParametersCommaAndGenericWhereClause?.raw
+      layout[4] = unexpectedBetweenKindSpecifierCommaAndArguments?.raw
+      layout[5] = arguments?.raw
+      layout[6] = unexpectedBetweenArgumentsAndArgumentsComma?.raw
+      layout[7] = argumentsComma?.raw
+      layout[8] = unexpectedBetweenArgumentsCommaAndGenericWhereClause?.raw
       layout[9] = genericWhereClause?.raw
       layout[10] = unexpectedAfterGenericWhereClause?.raw
     }
@@ -7021,23 +7021,23 @@ public struct RawDifferentiableAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenKindSpecifierCommaAndParameters: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenKindSpecifierCommaAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parameters: RawDifferentiabilityWithRespectToArgumentSyntax? {
+  public var arguments: RawDifferentiabilityWithRespectToArgumentSyntax? {
     layoutView.children[5].map(RawDifferentiabilityWithRespectToArgumentSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenParametersAndParametersComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndArgumentsComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parametersComma: RawTokenSyntax? {
+  public var argumentsComma: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenParametersCommaAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsCommaAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

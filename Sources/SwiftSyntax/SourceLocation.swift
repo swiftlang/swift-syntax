@@ -142,7 +142,7 @@ fileprivate struct SourceLocationDirectiveArguments {
   /// The `line` argument of the `#sourceLocation` directive.
   let line: Int
 
-  init(_ args: PoundSourceLocationArgsSyntax) throws {
+  init(_ args: PoundSourceLocationArgumentsSyntax) throws {
     guard args.fileName.segments.count == 1,
       case .stringSegment(let segment) = args.fileName.segments.first!
     else {

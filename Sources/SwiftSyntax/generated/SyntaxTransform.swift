@@ -29,6 +29,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorBlockSyntax) -> ResultType
   
+  /// Visiting ``AccessorDeclListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AccessorDeclListSyntax) -> ResultType
+  
   /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -44,15 +49,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AccessorInitEffectsSyntax) -> ResultType
   
-  /// Visiting ``AccessorListSyntax`` specifically.
+  /// Visiting ``AccessorParametersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorListSyntax) -> ResultType
-  
-  /// Visiting ``AccessorParameterSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AccessorParameterSyntax) -> ResultType
+  func visit(_ node: AccessorParametersSyntax) -> ResultType
   
   /// Visiting ``ActorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -94,10 +94,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AssignmentExprSyntax) -> ResultType
   
-  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
+  /// Visiting ``AssociatedTypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType
+  func visit(_ node: AssociatedTypeDeclSyntax) -> ResultType
   
   /// Visiting ``AttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -114,6 +114,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AttributedTypeSyntax) -> ResultType
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: AvailabilityArgumentListSyntax) -> ResultType
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -124,45 +129,20 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityConditionSyntax) -> ResultType
   
-  /// Visiting ``AvailabilityEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityEntrySyntax) -> ResultType
-  
   /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilitySpecListSyntax) -> ResultType
-  
-  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType
-  
-  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType
-  
-  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType
   
   /// Visiting ``AwaitExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: AwaitExprSyntax) -> ResultType
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType
+  func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``BinaryOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -194,16 +174,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: CanImportVersionInfoSyntax) -> ResultType
   
-  /// Visiting ``CaseItemListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CaseItemListSyntax) -> ResultType
-  
-  /// Visiting ``CaseItemSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: CaseItemSyntax) -> ResultType
-  
   /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -234,40 +204,30 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClassRestrictionTypeSyntax) -> ResultType
   
-  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
+  /// Visiting ``ClosureCaptureClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType
+  func visit(_ node: ClosureCaptureClauseSyntax) -> ResultType
   
-  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
+  /// Visiting ``ClosureCaptureListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType
+  func visit(_ node: ClosureCaptureListSyntax) -> ResultType
   
-  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureItemSyntax) -> ResultType
+  func visit(_ node: ClosureCaptureSpecifierSyntax) -> ResultType
   
-  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType
+  func visit(_ node: ClosureCaptureSyntax) -> ResultType
   
   /// Visiting ``ClosureExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureExprSyntax) -> ResultType
-  
-  /// Visiting ``ClosureParamListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureParamListSyntax) -> ResultType
-  
-  /// Visiting ``ClosureParamSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ClosureParamSyntax) -> ResultType
   
   /// Visiting ``ClosureParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -283,6 +243,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ClosureParameterSyntax) -> ResultType
+  
+  /// Visiting ``ClosureShorthandParameterListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureShorthandParameterListSyntax) -> ResultType
+  
+  /// Visiting ``ClosureShorthandParameterSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ClosureShorthandParameterSyntax) -> ResultType
   
   /// Visiting ``ClosureSignatureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -334,10 +304,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ConformanceRequirementSyntax) -> ResultType
   
-  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
+  /// Visiting ``ConsumeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType
+  func visit(_ node: ConsumeExprSyntax) -> ResultType
   
   /// Visiting ``ContinueStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -363,6 +333,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclModifierDetailSyntax) -> ResultType
+  
+  /// Visiting ``DeclModifierListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DeclModifierListSyntax) -> ResultType
   
   /// Visiting ``DeclModifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -394,30 +369,30 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeferStmtSyntax) -> ResultType
   
-  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DeinitEffectSpecifiersSyntax) -> ResultType
-  
   /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeinitializerDeclSyntax) -> ResultType
   
-  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
+  /// Visiting ``DeinitializerEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType
+  func visit(_ node: DeinitializerEffectSpecifiersSyntax) -> ResultType
   
-  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
+  /// Visiting ``DerivativeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DesignatedTypeElementSyntax) -> ResultType
+  func visit(_ node: DerivativeAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``DesignatedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DesignatedTypeListSyntax) -> ResultType
+  
+  /// Visiting ``DesignatedTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DesignatedTypeSyntax) -> ResultType
   
   /// Visiting ``DictionaryElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -439,25 +414,25 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryTypeSyntax) -> ResultType
   
-  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType
+  func visit(_ node: DifferentiabilityArgumentSyntax) -> ResultType
   
-  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamSyntax) -> ResultType
+  func visit(_ node: DifferentiabilityArgumentsSyntax) -> ResultType
   
-  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
+  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType
+  func visit(_ node: DifferentiabilityParameterListSyntax) -> ResultType
   
-  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
+  /// Visiting ``DifferentiabilityWithRespectToArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType
+  func visit(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> ResultType
   
   /// Visiting ``DifferentiableAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -489,10 +464,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DocumentationAttributeArgumentSyntax) -> ResultType
   
-  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
+  /// Visiting ``DynamicReplacementAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType
+  func visit(_ node: DynamicReplacementAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``EditorPlaceholderDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -504,10 +479,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderExprSyntax) -> ResultType
   
-  /// Visiting ``EffectsArgumentListSyntax`` specifically.
+  /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: EffectsArgumentListSyntax) -> ResultType
+  func visit(_ node: EffectsAttributeArgumentListSyntax) -> ResultType
   
   /// Visiting ``EnumCaseDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -574,25 +549,25 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ExtensionDeclSyntax) -> ResultType
   
-  /// Visiting ``FallthroughStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: FallthroughStmtSyntax) -> ResultType
+  func visit(_ node: FallThroughStmtSyntax) -> ResultType
   
   /// Visiting ``FloatLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FloatLiteralExprSyntax) -> ResultType
   
-  /// Visiting ``ForInStmtSyntax`` specifically.
+  /// Visiting ``ForStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ForInStmtSyntax) -> ResultType
+  func visit(_ node: ForStmtSyntax) -> ResultType
   
-  /// Visiting ``ForcedValueExprSyntax`` specifically.
+  /// Visiting ``ForceUnwrapExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ForcedValueExprSyntax) -> ResultType
+  func visit(_ node: ForceUnwrapExprSyntax) -> ResultType
   
   /// Visiting ``FunctionCallExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -608,6 +583,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType
+  
+  /// Visiting ``FunctionParameterClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: FunctionParameterClauseSyntax) -> ResultType
   
   /// Visiting ``FunctionParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -669,6 +649,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GenericRequirementSyntax) -> ResultType
   
+  /// Visiting ``GenericSpecializationExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: GenericSpecializationExprSyntax) -> ResultType
+  
   /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -688,6 +673,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: IdentifierPatternSyntax) -> ResultType
+  
+  /// Visiting ``IdentifierTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: IdentifierTypeSyntax) -> ResultType
   
   /// Visiting ``IfConfigClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -743,6 +733,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: InfixOperatorExprSyntax) -> ResultType
+  
+  /// Visiting ``InheritanceClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: InheritanceClauseSyntax) -> ResultType
   
   /// Visiting ``InheritedTypeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -814,10 +809,20 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: KeyPathSubscriptComponentSyntax) -> ResultType
   
-  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
+  /// Visiting ``LabeledExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType
+  func visit(_ node: LabeledExprListSyntax) -> ResultType
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LabeledExprSyntax) -> ResultType
+  
+  /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: LabeledSpecializeArgumentSyntax) -> ResultType
   
   /// Visiting ``LabeledStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -854,25 +859,25 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MemberAccessExprSyntax) -> ResultType
   
-  /// Visiting ``MemberDeclBlockSyntax`` specifically.
+  /// Visiting ``MemberBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclBlockSyntax) -> ResultType
+  func visit(_ node: MemberBlockItemListSyntax) -> ResultType
   
-  /// Visiting ``MemberDeclListItemSyntax`` specifically.
+  /// Visiting ``MemberBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclListItemSyntax) -> ResultType
+  func visit(_ node: MemberBlockItemSyntax) -> ResultType
   
-  /// Visiting ``MemberDeclListSyntax`` specifically.
+  /// Visiting ``MemberBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberDeclListSyntax) -> ResultType
+  func visit(_ node: MemberBlockSyntax) -> ResultType
   
-  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
+  /// Visiting ``MemberTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType
+  func visit(_ node: MemberTypeSyntax) -> ResultType
   
   /// Visiting ``MetatypeTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -908,16 +913,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: MissingTypeSyntax) -> ResultType
-  
-  /// Visiting ``ModifierListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ModifierListSyntax) -> ResultType
-  
-  /// Visiting ``MoveExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: MoveExprSyntax) -> ResultType
   
   /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -979,15 +974,20 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: OptionalTypeSyntax) -> ResultType
   
-  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
+  /// Visiting ``OriginallyDefinedInAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType
+  func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``PackElementExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackElementExprSyntax) -> ResultType
+  
+  /// Visiting ``PackElementTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PackElementTypeSyntax) -> ResultType
   
   /// Visiting ``PackExpansionExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -999,16 +999,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PackExpansionTypeSyntax) -> ResultType
   
-  /// Visiting ``PackReferenceTypeSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PackReferenceTypeSyntax) -> ResultType
-  
-  /// Visiting ``ParameterClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ParameterClauseSyntax) -> ResultType
-  
   /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1019,20 +1009,40 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PatternBindingSyntax) -> ResultType
   
+  /// Visiting ``PatternExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PatternExprSyntax) -> ResultType
+  
+  /// Visiting ``PlatformVersionItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PlatformVersionItemListSyntax) -> ResultType
+  
+  /// Visiting ``PlatformVersionItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PlatformVersionItemSyntax) -> ResultType
+  
+  /// Visiting ``PlatformVersionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PlatformVersionSyntax) -> ResultType
+  
   /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PostfixIfConfigExprSyntax) -> ResultType
   
-  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
+  /// Visiting ``PostfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PostfixUnaryExprSyntax) -> ResultType
+  func visit(_ node: PostfixOperatorExprSyntax) -> ResultType
   
-  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
+  /// Visiting ``PoundSourceLocationArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType
+  func visit(_ node: PoundSourceLocationArgumentsSyntax) -> ResultType
   
   /// Visiting ``PoundSourceLocationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1059,15 +1069,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupDeclSyntax) -> ResultType
   
-  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType
-  
   /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType
+  
+  /// Visiting ``PrecedenceGroupNameSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: PrecedenceGroupNameSyntax) -> ResultType
   
   /// Visiting ``PrecedenceGroupRelationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1109,10 +1119,10 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: RegexLiteralExprSyntax) -> ResultType
   
-  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
+  /// Visiting ``RepeatStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: RepeatWhileStmtSyntax) -> ResultType
+  func visit(_ node: RepeatStmtSyntax) -> ResultType
   
   /// Visiting ``ReturnClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1134,25 +1144,30 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SequenceExprSyntax) -> ResultType
   
-  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
+  /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType
+  func visit(_ node: SomeOrAnyTypeSyntax) -> ResultType
   
   /// Visiting ``SourceFileSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SourceFileSyntax) -> ResultType
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType
+  func visit(_ node: SpecializeAttributeArgumentListSyntax) -> ResultType
   
-  /// Visiting ``SpecializeExprSyntax`` specifically.
+  /// Visiting ``SpecializeAvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SpecializeExprSyntax) -> ResultType
+  func visit(_ node: SpecializeAvailabilityArgumentSyntax) -> ResultType
+  
+  /// Visiting ``SpecializeTargetFunctionArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SpecializeTargetFunctionArgumentSyntax) -> ResultType
   
   /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1174,25 +1189,35 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: StructDeclSyntax) -> ResultType
   
+  /// Visiting ``SubscriptCallExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SubscriptCallExprSyntax) -> ResultType
+  
   /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SubscriptDeclSyntax) -> ResultType
   
-  /// Visiting ``SubscriptExprSyntax`` specifically.
+  /// Visiting ``SuperExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SubscriptExprSyntax) -> ResultType
-  
-  /// Visiting ``SuperRefExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: SuperRefExprSyntax) -> ResultType
+  func visit(_ node: SuperExprSyntax) -> ResultType
   
   /// Visiting ``SuppressedTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SuppressedTypeSyntax) -> ResultType
+  
+  /// Visiting ``SwitchCaseItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchCaseItemListSyntax) -> ResultType
+  
+  /// Visiting ``SwitchCaseItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SwitchCaseItemSyntax) -> ResultType
   
   /// Visiting ``SwitchCaseLabelSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1219,11 +1244,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SwitchExprSyntax) -> ResultType
   
-  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TargetFunctionEntrySyntax) -> ResultType
-  
   /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1238,16 +1258,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TryExprSyntax) -> ResultType
-  
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementListSyntax) -> ResultType
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TupleExprElementSyntax) -> ResultType
   
   /// Visiting ``TupleExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1284,6 +1294,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TupleTypeSyntax) -> ResultType
   
+  /// Visiting ``TypeAliasDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: TypeAliasDeclSyntax) -> ResultType
+  
   /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -1299,25 +1314,15 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeExprSyntax) -> ResultType
   
-  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType
-  
   /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TypeInitializerClauseSyntax) -> ResultType
   
-  /// Visiting ``TypealiasDeclSyntax`` specifically.
+  /// Visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: TypealiasDeclSyntax) -> ResultType
-  
-  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType
+  func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> ResultType
   
   /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1338,11 +1343,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: UnresolvedIsExprSyntax) -> ResultType
-  
-  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType
   
   /// Visiting ``UnresolvedTernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1389,20 +1389,20 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: WildcardPatternSyntax) -> ResultType
   
-  /// Visiting ``YieldExprListElementSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldExprListElementSyntax) -> ResultType
+  func visit(_ node: YieldStmtArgumentClauseSyntax) -> ResultType
   
-  /// Visiting ``YieldExprListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldExprListSyntax) -> ResultType
+  func visit(_ node: YieldStmtArgumentListSyntax) -> ResultType
   
-  /// Visiting ``YieldListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldListSyntax) -> ResultType
+  func visit(_ node: YieldStmtArgumentSyntax) -> ResultType
   
   /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1429,6 +1429,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``AccessorDeclListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AccessorDeclListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1450,17 +1457,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``AccessorListSyntax`` specifically.
+  /// Visiting ``AccessorParametersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AccessorListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AccessorParameterSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AccessorParameterSyntax) -> ResultType {
+  public func visit(_ node: AccessorParametersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1520,10 +1520,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
+  /// Visiting ``AssociatedTypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: AssociatedtypeDeclSyntax) -> ResultType {
+  public func visit(_ node: AssociatedTypeDeclSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1548,6 +1548,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: AvailabilityArgumentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1562,45 +1569,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``AvailabilityEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityEntrySyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: AvailabilityLabeledArgumentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilitySpecListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: AvailabilityVersionRestrictionSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1611,10 +1583,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: BackDeployedAttributeSpecListSyntax) -> ResultType {
+  public func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1660,20 +1632,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``CaseItemListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: CaseItemListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``CaseItemSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: CaseItemSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1716,31 +1674,31 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
+  /// Visiting ``ClosureCaptureClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureItemListSyntax) -> ResultType {
+  public func visit(_ node: ClosureCaptureClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
+  /// Visiting ``ClosureCaptureListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> ResultType {
+  public func visit(_ node: ClosureCaptureListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureItemSyntax) -> ResultType {
+  public func visit(_ node: ClosureCaptureSpecifierSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ClosureCaptureSignatureSyntax) -> ResultType {
+  public func visit(_ node: ClosureCaptureSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1748,20 +1706,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ClosureParamListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ClosureParamListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ClosureParamSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ClosureParamSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1783,6 +1727,20 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: ClosureParameterSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``ClosureShorthandParameterListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureShorthandParameterListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``ClosureShorthandParameterSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ClosureShorthandParameterSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1856,10 +1814,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
+  /// Visiting ``ConsumeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ConstrainedSugarTypeSyntax) -> ResultType {
+  public func visit(_ node: ConsumeExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1895,6 +1853,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DeclModifierDetailSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``DeclModifierListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DeclModifierListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1940,13 +1905,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DeinitEffectSpecifiersSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1954,17 +1912,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
+  /// Visiting ``DeinitializerEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> ResultType {
+  public func visit(_ node: DeinitializerEffectSpecifiersSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
+  /// Visiting ``DerivativeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DesignatedTypeElementSyntax) -> ResultType {
+  public func visit(_ node: DerivativeAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -1972,6 +1930,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DesignatedTypeListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``DesignatedTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DesignatedTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2003,31 +1968,31 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamListSyntax) -> ResultType {
+  public func visit(_ node: DifferentiabilityArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamSyntax) -> ResultType {
+  public func visit(_ node: DifferentiabilityArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
+  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamsClauseSyntax) -> ResultType {
+  public func visit(_ node: DifferentiabilityParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
+  /// Visiting ``DifferentiabilityWithRespectToArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParamsSyntax) -> ResultType {
+  public func visit(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2073,10 +2038,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
+  /// Visiting ``DynamicReplacementAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: DynamicReplacementArgumentsSyntax) -> ResultType {
+  public func visit(_ node: DynamicReplacementAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2094,10 +2059,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``EffectsArgumentListSyntax`` specifically.
+  /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: EffectsArgumentListSyntax) -> ResultType {
+  public func visit(_ node: EffectsAttributeArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2192,10 +2157,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``FallthroughStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: FallthroughStmtSyntax) -> ResultType {
+  public func visit(_ node: FallThroughStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2206,17 +2171,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ForInStmtSyntax`` specifically.
+  /// Visiting ``ForStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ForInStmtSyntax) -> ResultType {
+  public func visit(_ node: ForStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``ForcedValueExprSyntax`` specifically.
+  /// Visiting ``ForceUnwrapExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: ForcedValueExprSyntax) -> ResultType {
+  public func visit(_ node: ForceUnwrapExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2238,6 +2203,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: FunctionEffectSpecifiersSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``FunctionParameterClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: FunctionParameterClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2325,6 +2297,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``GenericSpecializationExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: GenericSpecializationExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2350,6 +2329,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: IdentifierPatternSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``IdentifierTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: IdentifierTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2427,6 +2413,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: InfixOperatorExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``InheritanceClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: InheritanceClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2528,10 +2521,24 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
+  /// Visiting ``LabeledExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: LabeledSpecializeEntrySyntax) -> ResultType {
+  public func visit(_ node: LabeledExprListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LabeledExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: LabeledSpecializeArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2584,31 +2591,31 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``MemberDeclBlockSyntax`` specifically.
+  /// Visiting ``MemberBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclBlockSyntax) -> ResultType {
+  public func visit(_ node: MemberBlockItemListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``MemberDeclListItemSyntax`` specifically.
+  /// Visiting ``MemberBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclListItemSyntax) -> ResultType {
+  public func visit(_ node: MemberBlockItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``MemberDeclListSyntax`` specifically.
+  /// Visiting ``MemberBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberDeclListSyntax) -> ResultType {
+  public func visit(_ node: MemberBlockSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
+  /// Visiting ``MemberTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: MemberTypeIdentifierSyntax) -> ResultType {
+  public func visit(_ node: MemberTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2658,20 +2665,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: MissingTypeSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ModifierListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ModifierListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``MoveExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: MoveExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2759,10 +2752,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
+  /// Visiting ``OriginallyDefinedInAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> ResultType {
+  public func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2770,6 +2763,13 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PackElementExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``PackElementTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PackElementTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2787,20 +2787,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``PackReferenceTypeSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PackReferenceTypeSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``ParameterClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: ParameterClauseSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2815,6 +2801,34 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``PatternExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PatternExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``PlatformVersionItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PlatformVersionItemListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``PlatformVersionItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PlatformVersionItemSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``PlatformVersionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PlatformVersionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2822,17 +2836,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
+  /// Visiting ``PostfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PostfixUnaryExprSyntax) -> ResultType {
+  public func visit(_ node: PostfixOperatorExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
+  /// Visiting ``PoundSourceLocationArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: PoundSourceLocationArgsSyntax) -> ResultType {
+  public func visit(_ node: PoundSourceLocationArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2871,17 +2885,17 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: PrecedenceGroupNameElementSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: PrecedenceGroupNameListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``PrecedenceGroupNameSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: PrecedenceGroupNameSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2941,10 +2955,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
+  /// Visiting ``RepeatStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: RepeatWhileStmtSyntax) -> ResultType {
+  public func visit(_ node: RepeatStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2976,10 +2990,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
+  /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SimpleTypeIdentifierSyntax) -> ResultType {
+  public func visit(_ node: SomeOrAnyTypeSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -2990,17 +3004,24 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SpecializeAttributeSpecListSyntax) -> ResultType {
+  public func visit(_ node: SpecializeAttributeArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``SpecializeExprSyntax`` specifically.
+  /// Visiting ``SpecializeAvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SpecializeExprSyntax) -> ResultType {
+  public func visit(_ node: SpecializeAvailabilityArgumentSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``SpecializeTargetFunctionArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SpecializeTargetFunctionArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3032,6 +3053,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``SubscriptCallExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SubscriptCallExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3039,17 +3067,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``SubscriptExprSyntax`` specifically.
+  /// Visiting ``SuperExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: SubscriptExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``SuperRefExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: SuperRefExprSyntax) -> ResultType {
+  public func visit(_ node: SuperExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3057,6 +3078,20 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: SuppressedTypeSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``SwitchCaseItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchCaseItemListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``SwitchCaseItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SwitchCaseItemSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3095,13 +3130,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TargetFunctionEntrySyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3120,20 +3148,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: TryExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TupleExprElementSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3186,6 +3200,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``TypeAliasDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: TypeAliasDeclSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3207,13 +3228,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: TypeInheritanceClauseSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3221,17 +3235,10 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``TypealiasDeclSyntax`` specifically.
+  /// Visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: TypealiasDeclSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> ResultType {
+  public func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3260,13 +3267,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: UnresolvedIsExprSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: UnresolvedPatternExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3333,24 +3333,24 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``YieldExprListElementSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: YieldExprListElementSyntax) -> ResultType {
+  public func visit(_ node: YieldStmtArgumentClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``YieldExprListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: YieldExprListSyntax) -> ResultType {
+  public func visit(_ node: YieldStmtArgumentListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``YieldListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
-  public func visit(_ node: YieldListSyntax) -> ResultType {
+  public func visit(_ node: YieldStmtArgumentSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3369,15 +3369,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .accessorBlock(let derived):
       return visit(derived)
+    case .accessorDeclList(let derived):
+      return visit(derived)
     case .accessorDecl(let derived):
       return visit(derived)
     case .accessorEffectSpecifiers(let derived):
       return visit(derived)
     case .accessorInitEffects(let derived):
       return visit(derived)
-    case .accessorList(let derived):
-      return visit(derived)
-    case .accessorParameter(let derived):
+    case .accessorParameters(let derived):
       return visit(derived)
     case .actorDecl(let derived):
       return visit(derived)
@@ -3395,7 +3395,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .assignmentExpr(let derived):
       return visit(derived)
-    case .associatedtypeDecl(let derived):
+    case .associatedTypeDecl(let derived):
       return visit(derived)
     case .attributeList(let derived):
       return visit(derived)
@@ -3403,25 +3403,17 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .attributedType(let derived):
       return visit(derived)
+    case .availabilityArgumentList(let derived):
+      return visit(derived)
     case .availabilityArgument(let derived):
       return visit(derived)
     case .availabilityCondition(let derived):
       return visit(derived)
-    case .availabilityEntry(let derived):
-      return visit(derived)
     case .availabilityLabeledArgument(let derived):
-      return visit(derived)
-    case .availabilitySpecList(let derived):
-      return visit(derived)
-    case .availabilityVersionRestrictionListEntry(let derived):
-      return visit(derived)
-    case .availabilityVersionRestrictionList(let derived):
-      return visit(derived)
-    case .availabilityVersionRestriction(let derived):
       return visit(derived)
     case .awaitExpr(let derived):
       return visit(derived)
-    case .backDeployedAttributeSpecList(let derived):
+    case .backDeployedAttributeArguments(let derived):
       return visit(derived)
     case .binaryOperatorExpr(let derived):
       return visit(derived)
@@ -3435,10 +3427,6 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .canImportVersionInfo(let derived):
       return visit(derived)
-    case .caseItemList(let derived):
-      return visit(derived)
-    case .caseItem(let derived):
-      return visit(derived)
     case .catchClauseList(let derived):
       return visit(derived)
     case .catchClause(let derived):
@@ -3451,25 +3439,25 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .classRestrictionType(let derived):
       return visit(derived)
-    case .closureCaptureItemList(let derived):
+    case .closureCaptureClause(let derived):
       return visit(derived)
-    case .closureCaptureItemSpecifier(let derived):
+    case .closureCaptureList(let derived):
       return visit(derived)
-    case .closureCaptureItem(let derived):
+    case .closureCaptureSpecifier(let derived):
       return visit(derived)
-    case .closureCaptureSignature(let derived):
+    case .closureCapture(let derived):
       return visit(derived)
     case .closureExpr(let derived):
-      return visit(derived)
-    case .closureParamList(let derived):
-      return visit(derived)
-    case .closureParam(let derived):
       return visit(derived)
     case .closureParameterClause(let derived):
       return visit(derived)
     case .closureParameterList(let derived):
       return visit(derived)
     case .closureParameter(let derived):
+      return visit(derived)
+    case .closureShorthandParameterList(let derived):
+      return visit(derived)
+    case .closureShorthandParameter(let derived):
       return visit(derived)
     case .closureSignature(let derived):
       return visit(derived)
@@ -3491,7 +3479,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .conformanceRequirement(let derived):
       return visit(derived)
-    case .constrainedSugarType(let derived):
+    case .consumeExpr(let derived):
       return visit(derived)
     case .continueStmt(let derived):
       return visit(derived)
@@ -3502,6 +3490,8 @@ extension SyntaxTransformVisitor {
     case .copyExpr(let derived):
       return visit(derived)
     case .declModifierDetail(let derived):
+      return visit(derived)
+    case .declModifierList(let derived):
       return visit(derived)
     case .declModifier(let derived):
       return visit(derived)
@@ -3515,15 +3505,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .deferStmt(let derived):
       return visit(derived)
-    case .deinitEffectSpecifiers(let derived):
-      return visit(derived)
     case .deinitializerDecl(let derived):
       return visit(derived)
-    case .derivativeRegistrationAttributeArguments(let derived):
+    case .deinitializerEffectSpecifiers(let derived):
       return visit(derived)
-    case .designatedTypeElement(let derived):
+    case .derivativeAttributeArguments(let derived):
       return visit(derived)
     case .designatedTypeList(let derived):
+      return visit(derived)
+    case .designatedType(let derived):
       return visit(derived)
     case .dictionaryElementList(let derived):
       return visit(derived)
@@ -3533,13 +3523,13 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .dictionaryType(let derived):
       return visit(derived)
-    case .differentiabilityParamList(let derived):
+    case .differentiabilityArgument(let derived):
       return visit(derived)
-    case .differentiabilityParam(let derived):
+    case .differentiabilityArguments(let derived):
       return visit(derived)
-    case .differentiabilityParamsClause(let derived):
+    case .differentiabilityParameterList(let derived):
       return visit(derived)
-    case .differentiabilityParams(let derived):
+    case .differentiabilityWithRespectToArgument(let derived):
       return visit(derived)
     case .differentiableAttributeArguments(let derived):
       return visit(derived)
@@ -3553,13 +3543,13 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .documentationAttributeArgument(let derived):
       return visit(derived)
-    case .dynamicReplacementArguments(let derived):
+    case .dynamicReplacementAttributeArguments(let derived):
       return visit(derived)
     case .editorPlaceholderDecl(let derived):
       return visit(derived)
     case .editorPlaceholderExpr(let derived):
       return visit(derived)
-    case .effectsArgumentList(let derived):
+    case .effectsAttributeArgumentList(let derived):
       return visit(derived)
     case .enumCaseDecl(let derived):
       return visit(derived)
@@ -3587,19 +3577,21 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .extensionDecl(let derived):
       return visit(derived)
-    case .fallthroughStmt(let derived):
+    case .fallThroughStmt(let derived):
       return visit(derived)
     case .floatLiteralExpr(let derived):
       return visit(derived)
-    case .forInStmt(let derived):
+    case .forStmt(let derived):
       return visit(derived)
-    case .forcedValueExpr(let derived):
+    case .forceUnwrapExpr(let derived):
       return visit(derived)
     case .functionCallExpr(let derived):
       return visit(derived)
     case .functionDecl(let derived):
       return visit(derived)
     case .functionEffectSpecifiers(let derived):
+      return visit(derived)
+    case .functionParameterClause(let derived):
       return visit(derived)
     case .functionParameterList(let derived):
       return visit(derived)
@@ -3625,6 +3617,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .genericRequirement(let derived):
       return visit(derived)
+    case .genericSpecializationExpr(let derived):
+      return visit(derived)
     case .genericWhereClause(let derived):
       return visit(derived)
     case .guardStmt(let derived):
@@ -3632,6 +3626,8 @@ extension SyntaxTransformVisitor {
     case .identifierExpr(let derived):
       return visit(derived)
     case .identifierPattern(let derived):
+      return visit(derived)
+    case .identifierType(let derived):
       return visit(derived)
     case .ifConfigClauseList(let derived):
       return visit(derived)
@@ -3654,6 +3650,8 @@ extension SyntaxTransformVisitor {
     case .inOutExpr(let derived):
       return visit(derived)
     case .infixOperatorExpr(let derived):
+      return visit(derived)
+    case .inheritanceClause(let derived):
       return visit(derived)
     case .inheritedTypeList(let derived):
       return visit(derived)
@@ -3683,7 +3681,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .keyPathSubscriptComponent(let derived):
       return visit(derived)
-    case .labeledSpecializeEntry(let derived):
+    case .labeledExprList(let derived):
+      return visit(derived)
+    case .labeledExpr(let derived):
+      return visit(derived)
+    case .labeledSpecializeArgument(let derived):
       return visit(derived)
     case .labeledStmt(let derived):
       return visit(derived)
@@ -3699,13 +3701,13 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .memberAccessExpr(let derived):
       return visit(derived)
-    case .memberDeclBlock(let derived):
+    case .memberBlockItemList(let derived):
       return visit(derived)
-    case .memberDeclListItem(let derived):
+    case .memberBlockItem(let derived):
       return visit(derived)
-    case .memberDeclList(let derived):
+    case .memberBlock(let derived):
       return visit(derived)
-    case .memberTypeIdentifier(let derived):
+    case .memberType(let derived):
       return visit(derived)
     case .metatypeType(let derived):
       return visit(derived)
@@ -3720,10 +3722,6 @@ extension SyntaxTransformVisitor {
     case .missing(let derived):
       return visit(derived)
     case .missingType(let derived):
-      return visit(derived)
-    case .modifierList(let derived):
-      return visit(derived)
-    case .moveExpr(let derived):
       return visit(derived)
     case .multipleTrailingClosureElementList(let derived):
       return visit(derived)
@@ -3749,27 +3747,33 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .optionalType(let derived):
       return visit(derived)
-    case .originallyDefinedInArguments(let derived):
+    case .originallyDefinedInAttributeArguments(let derived):
       return visit(derived)
     case .packElementExpr(let derived):
+      return visit(derived)
+    case .packElementType(let derived):
       return visit(derived)
     case .packExpansionExpr(let derived):
       return visit(derived)
     case .packExpansionType(let derived):
       return visit(derived)
-    case .packReferenceType(let derived):
-      return visit(derived)
-    case .parameterClause(let derived):
-      return visit(derived)
     case .patternBindingList(let derived):
       return visit(derived)
     case .patternBinding(let derived):
       return visit(derived)
+    case .patternExpr(let derived):
+      return visit(derived)
+    case .platformVersionItemList(let derived):
+      return visit(derived)
+    case .platformVersionItem(let derived):
+      return visit(derived)
+    case .platformVersion(let derived):
+      return visit(derived)
     case .postfixIfConfigExpr(let derived):
       return visit(derived)
-    case .postfixUnaryExpr(let derived):
+    case .postfixOperatorExpr(let derived):
       return visit(derived)
-    case .poundSourceLocationArgs(let derived):
+    case .poundSourceLocationArguments(let derived):
       return visit(derived)
     case .poundSourceLocation(let derived):
       return visit(derived)
@@ -3781,9 +3785,9 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .precedenceGroupDecl(let derived):
       return visit(derived)
-    case .precedenceGroupNameElement(let derived):
-      return visit(derived)
     case .precedenceGroupNameList(let derived):
+      return visit(derived)
+    case .precedenceGroupName(let derived):
       return visit(derived)
     case .precedenceGroupRelation(let derived):
       return visit(derived)
@@ -3801,7 +3805,7 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .regexLiteralExpr(let derived):
       return visit(derived)
-    case .repeatWhileStmt(let derived):
+    case .repeatStmt(let derived):
       return visit(derived)
     case .returnClause(let derived):
       return visit(derived)
@@ -3811,13 +3815,15 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .sequenceExpr(let derived):
       return visit(derived)
-    case .simpleTypeIdentifier(let derived):
+    case .someOrAnyType(let derived):
       return visit(derived)
     case .sourceFile(let derived):
       return visit(derived)
-    case .specializeAttributeSpecList(let derived):
+    case .specializeAttributeArgumentList(let derived):
       return visit(derived)
-    case .specializeExpr(let derived):
+    case .specializeAvailabilityArgument(let derived):
+      return visit(derived)
+    case .specializeTargetFunctionArgument(let derived):
       return visit(derived)
     case .stringLiteralExpr(let derived):
       return visit(derived)
@@ -3827,13 +3833,17 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .structDecl(let derived):
       return visit(derived)
+    case .subscriptCallExpr(let derived):
+      return visit(derived)
     case .subscriptDecl(let derived):
       return visit(derived)
-    case .subscriptExpr(let derived):
-      return visit(derived)
-    case .superRefExpr(let derived):
+    case .superExpr(let derived):
       return visit(derived)
     case .suppressedType(let derived):
+      return visit(derived)
+    case .switchCaseItemList(let derived):
+      return visit(derived)
+    case .switchCaseItem(let derived):
       return visit(derived)
     case .switchCaseLabel(let derived):
       return visit(derived)
@@ -3845,17 +3855,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .switchExpr(let derived):
       return visit(derived)
-    case .targetFunctionEntry(let derived):
-      return visit(derived)
     case .ternaryExpr(let derived):
       return visit(derived)
     case .throwStmt(let derived):
       return visit(derived)
     case .tryExpr(let derived):
-      return visit(derived)
-    case .tupleExprElementList(let derived):
-      return visit(derived)
-    case .tupleExprElement(let derived):
       return visit(derived)
     case .tupleExpr(let derived):
       return visit(derived)
@@ -3871,19 +3875,17 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .tupleType(let derived):
       return visit(derived)
+    case .typeAliasDecl(let derived):
+      return visit(derived)
     case .typeAnnotation(let derived):
       return visit(derived)
     case .typeEffectSpecifiers(let derived):
       return visit(derived)
     case .typeExpr(let derived):
       return visit(derived)
-    case .typeInheritanceClause(let derived):
-      return visit(derived)
     case .typeInitializerClause(let derived):
       return visit(derived)
-    case .typealiasDecl(let derived):
-      return visit(derived)
-    case .unavailableFromAsyncArguments(let derived):
+    case .unavailableFromAsyncAttributeArguments(let derived):
       return visit(derived)
     case .underscorePrivateAttributeArguments(let derived):
       return visit(derived)
@@ -3892,8 +3894,6 @@ extension SyntaxTransformVisitor {
     case .unresolvedAsExpr(let derived):
       return visit(derived)
     case .unresolvedIsExpr(let derived):
-      return visit(derived)
-    case .unresolvedPatternExpr(let derived):
       return visit(derived)
     case .unresolvedTernaryExpr(let derived):
       return visit(derived)
@@ -3913,11 +3913,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .wildcardPattern(let derived):
       return visit(derived)
-    case .yieldExprListElement(let derived):
+    case .yieldStmtArgumentClause(let derived):
       return visit(derived)
-    case .yieldExprList(let derived):
+    case .yieldStmtArgumentList(let derived):
       return visit(derived)
-    case .yieldList(let derived):
+    case .yieldStmtArgument(let derived):
       return visit(derived)
     case .yieldStmt(let derived):
       return visit(derived)

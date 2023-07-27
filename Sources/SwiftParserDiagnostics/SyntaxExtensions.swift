@@ -80,7 +80,7 @@ extension SyntaxProtocol {
   /// If `allowBlockNames` is `false`, ``CodeBlockSyntax`` and ``MemberDeclBlockSyntax`` are not considered to have a good name and will return `nil`.
   func nodeTypeNameForDiagnostics(allowBlockNames: Bool) -> String? {
     let syntax = Syntax(self)
-    if !allowBlockNames && (syntax.is(CodeBlockSyntax.self) || syntax.is(MemberDeclBlockSyntax.self)) {
+    if !allowBlockNames && (syntax.is(CodeBlockSyntax.self) || syntax.is(MemberBlockSyntax.self)) {
       return nil
     }
     return syntax.kind.nameForDiagnostics
@@ -126,7 +126,7 @@ extension SyntaxProtocol {
   /// of this mode, when it is switched from being missing to present.
   var shouldBeInsertedAfterNextTokenTrivia: Bool {
     if !self.raw.kind.isMissing,
-      let memberDeclItem = self.ancestorOrSelf(mapping: { $0.as(MemberDeclListItemSyntax.self) }),
+      let memberDeclItem = self.ancestorOrSelf(mapping: { $0.as(MemberBlockItemSyntax.self) }),
       memberDeclItem.firstToken(viewMode: .all) == self.firstToken(viewMode: .all)
     {
       return true

@@ -28,7 +28,7 @@ final class TernaryExprTests: XCTestCase {
   func testTernarySequenceExpr() {
     let buildable = SequenceExprSyntax {
       BooleanLiteralExprSyntax(true)
-      UnresolvedTernaryExprSyntax(firstChoice: IntegerLiteralExprSyntax(1))
+      UnresolvedTernaryExprSyntax(thenExpression: IntegerLiteralExprSyntax(1))
       IntegerLiteralExprSyntax(0)
     }
     assertBuildResult(
@@ -42,8 +42,8 @@ final class TernaryExprTests: XCTestCase {
   func testTernaryExpr() {
     let buildable = TernaryExprSyntax(
       condition: BooleanLiteralExprSyntax(true),
-      firstChoice: IntegerLiteralExprSyntax(1),
-      secondChoice: IntegerLiteralExprSyntax(0)
+      thenExpression: IntegerLiteralExprSyntax(1),
+      elseExpression: IntegerLiteralExprSyntax(0)
     )
     assertBuildResult(
       buildable,

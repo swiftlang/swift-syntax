@@ -58,6 +58,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AccessorBlockSyntax) {
   }
   
+  /// Visiting ``AccessorDeclListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AccessorDeclListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``AccessorDeclListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AccessorDeclListSyntax) {
+  }
+  
   /// Visiting ``AccessorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -94,28 +106,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AccessorInitEffectsSyntax) {
   }
   
-  /// Visiting ``AccessorListSyntax`` specifically.
+  /// Visiting ``AccessorParametersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessorListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: AccessorParametersSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AccessorListSyntax`` and its descendants.
+  /// The function called after visiting ``AccessorParametersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessorListSyntax) {
-  }
-  
-  /// Visiting ``AccessorParameterSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessorParameterSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AccessorParameterSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessorParameterSyntax) {
+  open func visitPost(_ node: AccessorParametersSyntax) {
   }
   
   /// Visiting ``ActorDeclSyntax`` specifically.
@@ -214,16 +214,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AssignmentExprSyntax) {
   }
   
-  /// Visiting ``AssociatedtypeDeclSyntax`` specifically.
+  /// Visiting ``AssociatedTypeDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AssociatedtypeDeclSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``AssociatedtypeDeclSyntax`` and its descendants.
+  /// The function called after visiting ``AssociatedTypeDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AssociatedtypeDeclSyntax) {
+  open func visitPost(_ node: AssociatedTypeDeclSyntax) {
   }
   
   /// Visiting ``AttributeListSyntax`` specifically.
@@ -262,6 +262,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AttributedTypeSyntax) {
   }
   
+  /// Visiting ``AvailabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: AvailabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``AvailabilityArgumentListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: AvailabilityArgumentListSyntax) {
+  }
+  
   /// Visiting ``AvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -286,18 +298,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AvailabilityConditionSyntax) {
   }
   
-  /// Visiting ``AvailabilityEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilityEntrySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilityEntrySyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilityEntrySyntax) {
-  }
-  
   /// Visiting ``AvailabilityLabeledArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -308,54 +308,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
-  }
-  
-  /// Visiting ``AvailabilitySpecListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilitySpecListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilitySpecListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilitySpecListSyntax) {
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionListEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilityVersionRestrictionListEntrySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilityVersionRestrictionListEntrySyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilityVersionRestrictionListEntrySyntax) {
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilityVersionRestrictionListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilityVersionRestrictionListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilityVersionRestrictionListSyntax) {
-  }
-  
-  /// Visiting ``AvailabilityVersionRestrictionSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AvailabilityVersionRestrictionSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AvailabilityVersionRestrictionSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AvailabilityVersionRestrictionSyntax) {
   }
   
   /// Visiting ``AwaitExprSyntax`` specifically.
@@ -370,16 +322,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AwaitExprSyntax) {
   }
   
-  /// Visiting ``BackDeployedAttributeSpecListSyntax`` specifically.
+  /// Visiting ``BackDeployedAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: BackDeployedAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``BackDeployedAttributeSpecListSyntax`` and its descendants.
+  /// The function called after visiting ``BackDeployedAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: BackDeployedAttributeSpecListSyntax) {
+  open func visitPost(_ node: BackDeployedAttributeArgumentsSyntax) {
   }
   
   /// Visiting ``BinaryOperatorExprSyntax`` specifically.
@@ -454,30 +406,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: CanImportVersionInfoSyntax) {
   }
   
-  /// Visiting ``CaseItemListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: CaseItemListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``CaseItemListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: CaseItemListSyntax) {
-  }
-  
-  /// Visiting ``CaseItemSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: CaseItemSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``CaseItemSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: CaseItemSyntax) {
-  }
-  
   /// Visiting ``CatchClauseListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -550,52 +478,52 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ClassRestrictionTypeSyntax) {
   }
   
-  /// Visiting ``ClosureCaptureItemListSyntax`` specifically.
+  /// Visiting ``ClosureCaptureClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureCaptureItemListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ClosureCaptureClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemListSyntax`` and its descendants.
+  /// The function called after visiting ``ClosureCaptureClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureCaptureItemListSyntax) {
+  open func visitPost(_ node: ClosureCaptureClauseSyntax) {
   }
   
-  /// Visiting ``ClosureCaptureItemSpecifierSyntax`` specifically.
+  /// Visiting ``ClosureCaptureListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureCaptureItemSpecifierSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ClosureCaptureListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemSpecifierSyntax`` and its descendants.
+  /// The function called after visiting ``ClosureCaptureListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureCaptureItemSpecifierSyntax) {
+  open func visitPost(_ node: ClosureCaptureListSyntax) {
   }
   
-  /// Visiting ``ClosureCaptureItemSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSpecifierSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureCaptureItemSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ClosureCaptureSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureItemSyntax`` and its descendants.
+  /// The function called after visiting ``ClosureCaptureSpecifierSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureCaptureItemSyntax) {
+  open func visitPost(_ node: ClosureCaptureSpecifierSyntax) {
   }
   
-  /// Visiting ``ClosureCaptureSignatureSyntax`` specifically.
+  /// Visiting ``ClosureCaptureSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureCaptureSignatureSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ClosureCaptureSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ClosureCaptureSignatureSyntax`` and its descendants.
+  /// The function called after visiting ``ClosureCaptureSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureCaptureSignatureSyntax) {
+  open func visitPost(_ node: ClosureCaptureSyntax) {
   }
   
   /// Visiting ``ClosureExprSyntax`` specifically.
@@ -608,30 +536,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``ClosureExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureExprSyntax) {
-  }
-  
-  /// Visiting ``ClosureParamListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureParamListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``ClosureParamListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureParamListSyntax) {
-  }
-  
-  /// Visiting ``ClosureParamSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ClosureParamSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``ClosureParamSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ClosureParamSyntax) {
   }
   
   /// Visiting ``ClosureParameterClauseSyntax`` specifically.
@@ -668,6 +572,30 @@ open class SyntaxVisitor {
   /// The function called after visiting ``ClosureParameterSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureParameterSyntax) {
+  }
+  
+  /// Visiting ``ClosureShorthandParameterListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureShorthandParameterListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``ClosureShorthandParameterListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureShorthandParameterListSyntax) {
+  }
+  
+  /// Visiting ``ClosureShorthandParameterSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClosureShorthandParameterSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``ClosureShorthandParameterSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClosureShorthandParameterSyntax) {
   }
   
   /// Visiting ``ClosureSignatureSyntax`` specifically.
@@ -790,16 +718,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ConformanceRequirementSyntax) {
   }
   
-  /// Visiting ``ConstrainedSugarTypeSyntax`` specifically.
+  /// Visiting ``ConsumeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ConstrainedSugarTypeSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ConsumeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ConstrainedSugarTypeSyntax`` and its descendants.
+  /// The function called after visiting ``ConsumeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ConstrainedSugarTypeSyntax) {
+  open func visitPost(_ node: ConsumeExprSyntax) {
   }
   
   /// Visiting ``ContinueStmtSyntax`` specifically.
@@ -860,6 +788,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``DeclModifierDetailSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DeclModifierDetailSyntax) {
+  }
+  
+  /// Visiting ``DeclModifierListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DeclModifierListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``DeclModifierListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DeclModifierListSyntax) {
   }
   
   /// Visiting ``DeclModifierSyntax`` specifically.
@@ -934,18 +874,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DeferStmtSyntax) {
   }
   
-  /// Visiting ``DeinitEffectSpecifiersSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DeinitEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``DeinitEffectSpecifiersSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DeinitEffectSpecifiersSyntax) {
-  }
-  
   /// Visiting ``DeinitializerDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -958,28 +886,28 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DeinitializerDeclSyntax) {
   }
   
-  /// Visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` specifically.
+  /// Visiting ``DeinitializerEffectSpecifiersSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DerivativeRegistrationAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DeinitializerEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DerivativeRegistrationAttributeArgumentsSyntax`` and its descendants.
+  /// The function called after visiting ``DeinitializerEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DerivativeRegistrationAttributeArgumentsSyntax) {
+  open func visitPost(_ node: DeinitializerEffectSpecifiersSyntax) {
   }
   
-  /// Visiting ``DesignatedTypeElementSyntax`` specifically.
+  /// Visiting ``DerivativeAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DesignatedTypeElementSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DerivativeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DesignatedTypeElementSyntax`` and its descendants.
+  /// The function called after visiting ``DerivativeAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DesignatedTypeElementSyntax) {
+  open func visitPost(_ node: DerivativeAttributeArgumentsSyntax) {
   }
   
   /// Visiting ``DesignatedTypeListSyntax`` specifically.
@@ -992,6 +920,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``DesignatedTypeListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: DesignatedTypeListSyntax) {
+  }
+  
+  /// Visiting ``DesignatedTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: DesignatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``DesignatedTypeSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: DesignatedTypeSyntax) {
   }
   
   /// Visiting ``DictionaryElementListSyntax`` specifically.
@@ -1042,52 +982,52 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DictionaryTypeSyntax) {
   }
   
-  /// Visiting ``DifferentiabilityParamListSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiabilityParamListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamListSyntax`` and its descendants.
+  /// The function called after visiting ``DifferentiabilityArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiabilityParamListSyntax) {
+  open func visitPost(_ node: DifferentiabilityArgumentSyntax) {
   }
   
-  /// Visiting ``DifferentiabilityParamSyntax`` specifically.
+  /// Visiting ``DifferentiabilityArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiabilityParamSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamSyntax`` and its descendants.
+  /// The function called after visiting ``DifferentiabilityArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiabilityParamSyntax) {
+  open func visitPost(_ node: DifferentiabilityArgumentsSyntax) {
   }
   
-  /// Visiting ``DifferentiabilityParamsClauseSyntax`` specifically.
+  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiabilityParamsClauseSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityParameterListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamsClauseSyntax`` and its descendants.
+  /// The function called after visiting ``DifferentiabilityParameterListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiabilityParamsClauseSyntax) {
+  open func visitPost(_ node: DifferentiabilityParameterListSyntax) {
   }
   
-  /// Visiting ``DifferentiabilityParamsSyntax`` specifically.
+  /// Visiting ``DifferentiabilityWithRespectToArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DifferentiabilityParamsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DifferentiabilityParamsSyntax`` and its descendants.
+  /// The function called after visiting ``DifferentiabilityWithRespectToArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DifferentiabilityParamsSyntax) {
+  open func visitPost(_ node: DifferentiabilityWithRespectToArgumentSyntax) {
   }
   
   /// Visiting ``DifferentiableAttributeArgumentsSyntax`` specifically.
@@ -1162,16 +1102,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DocumentationAttributeArgumentSyntax) {
   }
   
-  /// Visiting ``DynamicReplacementArgumentsSyntax`` specifically.
+  /// Visiting ``DynamicReplacementAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: DynamicReplacementArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: DynamicReplacementAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DynamicReplacementArgumentsSyntax`` and its descendants.
+  /// The function called after visiting ``DynamicReplacementAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: DynamicReplacementArgumentsSyntax) {
+  open func visitPost(_ node: DynamicReplacementAttributeArgumentsSyntax) {
   }
   
   /// Visiting ``EditorPlaceholderDeclSyntax`` specifically.
@@ -1198,16 +1138,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: EditorPlaceholderExprSyntax) {
   }
   
-  /// Visiting ``EffectsArgumentListSyntax`` specifically.
+  /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: EffectsArgumentListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: EffectsAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``EffectsArgumentListSyntax`` and its descendants.
+  /// The function called after visiting ``EffectsAttributeArgumentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: EffectsArgumentListSyntax) {
+  open func visitPost(_ node: EffectsAttributeArgumentListSyntax) {
   }
   
   /// Visiting ``EnumCaseDeclSyntax`` specifically.
@@ -1366,16 +1306,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ExtensionDeclSyntax) {
   }
   
-  /// Visiting ``FallthroughStmtSyntax`` specifically.
+  /// Visiting ``FallThroughStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: FallthroughStmtSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: FallThroughStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``FallthroughStmtSyntax`` and its descendants.
+  /// The function called after visiting ``FallThroughStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: FallthroughStmtSyntax) {
+  open func visitPost(_ node: FallThroughStmtSyntax) {
   }
   
   /// Visiting ``FloatLiteralExprSyntax`` specifically.
@@ -1390,28 +1330,28 @@ open class SyntaxVisitor {
   open func visitPost(_ node: FloatLiteralExprSyntax) {
   }
   
-  /// Visiting ``ForInStmtSyntax`` specifically.
+  /// Visiting ``ForStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ForInStmtSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ForStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ForInStmtSyntax`` and its descendants.
+  /// The function called after visiting ``ForStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ForInStmtSyntax) {
+  open func visitPost(_ node: ForStmtSyntax) {
   }
   
-  /// Visiting ``ForcedValueExprSyntax`` specifically.
+  /// Visiting ``ForceUnwrapExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ForcedValueExprSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ForceUnwrapExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ForcedValueExprSyntax`` and its descendants.
+  /// The function called after visiting ``ForceUnwrapExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ForcedValueExprSyntax) {
+  open func visitPost(_ node: ForceUnwrapExprSyntax) {
   }
   
   /// Visiting ``FunctionCallExprSyntax`` specifically.
@@ -1448,6 +1388,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``FunctionEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: FunctionEffectSpecifiersSyntax) {
+  }
+  
+  /// Visiting ``FunctionParameterClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: FunctionParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``FunctionParameterClauseSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: FunctionParameterClauseSyntax) {
   }
   
   /// Visiting ``FunctionParameterListSyntax`` specifically.
@@ -1594,6 +1546,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: GenericRequirementSyntax) {
   }
   
+  /// Visiting ``GenericSpecializationExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: GenericSpecializationExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``GenericSpecializationExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: GenericSpecializationExprSyntax) {
+  }
+  
   /// Visiting ``GenericWhereClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1640,6 +1604,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``IdentifierPatternSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: IdentifierPatternSyntax) {
+  }
+  
+  /// Visiting ``IdentifierTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: IdentifierTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``IdentifierTypeSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: IdentifierTypeSyntax) {
   }
   
   /// Visiting ``IfConfigClauseListSyntax`` specifically.
@@ -1772,6 +1748,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``InfixOperatorExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: InfixOperatorExprSyntax) {
+  }
+  
+  /// Visiting ``InheritanceClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: InheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``InheritanceClauseSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: InheritanceClauseSyntax) {
   }
   
   /// Visiting ``InheritedTypeListSyntax`` specifically.
@@ -1942,16 +1930,40 @@ open class SyntaxVisitor {
   open func visitPost(_ node: KeyPathSubscriptComponentSyntax) {
   }
   
-  /// Visiting ``LabeledSpecializeEntrySyntax`` specifically.
+  /// Visiting ``LabeledExprListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: LabeledSpecializeEntrySyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: LabeledExprListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LabeledSpecializeEntrySyntax`` and its descendants.
+  /// The function called after visiting ``LabeledExprListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: LabeledSpecializeEntrySyntax) {
+  open func visitPost(_ node: LabeledExprListSyntax) {
+  }
+  
+  /// Visiting ``LabeledExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LabeledExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``LabeledExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LabeledExprSyntax) {
+  }
+  
+  /// Visiting ``LabeledSpecializeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: LabeledSpecializeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``LabeledSpecializeArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: LabeledSpecializeArgumentSyntax) {
   }
   
   /// Visiting ``LabeledStmtSyntax`` specifically.
@@ -2038,52 +2050,52 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MemberAccessExprSyntax) {
   }
   
-  /// Visiting ``MemberDeclBlockSyntax`` specifically.
+  /// Visiting ``MemberBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: MemberDeclBlockSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: MemberBlockItemListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclBlockSyntax`` and its descendants.
+  /// The function called after visiting ``MemberBlockItemListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: MemberDeclBlockSyntax) {
+  open func visitPost(_ node: MemberBlockItemListSyntax) {
   }
   
-  /// Visiting ``MemberDeclListItemSyntax`` specifically.
+  /// Visiting ``MemberBlockItemSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: MemberDeclListItemSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: MemberBlockItemSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclListItemSyntax`` and its descendants.
+  /// The function called after visiting ``MemberBlockItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: MemberDeclListItemSyntax) {
+  open func visitPost(_ node: MemberBlockItemSyntax) {
   }
   
-  /// Visiting ``MemberDeclListSyntax`` specifically.
+  /// Visiting ``MemberBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: MemberDeclListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: MemberBlockSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberDeclListSyntax`` and its descendants.
+  /// The function called after visiting ``MemberBlockSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: MemberDeclListSyntax) {
+  open func visitPost(_ node: MemberBlockSyntax) {
   }
   
-  /// Visiting ``MemberTypeIdentifierSyntax`` specifically.
+  /// Visiting ``MemberTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: MemberTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: MemberTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``MemberTypeIdentifierSyntax`` and its descendants.
+  /// The function called after visiting ``MemberTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: MemberTypeIdentifierSyntax) {
+  open func visitPost(_ node: MemberTypeSyntax) {
   }
   
   /// Visiting ``MetatypeTypeSyntax`` specifically.
@@ -2168,30 +2180,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``MissingTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: MissingTypeSyntax) {
-  }
-  
-  /// Visiting ``ModifierListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ModifierListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``ModifierListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ModifierListSyntax) {
-  }
-  
-  /// Visiting ``MoveExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: MoveExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``MoveExprSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: MoveExprSyntax) {
   }
   
   /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
@@ -2338,16 +2326,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: OptionalTypeSyntax) {
   }
   
-  /// Visiting ``OriginallyDefinedInArgumentsSyntax`` specifically.
+  /// Visiting ``OriginallyDefinedInAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: OriginallyDefinedInArgumentsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``OriginallyDefinedInArgumentsSyntax`` and its descendants.
+  /// The function called after visiting ``OriginallyDefinedInAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: OriginallyDefinedInArgumentsSyntax) {
+  open func visitPost(_ node: OriginallyDefinedInAttributeArgumentsSyntax) {
   }
   
   /// Visiting ``PackElementExprSyntax`` specifically.
@@ -2360,6 +2348,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``PackElementExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PackElementExprSyntax) {
+  }
+  
+  /// Visiting ``PackElementTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PackElementTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PackElementTypeSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PackElementTypeSyntax) {
   }
   
   /// Visiting ``PackExpansionExprSyntax`` specifically.
@@ -2386,30 +2386,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PackExpansionTypeSyntax) {
   }
   
-  /// Visiting ``PackReferenceTypeSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PackReferenceTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``PackReferenceTypeSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PackReferenceTypeSyntax) {
-  }
-  
-  /// Visiting ``ParameterClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ParameterClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``ParameterClauseSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ParameterClauseSyntax) {
-  }
-  
   /// Visiting ``PatternBindingListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2434,6 +2410,54 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PatternBindingSyntax) {
   }
   
+  /// Visiting ``PatternExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PatternExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PatternExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PatternExprSyntax) {
+  }
+  
+  /// Visiting ``PlatformVersionItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PlatformVersionItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PlatformVersionItemListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PlatformVersionItemListSyntax) {
+  }
+  
+  /// Visiting ``PlatformVersionItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PlatformVersionItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PlatformVersionItemSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PlatformVersionItemSyntax) {
+  }
+  
+  /// Visiting ``PlatformVersionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PlatformVersionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PlatformVersionSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PlatformVersionSyntax) {
+  }
+  
   /// Visiting ``PostfixIfConfigExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2446,28 +2470,28 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PostfixIfConfigExprSyntax) {
   }
   
-  /// Visiting ``PostfixUnaryExprSyntax`` specifically.
+  /// Visiting ``PostfixOperatorExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PostfixUnaryExprSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: PostfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PostfixUnaryExprSyntax`` and its descendants.
+  /// The function called after visiting ``PostfixOperatorExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PostfixUnaryExprSyntax) {
+  open func visitPost(_ node: PostfixOperatorExprSyntax) {
   }
   
-  /// Visiting ``PoundSourceLocationArgsSyntax`` specifically.
+  /// Visiting ``PoundSourceLocationArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PoundSourceLocationArgsSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: PoundSourceLocationArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``PoundSourceLocationArgsSyntax`` and its descendants.
+  /// The function called after visiting ``PoundSourceLocationArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PoundSourceLocationArgsSyntax) {
+  open func visitPost(_ node: PoundSourceLocationArgumentsSyntax) {
   }
   
   /// Visiting ``PoundSourceLocationSyntax`` specifically.
@@ -2530,18 +2554,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PrecedenceGroupDeclSyntax) {
   }
   
-  /// Visiting ``PrecedenceGroupNameElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: PrecedenceGroupNameElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``PrecedenceGroupNameElementSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: PrecedenceGroupNameElementSyntax) {
-  }
-  
   /// Visiting ``PrecedenceGroupNameListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2552,6 +2564,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``PrecedenceGroupNameListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: PrecedenceGroupNameListSyntax) {
+  }
+  
+  /// Visiting ``PrecedenceGroupNameSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: PrecedenceGroupNameSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``PrecedenceGroupNameSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: PrecedenceGroupNameSyntax) {
   }
   
   /// Visiting ``PrecedenceGroupRelationSyntax`` specifically.
@@ -2650,16 +2674,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: RegexLiteralExprSyntax) {
   }
   
-  /// Visiting ``RepeatWhileStmtSyntax`` specifically.
+  /// Visiting ``RepeatStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: RepeatWhileStmtSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: RepeatStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``RepeatWhileStmtSyntax`` and its descendants.
+  /// The function called after visiting ``RepeatStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: RepeatWhileStmtSyntax) {
+  open func visitPost(_ node: RepeatStmtSyntax) {
   }
   
   /// Visiting ``ReturnClauseSyntax`` specifically.
@@ -2710,16 +2734,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SequenceExprSyntax) {
   }
   
-  /// Visiting ``SimpleTypeIdentifierSyntax`` specifically.
+  /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SimpleTypeIdentifierSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: SomeOrAnyTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SimpleTypeIdentifierSyntax`` and its descendants.
+  /// The function called after visiting ``SomeOrAnyTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SimpleTypeIdentifierSyntax) {
+  open func visitPost(_ node: SomeOrAnyTypeSyntax) {
   }
   
   /// Visiting ``SourceFileSyntax`` specifically.
@@ -2734,28 +2758,40 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SourceFileSyntax) {
   }
   
-  /// Visiting ``SpecializeAttributeSpecListSyntax`` specifically.
+  /// Visiting ``SpecializeAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SpecializeAttributeSpecListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: SpecializeAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SpecializeAttributeSpecListSyntax`` and its descendants.
+  /// The function called after visiting ``SpecializeAttributeArgumentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SpecializeAttributeSpecListSyntax) {
+  open func visitPost(_ node: SpecializeAttributeArgumentListSyntax) {
   }
   
-  /// Visiting ``SpecializeExprSyntax`` specifically.
+  /// Visiting ``SpecializeAvailabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SpecializeExprSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: SpecializeAvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SpecializeExprSyntax`` and its descendants.
+  /// The function called after visiting ``SpecializeAvailabilityArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SpecializeExprSyntax) {
+  open func visitPost(_ node: SpecializeAvailabilityArgumentSyntax) {
+  }
+  
+  /// Visiting ``SpecializeTargetFunctionArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SpecializeTargetFunctionArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SpecializeTargetFunctionArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SpecializeTargetFunctionArgumentSyntax) {
   }
   
   /// Visiting ``StringLiteralExprSyntax`` specifically.
@@ -2806,6 +2842,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: StructDeclSyntax) {
   }
   
+  /// Visiting ``SubscriptCallExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SubscriptCallExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SubscriptCallExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SubscriptCallExprSyntax) {
+  }
+  
   /// Visiting ``SubscriptDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2818,28 +2866,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SubscriptDeclSyntax) {
   }
   
-  /// Visiting ``SubscriptExprSyntax`` specifically.
+  /// Visiting ``SuperExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SubscriptExprSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: SuperExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``SubscriptExprSyntax`` and its descendants.
+  /// The function called after visiting ``SuperExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SubscriptExprSyntax) {
-  }
-  
-  /// Visiting ``SuperRefExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: SuperRefExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``SuperRefExprSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: SuperRefExprSyntax) {
+  open func visitPost(_ node: SuperExprSyntax) {
   }
   
   /// Visiting ``SuppressedTypeSyntax`` specifically.
@@ -2852,6 +2888,30 @@ open class SyntaxVisitor {
   /// The function called after visiting ``SuppressedTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: SuppressedTypeSyntax) {
+  }
+  
+  /// Visiting ``SwitchCaseItemListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchCaseItemListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SwitchCaseItemListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchCaseItemListSyntax) {
+  }
+  
+  /// Visiting ``SwitchCaseItemSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SwitchCaseItemSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SwitchCaseItemSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SwitchCaseItemSyntax) {
   }
   
   /// Visiting ``SwitchCaseLabelSyntax`` specifically.
@@ -2914,18 +2974,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SwitchExprSyntax) {
   }
   
-  /// Visiting ``TargetFunctionEntrySyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TargetFunctionEntrySyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TargetFunctionEntrySyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TargetFunctionEntrySyntax) {
-  }
-  
   /// Visiting ``TernaryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2960,30 +3008,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``TryExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: TryExprSyntax) {
-  }
-  
-  /// Visiting ``TupleExprElementListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TupleExprElementListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TupleExprElementListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TupleExprElementListSyntax) {
-  }
-  
-  /// Visiting ``TupleExprElementSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TupleExprElementSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TupleExprElementSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TupleExprElementSyntax) {
   }
   
   /// Visiting ``TupleExprSyntax`` specifically.
@@ -3070,6 +3094,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TupleTypeSyntax) {
   }
   
+  /// Visiting ``TypeAliasDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``TypeAliasDeclSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: TypeAliasDeclSyntax) {
+  }
+  
   /// Visiting ``TypeAnnotationSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3106,18 +3142,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TypeExprSyntax) {
   }
   
-  /// Visiting ``TypeInheritanceClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TypeInheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``TypeInheritanceClauseSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TypeInheritanceClauseSyntax) {
-  }
-  
   /// Visiting ``TypeInitializerClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3130,28 +3154,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TypeInitializerClauseSyntax) {
   }
   
-  /// Visiting ``TypealiasDeclSyntax`` specifically.
+  /// Visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: TypealiasDeclSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``TypealiasDeclSyntax`` and its descendants.
+  /// The function called after visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: TypealiasDeclSyntax) {
-  }
-  
-  /// Visiting ``UnavailableFromAsyncArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnavailableFromAsyncArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``UnavailableFromAsyncArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnavailableFromAsyncArgumentsSyntax) {
+  open func visitPost(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
   }
   
   /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
@@ -3200,18 +3212,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``UnresolvedIsExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnresolvedIsExprSyntax) {
-  }
-  
-  /// Visiting ``UnresolvedPatternExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnresolvedPatternExprSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``UnresolvedPatternExprSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnresolvedPatternExprSyntax) {
   }
   
   /// Visiting ``UnresolvedTernaryExprSyntax`` specifically.
@@ -3322,40 +3322,40 @@ open class SyntaxVisitor {
   open func visitPost(_ node: WildcardPatternSyntax) {
   }
   
-  /// Visiting ``YieldExprListElementSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldExprListElementSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: YieldStmtArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldExprListElementSyntax`` and its descendants.
+  /// The function called after visiting ``YieldStmtArgumentClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldExprListElementSyntax) {
+  open func visitPost(_ node: YieldStmtArgumentClauseSyntax) {
   }
   
-  /// Visiting ``YieldExprListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldExprListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: YieldStmtArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldExprListSyntax`` and its descendants.
+  /// The function called after visiting ``YieldStmtArgumentListSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldExprListSyntax) {
+  open func visitPost(_ node: YieldStmtArgumentListSyntax) {
   }
   
-  /// Visiting ``YieldListSyntax`` specifically.
+  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldListSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: YieldStmtArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``YieldListSyntax`` and its descendants.
+  /// The function called after visiting ``YieldStmtArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldListSyntax) {
+  open func visitPost(_ node: YieldStmtArgumentSyntax) {
   }
   
   /// Visiting ``YieldStmtSyntax`` specifically.
@@ -3405,6 +3405,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAccessorDeclListSyntax(_ data: SyntaxData) {
+    let node = AccessorDeclListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorDeclSyntax(_ data: SyntaxData) {
     let node = AccessorDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3438,19 +3449,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorListSyntax(_ data: SyntaxData) {
-    let node = AccessorListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorParameterSyntax(_ data: SyntaxData) {
-    let node = AccessorParameterSyntax(data)
+  private func visitImplAccessorParametersSyntax(_ data: SyntaxData) {
+    let node = AccessorParametersSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3548,8 +3548,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAssociatedtypeDeclSyntax(_ data: SyntaxData) {
-    let node = AssociatedtypeDeclSyntax(data)
+  private func visitImplAssociatedTypeDeclSyntax(_ data: SyntaxData) {
+    let node = AssociatedTypeDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3592,6 +3592,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplAvailabilityArgumentListSyntax(_ data: SyntaxData) {
+    let node = AvailabilityArgumentListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) {
     let node = AvailabilityArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3614,63 +3625,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityEntrySyntax(_ data: SyntaxData) {
-    let node = AvailabilityEntrySyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) {
     let node = AvailabilityLabeledArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilitySpecListSyntax(_ data: SyntaxData) {
-    let node = AvailabilitySpecListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityVersionRestrictionListEntrySyntax(_ data: SyntaxData) {
-    let node = AvailabilityVersionRestrictionListEntrySyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityVersionRestrictionListSyntax(_ data: SyntaxData) {
-    let node = AvailabilityVersionRestrictionListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityVersionRestrictionSyntax(_ data: SyntaxData) {
-    let node = AvailabilityVersionRestrictionSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3691,8 +3647,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployedAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = BackDeployedAttributeSpecListSyntax(data)
+  private func visitImplBackDeployedAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = BackDeployedAttributeArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3768,28 +3724,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCaseItemListSyntax(_ data: SyntaxData) {
-    let node = CaseItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCaseItemSyntax(_ data: SyntaxData) {
-    let node = CaseItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplCatchClauseListSyntax(_ data: SyntaxData) {
     let node = CatchClauseListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3856,8 +3790,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureItemListSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureItemListSyntax(data)
+  private func visitImplClosureCaptureClauseSyntax(_ data: SyntaxData) {
+    let node = ClosureCaptureClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3867,8 +3801,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureItemSpecifierSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureItemSpecifierSyntax(data)
+  private func visitImplClosureCaptureListSyntax(_ data: SyntaxData) {
+    let node = ClosureCaptureListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3878,8 +3812,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureItemSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureItemSyntax(data)
+  private func visitImplClosureCaptureSpecifierSyntax(_ data: SyntaxData) {
+    let node = ClosureCaptureSpecifierSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3889,8 +3823,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureSignatureSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureSignatureSyntax(data)
+  private func visitImplClosureCaptureSyntax(_ data: SyntaxData) {
+    let node = ClosureCaptureSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3902,28 +3836,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureExprSyntax(_ data: SyntaxData) {
     let node = ClosureExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureParamListSyntax(_ data: SyntaxData) {
-    let node = ClosureParamListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureParamSyntax(_ data: SyntaxData) {
-    let node = ClosureParamSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -3957,6 +3869,28 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplClosureParameterSyntax(_ data: SyntaxData) {
     let node = ClosureParameterSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureShorthandParameterListSyntax(_ data: SyntaxData) {
+    let node = ClosureShorthandParameterListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplClosureShorthandParameterSyntax(_ data: SyntaxData) {
+    let node = ClosureShorthandParameterSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4076,8 +4010,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConstrainedSugarTypeSyntax(_ data: SyntaxData) {
-    let node = ConstrainedSugarTypeSyntax(data)
+  private func visitImplConsumeExprSyntax(_ data: SyntaxData) {
+    let node = ConsumeExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4133,6 +4067,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) {
     let node = DeclModifierDetailSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDeclModifierListSyntax(_ data: SyntaxData) {
+    let node = DeclModifierListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4208,17 +4153,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeinitEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = DeinitEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) {
     let node = DeinitializerDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4230,8 +4164,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDerivativeRegistrationAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = DerivativeRegistrationAttributeArgumentsSyntax(data)
+  private func visitImplDeinitializerEffectSpecifiersSyntax(_ data: SyntaxData) {
+    let node = DeinitializerEffectSpecifiersSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4241,8 +4175,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDesignatedTypeElementSyntax(_ data: SyntaxData) {
-    let node = DesignatedTypeElementSyntax(data)
+  private func visitImplDerivativeAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = DerivativeAttributeArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4254,6 +4188,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) {
     let node = DesignatedTypeListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplDesignatedTypeSyntax(_ data: SyntaxData) {
+    let node = DesignatedTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4307,8 +4252,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityParamListSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityParamListSyntax(data)
+  private func visitImplDifferentiabilityArgumentSyntax(_ data: SyntaxData) {
+    let node = DifferentiabilityArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4318,8 +4263,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityParamSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityParamSyntax(data)
+  private func visitImplDifferentiabilityArgumentsSyntax(_ data: SyntaxData) {
+    let node = DifferentiabilityArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4329,8 +4274,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityParamsClauseSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityParamsClauseSyntax(data)
+  private func visitImplDifferentiabilityParameterListSyntax(_ data: SyntaxData) {
+    let node = DifferentiabilityParameterListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4340,8 +4285,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityParamsSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityParamsSyntax(data)
+  private func visitImplDifferentiabilityWithRespectToArgumentSyntax(_ data: SyntaxData) {
+    let node = DifferentiabilityWithRespectToArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4417,8 +4362,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDynamicReplacementArgumentsSyntax(_ data: SyntaxData) {
-    let node = DynamicReplacementArgumentsSyntax(data)
+  private func visitImplDynamicReplacementAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = DynamicReplacementAttributeArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4450,8 +4395,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEffectsArgumentListSyntax(_ data: SyntaxData) {
-    let node = EffectsArgumentListSyntax(data)
+  private func visitImplEffectsAttributeArgumentListSyntax(_ data: SyntaxData) {
+    let node = EffectsAttributeArgumentListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4604,8 +4549,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFallthroughStmtSyntax(_ data: SyntaxData) {
-    let node = FallthroughStmtSyntax(data)
+  private func visitImplFallThroughStmtSyntax(_ data: SyntaxData) {
+    let node = FallThroughStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4626,8 +4571,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplForInStmtSyntax(_ data: SyntaxData) {
-    let node = ForInStmtSyntax(data)
+  private func visitImplForStmtSyntax(_ data: SyntaxData) {
+    let node = ForStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4637,8 +4582,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplForcedValueExprSyntax(_ data: SyntaxData) {
-    let node = ForcedValueExprSyntax(data)
+  private func visitImplForceUnwrapExprSyntax(_ data: SyntaxData) {
+    let node = ForceUnwrapExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4672,6 +4617,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplFunctionEffectSpecifiersSyntax(_ data: SyntaxData) {
     let node = FunctionEffectSpecifiersSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplFunctionParameterClauseSyntax(_ data: SyntaxData) {
+    let node = FunctionParameterClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4813,6 +4769,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplGenericSpecializationExprSyntax(_ data: SyntaxData) {
+    let node = GenericSpecializationExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) {
     let node = GenericWhereClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -4848,6 +4815,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) {
     let node = IdentifierPatternSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplIdentifierTypeSyntax(_ data: SyntaxData) {
+    let node = IdentifierTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -4969,6 +4947,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) {
     let node = InfixOperatorExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplInheritanceClauseSyntax(_ data: SyntaxData) {
+    let node = InheritanceClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5132,8 +5121,30 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledSpecializeEntrySyntax(_ data: SyntaxData) {
-    let node = LabeledSpecializeEntrySyntax(data)
+  private func visitImplLabeledExprListSyntax(_ data: SyntaxData) {
+    let node = LabeledExprListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledExprSyntax(_ data: SyntaxData) {
+    let node = LabeledExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplLabeledSpecializeArgumentSyntax(_ data: SyntaxData) {
+    let node = LabeledSpecializeArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5220,8 +5231,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberDeclBlockSyntax(_ data: SyntaxData) {
-    let node = MemberDeclBlockSyntax(data)
+  private func visitImplMemberBlockItemListSyntax(_ data: SyntaxData) {
+    let node = MemberBlockItemListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5231,8 +5242,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberDeclListItemSyntax(_ data: SyntaxData) {
-    let node = MemberDeclListItemSyntax(data)
+  private func visitImplMemberBlockItemSyntax(_ data: SyntaxData) {
+    let node = MemberBlockItemSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5242,8 +5253,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberDeclListSyntax(_ data: SyntaxData) {
-    let node = MemberDeclListSyntax(data)
+  private func visitImplMemberBlockSyntax(_ data: SyntaxData) {
+    let node = MemberBlockSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5253,8 +5264,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberTypeIdentifierSyntax(_ data: SyntaxData) {
-    let node = MemberTypeIdentifierSyntax(data)
+  private func visitImplMemberTypeSyntax(_ data: SyntaxData) {
+    let node = MemberTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5332,28 +5343,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplMissingTypeSyntax(_ data: SyntaxData) {
     let node = MissingTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplModifierListSyntax(_ data: SyntaxData) {
-    let node = ModifierListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMoveExprSyntax(_ data: SyntaxData) {
-    let node = MoveExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5495,8 +5484,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOriginallyDefinedInArgumentsSyntax(_ data: SyntaxData) {
-    let node = OriginallyDefinedInArgumentsSyntax(data)
+  private func visitImplOriginallyDefinedInAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = OriginallyDefinedInAttributeArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5508,6 +5497,17 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPackElementExprSyntax(_ data: SyntaxData) {
     let node = PackElementExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPackElementTypeSyntax(_ data: SyntaxData) {
+    let node = PackElementTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5539,28 +5539,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPackReferenceTypeSyntax(_ data: SyntaxData) {
-    let node = PackReferenceTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplParameterClauseSyntax(_ data: SyntaxData) {
-    let node = ParameterClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPatternBindingListSyntax(_ data: SyntaxData) {
     let node = PatternBindingListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5583,6 +5561,50 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPatternExprSyntax(_ data: SyntaxData) {
+    let node = PatternExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPlatformVersionItemListSyntax(_ data: SyntaxData) {
+    let node = PlatformVersionItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPlatformVersionItemSyntax(_ data: SyntaxData) {
+    let node = PlatformVersionItemSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplPlatformVersionSyntax(_ data: SyntaxData) {
+    let node = PlatformVersionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) {
     let node = PostfixIfConfigExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5594,8 +5616,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPostfixUnaryExprSyntax(_ data: SyntaxData) {
-    let node = PostfixUnaryExprSyntax(data)
+  private func visitImplPostfixOperatorExprSyntax(_ data: SyntaxData) {
+    let node = PostfixOperatorExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5605,8 +5627,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundSourceLocationArgsSyntax(_ data: SyntaxData) {
-    let node = PoundSourceLocationArgsSyntax(data)
+  private func visitImplPoundSourceLocationArgumentsSyntax(_ data: SyntaxData) {
+    let node = PoundSourceLocationArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5671,8 +5693,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameElementSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupNameElementSyntax(data)
+  private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) {
+    let node = PrecedenceGroupNameListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5682,8 +5704,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupNameListSyntax(data)
+  private func visitImplPrecedenceGroupNameSyntax(_ data: SyntaxData) {
+    let node = PrecedenceGroupNameSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5781,8 +5803,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplRepeatWhileStmtSyntax(_ data: SyntaxData) {
-    let node = RepeatWhileStmtSyntax(data)
+  private func visitImplRepeatStmtSyntax(_ data: SyntaxData) {
+    let node = RepeatStmtSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5836,8 +5858,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSimpleTypeIdentifierSyntax(_ data: SyntaxData) {
-    let node = SimpleTypeIdentifierSyntax(data)
+  private func visitImplSomeOrAnyTypeSyntax(_ data: SyntaxData) {
+    let node = SomeOrAnyTypeSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5858,8 +5880,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeAttributeSpecListSyntax(_ data: SyntaxData) {
-    let node = SpecializeAttributeSpecListSyntax(data)
+  private func visitImplSpecializeAttributeArgumentListSyntax(_ data: SyntaxData) {
+    let node = SpecializeAttributeArgumentListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5869,8 +5891,19 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeExprSyntax(_ data: SyntaxData) {
-    let node = SpecializeExprSyntax(data)
+  private func visitImplSpecializeAvailabilityArgumentSyntax(_ data: SyntaxData) {
+    let node = SpecializeAvailabilityArgumentSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSpecializeTargetFunctionArgumentSyntax(_ data: SyntaxData) {
+    let node = SpecializeTargetFunctionArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5924,6 +5957,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSubscriptCallExprSyntax(_ data: SyntaxData) {
+    let node = SubscriptCallExprSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) {
     let node = SubscriptDeclSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -5935,19 +5979,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSubscriptExprSyntax(_ data: SyntaxData) {
-    let node = SubscriptExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSuperRefExprSyntax(_ data: SyntaxData) {
-    let node = SuperRefExprSyntax(data)
+  private func visitImplSuperExprSyntax(_ data: SyntaxData) {
+    let node = SuperExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5959,6 +5992,28 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplSuppressedTypeSyntax(_ data: SyntaxData) {
     let node = SuppressedTypeSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseItemListSyntax(_ data: SyntaxData) {
+    let node = SwitchCaseItemListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplSwitchCaseItemSyntax(_ data: SyntaxData) {
+    let node = SwitchCaseItemSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6023,17 +6078,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTargetFunctionEntrySyntax(_ data: SyntaxData) {
-    let node = TargetFunctionEntrySyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTernaryExprSyntax(_ data: SyntaxData) {
     let node = TernaryExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6058,28 +6102,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTryExprSyntax(_ data: SyntaxData) {
     let node = TryExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleExprElementListSyntax(_ data: SyntaxData) {
-    let node = TupleExprElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleExprElementSyntax(_ data: SyntaxData) {
-    let node = TupleExprElementSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6166,6 +6188,17 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplTypeAliasDeclSyntax(_ data: SyntaxData) {
+    let node = TypeAliasDeclSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) {
     let node = TypeAnnotationSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6199,17 +6232,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeInheritanceClauseSyntax(_ data: SyntaxData) {
-    let node = TypeInheritanceClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) {
     let node = TypeInitializerClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6221,19 +6243,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypealiasDeclSyntax(_ data: SyntaxData) {
-    let node = TypealiasDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnavailableFromAsyncArgumentsSyntax(_ data: SyntaxData) {
-    let node = UnavailableFromAsyncArgumentsSyntax(data)
+  private func visitImplUnavailableFromAsyncAttributeArgumentsSyntax(_ data: SyntaxData) {
+    let node = UnavailableFromAsyncAttributeArgumentsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6278,17 +6289,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) {
     let node = UnresolvedIsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedPatternExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedPatternExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6397,8 +6397,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldExprListElementSyntax(_ data: SyntaxData) {
-    let node = YieldExprListElementSyntax(data)
+  private func visitImplYieldStmtArgumentClauseSyntax(_ data: SyntaxData) {
+    let node = YieldStmtArgumentClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6408,8 +6408,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldExprListSyntax(_ data: SyntaxData) {
-    let node = YieldExprListSyntax(data)
+  private func visitImplYieldStmtArgumentListSyntax(_ data: SyntaxData) {
+    let node = YieldStmtArgumentListSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6419,8 +6419,8 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldListSyntax(_ data: SyntaxData) {
-    let node = YieldListSyntax(data)
+  private func visitImplYieldStmtArgumentSyntax(_ data: SyntaxData) {
+    let node = YieldStmtArgumentSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6451,16 +6451,16 @@ open class SyntaxVisitor {
       visitImplAccessesEffectSyntax(data)
     case .accessorBlock:
       visitImplAccessorBlockSyntax(data)
+    case .accessorDeclList:
+      visitImplAccessorDeclListSyntax(data)
     case .accessorDecl:
       visitImplAccessorDeclSyntax(data)
     case .accessorEffectSpecifiers:
       visitImplAccessorEffectSpecifiersSyntax(data)
     case .accessorInitEffects:
       visitImplAccessorInitEffectsSyntax(data)
-    case .accessorList:
-      visitImplAccessorListSyntax(data)
-    case .accessorParameter:
-      visitImplAccessorParameterSyntax(data)
+    case .accessorParameters:
+      visitImplAccessorParametersSyntax(data)
     case .actorDecl:
       visitImplActorDeclSyntax(data)
     case .arrayElementList:
@@ -6477,34 +6477,26 @@ open class SyntaxVisitor {
       visitImplAsExprSyntax(data)
     case .assignmentExpr:
       visitImplAssignmentExprSyntax(data)
-    case .associatedtypeDecl:
-      visitImplAssociatedtypeDeclSyntax(data)
+    case .associatedTypeDecl:
+      visitImplAssociatedTypeDeclSyntax(data)
     case .attributeList:
       visitImplAttributeListSyntax(data)
     case .attribute:
       visitImplAttributeSyntax(data)
     case .attributedType:
       visitImplAttributedTypeSyntax(data)
+    case .availabilityArgumentList:
+      visitImplAvailabilityArgumentListSyntax(data)
     case .availabilityArgument:
       visitImplAvailabilityArgumentSyntax(data)
     case .availabilityCondition:
       visitImplAvailabilityConditionSyntax(data)
-    case .availabilityEntry:
-      visitImplAvailabilityEntrySyntax(data)
     case .availabilityLabeledArgument:
       visitImplAvailabilityLabeledArgumentSyntax(data)
-    case .availabilitySpecList:
-      visitImplAvailabilitySpecListSyntax(data)
-    case .availabilityVersionRestrictionListEntry:
-      visitImplAvailabilityVersionRestrictionListEntrySyntax(data)
-    case .availabilityVersionRestrictionList:
-      visitImplAvailabilityVersionRestrictionListSyntax(data)
-    case .availabilityVersionRestriction:
-      visitImplAvailabilityVersionRestrictionSyntax(data)
     case .awaitExpr:
       visitImplAwaitExprSyntax(data)
-    case .backDeployedAttributeSpecList:
-      visitImplBackDeployedAttributeSpecListSyntax(data)
+    case .backDeployedAttributeArguments:
+      visitImplBackDeployedAttributeArgumentsSyntax(data)
     case .binaryOperatorExpr:
       visitImplBinaryOperatorExprSyntax(data)
     case .booleanLiteralExpr:
@@ -6517,10 +6509,6 @@ open class SyntaxVisitor {
       visitImplCanImportExprSyntax(data)
     case .canImportVersionInfo:
       visitImplCanImportVersionInfoSyntax(data)
-    case .caseItemList:
-      visitImplCaseItemListSyntax(data)
-    case .caseItem:
-      visitImplCaseItemSyntax(data)
     case .catchClauseList:
       visitImplCatchClauseListSyntax(data)
     case .catchClause:
@@ -6533,26 +6521,26 @@ open class SyntaxVisitor {
       visitImplClassDeclSyntax(data)
     case .classRestrictionType:
       visitImplClassRestrictionTypeSyntax(data)
-    case .closureCaptureItemList:
-      visitImplClosureCaptureItemListSyntax(data)
-    case .closureCaptureItemSpecifier:
-      visitImplClosureCaptureItemSpecifierSyntax(data)
-    case .closureCaptureItem:
-      visitImplClosureCaptureItemSyntax(data)
-    case .closureCaptureSignature:
-      visitImplClosureCaptureSignatureSyntax(data)
+    case .closureCaptureClause:
+      visitImplClosureCaptureClauseSyntax(data)
+    case .closureCaptureList:
+      visitImplClosureCaptureListSyntax(data)
+    case .closureCaptureSpecifier:
+      visitImplClosureCaptureSpecifierSyntax(data)
+    case .closureCapture:
+      visitImplClosureCaptureSyntax(data)
     case .closureExpr:
       visitImplClosureExprSyntax(data)
-    case .closureParamList:
-      visitImplClosureParamListSyntax(data)
-    case .closureParam:
-      visitImplClosureParamSyntax(data)
     case .closureParameterClause:
       visitImplClosureParameterClauseSyntax(data)
     case .closureParameterList:
       visitImplClosureParameterListSyntax(data)
     case .closureParameter:
       visitImplClosureParameterSyntax(data)
+    case .closureShorthandParameterList:
+      visitImplClosureShorthandParameterListSyntax(data)
+    case .closureShorthandParameter:
+      visitImplClosureShorthandParameterSyntax(data)
     case .closureSignature:
       visitImplClosureSignatureSyntax(data)
     case .codeBlockItemList:
@@ -6573,8 +6561,8 @@ open class SyntaxVisitor {
       visitImplConditionElementSyntax(data)
     case .conformanceRequirement:
       visitImplConformanceRequirementSyntax(data)
-    case .constrainedSugarType:
-      visitImplConstrainedSugarTypeSyntax(data)
+    case .consumeExpr:
+      visitImplConsumeExprSyntax(data)
     case .continueStmt:
       visitImplContinueStmtSyntax(data)
     case .conventionAttributeArguments:
@@ -6585,6 +6573,8 @@ open class SyntaxVisitor {
       visitImplCopyExprSyntax(data)
     case .declModifierDetail:
       visitImplDeclModifierDetailSyntax(data)
+    case .declModifierList:
+      visitImplDeclModifierListSyntax(data)
     case .declModifier:
       visitImplDeclModifierSyntax(data)
     case .declNameArgumentList:
@@ -6597,16 +6587,16 @@ open class SyntaxVisitor {
       visitImplDeclNameSyntax(data)
     case .deferStmt:
       visitImplDeferStmtSyntax(data)
-    case .deinitEffectSpecifiers:
-      visitImplDeinitEffectSpecifiersSyntax(data)
     case .deinitializerDecl:
       visitImplDeinitializerDeclSyntax(data)
-    case .derivativeRegistrationAttributeArguments:
-      visitImplDerivativeRegistrationAttributeArgumentsSyntax(data)
-    case .designatedTypeElement:
-      visitImplDesignatedTypeElementSyntax(data)
+    case .deinitializerEffectSpecifiers:
+      visitImplDeinitializerEffectSpecifiersSyntax(data)
+    case .derivativeAttributeArguments:
+      visitImplDerivativeAttributeArgumentsSyntax(data)
     case .designatedTypeList:
       visitImplDesignatedTypeListSyntax(data)
+    case .designatedType:
+      visitImplDesignatedTypeSyntax(data)
     case .dictionaryElementList:
       visitImplDictionaryElementListSyntax(data)
     case .dictionaryElement:
@@ -6615,14 +6605,14 @@ open class SyntaxVisitor {
       visitImplDictionaryExprSyntax(data)
     case .dictionaryType:
       visitImplDictionaryTypeSyntax(data)
-    case .differentiabilityParamList:
-      visitImplDifferentiabilityParamListSyntax(data)
-    case .differentiabilityParam:
-      visitImplDifferentiabilityParamSyntax(data)
-    case .differentiabilityParamsClause:
-      visitImplDifferentiabilityParamsClauseSyntax(data)
-    case .differentiabilityParams:
-      visitImplDifferentiabilityParamsSyntax(data)
+    case .differentiabilityArgument:
+      visitImplDifferentiabilityArgumentSyntax(data)
+    case .differentiabilityArguments:
+      visitImplDifferentiabilityArgumentsSyntax(data)
+    case .differentiabilityParameterList:
+      visitImplDifferentiabilityParameterListSyntax(data)
+    case .differentiabilityWithRespectToArgument:
+      visitImplDifferentiabilityWithRespectToArgumentSyntax(data)
     case .differentiableAttributeArguments:
       visitImplDifferentiableAttributeArgumentsSyntax(data)
     case .discardAssignmentExpr:
@@ -6635,14 +6625,14 @@ open class SyntaxVisitor {
       visitImplDocumentationAttributeArgumentListSyntax(data)
     case .documentationAttributeArgument:
       visitImplDocumentationAttributeArgumentSyntax(data)
-    case .dynamicReplacementArguments:
-      visitImplDynamicReplacementArgumentsSyntax(data)
+    case .dynamicReplacementAttributeArguments:
+      visitImplDynamicReplacementAttributeArgumentsSyntax(data)
     case .editorPlaceholderDecl:
       visitImplEditorPlaceholderDeclSyntax(data)
     case .editorPlaceholderExpr:
       visitImplEditorPlaceholderExprSyntax(data)
-    case .effectsArgumentList:
-      visitImplEffectsArgumentListSyntax(data)
+    case .effectsAttributeArgumentList:
+      visitImplEffectsAttributeArgumentListSyntax(data)
     case .enumCaseDecl:
       visitImplEnumCaseDeclSyntax(data)
     case .enumCaseElementList:
@@ -6669,20 +6659,22 @@ open class SyntaxVisitor {
       visitImplExpressionStmtSyntax(data)
     case .extensionDecl:
       visitImplExtensionDeclSyntax(data)
-    case .fallthroughStmt:
-      visitImplFallthroughStmtSyntax(data)
+    case .fallThroughStmt:
+      visitImplFallThroughStmtSyntax(data)
     case .floatLiteralExpr:
       visitImplFloatLiteralExprSyntax(data)
-    case .forInStmt:
-      visitImplForInStmtSyntax(data)
-    case .forcedValueExpr:
-      visitImplForcedValueExprSyntax(data)
+    case .forStmt:
+      visitImplForStmtSyntax(data)
+    case .forceUnwrapExpr:
+      visitImplForceUnwrapExprSyntax(data)
     case .functionCallExpr:
       visitImplFunctionCallExprSyntax(data)
     case .functionDecl:
       visitImplFunctionDeclSyntax(data)
     case .functionEffectSpecifiers:
       visitImplFunctionEffectSpecifiersSyntax(data)
+    case .functionParameterClause:
+      visitImplFunctionParameterClauseSyntax(data)
     case .functionParameterList:
       visitImplFunctionParameterListSyntax(data)
     case .functionParameter:
@@ -6707,6 +6699,8 @@ open class SyntaxVisitor {
       visitImplGenericRequirementListSyntax(data)
     case .genericRequirement:
       visitImplGenericRequirementSyntax(data)
+    case .genericSpecializationExpr:
+      visitImplGenericSpecializationExprSyntax(data)
     case .genericWhereClause:
       visitImplGenericWhereClauseSyntax(data)
     case .guardStmt:
@@ -6715,6 +6709,8 @@ open class SyntaxVisitor {
       visitImplIdentifierExprSyntax(data)
     case .identifierPattern:
       visitImplIdentifierPatternSyntax(data)
+    case .identifierType:
+      visitImplIdentifierTypeSyntax(data)
     case .ifConfigClauseList:
       visitImplIfConfigClauseListSyntax(data)
     case .ifConfigClause:
@@ -6737,6 +6733,8 @@ open class SyntaxVisitor {
       visitImplInOutExprSyntax(data)
     case .infixOperatorExpr:
       visitImplInfixOperatorExprSyntax(data)
+    case .inheritanceClause:
+      visitImplInheritanceClauseSyntax(data)
     case .inheritedTypeList:
       visitImplInheritedTypeListSyntax(data)
     case .inheritedType:
@@ -6765,8 +6763,12 @@ open class SyntaxVisitor {
       visitImplKeyPathPropertyComponentSyntax(data)
     case .keyPathSubscriptComponent:
       visitImplKeyPathSubscriptComponentSyntax(data)
-    case .labeledSpecializeEntry:
-      visitImplLabeledSpecializeEntrySyntax(data)
+    case .labeledExprList:
+      visitImplLabeledExprListSyntax(data)
+    case .labeledExpr:
+      visitImplLabeledExprSyntax(data)
+    case .labeledSpecializeArgument:
+      visitImplLabeledSpecializeArgumentSyntax(data)
     case .labeledStmt:
       visitImplLabeledStmtSyntax(data)
     case .layoutRequirement:
@@ -6781,14 +6783,14 @@ open class SyntaxVisitor {
       visitImplMatchingPatternConditionSyntax(data)
     case .memberAccessExpr:
       visitImplMemberAccessExprSyntax(data)
-    case .memberDeclBlock:
-      visitImplMemberDeclBlockSyntax(data)
-    case .memberDeclListItem:
-      visitImplMemberDeclListItemSyntax(data)
-    case .memberDeclList:
-      visitImplMemberDeclListSyntax(data)
-    case .memberTypeIdentifier:
-      visitImplMemberTypeIdentifierSyntax(data)
+    case .memberBlockItemList:
+      visitImplMemberBlockItemListSyntax(data)
+    case .memberBlockItem:
+      visitImplMemberBlockItemSyntax(data)
+    case .memberBlock:
+      visitImplMemberBlockSyntax(data)
+    case .memberType:
+      visitImplMemberTypeSyntax(data)
     case .metatypeType:
       visitImplMetatypeTypeSyntax(data)
     case .missingDecl:
@@ -6803,10 +6805,6 @@ open class SyntaxVisitor {
       visitImplMissingSyntax(data)
     case .missingType:
       visitImplMissingTypeSyntax(data)
-    case .modifierList:
-      visitImplModifierListSyntax(data)
-    case .moveExpr:
-      visitImplMoveExprSyntax(data)
     case .multipleTrailingClosureElementList:
       visitImplMultipleTrailingClosureElementListSyntax(data)
     case .multipleTrailingClosureElement:
@@ -6831,28 +6829,34 @@ open class SyntaxVisitor {
       visitImplOptionalChainingExprSyntax(data)
     case .optionalType:
       visitImplOptionalTypeSyntax(data)
-    case .originallyDefinedInArguments:
-      visitImplOriginallyDefinedInArgumentsSyntax(data)
+    case .originallyDefinedInAttributeArguments:
+      visitImplOriginallyDefinedInAttributeArgumentsSyntax(data)
     case .packElementExpr:
       visitImplPackElementExprSyntax(data)
+    case .packElementType:
+      visitImplPackElementTypeSyntax(data)
     case .packExpansionExpr:
       visitImplPackExpansionExprSyntax(data)
     case .packExpansionType:
       visitImplPackExpansionTypeSyntax(data)
-    case .packReferenceType:
-      visitImplPackReferenceTypeSyntax(data)
-    case .parameterClause:
-      visitImplParameterClauseSyntax(data)
     case .patternBindingList:
       visitImplPatternBindingListSyntax(data)
     case .patternBinding:
       visitImplPatternBindingSyntax(data)
+    case .patternExpr:
+      visitImplPatternExprSyntax(data)
+    case .platformVersionItemList:
+      visitImplPlatformVersionItemListSyntax(data)
+    case .platformVersionItem:
+      visitImplPlatformVersionItemSyntax(data)
+    case .platformVersion:
+      visitImplPlatformVersionSyntax(data)
     case .postfixIfConfigExpr:
       visitImplPostfixIfConfigExprSyntax(data)
-    case .postfixUnaryExpr:
-      visitImplPostfixUnaryExprSyntax(data)
-    case .poundSourceLocationArgs:
-      visitImplPoundSourceLocationArgsSyntax(data)
+    case .postfixOperatorExpr:
+      visitImplPostfixOperatorExprSyntax(data)
+    case .poundSourceLocationArguments:
+      visitImplPoundSourceLocationArgumentsSyntax(data)
     case .poundSourceLocation:
       visitImplPoundSourceLocationSyntax(data)
     case .precedenceGroupAssignment:
@@ -6863,10 +6867,10 @@ open class SyntaxVisitor {
       visitImplPrecedenceGroupAttributeListSyntax(data)
     case .precedenceGroupDecl:
       visitImplPrecedenceGroupDeclSyntax(data)
-    case .precedenceGroupNameElement:
-      visitImplPrecedenceGroupNameElementSyntax(data)
     case .precedenceGroupNameList:
       visitImplPrecedenceGroupNameListSyntax(data)
+    case .precedenceGroupName:
+      visitImplPrecedenceGroupNameSyntax(data)
     case .precedenceGroupRelation:
       visitImplPrecedenceGroupRelationSyntax(data)
     case .prefixOperatorExpr:
@@ -6883,8 +6887,8 @@ open class SyntaxVisitor {
       visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr:
       visitImplRegexLiteralExprSyntax(data)
-    case .repeatWhileStmt:
-      visitImplRepeatWhileStmtSyntax(data)
+    case .repeatStmt:
+      visitImplRepeatStmtSyntax(data)
     case .returnClause:
       visitImplReturnClauseSyntax(data)
     case .returnStmt:
@@ -6893,14 +6897,16 @@ open class SyntaxVisitor {
       visitImplSameTypeRequirementSyntax(data)
     case .sequenceExpr:
       visitImplSequenceExprSyntax(data)
-    case .simpleTypeIdentifier:
-      visitImplSimpleTypeIdentifierSyntax(data)
+    case .someOrAnyType:
+      visitImplSomeOrAnyTypeSyntax(data)
     case .sourceFile:
       visitImplSourceFileSyntax(data)
-    case .specializeAttributeSpecList:
-      visitImplSpecializeAttributeSpecListSyntax(data)
-    case .specializeExpr:
-      visitImplSpecializeExprSyntax(data)
+    case .specializeAttributeArgumentList:
+      visitImplSpecializeAttributeArgumentListSyntax(data)
+    case .specializeAvailabilityArgument:
+      visitImplSpecializeAvailabilityArgumentSyntax(data)
+    case .specializeTargetFunctionArgument:
+      visitImplSpecializeTargetFunctionArgumentSyntax(data)
     case .stringLiteralExpr:
       visitImplStringLiteralExprSyntax(data)
     case .stringLiteralSegmentList:
@@ -6909,14 +6915,18 @@ open class SyntaxVisitor {
       visitImplStringSegmentSyntax(data)
     case .structDecl:
       visitImplStructDeclSyntax(data)
+    case .subscriptCallExpr:
+      visitImplSubscriptCallExprSyntax(data)
     case .subscriptDecl:
       visitImplSubscriptDeclSyntax(data)
-    case .subscriptExpr:
-      visitImplSubscriptExprSyntax(data)
-    case .superRefExpr:
-      visitImplSuperRefExprSyntax(data)
+    case .superExpr:
+      visitImplSuperExprSyntax(data)
     case .suppressedType:
       visitImplSuppressedTypeSyntax(data)
+    case .switchCaseItemList:
+      visitImplSwitchCaseItemListSyntax(data)
+    case .switchCaseItem:
+      visitImplSwitchCaseItemSyntax(data)
     case .switchCaseLabel:
       visitImplSwitchCaseLabelSyntax(data)
     case .switchCaseList:
@@ -6927,18 +6937,12 @@ open class SyntaxVisitor {
       visitImplSwitchDefaultLabelSyntax(data)
     case .switchExpr:
       visitImplSwitchExprSyntax(data)
-    case .targetFunctionEntry:
-      visitImplTargetFunctionEntrySyntax(data)
     case .ternaryExpr:
       visitImplTernaryExprSyntax(data)
     case .throwStmt:
       visitImplThrowStmtSyntax(data)
     case .tryExpr:
       visitImplTryExprSyntax(data)
-    case .tupleExprElementList:
-      visitImplTupleExprElementListSyntax(data)
-    case .tupleExprElement:
-      visitImplTupleExprElementSyntax(data)
     case .tupleExpr:
       visitImplTupleExprSyntax(data)
     case .tuplePatternElementList:
@@ -6953,20 +6957,18 @@ open class SyntaxVisitor {
       visitImplTupleTypeElementSyntax(data)
     case .tupleType:
       visitImplTupleTypeSyntax(data)
+    case .typeAliasDecl:
+      visitImplTypeAliasDeclSyntax(data)
     case .typeAnnotation:
       visitImplTypeAnnotationSyntax(data)
     case .typeEffectSpecifiers:
       visitImplTypeEffectSpecifiersSyntax(data)
     case .typeExpr:
       visitImplTypeExprSyntax(data)
-    case .typeInheritanceClause:
-      visitImplTypeInheritanceClauseSyntax(data)
     case .typeInitializerClause:
       visitImplTypeInitializerClauseSyntax(data)
-    case .typealiasDecl:
-      visitImplTypealiasDeclSyntax(data)
-    case .unavailableFromAsyncArguments:
-      visitImplUnavailableFromAsyncArgumentsSyntax(data)
+    case .unavailableFromAsyncAttributeArguments:
+      visitImplUnavailableFromAsyncAttributeArgumentsSyntax(data)
     case .underscorePrivateAttributeArguments:
       visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
     case .unexpectedNodes:
@@ -6975,8 +6977,6 @@ open class SyntaxVisitor {
       visitImplUnresolvedAsExprSyntax(data)
     case .unresolvedIsExpr:
       visitImplUnresolvedIsExprSyntax(data)
-    case .unresolvedPatternExpr:
-      visitImplUnresolvedPatternExprSyntax(data)
     case .unresolvedTernaryExpr:
       visitImplUnresolvedTernaryExprSyntax(data)
     case .valueBindingPattern:
@@ -6995,12 +6995,12 @@ open class SyntaxVisitor {
       visitImplWhileStmtSyntax(data)
     case .wildcardPattern:
       visitImplWildcardPatternSyntax(data)
-    case .yieldExprListElement:
-      visitImplYieldExprListElementSyntax(data)
-    case .yieldExprList:
-      visitImplYieldExprListSyntax(data)
-    case .yieldList:
-      visitImplYieldListSyntax(data)
+    case .yieldStmtArgumentClause:
+      visitImplYieldStmtArgumentClauseSyntax(data)
+    case .yieldStmtArgumentList:
+      visitImplYieldStmtArgumentListSyntax(data)
+    case .yieldStmtArgument:
+      visitImplYieldStmtArgumentSyntax(data)
     case .yieldStmt:
       visitImplYieldStmtSyntax(data)
     }

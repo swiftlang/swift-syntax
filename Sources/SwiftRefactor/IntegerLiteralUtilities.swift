@@ -30,7 +30,7 @@ extension IntegerLiteralExprSyntax {
   }
 
   public var radix: Radix {
-    let text = self.digits.text
+    let text = self.literal.text
     if text.starts(with: "0b") {
       return .binary
     } else if text.starts(with: "0o") {
@@ -62,7 +62,7 @@ extension IntegerLiteralExprSyntax {
   /// 0b1010101 -> ("0b", "1010101")
   /// ```
   public func split() -> (prefix: String, value: Substring) {
-    let text = self.digits.text
+    let text = self.literal.text
     switch self.radix {
     case .binary:
       return ("0b", text.dropFirst(2))

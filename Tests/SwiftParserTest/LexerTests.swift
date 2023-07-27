@@ -224,11 +224,11 @@ public class LexerTests: XCTestCase {
       ###"this is a ##"raw"## string"###
       """,
       lexemes: [
-        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ###"this is a ##"raw"## string"###),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
       ]
     )
 
@@ -237,11 +237,11 @@ public class LexerTests: XCTestCase {
       #"#"abc"#
       """,
       lexemes: [
-        LexemeSpec(.rawStringDelimiter, text: "#"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "#"),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: #"#"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.rawStringDelimiter, text: "#"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "#"),
       ]
     )
 
@@ -250,11 +250,11 @@ public class LexerTests: XCTestCase {
       ###"##"abc"###
       """,
       lexemes: [
-        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: #"##"abc"#),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.rawStringDelimiter, text: "###"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "###"),
       ]
     )
 
@@ -263,11 +263,11 @@ public class LexerTests: XCTestCase {
       ##"""abc"####
       """#####,
       lexemes: [
-        LexemeSpec(.rawStringDelimiter, text: "##"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "##"),
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ###"""abc"###),
         LexemeSpec(.stringQuote, text: #"""#),
-        LexemeSpec(.rawStringDelimiter, text: "####"),
+        LexemeSpec(.rawStringPoundDelimiter, text: "####"),
       ]
     )
   }
@@ -350,21 +350,21 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "###/abc/###",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "###"),
+        LexemeSpec(.regexPoundDelimiter, text: "###"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "###"),
+        LexemeSpec(.regexPoundDelimiter, text: "###"),
       ]
     )
     assertLexemes(
@@ -375,67 +375,67 @@ public class LexerTests: XCTestCase {
       /#
       """,
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "\na\nb\n"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/ \na\nb\n  /#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "##/ \na\nb\n  /##",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "##"),
+        LexemeSpec(.regexPoundDelimiter, text: "##"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: " \na\nb\n  "),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "##"),
+        LexemeSpec(.regexPoundDelimiter, text: "##"),
       ]
     )
     assertLexemes(
       "#/abc/def/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc/def"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc\\/#def/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc\\/#def"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc|#def/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     assertLexemes(
       "#/abc\n/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\n", text: "/", flags: [.isAtStartOfLine]),
@@ -445,7 +445,7 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc\r/#",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.prefixOperator, leading: "\r", text: "/", flags: [.isAtStartOfLine]),
@@ -469,7 +469,7 @@ public class LexerTests: XCTestCase {
       abc
       """,
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: ""),
         LexemeSpec(.identifier, leading: "\n", text: "abc", flags: .isAtStartOfLine),
@@ -498,11 +498,11 @@ public class LexerTests: XCTestCase {
       "!#/abc/#",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "!"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc"),
         LexemeSpec(.regexSlash, text: "/"),
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
       ]
     )
     // Make sure we don't lex this as a regex.
@@ -763,7 +763,7 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc|#def/",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def"),
         LexemeSpec(.regexSlash, text: "/"),
@@ -773,7 +773,7 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "#/abc|#def//",
       lexemes: [
-        LexemeSpec(.extendedRegexDelimiter, text: "#"),
+        LexemeSpec(.regexPoundDelimiter, text: "#"),
         LexemeSpec(.regexSlash, text: "/"),
         LexemeSpec(.regexLiteralPattern, text: "abc|#def/"),
         LexemeSpec(.regexSlash, text: "/"),

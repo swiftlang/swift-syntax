@@ -21,8 +21,8 @@ final class CustomAttributeTests: XCTestCase {
       #line: (AttributeSyntax("WithParens") {}, "@WithParens()"),
       #line: (
         AttributeSyntax("WithArgs") {
-          TupleExprElementSyntax(expression: ExprSyntax("value1"))
-          TupleExprElementSyntax(label: "labelled", expression: ExprSyntax("value2"))
+          LabeledExprSyntax(expression: ExprSyntax("value1"))
+          LabeledExprSyntax(label: "labelled", expression: ExprSyntax("value2"))
         }, "@WithArgs(value1, labelled: value2)"
       ),
     ]

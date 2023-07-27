@@ -28,7 +28,7 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "AvailabilityArguments",
         deprecatedName: "AvailabilitySpec",
-        kind: .collection(kind: .availabilitySpecList, collectionElementName: "AvailabilityArgument")
+        kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument")
       ),
       Child(
         name: "RightParen",
@@ -58,10 +58,10 @@ public let STMT_NODES: [Node] = [
 
   // case-item-list -> case-item case-item-list?
   Node(
-    kind: .caseItemList,
+    kind: .switchCaseItemList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.caseItem]
+    elementChoices: [.switchCaseItem]
   ),
 
   // catch-clause-list -> catch-clause catch-clause-list?
@@ -261,7 +261,7 @@ public let STMT_NODES: [Node] = [
 
   // fallthrough-stmt -> 'fallthrough' ';'?
   Node(
-    kind: .fallthroughStmt,
+    kind: .fallThroughStmt,
     base: .stmt,
     nameForDiagnostics: "'fallthrough' statement",
     children: [
@@ -276,7 +276,7 @@ public let STMT_NODES: [Node] = [
   //   'for' 'try'? 'await'? 'case'? pattern 'in' expr 'where'?
   //   expr code-block ';'?
   Node(
-    kind: .forInStmt,
+    kind: .forStmt,
     base: .stmt,
     nameForDiagnostics: "'for' statement",
     traits: [
@@ -461,7 +461,7 @@ public let STMT_NODES: [Node] = [
 
   // repeat-while-stmt -> label? ':'? 'repeat' code-block 'while' expr ';'?
   Node(
-    kind: .repeatWhileStmt,
+    kind: .repeatStmt,
     base: .stmt,
     nameForDiagnostics: "'repeat' statement",
     traits: [
@@ -534,7 +534,8 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "where")])
       ),
       Child(
-        name: "GuardResult",
+        name: "Condition",
+        deprecatedName: "GuardResult",
         kind: .node(kind: .expr)
       ),
     ]
@@ -565,7 +566,7 @@ public let STMT_NODES: [Node] = [
   ),
 
   Node(
-    kind: .yieldList,
+    kind: .yieldStmtArgumentClause,
     base: .syntax,
     nameForDiagnostics: nil,
     children: [
@@ -576,7 +577,7 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "Elements",
         deprecatedName: "ElementList",
-        kind: .collection(kind: .yieldExprList, collectionElementName: "Element")
+        kind: .collection(kind: .yieldStmtArgumentList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",
@@ -596,11 +597,12 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.keyword(text: "yield")])
       ),
       Child(
-        name: "Yields",
+        name: "YieldedExpressions",
+        deprecatedName: "Yields",
         kind: .nodeChoices(choices: [
           Child(
             name: "YieldList",
-            kind: .node(kind: .yieldList)
+            kind: .node(kind: .yieldStmtArgumentClause)
           ),
           Child(
             name: "SimpleYield",

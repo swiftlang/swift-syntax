@@ -236,7 +236,7 @@ extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
   public func makeLiteralSyntax() -> IntegerLiteralExprSyntax {
     // TODO: Radix selection? Thousands separators?
     let digits = String(self, radix: 10)
-    return IntegerLiteralExprSyntax(digits: .integerLiteral(digits))
+    return IntegerLiteralExprSyntax(literal: .integerLiteral(digits))
   }
 }
 extension Int: ExpressibleByLiteralSyntax {}
@@ -266,14 +266,14 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
       return ExprSyntax(
         PrefixOperatorExprSyntax(
           operator: .prefixOperator("-"),
-          base: (-self).makeLiteralSyntax()
+          expression: (-self).makeLiteralSyntax()
         )
       )
 
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
       let digits = String(self)
-      return ExprSyntax(FloatLiteralExprSyntax(digits: .floatingLiteral(digits)))
+      return ExprSyntax(FloatLiteralExprSyntax(literal: .floatingLiteral(digits)))
     }
 
   }
@@ -399,7 +399,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
       if containsNil(wrappedExpr) {
         return ExprSyntax(
           FunctionCallExprSyntax(callee: MemberAccessExprSyntax(name: "some")) {
-            TupleExprElementSyntax(expression: wrappedExpr)
+            LabeledExprSyntax(expression: wrappedExpr)
           }
         )
       }

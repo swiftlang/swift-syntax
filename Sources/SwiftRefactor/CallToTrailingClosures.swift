@@ -59,7 +59,7 @@ extension FunctionCallExprSyntax {
       return nil
     }
 
-    var closures = [(original: TupleExprElementSyntax, closure: ClosureExprSyntax)]()
+    var closures = [(original: LabeledExprSyntax, closure: ClosureExprSyntax)]()
     for arg in arguments.dropFirst(startAtArgument) {
       guard var closure = arg.expression.as(ClosureExprSyntax.self) else {
         closures.removeAll()
@@ -132,7 +132,7 @@ extension FunctionCallExprSyntax {
     // Update arguments and trailing closures
     converted =
       converted
-      .with(\.arguments, TupleExprElementListSyntax(argList))
+      .with(\.arguments, LabeledExprListSyntax(argList))
       .with(\.trailingClosure, trailingClosure)
     if !additionalTrailingClosures.isEmpty {
       converted = converted.with(\.additionalTrailingClosures, MultipleTrailingClosureElementListSyntax(additionalTrailingClosures))

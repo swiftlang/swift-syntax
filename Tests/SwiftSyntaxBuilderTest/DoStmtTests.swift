@@ -28,14 +28,14 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {
@@ -43,7 +43,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]
@@ -78,14 +78,14 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {
@@ -93,7 +93,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]
@@ -128,14 +128,14 @@ final class DoStmtTests: XCTestCase {
           }
         ) {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
+            LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Known error"))
           }
         },
         CatchClauseSyntax(
           CatchItemListSyntax {
             CatchItemSyntax(
               pattern: PatternSyntax("Error3"),
-              whereClause: WhereClauseSyntax(guardResult: ExprSyntax("error.isError4"))
+              whereClause: WhereClauseSyntax(condition: ExprSyntax("error.isError4"))
             )
           }
         ) {
@@ -143,7 +143,7 @@ final class DoStmtTests: XCTestCase {
         },
         CatchClauseSyntax {
           FunctionCallExprSyntax(callee: ExprSyntax("print")) {
-            TupleExprElementSyntax(expression: ExprSyntax("error"))
+            LabeledExprSyntax(expression: ExprSyntax("error"))
           }
         },
       ]

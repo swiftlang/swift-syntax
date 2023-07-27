@@ -109,7 +109,7 @@ struct PrecedenceGraph {
               relationSyntax = Syntax(knownSyntax)
             } else {
               relationSyntax =
-                Syntax(relation.synthesizedSyntax().otherNames.first!.name)
+                Syntax(relation.synthesizedSyntax().precedenceGroups.first!.name)
             }
             stack.append((otherGroupName, relationSyntax))
           }

@@ -392,14 +392,14 @@ final class ExpressionTests: XCTestCase {
           key: MacroExpansionExprSyntax(
             pound: .poundToken(),
             macroName: .identifier("line"),
-            arguments: TupleExprElementListSyntax([])
+            arguments: LabeledExprListSyntax([])
           ),
           colon: .colonToken(),
           value: FunctionCallExprSyntax(
             calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
             leftParen: .leftParenToken(),
-            arguments: TupleExprElementListSyntax([
-              TupleExprElementSyntax(
+            arguments: LabeledExprListSyntax([
+              LabeledExprSyntax(
                 label: .identifier("identifier"),
                 colon: .colonToken(),
                 expression: MemberAccessExprSyntax(
@@ -1158,7 +1158,7 @@ final class ExpressionTests: XCTestCase {
         MacroExpansionExprSyntax(
           pound: .poundToken(),
           macroName: .identifier("case"),
-          arguments: TupleExprElementListSyntax([])
+          arguments: LabeledExprListSyntax([])
         )
       )
     )
@@ -1208,11 +1208,11 @@ final class ExpressionTests: XCTestCase {
       """,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openQuote: .stringQuoteToken(),
+          openingQuote: .stringQuoteToken(),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("This is unterminated")))
           ]),
-          closeQuote: .stringQuoteToken(presence: .missing)
+          closingQuote: .stringQuoteToken(presence: .missing)
         )
       ),
       diagnostics: [
@@ -1239,12 +1239,12 @@ final class ExpressionTests: XCTestCase {
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          openingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
-          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+          closingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
       options: [.substructureCheckTrivia]
@@ -1259,14 +1259,14 @@ final class ExpressionTests: XCTestCase {
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          openingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(
               StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))
             ),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
           ]),
-          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+          closingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
       options: [.substructureCheckTrivia]
@@ -1281,7 +1281,7 @@ final class ExpressionTests: XCTestCase {
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
+          openingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
             .stringSegment(
@@ -1291,7 +1291,7 @@ final class ExpressionTests: XCTestCase {
               )
             ),
           ]),
-          closeQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
+          closingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
         )
       ),
       diagnostics: [
@@ -1329,15 +1329,15 @@ final class ExpressionTests: XCTestCase {
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openDelimiter: nil,
-          openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
+          openingPounds: nil,
+          openingQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("\n"))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: [.spaces(2)], trailingTrivia: .newline))),
           ]),
-          closeQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
-          closeDelimiter: nil
+          closingQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
+          closingPounds: nil
         )
       ),
       options: [.substructureCheckTrivia]
@@ -1352,14 +1352,14 @@ final class ExpressionTests: XCTestCase {
       """#,
       substructure: Syntax(
         StringLiteralExprSyntax(
-          openDelimiter: nil,
-          openQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
+          openingPounds: nil,
+          openingQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)], trailingTrivia: .newline),
           segments: StringLiteralSegmentListSyntax([
             .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
             .stringSegment(StringSegmentSyntax(content: .stringSegment("", trailingTrivia: .newline))),
           ]),
-          closeQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
-          closeDelimiter: nil
+          closingQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
+          closingPounds: nil
         )
       ),
       options: [.substructureCheckTrivia]
@@ -1537,7 +1537,7 @@ final class StatementExpressionTests: XCTestCase {
   private func switchRandomZeroOne() -> ExprSyntax {
     .init(
       SwitchExprSyntax(
-        expression: FunctionCallExprSyntax(
+        subject: FunctionCallExprSyntax(
           callee: MemberAccessExprSyntax(
             base: IdentifierExprSyntax(identifier: .identifier("Bool")),
             name: "random"
@@ -1587,7 +1587,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax()
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -1607,7 +1607,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax()
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -1823,7 +1823,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax(questionOrExclamationMark: .postfixQuestionMarkToken())
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -1844,7 +1844,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax(questionOrExclamationMark: .exclamationMarkToken())
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -1892,7 +1892,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax(questionOrExclamationMark: .postfixQuestionMarkToken())
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -1913,7 +1913,7 @@ final class StatementExpressionTests: XCTestCase {
               UnresolvedAsExprSyntax(questionOrExclamationMark: .exclamationMarkToken())
             ),
             ExprSyntax(
-              TypeExprSyntax(type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int"))))
+              TypeExprSyntax(type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int"))))
             ),
           ])
         )
@@ -2600,7 +2600,7 @@ final class StatementExpressionTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       )

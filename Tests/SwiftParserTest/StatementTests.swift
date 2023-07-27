@@ -150,7 +150,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         ReturnStmtSyntax(
           returnKeyword: .keyword(.return),
-          expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
+          expression: IntegerLiteralExprSyntax(literal: .integerLiteral("0"))
         )
       ),
       substructureAfterMarker: "1️⃣"
@@ -365,8 +365,8 @@ final class StatementTests: XCTestCase {
       graphQLMap["clientMutationId"] as? 1️⃣Swift.Optional<String?> ?? Swift.Optional<String?>.none
       """,
       substructure: Syntax(
-        MemberTypeIdentifierSyntax(
-          baseType: SimpleTypeIdentifierSyntax(name: .identifier("Swift")),
+        MemberTypeSyntax(
+          baseType: IdentifierTypeSyntax(name: .identifier("Swift")),
           period: .periodToken(),
           name: .identifier("Optional"),
           genericArgumentClause: GenericArgumentClauseSyntax(
@@ -374,7 +374,7 @@ final class StatementTests: XCTestCase {
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
                 argument: OptionalTypeSyntax(
-                  wrappedType: SimpleTypeIdentifierSyntax(name: .identifier("String")),
+                  wrappedType: IdentifierTypeSyntax(name: .identifier("String")),
                   questionMark: .postfixQuestionMarkToken()
                 )
               )
@@ -391,13 +391,13 @@ final class StatementTests: XCTestCase {
       if case 1️⃣Optional<Any>.none = object["anyCol"] { }
       """,
       substructure: Syntax(
-        SpecializeExprSyntax(
+        GenericSpecializationExprSyntax(
           expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
           genericArgumentClause: GenericArgumentClauseSyntax(
             leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argument: SimpleTypeIdentifierSyntax(name: .keyword(.Any))
+                argument: IdentifierTypeSyntax(name: .keyword(.Any))
               )
             ]),
             rightAngle: .rightAngleToken()
@@ -432,7 +432,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         YieldStmtSyntax(
           yieldKeyword: .keyword(.yield),
-          yields: .init(
+          yieldedExpressions: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
               expression: IdentifierExprSyntax(identifier: .identifier("x"))
@@ -466,18 +466,18 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         YieldStmtSyntax(
           yieldKeyword: .keyword(.yield),
-          yields: .init(
+          yieldedExpressions: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
-              expression: SubscriptExprSyntax(
+              expression: SubscriptCallExprSyntax(
                 calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
                 leftSquare: .leftSquareToken(),
-                arguments: TupleExprElementListSyntax([
-                  TupleExprElementSyntax(
+                arguments: LabeledExprListSyntax([
+                  LabeledExprSyntax(
                     expression: IdentifierExprSyntax(identifier: .identifier("key")),
                     trailingComma: .commaToken()
                   ),
-                  TupleExprElementSyntax(
+                  LabeledExprSyntax(
                     label: .identifier("isUnique"),
                     colon: .colonToken(),
                     expression: BooleanLiteralExprSyntax(literal: .keyword(.true))
@@ -505,7 +505,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -524,7 +524,7 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([]),
+          arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
         )
       ),
@@ -539,8 +539,8 @@ final class StatementTests: XCTestCase {
         FunctionCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: ArrayExprSyntax(
                 leftSquare: .leftSquareToken(),
                 elements: ArrayElementListSyntax([]),
@@ -668,8 +668,8 @@ final class StatementTests: XCTestCase {
             identifier: .identifier("discard")
           ),
           argumentList: {
-            TupleExprElementListSyntax([
-              TupleExprElementSyntax(
+            LabeledExprListSyntax([
+              LabeledExprSyntax(
                 expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
               )
             ])
@@ -689,15 +689,15 @@ final class StatementTests: XCTestCase {
       data[position, default: 0]
       """,
       substructure: Syntax(
-        SubscriptExprSyntax(
+        SubscriptCallExprSyntax(
           calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
           leftSquare: .leftSquareToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
               expression: IdentifierExprSyntax(identifier: .identifier("position")),
               trailingComma: .commaToken()
             ),
-            TupleExprElementSyntax(
+            LabeledExprSyntax(
               label: .identifier("default"),
               colon: .colonToken(),
               expression: IntegerLiteralExprSyntax(0)

@@ -26,7 +26,6 @@ public enum TokenKind: Hashable {
   case endOfFile
   case equal
   case exclamationMark
-  case extendedRegexDelimiter(String)
   case floatingLiteral(String)
   case identifier(String)
   case infixQuestionMark
@@ -50,8 +49,9 @@ public enum TokenKind: Hashable {
   case poundUnavailable
   case prefixAmpersand
   case prefixOperator(String)
-  case rawStringDelimiter(String)
+  case rawStringPoundDelimiter(String)
   case regexLiteralPattern(String)
+  case regexPoundDelimiter(String)
   case regexSlash
   case rightAngle
   case rightBrace
@@ -92,8 +92,6 @@ public enum TokenKind: Hashable {
       return #"="#
     case .exclamationMark:
       return #"!"#
-    case .extendedRegexDelimiter(let text):
-      return text
     case .floatingLiteral(let text):
       return text
     case .identifier(let text):
@@ -140,9 +138,11 @@ public enum TokenKind: Hashable {
       return #"&"#
     case .prefixOperator(let text):
       return text
-    case .rawStringDelimiter(let text):
+    case .rawStringPoundDelimiter(let text):
       return text
     case .regexLiteralPattern(let text):
+      return text
+    case .regexPoundDelimiter(let text):
       return text
     case .regexSlash:
       return #"/"#
@@ -283,8 +283,6 @@ public enum TokenKind: Hashable {
       return true
     case .exclamationMark:
       return true
-    case .extendedRegexDelimiter:
-      return false
     case .floatingLiteral:
       return false
     case .identifier:
@@ -331,9 +329,11 @@ public enum TokenKind: Hashable {
       return true
     case .prefixOperator:
       return false
-    case .rawStringDelimiter:
+    case .rawStringPoundDelimiter:
       return false
     case .regexLiteralPattern:
+      return false
+    case .regexPoundDelimiter:
       return false
     case .regexSlash:
       return true
@@ -388,8 +388,6 @@ extension TokenKind: Equatable {
       return true
     case (.exclamationMark, .exclamationMark):
       return true
-    case (.extendedRegexDelimiter(let lhsText), .extendedRegexDelimiter(let rhsText)):
-      return lhsText == rhsText
     case (.floatingLiteral(let lhsText), .floatingLiteral(let rhsText)):
       return lhsText == rhsText
     case (.identifier(let lhsText), .identifier(let rhsText)):
@@ -436,9 +434,11 @@ extension TokenKind: Equatable {
       return true
     case (.prefixOperator(let lhsText), .prefixOperator(let rhsText)):
       return lhsText == rhsText
-    case (.rawStringDelimiter(let lhsText), .rawStringDelimiter(let rhsText)):
+    case (.rawStringPoundDelimiter(let lhsText), .rawStringPoundDelimiter(let rhsText)):
       return lhsText == rhsText
     case (.regexLiteralPattern(let lhsText), .regexLiteralPattern(let rhsText)):
+      return lhsText == rhsText
+    case (.regexPoundDelimiter(let lhsText), .regexPoundDelimiter(let rhsText)):
       return lhsText == rhsText
     case (.regexSlash, .regexSlash):
       return true
@@ -487,7 +487,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case endOfFile
   case equal
   case exclamationMark
-  case extendedRegexDelimiter
   case floatingLiteral
   case identifier
   case infixQuestionMark
@@ -511,8 +510,9 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case poundUnavailable
   case prefixAmpersand
   case prefixOperator
-  case rawStringDelimiter
+  case rawStringPoundDelimiter
   case regexLiteralPattern
+  case regexPoundDelimiter
   case regexSlash
   case rightAngle
   case rightBrace
@@ -636,8 +636,6 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .exclamationMark:
       return true
-    case .extendedRegexDelimiter:
-      return false
     case .floatingLiteral:
       return false
     case .identifier:
@@ -684,9 +682,11 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .prefixOperator:
       return false
-    case .rawStringDelimiter:
+    case .rawStringPoundDelimiter:
       return false
     case .regexLiteralPattern:
+      return false
+    case .regexPoundDelimiter:
       return false
     case .regexSlash:
       return true
@@ -753,8 +753,6 @@ extension TokenKind {
     case .exclamationMark:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .exclamationMark
-    case .extendedRegexDelimiter:
-      return .extendedRegexDelimiter(text)
     case .floatingLiteral:
       return .floatingLiteral(text)
     case .identifier:
@@ -821,10 +819,12 @@ extension TokenKind {
       return .prefixAmpersand
     case .prefixOperator:
       return .prefixOperator(text)
-    case .rawStringDelimiter:
-      return .rawStringDelimiter(text)
+    case .rawStringPoundDelimiter:
+      return .rawStringPoundDelimiter(text)
     case .regexLiteralPattern:
       return .regexLiteralPattern(text)
+    case .regexPoundDelimiter:
+      return .regexPoundDelimiter(text)
     case .regexSlash:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .regexSlash
@@ -888,8 +888,6 @@ extension TokenKind {
       return (.equal, nil)
     case .exclamationMark:
       return (.exclamationMark, nil)
-    case .extendedRegexDelimiter(let str):
-      return (.extendedRegexDelimiter, str)
     case .floatingLiteral(let str):
       return (.floatingLiteral, str)
     case .identifier(let str):
@@ -936,10 +934,12 @@ extension TokenKind {
       return (.prefixAmpersand, nil)
     case .prefixOperator(let str):
       return (.prefixOperator, str)
-    case .rawStringDelimiter(let str):
-      return (.rawStringDelimiter, str)
+    case .rawStringPoundDelimiter(let str):
+      return (.rawStringPoundDelimiter, str)
     case .regexLiteralPattern(let str):
       return (.regexLiteralPattern, str)
+    case .regexPoundDelimiter(let str):
+      return (.regexPoundDelimiter, str)
     case .regexSlash:
       return (.regexSlash, nil)
     case .rightAngle:

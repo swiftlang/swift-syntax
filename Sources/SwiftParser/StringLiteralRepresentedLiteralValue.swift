@@ -46,7 +46,7 @@ extension StringLiteralExprSyntax {
   }
 
   fileprivate var stringLiteralKind: StringLiteralKind? {
-    switch openQuote.tokenKind {
+    switch openingQuote.tokenKind {
     case .stringQuote:
       return .singleLine
     case .multilineStringQuote:
@@ -59,7 +59,7 @@ extension StringLiteralExprSyntax {
   }
 
   fileprivate var delimiterLength: Int {
-    openDelimiter?.text.count ?? 0
+    openingPounds?.text.count ?? 0
   }
 }
 

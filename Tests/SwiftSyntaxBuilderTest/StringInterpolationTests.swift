@@ -57,7 +57,7 @@ final class StringInterpolationTests: XCTestCase {
   func testStmtSyntax() {
     let collection: ExprSyntax = "[1, 2, 3, 4, 5]"
     let stmtSyntax: StmtSyntax = "for x in \(collection) { }"
-    XCTAssertTrue(stmtSyntax.is(ForInStmtSyntax.self))
+    XCTAssertTrue(stmtSyntax.is(ForStmtSyntax.self))
   }
 
   func testTypeInterpolation() {

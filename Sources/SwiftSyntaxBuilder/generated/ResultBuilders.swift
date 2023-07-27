@@ -15,7 +15,7 @@
 import SwiftSyntax
 
 @resultBuilder
-public struct AccessorListBuilder {
+public struct AccessorDeclListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = AccessorDeclSyntax
@@ -26,7 +26,7 @@ public struct AccessorListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AccessorListSyntax
+  public typealias FinalResult = AccessorDeclListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -88,8 +88,8 @@ public struct AccessorListBuilder {
   }
 }
 
-public extension AccessorListSyntax {
-  init(@AccessorListBuilder itemsBuilder: () throws -> AccessorListSyntax) rethrows {
+public extension AccessorDeclListSyntax {
+  init(@AccessorDeclListBuilder itemsBuilder: () throws -> AccessorDeclListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -270,7 +270,7 @@ public extension AttributeListSyntax {
 }
 
 @resultBuilder
-public struct AvailabilitySpecListBuilder {
+public struct AvailabilityArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = AvailabilityArgumentSyntax
@@ -281,7 +281,7 @@ public struct AvailabilitySpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = AvailabilitySpecListSyntax
+  public typealias FinalResult = AvailabilityArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -346,174 +346,8 @@ public struct AvailabilitySpecListBuilder {
   }
 }
 
-public extension AvailabilitySpecListSyntax {
-  init(@AvailabilitySpecListBuilder itemsBuilder: () throws -> AvailabilitySpecListSyntax) rethrows {
-    self = try itemsBuilder()
-  }
-}
-
-@resultBuilder
-public struct AvailabilityVersionRestrictionListBuilder {
-  /// The type of individual statement expressions in the transformed function,
-  /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = AvailabilityVersionRestrictionListEntrySyntax
-  
-  /// The type of a partial result, which will be carried through all of the
-  /// build methods.
-  public typealias Component = [Expression]
-  
-  /// The type of the final returned result, which defaults to Component if
-  /// buildFinalResult() is not provided.
-  public typealias FinalResult = AvailabilityVersionRestrictionListSyntax
-  
-  /// Required by every result builder to build combined results from
-  /// statement blocks.
-  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, provides contextual type information for statement
-  /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
-    return [expression]
-  }
-  
-  /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map {
-      $0
-    }
-  }
-  
-  /// Enables support for `if` statements that do not have an `else`.
-  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
-    return component ?? []
-  }
-  
-  /// With buildEither(second:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(first component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// With buildEither(first:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(second component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// Enables support for 'for..in' loops by combining the
-  /// results of all iterations into a single result.
-  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, this will be called on the partial result of an 'if'
-  /// #available' block to allow the result builder to erase type
-  /// information.
-  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// If declared, this will be called on the partial result from the outermost
-  /// block statement to produce the final returned result.
-  public static func buildFinalResult(_ component: Component) -> FinalResult {
-    let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-      })
-  }
-}
-
-public extension AvailabilityVersionRestrictionListSyntax {
-  init(@AvailabilityVersionRestrictionListBuilder itemsBuilder: () throws -> AvailabilityVersionRestrictionListSyntax) rethrows {
-    self = try itemsBuilder()
-  }
-}
-
-@resultBuilder
-public struct CaseItemListBuilder {
-  /// The type of individual statement expressions in the transformed function,
-  /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = CaseItemSyntax
-  
-  /// The type of a partial result, which will be carried through all of the
-  /// build methods.
-  public typealias Component = [Expression]
-  
-  /// The type of the final returned result, which defaults to Component if
-  /// buildFinalResult() is not provided.
-  public typealias FinalResult = CaseItemListSyntax
-  
-  /// Required by every result builder to build combined results from
-  /// statement blocks.
-  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, provides contextual type information for statement
-  /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
-    return [expression]
-  }
-  
-  /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map {
-      $0
-    }
-  }
-  
-  /// Enables support for `if` statements that do not have an `else`.
-  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
-    return component ?? []
-  }
-  
-  /// With buildEither(second:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(first component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// With buildEither(first:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(second component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// Enables support for 'for..in' loops by combining the
-  /// results of all iterations into a single result.
-  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, this will be called on the partial result of an 'if'
-  /// #available' block to allow the result builder to erase type
-  /// information.
-  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// If declared, this will be called on the partial result from the outermost
-  /// block statement to produce the final returned result.
-  public static func buildFinalResult(_ component: Component) -> FinalResult {
-    let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-      })
-  }
-}
-
-public extension CaseItemListSyntax {
-  init(@CaseItemListBuilder itemsBuilder: () throws -> CaseItemListSyntax) rethrows {
+public extension AvailabilityArgumentListSyntax {
+  init(@AvailabilityArgumentListBuilder itemsBuilder: () throws -> AvailabilityArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -682,10 +516,10 @@ public extension CatchItemListSyntax {
 }
 
 @resultBuilder
-public struct ClosureCaptureItemListBuilder {
+public struct ClosureCaptureListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureCaptureItemSyntax
+  public typealias Expression = ClosureCaptureSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -693,7 +527,7 @@ public struct ClosureCaptureItemListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ClosureCaptureItemListSyntax
+  public typealias FinalResult = ClosureCaptureListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -758,91 +592,8 @@ public struct ClosureCaptureItemListBuilder {
   }
 }
 
-public extension ClosureCaptureItemListSyntax {
-  init(@ClosureCaptureItemListBuilder itemsBuilder: () throws -> ClosureCaptureItemListSyntax) rethrows {
-    self = try itemsBuilder()
-  }
-}
-
-@resultBuilder
-public struct ClosureParamListBuilder {
-  /// The type of individual statement expressions in the transformed function,
-  /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = ClosureParamSyntax
-  
-  /// The type of a partial result, which will be carried through all of the
-  /// build methods.
-  public typealias Component = [Expression]
-  
-  /// The type of the final returned result, which defaults to Component if
-  /// buildFinalResult() is not provided.
-  public typealias FinalResult = ClosureParamListSyntax
-  
-  /// Required by every result builder to build combined results from
-  /// statement blocks.
-  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, provides contextual type information for statement
-  /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
-    return [expression]
-  }
-  
-  /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map {
-      $0
-    }
-  }
-  
-  /// Enables support for `if` statements that do not have an `else`.
-  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
-    return component ?? []
-  }
-  
-  /// With buildEither(second:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(first component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// With buildEither(first:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(second component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// Enables support for 'for..in' loops by combining the
-  /// results of all iterations into a single result.
-  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, this will be called on the partial result of an 'if'
-  /// #available' block to allow the result builder to erase type
-  /// information.
-  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// If declared, this will be called on the partial result from the outermost
-  /// block statement to produce the final returned result.
-  public static func buildFinalResult(_ component: Component) -> FinalResult {
-    let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-      })
-  }
-}
-
-public extension ClosureParamListSyntax {
-  init(@ClosureParamListBuilder itemsBuilder: () throws -> ClosureParamListSyntax) rethrows {
+public extension ClosureCaptureListSyntax {
+  init(@ClosureCaptureListBuilder itemsBuilder: () throws -> ClosureCaptureListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -926,6 +677,89 @@ public struct ClosureParameterListBuilder {
 
 public extension ClosureParameterListSyntax {
   init(@ClosureParameterListBuilder itemsBuilder: () throws -> ClosureParameterListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
+@resultBuilder
+public struct ClosureShorthandParameterListBuilder {
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = ClosureShorthandParameterSyntax
+  
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [Expression]
+  
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = ClosureShorthandParameterListSyntax
+  
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
+    return [expression]
+  }
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
+    return expression.map {
+      $0
+    }
+  }
+  
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
+    return component ?? []
+  }
+  
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, this will be called on the partial result of an 'if'
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
+  }
+}
+
+public extension ClosureShorthandParameterListSyntax {
+  init(@ClosureShorthandParameterListBuilder itemsBuilder: () throws -> ClosureShorthandParameterListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -1174,6 +1008,86 @@ public extension ConditionElementListSyntax {
 }
 
 @resultBuilder
+public struct DeclModifierListBuilder {
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = DeclModifierSyntax
+  
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [Expression]
+  
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = DeclModifierListSyntax
+  
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
+    return [expression]
+  }
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
+    return expression.map {
+      $0
+    }
+  }
+  
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
+    return component ?? []
+  }
+  
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, this will be called on the partial result of an 'if'
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    return .init(component)
+  }
+}
+
+public extension DeclModifierListSyntax {
+  init(@DeclModifierListBuilder itemsBuilder: () throws -> DeclModifierListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
+@resultBuilder
 public struct DeclNameArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
@@ -1257,7 +1171,7 @@ public extension DeclNameArgumentListSyntax {
 public struct DesignatedTypeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DesignatedTypeElementSyntax
+  public typealias Expression = DesignatedTypeSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1417,10 +1331,10 @@ public extension DictionaryElementListSyntax {
 }
 
 @resultBuilder
-public struct DifferentiabilityParamListBuilder {
+public struct DifferentiabilityParameterListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DifferentiabilityParamSyntax
+  public typealias Expression = DifferentiabilityArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -1428,7 +1342,7 @@ public struct DifferentiabilityParamListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DifferentiabilityParamListSyntax
+  public typealias FinalResult = DifferentiabilityParameterListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1493,8 +1407,8 @@ public struct DifferentiabilityParamListBuilder {
   }
 }
 
-public extension DifferentiabilityParamListSyntax {
-  init(@DifferentiabilityParamListBuilder itemsBuilder: () throws -> DifferentiabilityParamListSyntax) rethrows {
+public extension DifferentiabilityParameterListSyntax {
+  init(@DifferentiabilityParameterListBuilder itemsBuilder: () throws -> DifferentiabilityParameterListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -1583,7 +1497,7 @@ public extension DocumentationAttributeArgumentListSyntax {
 }
 
 @resultBuilder
-public struct EffectsArgumentListBuilder {
+public struct EffectsAttributeArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = TokenSyntax
@@ -1594,7 +1508,7 @@ public struct EffectsArgumentListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = EffectsArgumentListSyntax
+  public typealias FinalResult = EffectsAttributeArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1656,8 +1570,8 @@ public struct EffectsArgumentListBuilder {
   }
 }
 
-public extension EffectsArgumentListSyntax {
-  init(@EffectsArgumentListBuilder itemsBuilder: () throws -> EffectsArgumentListSyntax) rethrows {
+public extension EffectsAttributeArgumentListSyntax {
+  init(@EffectsAttributeArgumentListBuilder itemsBuilder: () throws -> EffectsAttributeArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -2564,10 +2478,10 @@ public extension KeyPathComponentListSyntax {
 }
 
 @resultBuilder
-public struct MemberDeclListBuilder {
+public struct LabeledExprListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = MemberDeclListItemSyntax
+  public typealias Expression = LabeledExprSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2575,7 +2489,7 @@ public struct MemberDeclListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = MemberDeclListSyntax
+  public typealias FinalResult = LabeledExprListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2633,21 +2547,24 @@ public struct MemberDeclListBuilder {
   /// If declared, this will be called on the partial result from the outermost
   /// block statement to produce the final returned result.
   public static func buildFinalResult(_ component: Component) -> FinalResult {
-    return .init(component)
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
   }
 }
 
-public extension MemberDeclListSyntax {
-  init(@MemberDeclListBuilder itemsBuilder: () throws -> MemberDeclListSyntax) rethrows {
+public extension LabeledExprListSyntax {
+  init(@LabeledExprListBuilder itemsBuilder: () throws -> LabeledExprListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
 
 @resultBuilder
-public struct ModifierListBuilder {
+public struct MemberBlockItemListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = DeclModifierSyntax
+  public typealias Expression = MemberBlockItemSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -2655,7 +2572,7 @@ public struct ModifierListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = ModifierListSyntax
+  public typealias FinalResult = MemberBlockItemListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -2717,8 +2634,8 @@ public struct ModifierListBuilder {
   }
 }
 
-public extension ModifierListSyntax {
-  init(@ModifierListBuilder itemsBuilder: () throws -> ModifierListSyntax) rethrows {
+public extension MemberBlockItemListSyntax {
+  init(@MemberBlockItemListBuilder itemsBuilder: () throws -> MemberBlockItemListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -2967,6 +2884,89 @@ public extension PatternBindingListSyntax {
 }
 
 @resultBuilder
+public struct PlatformVersionItemListBuilder {
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = PlatformVersionItemSyntax
+  
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [Expression]
+  
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = PlatformVersionItemListSyntax
+  
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
+    return [expression]
+  }
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
+    return expression.map {
+      $0
+    }
+  }
+  
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
+    return component ?? []
+  }
+  
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, this will be called on the partial result of an 'if'
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
+  }
+}
+
+public extension PlatformVersionItemListSyntax {
+  init(@PlatformVersionItemListBuilder itemsBuilder: () throws -> PlatformVersionItemListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
+@resultBuilder
 public struct PrecedenceGroupAttributeListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
@@ -3068,7 +3068,7 @@ public extension PrecedenceGroupAttributeListSyntax {
 public struct PrecedenceGroupNameListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = PrecedenceGroupNameElementSyntax
+  public typealias Expression = PrecedenceGroupNameSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3231,10 +3231,10 @@ public extension PrimaryAssociatedTypeListSyntax {
 }
 
 @resultBuilder
-public struct SpecializeAttributeSpecListBuilder {
+public struct SpecializeAttributeArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = SpecializeAttributeSpecListSyntax.Element
+  public typealias Expression = SpecializeAttributeArgumentListSyntax.Element
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3242,7 +3242,7 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = SpecializeAttributeSpecListSyntax
+  public typealias FinalResult = SpecializeAttributeArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -3260,19 +3260,19 @@ public struct SpecializeAttributeSpecListBuilder {
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: LabeledSpecializeEntrySyntax) -> Self.Component {
+  public static func buildExpression(_ expression: LabeledSpecializeArgumentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: AvailabilityEntrySyntax) -> Self.Component {
+  public static func buildExpression(_ expression: SpecializeAvailabilityArgumentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
   /// If declared, provides contextual type information for statement
   /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: TargetFunctionEntrySyntax) -> Self.Component {
+  public static func buildExpression(_ expression: SpecializeTargetFunctionArgumentSyntax) -> Self.Component {
     return buildExpression(.init(expression))
   }
   
@@ -3328,8 +3328,8 @@ public struct SpecializeAttributeSpecListBuilder {
   }
 }
 
-public extension SpecializeAttributeSpecListSyntax {
-  init(@SpecializeAttributeSpecListBuilder itemsBuilder: () throws -> SpecializeAttributeSpecListSyntax) rethrows {
+public extension SpecializeAttributeArgumentListSyntax {
+  init(@SpecializeAttributeArgumentListBuilder itemsBuilder: () throws -> SpecializeAttributeArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -3427,6 +3427,89 @@ public extension StringLiteralSegmentListSyntax {
 }
 
 @resultBuilder
+public struct SwitchCaseItemListBuilder {
+  /// The type of individual statement expressions in the transformed function,
+  /// which defaults to Component if buildExpression() is not provided.
+  public typealias Expression = SwitchCaseItemSyntax
+  
+  /// The type of a partial result, which will be carried through all of the
+  /// build methods.
+  public typealias Component = [Expression]
+  
+  /// The type of the final returned result, which defaults to Component if
+  /// buildFinalResult() is not provided.
+  public typealias FinalResult = SwitchCaseItemListSyntax
+  
+  /// Required by every result builder to build combined results from
+  /// statement blocks.
+  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, provides contextual type information for statement
+  /// expressions to translate them into partial results.
+  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
+    return [expression]
+  }
+  
+  /// Add all the elements of `expression` to this result builder, effectively flattening them.
+  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
+    return expression.map {
+      $0
+    }
+  }
+  
+  /// Enables support for `if` statements that do not have an `else`.
+  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
+    return component ?? []
+  }
+  
+  /// With buildEither(second:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(first component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// With buildEither(first:), enables support for 'if-else' and 'switch'
+  /// statements by folding conditional results into a single result.
+  public static func buildEither(second component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// Enables support for 'for..in' loops by combining the
+  /// results of all iterations into a single result.
+  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
+    return components.flatMap {
+      $0
+    }
+  }
+  
+  /// If declared, this will be called on the partial result of an 'if'
+  /// #available' block to allow the result builder to erase type
+  /// information.
+  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
+    return component
+  }
+  
+  /// If declared, this will be called on the partial result from the outermost
+  /// block statement to produce the final returned result.
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
+    let lastIndex = component.count - 1
+    return .init(component.enumerated().map { index, source in
+      return index < lastIndex ? source.ensuringTrailingComma() : source
+      })
+  }
+}
+
+public extension SwitchCaseItemListSyntax {
+  init(@SwitchCaseItemListBuilder itemsBuilder: () throws -> SwitchCaseItemListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
+@resultBuilder
 public struct SwitchCaseListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
@@ -3514,89 +3597,6 @@ public struct SwitchCaseListBuilder {
 
 public extension SwitchCaseListSyntax {
   init(@SwitchCaseListBuilder itemsBuilder: () throws -> SwitchCaseListSyntax) rethrows {
-    self = try itemsBuilder()
-  }
-}
-
-@resultBuilder
-public struct TupleExprElementListBuilder {
-  /// The type of individual statement expressions in the transformed function,
-  /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = TupleExprElementSyntax
-  
-  /// The type of a partial result, which will be carried through all of the
-  /// build methods.
-  public typealias Component = [Expression]
-  
-  /// The type of the final returned result, which defaults to Component if
-  /// buildFinalResult() is not provided.
-  public typealias FinalResult = TupleExprElementListSyntax
-  
-  /// Required by every result builder to build combined results from
-  /// statement blocks.
-  public static func buildBlock(_ components: Self.Component...) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, provides contextual type information for statement
-  /// expressions to translate them into partial results.
-  public static func buildExpression(_ expression: Self.Expression) -> Self.Component {
-    return [expression]
-  }
-  
-  /// Add all the elements of `expression` to this result builder, effectively flattening them.
-  public static func buildExpression(_ expression: Self.FinalResult) -> Self.Component {
-    return expression.map {
-      $0
-    }
-  }
-  
-  /// Enables support for `if` statements that do not have an `else`.
-  public static func buildOptional(_ component: Self.Component?) -> Self.Component {
-    return component ?? []
-  }
-  
-  /// With buildEither(second:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(first component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// With buildEither(first:), enables support for 'if-else' and 'switch'
-  /// statements by folding conditional results into a single result.
-  public static func buildEither(second component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// Enables support for 'for..in' loops by combining the
-  /// results of all iterations into a single result.
-  public static func buildArray(_ components: [Self.Component]) -> Self.Component {
-    return components.flatMap {
-      $0
-    }
-  }
-  
-  /// If declared, this will be called on the partial result of an 'if'
-  /// #available' block to allow the result builder to erase type
-  /// information.
-  public static func buildLimitedAvailability(_ component: Self.Component) -> Self.Component {
-    return component
-  }
-  
-  /// If declared, this will be called on the partial result from the outermost
-  /// block statement to produce the final returned result.
-  public static func buildFinalResult(_ component: Component) -> FinalResult {
-    let lastIndex = component.count - 1
-    return .init(component.enumerated().map { index, source in
-      return index < lastIndex ? source.ensuringTrailingComma() : source
-      })
-  }
-}
-
-public extension TupleExprElementListSyntax {
-  init(@TupleExprElementListBuilder itemsBuilder: () throws -> TupleExprElementListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }
@@ -3928,10 +3928,10 @@ public extension VersionComponentListSyntax {
 }
 
 @resultBuilder
-public struct YieldExprListBuilder {
+public struct YieldStmtArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = YieldExprListElementSyntax
+  public typealias Expression = YieldStmtArgumentSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3939,7 +3939,7 @@ public struct YieldExprListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = YieldExprListSyntax
+  public typealias FinalResult = YieldStmtArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -4001,8 +4001,8 @@ public struct YieldExprListBuilder {
   }
 }
 
-public extension YieldExprListSyntax {
-  init(@YieldExprListBuilder itemsBuilder: () throws -> YieldExprListSyntax) rethrows {
+public extension YieldStmtArgumentListSyntax {
+  init(@YieldStmtArgumentListBuilder itemsBuilder: () throws -> YieldStmtArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }

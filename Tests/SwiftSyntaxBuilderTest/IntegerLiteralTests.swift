@@ -17,10 +17,10 @@ import SwiftSyntaxBuilder
 final class IntegerLiteralTests: XCTestCase {
   func testIntegerLiteral() {
     let testCases: [UInt: (IntegerLiteralExprSyntax, String)] = [
-      #line: (IntegerLiteralExprSyntax(digits: .integerLiteral(String(123))), "123"),
-      #line: (IntegerLiteralExprSyntax(digits: .integerLiteral(String(-123))), "-123"),
-      #line: (IntegerLiteralExprSyntax(digits: .integerLiteral("1_000")), "1_000"),
-      #line: (IntegerLiteralExprSyntax(digits: .integerLiteral("-1_000")), "-1_000"),
+      #line: (IntegerLiteralExprSyntax(literal: .integerLiteral(String(123))), "123"),
+      #line: (IntegerLiteralExprSyntax(literal: .integerLiteral(String(-123))), "-123"),
+      #line: (IntegerLiteralExprSyntax(literal: .integerLiteral("1_000")), "1_000"),
+      #line: (IntegerLiteralExprSyntax(literal: .integerLiteral("-1_000")), "-1_000"),
       #line: (IntegerLiteralExprSyntax(1_000), "1000"),
       #line: (IntegerLiteralExprSyntax(-1_000), "-1000"),
       #line: (1_000, "1000"),

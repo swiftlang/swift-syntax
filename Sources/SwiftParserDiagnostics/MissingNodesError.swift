@@ -197,9 +197,9 @@ fileprivate extension TokenKind {
       return .leftParen
     case .rightSquare:
       return .leftSquare
-    case .stringQuote, .multilineStringQuote, .rawStringDelimiter:
+    case .stringQuote, .multilineStringQuote, .rawStringPoundDelimiter:
       return self
-    case .regexSlash, .extendedRegexDelimiter:
+    case .regexSlash, .regexPoundDelimiter:
       return self
     default:
       return nil

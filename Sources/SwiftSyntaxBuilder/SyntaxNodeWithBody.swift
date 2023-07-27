@@ -81,7 +81,7 @@ extension CatchClauseSyntax: HasTrailingCodeBlock {
 }
 extension DeferStmtSyntax: HasTrailingCodeBlock {}
 extension DoStmtSyntax: HasTrailingCodeBlock {}
-extension ForInStmtSyntax: HasTrailingCodeBlock {}
+extension ForStmtSyntax: HasTrailingCodeBlock {}
 extension GuardStmtSyntax: HasTrailingCodeBlock {}
 extension WhileStmtSyntax: HasTrailingCodeBlock {}
 
@@ -131,7 +131,7 @@ extension InitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
 // MARK: HasTrailingMemberDeclBlock
 
 public protocol HasTrailingMemberDeclBlock {
-  var memberBlock: MemberDeclBlockSyntax { get set }
+  var memberBlock: MemberBlockSyntax { get set }
 
   /// Constructs a syntax node where `header` builds the text of the node before the members in braces and `membersBuilder` is used to list the node’s members.
   ///
@@ -154,17 +154,17 @@ public protocol HasTrailingMemberDeclBlock {
   /// ```
   ///
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
-  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws
+  init(_ header: PartialSyntaxNodeString, @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax) throws
 }
 
 public extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
-  init(_ header: PartialSyntaxNodeString, @MemberDeclListBuilder membersBuilder: () throws -> MemberDeclListSyntax) throws {
+  init(_ header: PartialSyntaxNodeString, @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.memberBlock = try MemberDeclBlockSyntax(members: membersBuilder())
+    self.memberBlock = try MemberBlockSyntax(members: membersBuilder())
   }
 }
 

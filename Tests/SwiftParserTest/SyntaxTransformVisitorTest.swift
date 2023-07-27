@@ -74,7 +74,7 @@ final class SyntaxTransformVisitorTest: XCTestCase {
         return "(" + argStrings.joined(separator: ", ") + ") -> " + resultString
       }
 
-      public func visit(_ node: SimpleTypeIdentifierSyntax) -> String {
+      public func visit(_ node: IdentifierTypeSyntax) -> String {
         node.name.text
       }
 

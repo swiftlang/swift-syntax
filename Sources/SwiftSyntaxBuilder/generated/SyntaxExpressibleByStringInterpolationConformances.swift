@@ -34,7 +34,7 @@ extension FunctionParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
-extension MemberDeclBlockSyntax: SyntaxExpressibleByStringInterpolation {}
+extension MemberBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension PatternSyntax: SyntaxExpressibleByStringInterpolation {}
 

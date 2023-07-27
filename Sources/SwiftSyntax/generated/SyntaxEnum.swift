@@ -17,11 +17,11 @@ public enum SyntaxEnum {
   case token(TokenSyntax)
   case accessesEffect(AccessesEffectSyntax)
   case accessorBlock(AccessorBlockSyntax)
+  case accessorDeclList(AccessorDeclListSyntax)
   case accessorDecl(AccessorDeclSyntax)
   case accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax)
   case accessorInitEffects(AccessorInitEffectsSyntax)
-  case accessorList(AccessorListSyntax)
-  case accessorParameter(AccessorParameterSyntax)
+  case accessorParameters(AccessorParametersSyntax)
   case actorDecl(ActorDeclSyntax)
   case arrayElementList(ArrayElementListSyntax)
   case arrayElement(ArrayElementSyntax)
@@ -30,44 +30,38 @@ public enum SyntaxEnum {
   case arrowExpr(ArrowExprSyntax)
   case asExpr(AsExprSyntax)
   case assignmentExpr(AssignmentExprSyntax)
-  case associatedtypeDecl(AssociatedtypeDeclSyntax)
+  case associatedTypeDecl(AssociatedTypeDeclSyntax)
   case attributeList(AttributeListSyntax)
   case attribute(AttributeSyntax)
   case attributedType(AttributedTypeSyntax)
+  case availabilityArgumentList(AvailabilityArgumentListSyntax)
   case availabilityArgument(AvailabilityArgumentSyntax)
   case availabilityCondition(AvailabilityConditionSyntax)
-  case availabilityEntry(AvailabilityEntrySyntax)
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
-  case availabilitySpecList(AvailabilitySpecListSyntax)
-  case availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax)
-  case availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax)
-  case availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax)
   case awaitExpr(AwaitExprSyntax)
-  case backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax)
+  case backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
   case breakStmt(BreakStmtSyntax)
   case canImportExpr(CanImportExprSyntax)
   case canImportVersionInfo(CanImportVersionInfoSyntax)
-  case caseItemList(CaseItemListSyntax)
-  case caseItem(CaseItemSyntax)
   case catchClauseList(CatchClauseListSyntax)
   case catchClause(CatchClauseSyntax)
   case catchItemList(CatchItemListSyntax)
   case catchItem(CatchItemSyntax)
   case classDecl(ClassDeclSyntax)
   case classRestrictionType(ClassRestrictionTypeSyntax)
-  case closureCaptureItemList(ClosureCaptureItemListSyntax)
-  case closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax)
-  case closureCaptureItem(ClosureCaptureItemSyntax)
-  case closureCaptureSignature(ClosureCaptureSignatureSyntax)
+  case closureCaptureClause(ClosureCaptureClauseSyntax)
+  case closureCaptureList(ClosureCaptureListSyntax)
+  case closureCaptureSpecifier(ClosureCaptureSpecifierSyntax)
+  case closureCapture(ClosureCaptureSyntax)
   case closureExpr(ClosureExprSyntax)
-  case closureParamList(ClosureParamListSyntax)
-  case closureParam(ClosureParamSyntax)
   case closureParameterClause(ClosureParameterClauseSyntax)
   case closureParameterList(ClosureParameterListSyntax)
   case closureParameter(ClosureParameterSyntax)
+  case closureShorthandParameterList(ClosureShorthandParameterListSyntax)
+  case closureShorthandParameter(ClosureShorthandParameterSyntax)
   case closureSignature(ClosureSignatureSyntax)
   case codeBlockItemList(CodeBlockItemListSyntax)
   case codeBlockItem(CodeBlockItemSyntax)
@@ -78,41 +72,42 @@ public enum SyntaxEnum {
   case conditionElementList(ConditionElementListSyntax)
   case conditionElement(ConditionElementSyntax)
   case conformanceRequirement(ConformanceRequirementSyntax)
-  case constrainedSugarType(ConstrainedSugarTypeSyntax)
+  case consumeExpr(ConsumeExprSyntax)
   case continueStmt(ContinueStmtSyntax)
   case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
   case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   case copyExpr(CopyExprSyntax)
   case declModifierDetail(DeclModifierDetailSyntax)
+  case declModifierList(DeclModifierListSyntax)
   case declModifier(DeclModifierSyntax)
   case declNameArgumentList(DeclNameArgumentListSyntax)
   case declNameArgument(DeclNameArgumentSyntax)
   case declNameArguments(DeclNameArgumentsSyntax)
   case declName(DeclNameSyntax)
   case deferStmt(DeferStmtSyntax)
-  case deinitEffectSpecifiers(DeinitEffectSpecifiersSyntax)
   case deinitializerDecl(DeinitializerDeclSyntax)
-  case derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax)
-  case designatedTypeElement(DesignatedTypeElementSyntax)
+  case deinitializerEffectSpecifiers(DeinitializerEffectSpecifiersSyntax)
+  case derivativeAttributeArguments(DerivativeAttributeArgumentsSyntax)
   case designatedTypeList(DesignatedTypeListSyntax)
+  case designatedType(DesignatedTypeSyntax)
   case dictionaryElementList(DictionaryElementListSyntax)
   case dictionaryElement(DictionaryElementSyntax)
   case dictionaryExpr(DictionaryExprSyntax)
   case dictionaryType(DictionaryTypeSyntax)
-  case differentiabilityParamList(DifferentiabilityParamListSyntax)
-  case differentiabilityParam(DifferentiabilityParamSyntax)
-  case differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax)
-  case differentiabilityParams(DifferentiabilityParamsSyntax)
+  case differentiabilityArgument(DifferentiabilityArgumentSyntax)
+  case differentiabilityArguments(DifferentiabilityArgumentsSyntax)
+  case differentiabilityParameterList(DifferentiabilityParameterListSyntax)
+  case differentiabilityWithRespectToArgument(DifferentiabilityWithRespectToArgumentSyntax)
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
   case discardStmt(DiscardStmtSyntax)
   case doStmt(DoStmtSyntax)
   case documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax)
   case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
-  case dynamicReplacementArguments(DynamicReplacementArgumentsSyntax)
+  case dynamicReplacementAttributeArguments(DynamicReplacementAttributeArgumentsSyntax)
   case editorPlaceholderDecl(EditorPlaceholderDeclSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
-  case effectsArgumentList(EffectsArgumentListSyntax)
+  case effectsAttributeArgumentList(EffectsAttributeArgumentListSyntax)
   case enumCaseDecl(EnumCaseDeclSyntax)
   case enumCaseElementList(EnumCaseElementListSyntax)
   case enumCaseElement(EnumCaseElementSyntax)
@@ -126,13 +121,14 @@ public enum SyntaxEnum {
   case expressionSegment(ExpressionSegmentSyntax)
   case expressionStmt(ExpressionStmtSyntax)
   case extensionDecl(ExtensionDeclSyntax)
-  case fallthroughStmt(FallthroughStmtSyntax)
+  case fallThroughStmt(FallThroughStmtSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
-  case forInStmt(ForInStmtSyntax)
-  case forcedValueExpr(ForcedValueExprSyntax)
+  case forStmt(ForStmtSyntax)
+  case forceUnwrapExpr(ForceUnwrapExprSyntax)
   case functionCallExpr(FunctionCallExprSyntax)
   case functionDecl(FunctionDeclSyntax)
   case functionEffectSpecifiers(FunctionEffectSpecifiersSyntax)
+  case functionParameterClause(FunctionParameterClauseSyntax)
   case functionParameterList(FunctionParameterListSyntax)
   case functionParameter(FunctionParameterSyntax)
   case functionSignature(FunctionSignatureSyntax)
@@ -145,10 +141,12 @@ public enum SyntaxEnum {
   case genericParameter(GenericParameterSyntax)
   case genericRequirementList(GenericRequirementListSyntax)
   case genericRequirement(GenericRequirementSyntax)
+  case genericSpecializationExpr(GenericSpecializationExprSyntax)
   case genericWhereClause(GenericWhereClauseSyntax)
   case guardStmt(GuardStmtSyntax)
   case identifierExpr(IdentifierExprSyntax)
   case identifierPattern(IdentifierPatternSyntax)
+  case identifierType(IdentifierTypeSyntax)
   case ifConfigClauseList(IfConfigClauseListSyntax)
   case ifConfigClause(IfConfigClauseSyntax)
   case ifConfigDecl(IfConfigDeclSyntax)
@@ -160,6 +158,7 @@ public enum SyntaxEnum {
   case importPathComponent(ImportPathComponentSyntax)
   case inOutExpr(InOutExprSyntax)
   case infixOperatorExpr(InfixOperatorExprSyntax)
+  case inheritanceClause(InheritanceClauseSyntax)
   case inheritedTypeList(InheritedTypeListSyntax)
   case inheritedType(InheritedTypeSyntax)
   case initializerClause(InitializerClauseSyntax)
@@ -174,7 +173,9 @@ public enum SyntaxEnum {
   case keyPathOptionalComponent(KeyPathOptionalComponentSyntax)
   case keyPathPropertyComponent(KeyPathPropertyComponentSyntax)
   case keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax)
-  case labeledSpecializeEntry(LabeledSpecializeEntrySyntax)
+  case labeledExprList(LabeledExprListSyntax)
+  case labeledExpr(LabeledExprSyntax)
+  case labeledSpecializeArgument(LabeledSpecializeArgumentSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case layoutRequirement(LayoutRequirementSyntax)
   case macroDecl(MacroDeclSyntax)
@@ -182,10 +183,10 @@ public enum SyntaxEnum {
   case macroExpansionExpr(MacroExpansionExprSyntax)
   case matchingPatternCondition(MatchingPatternConditionSyntax)
   case memberAccessExpr(MemberAccessExprSyntax)
-  case memberDeclBlock(MemberDeclBlockSyntax)
-  case memberDeclListItem(MemberDeclListItemSyntax)
-  case memberDeclList(MemberDeclListSyntax)
-  case memberTypeIdentifier(MemberTypeIdentifierSyntax)
+  case memberBlockItemList(MemberBlockItemListSyntax)
+  case memberBlockItem(MemberBlockItemSyntax)
+  case memberBlock(MemberBlockSyntax)
+  case memberType(MemberTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
   case missingDecl(MissingDeclSyntax)
   case missingExpr(MissingExprSyntax)
@@ -193,8 +194,6 @@ public enum SyntaxEnum {
   case missingStmt(MissingStmtSyntax)
   case missing(MissingSyntax)
   case missingType(MissingTypeSyntax)
-  case modifierList(ModifierListSyntax)
-  case moveExpr(MoveExprSyntax)
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
@@ -207,24 +206,27 @@ public enum SyntaxEnum {
   case optionalBindingCondition(OptionalBindingConditionSyntax)
   case optionalChainingExpr(OptionalChainingExprSyntax)
   case optionalType(OptionalTypeSyntax)
-  case originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax)
+  case originallyDefinedInAttributeArguments(OriginallyDefinedInAttributeArgumentsSyntax)
   case packElementExpr(PackElementExprSyntax)
+  case packElementType(PackElementTypeSyntax)
   case packExpansionExpr(PackExpansionExprSyntax)
   case packExpansionType(PackExpansionTypeSyntax)
-  case packReferenceType(PackReferenceTypeSyntax)
-  case parameterClause(ParameterClauseSyntax)
   case patternBindingList(PatternBindingListSyntax)
   case patternBinding(PatternBindingSyntax)
+  case patternExpr(PatternExprSyntax)
+  case platformVersionItemList(PlatformVersionItemListSyntax)
+  case platformVersionItem(PlatformVersionItemSyntax)
+  case platformVersion(PlatformVersionSyntax)
   case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
-  case postfixUnaryExpr(PostfixUnaryExprSyntax)
-  case poundSourceLocationArgs(PoundSourceLocationArgsSyntax)
+  case postfixOperatorExpr(PostfixOperatorExprSyntax)
+  case poundSourceLocationArguments(PoundSourceLocationArgumentsSyntax)
   case poundSourceLocation(PoundSourceLocationSyntax)
   case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
   case precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax)
   case precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax)
   case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
-  case precedenceGroupNameElement(PrecedenceGroupNameElementSyntax)
   case precedenceGroupNameList(PrecedenceGroupNameListSyntax)
+  case precedenceGroupName(PrecedenceGroupNameSyntax)
   case precedenceGroupRelation(PrecedenceGroupRelationSyntax)
   case prefixOperatorExpr(PrefixOperatorExprSyntax)
   case primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax)
@@ -233,34 +235,34 @@ public enum SyntaxEnum {
   case protocolDecl(ProtocolDeclSyntax)
   case qualifiedDeclName(QualifiedDeclNameSyntax)
   case regexLiteralExpr(RegexLiteralExprSyntax)
-  case repeatWhileStmt(RepeatWhileStmtSyntax)
+  case repeatStmt(RepeatStmtSyntax)
   case returnClause(ReturnClauseSyntax)
   case returnStmt(ReturnStmtSyntax)
   case sameTypeRequirement(SameTypeRequirementSyntax)
   case sequenceExpr(SequenceExprSyntax)
-  case simpleTypeIdentifier(SimpleTypeIdentifierSyntax)
+  case someOrAnyType(SomeOrAnyTypeSyntax)
   case sourceFile(SourceFileSyntax)
-  case specializeAttributeSpecList(SpecializeAttributeSpecListSyntax)
-  case specializeExpr(SpecializeExprSyntax)
+  case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
+  case specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax)
+  case specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
   case stringLiteralSegmentList(StringLiteralSegmentListSyntax)
   case stringSegment(StringSegmentSyntax)
   case structDecl(StructDeclSyntax)
+  case subscriptCallExpr(SubscriptCallExprSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
-  case subscriptExpr(SubscriptExprSyntax)
-  case superRefExpr(SuperRefExprSyntax)
+  case superExpr(SuperExprSyntax)
   case suppressedType(SuppressedTypeSyntax)
+  case switchCaseItemList(SwitchCaseItemListSyntax)
+  case switchCaseItem(SwitchCaseItemSyntax)
   case switchCaseLabel(SwitchCaseLabelSyntax)
   case switchCaseList(SwitchCaseListSyntax)
   case switchCase(SwitchCaseSyntax)
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case switchExpr(SwitchExprSyntax)
-  case targetFunctionEntry(TargetFunctionEntrySyntax)
   case ternaryExpr(TernaryExprSyntax)
   case throwStmt(ThrowStmtSyntax)
   case tryExpr(TryExprSyntax)
-  case tupleExprElementList(TupleExprElementListSyntax)
-  case tupleExprElement(TupleExprElementSyntax)
   case tupleExpr(TupleExprSyntax)
   case tuplePatternElementList(TuplePatternElementListSyntax)
   case tuplePatternElement(TuplePatternElementSyntax)
@@ -268,18 +270,16 @@ public enum SyntaxEnum {
   case tupleTypeElementList(TupleTypeElementListSyntax)
   case tupleTypeElement(TupleTypeElementSyntax)
   case tupleType(TupleTypeSyntax)
+  case typeAliasDecl(TypeAliasDeclSyntax)
   case typeAnnotation(TypeAnnotationSyntax)
   case typeEffectSpecifiers(TypeEffectSpecifiersSyntax)
   case typeExpr(TypeExprSyntax)
-  case typeInheritanceClause(TypeInheritanceClauseSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
-  case typealiasDecl(TypealiasDeclSyntax)
-  case unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax)
+  case unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
   case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
-  case unresolvedPatternExpr(UnresolvedPatternExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
@@ -289,9 +289,9 @@ public enum SyntaxEnum {
   case whereClause(WhereClauseSyntax)
   case whileStmt(WhileStmtSyntax)
   case wildcardPattern(WildcardPatternSyntax)
-  case yieldExprListElement(YieldExprListElementSyntax)
-  case yieldExprList(YieldExprListSyntax)
-  case yieldList(YieldListSyntax)
+  case yieldStmtArgumentClause(YieldStmtArgumentClauseSyntax)
+  case yieldStmtArgumentList(YieldStmtArgumentListSyntax)
+  case yieldStmtArgument(YieldStmtArgumentSyntax)
   case yieldStmt(YieldStmtSyntax)
 }
 
@@ -305,16 +305,16 @@ public extension Syntax {
       return .accessesEffect(AccessesEffectSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
+    case .accessorDeclList:
+      return .accessorDeclList(AccessorDeclListSyntax(self)!)
     case .accessorDecl:
       return .accessorDecl(AccessorDeclSyntax(self)!)
     case .accessorEffectSpecifiers:
       return .accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax(self)!)
     case .accessorInitEffects:
       return .accessorInitEffects(AccessorInitEffectsSyntax(self)!)
-    case .accessorList:
-      return .accessorList(AccessorListSyntax(self)!)
-    case .accessorParameter:
-      return .accessorParameter(AccessorParameterSyntax(self)!)
+    case .accessorParameters:
+      return .accessorParameters(AccessorParametersSyntax(self)!)
     case .actorDecl:
       return .actorDecl(ActorDeclSyntax(self)!)
     case .arrayElementList:
@@ -331,34 +331,26 @@ public extension Syntax {
       return .asExpr(AsExprSyntax(self)!)
     case .assignmentExpr:
       return .assignmentExpr(AssignmentExprSyntax(self)!)
-    case .associatedtypeDecl:
-      return .associatedtypeDecl(AssociatedtypeDeclSyntax(self)!)
+    case .associatedTypeDecl:
+      return .associatedTypeDecl(AssociatedTypeDeclSyntax(self)!)
     case .attributeList:
       return .attributeList(AttributeListSyntax(self)!)
     case .attribute:
       return .attribute(AttributeSyntax(self)!)
     case .attributedType:
       return .attributedType(AttributedTypeSyntax(self)!)
+    case .availabilityArgumentList:
+      return .availabilityArgumentList(AvailabilityArgumentListSyntax(self)!)
     case .availabilityArgument:
       return .availabilityArgument(AvailabilityArgumentSyntax(self)!)
     case .availabilityCondition:
       return .availabilityCondition(AvailabilityConditionSyntax(self)!)
-    case .availabilityEntry:
-      return .availabilityEntry(AvailabilityEntrySyntax(self)!)
     case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
-    case .availabilitySpecList:
-      return .availabilitySpecList(AvailabilitySpecListSyntax(self)!)
-    case .availabilityVersionRestrictionListEntry:
-      return .availabilityVersionRestrictionListEntry(AvailabilityVersionRestrictionListEntrySyntax(self)!)
-    case .availabilityVersionRestrictionList:
-      return .availabilityVersionRestrictionList(AvailabilityVersionRestrictionListSyntax(self)!)
-    case .availabilityVersionRestriction:
-      return .availabilityVersionRestriction(AvailabilityVersionRestrictionSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
-    case .backDeployedAttributeSpecList:
-      return .backDeployedAttributeSpecList(BackDeployedAttributeSpecListSyntax(self)!)
+    case .backDeployedAttributeArguments:
+      return .backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax(self)!)
     case .binaryOperatorExpr:
       return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
     case .booleanLiteralExpr:
@@ -371,10 +363,6 @@ public extension Syntax {
       return .canImportExpr(CanImportExprSyntax(self)!)
     case .canImportVersionInfo:
       return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
-    case .caseItemList:
-      return .caseItemList(CaseItemListSyntax(self)!)
-    case .caseItem:
-      return .caseItem(CaseItemSyntax(self)!)
     case .catchClauseList:
       return .catchClauseList(CatchClauseListSyntax(self)!)
     case .catchClause:
@@ -387,26 +375,26 @@ public extension Syntax {
       return .classDecl(ClassDeclSyntax(self)!)
     case .classRestrictionType:
       return .classRestrictionType(ClassRestrictionTypeSyntax(self)!)
-    case .closureCaptureItemList:
-      return .closureCaptureItemList(ClosureCaptureItemListSyntax(self)!)
-    case .closureCaptureItemSpecifier:
-      return .closureCaptureItemSpecifier(ClosureCaptureItemSpecifierSyntax(self)!)
-    case .closureCaptureItem:
-      return .closureCaptureItem(ClosureCaptureItemSyntax(self)!)
-    case .closureCaptureSignature:
-      return .closureCaptureSignature(ClosureCaptureSignatureSyntax(self)!)
+    case .closureCaptureClause:
+      return .closureCaptureClause(ClosureCaptureClauseSyntax(self)!)
+    case .closureCaptureList:
+      return .closureCaptureList(ClosureCaptureListSyntax(self)!)
+    case .closureCaptureSpecifier:
+      return .closureCaptureSpecifier(ClosureCaptureSpecifierSyntax(self)!)
+    case .closureCapture:
+      return .closureCapture(ClosureCaptureSyntax(self)!)
     case .closureExpr:
       return .closureExpr(ClosureExprSyntax(self)!)
-    case .closureParamList:
-      return .closureParamList(ClosureParamListSyntax(self)!)
-    case .closureParam:
-      return .closureParam(ClosureParamSyntax(self)!)
     case .closureParameterClause:
       return .closureParameterClause(ClosureParameterClauseSyntax(self)!)
     case .closureParameterList:
       return .closureParameterList(ClosureParameterListSyntax(self)!)
     case .closureParameter:
       return .closureParameter(ClosureParameterSyntax(self)!)
+    case .closureShorthandParameterList:
+      return .closureShorthandParameterList(ClosureShorthandParameterListSyntax(self)!)
+    case .closureShorthandParameter:
+      return .closureShorthandParameter(ClosureShorthandParameterSyntax(self)!)
     case .closureSignature:
       return .closureSignature(ClosureSignatureSyntax(self)!)
     case .codeBlockItemList:
@@ -427,8 +415,8 @@ public extension Syntax {
       return .conditionElement(ConditionElementSyntax(self)!)
     case .conformanceRequirement:
       return .conformanceRequirement(ConformanceRequirementSyntax(self)!)
-    case .constrainedSugarType:
-      return .constrainedSugarType(ConstrainedSugarTypeSyntax(self)!)
+    case .consumeExpr:
+      return .consumeExpr(ConsumeExprSyntax(self)!)
     case .continueStmt:
       return .continueStmt(ContinueStmtSyntax(self)!)
     case .conventionAttributeArguments:
@@ -439,6 +427,8 @@ public extension Syntax {
       return .copyExpr(CopyExprSyntax(self)!)
     case .declModifierDetail:
       return .declModifierDetail(DeclModifierDetailSyntax(self)!)
+    case .declModifierList:
+      return .declModifierList(DeclModifierListSyntax(self)!)
     case .declModifier:
       return .declModifier(DeclModifierSyntax(self)!)
     case .declNameArgumentList:
@@ -451,16 +441,16 @@ public extension Syntax {
       return .declName(DeclNameSyntax(self)!)
     case .deferStmt:
       return .deferStmt(DeferStmtSyntax(self)!)
-    case .deinitEffectSpecifiers:
-      return .deinitEffectSpecifiers(DeinitEffectSpecifiersSyntax(self)!)
     case .deinitializerDecl:
       return .deinitializerDecl(DeinitializerDeclSyntax(self)!)
-    case .derivativeRegistrationAttributeArguments:
-      return .derivativeRegistrationAttributeArguments(DerivativeRegistrationAttributeArgumentsSyntax(self)!)
-    case .designatedTypeElement:
-      return .designatedTypeElement(DesignatedTypeElementSyntax(self)!)
+    case .deinitializerEffectSpecifiers:
+      return .deinitializerEffectSpecifiers(DeinitializerEffectSpecifiersSyntax(self)!)
+    case .derivativeAttributeArguments:
+      return .derivativeAttributeArguments(DerivativeAttributeArgumentsSyntax(self)!)
     case .designatedTypeList:
       return .designatedTypeList(DesignatedTypeListSyntax(self)!)
+    case .designatedType:
+      return .designatedType(DesignatedTypeSyntax(self)!)
     case .dictionaryElementList:
       return .dictionaryElementList(DictionaryElementListSyntax(self)!)
     case .dictionaryElement:
@@ -469,14 +459,14 @@ public extension Syntax {
       return .dictionaryExpr(DictionaryExprSyntax(self)!)
     case .dictionaryType:
       return .dictionaryType(DictionaryTypeSyntax(self)!)
-    case .differentiabilityParamList:
-      return .differentiabilityParamList(DifferentiabilityParamListSyntax(self)!)
-    case .differentiabilityParam:
-      return .differentiabilityParam(DifferentiabilityParamSyntax(self)!)
-    case .differentiabilityParamsClause:
-      return .differentiabilityParamsClause(DifferentiabilityParamsClauseSyntax(self)!)
-    case .differentiabilityParams:
-      return .differentiabilityParams(DifferentiabilityParamsSyntax(self)!)
+    case .differentiabilityArgument:
+      return .differentiabilityArgument(DifferentiabilityArgumentSyntax(self)!)
+    case .differentiabilityArguments:
+      return .differentiabilityArguments(DifferentiabilityArgumentsSyntax(self)!)
+    case .differentiabilityParameterList:
+      return .differentiabilityParameterList(DifferentiabilityParameterListSyntax(self)!)
+    case .differentiabilityWithRespectToArgument:
+      return .differentiabilityWithRespectToArgument(DifferentiabilityWithRespectToArgumentSyntax(self)!)
     case .differentiableAttributeArguments:
       return .differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax(self)!)
     case .discardAssignmentExpr:
@@ -489,14 +479,14 @@ public extension Syntax {
       return .documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax(self)!)
     case .documentationAttributeArgument:
       return .documentationAttributeArgument(DocumentationAttributeArgumentSyntax(self)!)
-    case .dynamicReplacementArguments:
-      return .dynamicReplacementArguments(DynamicReplacementArgumentsSyntax(self)!)
+    case .dynamicReplacementAttributeArguments:
+      return .dynamicReplacementAttributeArguments(DynamicReplacementAttributeArgumentsSyntax(self)!)
     case .editorPlaceholderDecl:
       return .editorPlaceholderDecl(EditorPlaceholderDeclSyntax(self)!)
     case .editorPlaceholderExpr:
       return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
-    case .effectsArgumentList:
-      return .effectsArgumentList(EffectsArgumentListSyntax(self)!)
+    case .effectsAttributeArgumentList:
+      return .effectsAttributeArgumentList(EffectsAttributeArgumentListSyntax(self)!)
     case .enumCaseDecl:
       return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
     case .enumCaseElementList:
@@ -523,20 +513,22 @@ public extension Syntax {
       return .expressionStmt(ExpressionStmtSyntax(self)!)
     case .extensionDecl:
       return .extensionDecl(ExtensionDeclSyntax(self)!)
-    case .fallthroughStmt:
-      return .fallthroughStmt(FallthroughStmtSyntax(self)!)
+    case .fallThroughStmt:
+      return .fallThroughStmt(FallThroughStmtSyntax(self)!)
     case .floatLiteralExpr:
       return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
-    case .forInStmt:
-      return .forInStmt(ForInStmtSyntax(self)!)
-    case .forcedValueExpr:
-      return .forcedValueExpr(ForcedValueExprSyntax(self)!)
+    case .forStmt:
+      return .forStmt(ForStmtSyntax(self)!)
+    case .forceUnwrapExpr:
+      return .forceUnwrapExpr(ForceUnwrapExprSyntax(self)!)
     case .functionCallExpr:
       return .functionCallExpr(FunctionCallExprSyntax(self)!)
     case .functionDecl:
       return .functionDecl(FunctionDeclSyntax(self)!)
     case .functionEffectSpecifiers:
       return .functionEffectSpecifiers(FunctionEffectSpecifiersSyntax(self)!)
+    case .functionParameterClause:
+      return .functionParameterClause(FunctionParameterClauseSyntax(self)!)
     case .functionParameterList:
       return .functionParameterList(FunctionParameterListSyntax(self)!)
     case .functionParameter:
@@ -561,6 +553,8 @@ public extension Syntax {
       return .genericRequirementList(GenericRequirementListSyntax(self)!)
     case .genericRequirement:
       return .genericRequirement(GenericRequirementSyntax(self)!)
+    case .genericSpecializationExpr:
+      return .genericSpecializationExpr(GenericSpecializationExprSyntax(self)!)
     case .genericWhereClause:
       return .genericWhereClause(GenericWhereClauseSyntax(self)!)
     case .guardStmt:
@@ -569,6 +563,8 @@ public extension Syntax {
       return .identifierExpr(IdentifierExprSyntax(self)!)
     case .identifierPattern:
       return .identifierPattern(IdentifierPatternSyntax(self)!)
+    case .identifierType:
+      return .identifierType(IdentifierTypeSyntax(self)!)
     case .ifConfigClauseList:
       return .ifConfigClauseList(IfConfigClauseListSyntax(self)!)
     case .ifConfigClause:
@@ -591,6 +587,8 @@ public extension Syntax {
       return .inOutExpr(InOutExprSyntax(self)!)
     case .infixOperatorExpr:
       return .infixOperatorExpr(InfixOperatorExprSyntax(self)!)
+    case .inheritanceClause:
+      return .inheritanceClause(InheritanceClauseSyntax(self)!)
     case .inheritedTypeList:
       return .inheritedTypeList(InheritedTypeListSyntax(self)!)
     case .inheritedType:
@@ -619,8 +617,12 @@ public extension Syntax {
       return .keyPathPropertyComponent(KeyPathPropertyComponentSyntax(self)!)
     case .keyPathSubscriptComponent:
       return .keyPathSubscriptComponent(KeyPathSubscriptComponentSyntax(self)!)
-    case .labeledSpecializeEntry:
-      return .labeledSpecializeEntry(LabeledSpecializeEntrySyntax(self)!)
+    case .labeledExprList:
+      return .labeledExprList(LabeledExprListSyntax(self)!)
+    case .labeledExpr:
+      return .labeledExpr(LabeledExprSyntax(self)!)
+    case .labeledSpecializeArgument:
+      return .labeledSpecializeArgument(LabeledSpecializeArgumentSyntax(self)!)
     case .labeledStmt:
       return .labeledStmt(LabeledStmtSyntax(self)!)
     case .layoutRequirement:
@@ -635,14 +637,14 @@ public extension Syntax {
       return .matchingPatternCondition(MatchingPatternConditionSyntax(self)!)
     case .memberAccessExpr:
       return .memberAccessExpr(MemberAccessExprSyntax(self)!)
-    case .memberDeclBlock:
-      return .memberDeclBlock(MemberDeclBlockSyntax(self)!)
-    case .memberDeclListItem:
-      return .memberDeclListItem(MemberDeclListItemSyntax(self)!)
-    case .memberDeclList:
-      return .memberDeclList(MemberDeclListSyntax(self)!)
-    case .memberTypeIdentifier:
-      return .memberTypeIdentifier(MemberTypeIdentifierSyntax(self)!)
+    case .memberBlockItemList:
+      return .memberBlockItemList(MemberBlockItemListSyntax(self)!)
+    case .memberBlockItem:
+      return .memberBlockItem(MemberBlockItemSyntax(self)!)
+    case .memberBlock:
+      return .memberBlock(MemberBlockSyntax(self)!)
+    case .memberType:
+      return .memberType(MemberTypeSyntax(self)!)
     case .metatypeType:
       return .metatypeType(MetatypeTypeSyntax(self)!)
     case .missingDecl:
@@ -657,10 +659,6 @@ public extension Syntax {
       return .missing(MissingSyntax(self)!)
     case .missingType:
       return .missingType(MissingTypeSyntax(self)!)
-    case .modifierList:
-      return .modifierList(ModifierListSyntax(self)!)
-    case .moveExpr:
-      return .moveExpr(MoveExprSyntax(self)!)
     case .multipleTrailingClosureElementList:
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
     case .multipleTrailingClosureElement:
@@ -685,28 +683,34 @@ public extension Syntax {
       return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
     case .optionalType:
       return .optionalType(OptionalTypeSyntax(self)!)
-    case .originallyDefinedInArguments:
-      return .originallyDefinedInArguments(OriginallyDefinedInArgumentsSyntax(self)!)
+    case .originallyDefinedInAttributeArguments:
+      return .originallyDefinedInAttributeArguments(OriginallyDefinedInAttributeArgumentsSyntax(self)!)
     case .packElementExpr:
       return .packElementExpr(PackElementExprSyntax(self)!)
+    case .packElementType:
+      return .packElementType(PackElementTypeSyntax(self)!)
     case .packExpansionExpr:
       return .packExpansionExpr(PackExpansionExprSyntax(self)!)
     case .packExpansionType:
       return .packExpansionType(PackExpansionTypeSyntax(self)!)
-    case .packReferenceType:
-      return .packReferenceType(PackReferenceTypeSyntax(self)!)
-    case .parameterClause:
-      return .parameterClause(ParameterClauseSyntax(self)!)
     case .patternBindingList:
       return .patternBindingList(PatternBindingListSyntax(self)!)
     case .patternBinding:
       return .patternBinding(PatternBindingSyntax(self)!)
+    case .patternExpr:
+      return .patternExpr(PatternExprSyntax(self)!)
+    case .platformVersionItemList:
+      return .platformVersionItemList(PlatformVersionItemListSyntax(self)!)
+    case .platformVersionItem:
+      return .platformVersionItem(PlatformVersionItemSyntax(self)!)
+    case .platformVersion:
+      return .platformVersion(PlatformVersionSyntax(self)!)
     case .postfixIfConfigExpr:
       return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
-    case .postfixUnaryExpr:
-      return .postfixUnaryExpr(PostfixUnaryExprSyntax(self)!)
-    case .poundSourceLocationArgs:
-      return .poundSourceLocationArgs(PoundSourceLocationArgsSyntax(self)!)
+    case .postfixOperatorExpr:
+      return .postfixOperatorExpr(PostfixOperatorExprSyntax(self)!)
+    case .poundSourceLocationArguments:
+      return .poundSourceLocationArguments(PoundSourceLocationArgumentsSyntax(self)!)
     case .poundSourceLocation:
       return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
     case .precedenceGroupAssignment:
@@ -717,10 +721,10 @@ public extension Syntax {
       return .precedenceGroupAttributeList(PrecedenceGroupAttributeListSyntax(self)!)
     case .precedenceGroupDecl:
       return .precedenceGroupDecl(PrecedenceGroupDeclSyntax(self)!)
-    case .precedenceGroupNameElement:
-      return .precedenceGroupNameElement(PrecedenceGroupNameElementSyntax(self)!)
     case .precedenceGroupNameList:
       return .precedenceGroupNameList(PrecedenceGroupNameListSyntax(self)!)
+    case .precedenceGroupName:
+      return .precedenceGroupName(PrecedenceGroupNameSyntax(self)!)
     case .precedenceGroupRelation:
       return .precedenceGroupRelation(PrecedenceGroupRelationSyntax(self)!)
     case .prefixOperatorExpr:
@@ -737,8 +741,8 @@ public extension Syntax {
       return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
     case .regexLiteralExpr:
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
-    case .repeatWhileStmt:
-      return .repeatWhileStmt(RepeatWhileStmtSyntax(self)!)
+    case .repeatStmt:
+      return .repeatStmt(RepeatStmtSyntax(self)!)
     case .returnClause:
       return .returnClause(ReturnClauseSyntax(self)!)
     case .returnStmt:
@@ -747,14 +751,16 @@ public extension Syntax {
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
-    case .simpleTypeIdentifier:
-      return .simpleTypeIdentifier(SimpleTypeIdentifierSyntax(self)!)
+    case .someOrAnyType:
+      return .someOrAnyType(SomeOrAnyTypeSyntax(self)!)
     case .sourceFile:
       return .sourceFile(SourceFileSyntax(self)!)
-    case .specializeAttributeSpecList:
-      return .specializeAttributeSpecList(SpecializeAttributeSpecListSyntax(self)!)
-    case .specializeExpr:
-      return .specializeExpr(SpecializeExprSyntax(self)!)
+    case .specializeAttributeArgumentList:
+      return .specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax(self)!)
+    case .specializeAvailabilityArgument:
+      return .specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax(self)!)
+    case .specializeTargetFunctionArgument:
+      return .specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax(self)!)
     case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
     case .stringLiteralSegmentList:
@@ -763,14 +769,18 @@ public extension Syntax {
       return .stringSegment(StringSegmentSyntax(self)!)
     case .structDecl:
       return .structDecl(StructDeclSyntax(self)!)
+    case .subscriptCallExpr:
+      return .subscriptCallExpr(SubscriptCallExprSyntax(self)!)
     case .subscriptDecl:
       return .subscriptDecl(SubscriptDeclSyntax(self)!)
-    case .subscriptExpr:
-      return .subscriptExpr(SubscriptExprSyntax(self)!)
-    case .superRefExpr:
-      return .superRefExpr(SuperRefExprSyntax(self)!)
+    case .superExpr:
+      return .superExpr(SuperExprSyntax(self)!)
     case .suppressedType:
       return .suppressedType(SuppressedTypeSyntax(self)!)
+    case .switchCaseItemList:
+      return .switchCaseItemList(SwitchCaseItemListSyntax(self)!)
+    case .switchCaseItem:
+      return .switchCaseItem(SwitchCaseItemSyntax(self)!)
     case .switchCaseLabel:
       return .switchCaseLabel(SwitchCaseLabelSyntax(self)!)
     case .switchCaseList:
@@ -781,18 +791,12 @@ public extension Syntax {
       return .switchDefaultLabel(SwitchDefaultLabelSyntax(self)!)
     case .switchExpr:
       return .switchExpr(SwitchExprSyntax(self)!)
-    case .targetFunctionEntry:
-      return .targetFunctionEntry(TargetFunctionEntrySyntax(self)!)
     case .ternaryExpr:
       return .ternaryExpr(TernaryExprSyntax(self)!)
     case .throwStmt:
       return .throwStmt(ThrowStmtSyntax(self)!)
     case .tryExpr:
       return .tryExpr(TryExprSyntax(self)!)
-    case .tupleExprElementList:
-      return .tupleExprElementList(TupleExprElementListSyntax(self)!)
-    case .tupleExprElement:
-      return .tupleExprElement(TupleExprElementSyntax(self)!)
     case .tupleExpr:
       return .tupleExpr(TupleExprSyntax(self)!)
     case .tuplePatternElementList:
@@ -807,20 +811,18 @@ public extension Syntax {
       return .tupleTypeElement(TupleTypeElementSyntax(self)!)
     case .tupleType:
       return .tupleType(TupleTypeSyntax(self)!)
+    case .typeAliasDecl:
+      return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
     case .typeAnnotation:
       return .typeAnnotation(TypeAnnotationSyntax(self)!)
     case .typeEffectSpecifiers:
       return .typeEffectSpecifiers(TypeEffectSpecifiersSyntax(self)!)
     case .typeExpr:
       return .typeExpr(TypeExprSyntax(self)!)
-    case .typeInheritanceClause:
-      return .typeInheritanceClause(TypeInheritanceClauseSyntax(self)!)
     case .typeInitializerClause:
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
-    case .typealiasDecl:
-      return .typealiasDecl(TypealiasDeclSyntax(self)!)
-    case .unavailableFromAsyncArguments:
-      return .unavailableFromAsyncArguments(UnavailableFromAsyncArgumentsSyntax(self)!)
+    case .unavailableFromAsyncAttributeArguments:
+      return .unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax(self)!)
     case .underscorePrivateAttributeArguments:
       return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
     case .unexpectedNodes:
@@ -829,8 +831,6 @@ public extension Syntax {
       return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
     case .unresolvedIsExpr:
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
-    case .unresolvedPatternExpr:
-      return .unresolvedPatternExpr(UnresolvedPatternExprSyntax(self)!)
     case .unresolvedTernaryExpr:
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
     case .valueBindingPattern:
@@ -849,12 +849,12 @@ public extension Syntax {
       return .whileStmt(WhileStmtSyntax(self)!)
     case .wildcardPattern:
       return .wildcardPattern(WildcardPatternSyntax(self)!)
-    case .yieldExprListElement:
-      return .yieldExprListElement(YieldExprListElementSyntax(self)!)
-    case .yieldExprList:
-      return .yieldExprList(YieldExprListSyntax(self)!)
-    case .yieldList:
-      return .yieldList(YieldListSyntax(self)!)
+    case .yieldStmtArgumentClause:
+      return .yieldStmtArgumentClause(YieldStmtArgumentClauseSyntax(self)!)
+    case .yieldStmtArgumentList:
+      return .yieldStmtArgumentList(YieldStmtArgumentListSyntax(self)!)
+    case .yieldStmtArgument:
+      return .yieldStmtArgument(YieldStmtArgumentSyntax(self)!)
     case .yieldStmt:
       return .yieldStmt(YieldStmtSyntax(self)!)
     }

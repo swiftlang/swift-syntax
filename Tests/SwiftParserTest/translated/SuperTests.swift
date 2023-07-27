@@ -138,11 +138,11 @@ final class SuperTests: XCTestCase {
       """#,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: SuperRefExprSyntax(superKeyword: .keyword(.super)),
+          calledExpression: SuperExprSyntax(superKeyword: .keyword(.super)),
           leftParen: .leftParenToken(),
-          arguments: TupleExprElementListSyntax([
-            TupleExprElementSyntax(
-              expression: IntegerLiteralExprSyntax(digits: .integerLiteral("0"))
+          arguments: LabeledExprListSyntax([
+            LabeledExprSyntax(
+              expression: IntegerLiteralExprSyntax(literal: .integerLiteral("0"))
             )
           ]),
           rightParen: .rightParenToken()
@@ -166,7 +166,7 @@ final class SuperTests: XCTestCase {
           leftSquare: .leftSquareToken(),
           elements: ArrayElementListSyntax([
             ArrayElementSyntax(
-              expression: IntegerLiteralExprSyntax(digits: .integerLiteral("1"))
+              expression: IntegerLiteralExprSyntax(literal: .integerLiteral("1"))
             )
           ]),
           rightSquare: .rightSquareToken()

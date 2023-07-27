@@ -41,8 +41,8 @@ final class HashbangLibraryTests: XCTestCase {
                       trailingTrivia: .space
                     ),
                     name: .identifier("Foo", trailingTrivia: .space),
-                    memberBlock: MemberDeclBlockSyntax(
-                      members: MemberDeclListSyntax([])
+                    memberBlock: MemberBlockSyntax(
+                      members: MemberBlockItemListSyntax([])
                     )
                   )
                 )

@@ -20,8 +20,8 @@ final class TypeMemberTests: XCTestCase {
       "MyType.class",
       TypeSyntax.parse,
       substructure: Syntax(
-        MemberTypeIdentifierSyntax(
-          baseType: SimpleTypeIdentifierSyntax(
+        MemberTypeSyntax(
+          baseType: IdentifierTypeSyntax(
             name: .identifier("MyType")
           ),
           name: .identifier("class")
@@ -35,8 +35,8 @@ final class TypeMemberTests: XCTestCase {
       "MyType.1️⃣",
       TypeSyntax.parse,
       substructure: Syntax(
-        MemberTypeIdentifierSyntax(
-          baseType: SimpleTypeIdentifierSyntax(
+        MemberTypeSyntax(
+          baseType: IdentifierTypeSyntax(
             name: .identifier("MyType")
           ),
           name: .identifier("", presence: .missing)
@@ -53,8 +53,8 @@ final class TypeMemberTests: XCTestCase {
 
   func testValidWhitespace() {
     let expected = Syntax(
-      MemberTypeIdentifierSyntax(
-        baseType: SimpleTypeIdentifierSyntax(
+      MemberTypeSyntax(
+        baseType: IdentifierTypeSyntax(
           name: .identifier("MyType")
         ),
         name: .identifier("Nested")
@@ -133,7 +133,7 @@ final class TypeMemberTests: XCTestCase {
     for (line, baseType) in cases {
       var parser = Parser(baseType)
 
-      let expectedSyntax = MemberTypeIdentifierSyntax(
+      let expectedSyntax = MemberTypeSyntax(
         baseType: TypeSyntax.parse(from: &parser),
         name: .identifier("Z")
       )
@@ -153,7 +153,7 @@ final class TypeMemberTests: XCTestCase {
             \.genericArgumentClause,
             GenericArgumentClauseSyntax(
               arguments: .init([
-                GenericArgumentSyntax(argument: SimpleTypeIdentifierSyntax(name: .identifier("W")))
+                GenericArgumentSyntax(argument: IdentifierTypeSyntax(name: .identifier("W")))
               ])
             )
           )

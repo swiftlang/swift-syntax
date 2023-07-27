@@ -17,11 +17,11 @@ extension Parser {
   mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
-      let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
+      let repetitionPattern = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
       return RawTypeSyntax(
         RawPackExpansionTypeSyntax(
           repeatKeyword: repeatKeyword,
-          pack: type,
+          repetitionPattern: repetitionPattern,
           arena: self.arena
         )
       )
@@ -70,7 +70,7 @@ extension Parser {
           elements: [
             RawTupleTypeElementSyntax(
               inoutKeyword: nil,
-              name: nil,
+              firstName: nil,
               secondName: nil,
               colon: nil,
               type: base,
@@ -122,7 +122,7 @@ extension Parser {
     if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
       return RawTypeSyntax(
-        RawPackReferenceTypeSyntax(
+        RawPackElementTypeSyntax(
           eachKeyword: each,
           pack: packType,
           arena: self.arena
@@ -136,9 +136,9 @@ extension Parser {
     guard self.atContextualPunctuator("&") else {
       if let someOrAny {
         return RawTypeSyntax(
-          RawConstrainedSugarTypeSyntax(
+          RawSomeOrAnyTypeSyntax(
             someOrAnySpecifier: someOrAny,
-            baseType: base,
+            constraint: base,
             arena: self.arena
           )
         )
@@ -181,9 +181,9 @@ extension Parser {
 
     if let someOrAny {
       return RawTypeSyntax(
-        RawConstrainedSugarTypeSyntax(
+        RawSomeOrAnyTypeSyntax(
           someOrAnySpecifier: someOrAny,
-          baseType: base,
+          constraint: base,
           arena: self.arena
         )
       )
@@ -249,7 +249,7 @@ extension Parser {
         if skipMemberName {
           let missingIdentifier = missingToken(.identifier)
           base = RawTypeSyntax(
-            RawMemberTypeIdentifierSyntax(
+            RawMemberTypeSyntax(
               baseType: base,
               unexpectedPeriod,
               period: period,
@@ -273,7 +273,7 @@ extension Parser {
         } else {
           let (name, generics) = self.parseTypeNameWithGenerics(allowKeywordAsName: true)
           base = RawTypeSyntax(
-            RawMemberTypeIdentifierSyntax(
+            RawMemberTypeSyntax(
               baseType: base,
               unexpectedPeriod,
               period: period,
@@ -346,7 +346,7 @@ extension Parser {
 
     let (name, generics) = parseTypeNameWithGenerics(allowKeywordAsName: false)
     return RawTypeSyntax(
-      RawSimpleTypeIdentifierSyntax(
+      RawIdentifierTypeSyntax(
         name: name,
         genericArgumentClause: generics,
         arena: self.arena
@@ -355,9 +355,9 @@ extension Parser {
   }
 
   /// Parse the existential `Any` type.
-  mutating func parseAnyType() -> RawSimpleTypeIdentifierSyntax {
+  mutating func parseAnyType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
-    return RawSimpleTypeIdentifierSyntax(
+    return RawIdentifierTypeSyntax(
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -366,10 +366,10 @@ extension Parser {
   }
 
   /// Parse a type placeholder.
-  mutating func parsePlaceholderType() -> RawSimpleTypeIdentifierSyntax {
+  mutating func parsePlaceholderType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
     // FIXME: Need a better syntax node than this
-    return RawSimpleTypeIdentifierSyntax(
+    return RawIdentifierTypeSyntax(
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -485,11 +485,11 @@ extension Parser {
           elements.append(
             RawTupleTypeElementSyntax(
               inoutKeyword: nil,
-              name: nil,
+              firstName: nil,
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawTypeSyntax(RawSimpleTypeIdentifierSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+              type: RawTypeSyntax(RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
               ellipsis: nil,
               initializer: nil,
               trailingComma: self.missingToken(.comma),
@@ -512,7 +512,7 @@ extension Parser {
           RawTupleTypeElementSyntax(
             inoutKeyword: nil,
             RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeFirst, arena: self.arena),
-            name: first,
+            firstName: first,
             unexpectedBeforeSecond,
             secondName: second,
             unexpectedBeforeColon,
@@ -925,7 +925,7 @@ extension Parser {
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(pattern: .none)
-        return .argumentList(RawTupleExprElementListSyntax(elements: arguments, arena: parser.arena))
+        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
 
     }
@@ -940,7 +940,7 @@ extension Parser {
       return RawTypeSyntax(
         RawNamedOpaqueReturnTypeSyntax(
           genericParameterClause: generics,
-          baseType: baseType,
+          type: baseType,
           arena: self.arena
         )
       )

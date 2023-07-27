@@ -68,19 +68,19 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
         """
       ) {
         FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {
-          TupleExprElementSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
+          LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
           for child in layoutNode.children {
             if child.isUnexpectedNodes {
-              TupleExprElementSyntax(expression: ExprSyntax("\(raw: child.deprecatedVarName ?? child.varOrCaseName)"))
+              LabeledExprSyntax(expression: ExprSyntax("\(raw: child.deprecatedVarName ?? child.varOrCaseName)"))
             } else {
-              TupleExprElementSyntax(
+              LabeledExprSyntax(
                 label: child.varOrCaseName,
                 colon: .colonToken(),
                 expression: IdentifierExprSyntax(identifier: child.deprecatedVarName ?? child.varOrCaseName)
               )
             }
           }
-          TupleExprElementSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
+          LabeledExprSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
         }
       }
     }

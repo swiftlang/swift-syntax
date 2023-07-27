@@ -141,7 +141,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(binaryOperatorExpr),
+          operator: ExprSyntax(binaryOperatorExpr),
           rightOperand: rhs
         )
       )
@@ -154,11 +154,11 @@ extension OperatorTable {
           condition: lhs,
           ternaryExpr.unexpectedBeforeQuestionMark,
           questionMark: ternaryExpr.questionMark,
-          ternaryExpr.unexpectedBetweenQuestionMarkAndFirstChoice,
-          firstChoice: ternaryExpr.firstChoice,
-          ternaryExpr.unexpectedBetweenFirstChoiceAndColon,
+          ternaryExpr.unexpectedBetweenQuestionMarkAndThenExpression,
+          thenExpression: ternaryExpr.thenExpression,
+          ternaryExpr.unexpectedBetweenThenExpressionAndColon,
           colon: ternaryExpr.colon,
-          secondChoice: rhs
+          elseExpression: rhs
         )
       )
     }
@@ -168,7 +168,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(assignExpr),
+          operator: ExprSyntax(assignExpr),
           rightOperand: rhs
         )
       )
@@ -209,7 +209,7 @@ extension OperatorTable {
       return ExprSyntax(
         InfixOperatorExprSyntax(
           leftOperand: lhs,
-          operatorOperand: ExprSyntax(arrowExpr),
+          operator: ExprSyntax(arrowExpr),
           rightOperand: rhs
         )
       )

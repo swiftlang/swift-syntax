@@ -260,7 +260,7 @@ extension GenericParameterClauseSyntax: SyntaxParseable {
   }
 }
 
-extension MemberDeclBlockSyntax: SyntaxParseable {
+extension MemberBlockSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     // Keep the parser alive so that the arena in which `raw` is allocated
     // doesn’t get deallocated before we have a chance to create a syntax node
@@ -272,7 +272,7 @@ extension MemberDeclBlockSyntax: SyntaxParseable {
       withExtendedLifetime(parser) {
       }
     }
-    let node = parser.parseMemberDeclList()
+    let node = parser.parseMemberBlock()
     let raw = RawSyntax(parser.parseRemainder(into: node))
     return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }

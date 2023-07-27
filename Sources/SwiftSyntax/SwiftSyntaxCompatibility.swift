@@ -95,6 +95,11 @@ public extension SyntaxProtocol {
 }
 
 public extension TokenKind {
+  @available(*, deprecated, renamed: "regexPoundDelimiter")
+  static func extendedRegexDelimiter(_ text: String) -> TokenKind {
+    return .regexPoundDelimiter(text)
+  }
+
   @available(*, deprecated, renamed: "leftSquare")
   static var leftSquareBracket: TokenKind {
     return .leftSquare
@@ -135,6 +140,11 @@ public extension TokenKind {
     return .poundUnavailable
   }
 
+  @available(*, deprecated, renamed: "rawStringPoundDelimiter")
+  static func rawStringDelimiter(_ text: String) -> TokenKind {
+    return .rawStringPoundDelimiter(text)
+  }
+
   @available(*, deprecated, renamed: "rightSquare")
   static var rightSquareBracket: TokenKind {
     return .rightSquare
@@ -145,6 +155,21 @@ public extension TokenKind {
 }
 
 public extension TokenSyntax {
+  @available(*, deprecated, renamed: "regexPoundDelimiter")
+  static func extendedRegexDelimiter(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return regexPoundDelimiter(
+      text,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
   @available(*, deprecated, renamed: "leftSquareToken")
   static func leftSquareBracketToken(
     leadingTrivia: Trivia = [],
@@ -243,6 +268,21 @@ public extension TokenSyntax {
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return poundUnavailableToken(
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "rawStringPoundDelimiter")
+  static func rawStringDelimiter(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return rawStringPoundDelimiter(
+      text,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

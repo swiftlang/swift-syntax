@@ -36,7 +36,7 @@ extension ParseDiagnosticsGenerator {
       handled = handleInvalidMultilineStringQuote(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
     case (.period, .period):
       handled = handleInvalidPeriod(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
-    case (.rawStringDelimiter, .rawStringDelimiter), (.extendedRegexDelimiter, .extendedRegexDelimiter):
+    case (.rawStringPoundDelimiter, .rawStringPoundDelimiter), (.regexPoundDelimiter, .regexPoundDelimiter):
       handled = handleInvalidPoundDelimiter(invalidToken: invalidToken, missingToken: missingToken, invalidTokenContainer: invalidTokenContainer)
     default:
       handled = false

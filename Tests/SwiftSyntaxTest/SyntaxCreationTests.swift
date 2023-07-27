@@ -17,9 +17,9 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)
   let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)
-  let memberBlock = MemberDeclBlockSyntax(
+  let memberBlock = MemberBlockSyntax(
     leftBrace: .leftBraceToken(),
-    members: MemberDeclListSyntax([]),
+    members: MemberBlockItemListSyntax([]),
     rightBrace: rBrace
   )
   return StructDeclSyntax(
@@ -109,33 +109,33 @@ public class SyntaxCreationTests: XCTestCase {
 
   public func testFunctionCallSyntaxBuilder() {
     let string = StringLiteralExprSyntax(
-      openQuote: .stringQuoteToken(),
+      openingQuote: .stringQuoteToken(),
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
-      closeQuote: .stringQuoteToken()
+      closingQuote: .stringQuoteToken()
     )
     let printID = IdentifierExprSyntax(identifier: .identifier("print"))
-    let arg = TupleExprElementSyntax(expression: string)
+    let arg = LabeledExprSyntax(expression: string)
     let call = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      arguments: TupleExprElementListSyntax([arg]),
+      arguments: LabeledExprListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertEqual("\(call)", "print(\"Hello, world!\")")
 
     let emptyString = StringLiteralExprSyntax(
-      openQuote: .stringQuoteToken(),
+      openingQuote: .stringQuoteToken(),
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment(" ")))]),
-      closeQuote: .stringQuoteToken()
+      closingQuote: .stringQuoteToken()
     )
-    let terminatorArg = TupleExprElementSyntax(
+    let terminatorArg = LabeledExprSyntax(
       label: .identifier("terminator"),
       colon: .colonToken(trailingTrivia: .space),
       expression: emptyString
     )
     let callWithTerminator = call.with(
       \.arguments,
-      TupleExprElementListSyntax([
+      LabeledExprListSyntax([
         arg.with(
           \.trailingComma,
           .commaToken(trailingTrivia: .space)
@@ -152,18 +152,18 @@ public class SyntaxCreationTests: XCTestCase {
 
   public func testWithOptionalChild() {
     let string = StringLiteralExprSyntax(
-      openDelimiter: nil,
-      openQuote: .stringQuoteToken(),
+      openingPounds: nil,
+      openingQuote: .stringQuoteToken(),
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
-      closeQuote: .stringQuoteToken(),
-      closeDelimiter: nil
+      closingQuote: .stringQuoteToken(),
+      closingPounds: nil
     )
     let printID = IdentifierExprSyntax(identifier: .identifier("print"))
-    let arg = TupleExprElementSyntax(expression: string)
+    let arg = LabeledExprSyntax(expression: string)
     let call1 = FunctionCallExprSyntax(
       calledExpression: printID,
       leftParen: .leftParenToken(),
-      arguments: TupleExprElementListSyntax([arg]),
+      arguments: LabeledExprListSyntax([arg]),
       rightParen: .rightParenToken()
     )
     XCTAssertNotNil(call1.leftParen)
@@ -175,7 +175,7 @@ public class SyntaxCreationTests: XCTestCase {
 
     let call3 = FunctionCallExprSyntax(
       calledExpression: printID,
-      arguments: TupleExprElementListSyntax([arg])
+      arguments: LabeledExprListSyntax([arg])
     )
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)
@@ -183,9 +183,9 @@ public class SyntaxCreationTests: XCTestCase {
 
   public func testMakeStringLiteralExpr() {
     let expr = StringLiteralExprSyntax(
-      openQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
+      openingQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
-      closeQuote: .stringQuoteToken()
+      closingQuote: .stringQuoteToken()
     )
     let expected = """
       // hello
@@ -196,10 +196,10 @@ public class SyntaxCreationTests: XCTestCase {
 
   public func testMakeBinaryOperator() {
     let first = IntegerLiteralExprSyntax(
-      digits: .integerLiteral("1")
+      literal: .integerLiteral("1")
     )
     let second = IntegerLiteralExprSyntax(
-      digits: .integerLiteral("1")
+      literal: .integerLiteral("1")
     )
     let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
     operatorNames.forEach { operatorName in
@@ -220,7 +220,7 @@ public class SyntaxCreationTests: XCTestCase {
       leadingTrivia: .lineComment("// Outer leading") + .newline,
       expression: IntegerLiteralExprSyntax(
         leadingTrivia: .lineComment("// Inner leading") + .newline,
-        digits: .integerLiteral("42"),
+        literal: .integerLiteral("42"),
         trailingTrivia: .newline + .lineComment("// Inner trailing")
       ),
       trailingTrivia: .newline + .lineComment("// Outer trailing")

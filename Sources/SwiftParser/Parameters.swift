@@ -47,7 +47,7 @@ protocol RawParameterClauseTrait: RawSyntaxNodeProtocol {
   )
 }
 
-extension RawParameterClauseSyntax: RawParameterClauseTrait {}
+extension RawFunctionParameterClauseSyntax: RawParameterClauseTrait {}
 extension RawClosureParameterClauseSyntax: RawParameterClauseTrait {}
 extension RawEnumCaseParameterClauseSyntax: RawParameterClauseTrait {}
 
@@ -100,7 +100,7 @@ extension Parser {
     if colon.presence == .missing, let secondName = names.secondName, secondName.tokenText.isStartingWithUppercase {
       // Synthesize the secondName parameter as a type node.
       type = RawTypeSyntax(
-        RawSimpleTypeIdentifierSyntax(
+        RawIdentifierTypeSyntax(
           name: secondName,
           genericArgumentClause: nil,
           arena: self.arena
@@ -119,11 +119,11 @@ extension Parser {
 
     let ellipsis = self.consumeIfContextualPunctuator("...", remapping: .ellipsis)
 
-    let defaultArgument: RawInitializerClauseSyntax?
+    let defaultValue: RawInitializerClauseSyntax?
     if self.at(.equal) || self.atContextualPunctuator("==") {
-      defaultArgument = self.parseDefaultArgument()
+      defaultValue = self.parseDefaultArgument()
     } else {
-      defaultArgument = nil
+      defaultValue = nil
     }
 
     let trailingComma = self.consume(if: .comma)
@@ -139,7 +139,7 @@ extension Parser {
       colon: colon,
       type: type,
       ellipsis: ellipsis,
-      defaultArgument: defaultArgument,
+      defaultValue: defaultValue,
       trailingComma: trailingComma,
       arena: self.arena
     )
@@ -206,11 +206,11 @@ extension Parser {
       type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
     }
 
-    let defaultArgument: RawInitializerClauseSyntax?
+    let defaultValue: RawInitializerClauseSyntax?
     if self.at(.equal) || self.atContextualPunctuator("==") {
-      defaultArgument = self.parseDefaultArgument()
+      defaultValue = self.parseDefaultArgument()
     } else {
-      defaultArgument = nil
+      defaultValue = nil
     }
 
     let trailingComma = self.consume(if: .comma)
@@ -224,7 +224,7 @@ extension Parser {
       unexpectedBeforeColon,
       colon: colon,
       type: type,
-      defaultArgument: defaultArgument,
+      defaultValue: defaultValue,
       trailingComma: trailingComma,
       arena: self.arena
     )
@@ -234,7 +234,7 @@ extension Parser {
 // MARK: - Parameter Modifiers
 
 extension Parser {
-  mutating func parseParameterModifiers(isClosure: Bool) -> RawModifierListSyntax? {
+  mutating func parseParameterModifiers(isClosure: Bool) -> RawDeclModifierListSyntax? {
     var elements = [RawDeclModifierSyntax]()
     var loopProgress = LoopProgressCondition()
     MODIFIER_LOOP: while self.hasProgressed(&loopProgress) {
@@ -250,7 +250,7 @@ extension Parser {
     if elements.isEmpty {
       return nil
     } else {
-      return RawModifierListSyntax(elements: elements, arena: self.arena)
+      return RawDeclModifierListSyntax(elements: elements, arena: self.arena)
     }
   }
 

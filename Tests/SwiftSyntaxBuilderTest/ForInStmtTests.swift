@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 final class ForInStmtTests: XCTestCase {
   func testEmptyForInStmtSyntax() throws {
-    let buildable = ForInStmtSyntax(pattern: PatternSyntax("foo"), sequence: ExprSyntax("bar")) {}
+    let buildable = ForStmtSyntax(pattern: PatternSyntax("foo"), sequence: ExprSyntax("bar")) {}
     assertBuildResult(
       buildable,
       """
@@ -27,7 +27,7 @@ final class ForInStmtTests: XCTestCase {
   }
 
   func testForInStmtSyntax() throws {
-    let testCases: [UInt: (ForInStmtSyntax, String)] = [
+    let testCases: [UInt: (ForStmtSyntax, String)] = [
       #line: (
         StmtSyntax(
           """
@@ -35,7 +35,7 @@ final class ForInStmtTests: XCTestCase {
             _ = foo
           }
           """
-        ).cast(ForInStmtSyntax.self),
+        ).cast(ForStmtSyntax.self),
         """
         for foo in bar {
           _ = foo
@@ -43,7 +43,7 @@ final class ForInStmtTests: XCTestCase {
         """
       ),
       #line: (
-        try ForInStmtSyntax("for try await foo in bar") { ExprSyntax("print(foo)") },
+        try ForStmtSyntax("for try await foo in bar") { ExprSyntax("print(foo)") },
         """
         for try await foo in bar {
             print(foo)
@@ -59,7 +59,7 @@ final class ForInStmtTests: XCTestCase {
   }
 
   func testEffectiveForInStmtSyntax() throws {
-    let buildable = ForInStmtSyntax(
+    let buildable = ForStmtSyntax(
       tryKeyword: .keyword(.try),
       awaitKeyword: .keyword(.await),
       pattern: PatternSyntax("foo"),

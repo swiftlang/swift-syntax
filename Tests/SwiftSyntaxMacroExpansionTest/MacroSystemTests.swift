@@ -51,9 +51,9 @@ public struct StringifyMacro: ExpressionMacro {
 /// Replace the label of the first element in the tuple with the given
 /// new label.
 private func replaceFirstLabel(
-  of tuple: TupleExprElementListSyntax,
+  of tuple: LabeledExprListSyntax,
   with newLabel: String
-) -> TupleExprElementListSyntax {
+) -> LabeledExprListSyntax {
   guard let firstElement = tuple.first else {
     return tuple
   }
@@ -470,7 +470,7 @@ public struct WrapAllProperties: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("Wrapper")
         )
       )
@@ -516,7 +516,7 @@ public struct WrapStoredProperties: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("Wrapper")
         )
       )
@@ -558,7 +558,7 @@ extension CustomTypeWrapperMacro: MemberAttributeMacro {
   ) throws -> [AttributeSyntax] {
     return [
       AttributeSyntax(
-        attributeName: SimpleTypeIdentifierSyntax(
+        attributeName: IdentifierTypeSyntax(
           name: .identifier("customTypeWrapper")
         )
       )
@@ -613,7 +613,7 @@ public struct UnwrapMacro: CodeItemMacro {
     }
     let errorThrower = node.trailingClosure
     let identifiers = try node.argumentList.map { argument in
-      guard let tupleElement = argument.as(TupleExprElementSyntax.self),
+      guard let tupleElement = argument.as(LabeledExprSyntax.self),
         let identifierExpr = tupleElement.expression.as(IdentifierExprSyntax.self)
       else {
         throw CustomError.message("Arguments must be identifiers")

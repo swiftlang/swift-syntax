@@ -158,9 +158,9 @@ extension TokenConsumer {
 extension Parser {
   struct DeclAttributes {
     var attributes: RawAttributeListSyntax?
-    var modifiers: RawModifierListSyntax?
+    var modifiers: RawDeclModifierListSyntax?
 
-    init(attributes: RawAttributeListSyntax?, modifiers: RawModifierListSyntax?) {
+    init(attributes: RawAttributeListSyntax?, modifiers: RawDeclModifierListSyntax?) {
       self.attributes = attributes
       self.modifiers = modifiers
     }
@@ -177,14 +177,14 @@ extension Parser {
       let directive = self.parsePoundIfDirective { (parser, _) in
         let parsedDecl = parser.parseDeclaration()
         let semicolon = parser.consume(if: .semicolon)
-        return RawMemberDeclListItemSyntax(
+        return RawMemberBlockItemSyntax(
           decl: parsedDecl,
           semicolon: semicolon,
           arena: parser.arena
         )
       } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
         if lastElement.semicolon == nil && !newItemAtStartOfLine {
-          return RawMemberDeclListItemSyntax(
+          return RawMemberBlockItemSyntax(
             lastElement.unexpectedBeforeDecl,
             decl: lastElement.decl,
             lastElement.unexpectedBetweenDeclAndSemicolon,
@@ -196,14 +196,14 @@ extension Parser {
           return nil
         }
       } syntax: { parser, elements in
-        return .decls(RawMemberDeclListSyntax(elements: elements, arena: parser.arena))
+        return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
       }
       return RawDeclSyntax(directive)
     }
 
     let attrs = DeclAttributes(
       attributes: self.parseAttributeList(),
-      modifiers: self.parseModifierList()
+      modifiers: self.parseDeclModifierList()
     )
 
     // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
@@ -340,7 +340,7 @@ extension Parser {
     let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(handle)
     let type = self.parseType()
 
-    let inheritance: RawTypeInheritanceClauseSyntax?
+    let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) {
       inheritance = self.parseInheritance()
     } else {
@@ -353,7 +353,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let memberBlock = self.parseMemberDeclList(introducer: extensionKeyword)
+    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -419,7 +419,7 @@ extension Parser {
           } else if let classKeyword = self.consume(if: .keyword(.class)) {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
             inherited = RawTypeSyntax(
-              RawSimpleTypeIdentifierSyntax(
+              RawIdentifierTypeSyntax(
                 name: missingToken(.identifier, text: "AnyObject"),
                 genericArgumentClause: nil,
                 arena: self.arena
@@ -534,9 +534,9 @@ extension Parser {
         case (.colon, let handle)?:
           let colon = self.eat(handle)
           // A conformance-requirement.
-          if let (layoutConstraint, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutConstraintOptions.self) {
+          if let (layoutSpecifier, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutSpecifierOptions.self) {
             // Parse a layout constraint.
-            let constraint = self.eat(handle)
+            let specifier = self.eat(handle)
 
             let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
             let leftParen: RawTokenSyntax?
@@ -547,7 +547,7 @@ extension Parser {
             let rightParen: RawTokenSyntax?
 
             var hasArguments: Bool {
-              switch layoutConstraint {
+              switch layoutSpecifier {
               case ._Trivial,
                 ._TrivialAtMost:
                 return true
@@ -563,7 +563,7 @@ extension Parser {
 
             // Unlike the other layout constraints, _Trivial's argument list
             // is optional.
-            if hasArguments && (layoutConstraint != ._Trivial || self.at(.leftParen)) {
+            if hasArguments && (layoutSpecifier != ._Trivial || self.at(.leftParen)) {
               (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
               size = self.expectWithoutRecovery(.integerLiteral)
               comma = self.consume(if: .comma)
@@ -587,7 +587,7 @@ extension Parser {
               RawLayoutRequirementSyntax(
                 type: firstType,
                 colon: colon,
-                layoutConstraint: constraint,
+                layoutSpecifier: specifier,
                 unexpectedBeforeLeftParen,
                 leftParen: leftParen,
                 size: size,
@@ -667,14 +667,14 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseMemberDeclListItem() -> RawMemberDeclListItemSyntax? {
+  mutating func parseMemberBlockItem() -> RawMemberBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberDeclListItem) {
       self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
-      return RawMemberDeclListItemSyntax(syntax.raw)
+      return RawMemberBlockItemSyntax(syntax.raw)
     }
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
-      let item = RawMemberDeclListItemSyntax(
+      let item = RawMemberBlockItemSyntax(
         remainingTokens,
         decl: RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena)),
         semicolon: nil,
@@ -700,7 +700,7 @@ extension Parser {
       return nil
     }
 
-    let result = RawMemberDeclListItemSyntax(
+    let result = RawMemberBlockItemSyntax(
       decl: decl,
       semicolon: semi,
       RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
@@ -715,18 +715,18 @@ extension Parser {
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseMemberDeclList(introducer: RawTokenSyntax? = nil) -> RawMemberDeclBlockSyntax {
-    var elements = [RawMemberDeclListItemSyntax]()
+  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
+    var elements = [RawMemberBlockItemSyntax]()
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     do {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightBrace) && self.hasProgressed(&loopProgress) {
         let newItemAtStartOfLine = self.atStartOfLine
-        guard let newElement = self.parseMemberDeclListItem() else {
+        guard let newElement = self.parseMemberBlockItem() else {
           break
         }
         if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
-          elements[elements.count - 1] = RawMemberDeclListItemSyntax(
+          elements[elements.count - 1] = RawMemberBlockItemSyntax(
             lastItem.unexpectedBeforeDecl,
             decl: lastItem.decl,
             lastItem.unexpectedBetweenDeclAndSemicolon,
@@ -740,14 +740,14 @@ extension Parser {
       }
     }
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
-    let members: RawMemberDeclListSyntax
+    let members: RawMemberBlockItemListSyntax
     if elements.isEmpty && (lbrace.isMissing || rbrace.isMissing) {
-      members = RawMemberDeclListSyntax(elements: [], arena: self.arena)
+      members = RawMemberBlockItemListSyntax(elements: [], arena: self.arena)
     } else {
-      members = RawMemberDeclListSyntax(elements: elements, arena: self.arena)
+      members = RawMemberBlockItemListSyntax(elements: elements, arena: self.arena)
     }
 
-    return RawMemberDeclBlockSyntax(
+    return RawMemberBlockSyntax(
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
       members: members,
@@ -773,13 +773,13 @@ extension Parser {
         let unexpectedPeriod = self.consume(if: .period)
         let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
-        let associatedValue: RawEnumCaseParameterClauseSyntax?
+        let parameterClause: RawEnumCaseParameterClauseSyntax?
         if self.at(TokenSpec(.leftParen)) {
-          associatedValue = self.parseParameterClause(RawEnumCaseParameterClauseSyntax.self) { parser in
+          parameterClause = self.parseParameterClause(RawEnumCaseParameterClauseSyntax.self) { parser in
             parser.parseEnumCaseParameter()
           }
         } else {
-          associatedValue = nil
+          parameterClause = nil
         }
 
         // See if there's a raw value expression.
@@ -801,7 +801,7 @@ extension Parser {
           RawEnumCaseElementSyntax(
             RawUnexpectedNodesSyntax(combining: unexpectedPeriod, unexpectedBeforeName, arena: self.arena),
             name: name,
-            associatedValue: associatedValue,
+            parameterClause: parameterClause,
             rawValue: rawValue,
             trailingComma: keepGoing,
             arena: self.arena
@@ -824,7 +824,7 @@ extension Parser {
   mutating func parseAssociatedTypeDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
-  ) -> RawAssociatedtypeDeclSyntax {
+  ) -> RawAssociatedTypeDeclSyntax {
     let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(handle)
 
     // Detect an attempt to use a type parameter pack.
@@ -836,7 +836,7 @@ extension Parser {
     }
 
     if unexpectedBeforeName == nil && name.isMissing {
-      return RawAssociatedtypeDeclSyntax(
+      return RawAssociatedTypeDeclSyntax(
         attributes: attrs.attributes,
         modifiers: attrs.modifiers,
         unexpectedBeforeAssocKeyword,
@@ -854,7 +854,7 @@ extension Parser {
     let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis)
 
     // Parse optional inheritance clause.
-    let inheritance: RawTypeInheritanceClauseSyntax?
+    let inheritance: RawInheritanceClauseSyntax?
     if self.at(.colon) {
       inheritance = self.parseInheritance()
     } else {
@@ -882,7 +882,7 @@ extension Parser {
       whereClause = nil
     }
 
-    return RawAssociatedtypeDeclSyntax(
+    return RawAssociatedTypeDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeAssocKeyword,
@@ -969,7 +969,7 @@ extension Parser {
       effectSpecifiers = parseDeinitEffectSpecifiers()
     }
     if effectSpecifiers == nil && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
-      let input = parseParameterClause(RawParameterClauseSyntax.self) { parser in
+      let input = parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
         parser.parseFunctionParameter()
       }
       unexpectedNameAndSignature.append(RawSyntax(input))
@@ -1078,7 +1078,7 @@ extension Parser {
   }
 
   mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
-    let parameterClause = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+    let parameterClause = self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
 
@@ -1134,7 +1134,7 @@ extension Parser {
       genericParameterClause = nil
     }
 
-    let parameterClause = self.parseParameterClause(RawParameterClauseSyntax.self) { parser in
+    let parameterClause = self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
 
@@ -1361,11 +1361,11 @@ extension Parser {
     // protocol, but we parse and then reject it for better QoI.
     //
     //     set-name    ::= '(' identifier ')'
-    let parameter: RawAccessorParameterSyntax?
+    let parameters: RawAccessorParametersSyntax?
     if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      parameter = RawAccessorParameterSyntax(
+      parameters = RawAccessorParametersSyntax(
         leftParen: lparen,
         unexpectedBeforeName,
         name: name,
@@ -1374,7 +1374,7 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      parameter = nil
+      parameters = nil
     }
 
     let effectSpecifiers = self.parseAccessorEffectSpecifiers()
@@ -1386,7 +1386,7 @@ extension Parser {
       modifier: introducer.modifier,
       introducer.unexpectedBeforeToken,
       accessorSpecifier: introducer.token,
-      parameter: parameter,
+      parameters: parameters,
       effectSpecifiers: effectSpecifiers,
       initEffects: initEffects,
       body: body,
@@ -1420,7 +1420,7 @@ extension Parser {
               RawAccessorBlockSyntax(
                 unexpectedBeforeLBrace,
                 leftBrace: lbrace,
-                accessors: RawAccessorListSyntax(elements: elements, arena: self.arena),
+                accessors: RawAccessorDeclListSyntax(elements: elements, arena: self.arena),
                 unexpectedBeforeRBrace,
                 rightBrace: rbrace,
                 arena: self.arena
@@ -1452,7 +1452,7 @@ extension Parser {
       RawAccessorBlockSyntax(
         unexpectedBeforeLBrace,
         leftBrace: lbrace,
-        accessors: RawAccessorListSyntax(elements: elements, arena: self.arena),
+        accessors: RawAccessorDeclListSyntax(elements: elements, arena: self.arena),
         unexpectedBeforeRBrace,
         rightBrace: rbrace,
         arena: self.arena
@@ -1466,7 +1466,7 @@ extension Parser {
   mutating func parseTypealiasDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
-  ) -> RawTypealiasDeclSyntax {
+  ) -> RawTypeAliasDeclSyntax {
     let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
@@ -1503,7 +1503,7 @@ extension Parser {
       genericWhereClause = nil
     }
 
-    return RawTypealiasDeclSyntax(
+    return RawTypeAliasDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeTypealiasKeyword,
@@ -1625,13 +1625,13 @@ extension Parser {
     let precedenceAndTypes: RawOperatorPrecedenceAndTypesSyntax?
     if let colon = self.consume(if: .colon) {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-      var types = [RawDesignatedTypeElementSyntax]()
+      var types = [RawDesignatedTypeSyntax]()
       while let comma = self.consume(if: .comma) {
         // FIXME: The compiler accepts... anything here. This is a bug.
         // let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
         let designatedType = self.consumeAnyToken()
         types.append(
-          RawDesignatedTypeElementSyntax(
+          RawDesignatedTypeSyntax(
             leadingComma: comma,
             name: designatedType,
             arena: self.arena
@@ -1787,7 +1787,7 @@ extension Parser {
           // "lowerThan" and "higherThan" are contextual keywords.
           let level = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          var names = [RawPrecedenceGroupNameElementSyntax]()
+          var names = [RawPrecedenceGroupNameSyntax]()
           do {
             var keepGoing: RawTokenSyntax? = nil
             var namesProgress = LoopProgressCondition()
@@ -1795,7 +1795,7 @@ extension Parser {
               let (unexpectedBeforeName, name) = self.expectIdentifier()
               keepGoing = self.consume(if: .comma)
               names.append(
-                RawPrecedenceGroupNameElementSyntax(
+                RawPrecedenceGroupNameSyntax(
                   unexpectedBeforeName,
                   name: name,
                   trailingComma: keepGoing,
@@ -1810,7 +1810,7 @@ extension Parser {
                 higherThanOrLowerThanLabel: level,
                 unexpectedBeforeColon,
                 colon: colon,
-                otherNames: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
+                precedenceGroups: RawPrecedenceGroupNameListSyntax(elements: names, arena: self.arena),
                 arena: self.arena
               )
             )
@@ -1915,7 +1915,7 @@ extension Parser {
 
     // Parse the optional parenthesized argument list.
     let leftParen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false))
-    let args: [RawTupleExprElementSyntax]
+    let args: [RawLabeledExprSyntax]
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
@@ -1949,7 +1949,7 @@ extension Parser {
       macroName: macro,
       genericArgumentClause: generics,
       leftParen: leftParen,
-      arguments: RawTupleExprElementListSyntax(
+      arguments: RawLabeledExprListSyntax(
         elements: args,
         arena: self.arena
       ),

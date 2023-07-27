@@ -186,11 +186,11 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             name: TokenSyntax.identifier("foo"),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {}
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: .identifier("String"))
+                type: IdentifierTypeSyntax(name: .identifier("String"))
               )
             ),
             bodyBuilder: {
@@ -210,14 +210,14 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: IdentifierTypeSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {
@@ -245,7 +245,7 @@ final class FunctionTests: XCTestCase {
             modifiers: [DeclModifierSyntax(name: .keyword(.public)), DeclModifierSyntax(name: .keyword(.static))],
             name: TokenSyntax.identifier("=="),
             signature: FunctionSignatureSyntax(
-              parameterClause: ParameterClauseSyntax(
+              parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
                   FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
@@ -254,7 +254,7 @@ final class FunctionTests: XCTestCase {
                 }
               ),
               returnClause: ReturnClauseSyntax(
-                type: SimpleTypeIdentifierSyntax(name: TokenSyntax.identifier("Bool"))
+                type: IdentifierTypeSyntax(name: TokenSyntax.identifier("Bool"))
               )
             ),
             bodyBuilder: {
@@ -287,7 +287,7 @@ final class FunctionTests: XCTestCase {
   func testArguments() {
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test")) {
       for param in (1...5) {
-        TupleExprElementSyntax(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: ExprSyntax("value\(raw: param)"))
+        LabeledExprSyntax(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: ExprSyntax("value\(raw: param)"))
       }
     }
     assertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")
@@ -377,7 +377,7 @@ final class FunctionTests: XCTestCase {
 
   func testParensEmittedForArgumentAndTrailingClosure() {
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: ClosureExprSyntax {}) {
-      TupleExprElementSyntax(expression: ExprSyntax("42"))
+      LabeledExprSyntax(expression: ExprSyntax("42"))
     }
     assertBuildResult(buildable, "test(42) {\n}")
   }
@@ -385,7 +385,7 @@ final class FunctionTests: XCTestCase {
   func testParensOmittedForNoArgumentsAndTrailingClosure() {
     let closure = ClosureExprSyntax(statementsBuilder: {
       FunctionCallExprSyntax(callee: ExprSyntax("f")) {
-        TupleExprElementSyntax(expression: ExprSyntax("a"))
+        LabeledExprSyntax(expression: ExprSyntax("a"))
       }
     })
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test"), trailingClosure: closure)

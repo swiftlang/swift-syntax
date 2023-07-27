@@ -986,7 +986,7 @@ final class RegexLiteralTests: XCTestCase {
       foo(a: /, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             label: "a",
             colon: .colonToken(),
@@ -1008,7 +1008,7 @@ final class RegexLiteralTests: XCTestCase {
       foo(a, /, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: "a"),
             trailingComma: .commaToken()
@@ -1032,7 +1032,7 @@ final class RegexLiteralTests: XCTestCase {
       foo(a, ^/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: "a"),
             trailingComma: .commaToken()
@@ -1056,7 +1056,7 @@ final class RegexLiteralTests: XCTestCase {
       foo(a: ^/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             label: "a",
             colon: .colonToken(),
@@ -1078,7 +1078,7 @@ final class RegexLiteralTests: XCTestCase {
       foo(^/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
             trailingComma: .commaToken()
@@ -1098,7 +1098,7 @@ final class RegexLiteralTests: XCTestCase {
       (^/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
             trailingComma: .commaToken()
@@ -1118,7 +1118,7 @@ final class RegexLiteralTests: XCTestCase {
       (/, /)
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
             trailingComma: .commaToken()
@@ -1138,7 +1138,7 @@ final class RegexLiteralTests: XCTestCase {
       x[/, /]
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
             trailingComma: .commaToken()
@@ -1158,7 +1158,7 @@ final class RegexLiteralTests: XCTestCase {
       x[^/, /]
       """,
       substructure: Syntax(
-        TupleExprElementListSyntax([
+        LabeledExprListSyntax([
           .init(
             expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
             trailingComma: .commaToken()
@@ -1277,7 +1277,7 @@ final class RegexLiteralTests: XCTestCase {
         SequenceExprSyntax(
           elements: .init([
             BooleanLiteralExprSyntax(booleanLiteral: true),
-            UnresolvedTernaryExprSyntax(firstChoice: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
+            UnresolvedTernaryExprSyntax(thenExpression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
             RegexLiteralExprSyntax(regex: .regexLiteralPattern("def")),
           ])
         )

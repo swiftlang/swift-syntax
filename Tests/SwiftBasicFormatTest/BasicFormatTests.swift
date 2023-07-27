@@ -283,12 +283,12 @@ final class BasicFormatTest: XCTestCase {
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x"))),
           typeAnnotation: TypeAnnotationSyntax(
             colon: .colonToken(trailingTrivia: .space),
-            type: TypeSyntax(SimpleTypeIdentifierSyntax(name: .identifier("Int")))
+            type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))
           ),
           accessors: PatternBindingSyntax.Accessors(
             AccessorBlockSyntax(
               leftBrace: .leftBraceToken(leadingTrivia: .space),
-              accessors: AccessorListSyntax([]),
+              accessors: AccessorDeclListSyntax([]),
               rightBrace: .rightBraceToken(leadingTrivia: .newline)
             )
           )

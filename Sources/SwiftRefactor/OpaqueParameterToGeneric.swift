@@ -15,9 +15,9 @@ import SwiftSyntax
 /// Describes a "some" parameter that has been rewritten into a generic
 /// parameter.
 fileprivate struct RewrittenSome {
-  let original: ConstrainedSugarTypeSyntax
+  let original: SomeOrAnyTypeSyntax
   let genericParam: GenericParameterSyntax
-  let genericParamRef: SimpleTypeIdentifierSyntax
+  let genericParamRef: IdentifierTypeSyntax
 }
 
 /// Rewrite `some` parameters to explicit generic parameters.
@@ -36,7 +36,7 @@ fileprivate struct RewrittenSome {
 fileprivate class SomeParameterRewriter: SyntaxRewriter {
   var rewrittenSomeParameters: [RewrittenSome] = []
 
-  override func visit(_ node: ConstrainedSugarTypeSyntax) -> TypeSyntax {
+  override func visit(_ node: SomeOrAnyTypeSyntax) -> TypeSyntax {
     if node.someOrAnySpecifier.text != "some" {
       return TypeSyntax(node)
     }
@@ -46,9 +46,9 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
 
     let inheritedType: TypeSyntax?
     let colon: TokenSyntax?
-    if node.baseType.description != "Any" {
+    if node.constraint.description != "Any" {
       colon = .colonToken()
-      inheritedType = node.baseType.with(\.leadingTrivia, .space)
+      inheritedType = node.constraint.with(\.leadingTrivia, .space)
     } else {
       colon = nil
       inheritedType = nil
@@ -63,7 +63,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
       trailingComma: nil
     )
 
-    let genericParamRef = SimpleTypeIdentifierSyntax(
+    let genericParamRef = IdentifierTypeSyntax(
       name: .identifier(paramName),
       genericArgumentClause: nil
     )
@@ -87,10 +87,10 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
     guard let newTuple = newNode.as(TupleTypeSyntax.self),
       newTuple.elements.count == 1,
       let onlyElement = newTuple.elements.first,
-      onlyElement.name == nil,
+      onlyElement.firstName == nil,
       onlyElement.ellipsis == nil,
       let onlyIdentifierType =
-        onlyElement.type.as(SimpleTypeIdentifierSyntax.self),
+        onlyElement.type.as(IdentifierTypeSyntax.self),
       rewrittenSomeParameters.first(
         where: { $0.genericParamRef.name.text == onlyIdentifierType.name.text }
       ) != nil
@@ -122,9 +122,9 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
   /// - Returns: nil if there was nothing to rewrite, or a pair of the
   /// rewritten parameters and augmented generic parameter list.
   static func replaceSomeParameters(
-    in params: ParameterClauseSyntax,
+    in params: FunctionParameterClauseSyntax,
     augmenting genericParams: GenericParameterClauseSyntax?
-  ) -> (ParameterClauseSyntax, GenericParameterClauseSyntax)? {
+  ) -> (FunctionParameterClauseSyntax, GenericParameterClauseSyntax)? {
     let rewriter = SomeParameterRewriter(viewMode: .sourceAccurate)
     let rewrittenParams = rewriter.visit(params.parameters)
 

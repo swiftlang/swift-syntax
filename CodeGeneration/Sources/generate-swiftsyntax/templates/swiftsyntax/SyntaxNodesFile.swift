@@ -113,8 +113,8 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           let initializer = FunctionCallExprSyntax(
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
-            arguments: TupleExprElementListSyntax {
-              TupleExprElementSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
+            arguments: LabeledExprListSyntax {
+              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {

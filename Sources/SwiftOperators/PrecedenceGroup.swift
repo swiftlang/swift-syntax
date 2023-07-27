@@ -61,12 +61,12 @@ public struct PrecedenceRelation {
   /// The syntax that provides the relation. This specifically refers to the
   /// group name itself, but one can follow the parent pointer to find its
   /// position.
-  public var syntax: PrecedenceGroupNameElementSyntax?
+  public var syntax: PrecedenceGroupNameSyntax?
 
   /// Return a higher-than precedence relation.
   public static func higherThan(
     _ groupName: PrecedenceGroupName,
-    syntax: PrecedenceGroupNameElementSyntax? = nil
+    syntax: PrecedenceGroupNameSyntax? = nil
   ) -> PrecedenceRelation {
     return .init(kind: .higherThan, groupName: groupName, syntax: syntax)
   }
@@ -74,7 +74,7 @@ public struct PrecedenceRelation {
   /// Return a lower-than precedence relation.
   public static func lowerThan(
     _ groupName: PrecedenceGroupName,
-    syntax: PrecedenceGroupNameElementSyntax? = nil
+    syntax: PrecedenceGroupNameSyntax? = nil
   ) -> PrecedenceRelation {
     return .init(kind: .lowerThan, groupName: groupName, syntax: syntax)
   }

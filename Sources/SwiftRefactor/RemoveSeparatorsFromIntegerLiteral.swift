@@ -28,10 +28,10 @@ import SwiftSyntax
 /// ```
 public struct RemoveSeparatorsFromIntegerLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: IntegerLiteralExprSyntax, in context: Void) -> IntegerLiteralExprSyntax? {
-    guard lit.digits.text.contains("_") else {
+    guard lit.literal.text.contains("_") else {
       return lit
     }
-    let formattedText = lit.digits.text.filter({ $0 != "_" })
-    return lit.with(\.digits, lit.digits.with(\.tokenKind, .integerLiteral(formattedText)))
+    let formattedText = lit.literal.text.filter({ $0 != "_" })
+    return lit.with(\.literal, lit.literal.with(\.tokenKind, .integerLiteral(formattedText)))
   }
 }

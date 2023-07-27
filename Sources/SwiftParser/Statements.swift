@@ -65,11 +65,11 @@ extension Parser {
     let optLabel = self.parseOptionalStatementLabel()
     switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
     case (.for, let handle)?:
-      return label(self.parseForEachStatement(forHandle: handle), with: optLabel)
+      return label(self.parseForStatement(forHandle: handle), with: optLabel)
     case (.while, let handle)?:
       return label(self.parseWhileStatement(whileHandle: handle), with: optLabel)
     case (.repeat, let handle)?:
-      return label(self.parseRepeatWhileStatement(repeatHandle: handle), with: optLabel)
+      return label(self.parseRepeatStatement(repeatHandle: handle), with: optLabel)
 
     case (.if, let handle)?:
       let ifExpr = self.parseIfExpression(ifHandle: handle)
@@ -92,7 +92,7 @@ extension Parser {
     case (.continue, let handle)?:
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
     case (.fallthrough, let handle)?:
-      return label(self.parseFallthroughStatement(fallthroughHandle: handle), with: optLabel)
+      return label(self.parseFallThroughStatement(fallthroughHandle: handle), with: optLabel)
     case (._forget, let handle)?, (.discard, let handle)?:  // NOTE: support for deprecated _forget
       return label(self.parseDiscardStatement(discardHandle: handle), with: optLabel)
     case (.return, let handle)?:
@@ -437,10 +437,10 @@ extension Parser {
     // Parse the optional 'where' guard.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let guardExpr = self.parseExpression(.basic)
+      let condition = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
-        guardResult: guardExpr,
+        condition: condition,
         arena: self.arena
       )
     } else {
@@ -485,12 +485,12 @@ extension Parser {
 
 extension Parser {
   /// Parse a repeat-while statement.
-  mutating func parseRepeatWhileStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatWhileStmtSyntax {
+  mutating func parseRepeatStatement(repeatHandle: RecoveryConsumptionHandle) -> RawRepeatStmtSyntax {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
     let condition = self.parseExpression()
-    return RawRepeatWhileStmtSyntax(
+    return RawRepeatStmtSyntax(
       unexpectedBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,
       body: body,
@@ -506,7 +506,7 @@ extension Parser {
 
 extension Parser {
   /// Parse a for-in statement.
-  mutating func parseForEachStatement(forHandle: RecoveryConsumptionHandle) -> RawForInStmtSyntax {
+  mutating func parseForStatement(forHandle: RecoveryConsumptionHandle) -> RawForStmtSyntax {
     let (unexpectedBeforeForKeyword, forKeyword) = self.eat(forHandle)
     let tryKeyword = self.consume(if: .keyword(.try))
     let awaitKeyword = self.consume(if: .keyword(.await))
@@ -548,10 +548,10 @@ extension Parser {
     // Parse the 'where' expression if present.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let guardExpr = self.parseExpression(.basic)
+      let condition = self.parseExpression(.basic)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
-        guardResult: guardExpr,
+        condition: condition,
         arena: self.arena
       )
     } else {
@@ -560,7 +560,7 @@ extension Parser {
 
     // stmt-brace
     let body = self.parseCodeBlock(introducer: forKeyword)
-    return RawForInStmtSyntax(
+    return RawForStmtSyntax(
       unexpectedBeforeForKeyword,
       forKeyword: forKeyword,
       tryKeyword: tryKeyword,
@@ -678,18 +678,18 @@ extension Parser {
   mutating func parseYieldStatement(yieldHandle: RecoveryConsumptionHandle) -> RawYieldStmtSyntax {
     let (unexpectedBeforeYield, yield) = self.eat(yieldHandle)
 
-    let yields: RawYieldStmtSyntax.Yields
+    let yieldedExpressions: RawYieldStmtSyntax.YieldedExpressions
     if let lparen = self.consume(if: .leftParen) {
-      let exprList: RawYieldExprListSyntax
+      let exprList: RawYieldStmtArgumentListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawYieldExprListElementSyntax]()
+        var elementList = [RawYieldStmtArgumentSyntax]()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(
-            RawYieldExprListElementSyntax(
+            RawYieldStmtArgumentSyntax(
               expression: expr,
               comma: comma,
               arena: self.arena
@@ -698,11 +698,11 @@ extension Parser {
 
           keepGoing = (comma != nil)
         }
-        exprList = RawYieldExprListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldStmtArgumentListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      yields = .yieldList(
-        RawYieldListSyntax(
+      yieldedExpressions = .yieldList(
+        RawYieldStmtArgumentClauseSyntax(
           leftParen: lparen,
           elements: exprList,
           unexpectedBeforeRParen,
@@ -711,13 +711,13 @@ extension Parser {
         )
       )
     } else {
-      yields = .simpleYield(self.parseExpression())
+      yieldedExpressions = .simpleYield(self.parseExpression())
     }
 
     return RawYieldStmtSyntax(
       unexpectedBeforeYield,
       yieldKeyword: yield,
-      yields: yields,
+      yieldedExpressions: yieldedExpressions,
       arena: self.arena
     )
   }
@@ -776,9 +776,9 @@ extension Parser {
   }
 
   /// Parse a fallthrough statement.
-  mutating func parseFallthroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallthroughStmtSyntax {
+  mutating func parseFallThroughStatement(fallthroughHandle: RecoveryConsumptionHandle) -> RawFallThroughStmtSyntax {
     let (unexpectedBeforeFallthroughKeyword, fallthroughKeyword) = self.eat(fallthroughHandle)
-    return RawFallthroughStmtSyntax(
+    return RawFallThroughStmtSyntax(
       unexpectedBeforeFallthroughKeyword,
       fallthroughKeyword: fallthroughKeyword,
       arena: self.arena

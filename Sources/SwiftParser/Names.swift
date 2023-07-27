@@ -184,7 +184,7 @@ extension Parser {
       }
       if let keepGoing {
         result = RawTypeSyntax(
-          RawMemberTypeIdentifierSyntax(
+          RawMemberTypeSyntax(
             baseType: result!,
             period: keepGoing,
             unexpectedBeforeName,
@@ -195,7 +195,7 @@ extension Parser {
         )
       } else {
         result = RawTypeSyntax(
-          RawSimpleTypeIdentifierSyntax(
+          RawIdentifierTypeSyntax(
             unexpectedBeforeName,
             name: name,
             genericArgumentClause: generics,

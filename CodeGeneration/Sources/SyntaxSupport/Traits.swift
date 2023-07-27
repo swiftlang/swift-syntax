@@ -38,15 +38,15 @@ public let TRAITS: [Trait] = [
     traitName: "DeclGroup",
     children: [
       Child(name: "Attributes", kind: .node(kind: .attributeList), isOptional: true),
-      Child(name: "Modifiers", kind: .node(kind: .modifierList), isOptional: true),
-      Child(name: "InheritanceClause", kind: .node(kind: .typeInheritanceClause), isOptional: true),
+      Child(name: "Modifiers", kind: .node(kind: .declModifierList), isOptional: true),
+      Child(name: "InheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
       Child(
         name: "GenericWhereClause",
         kind: .node(kind: .genericWhereClause),
         documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
-      Child(name: "MemberBlock", kind: .node(kind: .memberDeclBlock)),
+      Child(name: "MemberBlock", kind: .node(kind: .memberBlock)),
     ]
   ),
   Trait(
@@ -66,7 +66,7 @@ public let TRAITS: [Trait] = [
       Child(name: "Macro", kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
       Child(name: "GenericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
       Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")]), isOptional: true),
-      Child(name: "ArgumentList", kind: .node(kind: .tupleExprElementList)),
+      Child(name: "ArgumentList", kind: .node(kind: .labeledExprList)),
       Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")]), isOptional: true),
       Child(name: "TrailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
       Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList), isOptional: true),
@@ -140,7 +140,7 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "WithModifiers",
     children: [
-      Child(name: "Modifiers", kind: .node(kind: .modifierList), isOptional: true)
+      Child(name: "Modifiers", kind: .node(kind: .declModifierList), isOptional: true)
     ]
   ),
   Trait(

@@ -17,10 +17,10 @@ import SwiftSyntaxBuilder
 final class FloatLiteralTests: XCTestCase {
   func testFloatLiteral() {
     let testCases: [UInt: (FloatLiteralExprSyntax, String)] = [
-      #line: (FloatLiteralExprSyntax(digits: .floatingLiteral(String(123.321))), "123.321"),
-      #line: (FloatLiteralExprSyntax(digits: .floatingLiteral(String(-123.321))), "-123.321"),
-      #line: (FloatLiteralExprSyntax(digits: .floatingLiteral("2_123.321")), "2_123.321"),
-      #line: (FloatLiteralExprSyntax(digits: .floatingLiteral("-2_123.321")), "-2_123.321"),
+      #line: (FloatLiteralExprSyntax(literal: .floatingLiteral(String(123.321))), "123.321"),
+      #line: (FloatLiteralExprSyntax(literal: .floatingLiteral(String(-123.321))), "-123.321"),
+      #line: (FloatLiteralExprSyntax(literal: .floatingLiteral("2_123.321")), "2_123.321"),
+      #line: (FloatLiteralExprSyntax(literal: .floatingLiteral("-2_123.321")), "-2_123.321"),
       #line: (FloatLiteralExprSyntax(2_123.321), "2123.321"),
       #line: (FloatLiteralExprSyntax(-2_123.321), "-2123.321"),
       #line: (2_123.321, "2123.321"),

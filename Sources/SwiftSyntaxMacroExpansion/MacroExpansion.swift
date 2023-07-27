@@ -256,7 +256,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         extensionOf = extendedType
       } else if let identified = declarationNode.asProtocol(NamedDeclSyntax.self) {
         // Fallback for old compilers with a new plugin, where
-        extensionOf = TypeSyntax(SimpleTypeIdentifierSyntax(name: identified.name))
+        extensionOf = TypeSyntax(IdentifierTypeSyntax(name: identified.name))
       } else {
         throw MacroExpansionError.noExtendedTypeSyntax
       }

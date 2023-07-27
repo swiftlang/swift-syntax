@@ -46,7 +46,7 @@ extension AttributeSyntax {
   /// initializer for ``FunctionCallExprSyntax``.
   public init(
     _ attributeName: TypeSyntax,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax? = { nil }
+    @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax? = { nil }
   ) {
     let argumentList = argumentList()
     self.init(
@@ -155,7 +155,7 @@ extension ExprSyntax {
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
-    self.init(digits: .floatingLiteral(String(value)))
+    self.init(literal: .floatingLiteral(String(value)))
   }
 
   public init(floatLiteral value: Float) {
@@ -173,7 +173,7 @@ extension FunctionCallExprSyntax {
     callee: some ExprSyntaxProtocol,
     trailingClosure: ClosureExprSyntax? = nil,
     additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
-    @TupleExprElementListBuilder argumentList: () -> TupleExprElementListSyntax = { [] }
+    @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax = { [] }
   ) {
     let argumentList = argumentList()
     let shouldOmitParens = argumentList.isEmpty && trailingClosure != nil
@@ -192,7 +192,7 @@ extension FunctionCallExprSyntax {
 
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
   public init(_ value: Int) {
-    self.init(digits: .integerLiteral(String(value)))
+    self.init(literal: .integerLiteral(String(value)))
   }
 
   public init(integerLiteral value: Int) {
@@ -303,44 +303,44 @@ extension StringLiteralExprSyntax {
   /// the number of `#`s needed to express the string as-is without any escapes.
   public init(
     openDelimiter: TokenSyntax? = nil,
-    openQuote: TokenSyntax = .stringQuoteToken(),
+    openingQuote: TokenSyntax = .stringQuoteToken(),
     content: String,
-    closeQuote: TokenSyntax = .stringQuoteToken(),
+    closingQuote: TokenSyntax = .stringQuoteToken(),
     closeDelimiter: TokenSyntax? = nil
   ) {
-    var openDelimiter = openDelimiter
-    var closeDelimiter = closeDelimiter
-    if openDelimiter == nil, closeDelimiter == nil {
+    var openingPounds = openDelimiter
+    var closingPounds = closeDelimiter
+    if openingPounds == nil, closingPounds == nil {
       // Match potential escapes in the string
       let (requiresEscaping, poundCount) = Self.requiresEscaping(content)
       if requiresEscaping {
         // Use a delimiter that is exactly one longer
-        openDelimiter = TokenSyntax.rawStringDelimiter(String(repeating: "#", count: poundCount + 1))
-        closeDelimiter = openDelimiter
+        openingPounds = TokenSyntax.rawStringPoundDelimiter(String(repeating: "#", count: poundCount + 1))
+        closingPounds = openingPounds
       }
     }
 
     let escapedContent = content.escapingForStringLiteral(
-      usingDelimiter: closeDelimiter?.text ?? "",
-      isMultiline: openQuote.tokenView.rawKind == .multilineStringQuote
+      usingDelimiter: closingPounds?.text ?? "",
+      isMultiline: openingQuote.tokenView.rawKind == .multilineStringQuote
     )
     let contentToken = TokenSyntax.stringSegment(escapedContent)
     let segment = StringSegmentSyntax(content: contentToken)
     let segments = StringLiteralSegmentListSyntax([.stringSegment(segment)])
 
     self.init(
-      openDelimiter: openDelimiter,
-      openQuote: openQuote,
+      openingPounds: openingPounds,
+      openingQuote: openingQuote,
       segments: segments,
-      closeQuote: closeQuote,
-      closeDelimiter: closeDelimiter
+      closingQuote: closingQuote,
+      closingPounds: closingPounds
     )
   }
 }
 
 // MARK: - TupleExprElement
 
-extension TupleExprElementSyntax {
+extension LabeledExprSyntax {
   /// A convenience initializer that allows passing in label as an optional string.
   /// The presence of the colon will be inferred based on the presence of the label.
   public init(label: String? = nil, expression: some ExprSyntaxProtocol) {
@@ -359,7 +359,7 @@ extension VariableDeclSyntax {
   public init(
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
-    modifiers: ModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax? = nil,
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,

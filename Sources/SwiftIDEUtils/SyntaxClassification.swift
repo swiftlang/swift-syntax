@@ -67,7 +67,7 @@ extension SyntaxClassification {
     switch keyPath {
     case \AttributeSyntax.attributeName:
       return (.attribute, false)
-    case \AvailabilityVersionRestrictionListEntrySyntax.availabilityVersionRestriction:
+    case \PlatformVersionItemSyntax.availabilityVersionRestriction:
       return (.keyword, false)
     case \AvailabilityVersionRestrictionSyntax.platform:
       return (.keyword, false)
@@ -126,8 +126,6 @@ extension RawTokenKind {
       return .none
     case .exclamationMark:
       return .none
-    case .extendedRegexDelimiter:
-      return .regexLiteral
     case .floatingLiteral:
       return .floatingLiteral
     case .identifier:
@@ -174,9 +172,11 @@ extension RawTokenKind {
       return .none
     case .prefixOperator:
       return .operatorIdentifier
-    case .rawStringDelimiter:
+    case .rawStringPoundDelimiter:
       return .none
     case .regexLiteralPattern:
+      return .regexLiteral
+    case .regexPoundDelimiter:
       return .regexLiteral
     case .regexSlash:
       return .regexLiteral

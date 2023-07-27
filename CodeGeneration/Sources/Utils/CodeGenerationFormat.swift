@@ -62,7 +62,7 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: MemberDeclBlockSyntax) -> MemberDeclBlockSyntax {
+  public override func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
     if node.members.count == 0 {
       return node.with(\.leftBrace, .leftBraceToken())
     } else {
@@ -70,20 +70,20 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  public override func visit(_ node: MemberDeclListItemSyntax) -> MemberDeclListItemSyntax {
+  public override func visit(_ node: MemberBlockItemSyntax) -> MemberBlockItemSyntax {
     let formatted = super.visit(node)
-    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberDeclListItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
+    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberBlockItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return formatted
     }
   }
 
-  public override func visit(_ node: TupleExprElementListSyntax) -> TupleExprElementListSyntax {
+  public override func visit(_ node: LabeledExprListSyntax) -> LabeledExprListSyntax {
     let children = node.children(viewMode: .all)
     // Short tuple element list literals are presented on one line, list each element on a different line.
     if children.count > 3 {
-      return TupleExprElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: TupleExprElementSyntax.self))
+      return LabeledExprListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self))
     } else {
       return super.visit(node)
     }

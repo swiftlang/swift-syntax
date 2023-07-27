@@ -227,7 +227,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                         }
                       }
                     } else if let node = node.collectionNode {
-                      try ForInStmtSyntax("for (index, element) in layout.enumerated()") {
+                      try ForStmtSyntax("for (index, element) in layout.enumerated()") {
                         if let onlyElement = node.elementChoices.only {
                           ExprSyntax("assertNoError(kind, index, verify(element, as: \(onlyElement.rawType).self))")
                         } else {

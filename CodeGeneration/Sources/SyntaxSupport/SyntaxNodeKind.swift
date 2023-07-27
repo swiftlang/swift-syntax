@@ -23,141 +23,139 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case accessesEffect
   case accessorBlock
   case accessorDecl
+  case accessorDeclList
   case accessorEffectSpecifiers
   case accessorInitEffects
-  case accessorList
-  case accessorParameter
+  case accessorParameters
   case actorDecl
-  case arrayElementList
   case arrayElement
+  case arrayElementList
   case arrayExpr
   case arrayType
   case arrowExpr
   case asExpr
   case assignmentExpr
-  case associatedtypeDecl
-  case attributeList
+  case associatedTypeDecl
   case attribute
   case attributedType
+  case attributeList
   case availabilityArgument
+  case availabilityArgumentList
   case availabilityCondition
-  case availabilityEntry
   case availabilityLabeledArgument
-  case availabilitySpecList
-  case availabilityVersionRestrictionListEntry
-  case availabilityVersionRestrictionList
-  case availabilityVersionRestriction
   case awaitExpr
-  case backDeployedAttributeSpecList
+  case backDeployedAttributeArguments
   case binaryOperatorExpr
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
   case canImportExpr
   case canImportVersionInfo
-  case caseItemList
-  case caseItem
-  case catchClauseList
   case catchClause
-  case catchItemList
+  case catchClauseList
   case catchItem
+  case catchItemList
   case classDecl
   case classRestrictionType
-  case closureCaptureItemList
-  case closureCaptureItemSpecifier
-  case closureCaptureItem
-  case closureCaptureSignature
+  case closureCapture
+  case closureCaptureClause
+  case closureCaptureList
+  case closureCaptureSpecifier
   case closureExpr
-  case closureParamList
-  case closureParam
+  case closureParameter
   case closureParameterClause
   case closureParameterList
-  case closureParameter
+  case closureShorthandParameter
+  case closureShorthandParameterList
   case closureSignature
-  case codeBlockItemList
-  case codeBlockItem
   case codeBlock
-  case compositionTypeElementList
-  case compositionTypeElement
+  case codeBlockItem
+  case codeBlockItemList
   case compositionType
-  case conditionElementList
+  case compositionTypeElement
+  case compositionTypeElementList
   case conditionElement
+  case conditionElementList
   case conformanceRequirement
-  case constrainedSugarType
+  case consumeExpr
   case continueStmt
   case conventionAttributeArguments
   case conventionWitnessMethodAttributeArguments
   case copyExpr
-  case declModifierDetail
-  case declModifier
-  case declNameArgumentList
-  case declNameArgument
-  case declNameArguments
-  case declName
   case decl
+  case declModifier
+  case declModifierDetail
+  case declModifierList
+  case declName
+  case declNameArgument
+  case declNameArgumentList
+  case declNameArguments
   case deferStmt
-  case deinitEffectSpecifiers
   case deinitializerDecl
-  case derivativeRegistrationAttributeArguments
-  case designatedTypeElement
+  case deinitializerEffectSpecifiers
+  case derivativeAttributeArguments
+  case designatedType
   case designatedTypeList
-  case dictionaryElementList
   case dictionaryElement
+  case dictionaryElementList
   case dictionaryExpr
   case dictionaryType
-  case differentiabilityParamList
-  case differentiabilityParam
-  case differentiabilityParamsClause
-  case differentiabilityParams
+  case differentiabilityArgument
+  case differentiabilityArguments
+  case differentiabilityParameterList
+  case differentiabilityWithRespectToArgument
   case differentiableAttributeArguments
   case discardAssignmentExpr
   case discardStmt
-  case doStmt
   case documentationAttributeArgument
   case documentationAttributeArgumentList
-  case dynamicReplacementArguments
+  case doStmt
+  case dynamicReplacementAttributeArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case effectsArgumentList
+  case effectsAttributeArgumentList
   case enumCaseDecl
-  case enumCaseElementList
   case enumCaseElement
+  case enumCaseElementList
+  case enumCaseParameter
   case enumCaseParameterClause
   case enumCaseParameterList
-  case enumCaseParameter
   case enumDecl
   case exposeAttributeArguments
-  case exprList
   case expr
   case expressionPattern
   case expressionSegment
   case expressionStmt
+  case exprList
   case extensionDecl
-  case fallthroughStmt
+  case fallThroughStmt
   case floatLiteralExpr
-  case forInStmt
-  case forcedValueExpr
+  case forceUnwrapExpr
+  case forStmt
   case functionCallExpr
   case functionDecl
   case functionEffectSpecifiers
-  case functionParameterList
   case functionParameter
+  case functionParameterClause
+  case functionParameterList
   case functionSignature
   case functionType
+  case genericArgument
   case genericArgumentClause
   case genericArgumentList
-  case genericArgument
+  case genericParameter
   case genericParameterClause
   case genericParameterList
-  case genericParameter
-  case genericRequirementList
   case genericRequirement
+  case genericRequirementList
+  case genericSpecializationExpr
   case genericWhereClause
   case guardStmt
   case identifierExpr
   case identifierPattern
-  case ifConfigClauseList
+  case identifierType
   case ifConfigClause
+  case ifConfigClauseList
   case ifConfigDecl
   case ifExpr
   case implementsAttributeArguments
@@ -165,23 +163,26 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case importDecl
   case importPathComponent
   case importPathComponentList
-  case inOutExpr
   case infixOperatorExpr
-  case inheritedTypeList
+  case inheritanceClause
   case inheritedType
+  case inheritedTypeList
   case initializerClause
   case initializerDecl
   case initializesEffect
+  case inOutExpr
   case integerLiteralExpr
   case isExpr
   case isTypePattern
-  case keyPathComponentList
   case keyPathComponent
+  case keyPathComponentList
   case keyPathExpr
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
-  case labeledSpecializeEntry
+  case labeledExpr
+  case labeledExprList
+  case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
   case macroDecl
@@ -189,21 +190,19 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case macroExpansionExpr
   case matchingPatternCondition
   case memberAccessExpr
-  case memberDeclBlock
-  case memberDeclListItem
-  case memberDeclList
-  case memberTypeIdentifier
+  case memberBlock
+  case memberBlockItem
+  case memberBlockItemList
+  case memberType
   case metatypeType
+  case missing
   case missingDecl
   case missingExpr
   case missingPattern
   case missingStmt
-  case missing
   case missingType
-  case modifierList
-  case moveExpr
-  case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
+  case multipleTrailingClosureElementList
   case namedOpaqueReturnType
   case nilLiteralExpr
   case objCSelectorPiece
@@ -214,95 +213,96 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case optionalBindingCondition
   case optionalChainingExpr
   case optionalType
-  case originallyDefinedInArguments
+  case originallyDefinedInAttributeArguments
   case packElementExpr
+  case packElementType
   case packExpansionExpr
   case packExpansionType
-  case packReferenceType
-  case parameterClause
-  case patternBindingList
-  case patternBinding
   case pattern
+  case patternBinding
+  case patternBindingList
+  case patternExpr
+  case platformVersion
+  case platformVersionItem
+  case platformVersionItemList
   case postfixIfConfigExpr
-  case postfixUnaryExpr
-  case poundSourceLocationArgs
+  case postfixOperatorExpr
   case poundSourceLocation
+  case poundSourceLocationArguments
   case precedenceGroupAssignment
   case precedenceGroupAssociativity
   case precedenceGroupAttributeList
   case precedenceGroupDecl
-  case precedenceGroupNameElement
+  case precedenceGroupName
   case precedenceGroupNameList
   case precedenceGroupRelation
   case prefixOperatorExpr
+  case primaryAssociatedType
   case primaryAssociatedTypeClause
   case primaryAssociatedTypeList
-  case primaryAssociatedType
   case protocolDecl
   case qualifiedDeclName
   case regexLiteralExpr
-  case repeatWhileStmt
+  case repeatStmt
   case returnClause
   case returnStmt
   case sameTypeRequirement
   case sequenceExpr
-  case simpleTypeIdentifier
+  case someOrAnyType
   case sourceFile
-  case specializeAttributeSpecList
-  case specializeExpr
+  case specializeAttributeArgumentList
+  case specializeAvailabilityArgument
+  case specializeTargetFunctionArgument
   case stmt
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
   case structDecl
+  case subscriptCallExpr
   case subscriptDecl
-  case subscriptExpr
-  case superRefExpr
+  case superExpr
   case suppressedType
+  case switchCase
+  case switchCaseItem
+  case switchCaseItemList
   case switchCaseLabel
   case switchCaseList
-  case switchCase
   case switchDefaultLabel
   case switchExpr
-  case targetFunctionEntry
   case ternaryExpr
   case throwStmt
   case tryExpr
-  case tupleExprElementList
-  case tupleExprElement
   case tupleExpr
-  case tuplePatternElementList
-  case tuplePatternElement
   case tuplePattern
-  case tupleTypeElementList
-  case tupleTypeElement
+  case tuplePatternElement
+  case tuplePatternElementList
   case tupleType
+  case tupleTypeElement
+  case tupleTypeElementList
+  case type
+  case typeAliasDecl
   case typeAnnotation
   case typeEffectSpecifiers
   case typeExpr
-  case typeInheritanceClause
   case typeInitializerClause
-  case type
-  case typealiasDecl
-  case unavailableFromAsyncArguments
+  case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
-  case unresolvedPatternExpr
   case unresolvedTernaryExpr
   case valueBindingPattern
   case variableDecl
-  case versionComponentList
   case versionComponent
+  case versionComponentList
   case versionTuple
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldExprListElement
-  case yieldExprList
-  case yieldList
   case yieldStmt
+  case yieldStmtArgument
+  case yieldStmtArgumentClause
+  case yieldStmtArgumentList
 
   // Nodes that have special handling throughout the codebase
 
@@ -374,20 +374,72 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// deprecated.
   public var deprecatedRawValue: String? {
     switch self {
-    case .importPathComponentList:
-      return "accessPath"
-    case .importPathComponent:
-      return "accessPathComponent"
-    case .documentationAttributeArgumentList:
-      return "documentationAttributeArguments"
-    case .effectsArgumentList:
-      return "effectsArguments"
-    case .objCSelectorPieceList:
-      return "objCSelector"
-    case .stringLiteralSegmentList:
-      return "stringLiteralSegments"
-    default:
-      return nil
+    case .accessorDeclList: return "accessorList"
+    case .accessorParameters: return "accessorParameter"
+    case .associatedTypeDecl: return "associatedtypeDecl"
+    case .availabilityArgumentList: return "availabilitySpecList"
+    case .backDeployedAttributeArguments: return "backDeployedAttributeSpecList"
+    case .closureCapture: return "closureCaptureItem"
+    case .closureCaptureClause: return "closureCaptureSignature"
+    case .closureCaptureList: return "closureCaptureItemList"
+    case .closureCaptureSpecifier: return "closureCaptureItemSpecifier"
+    case .closureShorthandParameter: return "closureParam"
+    case .closureShorthandParameterList: return "closureParamList"
+    case .consumeExpr: return "moveExpr"
+    case .declModifierList: return "modifierList"
+    case .deinitializerEffectSpecifiers: return "deinitEffectSpecifiers"
+    case .derivativeAttributeArguments: return "derivativeRegistrationAttributeArguments"
+    case .designatedType: return "designatedTypeElement"
+    case .differentiabilityArgument: return "differentiabilityParam"
+    case .differentiabilityArguments: return "differentiabilityParams"
+    case .differentiabilityParameterList: return "differentiabilityParamList"
+    case .differentiabilityWithRespectToArgument: return "differentiabilityParamsClause"
+    case .documentationAttributeArgumentList: return "documentationAttributeArguments"
+    case .dynamicReplacementAttributeArguments: return "dynamicReplacementArguments"
+    case .effectsAttributeArgumentList: return "effectsArguments"
+    case .enumCaseParameterClause: return "enumCaseAssociatedValue"
+    case .fallThroughStmt: return "fallthroughStmt"
+    case .forceUnwrapExpr: return "forcedValueExpr"
+    case .forStmt: return "forInStmt"
+    case .functionParameterClause: return "parameterClause"
+    case .genericSpecializationExpr: return "specializeExpr"
+    case .identifierType: return "simpleTypeIdentifier"
+    case .importPathComponent: return "accessPathComponent"
+    case .importPathComponentList: return "accessPath"
+    case .inheritanceClause: return "typeInheritanceClause"
+    case .labeledExpr: return "tupleExprElement"
+    case .labeledExprList: return "tupleExprElementList"
+    case .labeledSpecializeArgument: return "labeledSpecializeEntry"
+    case .memberBlock: return "memberDeclBlock"
+    case .memberBlockItem: return "memberDeclListItem"
+    case .memberBlockItemList: return "memberDeclList"
+    case .memberType: return "memberTypeIdentifier"
+    case .objCSelectorPieceList: return "objCSelector"
+    case .originallyDefinedInAttributeArguments: return "originallyDefinedInArguments"
+    case .packElementType: return "packReferenceType"
+    case .patternExpr: return "unresolvedPatternExpr"
+    case .platformVersion: return "availabilityVersionRestriction"
+    case .platformVersionItem: return " availabilityVersionRestrictionListEntry"
+    case .platformVersionItemList: return "availabilityVersionRestrictionList"
+    case .postfixOperatorExpr: return "postfixUnaryExpr"
+    case .poundSourceLocationArguments: return "poundSourceLocationArgs"
+    case .precedenceGroupName: return "precedenceGroupNameElement"
+    case .repeatStmt: return "repeatWhileStmt"
+    case .someOrAnyType: return "constrainedSugarType"
+    case .specializeAttributeArgumentList: return "specializeAttributeSpecList"
+    case .specializeAvailabilityArgument: return "availabilityEntry"
+    case .specializeTargetFunctionArgument: return "targetFunctionEntry"
+    case .stringLiteralSegmentList: return "stringLiteralSegments"
+    case .subscriptCallExpr: return "subscriptExpr"
+    case .superExpr: return "superRefExpr"
+    case .switchCaseItem: return "caseItem"
+    case .switchCaseItemList: return "caseItemList"
+    case .typeAliasDecl: return "typealiasDecl"
+    case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
+    case .yieldStmtArgument: return "yieldExprListElement"
+    case .yieldStmtArgumentClause: return "yieldList"
+    case .yieldStmtArgumentList: return "yieldExprList"
+    default: return nil
     }
   }
 }

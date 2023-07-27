@@ -443,7 +443,7 @@ extension RawAccessorEffectSpecifiersSyntax: RawEffectSpecifiersTrait {
   }
 }
 
-extension RawDeinitEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTrait {
+extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTrait {
   enum MisspelledAsyncTokenKinds: TokenSpecSet {
     case await
     case reasync
@@ -542,7 +542,7 @@ extension RawDeinitEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTrait {
   }
 
   func withMisplaced(async misplacedAsyncKeyword: RawTokenSyntax?, throws misplacedThrowsKeyword: RawTokenSyntax?, arena: SyntaxArena)
-    -> RawDeinitEffectSpecifiersSyntax
+    -> RawDeinitializerEffectSpecifiersSyntax
   {
     // `throwsSpecifier` should never be present because `parseMisplacedEffectSpecifiers()` only creates missing tokens
     // and `CorrectThrowsTokenKinds` is an empty `TokenSpecSet`.
@@ -662,7 +662,7 @@ extension Parser {
     return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
   }
 
-  mutating func parseDeinitEffectSpecifiers() -> RawDeinitEffectSpecifiersSyntax? {
+  mutating func parseDeinitEffectSpecifiers() -> RawDeinitializerEffectSpecifiersSyntax? {
     // Note that parseEffectSpecifiers() consumes deinit name as unexpected token
     // But we want it to be handled on the higher level.
     // So we parseEffectSpecifiers() is not reused here.
@@ -700,7 +700,7 @@ extension Parser {
       return nil
     }
 
-    return RawDeinitEffectSpecifiersSyntax(
+    return RawDeinitializerEffectSpecifiersSyntax(
       RawUnexpectedNodesSyntax(unexpectedBeforeAsync, arena: self.arena),
       asyncSpecifier: asyncKeyword,
       RawUnexpectedNodesSyntax(unexpectedAfterAsync, arena: self.arena),
@@ -783,7 +783,7 @@ extension Parser {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let args = parseArgumentListElements(pattern: .none)
-    let argumentList = RawTupleExprElementListSyntax(
+    let argumentList = RawLabeledExprListSyntax(
       elements: args,
       arena: self.arena
     )
@@ -809,7 +809,7 @@ extension Parser {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let args = parseArgumentListElements(pattern: .none)
-    let argumentList = RawTupleExprElementListSyntax(
+    let argumentList = RawLabeledExprListSyntax(
       elements: args,
       arena: self.arena
     )

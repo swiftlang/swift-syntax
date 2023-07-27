@@ -41,8 +41,6 @@ extension TokenKind {
       return "="
     case .exclamationMark:
       return "!"
-    case .extendedRegexDelimiter:
-      return "extended delimiter"
     case .floatingLiteral:
       return "floating literal"
     case .identifier:
@@ -87,10 +85,12 @@ extension TokenKind {
       return "&"
     case .prefixOperator:
       return "prefix operator"
-    case .rawStringDelimiter:
+    case .rawStringPoundDelimiter:
       return "raw string delimiter"
     case .regexLiteralPattern:
       return "regex pattern"
+    case .regexPoundDelimiter:
+      return "extended delimiter"
     case .regexSlash:
       return "/"
     case .rightAngle:

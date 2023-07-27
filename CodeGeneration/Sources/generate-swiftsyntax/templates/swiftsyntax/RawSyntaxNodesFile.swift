@@ -110,9 +110,9 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try FunctionDeclSyntax("public static func isKindOf(_ raw: RawSyntax) -> Bool") {
         if node.kind.isBase {
 
-          let cases = CaseItemListSyntax {
+          let cases = SwitchCaseItemListSyntax {
             for n in SYNTAX_NODES where n.base == node.kind {
-              CaseItemSyntax(
+              SwitchCaseItemSyntax(
                 pattern: ExpressionPatternSyntax(
                   expression: ExprSyntax(".\(raw: n.varOrCaseName)")
                 )
@@ -206,7 +206,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               secondName: child.isUnexpectedNodes ? child.varOrCaseName : nil,
               colon: .colonToken(),
               type: child.rawParameterType,
-              defaultArgument: child.isUnexpectedNodes ? child.defaultInitialization : nil
+              defaultValue: child.isUnexpectedNodes ? child.defaultInitialization : nil
             )
           }
 

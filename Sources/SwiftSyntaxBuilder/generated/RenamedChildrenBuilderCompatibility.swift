@@ -14,39 +14,6 @@
 
 import SwiftSyntax
 
-extension AccessesEffectSyntax {
-  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
-  @_disfavoredOverload
-  /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? = nil, 
-      accessesKeyword: TokenSyntax = .keyword(.accesses), 
-      unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil, 
-      unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @LabeledExprListBuilder propertyListBuilder: () throws -> LabeledExprListSyntax, 
-      trailingTrivia: Trivia? = nil
-    ) rethrows {
-    try self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAccessesKeyword, 
-        accessesKeyword: accessesKeyword, 
-        unexpectedBetweenAccessesKeywordAndLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndPropertyList, 
-        properties: propertyListBuilder(), 
-        unexpectedBetweenPropertyListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension AccessorDeclSyntax {
   @available(*, deprecated, message: "Use an initializer with accessorSpecifier, parameters argument(s).")
   @_disfavoredOverload
@@ -63,9 +30,7 @@ extension AccessorDeclSyntax {
       parameter: AccessorParametersSyntax? = nil, 
       unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil, 
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil, 
-      unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil, 
-      initEffects: AccessorInitEffectsSyntax? = nil, 
-      unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax?, 
       trailingTrivia: Trivia? = nil
@@ -82,9 +47,7 @@ extension AccessorDeclSyntax {
         parameters: parameter, 
         unexpectedBetweenParameterAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
-        unexpectedBetweenEffectSpecifiersAndInitEffects, 
-        initEffects: initEffects, 
-        unexpectedBetweenInitEffectsAndBody, 
+        unexpectedBetweenEffectSpecifiersAndBody, 
         body: bodyBuilder().map {
           CodeBlockSyntax(statements: $0)
         }, 
@@ -592,39 +555,6 @@ extension InheritanceClauseSyntax {
         unexpectedBetweenColonAndInheritedTypeCollection, 
         inheritedTypes: inheritedTypeCollectionBuilder(), 
         unexpectedAfterInheritedTypeCollection, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension InitializesEffectSyntax {
-  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
-  @_disfavoredOverload
-  /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
-      leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? = nil, 
-      initializesKeyword: TokenSyntax = .keyword(.initializes), 
-      unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil, 
-      leftParen: TokenSyntax = .leftParenToken(), 
-      unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil, 
-      unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil, 
-      rightParen: TokenSyntax = .rightParenToken(), 
-      unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil, 
-      @LabeledExprListBuilder propertyListBuilder: () throws -> LabeledExprListSyntax, 
-      trailingTrivia: Trivia? = nil
-    ) rethrows {
-    try self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeInitializesKeyword, 
-        initializesKeyword: initializesKeyword, 
-        unexpectedBetweenInitializesKeywordAndLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndPropertyList, 
-        properties: propertyListBuilder(), 
-        unexpectedBetweenPropertyListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -784,11 +784,9 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``AccessesEffectSyntax``.``AccessesEffectSyntax/properties``
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 ///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
 ///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
-///  - ``InitializesEffectSyntax``.``InitializesEffectSyntax/properties``
 ///  - ``KeyPathSubscriptComponentSyntax``.``KeyPathSubscriptComponentSyntax/arguments``
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/arguments``
 ///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/arguments``

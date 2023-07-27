@@ -687,12 +687,10 @@ extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
           .node(TokenSyntax.self),
-          .node(AccessesEffectSyntax.self),
           .node(AccessorBlockSyntax.self),
           .node(AccessorDeclListSyntax.self),
           .node(AccessorDeclSyntax.self),
           .node(AccessorEffectSpecifiersSyntax.self),
-          .node(AccessorInitEffectsSyntax.self),
           .node(AccessorParametersSyntax.self),
           .node(ActorDeclSyntax.self),
           .node(ArrayElementListSyntax.self),
@@ -835,7 +833,6 @@ extension Syntax {
           .node(InheritedTypeSyntax.self),
           .node(InitializerClauseSyntax.self),
           .node(InitializerDeclSyntax.self),
-          .node(InitializesEffectSyntax.self),
           .node(IntegerLiteralExprSyntax.self),
           .node(IsExprSyntax.self),
           .node(IsTypePatternSyntax.self),

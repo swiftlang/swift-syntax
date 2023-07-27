@@ -305,10 +305,8 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 ### Miscellaneous Syntax
 
-- <doc:SwiftSyntax/AccessesEffectSyntax>
 - <doc:SwiftSyntax/AccessorBlockSyntax>
 - <doc:SwiftSyntax/AccessorEffectSpecifiersSyntax>
-- <doc:SwiftSyntax/AccessorInitEffectsSyntax>
 - <doc:SwiftSyntax/AccessorParametersSyntax>
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
 - <doc:SwiftSyntax/AvailabilityLabeledArgumentSyntax>
@@ -340,7 +338,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ImplementsAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/InheritanceClauseSyntax>
 - <doc:SwiftSyntax/InitializerClauseSyntax>
-- <doc:SwiftSyntax/InitializesEffectSyntax>
 - <doc:SwiftSyntax/KeyPathOptionalComponentSyntax>
 - <doc:SwiftSyntax/KeyPathPropertyComponentSyntax>
 - <doc:SwiftSyntax/KeyPathSubscriptComponentSyntax>

@@ -1378,7 +1378,6 @@ extension Parser {
     }
 
     let effectSpecifiers = self.parseAccessorEffectSpecifiers()
-    let initEffects = self.parseInitAccessorEffects()
 
     let body = self.parseOptionalCodeBlock()
     return RawAccessorDeclSyntax(
@@ -1388,7 +1387,6 @@ extension Parser {
       accessorSpecifier: introducer.token,
       parameters: parameters,
       effectSpecifiers: effectSpecifiers,
-      initEffects: initEffects,
       body: body,
       arena: self.arena
     )

@@ -1998,32 +1998,32 @@ open class SyntaxRewriter {
     return PatternSyntax(visitChildren(node))
   }
   
-  /// Visit a ``YieldStmtArgumentClauseSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: YieldStmtArgumentClauseSyntax) -> YieldStmtArgumentClauseSyntax {
-    return Syntax(visitChildren(node)).cast(YieldStmtArgumentClauseSyntax.self)
-  }
-  
-  /// Visit a ``YieldStmtArgumentListSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: YieldStmtArgumentListSyntax) -> YieldStmtArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(YieldStmtArgumentListSyntax.self)
-  }
-  
-  /// Visit a ``YieldStmtArgumentSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: YieldStmtArgumentSyntax) -> YieldStmtArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(YieldStmtArgumentSyntax.self)
-  }
-  
   /// Visit a ``YieldStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
+  }
+  
+  /// Visit a ``YieldedExpressionListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldedExpressionListSyntax) -> YieldedExpressionListSyntax {
+    return Syntax(visitChildren(node)).cast(YieldedExpressionListSyntax.self)
+  }
+  
+  /// Visit a ``YieldedExpressionSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldedExpressionSyntax) -> YieldedExpressionSyntax {
+    return Syntax(visitChildren(node)).cast(YieldedExpressionSyntax.self)
+  }
+  
+  /// Visit a ``YieldedExpressionsClauseSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldedExpressionsClauseSyntax) -> YieldedExpressionsClauseSyntax {
+    return Syntax(visitChildren(node)).cast(YieldedExpressionsClauseSyntax.self)
   }
   
   /// Visit any DeclSyntax node.
@@ -5898,50 +5898,50 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldStmtArgumentClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldStmtArgumentClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldStmtArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldStmtArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldStmtArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldStmtArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplYieldStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = YieldStmtSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplYieldedExpressionListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = YieldedExpressionListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplYieldedExpressionSyntax(_ data: SyntaxData) -> Syntax {
+    let node = YieldedExpressionSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplYieldedExpressionsClauseSyntax(_ data: SyntaxData) -> Syntax {
+    let node = YieldedExpressionsClauseSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6543,14 +6543,14 @@ open class SyntaxRewriter {
       return visitImplWhileStmtSyntax
     case .wildcardPattern:
       return visitImplWildcardPatternSyntax
-    case .yieldStmtArgumentClause:
-      return visitImplYieldStmtArgumentClauseSyntax
-    case .yieldStmtArgumentList:
-      return visitImplYieldStmtArgumentListSyntax
-    case .yieldStmtArgument:
-      return visitImplYieldStmtArgumentSyntax
     case .yieldStmt:
       return visitImplYieldStmtSyntax
+    case .yieldedExpressionList:
+      return visitImplYieldedExpressionListSyntax
+    case .yieldedExpression:
+      return visitImplYieldedExpressionSyntax
+    case .yieldedExpressionsClause:
+      return visitImplYieldedExpressionsClauseSyntax
     }
   }
   private func visit(_ data: SyntaxData) -> Syntax {
@@ -7109,14 +7109,14 @@ open class SyntaxRewriter {
       return visitImplWhileStmtSyntax(data)
     case .wildcardPattern:
       return visitImplWildcardPatternSyntax(data)
-    case .yieldStmtArgumentClause:
-      return visitImplYieldStmtArgumentClauseSyntax(data)
-    case .yieldStmtArgumentList:
-      return visitImplYieldStmtArgumentListSyntax(data)
-    case .yieldStmtArgument:
-      return visitImplYieldStmtArgumentSyntax(data)
     case .yieldStmt:
       return visitImplYieldStmtSyntax(data)
+    case .yieldedExpressionList:
+      return visitImplYieldedExpressionListSyntax(data)
+    case .yieldedExpression:
+      return visitImplYieldedExpressionSyntax(data)
+    case .yieldedExpressionsClause:
+      return visitImplYieldedExpressionsClauseSyntax(data)
     }
   }
   #endif

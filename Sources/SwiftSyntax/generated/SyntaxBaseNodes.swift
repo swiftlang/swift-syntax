@@ -961,10 +961,10 @@ extension Syntax {
           .node(WhereClauseSyntax.self),
           .node(WhileStmtSyntax.self),
           .node(WildcardPatternSyntax.self),
-          .node(YieldStmtArgumentClauseSyntax.self),
-          .node(YieldStmtArgumentListSyntax.self),
-          .node(YieldStmtArgumentSyntax.self),
-          .node(YieldStmtSyntax.self)
+          .node(YieldStmtSyntax.self),
+          .node(YieldedExpressionListSyntax.self),
+          .node(YieldedExpressionSyntax.self),
+          .node(YieldedExpressionsClauseSyntax.self)
         ])
   }
 }

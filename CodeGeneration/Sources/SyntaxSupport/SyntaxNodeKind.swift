@@ -300,9 +300,9 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case whileStmt
   case wildcardPattern
   case yieldStmt
-  case yieldStmtArgument
-  case yieldStmtArgumentClause
-  case yieldStmtArgumentList
+  case yieldedExpression
+  case yieldedExpressionsClause
+  case yieldedExpressionList
 
   // Nodes that have special handling throughout the codebase
 
@@ -436,9 +436,9 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .switchCaseItemList: return "caseItemList"
     case .typeAliasDecl: return "typealiasDecl"
     case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
-    case .yieldStmtArgument: return "yieldExprListElement"
-    case .yieldStmtArgumentClause: return "yieldList"
-    case .yieldStmtArgumentList: return "yieldExprList"
+    case .yieldedExpression: return "yieldExprListElement"
+    case .yieldedExpressionsClause: return "yieldList"
+    case .yieldedExpressionList: return "yieldExprList"
     default: return nil
     }
   }

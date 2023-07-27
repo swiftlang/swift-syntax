@@ -289,10 +289,10 @@ public enum SyntaxKind: CaseIterable {
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldStmtArgumentClause
-  case yieldStmtArgumentList
-  case yieldStmtArgument
   case yieldStmt
+  case yieldedExpressionList
+  case yieldedExpression
+  case yieldedExpressionsClause
   
   public var isSyntaxCollection: Bool {
     switch self {
@@ -390,7 +390,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .versionComponentList:
       return true
-    case .yieldStmtArgumentList:
+    case .yieldedExpressionList:
       return true
     default:
       return false
@@ -968,14 +968,14 @@ public enum SyntaxKind: CaseIterable {
       return WhileStmtSyntax.self
     case .wildcardPattern:
       return WildcardPatternSyntax.self
-    case .yieldStmtArgumentClause:
-      return YieldStmtArgumentClauseSyntax.self
-    case .yieldStmtArgumentList:
-      return YieldStmtArgumentListSyntax.self
-    case .yieldStmtArgument:
-      return YieldStmtArgumentSyntax.self
     case .yieldStmt:
       return YieldStmtSyntax.self
+    case .yieldedExpressionList:
+      return YieldedExpressionListSyntax.self
+    case .yieldedExpression:
+      return YieldedExpressionSyntax.self
+    case .yieldedExpressionsClause:
+      return YieldedExpressionsClauseSyntax.self
     }
   }
 }

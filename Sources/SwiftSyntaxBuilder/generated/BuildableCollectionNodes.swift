@@ -355,8 +355,8 @@ extension VersionComponentListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `YieldStmtArgumentListSyntax` represents a collection of `YieldStmtArgumentSyntax`
-extension YieldStmtArgumentListSyntax: ExpressibleByArrayLiteral {
+/// `YieldedExpressionListSyntax` represents a collection of `YieldedExpressionSyntax`
+extension YieldedExpressionListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)
   }

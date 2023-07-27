@@ -403,10 +403,10 @@ extension SyntaxKind {
       return "'while' statement"
     case .wildcardPattern:
       return "wildcard pattern"
-    case .yieldStmtArgumentList:
-      return "yield list"
     case .yieldStmt:
       return "'yield' statement"
+    case .yieldedExpressionList:
+      return "yield list"
     default:
       return nil
     }

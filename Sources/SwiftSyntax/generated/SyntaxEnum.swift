@@ -289,10 +289,10 @@ public enum SyntaxEnum {
   case whereClause(WhereClauseSyntax)
   case whileStmt(WhileStmtSyntax)
   case wildcardPattern(WildcardPatternSyntax)
-  case yieldStmtArgumentClause(YieldStmtArgumentClauseSyntax)
-  case yieldStmtArgumentList(YieldStmtArgumentListSyntax)
-  case yieldStmtArgument(YieldStmtArgumentSyntax)
   case yieldStmt(YieldStmtSyntax)
+  case yieldedExpressionList(YieldedExpressionListSyntax)
+  case yieldedExpression(YieldedExpressionSyntax)
+  case yieldedExpressionsClause(YieldedExpressionsClauseSyntax)
 }
 
 public extension Syntax {
@@ -849,14 +849,14 @@ public extension Syntax {
       return .whileStmt(WhileStmtSyntax(self)!)
     case .wildcardPattern:
       return .wildcardPattern(WildcardPatternSyntax(self)!)
-    case .yieldStmtArgumentClause:
-      return .yieldStmtArgumentClause(YieldStmtArgumentClauseSyntax(self)!)
-    case .yieldStmtArgumentList:
-      return .yieldStmtArgumentList(YieldStmtArgumentListSyntax(self)!)
-    case .yieldStmtArgument:
-      return .yieldStmtArgument(YieldStmtArgumentSyntax(self)!)
     case .yieldStmt:
       return .yieldStmt(YieldStmtSyntax(self)!)
+    case .yieldedExpressionList:
+      return .yieldedExpressionList(YieldedExpressionListSyntax(self)!)
+    case .yieldedExpression:
+      return .yieldedExpression(YieldedExpressionSyntax(self)!)
+    case .yieldedExpressionsClause:
+      return .yieldedExpressionsClause(YieldedExpressionsClauseSyntax(self)!)
     }
   }
 }

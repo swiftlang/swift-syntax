@@ -566,7 +566,7 @@ public let STMT_NODES: [Node] = [
   ),
 
   Node(
-    kind: .yieldStmtArgumentClause,
+    kind: .yieldedExpressionsClause,
     base: .syntax,
     nameForDiagnostics: nil,
     children: [
@@ -577,7 +577,7 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "Elements",
         deprecatedName: "ElementList",
-        kind: .collection(kind: .yieldStmtArgumentList, collectionElementName: "Element")
+        kind: .collection(kind: .yieldedExpressionList, collectionElementName: "Element")
       ),
       Child(
         name: "RightParen",
@@ -601,11 +601,13 @@ public let STMT_NODES: [Node] = [
         deprecatedName: "Yields",
         kind: .nodeChoices(choices: [
           Child(
-            name: "YieldList",
-            kind: .node(kind: .yieldStmtArgumentClause)
+            name: "Multiple",
+            deprecatedName: "YieldList",
+            kind: .node(kind: .yieldedExpressionsClause)
           ),
           Child(
-            name: "SimpleYield",
+            name: "Single",
+            deprecatedName: "SimpleYield",
             kind: .node(kind: .expr)
           ),
         ])

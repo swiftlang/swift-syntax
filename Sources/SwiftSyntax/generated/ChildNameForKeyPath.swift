@@ -3459,30 +3459,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "typeAnnotation"
   case \WildcardPatternSyntax.unexpectedAfterTypeAnnotation:
     return "unexpectedAfterTypeAnnotation"
-  case \YieldStmtArgumentClauseSyntax.unexpectedBeforeLeftParen:
-    return "unexpectedBeforeLeftParen"
-  case \YieldStmtArgumentClauseSyntax.leftParen:
-    return "leftParen"
-  case \YieldStmtArgumentClauseSyntax.unexpectedBetweenLeftParenAndElements:
-    return "unexpectedBetweenLeftParenAndElements"
-  case \YieldStmtArgumentClauseSyntax.elements:
-    return "elements"
-  case \YieldStmtArgumentClauseSyntax.unexpectedBetweenElementsAndRightParen:
-    return "unexpectedBetweenElementsAndRightParen"
-  case \YieldStmtArgumentClauseSyntax.rightParen:
-    return "rightParen"
-  case \YieldStmtArgumentClauseSyntax.unexpectedAfterRightParen:
-    return "unexpectedAfterRightParen"
-  case \YieldStmtArgumentSyntax.unexpectedBeforeExpression:
-    return "unexpectedBeforeExpression"
-  case \YieldStmtArgumentSyntax.expression:
-    return "expression"
-  case \YieldStmtArgumentSyntax.unexpectedBetweenExpressionAndComma:
-    return "unexpectedBetweenExpressionAndComma"
-  case \YieldStmtArgumentSyntax.comma:
-    return "comma"
-  case \YieldStmtArgumentSyntax.unexpectedAfterComma:
-    return "unexpectedAfterComma"
   case \YieldStmtSyntax.unexpectedBeforeYieldKeyword:
     return "unexpectedBeforeYieldKeyword"
   case \YieldStmtSyntax.yieldKeyword:
@@ -3493,6 +3469,30 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "yieldedExpressions"
   case \YieldStmtSyntax.unexpectedAfterYieldedExpressions:
     return "unexpectedAfterYieldedExpressions"
+  case \YieldedExpressionSyntax.unexpectedBeforeExpression:
+    return "unexpectedBeforeExpression"
+  case \YieldedExpressionSyntax.expression:
+    return "expression"
+  case \YieldedExpressionSyntax.unexpectedBetweenExpressionAndComma:
+    return "unexpectedBetweenExpressionAndComma"
+  case \YieldedExpressionSyntax.comma:
+    return "comma"
+  case \YieldedExpressionSyntax.unexpectedAfterComma:
+    return "unexpectedAfterComma"
+  case \YieldedExpressionsClauseSyntax.unexpectedBeforeLeftParen:
+    return "unexpectedBeforeLeftParen"
+  case \YieldedExpressionsClauseSyntax.leftParen:
+    return "leftParen"
+  case \YieldedExpressionsClauseSyntax.unexpectedBetweenLeftParenAndElements:
+    return "unexpectedBetweenLeftParenAndElements"
+  case \YieldedExpressionsClauseSyntax.elements:
+    return "elements"
+  case \YieldedExpressionsClauseSyntax.unexpectedBetweenElementsAndRightParen:
+    return "unexpectedBetweenElementsAndRightParen"
+  case \YieldedExpressionsClauseSyntax.rightParen:
+    return "rightParen"
+  case \YieldedExpressionsClauseSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   default:
     return nil
   }

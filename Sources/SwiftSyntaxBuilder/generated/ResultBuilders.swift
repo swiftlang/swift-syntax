@@ -3928,10 +3928,10 @@ public extension VersionComponentListSyntax {
 }
 
 @resultBuilder
-public struct YieldStmtArgumentListBuilder {
+public struct YieldedExpressionListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
-  public typealias Expression = YieldStmtArgumentSyntax
+  public typealias Expression = YieldedExpressionSyntax
   
   /// The type of a partial result, which will be carried through all of the
   /// build methods.
@@ -3939,7 +3939,7 @@ public struct YieldStmtArgumentListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = YieldStmtArgumentListSyntax
+  public typealias FinalResult = YieldedExpressionListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -4001,8 +4001,8 @@ public struct YieldStmtArgumentListBuilder {
   }
 }
 
-public extension YieldStmtArgumentListSyntax {
-  init(@YieldStmtArgumentListBuilder itemsBuilder: () throws -> YieldStmtArgumentListSyntax) rethrows {
+public extension YieldedExpressionListSyntax {
+  init(@YieldedExpressionListBuilder itemsBuilder: () throws -> YieldedExpressionListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }

@@ -11601,7 +11601,6 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/initializer``
 ///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/initializer``
 ///  - ``PatternBindingSyntax``.``PatternBindingSyntax/initializer``
-///  - ``TupleTypeElementSyntax``.``TupleTypeElementSyntax/initializer``
 public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -18462,7 +18461,6 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `colon`: `':'`?
 ///  - `type`: ``TypeSyntax``
 ///  - `ellipsis`: `'...'`?
-///  - `initializer`: ``InitializerClauseSyntax``?
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
@@ -18503,9 +18501,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
       type: some TypeSyntaxProtocol,
       _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
       ellipsis: TokenSyntax? = nil,
-      _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil,
-      initializer: InitializerClauseSyntax? = nil,
-      _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -18526,9 +18522,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
             type, 
             unexpectedBetweenTypeAndEllipsis, 
             ellipsis, 
-            unexpectedBetweenEllipsisAndInitializer, 
-            initializer, 
-            unexpectedBetweenInitializerAndTrailingComma, 
+            unexpectedBetweenEllipsisAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
@@ -18545,9 +18539,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           type.raw, 
           unexpectedBetweenTypeAndEllipsis?.raw, 
           ellipsis?.raw, 
-          unexpectedBetweenEllipsisAndInitializer?.raw, 
-          initializer?.raw, 
-          unexpectedBetweenInitializerAndTrailingComma?.raw, 
+          unexpectedBetweenEllipsisAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -18672,7 +18664,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -18681,39 +18673,21 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var initializer: InitializerClauseSyntax? {
+  public var trailingComma: TokenSyntax? {
     get {
-      return data.child(at: 13, parent: Syntax(self)).map(InitializerClauseSyntax.init)
+      return data.child(at: 13, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
       self = TupleTypeElementSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = TupleTypeElementSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var trailingComma: TokenSyntax? {
-    get {
-      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = TupleTypeElementSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = TupleTypeElementSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -18731,9 +18705,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.type, 
           \Self.unexpectedBetweenTypeAndEllipsis, 
           \Self.ellipsis, 
-          \Self.unexpectedBetweenEllipsisAndInitializer, 
-          \Self.initializer, 
-          \Self.unexpectedBetweenInitializerAndTrailingComma, 
+          \Self.unexpectedBetweenEllipsisAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])

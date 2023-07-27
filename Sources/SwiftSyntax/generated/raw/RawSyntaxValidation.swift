@@ -2551,7 +2551,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       assertNoError(kind, index, verify(element, as: RawTupleTypeElementSyntax.self))
     }
   case .tupleTypeElement:
-    assert(layout.count == 17)
+    assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax?.self, tokenChoices: [.keyword("inout")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
@@ -2565,10 +2565,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.ellipsis)]))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawInitializerClauseSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
-    assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .tupleType:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))

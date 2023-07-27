@@ -75,7 +75,6 @@ extension Parser {
               colon: nil,
               type: base,
               ellipsis: nil,
-              initializer: nil,
               trailingComma: nil,
               arena: self.arena
             )
@@ -491,7 +490,6 @@ extension Parser {
               colon: nil,
               type: RawTypeSyntax(RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
               ellipsis: nil,
-              initializer: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
             )
@@ -519,7 +517,6 @@ extension Parser {
             colon: colon,
             type: type,
             ellipsis: ellipsis,
-            initializer: nil,
             trailingComma: trailingComma,
             arena: self.arena
           )

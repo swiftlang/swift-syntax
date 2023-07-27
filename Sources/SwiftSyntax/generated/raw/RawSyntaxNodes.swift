@@ -21199,15 +21199,13 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
       type: RawTypeSyntax, 
       _ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? = nil, 
       ellipsis: RawTokenSyntax?, 
-      _ unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax? = nil, 
-      initializer: RawInitializerClauseSyntax?, 
-      _ unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenEllipsisAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
       _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .tupleTypeElement, uninitializedCount: 17, arena: arena) { layout in
+      kind: .tupleTypeElement, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeInoutKeyword?.raw
       layout[1] = inoutKeyword?.raw
@@ -21221,11 +21219,9 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
       layout[9] = type.raw
       layout[10] = unexpectedBetweenTypeAndEllipsis?.raw
       layout[11] = ellipsis?.raw
-      layout[12] = unexpectedBetweenEllipsisAndInitializer?.raw
-      layout[13] = initializer?.raw
-      layout[14] = unexpectedBetweenInitializerAndTrailingComma?.raw
-      layout[15] = trailingComma?.raw
-      layout[16] = unexpectedAfterTrailingComma?.raw
+      layout[12] = unexpectedBetweenEllipsisAndTrailingComma?.raw
+      layout[13] = trailingComma?.raw
+      layout[14] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
@@ -21278,24 +21274,16 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[11].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenEllipsisAndInitializer: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEllipsisAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var initializer: RawInitializerClauseSyntax? {
-    layoutView.children[13].map(RawInitializerClauseSyntax.init(raw:))
-  }
-  
-  public var unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[15].map(RawTokenSyntax.init(raw:))
+    layoutView.children[13].map(RawTokenSyntax.init(raw:))
   }
   
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

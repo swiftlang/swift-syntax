@@ -501,11 +501,6 @@ public let TYPE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Initializer",
-        kind: .node(kind: .initializerClause),
-        isOptional: true
-      ),
-      Child(
         name: "TrailingComma",
         kind: .token(choices: [.token(tokenKind: "CommaToken")]),
         isOptional: true

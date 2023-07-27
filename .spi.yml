@@ -19,4 +19,5 @@ builder:
       - SwiftRefactor
       - SwiftSyntaxBuilder
       - SwiftSyntaxMacros
+      - SwiftSyntaxMacroExpansion
       - SwiftSyntaxMacrosTestSupport

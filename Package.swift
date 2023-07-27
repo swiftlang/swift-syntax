@@ -284,7 +284,7 @@ let package = Package(
     .testTarget(
       name: "PerformanceTest",
       dependencies: ["_InstructionCounter", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
-      exclude: ["Inputs", "ci-baselines.json"]
+      exclude: ["Inputs"]
     ),
   ]
 )

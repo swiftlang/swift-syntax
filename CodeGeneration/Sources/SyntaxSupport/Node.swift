@@ -151,6 +151,11 @@ public class Node {
 
   /// A doc comment that lists all the nodes in which this node occurs as a child in.
   public var containedIn: SwiftSyntax.Trivia {
+    if kind == .unexpectedNodes {
+      // We don't want to generate a 'Contained In' section for UnexpectedNodesSyntax
+      // because all nodes contain an UnexpectedNodesSyntax.
+      return []
+    }
     var childIn: [(node: SyntaxNodeKind, child: Child?)] = []
     for node in SYNTAX_NODES {
       if let layout = node.layoutNode {

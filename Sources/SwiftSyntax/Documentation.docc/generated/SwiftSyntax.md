@@ -235,7 +235,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/DesignatedTypeSyntax>
 - <doc:SwiftSyntax/DictionaryElementListSyntax>
 - <doc:SwiftSyntax/DictionaryElementSyntax>
-- <doc:SwiftSyntax/DifferentiabilityParameterListSyntax>
+- <doc:SwiftSyntax/DifferentiabilityArgumentListSyntax>
 - <doc:SwiftSyntax/DifferentiabilityArgumentSyntax>
 - <doc:SwiftSyntax/DocumentationAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>

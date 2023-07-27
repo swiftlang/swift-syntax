@@ -633,6 +633,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node))
   }
   
+  /// Visit a ``DifferentiabilityArgumentListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: DifferentiabilityArgumentListSyntax) -> DifferentiabilityArgumentListSyntax {
+    return Syntax(visitChildren(node)).cast(DifferentiabilityArgumentListSyntax.self)
+  }
+  
   /// Visit a ``DifferentiabilityArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -645,13 +652,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiabilityArgumentsSyntax) -> DifferentiabilityArgumentsSyntax {
     return Syntax(visitChildren(node)).cast(DifferentiabilityArgumentsSyntax.self)
-  }
-  
-  /// Visit a ``DifferentiabilityParameterListSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: DifferentiabilityParameterListSyntax) -> DifferentiabilityParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiabilityParameterListSyntax.self)
   }
   
   /// Visit a ``DifferentiabilityWithRespectToArgumentSyntax``.
@@ -3168,6 +3168,20 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
+  private func visitImplDifferentiabilityArgumentListSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DifferentiabilityArgumentListSyntax(data)
+    // Accessing _syntaxNode directly is faster than calling Syntax(node)
+    visitPre(node._syntaxNode)
+    defer {
+      visitPost(node._syntaxNode)
+    }
+    if let newNode = visitAny(node._syntaxNode) {
+      return newNode
+    }
+    return Syntax(visit(node))
+  }
+  
+  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDifferentiabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
     let node = DifferentiabilityArgumentSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -3184,20 +3198,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplDifferentiabilityArgumentsSyntax(_ data: SyntaxData) -> Syntax {
     let node = DifferentiabilityArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiabilityParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiabilityParameterListSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6153,12 +6153,12 @@ open class SyntaxRewriter {
       return visitImplDictionaryExprSyntax
     case .dictionaryType:
       return visitImplDictionaryTypeSyntax
+    case .differentiabilityArgumentList:
+      return visitImplDifferentiabilityArgumentListSyntax
     case .differentiabilityArgument:
       return visitImplDifferentiabilityArgumentSyntax
     case .differentiabilityArguments:
       return visitImplDifferentiabilityArgumentsSyntax
-    case .differentiabilityParameterList:
-      return visitImplDifferentiabilityParameterListSyntax
     case .differentiabilityWithRespectToArgument:
       return visitImplDifferentiabilityWithRespectToArgumentSyntax
     case .differentiableAttributeArguments:
@@ -6719,12 +6719,12 @@ open class SyntaxRewriter {
       return visitImplDictionaryExprSyntax(data)
     case .dictionaryType:
       return visitImplDictionaryTypeSyntax(data)
+    case .differentiabilityArgumentList:
+      return visitImplDifferentiabilityArgumentListSyntax(data)
     case .differentiabilityArgument:
       return visitImplDifferentiabilityArgumentSyntax(data)
     case .differentiabilityArguments:
       return visitImplDifferentiabilityArgumentsSyntax(data)
-    case .differentiabilityParameterList:
-      return visitImplDifferentiabilityParameterListSyntax(data)
     case .differentiabilityWithRespectToArgument:
       return visitImplDifferentiabilityWithRespectToArgumentSyntax(data)
     case .differentiableAttributeArguments:

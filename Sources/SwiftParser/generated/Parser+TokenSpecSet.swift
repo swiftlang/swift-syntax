@@ -722,7 +722,7 @@ extension DerivativeAttributeArgumentsSyntax {
 }
 
 extension DifferentiabilityArgumentSyntax {
-  enum ParameterOptions: TokenSpecSet {
+  enum ArgumentOptions: TokenSpecSet {
     case identifier
     case integerLiteral
     case `self`

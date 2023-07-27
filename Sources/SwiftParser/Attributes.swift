@@ -402,14 +402,14 @@ extension Parser {
       kindSpecifierComma = nil
     }
 
-    let parameters: RawDifferentiabilityWithRespectToArgumentSyntax?
-    let parametersComma: RawTokenSyntax?
+    let arguments: RawDifferentiabilityWithRespectToArgumentSyntax?
+    let argumentsComma: RawTokenSyntax?
     if self.at(.keyword(.wrt)) {
-      parameters = self.parseDifferentiabilityWithRespectToArgument()
-      parametersComma = self.consume(if: .comma)
+      arguments = self.parseDifferentiabilityWithRespectToArgument()
+      argumentsComma = self.consume(if: .comma)
     } else {
-      parameters = nil
-      parametersComma = nil
+      arguments = nil
+      argumentsComma = nil
     }
 
     let whereClause: RawGenericWhereClauseSyntax?
@@ -421,8 +421,8 @@ extension Parser {
     return RawDifferentiableAttributeArgumentsSyntax(
       kindSpecifier: kindSpecifier,
       kindSpecifierComma: kindSpecifierComma,
-      parameters: parameters,
-      parametersComma: parametersComma,
+      arguments: arguments,
+      argumentsComma: argumentsComma,
       genericWhereClause: whereClause,
       arena: self.arena
     )
@@ -434,10 +434,10 @@ extension Parser {
 
     guard let leftParen = self.consume(if: .leftParen) else {
       // If no opening '(' for parameter list, parse a single parameter.
-      let param =
+      let argument =
         self.parseDifferentiabilityArgument()
         ?? RawDifferentiabilityArgumentSyntax(
-          parameter: missingToken(.identifier),
+          argument: missingToken(.identifier),
           trailingComma: nil,
           arena: self.arena
         )
@@ -446,7 +446,7 @@ extension Parser {
         wrtLabel: wrt,
         unexpectedBeforeColon,
         colon: colon,
-        parameters: .parameter(param),
+        arguments: .argument(argument),
         arena: self.arena
       )
     }
@@ -461,10 +461,10 @@ extension Parser {
     }
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
-    let parameters = RawDifferentiabilityParameterListSyntax(elements: elements, arena: self.arena)
+    let arguments = RawDifferentiabilityArgumentListSyntax(elements: elements, arena: self.arena)
     let list = RawDifferentiabilityArgumentsSyntax(
       leftParen: leftParen,
-      differentiabilityParameters: parameters,
+      arguments: arguments,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -473,18 +473,18 @@ extension Parser {
       wrtLabel: wrt,
       unexpectedBeforeColon,
       colon: colon,
-      parameters: .parameterList(list),
+      arguments: .argumentList(list),
       arena: self.arena
     )
   }
 
   mutating func parseDifferentiabilityArgument() -> RawDifferentiabilityArgumentSyntax? {
-    switch self.at(anyIn: DifferentiabilityArgumentSyntax.ParameterOptions.self) {
+    switch self.at(anyIn: DifferentiabilityArgumentSyntax.ArgumentOptions.self) {
     case (.identifier, let handle)?:
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityArgumentSyntax(
-        parameter: token,
+        argument: token,
         trailingComma: comma,
         arena: self.arena
       )
@@ -492,7 +492,7 @@ extension Parser {
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityArgumentSyntax(
-        parameter: token,
+        argument: token,
         trailingComma: comma,
         arena: self.arena
       )
@@ -500,7 +500,7 @@ extension Parser {
       let token = self.eat(handle)
       let comma = self.consume(if: .comma)
       return RawDifferentiabilityArgumentSyntax(
-        parameter: token,
+        argument: token,
         trailingComma: comma,
         arena: self.arena
       )
@@ -568,11 +568,11 @@ extension Parser {
       (unexpectedBeforeAccessor, accessor) = (nil, nil)
     }
     let comma = self.consume(if: .comma)
-    let parameters: RawDifferentiabilityWithRespectToArgumentSyntax?
+    let arguments: RawDifferentiabilityWithRespectToArgumentSyntax?
     if comma != nil {
-      parameters = self.parseDifferentiabilityWithRespectToArgument()
+      arguments = self.parseDifferentiabilityWithRespectToArgument()
     } else {
-      parameters = nil
+      arguments = nil
     }
     return RawDerivativeAttributeArgumentsSyntax(
       unexpectedBeforeOfLabel,
@@ -584,7 +584,7 @@ extension Parser {
       unexpectedBeforeAccessor,
       accessorSpecifier: accessor,
       comma: comma,
-      parameters: parameters,
+      arguments: arguments,
       arena: self.arena
     )
   }

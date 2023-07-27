@@ -84,8 +84,8 @@ public typealias DesignatedTypeElementSyntax = DesignatedTypeSyntax
 @available(*, deprecated, renamed: "DifferentiabilityArgumentSyntax")
 public typealias DifferentiabilityParamSyntax = DifferentiabilityArgumentSyntax
 
-@available(*, deprecated, renamed: "DifferentiabilityParameterListSyntax")
-public typealias DifferentiabilityParamListSyntax = DifferentiabilityParameterListSyntax
+@available(*, deprecated, renamed: "DifferentiabilityArgumentListSyntax")
+public typealias DifferentiabilityParamListSyntax = DifferentiabilityArgumentListSyntax
 
 @available(*, deprecated, renamed: "DifferentiabilityArgumentsSyntax")
 public typealias DifferentiabilityParamsSyntax = DifferentiabilityArgumentsSyntax
@@ -305,7 +305,7 @@ public extension SyntaxKind {
   }
   
   static var differentiabilityParamList: Self {
-    return .differentiabilityParameterList
+    return .differentiabilityArgumentList
   }
   
   static var differentiabilityParams: Self {

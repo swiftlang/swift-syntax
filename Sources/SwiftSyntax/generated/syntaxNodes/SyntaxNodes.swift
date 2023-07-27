@@ -6068,7 +6068,7 @@ public struct DeinitializerEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashabl
 ///  - `period`: `'.'`?
 ///  - `accessorSpecifier`: (`'get'` | `'set'`)?
 ///  - `comma`: `','`?
-///  - `parameters`: ``DifferentiabilityWithRespectToArgumentSyntax``?
+///  - `arguments`: ``DifferentiabilityWithRespectToArgumentSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -6113,9 +6113,9 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       accessorSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenAccessorSpecifierAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax? = nil,
-      _ unexpectedBetweenCommaAndParameters: UnexpectedNodesSyntax? = nil,
-      parameters: DifferentiabilityWithRespectToArgumentSyntax? = nil,
-      _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenCommaAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DifferentiabilityWithRespectToArgumentSyntax? = nil,
+      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6134,9 +6134,9 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
             accessorSpecifier, 
             unexpectedBetweenAccessorSpecifierAndComma, 
             comma, 
-            unexpectedBetweenCommaAndParameters, 
-            parameters, 
-            unexpectedAfterParameters
+            unexpectedBetweenCommaAndArguments, 
+            arguments, 
+            unexpectedAfterArguments
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOfLabel?.raw, 
@@ -6151,9 +6151,9 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           accessorSpecifier?.raw, 
           unexpectedBetweenAccessorSpecifierAndComma?.raw, 
           comma?.raw, 
-          unexpectedBetweenCommaAndParameters?.raw, 
-          parameters?.raw, 
-          unexpectedAfterParameters?.raw
+          unexpectedBetweenCommaAndArguments?.raw, 
+          arguments?.raw, 
+          unexpectedAfterArguments?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.derivativeAttributeArguments,
@@ -6281,7 +6281,7 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public var unexpectedBetweenCommaAndParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenCommaAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6290,7 +6290,7 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public var parameters: DifferentiabilityWithRespectToArgumentSyntax? {
+  public var arguments: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
       return data.child(at: 13, parent: Syntax(self)).map(DifferentiabilityWithRespectToArgumentSyntax.init)
     }
@@ -6299,7 +6299,7 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public var unexpectedAfterParameters: UnexpectedNodesSyntax? {
+  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6322,9 +6322,9 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
           \Self.accessorSpecifier, 
           \Self.unexpectedBetweenAccessorSpecifierAndComma, 
           \Self.comma, 
-          \Self.unexpectedBetweenCommaAndParameters, 
-          \Self.parameters, 
-          \Self.unexpectedAfterParameters
+          \Self.unexpectedBetweenCommaAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedAfterArguments
         ])
   }
 }
@@ -6637,17 +6637,17 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - DifferentiabilityArgumentSyntax
 
-/// A differentiability parameter: either the "self" identifier, a function parameter name, or a function parameter index.
+/// A differentiability argument: either the "self" identifier, a function parameter name, or a function parameter index.
 ///
 /// ### Children
 /// 
-///  - `parameter`: (`<identifier>` | `<integerLiteral>` | `'self'`)
+///  - `argument`: (`<identifier>` | `<integerLiteral>` | `'self'`)
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
 /// 
-///  - ``DifferentiabilityParameterListSyntax``
-///  - ``DifferentiabilityWithRespectToArgumentSyntax``.``DifferentiabilityWithRespectToArgumentSyntax/parameters``
+///  - ``DifferentiabilityArgumentListSyntax``
+///  - ``DifferentiabilityWithRespectToArgumentSyntax``.``DifferentiabilityWithRespectToArgumentSyntax/arguments``
 public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6671,9 +6671,9 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
-      parameter: TokenSyntax,
-      _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeArgument: UnexpectedNodesSyntax? = nil,
+      argument: TokenSyntax,
+      _ unexpectedBetweenArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -6682,16 +6682,16 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeParameter, 
-            parameter, 
-            unexpectedBetweenParameterAndTrailingComma, 
+            unexpectedBeforeArgument, 
+            argument, 
+            unexpectedBetweenArgumentAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeParameter?.raw, 
-          parameter.raw, 
-          unexpectedBetweenParameterAndTrailingComma?.raw, 
+          unexpectedBeforeArgument?.raw, 
+          argument.raw, 
+          unexpectedBetweenArgumentAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -6708,7 +6708,7 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeParameter: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeArgument: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6717,7 +6717,7 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var parameter: TokenSyntax {
+  public var argument: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -6726,7 +6726,7 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6755,9 +6755,9 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeParameter, 
-          \Self.parameter, 
-          \Self.unexpectedBetweenParameterAndTrailingComma, 
+          \Self.unexpectedBeforeArgument, 
+          \Self.argument, 
+          \Self.unexpectedBetweenArgumentAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -6766,17 +6766,17 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 
 // MARK: - DifferentiabilityArgumentsSyntax
 
-/// The differentiability parameters.
+/// The differentiability arguments.
 ///
 /// ### Children
 /// 
 ///  - `leftParen`: `'('`
-///  - `differentiabilityParameters`: ``DifferentiabilityParameterListSyntax``
+///  - `arguments`: ``DifferentiabilityArgumentListSyntax``
 ///  - `rightParen`: `')'`
 ///
 /// ### Contained in
 /// 
-///  - ``DifferentiabilityWithRespectToArgumentSyntax``.``DifferentiabilityWithRespectToArgumentSyntax/parameters``
+///  - ``DifferentiabilityWithRespectToArgumentSyntax``.``DifferentiabilityWithRespectToArgumentSyntax/arguments``
 public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -6797,15 +6797,15 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - differentiabilityParameters: The parameters for differentiation.
+  ///   - arguments: The parameters for differentiation.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? = nil,
-      differentiabilityParameters: DifferentiabilityParameterListSyntax,
-      _ unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DifferentiabilityArgumentListSyntax,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -6816,18 +6816,18 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeLeftParen, 
             leftParen, 
-            unexpectedBetweenLeftParenAndDifferentiabilityParameters, 
-            differentiabilityParameters, 
-            unexpectedBetweenDifferentiabilityParametersAndRightParen, 
+            unexpectedBetweenLeftParenAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndRightParen, 
             rightParen, 
             unexpectedAfterRightParen
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftParen?.raw, 
           leftParen.raw, 
-          unexpectedBetweenLeftParenAndDifferentiabilityParameters?.raw, 
-          differentiabilityParameters.raw, 
-          unexpectedBetweenDifferentiabilityParametersAndRightParen?.raw, 
+          unexpectedBetweenLeftParenAndArguments?.raw, 
+          arguments.raw, 
+          unexpectedBetweenArgumentsAndRightParen?.raw, 
           rightParen.raw, 
           unexpectedAfterRightParen?.raw
         ]
@@ -6862,7 +6862,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6872,28 +6872,28 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// The parameters for differentiation.
-  public var differentiabilityParameters: DifferentiabilityParameterListSyntax {
+  public var arguments: DifferentiabilityArgumentListSyntax {
     get {
-      return DifferentiabilityParameterListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return DifferentiabilityArgumentListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
       self = DifferentiabilityArgumentsSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  /// Adds the provided `element` to the node's `differentiabilityParameters`
+  /// Adds the provided `element` to the node's `arguments`
   /// collection.
-  /// - param element: The new `DifferentiabilityParam` to add to the node's
-  ///                  `differentiabilityParameters` collection.
-  /// - returns: A copy of the receiver with the provided `DifferentiabilityParam`
-  ///            appended to its `differentiabilityParameters` collection.
-  public func addDifferentiabilityParam(_ element: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentsSyntax {
+  /// - param element: The new `Argument` to add to the node's
+  ///                  `arguments` collection.
+  /// - returns: A copy of the receiver with the provided `Argument`
+  ///            appended to its `arguments` collection.
+  public func addArgument(_ element: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityParameterList,
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityArgumentList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
@@ -6905,7 +6905,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return DifferentiabilityArgumentsSyntax(newData)
   }
   
-  public var unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -6936,9 +6936,9 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     return .layout([
           \Self.unexpectedBeforeLeftParen, 
           \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndDifferentiabilityParameters, 
-          \Self.differentiabilityParameters, 
-          \Self.unexpectedBetweenDifferentiabilityParametersAndRightParen, 
+          \Self.unexpectedBetweenLeftParenAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndRightParen, 
           \Self.rightParen, 
           \Self.unexpectedAfterRightParen
         ])
@@ -6953,22 +6953,22 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `wrtLabel`: `'wrt'`
 ///  - `colon`: `':'`
-///  - `parameters`: (``DifferentiabilityArgumentSyntax`` | ``DifferentiabilityArgumentsSyntax``)
+///  - `arguments`: (``DifferentiabilityArgumentSyntax`` | ``DifferentiabilityArgumentsSyntax``)
 ///
 /// ### Contained in
 /// 
-///  - ``DerivativeAttributeArgumentsSyntax``.``DerivativeAttributeArgumentsSyntax/parameters``
-///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/parameters``
+///  - ``DerivativeAttributeArgumentsSyntax``.``DerivativeAttributeArgumentsSyntax/arguments``
+///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/arguments``
 public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Parameters: SyntaxChildChoices {
-    case `parameter`(DifferentiabilityArgumentSyntax)
-    case `parameterList`(DifferentiabilityArgumentsSyntax)
+  public enum Arguments: SyntaxChildChoices {
+    case `argument`(DifferentiabilityArgumentSyntax)
+    case `argumentList`(DifferentiabilityArgumentsSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .parameter(let node):
+      case .argument(let node):
         return node._syntaxNode
-      case .parameterList(let node):
+      case .argumentList(let node):
         return node._syntaxNode
       }
     }
@@ -6978,20 +6978,20 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
     }
     
     public init(_ node: DifferentiabilityArgumentSyntax) {
-      self = .parameter(node)
+      self = .argument(node)
     }
     
     public init(_ node: DifferentiabilityArgumentsSyntax) {
-      self = .parameterList(node)
+      self = .argumentList(node)
     }
     
     public init?(_ node: some SyntaxProtocol) {
       if let node = node.as(DifferentiabilityArgumentSyntax.self) {
-        self = .parameter(node)
+        self = .argument(node)
         return
       }
       if let node = node.as(DifferentiabilityArgumentsSyntax.self) {
-        self = .parameterList(node)
+        self = .argumentList(node)
         return
       }
       return nil
@@ -7030,9 +7030,9 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
       wrtLabel: TokenSyntax = .keyword(.wrt),
       _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
-      parameters: Parameters,
-      _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenColonAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: Arguments,
+      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -7043,18 +7043,18 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
             wrtLabel, 
             unexpectedBetweenWrtLabelAndColon, 
             colon, 
-            unexpectedBetweenColonAndParameters, 
-            parameters, 
-            unexpectedAfterParameters
+            unexpectedBetweenColonAndArguments, 
+            arguments, 
+            unexpectedAfterArguments
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeWrtLabel?.raw, 
           wrtLabel.raw, 
           unexpectedBetweenWrtLabelAndColon?.raw, 
           colon.raw, 
-          unexpectedBetweenColonAndParameters?.raw, 
-          parameters.raw, 
-          unexpectedAfterParameters?.raw
+          unexpectedBetweenColonAndArguments?.raw, 
+          arguments.raw, 
+          unexpectedAfterArguments?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.differentiabilityWithRespectToArgument,
@@ -7107,7 +7107,7 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
     }
   }
   
-  public var unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenColonAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7116,16 +7116,16 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
     }
   }
   
-  public var parameters: Parameters {
+  public var arguments: Arguments {
     get {
-      return Parameters(data.child(at: 5, parent: Syntax(self))!)
+      return Arguments(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = DifferentiabilityWithRespectToArgumentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedAfterParameters: UnexpectedNodesSyntax? {
+  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7140,9 +7140,9 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
           \Self.wrtLabel, 
           \Self.unexpectedBetweenWrtLabelAndColon, 
           \Self.colon, 
-          \Self.unexpectedBetweenColonAndParameters, 
-          \Self.parameters, 
-          \Self.unexpectedAfterParameters
+          \Self.unexpectedBetweenColonAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedAfterArguments
         ])
   }
 }
@@ -7155,8 +7155,8 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
 /// 
 ///  - `kindSpecifier`: (`'_forward'` | `'reverse'` | `'_linear'`)?
 ///  - `kindSpecifierComma`: `','`?
-///  - `parameters`: ``DifferentiabilityWithRespectToArgumentSyntax``?
-///  - `parametersComma`: `','`?
+///  - `arguments`: ``DifferentiabilityWithRespectToArgumentSyntax``?
+///  - `argumentsComma`: `','`?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///
 /// ### Contained in
@@ -7183,7 +7183,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - kindSpecifierComma: The comma following the differentiability kind, if it exists.
-  ///   - parametersComma: The comma following the differentiability parameters clause, if it exists.
+  ///   - argumentsComma: The comma following the differentiability arguments clause, if it exists.
   ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -7192,11 +7192,11 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       kindSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenKindSpecifierAndKindSpecifierComma: UnexpectedNodesSyntax? = nil,
       kindSpecifierComma: TokenSyntax? = nil,
-      _ unexpectedBetweenKindSpecifierCommaAndParameters: UnexpectedNodesSyntax? = nil,
-      parameters: DifferentiabilityWithRespectToArgumentSyntax? = nil,
-      _ unexpectedBetweenParametersAndParametersComma: UnexpectedNodesSyntax? = nil,
-      parametersComma: TokenSyntax? = nil,
-      _ unexpectedBetweenParametersCommaAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenKindSpecifierCommaAndArguments: UnexpectedNodesSyntax? = nil,
+      arguments: DifferentiabilityWithRespectToArgumentSyntax? = nil,
+      _ unexpectedBetweenArgumentsAndArgumentsComma: UnexpectedNodesSyntax? = nil,
+      argumentsComma: TokenSyntax? = nil,
+      _ unexpectedBetweenArgumentsCommaAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -7209,11 +7209,11 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
             kindSpecifier, 
             unexpectedBetweenKindSpecifierAndKindSpecifierComma, 
             kindSpecifierComma, 
-            unexpectedBetweenKindSpecifierCommaAndParameters, 
-            parameters, 
-            unexpectedBetweenParametersAndParametersComma, 
-            parametersComma, 
-            unexpectedBetweenParametersCommaAndGenericWhereClause, 
+            unexpectedBetweenKindSpecifierCommaAndArguments, 
+            arguments, 
+            unexpectedBetweenArgumentsAndArgumentsComma, 
+            argumentsComma, 
+            unexpectedBetweenArgumentsCommaAndGenericWhereClause, 
             genericWhereClause, 
             unexpectedAfterGenericWhereClause
           ))) { (arena, _) in
@@ -7222,11 +7222,11 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
           kindSpecifier?.raw, 
           unexpectedBetweenKindSpecifierAndKindSpecifierComma?.raw, 
           kindSpecifierComma?.raw, 
-          unexpectedBetweenKindSpecifierCommaAndParameters?.raw, 
-          parameters?.raw, 
-          unexpectedBetweenParametersAndParametersComma?.raw, 
-          parametersComma?.raw, 
-          unexpectedBetweenParametersCommaAndGenericWhereClause?.raw, 
+          unexpectedBetweenKindSpecifierCommaAndArguments?.raw, 
+          arguments?.raw, 
+          unexpectedBetweenArgumentsAndArgumentsComma?.raw, 
+          argumentsComma?.raw, 
+          unexpectedBetweenArgumentsCommaAndGenericWhereClause?.raw, 
           genericWhereClause?.raw, 
           unexpectedAfterGenericWhereClause?.raw
         ]
@@ -7280,7 +7280,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
-  public var unexpectedBetweenKindSpecifierCommaAndParameters: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenKindSpecifierCommaAndArguments: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7289,7 +7289,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
-  public var parameters: DifferentiabilityWithRespectToArgumentSyntax? {
+  public var arguments: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(DifferentiabilityWithRespectToArgumentSyntax.init)
     }
@@ -7298,7 +7298,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
-  public var unexpectedBetweenParametersAndParametersComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndArgumentsComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7307,8 +7307,8 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
-  /// The comma following the differentiability parameters clause, if it exists.
-  public var parametersComma: TokenSyntax? {
+  /// The comma following the differentiability arguments clause, if it exists.
+  public var argumentsComma: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
     }
@@ -7317,7 +7317,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     }
   }
   
-  public var unexpectedBetweenParametersCommaAndGenericWhereClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsCommaAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -7351,11 +7351,11 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
           \Self.kindSpecifier, 
           \Self.unexpectedBetweenKindSpecifierAndKindSpecifierComma, 
           \Self.kindSpecifierComma, 
-          \Self.unexpectedBetweenKindSpecifierCommaAndParameters, 
-          \Self.parameters, 
-          \Self.unexpectedBetweenParametersAndParametersComma, 
-          \Self.parametersComma, 
-          \Self.unexpectedBetweenParametersCommaAndGenericWhereClause, 
+          \Self.unexpectedBetweenKindSpecifierCommaAndArguments, 
+          \Self.arguments, 
+          \Self.unexpectedBetweenArgumentsAndArgumentsComma, 
+          \Self.argumentsComma, 
+          \Self.unexpectedBetweenArgumentsCommaAndGenericWhereClause, 
           \Self.genericWhereClause, 
           \Self.unexpectedAfterGenericWhereClause
         ])

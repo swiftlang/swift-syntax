@@ -96,8 +96,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "key type"
   case \DictionaryTypeSyntax.value:
     return "value type"
-  case \DifferentiabilityWithRespectToArgumentSyntax.parameters:
-    return "parameters"
+  case \DifferentiabilityWithRespectToArgumentSyntax.arguments:
+    return "arguments"
   case \DoStmtSyntax.body:
     return "body"
   case \DocumentationAttributeArgumentSyntax.label:

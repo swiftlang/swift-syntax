@@ -1731,37 +1731,37 @@ extension DerivativeAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenCommaAndParameters")
+  @available(*, deprecated, renamed: "unexpectedBetweenCommaAndArguments")
   public var unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenCommaAndParameters
+      return unexpectedBetweenCommaAndArguments
     }
     set {
-      unexpectedBetweenCommaAndParameters = newValue
+      unexpectedBetweenCommaAndArguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "parameters")
+  @available(*, deprecated, renamed: "arguments")
   public var diffParams: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
-      return parameters
+      return arguments
     }
     set {
-      parameters = newValue
+      arguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedAfterParameters")
+  @available(*, deprecated, renamed: "unexpectedAfterArguments")
   public var unexpectedAfterDiffParams: UnexpectedNodesSyntax? {
     get {
-      return unexpectedAfterParameters
+      return unexpectedAfterArguments
     }
     set {
-      unexpectedAfterParameters = newValue
+      unexpectedAfterArguments = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessorSpecifier, parameters argument(s).")
+  @available(*, deprecated, message: "Use an initializer with accessorSpecifier, arguments argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1798,7 +1798,7 @@ extension DerivativeAttributeArgumentsSyntax {
         unexpectedBetweenAccessorKindAndComma, 
         comma: comma, 
         unexpectedBetweenCommaAndDiffParams, 
-        parameters: diffParams, 
+        arguments: diffParams, 
         unexpectedAfterDiffParams, 
         trailingTrivia: trailingTrivia
       )
@@ -2035,6 +2035,179 @@ extension DictionaryTypeSyntax {
   }
 }
 
+extension DifferentiabilityArgumentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeArgument")
+  public var unexpectedBeforeParameter: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeArgument
+    }
+    set {
+      unexpectedBeforeArgument = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "argument")
+  public var parameter: TokenSyntax {
+    get {
+      return argument
+    }
+    set {
+      argument = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentAndTrailingComma")
+  public var unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentAndTrailingComma
+    }
+    set {
+      unexpectedBetweenArgumentAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with argument argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeParameter: UnexpectedNodesSyntax? = nil,
+      parameter: TokenSyntax,
+      _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeParameter, 
+        argument: parameter, 
+        unexpectedBetweenParameterAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension DifferentiabilityArgumentsSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndArguments")
+  public var unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndArguments
+    }
+    set {
+      unexpectedBetweenLeftParenAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var differentiabilityParameters: DifferentiabilityArgumentListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndRightParen")
+  public var unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenArgumentsAndRightParen
+    }
+    set {
+      unexpectedBetweenArgumentsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndDifferentiabilityParameters: UnexpectedNodesSyntax? = nil,
+      differentiabilityParameters: DifferentiabilityArgumentListSyntax,
+      _ unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndDifferentiabilityParameters, 
+        arguments: differentiabilityParameters, 
+        unexpectedBetweenDifferentiabilityParametersAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension DifferentiabilityWithRespectToArgumentSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenColonAndArguments")
+  public var unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenColonAndArguments
+    }
+    set {
+      unexpectedBetweenColonAndArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "arguments")
+  public var parameters: Arguments {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterArguments")
+  public var unexpectedAfterParameters: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterArguments
+    }
+    set {
+      unexpectedAfterArguments = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? = nil,
+      wrtLabel: TokenSyntax = .keyword(.wrt),
+      _ unexpectedBetweenWrtLabelAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax = .colonToken(),
+      _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
+      parameters: Arguments,
+      _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeWrtLabel, 
+        wrtLabel: wrtLabel, 
+        unexpectedBetweenWrtLabelAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndParameters, 
+        arguments: parameters, 
+        unexpectedAfterParameters, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension DifferentiableAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeKindSpecifier")
   public var unexpectedBeforeDiffKind: UnexpectedNodesSyntax? {
@@ -2076,53 +2249,53 @@ extension DifferentiableAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenKindSpecifierCommaAndParameters")
+  @available(*, deprecated, renamed: "unexpectedBetweenKindSpecifierCommaAndArguments")
   public var unexpectedBetweenDiffKindCommaAndDiffParams: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenKindSpecifierCommaAndParameters
+      return unexpectedBetweenKindSpecifierCommaAndArguments
     }
     set {
-      unexpectedBetweenKindSpecifierCommaAndParameters = newValue
+      unexpectedBetweenKindSpecifierCommaAndArguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "parameters")
+  @available(*, deprecated, renamed: "arguments")
   public var diffParams: DifferentiabilityWithRespectToArgumentSyntax? {
     get {
-      return parameters
+      return arguments
     }
     set {
-      parameters = newValue
+      arguments = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenParametersAndParametersComma")
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsAndArgumentsComma")
   public var unexpectedBetweenDiffParamsAndDiffParamsComma: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenParametersAndParametersComma
+      return unexpectedBetweenArgumentsAndArgumentsComma
     }
     set {
-      unexpectedBetweenParametersAndParametersComma = newValue
+      unexpectedBetweenArgumentsAndArgumentsComma = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "parametersComma")
+  @available(*, deprecated, renamed: "argumentsComma")
   public var diffParamsComma: TokenSyntax? {
     get {
-      return parametersComma
+      return argumentsComma
     }
     set {
-      parametersComma = newValue
+      argumentsComma = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenParametersCommaAndGenericWhereClause")
+  @available(*, deprecated, renamed: "unexpectedBetweenArgumentsCommaAndGenericWhereClause")
   public var unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenParametersCommaAndGenericWhereClause
+      return unexpectedBetweenArgumentsCommaAndGenericWhereClause
     }
     set {
-      unexpectedBetweenParametersCommaAndGenericWhereClause = newValue
+      unexpectedBetweenArgumentsCommaAndGenericWhereClause = newValue
     }
   }
   
@@ -2146,7 +2319,7 @@ extension DifferentiableAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with kindSpecifier, kindSpecifierComma, parameters, parametersComma, genericWhereClause argument(s).")
+  @available(*, deprecated, message: "Use an initializer with kindSpecifier, kindSpecifierComma, arguments, argumentsComma, genericWhereClause argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2171,9 +2344,9 @@ extension DifferentiableAttributeArgumentsSyntax {
         unexpectedBetweenDiffKindAndDiffKindComma, 
         kindSpecifierComma: diffKindComma, 
         unexpectedBetweenDiffKindCommaAndDiffParams, 
-        parameters: diffParams, 
+        arguments: diffParams, 
         unexpectedBetweenDiffParamsAndDiffParamsComma, 
-        parametersComma: diffParamsComma, 
+        argumentsComma: diffParamsComma, 
         unexpectedBetweenDiffParamsCommaAndWhereClause, 
         genericWhereClause: whereClause, 
         unexpectedAfterWhereClause, 

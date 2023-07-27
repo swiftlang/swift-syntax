@@ -51,8 +51,8 @@ final class AttributeTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected ':' and parameters in '@differentiable' argument",
-          fixIts: ["insert ':' and parameters"]
+          message: "expected ':' and arguments in '@differentiable' argument",
+          fixIts: ["insert ':' and arguments"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
         DiagnosticSpec(

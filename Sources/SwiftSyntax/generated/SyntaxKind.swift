@@ -94,9 +94,9 @@ public enum SyntaxKind: CaseIterable {
   case dictionaryElement
   case dictionaryExpr
   case dictionaryType
+  case differentiabilityArgumentList
   case differentiabilityArgument
   case differentiabilityArguments
-  case differentiabilityParameterList
   case differentiabilityWithRespectToArgument
   case differentiableAttributeArguments
   case discardAssignmentExpr
@@ -328,7 +328,7 @@ public enum SyntaxKind: CaseIterable {
       return true
     case .dictionaryElementList:
       return true
-    case .differentiabilityParameterList:
+    case .differentiabilityArgumentList:
       return true
     case .documentationAttributeArgumentList:
       return true
@@ -578,12 +578,12 @@ public enum SyntaxKind: CaseIterable {
       return DictionaryExprSyntax.self
     case .dictionaryType:
       return DictionaryTypeSyntax.self
+    case .differentiabilityArgumentList:
+      return DifferentiabilityArgumentListSyntax.self
     case .differentiabilityArgument:
       return DifferentiabilityArgumentSyntax.self
     case .differentiabilityArguments:
       return DifferentiabilityArgumentsSyntax.self
-    case .differentiabilityParameterList:
-      return DifferentiabilityParameterListSyntax.self
     case .differentiabilityWithRespectToArgument:
       return DifferentiabilityWithRespectToArgumentSyntax.self
     case .differentiableAttributeArguments:

@@ -1331,7 +1331,7 @@ public extension DictionaryElementListSyntax {
 }
 
 @resultBuilder
-public struct DifferentiabilityParameterListBuilder {
+public struct DifferentiabilityArgumentListBuilder {
   /// The type of individual statement expressions in the transformed function,
   /// which defaults to Component if buildExpression() is not provided.
   public typealias Expression = DifferentiabilityArgumentSyntax
@@ -1342,7 +1342,7 @@ public struct DifferentiabilityParameterListBuilder {
   
   /// The type of the final returned result, which defaults to Component if
   /// buildFinalResult() is not provided.
-  public typealias FinalResult = DifferentiabilityParameterListSyntax
+  public typealias FinalResult = DifferentiabilityArgumentListSyntax
   
   /// Required by every result builder to build combined results from
   /// statement blocks.
@@ -1407,8 +1407,8 @@ public struct DifferentiabilityParameterListBuilder {
   }
 }
 
-public extension DifferentiabilityParameterListSyntax {
-  init(@DifferentiabilityParameterListBuilder itemsBuilder: () throws -> DifferentiabilityParameterListSyntax) rethrows {
+public extension DifferentiabilityArgumentListSyntax {
+  init(@DifferentiabilityArgumentListBuilder itemsBuilder: () throws -> DifferentiabilityArgumentListSyntax) rethrows {
     self = try itemsBuilder()
   }
 }

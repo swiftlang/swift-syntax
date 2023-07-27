@@ -252,7 +252,7 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(
           node: .differentiableAttributeArguments,
-          message: "child 'ParametersComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
+          message: "child 'ArgumentsComma' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
         ),
         ValidationFailure(
           node: .poundSourceLocationArguments,

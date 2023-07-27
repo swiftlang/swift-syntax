@@ -414,6 +414,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DictionaryTypeSyntax) -> ResultType
   
+  /// Visiting ``DifferentiabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DifferentiabilityArgumentListSyntax) -> ResultType
+  
   /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -423,11 +428,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DifferentiabilityArgumentsSyntax) -> ResultType
-  
-  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: DifferentiabilityParameterListSyntax) -> ResultType
   
   /// Visiting ``DifferentiabilityWithRespectToArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1968,6 +1968,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``DifferentiabilityArgumentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DifferentiabilityArgumentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``DifferentiabilityArgumentSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -1979,13 +1986,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: DifferentiabilityArgumentsSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``DifferentiabilityParameterListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: DifferentiabilityParameterListSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3523,11 +3523,11 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .dictionaryType(let derived):
       return visit(derived)
+    case .differentiabilityArgumentList(let derived):
+      return visit(derived)
     case .differentiabilityArgument(let derived):
       return visit(derived)
     case .differentiabilityArguments(let derived):
-      return visit(derived)
-    case .differentiabilityParameterList(let derived):
       return visit(derived)
     case .differentiabilityWithRespectToArgument(let derived):
       return visit(derived)

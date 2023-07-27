@@ -102,7 +102,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case dictionaryType
   case differentiabilityArgument
   case differentiabilityArguments
-  case differentiabilityParameterList
+  case differentiabilityArgumentList
   case differentiabilityWithRespectToArgument
   case differentiableAttributeArguments
   case discardAssignmentExpr
@@ -392,7 +392,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .designatedType: return "designatedTypeElement"
     case .differentiabilityArgument: return "differentiabilityParam"
     case .differentiabilityArguments: return "differentiabilityParams"
-    case .differentiabilityParameterList: return "differentiabilityParamList"
+    case .differentiabilityArgumentList: return "differentiabilityParamList"
     case .differentiabilityWithRespectToArgument: return "differentiabilityParamsClause"
     case .documentationAttributeArgumentList: return "documentationAttributeArguments"
     case .dynamicReplacementAttributeArguments: return "dynamicReplacementArguments"

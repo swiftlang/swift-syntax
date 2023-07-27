@@ -685,6 +685,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  override open func visit(_ node: DifferentiabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+  
+  override open func visitPost(_ node: DifferentiabilityArgumentListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+  
   override open func visit(_ node: DifferentiabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -698,14 +706,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: DifferentiabilityArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: DifferentiabilityParameterListSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: DifferentiabilityParameterListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

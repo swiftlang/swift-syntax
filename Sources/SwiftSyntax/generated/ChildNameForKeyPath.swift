@@ -3229,12 +3229,8 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTypeAndEllipsis"
   case \TupleTypeElementSyntax.ellipsis:
     return "ellipsis"
-  case \TupleTypeElementSyntax.unexpectedBetweenEllipsisAndInitializer:
-    return "unexpectedBetweenEllipsisAndInitializer"
-  case \TupleTypeElementSyntax.initializer:
-    return "initializer"
-  case \TupleTypeElementSyntax.unexpectedBetweenInitializerAndTrailingComma:
-    return "unexpectedBetweenInitializerAndTrailingComma"
+  case \TupleTypeElementSyntax.unexpectedBetweenEllipsisAndTrailingComma:
+    return "unexpectedBetweenEllipsisAndTrailingComma"
   case \TupleTypeElementSyntax.trailingComma:
     return "trailingComma"
   case \TupleTypeElementSyntax.unexpectedAfterTrailingComma:

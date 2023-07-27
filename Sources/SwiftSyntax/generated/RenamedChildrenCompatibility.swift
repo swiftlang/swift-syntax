@@ -8109,9 +8109,7 @@ extension TupleTypeElementSyntax {
       type: some TypeSyntaxProtocol,
       _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
       ellipsis: TokenSyntax? = nil,
-      _ unexpectedBetweenEllipsisAndInitializer: UnexpectedNodesSyntax? = nil,
-      initializer: InitializerClauseSyntax? = nil,
-      _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -8131,9 +8129,7 @@ extension TupleTypeElementSyntax {
         type: type, 
         unexpectedBetweenTypeAndEllipsis, 
         ellipsis: ellipsis, 
-        unexpectedBetweenEllipsisAndInitializer, 
-        initializer: initializer, 
-        unexpectedBetweenInitializerAndTrailingComma, 
+        unexpectedBetweenEllipsisAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
         trailingTrivia: trailingTrivia

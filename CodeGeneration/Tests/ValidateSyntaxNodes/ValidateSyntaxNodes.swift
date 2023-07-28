@@ -524,7 +524,6 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(node: .accessesEffect, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .accessorParameters, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
@@ -533,7 +532,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .initializesEffect, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .precedenceGroupDecl, message: "could conform to trait 'Braced' but does not"),
         ValidationFailure(node: .precedenceGroupName, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),

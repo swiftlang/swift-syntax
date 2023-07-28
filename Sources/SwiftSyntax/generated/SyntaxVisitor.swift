@@ -34,18 +34,6 @@ open class SyntaxVisitor {
     visit(node.data)
   }
   
-  /// Visiting ``AccessesEffectSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessesEffectSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AccessesEffectSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessesEffectSyntax) {
-  }
-  
   /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -92,18 +80,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``AccessorEffectSpecifiersSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AccessorEffectSpecifiersSyntax) {
-  }
-  
-  /// Visiting ``AccessorInitEffectsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: AccessorInitEffectsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``AccessorInitEffectsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: AccessorInitEffectsSyntax) {
   }
   
   /// Visiting ``AccessorParametersSyntax`` specifically.
@@ -1810,18 +1786,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: InitializerDeclSyntax) {
   }
   
-  /// Visiting ``InitializesEffectSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: InitializesEffectSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``InitializesEffectSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: InitializesEffectSyntax) {
-  }
-  
   /// Visiting ``IntegerLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3383,17 +3347,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessesEffectSyntax(_ data: SyntaxData) {
-    let node = AccessesEffectSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorBlockSyntax(_ data: SyntaxData) {
     let node = AccessorBlockSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -3429,17 +3382,6 @@ open class SyntaxVisitor {
   /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) {
     let node = AccessorEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorInitEffectsSyntax(_ data: SyntaxData) {
-    let node = AccessorInitEffectsSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -5011,17 +4953,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInitializesEffectSyntax(_ data: SyntaxData) {
-    let node = InitializesEffectSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) {
     let node = IntegerLiteralExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6447,8 +6378,6 @@ open class SyntaxVisitor {
       _ = visit(node)
       // No children to visit.
       visitPost(node)
-    case .accessesEffect:
-      visitImplAccessesEffectSyntax(data)
     case .accessorBlock:
       visitImplAccessorBlockSyntax(data)
     case .accessorDeclList:
@@ -6457,8 +6386,6 @@ open class SyntaxVisitor {
       visitImplAccessorDeclSyntax(data)
     case .accessorEffectSpecifiers:
       visitImplAccessorEffectSpecifiersSyntax(data)
-    case .accessorInitEffects:
-      visitImplAccessorInitEffectsSyntax(data)
     case .accessorParameters:
       visitImplAccessorParametersSyntax(data)
     case .actorDecl:
@@ -6743,8 +6670,6 @@ open class SyntaxVisitor {
       visitImplInitializerClauseSyntax(data)
     case .initializerDecl:
       visitImplInitializerDeclSyntax(data)
-    case .initializesEffect:
-      visitImplInitializesEffectSyntax(data)
     case .integerLiteralExpr:
       visitImplIntegerLiteralExprSyntax(data)
     case .isExpr:

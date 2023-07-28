@@ -964,48 +964,6 @@ final class DeclarationTests: XCTestCase {
     )
   }
 
-  func testInitAccessorEffects() {
-    assertParse(
-      """
-      struct S {
-        var value: Int {
-          init initializes(x) {}
-        }
-      }
-      """
-    )
-
-    assertParse(
-      """
-      struct S {
-        var value: Int {
-          init accesses(x) {}
-        }
-      }
-      """
-    )
-
-    assertParse(
-      """
-      struct S {
-        var value: Int {
-          init initializes(x) accesses(y) {}
-        }
-      }
-      """
-    )
-
-    assertParse(
-      """
-      struct S {
-        var value: Int {
-          init initializes(x, y, z) accesses(x, y, z) {}
-        }
-      }
-      """
-    )
-  }
-
   func testExpressionMember() {
     assertParse(
       """
@@ -2536,19 +2494,6 @@ final class DeclarationTests: XCTestCase {
       struct Test {
         var pair: (Int, Int) = (42, 0) {
           init(initialValue) {}
-
-          get { (0, 42) }
-          set { }
-        }
-      }
-      """
-    )
-
-    assertParse(
-      """
-      struct Test {
-        var pair: (Int, Int) = (42, 0) {
-          init initializes(a) {}
 
           get { (0, 42) }
           set { }

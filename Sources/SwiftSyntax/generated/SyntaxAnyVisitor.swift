@@ -53,14 +53,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: AccessesEffectSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AccessesEffectSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
   override open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -90,14 +82,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: AccessorEffectSpecifiersSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: AccessorInitEffectsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: AccessorInitEffectsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
@@ -1234,14 +1218,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
   
   override open func visitPost(_ node: InitializerDeclSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  override open func visit(_ node: InitializesEffectSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  override open func visitPost(_ node: InitializesEffectSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

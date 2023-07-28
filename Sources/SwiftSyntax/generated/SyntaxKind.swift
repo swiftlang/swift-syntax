@@ -15,12 +15,10 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: CaseIterable {
   case token
-  case accessesEffect
   case accessorBlock
   case accessorDeclList
   case accessorDecl
   case accessorEffectSpecifiers
-  case accessorInitEffects
   case accessorParameters
   case actorDecl
   case arrayElementList
@@ -163,7 +161,6 @@ public enum SyntaxKind: CaseIterable {
   case inheritedType
   case initializerClause
   case initializerDecl
-  case initializesEffect
   case integerLiteralExpr
   case isExpr
   case isTypePattern
@@ -420,8 +417,6 @@ public enum SyntaxKind: CaseIterable {
     switch self {
     case .token:
       return TokenSyntax.self
-    case .accessesEffect:
-      return AccessesEffectSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDeclList:
@@ -430,8 +425,6 @@ public enum SyntaxKind: CaseIterable {
       return AccessorDeclSyntax.self
     case .accessorEffectSpecifiers:
       return AccessorEffectSpecifiersSyntax.self
-    case .accessorInitEffects:
-      return AccessorInitEffectsSyntax.self
     case .accessorParameters:
       return AccessorParametersSyntax.self
     case .actorDecl:
@@ -716,8 +709,6 @@ public enum SyntaxKind: CaseIterable {
       return InitializerClauseSyntax.self
     case .initializerDecl:
       return InitializerDeclSyntax.self
-    case .initializesEffect:
-      return InitializesEffectSyntax.self
     case .integerLiteralExpr:
       return IntegerLiteralExprSyntax.self
     case .isExpr:

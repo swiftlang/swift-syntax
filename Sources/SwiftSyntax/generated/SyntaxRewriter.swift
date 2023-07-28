@@ -80,13 +80,6 @@ open class SyntaxRewriter {
     return visit(node.data).cast(T.self)
   }
   
-  /// Visit a ``AccessesEffectSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AccessesEffectSyntax) -> AccessesEffectSyntax {
-    return Syntax(visitChildren(node)).cast(AccessesEffectSyntax.self)
-  }
-  
   /// Visit a ``AccessorBlockSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -113,13 +106,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorEffectSpecifiersSyntax) -> AccessorEffectSpecifiersSyntax {
     return Syntax(visitChildren(node)).cast(AccessorEffectSpecifiersSyntax.self)
-  }
-  
-  /// Visit a ``AccessorInitEffectsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: AccessorInitEffectsSyntax) -> AccessorInitEffectsSyntax {
-    return Syntax(visitChildren(node)).cast(AccessorInitEffectsSyntax.self)
   }
   
   /// Visit a ``AccessorParametersSyntax``.
@@ -1116,13 +1102,6 @@ open class SyntaxRewriter {
     return DeclSyntax(visitChildren(node))
   }
   
-  /// Visit a ``InitializesEffectSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: InitializesEffectSyntax) -> InitializesEffectSyntax {
-    return Syntax(visitChildren(node)).cast(InitializesEffectSyntax.self)
-  }
-  
   /// Visit a ``IntegerLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2062,20 +2041,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessesEffectSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessesEffectSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorBlockSyntax(_ data: SyntaxData) -> Syntax {
     let node = AccessorBlockSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -2120,20 +2085,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
     let node = AccessorEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorInitEffectsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorInitEffectsSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -4134,20 +4085,6 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInitializesEffectSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InitializesEffectSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
     let node = IntegerLiteralExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
@@ -5995,8 +5932,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax
-    case .accessesEffect:
-      return visitImplAccessesEffectSyntax
     case .accessorBlock:
       return visitImplAccessorBlockSyntax
     case .accessorDeclList:
@@ -6005,8 +5940,6 @@ open class SyntaxRewriter {
       return visitImplAccessorDeclSyntax
     case .accessorEffectSpecifiers:
       return visitImplAccessorEffectSpecifiersSyntax
-    case .accessorInitEffects:
-      return visitImplAccessorInitEffectsSyntax
     case .accessorParameters:
       return visitImplAccessorParametersSyntax
     case .actorDecl:
@@ -6291,8 +6224,6 @@ open class SyntaxRewriter {
       return visitImplInitializerClauseSyntax
     case .initializerDecl:
       return visitImplInitializerDeclSyntax
-    case .initializesEffect:
-      return visitImplInitializesEffectSyntax
     case .integerLiteralExpr:
       return visitImplIntegerLiteralExprSyntax
     case .isExpr:
@@ -6561,8 +6492,6 @@ open class SyntaxRewriter {
     switch data.raw.kind {
     case .token:
       return visitImplTokenSyntax(data)
-    case .accessesEffect:
-      return visitImplAccessesEffectSyntax(data)
     case .accessorBlock:
       return visitImplAccessorBlockSyntax(data)
     case .accessorDeclList:
@@ -6571,8 +6500,6 @@ open class SyntaxRewriter {
       return visitImplAccessorDeclSyntax(data)
     case .accessorEffectSpecifiers:
       return visitImplAccessorEffectSpecifiersSyntax(data)
-    case .accessorInitEffects:
-      return visitImplAccessorInitEffectsSyntax(data)
     case .accessorParameters:
       return visitImplAccessorParametersSyntax(data)
     case .actorDecl:
@@ -6857,8 +6784,6 @@ open class SyntaxRewriter {
       return visitImplInitializerClauseSyntax(data)
     case .initializerDecl:
       return visitImplInitializerDeclSyntax(data)
-    case .initializesEffect:
-      return visitImplInitializesEffectSyntax(data)
     case .integerLiteralExpr:
       return visitImplIntegerLiteralExprSyntax(data)
     case .isExpr:

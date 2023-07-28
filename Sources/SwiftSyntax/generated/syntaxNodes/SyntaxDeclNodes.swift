@@ -21,7 +21,6 @@
 ///  - `accessorSpecifier`: (`'get'` | `'set'` | `'didSet'` | `'willSet'` | `'unsafeAddress'` | `'addressWithOwner'` | `'addressWithNativeOwner'` | `'unsafeMutableAddress'` | `'mutableAddressWithOwner'` | `'mutableAddressWithNativeOwner'` | `'_read'` | `'_modify'` | `'init'`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
-///  - `initEffects`: ``AccessorInitEffectsSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
 ///
 /// ### Contained in
@@ -60,9 +59,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       parameters: AccessorParametersSyntax? = nil,
       _ unexpectedBetweenParametersAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil,
-      initEffects: AccessorInitEffectsSyntax? = nil,
-      _ unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax? = nil,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -81,9 +78,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
             parameters, 
             unexpectedBetweenParametersAndEffectSpecifiers, 
             effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndInitEffects, 
-            initEffects, 
-            unexpectedBetweenInitEffectsAndBody, 
+            unexpectedBetweenEffectSpecifiersAndBody, 
             body, 
             unexpectedAfterBody
           ))) { (arena, _) in
@@ -98,9 +93,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           parameters?.raw, 
           unexpectedBetweenParametersAndEffectSpecifiers?.raw, 
           effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndInitEffects?.raw, 
-          initEffects?.raw, 
-          unexpectedBetweenInitEffectsAndBody?.raw, 
+          unexpectedBetweenEffectSpecifiersAndBody?.raw, 
           body?.raw, 
           unexpectedAfterBody?.raw
         ]
@@ -231,7 +224,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -240,39 +233,21 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var initEffects: AccessorInitEffectsSyntax? {
+  public var body: CodeBlockSyntax? {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(AccessorInitEffectsSyntax.init)
+      return data.child(at: 11, parent: Syntax(self)).map(CodeBlockSyntax.init)
     }
     set(value) {
       self = AccessorDeclSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? {
+  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = AccessorDeclSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var body: CodeBlockSyntax? {
-    get {
-      return data.child(at: 13, parent: Syntax(self)).map(CodeBlockSyntax.init)
-    }
-    set(value) {
-      self = AccessorDeclSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterBody: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = AccessorDeclSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -288,9 +263,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           \Self.parameters, 
           \Self.unexpectedBetweenParametersAndEffectSpecifiers, 
           \Self.effectSpecifiers, 
-          \Self.unexpectedBetweenEffectSpecifiersAndInitEffects, 
-          \Self.initEffects, 
-          \Self.unexpectedBetweenInitEffectsAndBody, 
+          \Self.unexpectedBetweenEffectSpecifiersAndBody, 
           \Self.body, 
           \Self.unexpectedAfterBody
         ])

@@ -12,69 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension AccessesEffectSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
-  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenLeftParenAndProperties
-    }
-    set {
-      unexpectedBetweenLeftParenAndProperties = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "properties")
-  public var propertyList: LabeledExprListSyntax {
-    get {
-      return properties
-    }
-    set {
-      properties = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
-  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenPropertiesAndRightParen
-    }
-    set {
-      unexpectedBetweenPropertiesAndRightParen = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAccessesKeyword: UnexpectedNodesSyntax? = nil,
-      accessesKeyword: TokenSyntax = .keyword(.accesses),
-      _ unexpectedBetweenAccessesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
-      propertyList: LabeledExprListSyntax,
-      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeAccessesKeyword, 
-        accessesKeyword: accessesKeyword, 
-        unexpectedBetweenAccessesKeywordAndLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndPropertyList, 
-        properties: propertyList, 
-        unexpectedBetweenPropertyListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension AccessorDeclSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenModifierAndAccessorSpecifier")
   public var unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? {
@@ -140,9 +77,7 @@ extension AccessorDeclSyntax {
       parameter: AccessorParametersSyntax? = nil,
       _ unexpectedBetweenParameterAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndInitEffects: UnexpectedNodesSyntax? = nil,
-      initEffects: AccessorInitEffectsSyntax? = nil,
-      _ unexpectedBetweenInitEffectsAndBody: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax? = nil,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -160,9 +95,7 @@ extension AccessorDeclSyntax {
         parameters: parameter, 
         unexpectedBetweenParameterAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 
-        unexpectedBetweenEffectSpecifiersAndInitEffects, 
-        initEffects: initEffects, 
-        unexpectedBetweenInitEffectsAndBody, 
+        unexpectedBetweenEffectSpecifiersAndBody, 
         body: body, 
         unexpectedAfterBody, 
         trailingTrivia: trailingTrivia
@@ -4277,69 +4210,6 @@ extension InheritedTypeSyntax {
         unexpectedBetweenTypeNameAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension InitializesEffectSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndProperties")
-  public var unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenLeftParenAndProperties
-    }
-    set {
-      unexpectedBetweenLeftParenAndProperties = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "properties")
-  public var propertyList: LabeledExprListSyntax {
-    get {
-      return properties
-    }
-    set {
-      properties = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenPropertiesAndRightParen")
-  public var unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenPropertiesAndRightParen
-    }
-    set {
-      unexpectedBetweenPropertiesAndRightParen = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with properties argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeInitializesKeyword: UnexpectedNodesSyntax? = nil,
-      initializesKeyword: TokenSyntax = .keyword(.initializes),
-      _ unexpectedBetweenInitializesKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndPropertyList: UnexpectedNodesSyntax? = nil,
-      propertyList: LabeledExprListSyntax,
-      _ unexpectedBetweenPropertyListAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeInitializesKeyword, 
-        initializesKeyword: initializesKeyword, 
-        unexpectedBetweenInitializesKeywordAndLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndPropertyList, 
-        properties: propertyList, 
-        unexpectedBetweenPropertyListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -3286,42 +3286,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: WildcardPatternSyntax) {
   }
   
-  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldStmtArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``YieldStmtArgumentClauseSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldStmtArgumentClauseSyntax) {
-  }
-  
-  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldStmtArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``YieldStmtArgumentListSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldStmtArgumentListSyntax) {
-  }
-  
-  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: YieldStmtArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``YieldStmtArgumentSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: YieldStmtArgumentSyntax) {
-  }
-  
   /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3332,6 +3296,42 @@ open class SyntaxVisitor {
   /// The function called after visiting ``YieldStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: YieldStmtSyntax) {
+  }
+  
+  /// Visiting ``YieldedExpressionListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldedExpressionListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``YieldedExpressionListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldedExpressionListSyntax) {
+  }
+  
+  /// Visiting ``YieldedExpressionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldedExpressionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``YieldedExpressionSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldedExpressionSyntax) {
+  }
+  
+  /// Visiting ``YieldedExpressionsClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldedExpressionsClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``YieldedExpressionsClauseSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldedExpressionsClauseSyntax) {
   }
   
   /// Visiting ``TokenSyntax`` specifically.
@@ -6328,41 +6328,41 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldStmtArgumentClauseSyntax(_ data: SyntaxData) {
-    let node = YieldStmtArgumentClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldStmtArgumentListSyntax(_ data: SyntaxData) {
-    let node = YieldStmtArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldStmtArgumentSyntax(_ data: SyntaxData) {
-    let node = YieldStmtArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplYieldStmtSyntax(_ data: SyntaxData) {
     let node = YieldStmtSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldedExpressionListSyntax(_ data: SyntaxData) {
+    let node = YieldedExpressionListSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldedExpressionSyntax(_ data: SyntaxData) {
+    let node = YieldedExpressionSyntax(data)
+    let needsChildren = (visit(node) == .visitChildren)
+    // Avoid calling into visitChildren if possible.
+    if needsChildren && !node.raw.layoutView!.children.isEmpty {
+      visitChildren(node)
+    }
+    visitPost(node)
+  }
+  
+  /// Implementation detail of doVisit(_:_:). Do not call directly.
+  private func visitImplYieldedExpressionsClauseSyntax(_ data: SyntaxData) {
+    let node = YieldedExpressionsClauseSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6920,14 +6920,14 @@ open class SyntaxVisitor {
       visitImplWhileStmtSyntax(data)
     case .wildcardPattern:
       visitImplWildcardPatternSyntax(data)
-    case .yieldStmtArgumentClause:
-      visitImplYieldStmtArgumentClauseSyntax(data)
-    case .yieldStmtArgumentList:
-      visitImplYieldStmtArgumentListSyntax(data)
-    case .yieldStmtArgument:
-      visitImplYieldStmtArgumentSyntax(data)
     case .yieldStmt:
       visitImplYieldStmtSyntax(data)
+    case .yieldedExpressionList:
+      visitImplYieldedExpressionListSyntax(data)
+    case .yieldedExpression:
+      visitImplYieldedExpressionSyntax(data)
+    case .yieldedExpressionsClause:
+      visitImplYieldedExpressionsClauseSyntax(data)
     }
   }
   

@@ -680,16 +680,16 @@ extension Parser {
 
     let yieldedExpressions: RawYieldStmtSyntax.YieldedExpressions
     if let lparen = self.consume(if: .leftParen) {
-      let exprList: RawYieldStmtArgumentListSyntax
+      let exprList: RawYieldedExpressionListSyntax
       do {
         var keepGoing = true
-        var elementList = [RawYieldStmtArgumentSyntax]()
+        var elementList = [RawYieldedExpressionSyntax]()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
           let expr = self.parseExpression()
           let comma = self.consume(if: .comma)
           elementList.append(
-            RawYieldStmtArgumentSyntax(
+            RawYieldedExpressionSyntax(
               expression: expr,
               comma: comma,
               arena: self.arena
@@ -698,11 +698,11 @@ extension Parser {
 
           keepGoing = (comma != nil)
         }
-        exprList = RawYieldStmtArgumentListSyntax(elements: elementList, arena: self.arena)
+        exprList = RawYieldedExpressionListSyntax(elements: elementList, arena: self.arena)
       }
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      yieldedExpressions = .yieldList(
-        RawYieldStmtArgumentClauseSyntax(
+      yieldedExpressions = .multiple(
+        RawYieldedExpressionsClauseSyntax(
           leftParen: lparen,
           elements: exprList,
           unexpectedBeforeRParen,
@@ -711,7 +711,7 @@ extension Parser {
         )
       )
     } else {
-      yieldedExpressions = .simpleYield(self.parseExpression())
+      yieldedExpressions = .single(self.parseExpression())
     }
 
     return RawYieldStmtSyntax(

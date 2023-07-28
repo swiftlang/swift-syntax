@@ -8633,65 +8633,6 @@ extension WhereClauseSyntax {
   }
 }
 
-extension YieldStmtArgumentClauseSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
-  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenLeftParenAndElements
-    }
-    set {
-      unexpectedBetweenLeftParenAndElements = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "elements")
-  public var elementList: YieldStmtArgumentListSyntax {
-    get {
-      return elements
-    }
-    set {
-      elements = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
-  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenElementsAndRightParen
-    }
-    set {
-      unexpectedBetweenElementsAndRightParen = newValue
-    }
-  }
-  
-  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
-      elementList: YieldStmtArgumentListSyntax,
-      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeLeftParen, 
-        leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndElementList, 
-        elements: elementList, 
-        unexpectedBetweenElementListAndRightParen, 
-        rightParen: rightParen, 
-        unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension YieldStmtSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenYieldKeywordAndYieldedExpressions")
   public var unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? {
@@ -8742,6 +8683,65 @@ extension YieldStmtSyntax {
         unexpectedBetweenYieldKeywordAndYields, 
         yieldedExpressions: yields, 
         unexpectedAfterYields, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension YieldedExpressionsClauseSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndElements")
+  public var unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenLeftParenAndElements
+    }
+    set {
+      unexpectedBetweenLeftParenAndElements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "elements")
+  public var elementList: YieldedExpressionListSyntax {
+    get {
+      return elements
+    }
+    set {
+      elements = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenElementsAndRightParen")
+  public var unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenElementsAndRightParen
+    }
+    set {
+      unexpectedBetweenElementsAndRightParen = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndElementList: UnexpectedNodesSyntax? = nil,
+      elementList: YieldedExpressionListSyntax,
+      _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeLeftParen, 
+        leftParen: leftParen, 
+        unexpectedBetweenLeftParenAndElementList, 
+        elements: elementList, 
+        unexpectedBetweenElementListAndRightParen, 
+        rightParen: rightParen, 
+        unexpectedAfterRightParen, 
         trailingTrivia: trailingTrivia
       )
   }

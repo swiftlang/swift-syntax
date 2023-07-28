@@ -19291,184 +19291,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   }
 }
 
-// MARK: - YieldStmtArgumentClauseSyntax
-
-/// ### Children
-/// 
-///  - `leftParen`: `'('`
-///  - `elements`: ``YieldStmtArgumentListSyntax``
-///  - `rightParen`: `')'`
-///
-/// ### Contained in
-/// 
-///  - ``YieldStmtSyntax``.``YieldStmtSyntax/yieldedExpressions``
-public struct YieldStmtArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .yieldStmtArgumentClause else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``YieldStmtArgumentClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .yieldStmtArgumentClause)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil,
-      elements: YieldStmtArgumentListSyntax,
-      _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndElements, 
-            elements, 
-            unexpectedBetweenElementsAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndElements?.raw, 
-          elements.raw, 
-          unexpectedBetweenElementsAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.yieldStmtArgumentClause,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var leftParen: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var elements: YieldStmtArgumentListSyntax {
-    get {
-      return YieldStmtArgumentListSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// Adds the provided `element` to the node's `elements`
-  /// collection.
-  /// - param element: The new `Element` to add to the node's
-  ///                  `elements` collection.
-  /// - returns: A copy of the receiver with the provided `Element`
-  ///            appended to its `elements` collection.
-  public func addElement(_ element: YieldStmtArgumentSyntax) -> YieldStmtArgumentClauseSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldStmtArgumentList,
-                                        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
-    return YieldStmtArgumentClauseSyntax(newData)
-  }
-  
-  public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var rightParen: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = YieldStmtArgumentClauseSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElements, 
-          \Self.elements, 
-          \Self.unexpectedBetweenElementsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
-}
-
-// MARK: - YieldStmtArgumentSyntax
+// MARK: - YieldedExpressionSyntax
 
 /// ### Children
 /// 
@@ -19477,22 +19300,22 @@ public struct YieldStmtArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``YieldStmtArgumentListSyntax``
-public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+///  - ``YieldedExpressionListSyntax``
+public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .yieldStmtArgument else {
+    guard node.raw.kind == .yieldedExpression else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``YieldStmtArgumentSyntax`` node from the given ``SyntaxData``. This assumes
+  /// Creates a ``YieldedExpressionSyntax`` node from the given ``SyntaxData``. This assumes
   /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
   /// is undefined.
   internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .yieldStmtArgument)
+    precondition(data.raw.kind == .yieldedExpression)
     self._syntaxNode = Syntax(data)
   }
   
@@ -19526,7 +19349,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedAfterComma?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.yieldStmtArgument,
+        kind: SyntaxKind.yieldedExpression,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -19543,7 +19366,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = YieldStmtArgumentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+      self = YieldedExpressionSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -19552,7 +19375,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       return ExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = YieldStmtArgumentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = YieldedExpressionSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -19561,7 +19384,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = YieldStmtArgumentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+      self = YieldedExpressionSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -19570,7 +19393,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = YieldStmtArgumentSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = YieldedExpressionSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -19579,7 +19402,7 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
-      self = YieldStmtArgumentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+      self = YieldedExpressionSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -19590,6 +19413,183 @@ public struct YieldStmtArgumentSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenExpressionAndComma, 
           \Self.comma, 
           \Self.unexpectedAfterComma
+        ])
+  }
+}
+
+// MARK: - YieldedExpressionsClauseSyntax
+
+/// ### Children
+/// 
+///  - `leftParen`: `'('`
+///  - `elements`: ``YieldedExpressionListSyntax``
+///  - `rightParen`: `')'`
+///
+/// ### Contained in
+/// 
+///  - ``YieldStmtSyntax``.``YieldStmtSyntax/yieldedExpressions``
+public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .yieldedExpressionsClause else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``YieldedExpressionsClauseSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .yieldedExpressionsClause)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? = nil,
+      elements: YieldedExpressionListSyntax,
+      _ unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? = nil,
+      rightParen: TokenSyntax = .rightParenToken(),
+      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeLeftParen, 
+            leftParen, 
+            unexpectedBetweenLeftParenAndElements, 
+            elements, 
+            unexpectedBetweenElementsAndRightParen, 
+            rightParen, 
+            unexpectedAfterRightParen
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeLeftParen?.raw, 
+          leftParen.raw, 
+          unexpectedBetweenLeftParenAndElements?.raw, 
+          elements.raw, 
+          unexpectedBetweenElementsAndRightParen?.raw, 
+          rightParen.raw, 
+          unexpectedAfterRightParen?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.yieldedExpressionsClause,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var leftParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenLeftParenAndElements: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var elements: YieldedExpressionListSyntax {
+    get {
+      return YieldedExpressionListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `element` to the node's `elements`
+  /// collection.
+  /// - param element: The new `Element` to add to the node's
+  ///                  `elements` collection.
+  /// - returns: A copy of the receiver with the provided `Element`
+  ///            appended to its `elements` collection.
+  public func addElement(_ element: YieldedExpressionSyntax) -> YieldedExpressionsClauseSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.yieldedExpressionList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
+    return YieldedExpressionsClauseSyntax(newData)
+  }
+  
+  public var unexpectedBetweenElementsAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var rightParen: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = YieldedExpressionsClauseSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeLeftParen, 
+          \Self.leftParen, 
+          \Self.unexpectedBetweenLeftParenAndElements, 
+          \Self.elements, 
+          \Self.unexpectedBetweenElementsAndRightParen, 
+          \Self.rightParen, 
+          \Self.unexpectedAfterRightParen
         ])
   }
 }

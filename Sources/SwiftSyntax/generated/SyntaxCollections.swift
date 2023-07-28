@@ -1373,22 +1373,22 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
 
 /// ### Children
 /// 
-/// ``YieldStmtArgumentSyntax`` `*`
+/// ``YieldedExpressionSyntax`` `*`
 ///
 /// ### Contained in
 /// 
-///  - ``YieldStmtArgumentClauseSyntax``.``YieldStmtArgumentClauseSyntax/elements``
-public struct YieldStmtArgumentListSyntax: SyntaxCollection, SyntaxHashable {
-  public typealias Element = YieldStmtArgumentSyntax
+///  - ``YieldedExpressionsClauseSyntax``.``YieldedExpressionsClauseSyntax/elements``
+public struct YieldedExpressionListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = YieldedExpressionSyntax
   
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .yieldStmtArgumentList else {
+    guard node.raw.kind == .yieldedExpressionList else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
   
-  public static let syntaxKind = SyntaxKind.yieldStmtArgumentList
+  public static let syntaxKind = SyntaxKind.yieldedExpressionList
 }

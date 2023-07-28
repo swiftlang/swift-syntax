@@ -198,14 +198,14 @@ public typealias UnavailableFromAsyncArgumentsSyntax = UnavailableFromAsyncAttri
 @available(*, deprecated, renamed: "PatternExprSyntax")
 public typealias UnresolvedPatternExprSyntax = PatternExprSyntax
 
-@available(*, deprecated, renamed: "YieldStmtArgumentListSyntax")
-public typealias YieldExprListSyntax = YieldStmtArgumentListSyntax
+@available(*, deprecated, renamed: "YieldedExpressionListSyntax")
+public typealias YieldExprListSyntax = YieldedExpressionListSyntax
 
-@available(*, deprecated, renamed: "YieldStmtArgumentSyntax")
-public typealias YieldExprListElementSyntax = YieldStmtArgumentSyntax
+@available(*, deprecated, renamed: "YieldedExpressionSyntax")
+public typealias YieldExprListElementSyntax = YieldedExpressionSyntax
 
-@available(*, deprecated, renamed: "YieldStmtArgumentClauseSyntax")
-public typealias YieldListSyntax = YieldStmtArgumentClauseSyntax
+@available(*, deprecated, renamed: "YieldedExpressionsClauseSyntax")
+public typealias YieldListSyntax = YieldedExpressionsClauseSyntax
 
 public extension SyntaxKind {
   static var  availabilityVersionRestrictionListEntry: Self {
@@ -457,14 +457,14 @@ public extension SyntaxKind {
   }
   
   static var yieldExprList: Self {
-    return .yieldStmtArgumentList
+    return .yieldedExpressionList
   }
   
   static var yieldExprListElement: Self {
-    return .yieldStmtArgument
+    return .yieldedExpression
   }
   
   static var yieldList: Self {
-    return .yieldStmtArgumentClause
+    return .yieldedExpressionsClause
   }
 }

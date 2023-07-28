@@ -2213,17 +2213,17 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `yieldKeyword`: `'yield'`
-///  - `yieldedExpressions`: (``YieldStmtArgumentClauseSyntax`` | ``ExprSyntax``)
+///  - `yieldedExpressions`: (``YieldedExpressionsClauseSyntax`` | ``ExprSyntax``)
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public enum YieldedExpressions: SyntaxChildChoices {
-    case `yieldList`(YieldStmtArgumentClauseSyntax)
-    case `simpleYield`(ExprSyntax)
+    case `multiple`(YieldedExpressionsClauseSyntax)
+    case `single`(ExprSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
-      case .yieldList(let node):
+      case .multiple(let node):
         return node._syntaxNode
-      case .simpleYield(let node):
+      case .single(let node):
         return node._syntaxNode
       }
     }
@@ -2232,28 +2232,28 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       self.init(Syntax(data))!
     }
     
-    public init(_ node: YieldStmtArgumentClauseSyntax) {
-      self = .yieldList(node)
+    public init(_ node: YieldedExpressionsClauseSyntax) {
+      self = .multiple(node)
     }
     
     public init(_ node: some ExprSyntaxProtocol) {
-      self = .simpleYield(ExprSyntax(node))
+      self = .single(ExprSyntax(node))
     }
     
     public init?(_ node: some SyntaxProtocol) {
-      if let node = node.as(YieldStmtArgumentClauseSyntax.self) {
-        self = .yieldList(node)
+      if let node = node.as(YieldedExpressionsClauseSyntax.self) {
+        self = .multiple(node)
         return
       }
       if let node = node.as(ExprSyntax.self) {
-        self = .simpleYield(node)
+        self = .single(node)
         return
       }
       return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([.node(YieldStmtArgumentClauseSyntax.self), .node(ExprSyntax.self)])
+      return .choices([.node(YieldedExpressionsClauseSyntax.self), .node(ExprSyntax.self)])
     }
   }
   

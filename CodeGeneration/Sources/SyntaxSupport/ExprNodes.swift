@@ -1921,7 +1921,7 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    kind: .yieldStmtArgument,
+    kind: .yieldedExpression,
     base: .syntax,
     nameForDiagnostics: nil,
     children: [
@@ -1938,10 +1938,10 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
-    kind: .yieldStmtArgumentList,
+    kind: .yieldedExpressionList,
     base: .syntaxCollection,
     nameForDiagnostics: "yield list",
-    elementChoices: [.yieldStmtArgument]
+    elementChoices: [.yieldedExpression]
   ),
 
 ]

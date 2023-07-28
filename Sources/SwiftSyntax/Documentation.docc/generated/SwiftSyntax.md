@@ -300,8 +300,8 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/UnexpectedNodesSyntax>
 - <doc:SwiftSyntax/VersionComponentListSyntax>
 - <doc:SwiftSyntax/VersionComponentSyntax>
-- <doc:SwiftSyntax/YieldStmtArgumentListSyntax>
-- <doc:SwiftSyntax/YieldStmtArgumentSyntax>
+- <doc:SwiftSyntax/YieldedExpressionListSyntax>
+- <doc:SwiftSyntax/YieldedExpressionSyntax>
 
 ### Miscellaneous Syntax
 
@@ -365,7 +365,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/UnderscorePrivateAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/VersionTupleSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
-- <doc:SwiftSyntax/YieldStmtArgumentClauseSyntax>
+- <doc:SwiftSyntax/YieldedExpressionsClauseSyntax>
 
 ### Traits
 

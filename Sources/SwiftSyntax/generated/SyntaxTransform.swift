@@ -1374,25 +1374,25 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: WildcardPatternSyntax) -> ResultType
   
-  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldStmtArgumentClauseSyntax) -> ResultType
-  
-  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldStmtArgumentListSyntax) -> ResultType
-  
-  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: YieldStmtArgumentSyntax) -> ResultType
-  
   /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: YieldStmtSyntax) -> ResultType
+  
+  /// Visiting ``YieldedExpressionListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: YieldedExpressionListSyntax) -> ResultType
+  
+  /// Visiting ``YieldedExpressionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: YieldedExpressionSyntax) -> ResultType
+  
+  /// Visiting ``YieldedExpressionsClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: YieldedExpressionsClauseSyntax) -> ResultType
 }
 
 extension SyntaxTransformVisitor {
@@ -3297,31 +3297,31 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``YieldStmtArgumentClauseSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: YieldStmtArgumentClauseSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``YieldStmtArgumentListSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: YieldStmtArgumentListSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``YieldStmtArgumentSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: YieldStmtArgumentSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``YieldStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: YieldStmtSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``YieldedExpressionListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: YieldedExpressionListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``YieldedExpressionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: YieldedExpressionSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``YieldedExpressionsClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: YieldedExpressionsClauseSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3871,13 +3871,13 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .wildcardPattern(let derived):
       return visit(derived)
-    case .yieldStmtArgumentClause(let derived):
-      return visit(derived)
-    case .yieldStmtArgumentList(let derived):
-      return visit(derived)
-    case .yieldStmtArgument(let derived):
-      return visit(derived)
     case .yieldStmt(let derived):
+      return visit(derived)
+    case .yieldedExpressionList(let derived):
+      return visit(derived)
+    case .yieldedExpression(let derived):
+      return visit(derived)
+    case .yieldedExpressionsClause(let derived):
       return visit(derived)
     }
   }

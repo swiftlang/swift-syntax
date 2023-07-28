@@ -433,6 +433,19 @@ open class BasicFormat: SyntaxRewriter {
       return trailingTrivia + Trivia(pieces: nextTokenLeadingWhitespace)
     }()
 
+    /// Whether the leading trivia of the token is folloed by a newline.
+    let leadingTriviaIsFollowedByNewline: Bool = {
+      if token.text.isEmpty && token.trailingTrivia.startsWithNewline {
+        return true
+      } else if token.text.first?.isNewline ?? false {
+        return true
+      } else if token.text.isEmpty && token.trailingTrivia.isEmpty && nextTokenWillStartWithNewline {
+        return true
+      } else {
+        return false
+      }
+    }()
+
     var leadingTrivia = token.leadingTrivia
     var trailingTrivia = token.trailingTrivia
 
@@ -455,9 +468,11 @@ open class BasicFormat: SyntaxRewriter {
       }
     }
 
-    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] {
+    let isEmptyLine = token.leadingTrivia.isEmpty && leadingTriviaIsFollowedByNewline
+    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] && !isEmptyLine {
       // If the token starts on a new line and does not have indentation, this
-      // is the last non-indented token. Store its indentation level
+      // is the last non-indented token. Store its indentation level.
+      // Do not store the indentation level if the line is empty.
       anchorPoints[token] = currentIndentationLevel
     }
 
@@ -501,21 +516,10 @@ open class BasicFormat: SyntaxRewriter {
     leadingTrivia = leadingTrivia.indented(indentation: leadingTriviaIndentation, isOnNewline: previousTokenIsStringLiteralEndingInNewline)
     trailingTrivia = trailingTrivia.indented(indentation: trailingTriviaIndentation, isOnNewline: false)
 
-    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: false)
+    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: leadingTriviaIsFollowedByNewline)
     trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: nextTokenWillStartWithNewline)
 
     if leadingTrivia == token.leadingTrivia && trailingTrivia == token.trailingTrivia {
-      return token
-    }
-
-    if token.text == "\n" && token.leadingTrivia.isEmpty && token.trailingTrivia.isEmpty {
-      return token
-    }
-    if token.text.isEmpty
-        && token.leadingTrivia.isEmpty
-        && token.trailingTrivia.startsWithNewline
-        && token.trailingTrivia.endsWithNewline
-        && previousTokenWillEndWithNewline {
       return token
     }
 

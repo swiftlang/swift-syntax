@@ -508,6 +508,17 @@ open class BasicFormat: SyntaxRewriter {
       return token
     }
 
+    if token.text == "\n" && token.leadingTrivia.isEmpty && token.trailingTrivia.isEmpty {
+      return token
+    }
+    if token.text.isEmpty
+        && token.leadingTrivia.isEmpty
+        && token.trailingTrivia.startsWithNewline
+        && token.trailingTrivia.endsWithNewline
+        && previousTokenWillEndWithNewline {
+      return token
+    }
+
     return token.detached.with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
   }
 }

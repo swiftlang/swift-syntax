@@ -374,7 +374,7 @@ open class BasicFormat: SyntaxRewriter {
 
     /// This method does not consider any posssible mutations to `previousToken`
     /// because newlines should be added to the next token's leading trivia.
-    lazy var previousTokenWillEndWithNewline: Bool = {
+    let previousTokenWillEndWithNewline: Bool = {
       guard let previousToken = previousToken else {
         // Assume that the start of the tree is equivalent to a newline so we
         // don't add a leading newline to the file.
@@ -386,7 +386,7 @@ open class BasicFormat: SyntaxRewriter {
       return previousToken.isStringSegmentWithLastCharacterBeingNewline
     }()
 
-    lazy var previousTokenIsStringLiteralEndingInNewline: Bool = {
+    let previousTokenIsStringLiteralEndingInNewline: Bool = {
       guard let previousToken = previousToken else {
         // Assume that the start of the tree is equivalent to a newline so we
         // don't add a leading newline to the file.
@@ -409,7 +409,7 @@ open class BasicFormat: SyntaxRewriter {
 
     /// Also considers `nextToken` as starting with a leading newline if `token`
     /// and `nextToken` should be separated by a newline.
-    lazy var nextTokenWillStartWithNewline: Bool = {
+    let nextTokenWillStartWithNewline: Bool = {
       guard let nextToken = nextToken else {
         return false
       }
@@ -426,15 +426,15 @@ open class BasicFormat: SyntaxRewriter {
       return false
     }()
 
+    var leadingTrivia = token.leadingTrivia
+    var trailingTrivia = token.trailingTrivia
+
     /// This token's trailing trivia + any spaces or tabs at the start of the
     /// next token's leading trivia.
-    lazy var combinedTrailingTrivia: Trivia = {
+    let combinedTrailingTrivia: Trivia = {
       let nextTokenLeadingWhitespace = nextToken?.leadingTrivia.prefix(while: { $0.isSpaceOrTab }) ?? []
       return trailingTrivia + Trivia(pieces: nextTokenLeadingWhitespace)
     }()
-
-    var leadingTrivia = token.leadingTrivia
-    var trailingTrivia = token.trailingTrivia
 
     if requiresNewline(between: previousToken, and: token) {
       // Add a leading newline if the token requires it unless

@@ -250,6 +250,41 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testMultilineStringLiteralWithBlankLines() {
+    let source = #"""
+      assertionFailure("""
+
+        First line
+
+        Second line
+
+        """)
+      """#
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testMultilineStringLiteralWithFirstLineBlank() {
+    let source = #"""
+      assertionFailure("""
+
+        """)
+      """#
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testNestedMultilineStringLiterals() {
+    let source = #"""
+      assertionFailure("""
+
+        \("""
+          First Line
+        """)
+      """)
+      """#
+
+    assertFormatted(source: source, expected: source)
+  }
+
   func testNestedUserDefinedIndentation() {
     assertFormatted(
       source: """

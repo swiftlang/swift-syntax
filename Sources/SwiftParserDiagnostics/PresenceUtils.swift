@@ -43,29 +43,6 @@ extension SyntaxProtocol {
   }
 }
 
-/// Transforms a syntax tree by making all missing tokens present.
-class PresentMaker: SyntaxRewriter {
-  init() {
-    super.init(viewMode: .fixedUp)
-  }
-
-  override func visit(_ token: TokenSyntax) -> TokenSyntax {
-    if token.isMissing {
-      let presentToken: TokenSyntax
-      let (rawKind, text) = token.tokenKind.decomposeToRaw()
-      if let text = text, (!text.isEmpty || rawKind == .stringSegment) {  // string segments can have empty text
-        presentToken = token.with(\.presence, .present)
-      } else {
-        let newKind = TokenKind.fromRaw(kind: rawKind, text: rawKind.defaultText.map(String.init) ?? "<#\(token.tokenKind.nameForDiagnostics)#>")
-        presentToken = token.with(\.tokenKind, newKind).with(\.presence, .present)
-      }
-      return presentToken
-    } else {
-      return token
-    }
-  }
-}
-
 /// Transforms a syntax tree by making all present tokens missing.
 class MissingMaker: SyntaxRewriter {
   init() {

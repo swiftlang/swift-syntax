@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 /// A rewriter that performs a "basic" format of the passed tree.
 ///
@@ -271,7 +271,7 @@ open class BasicFormat: SyntaxRewriter {
       (.keyword(.`init`), .leftParen),  // init()
       (.keyword(.self), .period),  // self.someProperty
       (.keyword(.Self), .period),  // self.someProperty
-      (.keyword(.set), .leftParen),  // var mYar: Int { set(value) {} }
+      (.keyword(.set), .leftParen),  // var mVar: Int { set(value) {} }
       (.keyword(.subscript), .leftParen),  // subscript(x: Int)
       (.keyword(.super), .period),  // super.someProperty
       (.leftBrace, .rightBrace),  // {}
@@ -348,6 +348,26 @@ open class BasicFormat: SyntaxRewriter {
     return true
   }
 
+  /// Change the text of a token during formatting.
+  ///
+  /// This allows formats to e.g. replace missing tokens by placeholder tokens.
+  ///
+  /// - Parameter token: The token whose text should be changed
+  /// - Returns: The new text or `nil` if the text should not be changed
+  open func transformTokenText(_ token: TokenSyntax) -> String? {
+    return nil
+  }
+
+  /// Change the presence of a token during formatting.
+  ///
+  /// This allows formats to e.g. replace missing tokens by placeholder tokens.
+  ///
+  /// - Parameter token: The token whose presence should be changed
+  /// - Returns: The new presence or `nil` if the presence should not be changed
+  open func transformTokenPresence(_ token: TokenSyntax) -> SourcePresence? {
+    return nil
+  }
+
   // MARK: - Formatting a token
 
   open override func visit(_ token: TokenSyntax) -> TokenSyntax {
@@ -357,6 +377,8 @@ open class BasicFormat: SyntaxRewriter {
     let isInitialToken = self.previousToken == nil
     let previousToken = self.previousToken ?? token.previousToken(viewMode: viewMode)
     let nextToken = token.nextToken(viewMode: viewMode)
+    let transformedTokenText = self.transformTokenText(token)
+    let transformedTokenPresence = self.transformTokenPresence(token)
 
     /// In addition to existing trivia of `previousToken`, also considers
     /// `previousToken` as ending with whitespace if it and `token` should be
@@ -372,7 +394,7 @@ open class BasicFormat: SyntaxRewriter {
         || (requiresWhitespace(between: previousToken, and: token) && isMutable(previousToken))
     }()
 
-    /// This method does not consider any posssible mutations to `previousToken`
+    /// This method does not consider any possible mutations to `previousToken`
     /// because newlines should be added to the next token's leading trivia.
     let previousTokenWillEndWithNewline: Bool = {
       guard let previousToken = previousToken else {
@@ -416,6 +438,14 @@ open class BasicFormat: SyntaxRewriter {
       if nextToken.leadingTrivia.startsWithNewline {
         return true
       }
+      if nextToken.leadingTrivia.isEmpty {
+        if nextToken.text.first?.isNewline ?? false {
+          return true
+        }
+        if nextToken.text.isEmpty && nextToken.trailingTrivia.startsWithNewline {
+          return true
+        }
+      }
       if requiresNewline(between: token, and: nextToken),
         isMutable(nextToken),
         !token.trailingTrivia.endsWithNewline,
@@ -434,6 +464,19 @@ open class BasicFormat: SyntaxRewriter {
     let combinedTrailingTrivia: Trivia = {
       let nextTokenLeadingWhitespace = nextToken?.leadingTrivia.prefix(while: { $0.isSpaceOrTab }) ?? []
       return trailingTrivia + Trivia(pieces: nextTokenLeadingWhitespace)
+    }()
+
+    /// Whether the leading trivia of the token is followed by a newline.
+    let leadingTriviaIsFollowedByNewline: Bool = {
+      if (transformedTokenText ?? token.text).isEmpty && token.trailingTrivia.startsWithNewline {
+        return true
+      } else if token.text.first?.isNewline ?? false {
+        return true
+      } else if (transformedTokenText ?? token.text).isEmpty && token.trailingTrivia.isEmpty && nextTokenWillStartWithNewline {
+        return true
+      } else {
+        return false
+      }
     }()
 
     if requiresNewline(between: previousToken, and: token) {
@@ -455,7 +498,8 @@ open class BasicFormat: SyntaxRewriter {
       }
     }
 
-    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] {
+    let isEmptyLine = token.leadingTrivia.isEmpty && leadingTriviaIsFollowedByNewline
+    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] && !isEmptyLine {
       // If the token starts on a new line and does not have indentation, this
       // is the last non-indented token. Store its indentation level
       anchorPoints[token] = currentIndentationLevel
@@ -501,14 +545,24 @@ open class BasicFormat: SyntaxRewriter {
     leadingTrivia = leadingTrivia.indented(indentation: leadingTriviaIndentation, isOnNewline: previousTokenIsStringLiteralEndingInNewline)
     trailingTrivia = trailingTrivia.indented(indentation: trailingTriviaIndentation, isOnNewline: false)
 
-    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: false)
+    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: leadingTriviaIsFollowedByNewline)
     trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: nextTokenWillStartWithNewline)
 
-    if leadingTrivia == token.leadingTrivia && trailingTrivia == token.trailingTrivia {
-      return token
+    var result = token.detached
+    if leadingTrivia != result.leadingTrivia {
+      result = result.with(\.leadingTrivia, leadingTrivia)
     }
-
-    return token.detached.with(\.leadingTrivia, leadingTrivia).with(\.trailingTrivia, trailingTrivia)
+    if trailingTrivia != result.trailingTrivia {
+      result = result.with(\.trailingTrivia, trailingTrivia)
+    }
+    if let transformedTokenText {
+      let newKind = TokenKind.fromRaw(kind: token.tokenKind.decomposeToRaw().rawKind, text: transformedTokenText)
+      result = result.with(\.tokenKind, newKind).with(\.presence, .present)
+    }
+    if let transformedTokenPresence {
+      result = result.with(\.presence, transformedTokenPresence)
+    }
+    return result
   }
 }
 

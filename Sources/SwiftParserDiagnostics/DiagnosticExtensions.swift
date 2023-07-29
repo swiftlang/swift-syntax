@@ -12,7 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftBasicFormat
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 extension FixIt {
   /// A more complex set of changes that affects multiple syntax nodes and thus
@@ -108,10 +108,45 @@ extension FixIt.MultiNodeChange {
 
 // MARK: - Make present
 
-class MissingNodesBasicFormatter: BasicFormat {
+class PresentMakingFormatter: BasicFormat {
+  init() {
+    super.init(viewMode: .fixedUp)
+  }
+
   override func isMutable(_ token: TokenSyntax) -> Bool {
     // Assume that all missing nodes will be made present by the Fix-It.
     return token.isMissing
+  }
+
+  /// Change the text of all missing tokens to a placeholder with their
+  /// name for diagnostics.
+  override func transformTokenText(_ token: TokenSyntax) -> String? {
+    guard token.isMissing else {
+      return nil
+    }
+
+    let (rawKind, text) = token.tokenKind.decomposeToRaw()
+
+    guard let text = text else {
+      // The token has a default text that we cannot change.
+      return nil
+    }
+
+    if text.isEmpty && rawKind != .stringSegment {
+      // String segments are allowed to have empty text. Replace all other empty
+      // tokens (e.g. missing identifiers) by a placeholder.
+      return "<#\(token.tokenKind.nameForDiagnostics)#>"
+    }
+
+    return nil
+  }
+
+  /// Make all tokens present.
+  override func transformTokenPresence(_ token: TokenSyntax) -> SourcePresence? {
+    guard token.isMissing else {
+      return nil
+    }
+    return .present
   }
 }
 
@@ -123,8 +158,7 @@ extension FixIt.MultiNodeChange {
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> Self {
-    var presentNode = MissingNodesBasicFormatter(viewMode: .fixedUp).rewrite(node, detach: true)
-    presentNode = PresentMaker().rewrite(presentNode)
+    var presentNode = PresentMakingFormatter().rewrite(node, detach: true)
 
     if let leadingTrivia {
       presentNode = presentNode.with(\.leadingTrivia, leadingTrivia)

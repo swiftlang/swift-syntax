@@ -60,9 +60,20 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
         .map { $0.varOrCaseName.description }
         .joined(separator: ", ")
 
+      let renamedArguments =
+        layoutNode.children.map { child in
+          if child.isUnexpectedNodes {
+            return "_:"
+          } else {
+            return "\(child.varOrCaseName):"
+          }
+        }.joined(separator: "")
+
+      let renamedName = "\(layoutNode.type.syntaxBaseName)(leadingTrivia:\(renamedArguments)trailingTrivia:)"
+
       try! InitializerDeclSyntax(
         """
-        @available(*, deprecated, message: "Use an initializer with \(raw: deprecatedNames) argument(s).")
+        @available(*, deprecated, renamed: \(literal: renamedName))
         @_disfavoredOverload
         \(layoutNode.generateInitializerDeclHeader(useDeprecatedChildName: true))
         """

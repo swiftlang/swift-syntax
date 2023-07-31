@@ -160,7 +160,7 @@ open class BasicFormat: SyntaxRewriter {
   ///         print(1)
   ///     }
   /// ```
-  open var inferInitialTokenIndentaiton: Bool { true }
+  open var inferInitialTokenIndentation: Bool { true }
 
   /// Whether a leading newline on `token` should be added.
   open func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
@@ -461,7 +461,7 @@ open class BasicFormat: SyntaxRewriter {
       anchorPoints[token] = currentIndentationLevel
     }
 
-    if inferInitialTokenIndentaiton
+    if inferInitialTokenIndentation
       && isInitialToken
       && token.presence == .present
     {

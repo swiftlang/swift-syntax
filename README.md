@@ -38,6 +38,7 @@ Mainline SwiftSyntax also includes
 - `SwiftParser` for natively parsing source code
 - `SwiftOperators` for folding SwiftSyntax trees containing operators
 - `SwiftSyntaxBuilder` for generating Swift code with a result builder-style interface
+- `SwiftSyntaxMacros` for providing syntactic macro support
 
 ### Releases
 
@@ -90,6 +91,7 @@ text editor, or IDE.
 - [SwiftSyntax](Sources/SwiftSyntax/Documentation.docc)
 - [SwiftParser](Sources/SwiftParser/SwiftParser.docc)
 - [SwiftOperators](Sources/SwiftOperators/SwiftOperators.docc)
+- [SwiftSyntaxMacros](Sources/SwiftSyntaxMacros/SwiftSyntaxMacros.docc)
 
 ## Contributing
 

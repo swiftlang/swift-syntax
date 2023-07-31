@@ -136,7 +136,7 @@ extension SyntaxProtocol {
     if case .collection(let collectionElementType) = self.syntaxNodeType.structure {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
-        FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
+        FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
           LabeledExprSyntax(
             expression: ArrayExprSyntax {
               for child in self.children(viewMode: .all) {
@@ -195,7 +195,7 @@ extension SyntaxProtocol {
     } else if case .layout(let layout) = self.syntaxNodeType.structure {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
-        FunctionCallExprSyntax(callee: IdentifierExprSyntax(identifier: .identifier(typeName))) {
+        FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
           for keyPath in layout {
             let label = childName(keyPath) ?? ""
             let value = self[keyPath: keyPath as! PartialKeyPath<Self>] as! SyntaxProtocol?

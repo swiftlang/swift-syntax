@@ -24,7 +24,7 @@ final class PatternTests: XCTestCase {
           expression: FunctionCallExprSyntax(
             calledExpression: MemberAccessExprSyntax(
               base: GenericSpecializationExprSyntax(
-                expression: IdentifierExprSyntax(identifier: .identifier("E")),
+                expression: DeclReferenceExprSyntax(baseName: .identifier("E")),
                 genericArgumentClause: GenericArgumentClauseSyntax(
                   arguments: .init([
                     .init(argument: IdentifierTypeSyntax(name: .identifier("Int")))
@@ -79,7 +79,7 @@ final class PatternTests: XCTestCase {
             elements: .init([
               .init(
                 expression: SubscriptCallExprSyntax(
-                  calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
+                  calledExpression: DeclReferenceExprSyntax(baseName: .identifier("y")),
                   leftSquare: .leftSquareToken(),
                   arguments: LabeledExprListSyntax([
                     .init(expression: IntegerLiteralExprSyntax(literal: .integerLiteral("0")))
@@ -128,7 +128,7 @@ final class PatternTests: XCTestCase {
         bindingSpecifier: .keyword(.let),
         pattern: ExpressionPatternSyntax(
           expression: SubscriptCallExprSyntax(
-            calledExpression: IdentifierExprSyntax(identifier: .identifier("y")),
+            calledExpression: DeclReferenceExprSyntax(baseName: .identifier("y")),
             leftSquare: .leftSquareToken(),
             arguments: LabeledExprListSyntax([
               .init(

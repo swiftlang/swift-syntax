@@ -177,7 +177,7 @@ public class SyntaxVisitorTests: XCTestCase {
         return nil
       }
     }
-    let parsed = IdentifierExprSyntax(identifier: .identifier("n"))
+    let parsed = DeclReferenceExprSyntax(baseName: .identifier("n"))
     let rewriter = VisitAnyRewriter(transform: { _ in
       return TokenSyntax.identifier("")
     })

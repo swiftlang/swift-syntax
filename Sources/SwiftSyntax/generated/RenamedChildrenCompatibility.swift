@@ -1558,6 +1558,81 @@ extension ConsumeExprSyntax {
   }
 }
 
+extension DeclReferenceExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeBaseName
+    }
+    set {
+      unexpectedBeforeBaseName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "baseName")
+  public var identifier: TokenSyntax {
+    get {
+      return baseName
+    }
+    set {
+      baseName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenBaseNameAndArgumentNames")
+  public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenBaseNameAndArgumentNames
+    }
+    set {
+      unexpectedBetweenBaseNameAndArgumentNames = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "argumentNames")
+  public var declNameArguments: DeclNameArgumentsSyntax? {
+    get {
+      return argumentNames
+    }
+    set {
+      argumentNames = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedAfterArgumentNames")
+  public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedAfterArgumentNames
+    }
+    set {
+      unexpectedAfterArgumentNames = newValue
+    }
+  }
+  
+  @available(*, deprecated, message: "Use an initializer with baseName, argumentNames argument(s).")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+      identifier: TokenSyntax,
+      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      declNameArguments: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeIdentifier, 
+        baseName: identifier, 
+        unexpectedBetweenIdentifierAndDeclNameArguments, 
+        argumentNames: declNameArguments, 
+        unexpectedAfterDeclNameArguments, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension DerivativeAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndAccessorSpecifier")
   public var unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? {
@@ -2225,7 +2300,7 @@ extension DynamicReplacementAttributeArgumentsSyntax {
   }
   
   @available(*, deprecated, renamed: "declName")
-  public var declname: IdentifierExprSyntax {
+  public var declname: DeclReferenceExprSyntax {
     get {
       return declName
     }
@@ -2253,7 +2328,7 @@ extension DynamicReplacementAttributeArgumentsSyntax {
       _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: IdentifierExprSyntax,
+      declname: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -3841,7 +3916,7 @@ extension ImplementsAttributeArgumentsSyntax {
   }
   
   @available(*, deprecated, renamed: "declName")
-  public var declname: IdentifierExprSyntax {
+  public var declname: DeclReferenceExprSyntax {
     get {
       return declName
     }
@@ -3869,7 +3944,7 @@ extension ImplementsAttributeArgumentsSyntax {
       _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax = .commaToken(),
       _ unexpectedBetweenCommaAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: IdentifierExprSyntax,
+      declname: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7102,7 +7177,7 @@ extension SpecializeTargetFunctionArgumentSyntax {
   }
   
   @available(*, deprecated, renamed: "declName")
-  public var declname: IdentifierExprSyntax {
+  public var declname: DeclReferenceExprSyntax {
     get {
       return declName
     }
@@ -7130,7 +7205,7 @@ extension SpecializeTargetFunctionArgumentSyntax {
       _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
-      declname: IdentifierExprSyntax,
+      declname: DeclReferenceExprSyntax,
       _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,

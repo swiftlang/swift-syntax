@@ -562,7 +562,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "DeclName",
         deprecatedName: "Declname",
-        kind: .node(kind: .identifierExpr)
+        kind: .node(kind: .declReferenceExpr)
       ),
     ]
   ),
@@ -621,7 +621,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "DeclName",
         deprecatedName: "Declname",
-        kind: .node(kind: .identifierExpr),
+        kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
       ),
@@ -837,7 +837,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "DeclName",
         deprecatedName: "Declname",
-        kind: .node(kind: .identifierExpr),
+        kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
       ),

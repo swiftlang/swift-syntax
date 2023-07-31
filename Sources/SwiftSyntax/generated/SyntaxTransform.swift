@@ -349,6 +349,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: DeclNameArgumentsSyntax) -> ResultType
   
+  /// Visiting ``DeclReferenceExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: DeclReferenceExprSyntax) -> ResultType
+  
   /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -648,11 +653,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: GuardStmtSyntax) -> ResultType
-  
-  /// Visiting ``IdentifierExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: IdentifierExprSyntax) -> ResultType
   
   /// Visiting ``IdentifierPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
@@ -1857,6 +1857,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``DeclReferenceExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: DeclReferenceExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``DeferStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -2274,13 +2281,6 @@ extension SyntaxTransformVisitor {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
   public func visit(_ node: GuardStmtSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
-  /// Visiting ``IdentifierExprSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: IdentifierExprSyntax) -> ResultType {
     visitAny(Syntax(node))
   }
   
@@ -3449,6 +3449,8 @@ extension SyntaxTransformVisitor {
       return visit(derived)
     case .declNameArguments(let derived):
       return visit(derived)
+    case .declReferenceExpr(let derived):
+      return visit(derived)
     case .deferStmt(let derived):
       return visit(derived)
     case .deinitializerDecl(let derived):
@@ -3568,8 +3570,6 @@ extension SyntaxTransformVisitor {
     case .genericWhereClause(let derived):
       return visit(derived)
     case .guardStmt(let derived):
-      return visit(derived)
-    case .identifierExpr(let derived):
       return visit(derived)
     case .identifierPattern(let derived):
       return visit(derived)

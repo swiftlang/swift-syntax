@@ -652,6 +652,53 @@ extension DeclModifierSyntax {
   }
 }
 
+extension DeclReferenceExprSyntax {
+  enum BaseNameOptions: TokenSpecSet {
+    case identifier
+    case `self`
+    case `Self`
+    case `init`
+    case dollarIdentifier
+    case binaryOperator
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.`self`):
+        self = .`self`
+      case TokenSpec(.`Self`):
+        self = .`Self`
+      case TokenSpec(.`init`):
+        self = .`init`
+      case TokenSpec(.dollarIdentifier):
+        self = .dollarIdentifier
+      case TokenSpec(.binaryOperator):
+        self = .binaryOperator
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .identifier:
+        return .identifier
+      case .`self`:
+        return .keyword(.`self`)
+      case .`Self`:
+        return .keyword(.`Self`)
+      case .`init`:
+        return .keyword(.`init`)
+      case .dollarIdentifier:
+        return .dollarIdentifier
+      case .binaryOperator:
+        return .binaryOperator
+      }
+    }
+  }
+}
+
 extension DerivativeAttributeArgumentsSyntax {
   enum AccessorSpecifierOptions: TokenSpecSet {
     case get
@@ -991,53 +1038,6 @@ extension FunctionParameterSyntax {
         return .identifier
       case .wildcard:
         return .wildcard
-      }
-    }
-  }
-}
-
-extension IdentifierExprSyntax {
-  enum IdentifierOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case dollarIdentifier
-    case binaryOperator
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.dollarIdentifier):
-        self = .dollarIdentifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .dollarIdentifier:
-        return .dollarIdentifier
-      case .binaryOperator:
-        return .binaryOperator
       }
     }
   }

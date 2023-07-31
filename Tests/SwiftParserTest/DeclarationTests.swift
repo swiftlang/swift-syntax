@@ -2203,11 +2203,11 @@ final class DeclarationTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("open")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("open")),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([
             LabeledExprSyntax(
-              expression: IdentifierExprSyntax(identifier: .identifier("set"))
+              expression: DeclReferenceExprSyntax(baseName: .identifier("set"))
             )
           ]),
           rightParen: .rightParenToken()

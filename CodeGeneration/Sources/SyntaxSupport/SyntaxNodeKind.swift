@@ -87,6 +87,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case declNameArgument
   case declNameArgumentList
   case declNameArguments
+  case declReferenceExpr
   case deferStmt
   case deinitializerDecl
   case deinitializerEffectSpecifiers
@@ -148,7 +149,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case genericSpecializationExpr
   case genericWhereClause
   case guardStmt
-  case identifierExpr
   case identifierPattern
   case identifierType
   case ifConfigClause
@@ -383,6 +383,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .closureShorthandParameterList: return "closureParamList"
     case .consumeExpr: return "moveExpr"
     case .declModifierList: return "modifierList"
+    case .declReferenceExpr: return "identifierExpr"
     case .deinitializerEffectSpecifiers: return "deinitEffectSpecifiers"
     case .derivativeAttributeArguments: return "derivativeRegistrationAttributeArguments"
     case .designatedType: return "designatedTypeElement"

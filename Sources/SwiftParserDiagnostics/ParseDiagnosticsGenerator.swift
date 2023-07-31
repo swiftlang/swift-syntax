@@ -1034,13 +1034,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
+  public override func visit(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.identifier.isMissing, let unexpected = node.unexpectedBeforeIdentifier {
+    if node.baseName.isMissing, let unexpected = node.unexpectedBeforeBaseName {
       if unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
-        addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.identifier.id])
+        addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.baseName.id])
       } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
         if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
           let operatorToken = prefixOperatorExpr.operator,
@@ -1065,10 +1065,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
                 ]
               )
             ],
-            handledNodes: [unexpected.id, node.identifier.id]
+            handledNodes: [unexpected.id, node.baseName.id]
           )
         } else {
-          addDiagnostic(unexpected, AvailabilityConditionInExpression(availabilityCondition: availability), handledNodes: [unexpected.id, node.identifier.id])
+          addDiagnostic(unexpected, AvailabilityConditionInExpression(availabilityCondition: availability), handledNodes: [unexpected.id, node.baseName.id])
         }
       }
     }

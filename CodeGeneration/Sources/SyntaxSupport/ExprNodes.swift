@@ -837,12 +837,13 @@ public let EXPR_NODES: [Node] = [
 
   // An identifier expression.
   Node(
-    kind: .identifierExpr,
+    kind: .declReferenceExpr,
     base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
-        name: "Identifier",
+        name: "BaseName",
+        deprecatedName: "Identifier",
         kind: .token(choices: [
           .token(tokenKind: "IdentifierToken"),
           .keyword(text: "self"),
@@ -853,7 +854,8 @@ public let EXPR_NODES: [Node] = [
         ])
       ),
       Child(
-        name: "DeclNameArguments",
+        name: "ArgumentNames",
+        deprecatedName: "DeclNameArguments",
         kind: .node(kind: .declNameArguments),
         isOptional: true
       ),

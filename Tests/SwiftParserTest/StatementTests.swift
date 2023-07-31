@@ -55,7 +55,7 @@ final class StatementTests: XCTestCase {
                 OptionalBindingConditionSyntax(
                   bindingSpecifier: .keyword(.let),
                   pattern: IdentifierPatternSyntax(identifier: .keyword(.self)),
-                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: IdentifierExprSyntax(identifier: .keyword(.self)))
+                  initializer: InitializerClauseSyntax(equal: .equalToken(), value: DeclReferenceExprSyntax(baseName: .keyword(.self)))
                 )
               )
             )
@@ -392,7 +392,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         GenericSpecializationExprSyntax(
-          expression: IdentifierExprSyntax(identifier: .identifier("Optional")),
+          expression: DeclReferenceExprSyntax(baseName: .identifier("Optional")),
           genericArgumentClause: GenericArgumentClauseSyntax(
             leftAngle: .leftAngleToken(),
             arguments: GenericArgumentListSyntax([
@@ -414,7 +414,7 @@ final class StatementTests: XCTestCase {
       1️⃣yield
       print("huh")
       """,
-      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("yield"))),
+      substructure: Syntax(DeclReferenceExprSyntax(baseName: .identifier("yield"))),
       substructureAfterMarker: "1️⃣"
     )
   }
@@ -435,7 +435,7 @@ final class StatementTests: XCTestCase {
           yieldedExpressions: .init(
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
-              expression: IdentifierExprSyntax(identifier: .identifier("x"))
+              expression: DeclReferenceExprSyntax(baseName: .identifier("x"))
             )
           )
         )
@@ -470,11 +470,11 @@ final class StatementTests: XCTestCase {
             InOutExprSyntax(
               ampersand: .prefixAmpersandToken(),
               expression: SubscriptCallExprSyntax(
-                calledExpression: IdentifierExprSyntax(identifier: .identifier("native")),
+                calledExpression: DeclReferenceExprSyntax(baseName: .identifier("native")),
                 leftSquare: .leftSquareToken(),
                 arguments: LabeledExprListSyntax([
                   LabeledExprSyntax(
-                    expression: IdentifierExprSyntax(identifier: .identifier("key")),
+                    expression: DeclReferenceExprSyntax(baseName: .identifier("key")),
                     trailingComma: .commaToken()
                   ),
                   LabeledExprSyntax(
@@ -503,7 +503,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("yield")),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
@@ -522,7 +522,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("yield")),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()
@@ -537,7 +537,7 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("yield")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("yield")),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([
             LabeledExprSyntax(
@@ -562,7 +562,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         SequenceExprSyntax(
           elements: ExprListSyntax([
-            IdentifierExprSyntax(identifier: .identifier("yield")),
+            DeclReferenceExprSyntax(baseName: .identifier("yield")),
             BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
@@ -580,7 +580,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         SequenceExprSyntax(
           elements: ExprListSyntax([
-            IdentifierExprSyntax(identifier: .identifier("yield")),
+            DeclReferenceExprSyntax(baseName: .identifier("yield")),
             BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
             IntegerLiteralExprSyntax(5),
           ])
@@ -599,7 +599,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         DiscardStmtSyntax(
           discardKeyword: .keyword(._forget),
-          expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+          expression: DeclReferenceExprSyntax(baseName: .keyword(.`self`))
         )
       )
     )
@@ -611,7 +611,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         DiscardStmtSyntax(
           discardKeyword: .keyword(.discard),
-          expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+          expression: DeclReferenceExprSyntax(baseName: .keyword(.`self`))
         )
       )
     )
@@ -623,7 +623,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         DiscardStmtSyntax(
           discardKeyword: .keyword(.discard),
-          expression: IdentifierExprSyntax(identifier: .keyword(.Self))
+          expression: DeclReferenceExprSyntax(baseName: .keyword(.Self))
         )
       )
     )
@@ -635,7 +635,7 @@ final class StatementTests: XCTestCase {
       substructure: Syntax(
         DiscardStmtSyntax(
           discardKeyword: .keyword(.discard),
-          expression: IdentifierExprSyntax(identifier: .identifier("SarahMarshall"))
+          expression: DeclReferenceExprSyntax(baseName: .identifier("SarahMarshall"))
         )
       )
     )
@@ -664,13 +664,13 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          callee: IdentifierExprSyntax(
-            identifier: .identifier("discard")
+          callee: DeclReferenceExprSyntax(
+            baseName: .identifier("discard")
           ),
           argumentList: {
             LabeledExprListSyntax([
               LabeledExprSyntax(
-                expression: IdentifierExprSyntax(identifier: .keyword(.`self`))
+                expression: DeclReferenceExprSyntax(baseName: .keyword(.`self`))
               )
             ])
           }
@@ -690,11 +690,11 @@ final class StatementTests: XCTestCase {
       """,
       substructure: Syntax(
         SubscriptCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("data")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("data")),
           leftSquare: .leftSquareToken(),
           arguments: LabeledExprListSyntax([
             LabeledExprSyntax(
-              expression: IdentifierExprSyntax(identifier: .identifier("position")),
+              expression: DeclReferenceExprSyntax(baseName: .identifier("position")),
               trailingComma: .commaToken()
             ),
             LabeledExprSyntax(

@@ -372,7 +372,7 @@ final class ForwardSlashRegexTests: XCTestCase {
               )
             ),
             BinaryOperatorExprSyntax(operator: .binaryOperator("/")),
-            PostfixOperatorExprSyntax(expression: IdentifierExprSyntax(identifier: "x"), operator: .postfixOperator("/")),
+            PostfixOperatorExprSyntax(expression: DeclReferenceExprSyntax(baseName: "x"), operator: .postfixOperator("/")),
           ])
         )
       )
@@ -1058,7 +1058,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x// comment
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x")))
     )
   }
 
@@ -1067,7 +1067,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x // comment
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x")))
     )
   }
 
@@ -1076,7 +1076,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       """
       _ = /x/*comment*/
       """,
-      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: IdentifierExprSyntax(identifier: "x")))
+      substructure: Syntax(PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x")))
     )
   }
 
@@ -1088,8 +1088,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       substructure: Syntax(
         LabeledExprListSyntax([
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")), trailingComma: .commaToken()),
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")), trailingComma: .commaToken()),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))),
         ])
       )
     )
@@ -1111,12 +1111,12 @@ final class ForwardSlashRegexTests: XCTestCase {
           .init(
             expression: TupleExprSyntax(
               elements: .init([
-                .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/")))
+                .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")))
               ])
             ),
             trailingComma: .commaToken()
           ),
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))),
         ])
       )
     )
@@ -1129,8 +1129,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       """,
       substructure: Syntax(
         LabeledExprListSyntax([
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")), trailingComma: .commaToken()),
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/^")), trailingComma: .commaToken()),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))),
         ])
       )
     )
@@ -1152,12 +1152,12 @@ final class ForwardSlashRegexTests: XCTestCase {
           .init(
             expression: TupleExprSyntax(
               elements: .init([
-                .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/^")))
+                .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/^")))
               ])
             ),
             trailingComma: .commaToken()
           ),
-          .init(expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))),
+          .init(expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))),
         ])
       )
     )

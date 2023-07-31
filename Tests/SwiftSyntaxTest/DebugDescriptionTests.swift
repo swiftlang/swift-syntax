@@ -183,7 +183,7 @@ public class DebugDescriptionTests: XCTestCase {
       SourceFileSyntax(
           statements: CodeBlockItemListSyntax([
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
-                        calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
+                        calledExpression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("test"))),
                         leftParen: .leftParenToken(),
                         arguments: LabeledExprListSyntax([
                               LabeledExprSyntax(
@@ -206,7 +206,7 @@ public class DebugDescriptionTests: XCTestCase {
       SourceFileSyntax(
           statements: CodeBlockItemListSyntax([
                 CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(FunctionCallExprSyntax(
-                        calledExpression: ExprSyntax(IdentifierExprSyntax(identifier: .identifier("test"))),
+                        calledExpression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("test"))),
                         leftParen: .leftParenToken(),
                         arguments: LabeledExprListSyntax([
                               LabeledExprSyntax(

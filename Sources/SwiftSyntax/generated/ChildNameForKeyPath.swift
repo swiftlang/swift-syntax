@@ -793,6 +793,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \DeclNameArgumentsSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
+  case \DeclReferenceExprSyntax.unexpectedBeforeBaseName:
+    return "unexpectedBeforeBaseName"
+  case \DeclReferenceExprSyntax.baseName:
+    return "baseName"
+  case \DeclReferenceExprSyntax.unexpectedBetweenBaseNameAndArgumentNames:
+    return "unexpectedBetweenBaseNameAndArgumentNames"
+  case \DeclReferenceExprSyntax.argumentNames:
+    return "argumentNames"
+  case \DeclReferenceExprSyntax.unexpectedAfterArgumentNames:
+    return "unexpectedAfterArgumentNames"
   case \DeferStmtSyntax.unexpectedBeforeDeferKeyword:
     return "unexpectedBeforeDeferKeyword"
   case \DeferStmtSyntax.deferKeyword:
@@ -1597,16 +1607,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \GuardStmtSyntax.unexpectedAfterBody:
     return "unexpectedAfterBody"
-  case \IdentifierExprSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \IdentifierExprSyntax.identifier:
-    return "identifier"
-  case \IdentifierExprSyntax.unexpectedBetweenIdentifierAndDeclNameArguments:
-    return "unexpectedBetweenIdentifierAndDeclNameArguments"
-  case \IdentifierExprSyntax.declNameArguments:
-    return "declNameArguments"
-  case \IdentifierExprSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
   case \IdentifierPatternSyntax.unexpectedBeforeIdentifier:
     return "unexpectedBeforeIdentifier"
   case \IdentifierPatternSyntax.identifier:

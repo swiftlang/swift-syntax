@@ -224,9 +224,9 @@ final class FunctionTests: XCTestCase {
               ReturnStmtSyntax(
                 expression: SequenceExprSyntax(
                   elements: ExprListSyntax {
-                    IdentifierExprSyntax(identifier: .identifier("lhs"))
+                    DeclReferenceExprSyntax(baseName: .identifier("lhs"))
                     BinaryOperatorExprSyntax(operator: .binaryOperator("<"))
-                    IdentifierExprSyntax(identifier: .identifier("rhs"))
+                    DeclReferenceExprSyntax(baseName: .identifier("rhs"))
                   }
                 )
               )

@@ -76,7 +76,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
               LabeledExprSyntax(
                 label: child.varOrCaseName,
                 colon: .colonToken(),
-                expression: IdentifierExprSyntax(identifier: child.deprecatedVarName ?? child.varOrCaseName)
+                expression: DeclReferenceExprSyntax(baseName: child.deprecatedVarName ?? child.varOrCaseName)
               )
             }
           }

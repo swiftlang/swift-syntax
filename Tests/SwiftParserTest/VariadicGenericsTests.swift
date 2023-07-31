@@ -26,8 +26,8 @@ final class VariadicGenericsTests: XCTestCase {
           repeatKeyword: .keyword(.repeat),
           repetitionPattern: PackElementExprSyntax(
             eachKeyword: .keyword(.each),
-            pack: IdentifierExprSyntax(
-              identifier: .identifier("t")
+            pack: DeclReferenceExprSyntax(
+              baseName: .identifier("t")
             )
           )
         )
@@ -139,15 +139,15 @@ final class VariadicGenericsTests: XCTestCase {
 
   func testEachExprKeyword() {
     let callExpr = FunctionCallExprSyntax(
-      calledExpression: IdentifierExprSyntax(
-        identifier: .identifier("each")
+      calledExpression: DeclReferenceExprSyntax(
+        baseName: .identifier("each")
       ),
       leftParen: .leftParenToken(),
       arguments: LabeledExprListSyntax([
         .init(
           expression:
-            IdentifierExprSyntax(
-              identifier: .identifier("x")
+            DeclReferenceExprSyntax(
+              baseName: .identifier("x")
             )
         )
       ]),
@@ -183,8 +183,8 @@ final class VariadicGenericsTests: XCTestCase {
       substructure: Syntax(
         PackElementExprSyntax(
           eachKeyword: .keyword(.each),
-          pack: IdentifierExprSyntax(
-            identifier: .identifier("x")
+          pack: DeclReferenceExprSyntax(
+            baseName: .identifier("x")
           )
         )
       ),
@@ -210,8 +210,8 @@ final class VariadicGenericsTests: XCTestCase {
                     LabeledExprSyntax(
                       expression: PackElementExprSyntax(
                         eachKeyword: .keyword(.each),
-                        pack: IdentifierExprSyntax(
-                          identifier: .identifier("t")
+                        pack: DeclReferenceExprSyntax(
+                          baseName: .identifier("t")
                         )
                       )
                     )
@@ -239,8 +239,8 @@ final class VariadicGenericsTests: XCTestCase {
             eachKeyword: .keyword(.each),
             pack: MemberAccessExprSyntax(
               base: ExprSyntax(
-                IdentifierExprSyntax(
-                  identifier: .identifier("t")
+                DeclReferenceExprSyntax(
+                  baseName: .identifier("t")
                 )
               ),
               name: "member"
@@ -263,8 +263,8 @@ final class VariadicGenericsTests: XCTestCase {
           repetitionPattern: SequenceExprSyntax(
             elements: .init([
               ExprSyntax(
-                IdentifierExprSyntax(
-                  identifier: .identifier("x")
+                DeclReferenceExprSyntax(
+                  baseName: .identifier("x")
                 )
               ),
               ExprSyntax(
@@ -275,8 +275,8 @@ final class VariadicGenericsTests: XCTestCase {
               ExprSyntax(
                 PackElementExprSyntax(
                   eachKeyword: .keyword(.each),
-                  pack: IdentifierExprSyntax(
-                    identifier: .identifier("t")
+                  pack: DeclReferenceExprSyntax(
+                    baseName: .identifier("t")
                   )
                 )
               ),

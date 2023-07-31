@@ -63,7 +63,7 @@ extension Parser {
     static let zeroArgCompoundNames: Self = [.compoundNames, Self(rawValue: 1 << 5)]
   }
 
-  mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
+  mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (baseName: RawTokenSyntax, argumentNames: RawDeclNameArgumentsSyntax?) {
     // Consume the base name.
     let base: RawTokenSyntax
     if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) ?? self.consume(if: .keyword(.`init`)) {

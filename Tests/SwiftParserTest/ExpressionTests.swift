@@ -396,7 +396,7 @@ final class ExpressionTests: XCTestCase {
           ),
           colon: .colonToken(),
           value: FunctionCallExprSyntax(
-            calledExpression: IdentifierExprSyntax(identifier: .identifier("Calendar")),
+            calledExpression: DeclReferenceExprSyntax(baseName: .identifier("Calendar")),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax([
               LabeledExprSyntax(
@@ -1539,7 +1539,7 @@ final class StatementExpressionTests: XCTestCase {
       SwitchExprSyntax(
         subject: FunctionCallExprSyntax(
           callee: MemberAccessExprSyntax(
-            base: IdentifierExprSyntax(identifier: .identifier("Bool")),
+            base: DeclReferenceExprSyntax(baseName: .identifier("Bool")),
             name: "random"
           )
         ),
@@ -2598,7 +2598,7 @@ final class StatementExpressionTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .keyword(.init("init")!)),
+          calledExpression: DeclReferenceExprSyntax(baseName: .keyword(.init("init")!)),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([]),
           rightParen: .rightParenToken()

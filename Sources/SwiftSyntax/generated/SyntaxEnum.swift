@@ -81,6 +81,7 @@ public enum SyntaxEnum {
   case declNameArgumentList(DeclNameArgumentListSyntax)
   case declNameArgument(DeclNameArgumentSyntax)
   case declNameArguments(DeclNameArgumentsSyntax)
+  case declReferenceExpr(DeclReferenceExprSyntax)
   case deferStmt(DeferStmtSyntax)
   case deinitializerDecl(DeinitializerDeclSyntax)
   case deinitializerEffectSpecifiers(DeinitializerEffectSpecifiersSyntax)
@@ -141,7 +142,6 @@ public enum SyntaxEnum {
   case genericSpecializationExpr(GenericSpecializationExprSyntax)
   case genericWhereClause(GenericWhereClauseSyntax)
   case guardStmt(GuardStmtSyntax)
-  case identifierExpr(IdentifierExprSyntax)
   case identifierPattern(IdentifierPatternSyntax)
   case identifierType(IdentifierTypeSyntax)
   case ifConfigClauseList(IfConfigClauseListSyntax)
@@ -429,6 +429,8 @@ public extension Syntax {
       return .declNameArgument(DeclNameArgumentSyntax(self)!)
     case .declNameArguments:
       return .declNameArguments(DeclNameArgumentsSyntax(self)!)
+    case .declReferenceExpr:
+      return .declReferenceExpr(DeclReferenceExprSyntax(self)!)
     case .deferStmt:
       return .deferStmt(DeferStmtSyntax(self)!)
     case .deinitializerDecl:
@@ -549,8 +551,6 @@ public extension Syntax {
       return .genericWhereClause(GenericWhereClauseSyntax(self)!)
     case .guardStmt:
       return .guardStmt(GuardStmtSyntax(self)!)
-    case .identifierExpr:
-      return .identifierExpr(IdentifierExprSyntax(self)!)
     case .identifierPattern:
       return .identifierPattern(IdentifierPatternSyntax(self)!)
     case .identifierType:

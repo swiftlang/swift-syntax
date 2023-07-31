@@ -81,6 +81,7 @@ public enum SyntaxKind: CaseIterable {
   case declNameArgumentList
   case declNameArgument
   case declNameArguments
+  case declReferenceExpr
   case deferStmt
   case deinitializerDecl
   case deinitializerEffectSpecifiers
@@ -141,7 +142,6 @@ public enum SyntaxKind: CaseIterable {
   case genericSpecializationExpr
   case genericWhereClause
   case guardStmt
-  case identifierExpr
   case identifierPattern
   case identifierType
   case ifConfigClauseList
@@ -548,6 +548,8 @@ public enum SyntaxKind: CaseIterable {
       return DeclNameArgumentSyntax.self
     case .declNameArguments:
       return DeclNameArgumentsSyntax.self
+    case .declReferenceExpr:
+      return DeclReferenceExprSyntax.self
     case .deferStmt:
       return DeferStmtSyntax.self
     case .deinitializerDecl:
@@ -668,8 +670,6 @@ public enum SyntaxKind: CaseIterable {
       return GenericWhereClauseSyntax.self
     case .guardStmt:
       return GuardStmtSyntax.self
-    case .identifierExpr:
-      return IdentifierExprSyntax.self
     case .identifierPattern:
       return IdentifierPatternSyntax.self
     case .identifierType:

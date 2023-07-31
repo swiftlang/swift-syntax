@@ -5352,7 +5352,7 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``IdentifierExprSyntax``.``IdentifierExprSyntax/declNameArguments``
+///  - ``DeclReferenceExprSyntax``.``DeclReferenceExprSyntax/argumentNames``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declNameArguments``
 ///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declNameArguments``
 ///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/arguments``
@@ -7147,7 +7147,7 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `forLabel`: `'for'`
 ///  - `colon`: `':'`
-///  - `declName`: ``IdentifierExprSyntax``
+///  - `declName`: ``DeclReferenceExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -7180,7 +7180,7 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
       _ unexpectedBetweenForLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: IdentifierExprSyntax,
+      declName: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7263,9 +7263,9 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
     }
   }
   
-  public var declName: IdentifierExprSyntax {
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = DynamicReplacementAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -10548,7 +10548,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `type`: ``TypeSyntax``
 ///  - `comma`: `','`
-///  - `declName`: ``IdentifierExprSyntax``
+///  - `declName`: ``DeclReferenceExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -10584,7 +10584,7 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       _ unexpectedBetweenTypeAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax = .commaToken(),
       _ unexpectedBetweenCommaAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: IdentifierExprSyntax,
+      declName: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -10670,9 +10670,9 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
   
   /// The value for this argument
-  public var declName: IdentifierExprSyntax {
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = ImplementsAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -16603,7 +16603,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `targetLabel`: `'target'`
 ///  - `colon`: `':'`
-///  - `declName`: ``IdentifierExprSyntax``
+///  - `declName`: ``DeclReferenceExprSyntax``
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
@@ -16641,7 +16641,7 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
       _ unexpectedBetweenTargetLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: IdentifierExprSyntax,
+      declName: DeclReferenceExprSyntax,
       _ unexpectedBetweenDeclNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -16733,9 +16733,9 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
   }
   
   /// The value for this argument
-  public var declName: IdentifierExprSyntax {
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return IdentifierExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = SpecializeTargetFunctionArgumentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))

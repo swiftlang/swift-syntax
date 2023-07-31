@@ -353,10 +353,10 @@ extension Parser {
       label: nil,
       colon: nil,
       expression: RawExprSyntax(
-        RawIdentifierExprSyntax(
+        RawDeclReferenceExprSyntax(
           unexpectedBeforeRole,
-          identifier: role,
-          declNameArguments: nil,
+          baseName: role,
+          argumentNames: nil,
           arena: self.arena
         )
       ),
@@ -682,9 +682,9 @@ extension Parser {
         let ident = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (targetFunction, args) = self.parseDeclNameRef([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
-        let declName = RawIdentifierExprSyntax(
-          identifier: targetFunction,
-          declNameArguments: args,
+        let declName = RawDeclReferenceExprSyntax(
+          baseName: targetFunction,
+          argumentNames: args,
           arena: self.arena
         )
         let comma = self.consume(if: .comma)
@@ -827,9 +827,9 @@ extension Parser {
       .zeroArgCompoundNames,
       .operators,
     ])
-    let declName = RawIdentifierExprSyntax(
-      identifier: name,
-      declNameArguments: args,
+    let declName = RawDeclReferenceExprSyntax(
+      baseName: name,
+      argumentNames: args,
       arena: self.arena
     )
     return RawImplementsAttributeArgumentsSyntax(
@@ -1025,17 +1025,21 @@ extension Parser {
   mutating func parseDynamicReplacementAttributeArguments() -> RawDynamicReplacementAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let base: RawTokenSyntax
-    let args: RawDeclNameArgumentsSyntax?
+    let baseName: RawTokenSyntax
+    let argumentNames: RawDeclNameArgumentsSyntax?
     if label.isMissing && colon.isMissing && self.atStartOfLine {
-      base = RawTokenSyntax(missing: .identifier, arena: self.arena)
-      args = nil
+      baseName = RawTokenSyntax(missing: .identifier, arena: self.arena)
+      argumentNames = nil
     } else {
-      (base, args) = self.parseDeclNameRef([
+      (baseName, argumentNames) = self.parseDeclNameRef([
         .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
       ])
     }
-    let method = RawIdentifierExprSyntax(identifier: base, declNameArguments: args, arena: self.arena)
+    let method = RawDeclReferenceExprSyntax(
+      baseName: baseName,
+      argumentNames: argumentNames,
+      arena: self.arena
+    )
     return RawDynamicReplacementAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
       forLabel: label,

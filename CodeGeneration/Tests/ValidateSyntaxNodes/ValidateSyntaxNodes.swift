@@ -462,7 +462,12 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .qualifiedDeclName,
           message:
-            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
+            "child 'Arguments' is named inconsistently with 'KeyPathPropertyComponentSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
+        ),
+        ValidationFailure(
+          node: .declReferenceExpr,
+          message:
+            "child 'ArgumentNames' is named inconsistently with 'KeyPathPropertyComponentSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
         ),
         // MARK: Alternate names for InitializerClauseSyntax
         // The cases below don’t have intializers but just a syntactic element that happens to be spelled the same
@@ -628,8 +633,7 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         // The identifier expr / pattern nodes do actually have a child that’s the identifier
-        ValidationFailure(node: .identifierExpr, message: "child 'Identifier' should generally not contain 'Identifier'"),
-        ValidationFailure(node: .identifierPattern, message: "child 'Identifier' should generally not contain 'Identifier'"),
+        ValidationFailure(node: .identifierPattern, message: "child 'Identifier' should generally not contain 'Identifier'")
       ]
     )
   }

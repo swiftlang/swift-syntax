@@ -114,6 +114,9 @@ public typealias ForInStmtSyntax = ForStmtSyntax
 @available(*, deprecated, renamed: "ForceUnwrapExprSyntax")
 public typealias ForcedValueExprSyntax = ForceUnwrapExprSyntax
 
+@available(*, deprecated, renamed: "DeclReferenceExprSyntax")
+public typealias IdentifierExprSyntax = DeclReferenceExprSyntax
+
 @available(*, deprecated, renamed: "LabeledSpecializeArgumentSyntax")
 public typealias LabeledSpecializeEntrySyntax = LabeledSpecializeArgumentSyntax
 
@@ -342,6 +345,10 @@ public extension SyntaxKind {
   
   static var forcedValueExpr: Self {
     return .forceUnwrapExpr
+  }
+  
+  static var identifierExpr: Self {
+    return .declReferenceExpr
   }
   
   static var labeledSpecializeEntry: Self {

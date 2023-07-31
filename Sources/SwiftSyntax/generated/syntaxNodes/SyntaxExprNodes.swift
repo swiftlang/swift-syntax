@@ -1811,6 +1811,134 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - DeclReferenceExprSyntax
+
+/// ### Children
+/// 
+///  - `baseName`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>`)
+///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``DynamicReplacementAttributeArgumentsSyntax``.``DynamicReplacementAttributeArgumentsSyntax/declName``
+///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
+///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
+public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .declReferenceExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``DeclReferenceExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .declReferenceExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeBaseName: UnexpectedNodesSyntax? = nil,
+      baseName: TokenSyntax,
+      _ unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? = nil,
+      argumentNames: DeclNameArgumentsSyntax? = nil,
+      _ unexpectedAfterArgumentNames: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeBaseName, 
+            baseName, 
+            unexpectedBetweenBaseNameAndArgumentNames, 
+            argumentNames, 
+            unexpectedAfterArgumentNames
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeBaseName?.raw, 
+          baseName.raw, 
+          unexpectedBetweenBaseNameAndArgumentNames?.raw, 
+          argumentNames?.raw, 
+          unexpectedAfterArgumentNames?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.declReferenceExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DeclReferenceExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var baseName: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = DeclReferenceExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DeclReferenceExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var argumentNames: DeclNameArgumentsSyntax? {
+    get {
+      return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
+    }
+    set(value) {
+      self = DeclReferenceExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterArgumentNames: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = DeclReferenceExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeBaseName, 
+          \Self.baseName, 
+          \Self.unexpectedBetweenBaseNameAndArgumentNames, 
+          \Self.argumentNames, 
+          \Self.unexpectedAfterArgumentNames
+        ])
+  }
+}
+
 // MARK: - DictionaryExprSyntax
 
 /// ### Children
@@ -2769,134 +2897,6 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
           \Self.unexpectedBetweenExpressionAndGenericArgumentClause, 
           \Self.genericArgumentClause, 
           \Self.unexpectedAfterGenericArgumentClause
-        ])
-  }
-}
-
-// MARK: - IdentifierExprSyntax
-
-/// ### Children
-/// 
-///  - `identifier`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>`)
-///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
-///
-/// ### Contained in
-/// 
-///  - ``DynamicReplacementAttributeArgumentsSyntax``.``DynamicReplacementAttributeArgumentsSyntax/declName``
-///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
-///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
-public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .identifierExpr else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``IdentifierExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .identifierExpr)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeIdentifier, 
-            identifier, 
-            unexpectedBetweenIdentifierAndDeclNameArguments, 
-            declNameArguments, 
-            unexpectedAfterDeclNameArguments
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeIdentifier?.raw, 
-          identifier.raw, 
-          unexpectedBetweenIdentifierAndDeclNameArguments?.raw, 
-          declNameArguments?.raw, 
-          unexpectedAfterDeclNameArguments?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.identifierExpr,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var identifier: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var declNameArguments: DeclNameArgumentsSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
-    }
-    set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = IdentifierExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeIdentifier, 
-          \Self.identifier, 
-          \Self.unexpectedBetweenIdentifierAndDeclNameArguments, 
-          \Self.declNameArguments, 
-          \Self.unexpectedAfterDeclNameArguments
         ])
   }
 }

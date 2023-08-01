@@ -17778,25 +17778,21 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
       baseType: RawTypeSyntax?, 
       _ unexpectedBetweenBaseTypeAndPeriod: RawUnexpectedNodesSyntax? = nil, 
       period: RawTokenSyntax?, 
-      _ unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? = nil, 
-      name: RawTokenSyntax, 
-      _ unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? = nil, 
-      arguments: RawDeclNameArgumentsSyntax?, 
-      _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenPeriodAndDeclName: RawUnexpectedNodesSyntax? = nil, 
+      declName: RawDeclReferenceExprSyntax, 
+      _ unexpectedAfterDeclName: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .qualifiedDeclName, uninitializedCount: 9, arena: arena) { layout in
+      kind: .qualifiedDeclName, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeBaseType?.raw
       layout[1] = baseType?.raw
       layout[2] = unexpectedBetweenBaseTypeAndPeriod?.raw
       layout[3] = period?.raw
-      layout[4] = unexpectedBetweenPeriodAndName?.raw
-      layout[5] = name.raw
-      layout[6] = unexpectedBetweenNameAndArguments?.raw
-      layout[7] = arguments?.raw
-      layout[8] = unexpectedAfterArguments?.raw
+      layout[4] = unexpectedBetweenPeriodAndDeclName?.raw
+      layout[5] = declName.raw
+      layout[6] = unexpectedAfterDeclName?.raw
     }
     self.init(unchecked: raw)
   }
@@ -17817,24 +17813,16 @@ public struct RawQualifiedDeclNameSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndDeclName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var name: RawTokenSyntax {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  public var declName: RawDeclReferenceExprSyntax {
+    layoutView.children[5].map(RawDeclReferenceExprSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenNameAndArguments: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterDeclName: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var arguments: RawDeclNameArgumentsSyntax? {
-    layoutView.children[7].map(RawDeclNameArgumentsSyntax.init(raw:))
-  }
-  
-  public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

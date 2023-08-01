@@ -284,10 +284,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \QualifiedDeclNameSyntax.baseType:
     return "base type"
-  case \QualifiedDeclNameSyntax.name:
-    return "base name"
-  case \QualifiedDeclNameSyntax.arguments:
-    return "arguments"
+  case \QualifiedDeclNameSyntax.declName:
+    return "name"
   case \RepeatStmtSyntax.body:
     return "body"
   case \RepeatStmtSyntax.condition:

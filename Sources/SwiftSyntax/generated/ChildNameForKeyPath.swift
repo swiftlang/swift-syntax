@@ -2683,16 +2683,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBaseTypeAndPeriod"
   case \QualifiedDeclNameSyntax.period:
     return "period"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenPeriodAndName:
-    return "unexpectedBetweenPeriodAndName"
-  case \QualifiedDeclNameSyntax.name:
-    return "name"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenNameAndArguments:
-    return "unexpectedBetweenNameAndArguments"
-  case \QualifiedDeclNameSyntax.arguments:
-    return "arguments"
-  case \QualifiedDeclNameSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
+  case \QualifiedDeclNameSyntax.unexpectedBetweenPeriodAndDeclName:
+    return "unexpectedBetweenPeriodAndDeclName"
+  case \QualifiedDeclNameSyntax.declName:
+    return "declName"
+  case \QualifiedDeclNameSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \RegexLiteralExprSyntax.unexpectedBeforeOpeningPounds:
     return "unexpectedBeforeOpeningPounds"
   case \RegexLiteralExprSyntax.openingPounds:

@@ -1824,6 +1824,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declName``
 ///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declName``
+///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/declName``
 ///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
 public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

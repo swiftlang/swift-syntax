@@ -160,8 +160,11 @@ extension Parser {
     return RawQualifiedDeclNameSyntax(
       baseType: type,
       period: period,
-      name: name,
-      arguments: args,
+      declName: RawDeclReferenceExprSyntax(
+        baseName: name,
+        argumentNames: args,
+        arena: self.arena
+      ),
       arena: self.arena
     )
   }

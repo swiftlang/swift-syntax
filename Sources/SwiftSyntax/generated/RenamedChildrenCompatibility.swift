@@ -6616,13 +6616,13 @@ extension QualifiedDeclNameSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
-  public var unexpectedBetweenDotAndName: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndDeclName")
+  public var unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPeriodAndName
+      return unexpectedBetweenPeriodAndDeclName
     }
     set {
-      unexpectedBetweenPeriodAndName = newValue
+      unexpectedBetweenPeriodAndDeclName = newValue
     }
   }
   
@@ -6634,11 +6634,9 @@ extension QualifiedDeclNameSyntax {
       baseType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
       dot: TokenSyntax? = nil,
-      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclReferenceExprSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6648,11 +6646,9 @@ extension QualifiedDeclNameSyntax {
         baseType: baseType, 
         unexpectedBetweenBaseTypeAndDot, 
         period: dot, 
-        unexpectedBetweenDotAndName, 
-        name: name, 
-        unexpectedBetweenNameAndArguments, 
-        arguments: arguments, 
-        unexpectedAfterArguments, 
+        unexpectedBetweenDotAndDeclName, 
+        declName: declName, 
+        unexpectedAfterDeclName, 
         trailingTrivia: trailingTrivia
       )
   }

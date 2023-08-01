@@ -1659,48 +1659,6 @@ extension PrecedenceGroupRelationSyntax {
   }
 }
 
-extension QualifiedDeclNameSyntax {
-  enum NameOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case binaryOperator
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .binaryOperator:
-        return .binaryOperator
-      }
-    }
-  }
-}
-
 extension SameTypeRequirementSyntax {
   enum EqualOptions: TokenSpecSet {
     case binaryOperator

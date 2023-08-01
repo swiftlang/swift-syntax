@@ -777,23 +777,10 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Name",
-        kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-          .keyword(text: "init"),
-          .token(tokenKind: "BinaryOperatorToken"),
-        ]),
-        nameForDiagnostics: "base name",
-        documentation: "The base name of the referenced function."
-      ),
-      Child(
-        name: "Arguments",
-        kind: .node(kind: .declNameArguments),
-        nameForDiagnostics: "arguments",
-        documentation: "The argument labels of the referenced function, optionally specified.",
-        isOptional: true
+        name: "DeclName",
+        kind: .node(kind: .declReferenceExpr),
+        nameForDiagnostics: "name",
+        documentation: "The name of the referenced function."
       ),
     ]
   ),

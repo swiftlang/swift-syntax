@@ -5353,7 +5353,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``DeclReferenceExprSyntax``.``DeclReferenceExprSyntax/argumentNames``
-///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/arguments``
 public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -15748,8 +15747,7 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `baseType`: ``TypeSyntax``?
 ///  - `period`: `'.'`?
-///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<binaryOperator>`)
-///  - `arguments`: ``DeclNameArgumentsSyntax``?
+///  - `declName`: ``DeclReferenceExprSyntax``
 ///
 /// ### Contained in
 /// 
@@ -15775,8 +15773,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - baseType: The base type of the qualified name, optionally specified.
-  ///   - name: The base name of the referenced function.
-  ///   - arguments: The argument labels of the referenced function, optionally specified.
+  ///   - declName: The name of the referenced function.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -15784,11 +15781,9 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
       baseType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax? = nil,
-      _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclReferenceExprSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -15799,22 +15794,18 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
             baseType, 
             unexpectedBetweenBaseTypeAndPeriod, 
             period, 
-            unexpectedBetweenPeriodAndName, 
-            name, 
-            unexpectedBetweenNameAndArguments, 
-            arguments, 
-            unexpectedAfterArguments
+            unexpectedBetweenPeriodAndDeclName, 
+            declName, 
+            unexpectedAfterDeclName
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
           baseType?.raw, 
           unexpectedBetweenBaseTypeAndPeriod?.raw, 
           period?.raw, 
-          unexpectedBetweenPeriodAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndArguments?.raw, 
-          arguments?.raw, 
-          unexpectedAfterArguments?.raw
+          unexpectedBetweenPeriodAndDeclName?.raw, 
+          declName.raw, 
+          unexpectedAfterDeclName?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.qualifiedDeclName,
@@ -15866,7 +15857,7 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -15875,41 +15866,22 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The base name of the referenced function.
-  public var name: TokenSyntax {
+  /// The name of the referenced function.
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = QualifiedDeclNameSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenNameAndArguments: UnexpectedNodesSyntax? {
+  public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = QualifiedDeclNameSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The argument labels of the referenced function, optionally specified.
-  public var arguments: DeclNameArgumentsSyntax? {
-    get {
-      return data.child(at: 7, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -15919,11 +15891,9 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.baseType, 
           \Self.unexpectedBetweenBaseTypeAndPeriod, 
           \Self.period, 
-          \Self.unexpectedBetweenPeriodAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndArguments, 
-          \Self.arguments, 
-          \Self.unexpectedAfterArguments
+          \Self.unexpectedBetweenPeriodAndDeclName, 
+          \Self.declName, 
+          \Self.unexpectedAfterDeclName
         ])
   }
 }

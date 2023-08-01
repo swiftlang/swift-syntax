@@ -5353,8 +5353,6 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``DeclReferenceExprSyntax``.``DeclReferenceExprSyntax/argumentNames``
-///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declNameArguments``
-///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declNameArguments``
 ///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/arguments``
 public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -11511,8 +11509,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `property`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
-///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
+///  - `declName`: ``DeclReferenceExprSyntax``
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///
 /// ### Contained in
@@ -11541,11 +11538,9 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeProperty: UnexpectedNodesSyntax? = nil,
-      property: TokenSyntax,
-      _ unexpectedBetweenPropertyAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclReferenceExprSyntax,
+      _ unexpectedBetweenDeclNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
       _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -11554,20 +11549,16 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeProperty, 
-            property, 
-            unexpectedBetweenPropertyAndDeclNameArguments, 
-            declNameArguments, 
-            unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
+            unexpectedBeforeDeclName, 
+            declName, 
+            unexpectedBetweenDeclNameAndGenericArgumentClause, 
             genericArgumentClause, 
             unexpectedAfterGenericArgumentClause
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeProperty?.raw, 
-          property.raw, 
-          unexpectedBetweenPropertyAndDeclNameArguments?.raw, 
-          declNameArguments?.raw, 
-          unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause?.raw, 
+          unexpectedBeforeDeclName?.raw, 
+          declName.raw, 
+          unexpectedBetweenDeclNameAndGenericArgumentClause?.raw, 
           genericArgumentClause?.raw, 
           unexpectedAfterGenericArgumentClause?.raw
         ]
@@ -11584,7 +11575,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeProperty: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -11593,16 +11584,16 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var property: TokenSyntax {
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenPropertyAndDeclNameArguments: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDeclNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -11611,16 +11602,16 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var declNameArguments: DeclNameArgumentsSyntax? {
+  public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
+      return data.child(at: 3, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -11629,31 +11620,11 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var genericArgumentClause: GenericArgumentClauseSyntax? {
-    get {
-      return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
-    }
-    set(value) {
-      self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeProperty, 
-          \Self.property, 
-          \Self.unexpectedBetweenPropertyAndDeclNameArguments, 
-          \Self.declNameArguments, 
-          \Self.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
+          \Self.unexpectedBeforeDeclName, 
+          \Self.declName, 
+          \Self.unexpectedBetweenDeclNameAndGenericArgumentClause, 
           \Self.genericArgumentClause, 
           \Self.unexpectedAfterGenericArgumentClause
         ])

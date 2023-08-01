@@ -132,7 +132,7 @@ final class ExpressionTests: XCTestCase {
                     period: .periodToken(),
                     component: .init(
                       KeyPathPropertyComponentSyntax(
-                        property: .identifier("foo")
+                        declName: DeclReferenceExprSyntax(baseName: .identifier("foo"))
                       )
                     )
                   ),
@@ -281,7 +281,9 @@ final class ExpressionTests: XCTestCase {
               KeyPathComponentSyntax(
                 period: .periodToken(),
                 component: .init(
-                  KeyPathPropertyComponentSyntax(property: .identifier("y"))
+                  KeyPathPropertyComponentSyntax(
+                    declName: DeclReferenceExprSyntax(baseName: .identifier("y"))
+                  )
                 )
               )
             ])

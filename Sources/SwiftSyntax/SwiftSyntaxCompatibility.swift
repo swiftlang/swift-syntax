@@ -77,6 +77,51 @@ extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
   }
 }
 
+extension MemberAccessExprSyntax {
+  @available(*, deprecated, renamed: "declName.baseName")
+  public var name: TokenSyntax {
+    return declName.baseName
+  }
+
+  @available(*, deprecated, renamed: "declName.argumentNames")
+  public var declNameArguments: DeclNameArgumentsSyntax? {
+    return declName.argumentNames
+  }
+
+  @available(*, deprecated, message: "Use initializer taking `DeclReferenceExprSyntax` instead")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeBase: UnexpectedNodesSyntax? = nil,
+    base: (some ExprSyntaxProtocol)? = ExprSyntax?.none,
+    _ unexpectedBetweenBaseAndPeriod: UnexpectedNodesSyntax? = nil,
+    dot: TokenSyntax = .periodToken(),
+    _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
+    declNameArguments: DeclNameArgumentsSyntax? = nil,
+    _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    let declName = DeclReferenceExprSyntax(
+      baseName: name,
+      unexpectedBetweenNameAndDeclNameArguments,
+      argumentNames: declNameArguments
+    )
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeBase,
+      base: base,
+      unexpectedBetweenBaseAndPeriod,
+      period: dot,
+      unexpectedBetweenPeriodAndName,
+      declName: declName,
+      unexpectedAfterDeclNameArguments,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {

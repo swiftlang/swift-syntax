@@ -1815,13 +1815,15 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `baseName`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>`)
+///  - `baseName`: (`<identifier>` | `'self'` | `'Self'` | `'init'` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
 ///
 /// ### Contained in
 /// 
 ///  - ``DynamicReplacementAttributeArgumentsSyntax``.``DynamicReplacementAttributeArgumentsSyntax/declName``
 ///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
+///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declName``
+///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declName``
 ///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
 public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -4204,8 +4206,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `base`: ``ExprSyntax``?
 ///  - `period`: `'.'`
-///  - `name`: ``TokenSyntax``
-///  - `declNameArguments`: ``DeclNameArgumentsSyntax``?
+///  - `declName`: ``DeclReferenceExprSyntax``
 public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -4233,11 +4234,9 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       base: (some ExprSyntaxProtocol)? = ExprSyntax?.none,
       _ unexpectedBetweenBaseAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax = .periodToken(),
-      _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclReferenceExprSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -4248,22 +4247,18 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
             base, 
             unexpectedBetweenBaseAndPeriod, 
             period, 
-            unexpectedBetweenPeriodAndName, 
-            name, 
-            unexpectedBetweenNameAndDeclNameArguments, 
-            declNameArguments, 
-            unexpectedAfterDeclNameArguments
+            unexpectedBetweenPeriodAndDeclName, 
+            declName, 
+            unexpectedAfterDeclName
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBase?.raw, 
           base?.raw, 
           unexpectedBetweenBaseAndPeriod?.raw, 
           period.raw, 
-          unexpectedBetweenPeriodAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndDeclNameArguments?.raw, 
-          declNameArguments?.raw, 
-          unexpectedAfterDeclNameArguments?.raw
+          unexpectedBetweenPeriodAndDeclName?.raw, 
+          declName.raw, 
+          unexpectedAfterDeclName?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.memberAccessExpr,
@@ -4314,7 +4309,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -4323,39 +4318,21 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var name: TokenSyntax {
+  public var declName: DeclReferenceExprSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? {
+  public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var declNameArguments: DeclNameArgumentsSyntax? {
-    get {
-      return data.child(at: 7, parent: Syntax(self)).map(DeclNameArgumentsSyntax.init)
-    }
-    set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = MemberAccessExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
     }
   }
   
@@ -4365,11 +4342,9 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           \Self.base, 
           \Self.unexpectedBetweenBaseAndPeriod, 
           \Self.period, 
-          \Self.unexpectedBetweenPeriodAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndDeclNameArguments, 
-          \Self.declNameArguments, 
-          \Self.unexpectedAfterDeclNameArguments
+          \Self.unexpectedBetweenPeriodAndDeclName, 
+          \Self.declName, 
+          \Self.unexpectedAfterDeclName
         ])
   }
 }

@@ -1873,16 +1873,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "questionOrExclamationMark"
   case \KeyPathOptionalComponentSyntax.unexpectedAfterQuestionOrExclamationMark:
     return "unexpectedAfterQuestionOrExclamationMark"
-  case \KeyPathPropertyComponentSyntax.unexpectedBeforeProperty:
-    return "unexpectedBeforeProperty"
-  case \KeyPathPropertyComponentSyntax.property:
-    return "property"
-  case \KeyPathPropertyComponentSyntax.unexpectedBetweenPropertyAndDeclNameArguments:
-    return "unexpectedBetweenPropertyAndDeclNameArguments"
-  case \KeyPathPropertyComponentSyntax.declNameArguments:
-    return "declNameArguments"
-  case \KeyPathPropertyComponentSyntax.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause:
-    return "unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause"
+  case \KeyPathPropertyComponentSyntax.unexpectedBeforeDeclName:
+    return "unexpectedBeforeDeclName"
+  case \KeyPathPropertyComponentSyntax.declName:
+    return "declName"
+  case \KeyPathPropertyComponentSyntax.unexpectedBetweenDeclNameAndGenericArgumentClause:
+    return "unexpectedBetweenDeclNameAndGenericArgumentClause"
   case \KeyPathPropertyComponentSyntax.genericArgumentClause:
     return "genericArgumentClause"
   case \KeyPathPropertyComponentSyntax.unexpectedAfterGenericArgumentClause:
@@ -2121,16 +2117,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBaseAndPeriod"
   case \MemberAccessExprSyntax.period:
     return "period"
-  case \MemberAccessExprSyntax.unexpectedBetweenPeriodAndName:
-    return "unexpectedBetweenPeriodAndName"
-  case \MemberAccessExprSyntax.name:
-    return "name"
-  case \MemberAccessExprSyntax.unexpectedBetweenNameAndDeclNameArguments:
-    return "unexpectedBetweenNameAndDeclNameArguments"
-  case \MemberAccessExprSyntax.declNameArguments:
-    return "declNameArguments"
-  case \MemberAccessExprSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
+  case \MemberAccessExprSyntax.unexpectedBetweenPeriodAndDeclName:
+    return "unexpectedBetweenPeriodAndDeclName"
+  case \MemberAccessExprSyntax.declName:
+    return "declName"
+  case \MemberAccessExprSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \MemberBlockItemSyntax.unexpectedBeforeDecl:
     return "unexpectedBeforeDecl"
   case \MemberBlockItemSyntax.decl:

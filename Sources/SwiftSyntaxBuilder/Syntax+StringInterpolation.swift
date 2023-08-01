@@ -377,7 +377,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
 
       if let call = expr.as(FunctionCallExprSyntax.self),
         let memberAccess = call.calledExpression.as(MemberAccessExprSyntax.self),
-        memberAccess.name.text == "some",
+        memberAccess.declName.baseName.text == "some",
         let argument = call.arguments.first?.expression
       {
         return containsNil(argument)

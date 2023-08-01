@@ -660,6 +660,7 @@ extension DeclReferenceExprSyntax {
     case `init`
     case dollarIdentifier
     case binaryOperator
+    case integerLiteral
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -675,6 +676,8 @@ extension DeclReferenceExprSyntax {
         self = .dollarIdentifier
       case TokenSpec(.binaryOperator):
         self = .binaryOperator
+      case TokenSpec(.integerLiteral):
+        self = .integerLiteral
       default:
         return nil
       }
@@ -694,6 +697,8 @@ extension DeclReferenceExprSyntax {
         return .dollarIdentifier
       case .binaryOperator:
         return .binaryOperator
+      case .integerLiteral:
+        return .integerLiteral
       }
     }
   }
@@ -1302,58 +1307,6 @@ extension KeyPathOptionalComponentSyntax {
         return .postfixQuestionMark
       case .exclamationMark:
         return .exclamationMark
-      }
-    }
-  }
-}
-
-extension KeyPathPropertyComponentSyntax {
-  enum PropertyOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case dollarIdentifier
-    case binaryOperator
-    case integerLiteral
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.dollarIdentifier):
-        self = .dollarIdentifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.integerLiteral):
-        self = .integerLiteral
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .dollarIdentifier:
-        return .dollarIdentifier
-      case .binaryOperator:
-        return .binaryOperator
-      case .integerLiteral:
-        return .integerLiteral
       }
     }
   }

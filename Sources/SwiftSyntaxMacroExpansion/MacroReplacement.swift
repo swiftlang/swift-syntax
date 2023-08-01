@@ -192,7 +192,7 @@ extension MacroDeclSyntax {
       let base = memberAccess.base,
       let baseName = base.as(DeclReferenceExprSyntax.self)?.baseName
     {
-      let memberName = memberAccess.name
+      let memberName = memberAccess.declName.baseName
       return .deprecatedExternal(
         node: Syntax(memberAccess),
         module: baseName.trimmedDescription,

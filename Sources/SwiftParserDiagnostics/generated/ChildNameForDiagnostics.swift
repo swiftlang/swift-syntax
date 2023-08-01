@@ -236,7 +236,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "modifiers"
   case \MemberAccessExprSyntax.base:
     return "base"
-  case \MemberAccessExprSyntax.name:
+  case \MemberAccessExprSyntax.declName:
     return "name"
   case \MemberTypeSyntax.baseType:
     return "base type"

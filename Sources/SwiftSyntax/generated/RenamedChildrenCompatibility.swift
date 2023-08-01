@@ -4405,45 +4405,43 @@ extension IsExprSyntax {
 }
 
 extension KeyPathPropertyComponentSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeProperty")
+  @available(*, deprecated, renamed: "unexpectedBeforeDeclName")
   public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeProperty
+      return unexpectedBeforeDeclName
     }
     set {
-      unexpectedBeforeProperty = newValue
+      unexpectedBeforeDeclName = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "property")
-  public var identifier: TokenSyntax {
+  @available(*, deprecated, renamed: "declName")
+  public var identifier: DeclReferenceExprSyntax {
     get {
-      return property
+      return declName
     }
     set {
-      property = newValue
+      declName = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenPropertyAndDeclNameArguments")
-  public var unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenDeclNameAndGenericArgumentClause")
+  public var unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPropertyAndDeclNameArguments
+      return unexpectedBetweenDeclNameAndGenericArgumentClause
     }
     set {
-      unexpectedBetweenPropertyAndDeclNameArguments = newValue
+      unexpectedBetweenDeclNameAndGenericArgumentClause = newValue
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with property argument(s).")
+  @available(*, deprecated, message: "Use an initializer with declName argument(s).")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: TokenSyntax,
-      _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+      identifier: DeclReferenceExprSyntax,
+      _ unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       genericArgumentClause: GenericArgumentClauseSyntax? = nil,
       _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -4452,10 +4450,8 @@ extension KeyPathPropertyComponentSyntax {
     self.init(
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeIdentifier, 
-        property: identifier, 
-        unexpectedBetweenIdentifierAndDeclNameArguments, 
-        declNameArguments: declNameArguments, 
-        unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause, 
+        declName: identifier, 
+        unexpectedBetweenIdentifierAndGenericArgumentClause, 
         genericArgumentClause: genericArgumentClause, 
         unexpectedAfterGenericArgumentClause, 
         trailingTrivia: trailingTrivia
@@ -5156,13 +5152,13 @@ extension MemberAccessExprSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
-  public var unexpectedBetweenDotAndName: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndDeclName")
+  public var unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPeriodAndName
+      return unexpectedBetweenPeriodAndDeclName
     }
     set {
-      unexpectedBetweenPeriodAndName = newValue
+      unexpectedBetweenPeriodAndDeclName = newValue
     }
   }
   
@@ -5174,11 +5170,9 @@ extension MemberAccessExprSyntax {
       base: (some ExprSyntaxProtocol)? = ExprSyntax?.none,
       _ unexpectedBetweenBaseAndDot: UnexpectedNodesSyntax? = nil,
       dot: TokenSyntax = .periodToken(),
-      _ unexpectedBetweenDotAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      declNameArguments: DeclNameArgumentsSyntax? = nil,
-      _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? = nil,
+      declName: DeclReferenceExprSyntax,
+      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -5188,11 +5182,9 @@ extension MemberAccessExprSyntax {
         base: base, 
         unexpectedBetweenBaseAndDot, 
         period: dot, 
-        unexpectedBetweenDotAndName, 
-        name: name, 
-        unexpectedBetweenNameAndDeclNameArguments, 
-        declNameArguments: declNameArguments, 
-        unexpectedAfterDeclNameArguments, 
+        unexpectedBetweenDotAndDeclName, 
+        declName: declName, 
+        unexpectedAfterDeclName, 
         trailingTrivia: trailingTrivia
       )
   }

@@ -633,6 +633,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                  `catchClauses` collection.
   /// - returns: A copy of the receiver with the provided `CatchClause`
   ///            appended to its `catchClauses` collection.
+  @available(*, deprecated, message: "Use node.catchClauses.append(newElement) instead")
   public func addCatchClause(_ element: CatchClauseSyntax) -> DoStmtSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1299,6 +1300,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                  `conditions` collection.
   /// - returns: A copy of the receiver with the provided `Condition`
   ///            appended to its `conditions` collection.
+  @available(*, deprecated, message: "Use node.conditions.append(newElement) instead")
   public func addCondition(_ element: ConditionElementSyntax) -> GuardStmtSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2150,6 +2152,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///                  `conditions` collection.
   /// - returns: A copy of the receiver with the provided `Condition`
   ///            appended to its `conditions` collection.
+  @available(*, deprecated, message: "Use node.conditions.append(newElement) instead")
   public func addCondition(_ element: ConditionElementSyntax) -> WhileStmtSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

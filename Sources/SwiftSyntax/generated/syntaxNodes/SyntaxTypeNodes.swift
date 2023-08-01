@@ -276,6 +276,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -492,6 +493,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -856,6 +858,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
   ///            appended to its `parameters` collection.
+  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
   public func addParameter(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2461,6 +2464,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: TupleTypeElementSyntax) -> TupleTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

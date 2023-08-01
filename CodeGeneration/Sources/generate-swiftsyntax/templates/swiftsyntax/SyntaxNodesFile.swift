@@ -203,6 +203,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
               ///                  `\(child.varOrCaseName)` collection.
               /// - returns: A copy of the receiver with the provided `\(raw: childElt)`
               ///            appended to its `\(child.varOrCaseName)` collection.
+              @available(*, deprecated, message: "Use node.\(child.varOrCaseName).append(newElement) instead")
               public func add\(raw: childElt)(_ element: \(raw: childEltType)) -> \(node.kind.syntaxType) {
                 var collection: RawSyntax
                 let arena = SyntaxArena()

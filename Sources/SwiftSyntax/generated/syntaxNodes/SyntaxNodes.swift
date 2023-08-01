@@ -1423,6 +1423,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `availabilityArguments` collection.
   /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
   ///            appended to its `availabilityArguments` collection.
+  @available(*, deprecated, message: "Use node.availabilityArguments.append(newElement) instead")
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> AvailabilityConditionSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1831,6 +1832,7 @@ public struct BackDeployedAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashab
   ///                  `platforms` collection.
   /// - returns: A copy of the receiver with the provided `Platform`
   ///            appended to its `platforms` collection.
+  @available(*, deprecated, message: "Use node.platforms.append(newElement) instead")
   public func addPlatform(_ element: PlatformVersionItemSyntax) -> BackDeployedAttributeArgumentsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1990,6 +1992,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `catchItems` collection.
   /// - returns: A copy of the receiver with the provided `CatchItem`
   ///            appended to its `catchItems` collection.
+  @available(*, deprecated, message: "Use node.catchItems.append(newElement) instead")
   public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2320,6 +2323,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `items` collection.
   /// - returns: A copy of the receiver with the provided `Item`
   ///            appended to its `items` collection.
+  @available(*, deprecated, message: "Use node.items.append(newElement) instead")
   public func addItem(_ element: ClosureCaptureSyntax) -> ClosureCaptureClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2889,6 +2893,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
   ///            appended to its `parameters` collection.
+  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
   public func addParameter(_ element: ClosureParameterSyntax) -> ClosureParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3090,6 +3095,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ClosureParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3132,6 +3138,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ClosureParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3586,6 +3593,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4038,6 +4046,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
   ///            appended to its `statements` collection.
+  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
   public func addStatement(_ element: CodeBlockItemSyntax) -> CodeBlockSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5461,6 +5470,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6437,6 +6447,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7605,6 +7616,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
   ///            appended to its `parameters` collection.
+  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
   public func addParameter(_ element: EnumCaseParameterSyntax) -> EnumCaseParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7797,6 +7809,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -8281,6 +8294,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `expressions` collection.
   /// - returns: A copy of the receiver with the provided `Expression`
   ///            appended to its `expressions` collection.
+  @available(*, deprecated, message: "Use node.expressions.append(newElement) instead")
   public func addExpression(_ element: LabeledExprSyntax) -> ExpressionSegmentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -8589,6 +8603,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
   ///            appended to its `parameters` collection.
+  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
   public func addParameter(_ element: FunctionParameterSyntax) -> FunctionParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -8790,6 +8805,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -8832,6 +8848,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -9289,6 +9306,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: GenericArgumentSyntax) -> GenericArgumentClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -9616,6 +9634,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
   ///            appended to its `parameters` collection.
+  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
   public func addParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -9818,6 +9837,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> GenericParameterSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -10265,6 +10285,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `requirements` collection.
   /// - returns: A copy of the receiver with the provided `Requirement`
   ///            appended to its `requirements` collection.
+  @available(*, deprecated, message: "Use node.requirements.append(newElement) instead")
   public func addRequirement(_ element: GenericRequirementSyntax) -> GenericWhereClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -10942,6 +10963,7 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `inheritedTypes` collection.
   /// - returns: A copy of the receiver with the provided `InheritedType`
   ///            appended to its `inheritedTypes` collection.
+  @available(*, deprecated, message: "Use node.inheritedTypes.append(newElement) instead")
   public func addInheritedType(_ element: InheritedTypeSyntax) -> InheritanceClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -11749,6 +11771,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: LabeledExprSyntax) -> KeyPathSubscriptComponentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -12901,6 +12924,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `members` collection.
   /// - returns: A copy of the receiver with the provided `Member`
   ///            appended to its `members` collection.
+  @available(*, deprecated, message: "Use node.members.append(newElement) instead")
   public func addMember(_ element: MemberBlockItemSyntax) -> MemberBlockSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -13631,6 +13655,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `designatedTypes` collection.
   /// - returns: A copy of the receiver with the provided `DesignatedTypeElement`
   ///            appended to its `designatedTypes` collection.
+  @available(*, deprecated, message: "Use node.designatedTypes.append(newElement) instead")
   public func addDesignatedTypeElement(_ element: DesignatedTypeSyntax) -> OperatorPrecedenceAndTypesSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -14040,6 +14065,7 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
   ///                  `platforms` collection.
   /// - returns: A copy of the receiver with the provided `Platform`
   ///            appended to its `platforms` collection.
+  @available(*, deprecated, message: "Use node.platforms.append(newElement) instead")
   public func addPlatform(_ element: PlatformVersionItemSyntax) -> OriginallyDefinedInAttributeArgumentsSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -15396,6 +15422,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `precedenceGroups` collection.
   /// - returns: A copy of the receiver with the provided `OtherName`
   ///            appended to its `precedenceGroups` collection.
+  @available(*, deprecated, message: "Use node.precedenceGroups.append(newElement) instead")
   public func addOtherName(_ element: PrecedenceGroupNameSyntax) -> PrecedenceGroupRelationSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -15555,6 +15582,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   ///                  `primaryAssociatedTypes` collection.
   /// - returns: A copy of the receiver with the provided `PrimaryAssociatedType`
   ///            appended to its `primaryAssociatedTypes` collection.
+  @available(*, deprecated, message: "Use node.primaryAssociatedTypes.append(newElement) instead")
   public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -16270,6 +16298,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
   ///            appended to its `statements` collection.
+  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -16476,6 +16505,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
   ///                  `availabilityArguments` collection.
   /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
   ///            appended to its `availabilityArguments` collection.
+  @available(*, deprecated, message: "Use node.availabilityArguments.append(newElement) instead")
   public func addAvailabilityArgument(_ element: AvailabilityArgumentSyntax) -> SpecializeAvailabilityArgumentSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -17085,6 +17115,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `caseItems` collection.
   /// - returns: A copy of the receiver with the provided `CaseItem`
   ///            appended to its `caseItems` collection.
+  @available(*, deprecated, message: "Use node.caseItems.append(newElement) instead")
   public func addCaseItem(_ element: SwitchCaseItemSyntax) -> SwitchCaseLabelSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -17324,6 +17355,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
   ///            appended to its `statements` collection.
+  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
   public func addStatement(_ element: CodeBlockItemSyntax) -> SwitchCaseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -18878,6 +18910,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `components` collection.
   /// - returns: A copy of the receiver with the provided `VersionComponent`
   ///            appended to its `components` collection.
+  @available(*, deprecated, message: "Use node.components.append(newElement) instead")
   public func addVersionComponent(_ element: VersionComponentSyntax) -> VersionTupleSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -19289,6 +19322,7 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: YieldedExpressionSyntax) -> YieldedExpressionsClauseSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

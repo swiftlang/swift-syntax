@@ -2443,12 +2443,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTypeAnnotationAndInitializer"
   case \PatternBindingSyntax.initializer:
     return "initializer"
-  case \PatternBindingSyntax.unexpectedBetweenInitializerAndAccessors:
-    return "unexpectedBetweenInitializerAndAccessors"
-  case \PatternBindingSyntax.accessors:
-    return "accessors"
-  case \PatternBindingSyntax.unexpectedBetweenAccessorsAndTrailingComma:
-    return "unexpectedBetweenAccessorsAndTrailingComma"
+  case \PatternBindingSyntax.unexpectedBetweenInitializerAndAccessorBlock:
+    return "unexpectedBetweenInitializerAndAccessorBlock"
+  case \PatternBindingSyntax.accessorBlock:
+    return "accessorBlock"
+  case \PatternBindingSyntax.unexpectedBetweenAccessorBlockAndTrailingComma:
+    return "unexpectedBetweenAccessorBlockAndTrailingComma"
   case \PatternBindingSyntax.trailingComma:
     return "trailingComma"
   case \PatternBindingSyntax.unexpectedAfterTrailingComma:
@@ -2967,12 +2967,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenReturnClauseAndGenericWhereClause"
   case \SubscriptDeclSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \SubscriptDeclSyntax.unexpectedBetweenGenericWhereClauseAndAccessors:
-    return "unexpectedBetweenGenericWhereClauseAndAccessors"
-  case \SubscriptDeclSyntax.accessors:
-    return "accessors"
-  case \SubscriptDeclSyntax.unexpectedAfterAccessors:
-    return "unexpectedAfterAccessors"
+  case \SubscriptDeclSyntax.unexpectedBetweenGenericWhereClauseAndAccessorBlock:
+    return "unexpectedBetweenGenericWhereClauseAndAccessorBlock"
+  case \SubscriptDeclSyntax.accessorBlock:
+    return "accessorBlock"
+  case \SubscriptDeclSyntax.unexpectedAfterAccessorBlock:
+    return "unexpectedAfterAccessorBlock"
   case \SuperExprSyntax.unexpectedBeforeSuperKeyword:
     return "unexpectedBeforeSuperKeyword"
   case \SuperExprSyntax.superKeyword:

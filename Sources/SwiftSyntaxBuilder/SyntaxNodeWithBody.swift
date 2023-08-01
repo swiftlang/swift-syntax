@@ -355,7 +355,7 @@ public extension VariableDeclSyntax {
     self = castedDecl
     precondition(self.bindings.count == 1)
     var binding: PatternBindingSyntax? = self.bindings.last
-    binding?.accessors = try .getter(CodeBlockSyntax(statements: accessor()))
+    binding?.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
     bindings = PatternBindingListSyntax([binding].compactMap { $0 })
   }
 }

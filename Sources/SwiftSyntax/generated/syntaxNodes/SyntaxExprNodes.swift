@@ -1819,7 +1819,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `content`: (`':'` | ``DictionaryElementListSyntax``)
 ///  - `rightSquare`: `']'`
 public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public enum Content: SyntaxChildChoices {
+  public enum Content: SyntaxChildChoices, SyntaxHashable {
     case `colon`(TokenSyntax)
     case `elements`(DictionaryElementListSyntax)
     
@@ -2909,7 +2909,7 @@ public struct IdentifierExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``IfExprSyntax``.``IfExprSyntax/elseBody``
 public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
-  public enum ElseBody: SyntaxChildChoices {
+  public enum ElseBody: SyntaxChildChoices, SyntaxHashable {
     case `ifExpr`(IfExprSyntax)
     case `codeBlock`(CodeBlockSyntax)
     

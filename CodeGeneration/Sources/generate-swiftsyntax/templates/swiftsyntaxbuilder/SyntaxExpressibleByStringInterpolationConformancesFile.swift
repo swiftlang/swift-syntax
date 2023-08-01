@@ -21,4 +21,11 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
   for node in SYNTAX_NODES where node.parserFunction != nil {
     DeclSyntax("extension \(node.kind.syntaxType): SyntaxExpressibleByStringInterpolation {}")
   }
+
+  // `SyntaxParsable` conformance for collection nodes is hand-written.
+  // We also need to hand-write the corresponding `SyntaxExpressibleByStringInterpolation` conformances.
+  DeclSyntax("extension AccessorDeclListSyntax: SyntaxExpressibleByStringInterpolation {}")
+  DeclSyntax("extension AttributeListSyntax: SyntaxExpressibleByStringInterpolation {}")
+  DeclSyntax("extension CodeBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}")
+  DeclSyntax("extension MemberBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}")
 }

@@ -241,7 +241,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
     return nil
   }
 
-  return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices") {
+  return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices, SyntaxHashable") {
     for choice in choices {
       DeclSyntax("case `\(choice.varOrCaseName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
     }

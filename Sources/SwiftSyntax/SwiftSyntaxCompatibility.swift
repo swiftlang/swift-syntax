@@ -77,16 +77,6 @@ extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
   }
 }
 
-extension PatternBindingSyntax {
-  @available(*, deprecated, renamed: "Accessors")
-  public typealias Accessor = Accessors
-}
-
-extension SubscriptDeclSyntax {
-  @available(*, deprecated, renamed: "Accessors")
-  public typealias Accessor = Accessors
-}
-
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {

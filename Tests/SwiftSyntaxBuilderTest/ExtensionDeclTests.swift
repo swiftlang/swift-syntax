@@ -18,7 +18,7 @@ final class ExtensionDeclTests: XCTestCase {
   func testExtensionDecl() {
     let keywords = ["associatedtype", "class"].map { keyword -> VariableDeclSyntax in
       // We need to use `CodeBlock` here to ensure there is braces around.
-      let body = CodeBlockSyntax {
+      let body = CodeBlockItemListSyntax {
         FunctionCallExprSyntax(callee: ExprSyntax("TokenSyntax.\(raw: keyword)Keyword"))
       }
 
@@ -29,7 +29,7 @@ final class ExtensionDeclTests: XCTestCase {
         PatternBindingSyntax(
           pattern: PatternSyntax("`\(raw: keyword)`"),
           typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("TokenSyntax")),
-          accessors: .getter(body)
+          accessorBlock: AccessorBlockSyntax(accessors: .getter(body))
         )
 
       }

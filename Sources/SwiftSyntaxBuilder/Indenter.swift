@@ -25,7 +25,8 @@ extension Trivia {
   }
 }
 
-class Indenter: SyntaxRewriter {
+/// Adds a given amount of indentation after every newline in a syntax tree.
+public class Indenter: SyntaxRewriter {
   let indentation: Trivia
 
   init(indentation: Trivia) {
@@ -33,7 +34,7 @@ class Indenter: SyntaxRewriter {
     super.init(viewMode: .sourceAccurate)
   }
 
-  /// Adds `indentation` after all newlines in the syntax tree.
+  /// Add `indentation` after all newlines in the syntax tree.
   public static func indent<SyntaxType: SyntaxProtocol>(
     _ node: SyntaxType,
     indentation: Trivia

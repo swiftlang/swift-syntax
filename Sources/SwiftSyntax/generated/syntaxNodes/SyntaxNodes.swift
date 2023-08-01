@@ -17,14 +17,56 @@
 /// ### Children
 /// 
 ///  - `leftBrace`: `'{'`
-///  - `accessors`: ``AccessorDeclListSyntax``
+///  - `accessors`: (``AccessorDeclListSyntax`` | ``CodeBlockItemListSyntax``)
 ///  - `rightBrace`: `'}'`
 ///
 /// ### Contained in
 /// 
-///  - ``PatternBindingSyntax``.``PatternBindingSyntax/accessors``
-///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessors``
+///  - ``PatternBindingSyntax``.``PatternBindingSyntax/accessorBlock``
+///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessorBlock``
 public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
+  public enum Accessors: SyntaxChildChoices, SyntaxHashable {
+    case `accessors`(AccessorDeclListSyntax)
+    case `getter`(CodeBlockItemListSyntax)
+    
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .accessors(let node):
+        return node._syntaxNode
+      case .getter(let node):
+        return node._syntaxNode
+      }
+    }
+    
+    init(_ data: SyntaxData) {
+      self.init(Syntax(data))!
+    }
+    
+    public init(_ node: AccessorDeclListSyntax) {
+      self = .accessors(node)
+    }
+    
+    public init(_ node: CodeBlockItemListSyntax) {
+      self = .getter(node)
+    }
+    
+    public init?(_ node: some SyntaxProtocol) {
+      if let node = node.as(AccessorDeclListSyntax.self) {
+        self = .accessors(node)
+        return
+      }
+      if let node = node.as(CodeBlockItemListSyntax.self) {
+        self = .getter(node)
+        return
+      }
+      return nil
+    }
+    
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(AccessorDeclListSyntax.self), .node(CodeBlockItemListSyntax.self)])
+    }
+  }
+  
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -50,7 +92,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
       leftBrace: TokenSyntax = .leftBraceToken(),
       _ unexpectedBetweenLeftBraceAndAccessors: UnexpectedNodesSyntax? = nil,
-      accessors: AccessorDeclListSyntax,
+      accessors: Accessors,
       _ unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? = nil,
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
@@ -117,37 +159,13 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessors: AccessorDeclListSyntax {
+  public var accessors: Accessors {
     get {
-      return AccessorDeclListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return Accessors(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
       self = AccessorBlockSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
-  }
-  
-  /// Adds the provided `element` to the node's `accessors`
-  /// collection.
-  /// - param element: The new `Accessor` to add to the node's
-  ///                  `accessors` collection.
-  /// - returns: A copy of the receiver with the provided `Accessor`
-  ///            appended to its `accessors` collection.
-  public func addAccessor(_ element: AccessorDeclSyntax) -> AccessorBlockSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.accessorDeclList,
-                                        from: [element.raw], arena: arena)
-    }
-    let newData = data.replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
-    return AccessorBlockSyntax(newData)
   }
   
   public var unexpectedBetweenAccessorsAndRightBrace: UnexpectedNodesSyntax? {
@@ -612,7 +630,7 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``AttributeListSyntax``
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Arguments: SyntaxChildChoices {
+  public enum Arguments: SyntaxChildChoices, SyntaxHashable {
     case `argumentList`(LabeledExprListSyntax)
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
@@ -1089,7 +1107,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``AvailabilityArgumentListSyntax``
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Argument: SyntaxChildChoices {
+  public enum Argument: SyntaxChildChoices, SyntaxHashable {
     case `token`(TokenSyntax)
     case `availabilityVersionRestriction`(PlatformVersionSyntax)
     case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
@@ -1479,7 +1497,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/argument``
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Value: SyntaxChildChoices {
+  public enum Value: SyntaxChildChoices, SyntaxHashable {
     case `string`(StringLiteralExprSyntax)
     case `version`(VersionTupleSyntax)
     
@@ -3419,7 +3437,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``ClosureExprSyntax``.``ClosureExprSyntax/signature``
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum ParameterClause: SyntaxChildChoices {
+  public enum ParameterClause: SyntaxChildChoices, SyntaxHashable {
     case `simpleInput`(ClosureShorthandParameterListSyntax)
     case `parameterClause`(ClosureParameterClauseSyntax)
     
@@ -3717,7 +3735,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``CodeBlockItemListSyntax``
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Item: SyntaxChildChoices {
+  public enum Item: SyntaxChildChoices, SyntaxHashable {
     case `decl`(DeclSyntax)
     case `stmt`(StmtSyntax)
     case `expr`(ExprSyntax)
@@ -3910,9 +3928,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``IfExprSyntax``.``IfExprSyntax/body``
 ///  - ``IfExprSyntax``.``IfExprSyntax/elseBody``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/body``
-///  - ``PatternBindingSyntax``.``PatternBindingSyntax/accessors``
 ///  - ``RepeatStmtSyntax``.``RepeatStmtSyntax/body``
-///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessors``
 ///  - ``WhileStmtSyntax``.``WhileStmtSyntax/body``
 public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -4217,7 +4233,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``ConditionElementListSyntax``
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Condition: SyntaxChildChoices {
+  public enum Condition: SyntaxChildChoices, SyntaxHashable {
     case `expression`(ExprSyntax)
     case `availability`(AvailabilityConditionSyntax)
     case `matchingPattern`(MatchingPatternConditionSyntax)
@@ -6630,7 +6646,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``DerivativeAttributeArgumentsSyntax``.``DerivativeAttributeArgumentsSyntax/arguments``
 ///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/arguments``
 public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Arguments: SyntaxChildChoices {
+  public enum Arguments: SyntaxChildChoices, SyntaxHashable {
     case `argument`(DifferentiabilityArgumentSyntax)
     case `argumentList`(DifferentiabilityArgumentsSyntax)
     
@@ -7045,7 +7061,7 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 /// 
 ///  - ``DocumentationAttributeArgumentListSyntax``
 public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Value: SyntaxChildChoices {
+  public enum Value: SyntaxChildChoices, SyntaxHashable {
     case `token`(TokenSyntax)
     case `string`(StringLiteralExprSyntax)
     
@@ -10085,7 +10101,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``GenericRequirementListSyntax``
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Requirement: SyntaxChildChoices {
+  public enum Requirement: SyntaxChildChoices, SyntaxHashable {
     case `sameTypeRequirement`(SameTypeRequirementSyntax)
     case `conformanceRequirement`(ConformanceRequirementSyntax)
     case `layoutRequirement`(LayoutRequirementSyntax)
@@ -10435,7 +10451,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``IfConfigClauseListSyntax``
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Elements: SyntaxChildChoices {
+  public enum Elements: SyntaxChildChoices, SyntaxHashable {
     case `statements`(CodeBlockItemListSyntax)
     case `switchCases`(SwitchCaseListSyntax)
     case `decls`(MemberBlockItemListSyntax)
@@ -11398,7 +11414,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``KeyPathComponentListSyntax``
 public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Component: SyntaxChildChoices {
+  public enum Component: SyntaxChildChoices, SyntaxHashable {
     case `property`(KeyPathPropertyComponentSyntax)
     case `subscript`(KeyPathSubscriptComponentSyntax)
     case `optional`(KeyPathOptionalComponentSyntax)
@@ -14267,55 +14283,13 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `initializer`: ``InitializerClauseSyntax``?
-///  - `accessors`: (``AccessorBlockSyntax`` | ``CodeBlockSyntax``)?
+///  - `accessorBlock`: ``AccessorBlockSyntax``?
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
 /// 
 ///  - ``PatternBindingListSyntax``
 public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Accessors: SyntaxChildChoices {
-    case `accessors`(AccessorBlockSyntax)
-    case `getter`(CodeBlockSyntax)
-    
-    public var _syntaxNode: Syntax {
-      switch self {
-      case .accessors(let node):
-        return node._syntaxNode
-      case .getter(let node):
-        return node._syntaxNode
-      }
-    }
-    
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
-    }
-    
-    public init(_ node: AccessorBlockSyntax) {
-      self = .accessors(node)
-    }
-    
-    public init(_ node: CodeBlockSyntax) {
-      self = .getter(node)
-    }
-    
-    public init?(_ node: some SyntaxProtocol) {
-      if let node = node.as(AccessorBlockSyntax.self) {
-        self = .accessors(node)
-        return
-      }
-      if let node = node.as(CodeBlockSyntax.self) {
-        self = .getter(node)
-        return
-      }
-      return nil
-    }
-    
-    public static var structure: SyntaxNodeStructure {
-      return .choices([.node(AccessorBlockSyntax.self), .node(CodeBlockSyntax.self)])
-    }
-  }
-  
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -14344,9 +14318,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
       typeAnnotation: TypeAnnotationSyntax? = nil,
       _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: InitializerClauseSyntax? = nil,
-      _ unexpectedBetweenInitializerAndAccessors: UnexpectedNodesSyntax? = nil,
-      accessors: Accessors? = nil,
-      _ unexpectedBetweenAccessorsAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenInitializerAndAccessorBlock: UnexpectedNodesSyntax? = nil,
+      accessorBlock: AccessorBlockSyntax? = nil,
+      _ unexpectedBetweenAccessorBlockAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -14361,9 +14335,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
             typeAnnotation, 
             unexpectedBetweenTypeAnnotationAndInitializer, 
             initializer, 
-            unexpectedBetweenInitializerAndAccessors, 
-            accessors, 
-            unexpectedBetweenAccessorsAndTrailingComma, 
+            unexpectedBetweenInitializerAndAccessorBlock, 
+            accessorBlock, 
+            unexpectedBetweenAccessorBlockAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
@@ -14374,9 +14348,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           typeAnnotation?.raw, 
           unexpectedBetweenTypeAnnotationAndInitializer?.raw, 
           initializer?.raw, 
-          unexpectedBetweenInitializerAndAccessors?.raw, 
-          accessors?.raw, 
-          unexpectedBetweenAccessorsAndTrailingComma?.raw, 
+          unexpectedBetweenInitializerAndAccessorBlock?.raw, 
+          accessorBlock?.raw, 
+          unexpectedBetweenAccessorBlockAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -14447,7 +14421,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenInitializerAndAccessors: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenInitializerAndAccessorBlock: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14456,16 +14430,16 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var accessors: Accessors? {
+  public var accessorBlock: AccessorBlockSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(Accessors.init)
+      return data.child(at: 7, parent: Syntax(self)).map(AccessorBlockSyntax.init)
     }
     set(value) {
       self = PatternBindingSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
     }
   }
   
-  public var unexpectedBetweenAccessorsAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAccessorBlockAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14500,9 +14474,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.typeAnnotation, 
           \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
           \Self.initializer, 
-          \Self.unexpectedBetweenInitializerAndAccessors, 
-          \Self.accessors, 
-          \Self.unexpectedBetweenAccessorsAndTrailingComma, 
+          \Self.unexpectedBetweenInitializerAndAccessorBlock, 
+          \Self.accessorBlock, 
+          \Self.unexpectedBetweenAccessorBlockAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -17402,7 +17376,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``SwitchCaseListSyntax``
 public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
-  public enum Label: SyntaxChildChoices {
+  public enum Label: SyntaxChildChoices, SyntaxHashable {
     case `default`(SwitchDefaultLabelSyntax)
     case `case`(SwitchCaseLabelSyntax)
     

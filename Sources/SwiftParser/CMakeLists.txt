@@ -10,6 +10,7 @@ add_swift_host_library(SwiftParser
   Attributes.swift
   Availability.swift
   CharacterInfo.swift
+  CollectionNodes+Parsable.swift
   Declarations.swift
   Directives.swift
   Expressions.swift
@@ -21,6 +22,7 @@ add_swift_host_library(SwiftParser
   Nominals.swift
   Parameters.swift
   Parser.swift
+  ParseSourceFile.swift
   Patterns.swift
   TokenSpec.swift
   TokenSpecSet.swift
@@ -37,7 +39,7 @@ add_swift_host_library(SwiftParser
   Types.swift
 
   generated/IsLexerClassified.swift
-  generated/Parser+Entry.swift
+  generated/LayoutNodes+Parsable.swift
   generated/Parser+TokenSpecSet.swift
   generated/TokenSpecStaticMembers.swift
 

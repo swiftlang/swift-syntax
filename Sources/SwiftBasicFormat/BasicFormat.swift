@@ -48,6 +48,14 @@ open class BasicFormat: SyntaxRewriter {
   /// been visited yet.
   private var previousToken: TokenSyntax? = nil
 
+  /// The number of ancestors that are `StringLiteralExprSyntax`.
+  private var stringLiteralNestingLevel = 0
+
+  /// Whether we are currently visiting the subtree of a `StringLiteralExprSyntax`.
+  private var isInsideStringLiteral: Bool {
+    return stringLiteralNestingLevel > 0
+  }
+
   public init(
     indentationWidth: Trivia = .spaces(4),
     initialIndentation: Trivia = [],
@@ -83,6 +91,9 @@ open class BasicFormat: SyntaxRewriter {
   }
 
   open override func visitPre(_ node: Syntax) {
+    if node.is(StringLiteralExprSyntax.self) {
+      stringLiteralNestingLevel += 1
+    }
     if requiresIndent(node) {
       if let firstToken = node.firstToken(viewMode: viewMode),
         let tokenIndentation = firstToken.leadingTrivia.indentation(isOnNewline: false),
@@ -98,6 +109,9 @@ open class BasicFormat: SyntaxRewriter {
   }
 
   open override func visitPost(_ node: Syntax) {
+    if node.is(StringLiteralExprSyntax.self) {
+      stringLiteralNestingLevel -= 1
+    }
     if requiresIndent(node) {
       decreaseIndentationLevel()
     }
@@ -498,10 +512,12 @@ open class BasicFormat: SyntaxRewriter {
       }
     }
 
-    let isEmptyLine = token.leadingTrivia.isEmpty && leadingTriviaIsFollowedByNewline
-    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] && !isEmptyLine {
+    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] && !token.isStringSegment {
       // If the token starts on a new line and does not have indentation, this
-      // is the last non-indented token. Store its indentation level
+      // is the last non-indented token. Store its indentation level.
+      // But never consider string segments as anchor points since you can’t
+      // indent individual lines of a multi-line string literals without breaking
+      // their integrity.
       anchorPoints[token] = currentIndentationLevel
     }
 
@@ -529,14 +545,17 @@ open class BasicFormat: SyntaxRewriter {
     var leadingTriviaIndentation = self.currentIndentationLevel
     var trailingTriviaIndentation = self.currentIndentationLevel
 
-    // If the trivia contain user-defined indentation, find their anchor point
+    // If the trivia contains user-defined indentation, find their anchor point
     // and indent the token relative to that anchor point.
-    if leadingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline),
+    // Always indent string literals relative to their anchor point because
+    // their indentation has structural meaning and we just want to maintain
+    // what the user wrote.
+    if leadingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) || isInsideStringLiteral,
       let anchorPointIndentation = self.anchorPointIndentation(for: token)
     {
       leadingTriviaIndentation = anchorPointIndentation
     }
-    if combinedTrailingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline),
+    if combinedTrailingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) || isInsideStringLiteral,
       let anchorPointIndentation = self.anchorPointIndentation(for: token)
     {
       trailingTriviaIndentation = anchorPointIndentation
@@ -567,6 +586,14 @@ open class BasicFormat: SyntaxRewriter {
 }
 
 fileprivate extension TokenSyntax {
+  var isStringSegment: Bool {
+    if case .stringSegment = self.tokenKind {
+      return true
+    } else {
+      return false
+    }
+  }
+
   var isStringSegmentWithLastCharacterBeingNewline: Bool {
     switch self.tokenKind {
     case .stringSegment(let segment):

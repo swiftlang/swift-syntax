@@ -285,6 +285,82 @@ final class BasicFormatTest: XCTestCase {
     assertFormatted(source: source, expected: source)
   }
 
+  func testIndentNestedMultilineStringLiterals() throws {
+    let stringLiteral: ExprSyntax = #"""
+      """
+
+        \("""
+          First Line
+        """)
+      """
+      """#
+
+    assertFormatted(tree: stringLiteral, expected: stringLiteral.description)
+
+    let tree = try FunctionDeclSyntax("func test()") {
+      stringLiteral
+    }
+
+    assertFormatted(
+      tree: tree,
+      expected: #"""
+        func test() {
+            """
+
+              \("""
+                First Line
+              """)
+            """
+        }
+        """#
+    )
+  }
+
+  func testIndentNestedIndentedMultilineStringLiterals() throws {
+    let stringLiteral: ExprSyntax = #"""
+      _ = """
+
+            \("""
+              First Line
+            """)
+          """
+      """#
+
+    assertFormatted(tree: stringLiteral, expected: stringLiteral.description)
+
+    let tree = try FunctionDeclSyntax("func test()") {
+      stringLiteral
+    }
+
+    assertFormatted(
+      tree: tree,
+      expected: #"""
+        func test() {
+            _ = """
+
+                  \("""
+                    First Line
+                  """)
+                """
+        }
+        """#
+    )
+  }
+
+  func testClosureInStringInterpolation() {
+    let source = #"""
+      """
+      \(gen { (x) in
+          return """
+          case
+      """
+      })
+      """
+      """#
+
+    assertFormatted(source: source, expected: source)
+  }
+
   func testNestedUserDefinedIndentation() {
     assertFormatted(
       source: """

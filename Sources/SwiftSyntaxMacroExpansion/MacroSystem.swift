@@ -928,7 +928,7 @@ private extension AccessorBlockSyntax {
     var result = self
     switch self.accessors {
     case .accessors(let accessors):
-      result.accessors = .accessors(AccessorDeclListSyntax(accessors + Array(newAccessors)))
+      result.accessors = .accessors(accessors + Array(newAccessors))
     case .getter(let getter):
       if newAccessors.isEmpty {
         return self

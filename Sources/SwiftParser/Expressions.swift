@@ -621,12 +621,7 @@ extension Parser {
       )
     } else {
       // Handle an arbitrary declaration name.
-      let (name, declNameArgs) = self.parseDeclNameRef([.keywords, .compoundNames])
-      declName = RawDeclReferenceExprSyntax(
-        baseName: name,
-        argumentNames: declNameArgs,
-        arena: self.arena
-      )
+      declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
     }
 
     // Parse the generic arguments, if any.
@@ -1207,12 +1202,7 @@ extension Parser {
         )
       }
 
-      let (name, args) = self.parseDeclNameRef([.keywords, .compoundNames])
-      let declName = RawDeclReferenceExprSyntax(
-        baseName: name,
-        argumentNames: args,
-        arena: self.arena
-      )
+      let declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
       return RawExprSyntax(
         RawMemberAccessExprSyntax(
           base: nil,
@@ -1256,34 +1246,23 @@ extension Parser {
 extension Parser {
   /// Parse an identifier as an expression.
   mutating func parseIdentifierExpression() -> RawExprSyntax {
-    let (baseName, argumentNames) = self.parseDeclNameRef(.compoundNames)
+    let declName = self.parseDeclReferenceExpr(.compoundNames)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
-      if baseName.tokenText.isEditorPlaceholder && argumentNames == nil {
+      if declName.baseName.tokenText.isEditorPlaceholder && declName.argumentNames == nil {
         return RawExprSyntax(
           RawEditorPlaceholderExprSyntax(
-            placeholder: baseName,
+            placeholder: declName.baseName,
             arena: self.arena
           )
         )
       }
-      return RawExprSyntax(
-        RawDeclReferenceExprSyntax(
-          baseName: baseName,
-          argumentNames: argumentNames,
-          arena: self.arena
-        )
-      )
+      return RawExprSyntax(declName)
     }
 
-    let identifier = RawDeclReferenceExprSyntax(
-      baseName: baseName,
-      argumentNames: argumentNames,
-      arena: self.arena
-    )
     let generics = self.parseGenericArguments()
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(identifier),
+        expression: RawExprSyntax(declName),
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -1907,14 +1886,7 @@ extension Parser {
       // follows a proper subexpression.
       let expr: RawExprSyntax
       if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
-        let (baseName, argumentNames) = self.parseDeclNameRef(.operators)
-        expr = RawExprSyntax(
-          RawDeclReferenceExprSyntax(
-            baseName: baseName,
-            argumentNames: argumentNames,
-            arena: self.arena
-          )
-        )
+        expr = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
       } else {
         expr = self.parseExpression(pattern: pattern)
       }

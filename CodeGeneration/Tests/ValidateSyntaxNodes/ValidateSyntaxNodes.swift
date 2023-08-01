@@ -700,4 +700,64 @@ class ValidateSyntaxNodes: XCTestCase {
       ]
     )
   }
+
+  /// Nodes ending with `List` should always be syntax collections
+  func testNonCollectionNodesShouldntContainList() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      if node.kind.syntaxType.description.contains("List") {
+        failures.append(
+          ValidationFailure(
+            node: node.kind,
+            message:
+              "non-collection node should not contain 'List'"
+          )
+        )
+      }
+    }
+
+    assertFailuresMatchXFails(failures, expectedFailures: [])
+  }
+
+  /// Children should always have a plural as their name instead of ending with 'List'.
+  func testChildrenDontEndWithList() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.children {
+        if child.name.contains("List") {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message:
+                "child '\(child.name)' should not contain 'List'"
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(failures, expectedFailures: [])
+  }
+
+  /// Entry is such an ambiguous term that we shouldn’t use it.
+  /// There are almost always better names
+  func testNoEntryInTypeNames() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES {
+      if node.kind.syntaxType.description.contains("Entry") {
+        failures.append(
+          ValidationFailure(
+            node: node.kind,
+            message:
+              "non-collection node shouldn’t contain 'List'"
+          )
+        )
+      }
+    }
+
+    assertFailuresMatchXFails(failures, expectedFailures: [])
+  }
 }

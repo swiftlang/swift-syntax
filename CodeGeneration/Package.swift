@@ -9,7 +9,7 @@ let package = Package(
     .macOS(.v10_15)
   ],
   products: [
-    .executable(name: "generate-swiftsyntax", targets: ["generate-swiftsyntax"])
+    .executable(name: "generate-swift-syntax", targets: ["generate-swift-syntax"])
   ],
   dependencies: [
     // This directory is a standalone package that uses swift-syntax from the
@@ -26,7 +26,7 @@ let package = Package(
   ],
   targets: [
     .executableTarget(
-      name: "generate-swiftsyntax",
+      name: "generate-swift-syntax",
       dependencies: [
         .product(name: "SwiftSyntax", package: "swift-syntax"),
         .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),

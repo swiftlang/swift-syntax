@@ -595,31 +595,33 @@ extension Parser {
   mutating func parseDottedExpressionSuffix(previousNode: (some RawSyntaxNodeProtocol)?) -> (
     unexpectedPeriod: RawUnexpectedNodesSyntax?,
     period: RawTokenSyntax,
-    name: RawTokenSyntax,
-    declNameArgs: RawDeclNameArgumentsSyntax?,
+    declName: RawDeclReferenceExprSyntax,
     generics: RawGenericArgumentClauseSyntax?
   ) {
     precondition(self.at(.period))
     let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: previousNode)
     if skipMemberName {
       let missingIdentifier = missingToken(.identifier)
-      return (unexpectedPeriod, period, missingIdentifier, nil, nil)
+      let declName = RawDeclReferenceExprSyntax(
+        baseName: missingIdentifier,
+        argumentNames: nil,
+        arena: self.arena
+      )
+      return (unexpectedPeriod, period, declName, nil)
     }
 
     // Parse the name portion.
-    let name: RawTokenSyntax
-    let declNameArgs: RawDeclNameArgumentsSyntax?
-    if let index = self.consume(if: .integerLiteral) {
+    let declName: RawDeclReferenceExprSyntax
+    if let indexOrSelf = self.consume(if: .integerLiteral, .keyword(.self)) {
       // Handle "x.42" - a tuple index.
-      name = index
-      declNameArgs = nil
-    } else if let selfKeyword = self.consume(if: .keyword(.self)) {
-      // Handle "x.self" expr.
-      name = selfKeyword
-      declNameArgs = nil
+      declName = RawDeclReferenceExprSyntax(
+        baseName: indexOrSelf,
+        argumentNames: nil,
+        arena: self.arena
+      )
     } else {
       // Handle an arbitrary declaration name.
-      (name, declNameArgs) = self.parseDeclNameRef([.keywords, .compoundNames])
+      declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
     }
 
     // Parse the generic arguments, if any.
@@ -630,18 +632,17 @@ extension Parser {
       generics = nil
     }
 
-    return (unexpectedPeriod, period, name, declNameArgs, generics)
+    return (unexpectedPeriod, period, declName, generics)
   }
 
   mutating func parseDottedExpressionSuffix(_ start: RawExprSyntax?) -> RawExprSyntax {
-    let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(previousNode: start)
+    let (unexpectedPeriod, period, declName, generics) = parseDottedExpressionSuffix(previousNode: start)
 
     let memberAccess = RawMemberAccessExprSyntax(
       base: start,
       unexpectedPeriod,
       period: period,
-      name: name,
-      declNameArguments: declNameArgs,
+      declName: declName,
       arena: self.arena
     )
 
@@ -1036,7 +1037,7 @@ extension Parser {
 
       // Check for a .name or .1 suffix.
       if self.at(.period) {
-        let (unexpectedPeriod, period, name, declNameArgs, generics) = parseDottedExpressionSuffix(
+        let (unexpectedPeriod, period, declName, generics) = parseDottedExpressionSuffix(
           previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw
         )
         components.append(
@@ -1045,8 +1046,7 @@ extension Parser {
             period: period,
             component: .property(
               RawKeyPathPropertyComponentSyntax(
-                property: name,
-                declNameArguments: declNameArgs,
+                declName: declName,
                 genericArgumentClause: generics,
                 arena: self.arena
               )
@@ -1166,10 +1166,10 @@ extension Parser {
     case (.poundAvailable, _)?, (.poundUnavailable, _)?:
       let poundAvailable = self.parsePoundAvailableConditionElement()
       return RawExprSyntax(
-        RawIdentifierExprSyntax(
+        RawDeclReferenceExprSyntax(
           RawUnexpectedNodesSyntax([poundAvailable], arena: self.arena),
-          identifier: missingToken(.identifier),
-          declNameArguments: nil,
+          baseName: missingToken(.identifier),
+          argumentNames: nil,
           arena: self.arena
         )
       )
@@ -1202,13 +1202,12 @@ extension Parser {
         )
       }
 
-      let (name, args) = self.parseDeclNameRef([.keywords, .compoundNames])
+      let declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
       return RawExprSyntax(
         RawMemberAccessExprSyntax(
           base: nil,
           period: period,
-          name: name,
-          declNameArguments: args,
+          declName: declName,
           arena: self.arena
         )
       )
@@ -1247,34 +1246,23 @@ extension Parser {
 extension Parser {
   /// Parse an identifier as an expression.
   mutating func parseIdentifierExpression() -> RawExprSyntax {
-    let (name, args) = self.parseDeclNameRef(.compoundNames)
+    let declName = self.parseDeclReferenceExpr(.compoundNames)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
-      if name.tokenText.isEditorPlaceholder && args == nil {
+      if declName.baseName.tokenText.isEditorPlaceholder && declName.argumentNames == nil {
         return RawExprSyntax(
           RawEditorPlaceholderExprSyntax(
-            placeholder: name,
+            placeholder: declName.baseName,
             arena: self.arena
           )
         )
       }
-      return RawExprSyntax(
-        RawIdentifierExprSyntax(
-          identifier: name,
-          declNameArguments: args,
-          arena: self.arena
-        )
-      )
+      return RawExprSyntax(declName)
     }
 
-    let identifier = RawIdentifierExprSyntax(
-      identifier: name,
-      declNameArguments: args,
-      arena: self.arena
-    )
     let generics = self.parseGenericArguments()
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(identifier),
+        expression: RawExprSyntax(declName),
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -1634,12 +1622,12 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseAnonymousClosureArgument() -> RawIdentifierExprSyntax {
-    let (unexpectedBeforeIdent, ident) = self.expect(.dollarIdentifier)
-    return RawIdentifierExprSyntax(
-      unexpectedBeforeIdent,
-      identifier: ident,
-      declNameArguments: nil,
+  mutating func parseAnonymousClosureArgument() -> RawDeclReferenceExprSyntax {
+    let (unexpectedBeforeBaseName, baseName) = self.expect(.dollarIdentifier)
+    return RawDeclReferenceExprSyntax(
+      unexpectedBeforeBaseName,
+      baseName: baseName,
+      argumentNames: nil,
       arena: self.arena
     )
   }
@@ -1898,14 +1886,7 @@ extension Parser {
       // follows a proper subexpression.
       let expr: RawExprSyntax
       if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
-        let (ident, args) = self.parseDeclNameRef(.operators)
-        expr = RawExprSyntax(
-          RawIdentifierExprSyntax(
-            identifier: ident,
-            declNameArguments: args,
-            arena: self.arena
-          )
-        )
+        expr = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
       } else {
         expr = self.parseExpression(pattern: pattern)
       }

@@ -63,7 +63,7 @@ extension Parser {
     static let zeroArgCompoundNames: Self = [.compoundNames, Self(rawValue: 1 << 5)]
   }
 
-  mutating func parseDeclNameRef(_ flags: DeclNameOptions = []) -> (RawTokenSyntax, RawDeclNameArgumentsSyntax?) {
+  mutating func parseDeclReferenceExpr(_ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
     // Consume the base name.
     let base: RawTokenSyntax
     if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) ?? self.consume(if: .keyword(.`init`)) {
@@ -78,7 +78,11 @@ extension Parser {
 
     // Parse an argument list, if the flags allow it and it's present.
     let args = self.parseArgLabelList(flags)
-    return (base, args)
+    return RawDeclReferenceExprSyntax(
+      baseName: base,
+      argumentNames: args,
+      arena: self.arena
+    )
   }
 
   mutating func parseArgLabelList(_ flags: DeclNameOptions) -> RawDeclNameArgumentsSyntax? {
@@ -152,7 +156,7 @@ extension Parser {
       period = nil
     }
 
-    let (name, args) = self.parseDeclNameRef([
+    let declName = self.parseDeclReferenceExpr([
       .zeroArgCompoundNames,
       .keywordsUsingSpecialNames,
       .operators,
@@ -160,8 +164,7 @@ extension Parser {
     return RawQualifiedDeclNameSyntax(
       baseType: type,
       period: period,
-      name: name,
-      arguments: args,
+      declName: declName,
       arena: self.arena
     )
   }

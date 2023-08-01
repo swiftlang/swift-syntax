@@ -542,11 +542,11 @@ open class SyntaxRewriter {
     return Syntax(visitChildren(node)).cast(DeclNameArgumentsSyntax.self)
   }
   
-  /// Visit a ``DeclNameSyntax``.
+  /// Visit a ``DeclReferenceExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  open func visit(_ node: DeclNameSyntax) -> DeclNameSyntax {
-    return Syntax(visitChildren(node)).cast(DeclNameSyntax.self)
+  open func visit(_ node: DeclReferenceExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
   }
   
   /// Visit a ``DeferStmtSyntax``.
@@ -967,13 +967,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: GuardStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
-  }
-  
-  /// Visit a ``IdentifierExprSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: IdentifierExprSyntax) -> ExprSyntax {
-    return ExprSyntax(visitChildren(node))
   }
   
   /// Visit a ``IdentifierPatternSyntax``.
@@ -2965,8 +2958,8 @@ open class SyntaxRewriter {
   }
   
   /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclNameSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclNameSyntax(data)
+  private func visitImplDeclReferenceExprSyntax(_ data: SyntaxData) -> Syntax {
+    let node = DeclReferenceExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -3807,20 +3800,6 @@ open class SyntaxRewriter {
   /// Implementation detail of visit(_:). Do not call directly.
   private func visitImplGuardStmtSyntax(_ data: SyntaxData) -> Syntax {
     let node = GuardStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIdentifierExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IdentifierExprSyntax(data)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -6064,8 +6043,8 @@ open class SyntaxRewriter {
       return visitImplDeclNameArgumentSyntax
     case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax
-    case .declName:
-      return visitImplDeclNameSyntax
+    case .declReferenceExpr:
+      return visitImplDeclReferenceExprSyntax
     case .deferStmt:
       return visitImplDeferStmtSyntax
     case .deinitializerDecl:
@@ -6186,8 +6165,6 @@ open class SyntaxRewriter {
       return visitImplGenericWhereClauseSyntax
     case .guardStmt:
       return visitImplGuardStmtSyntax
-    case .identifierExpr:
-      return visitImplIdentifierExprSyntax
     case .identifierPattern:
       return visitImplIdentifierPatternSyntax
     case .identifierType:
@@ -6624,8 +6601,8 @@ open class SyntaxRewriter {
       return visitImplDeclNameArgumentSyntax(data)
     case .declNameArguments:
       return visitImplDeclNameArgumentsSyntax(data)
-    case .declName:
-      return visitImplDeclNameSyntax(data)
+    case .declReferenceExpr:
+      return visitImplDeclReferenceExprSyntax(data)
     case .deferStmt:
       return visitImplDeferStmtSyntax(data)
     case .deinitializerDecl:
@@ -6746,8 +6723,6 @@ open class SyntaxRewriter {
       return visitImplGenericWhereClauseSyntax(data)
     case .guardStmt:
       return visitImplGuardStmtSyntax(data)
-    case .identifierExpr:
-      return visitImplIdentifierExprSyntax(data)
     case .identifierPattern:
       return visitImplIdentifierPatternSyntax(data)
     case .identifierType:

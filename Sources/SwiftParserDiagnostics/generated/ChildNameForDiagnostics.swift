@@ -78,10 +78,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "statements"
   case \ContinueStmtSyntax.label:
     return "label"
-  case \DeclNameSyntax.baseName:
-    return "base name"
-  case \DeclNameSyntax.arguments:
-    return "arguments"
   case \DeinitializerDeclSyntax.attributes:
     return "attributes"
   case \DeinitializerDeclSyntax.modifiers:
@@ -184,10 +180,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "else body"
   case \ImplementsAttributeArgumentsSyntax.type:
     return "type"
-  case \ImplementsAttributeArgumentsSyntax.declBaseName:
-    return "declaration base name"
-  case \ImplementsAttributeArgumentsSyntax.declNameArguments:
-    return "declaration name arguments"
+  case \ImplementsAttributeArgumentsSyntax.declName:
+    return "declaration name"
   case \ImportDeclSyntax.attributes:
     return "attributes"
   case \ImportDeclSyntax.modifiers:
@@ -242,7 +236,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "modifiers"
   case \MemberAccessExprSyntax.base:
     return "base"
-  case \MemberAccessExprSyntax.name:
+  case \MemberAccessExprSyntax.declName:
     return "name"
   case \MemberTypeSyntax.baseType:
     return "base type"
@@ -290,10 +284,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \QualifiedDeclNameSyntax.baseType:
     return "base type"
-  case \QualifiedDeclNameSyntax.name:
-    return "base name"
-  case \QualifiedDeclNameSyntax.arguments:
-    return "arguments"
+  case \QualifiedDeclNameSyntax.declName:
+    return "name"
   case \RepeatStmtSyntax.body:
     return "body"
   case \RepeatStmtSyntax.condition:

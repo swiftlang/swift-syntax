@@ -295,35 +295,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  Node(
-    kind: .declName,
-    base: .syntax,
-    nameForDiagnostics: "declaration name",
-    children: [
-      Child(
-        name: "BaseName",
-        deprecatedName: "DeclBaseName",
-        kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .token(tokenKind: "BinaryOperatorToken"),
-          .keyword(text: "init"),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-        ]),
-        nameForDiagnostics: "base name",
-        documentation: "The base name of the protocol's requirement."
-      ),
-      Child(
-        name: "Arguments",
-        deprecatedName: "DeclNameArguments",
-        kind: .node(kind: .declNameArguments),
-        nameForDiagnostics: "arguments",
-        documentation: "The argument labels of the protocol's requirement if it is a function requirement.",
-        isOptional: true
-      ),
-    ]
-  ),
-
   // The argument of the derivative registration attribute
   // '@derivative(of: ...)' and the transpose registration attribute
   // '@transpose(of: ...)'.
@@ -591,7 +562,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "DeclName",
         deprecatedName: "Declname",
-        kind: .node(kind: .declName)
+        kind: .node(kind: .declReferenceExpr)
       ),
     ]
   ),
@@ -648,17 +619,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The comma separating the type and method name"
       ),
       Child(
-        name: "DeclBaseName",
-        kind: .node(kind: .token),
-        nameForDiagnostics: "declaration base name",
-        documentation: "The base name of the protocol's requirement."
-      ),
-      Child(
-        name: "DeclNameArguments",
-        kind: .node(kind: .declNameArguments),
-        nameForDiagnostics: "declaration name arguments",
-        documentation: "The argument labels of the protocol's requirement if it is a function requirement.",
-        isOptional: true
+        name: "DeclName",
+        deprecatedName: "Declname",
+        kind: .node(kind: .declReferenceExpr),
+        nameForDiagnostics: "declaration name",
+        documentation: "The value for this argument"
       ),
     ]
   ),
@@ -812,23 +777,10 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "Name",
-        kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-          .keyword(text: "init"),
-          .token(tokenKind: "BinaryOperatorToken"),
-        ]),
-        nameForDiagnostics: "base name",
-        documentation: "The base name of the referenced function."
-      ),
-      Child(
-        name: "Arguments",
-        kind: .node(kind: .declNameArguments),
-        nameForDiagnostics: "arguments",
-        documentation: "The argument labels of the referenced function, optionally specified.",
-        isOptional: true
+        name: "DeclName",
+        kind: .node(kind: .declReferenceExpr),
+        nameForDiagnostics: "name",
+        documentation: "The name of the referenced function."
       ),
     ]
   ),
@@ -872,7 +824,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "DeclName",
         deprecatedName: "Declname",
-        kind: .node(kind: .declName),
+        kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
       ),

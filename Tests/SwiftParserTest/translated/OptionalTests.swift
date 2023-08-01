@@ -45,7 +45,7 @@ final class OptionalTests: XCTestCase {
       """,
       substructure: Syntax(
         OptionalChainingExprSyntax(
-          expression: IdentifierExprSyntax(identifier: .identifier("a")),
+          expression: DeclReferenceExprSyntax(baseName: .identifier("a")),
           questionMark: .postfixQuestionMarkToken()
         )
       )

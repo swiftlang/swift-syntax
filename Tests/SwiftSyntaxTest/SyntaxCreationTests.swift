@@ -113,7 +113,7 @@ public class SyntaxCreationTests: XCTestCase {
       segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
       closingQuote: .stringQuoteToken()
     )
-    let printID = IdentifierExprSyntax(identifier: .identifier("print"))
+    let printID = DeclReferenceExprSyntax(baseName: .identifier("print"))
     let arg = LabeledExprSyntax(expression: string)
     let call = FunctionCallExprSyntax(
       calledExpression: printID,
@@ -158,7 +158,7 @@ public class SyntaxCreationTests: XCTestCase {
       closingQuote: .stringQuoteToken(),
       closingPounds: nil
     )
-    let printID = IdentifierExprSyntax(identifier: .identifier("print"))
+    let printID = DeclReferenceExprSyntax(baseName: .identifier("print"))
     let arg = LabeledExprSyntax(expression: string)
     let call1 = FunctionCallExprSyntax(
       calledExpression: printID,

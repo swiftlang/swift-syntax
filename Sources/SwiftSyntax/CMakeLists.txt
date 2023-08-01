@@ -11,6 +11,7 @@ add_swift_host_library(SwiftSyntax
   Assert.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
+  Convenience.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
   Trivia.swift

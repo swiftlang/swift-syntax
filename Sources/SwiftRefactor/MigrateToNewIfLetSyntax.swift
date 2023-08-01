@@ -43,9 +43,9 @@ public struct MigrateToNewIfLetSyntax: SyntaxRefactoringProvider {
         // ... that binds an identifier (and not a tuple) ...
         let bindingIdentifier = binding.pattern.as(IdentifierPatternSyntax.self),
         // ... and has an initializer that is also an identifier ...
-        let initializerIdentifier = binding.initializer?.value.as(IdentifierExprSyntax.self),
+        let initializerIdentifier = binding.initializer?.value.as(DeclReferenceExprSyntax.self),
         // ... and both sides of the assignment are the same identifiers.
-        bindingIdentifier.identifier.text == initializerIdentifier.identifier.text
+        bindingIdentifier.identifier.text == initializerIdentifier.baseName.text
       {
         // Remove the initializer ...
         binding.initializer = nil

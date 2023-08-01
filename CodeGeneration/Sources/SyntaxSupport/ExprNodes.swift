@@ -837,12 +837,13 @@ public let EXPR_NODES: [Node] = [
 
   // An identifier expression.
   Node(
-    kind: .identifierExpr,
+    kind: .declReferenceExpr,
     base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
-        name: "Identifier",
+        name: "BaseName",
+        deprecatedName: "Identifier",
         kind: .token(choices: [
           .token(tokenKind: "IdentifierToken"),
           .keyword(text: "self"),
@@ -850,10 +851,12 @@ public let EXPR_NODES: [Node] = [
           .keyword(text: "init"),
           .token(tokenKind: "DollarIdentifierToken"),
           .token(tokenKind: "BinaryOperatorToken"),
+          .token(tokenKind: "IntegerLiteralToken"),
         ])
       ),
       Child(
-        name: "DeclNameArguments",
+        name: "ArgumentNames",
+        deprecatedName: "DeclNameArguments",
         kind: .node(kind: .declNameArguments),
         isOptional: true
       ),
@@ -1089,22 +1092,9 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: "key path property component",
     children: [
       Child(
-        name: "Property",
+        name: "DeclName",
         deprecatedName: "Identifier",
-        kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-          .keyword(text: "init"),
-          .token(tokenKind: "DollarIdentifierToken"),
-          .token(tokenKind: "BinaryOperatorToken"),
-          .token(tokenKind: "IntegerLiteralToken"),
-        ])
-      ),
-      Child(
-        name: "DeclNameArguments",
-        kind: .node(kind: .declNameArguments),
-        isOptional: true
+        kind: .node(kind: .declReferenceExpr)
       ),
       Child(
         name: "GenericArgumentClause",
@@ -1211,14 +1201,9 @@ public let EXPR_NODES: [Node] = [
         kind: .token(choices: [.token(tokenKind: "PeriodToken")])
       ),
       Child(
-        name: "Name",
-        kind: .node(kind: .token),
+        name: "DeclName",
+        kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "name"
-      ),
-      Child(
-        name: "DeclNameArguments",
-        kind: .node(kind: .declNameArguments),
-        isOptional: true
       ),
     ]
   ),

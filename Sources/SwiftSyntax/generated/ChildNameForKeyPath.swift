@@ -793,16 +793,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \DeclNameArgumentsSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \DeclNameSyntax.unexpectedBeforeBaseName:
+  case \DeclReferenceExprSyntax.unexpectedBeforeBaseName:
     return "unexpectedBeforeBaseName"
-  case \DeclNameSyntax.baseName:
+  case \DeclReferenceExprSyntax.baseName:
     return "baseName"
-  case \DeclNameSyntax.unexpectedBetweenBaseNameAndArguments:
-    return "unexpectedBetweenBaseNameAndArguments"
-  case \DeclNameSyntax.arguments:
-    return "arguments"
-  case \DeclNameSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
+  case \DeclReferenceExprSyntax.unexpectedBetweenBaseNameAndArgumentNames:
+    return "unexpectedBetweenBaseNameAndArgumentNames"
+  case \DeclReferenceExprSyntax.argumentNames:
+    return "argumentNames"
+  case \DeclReferenceExprSyntax.unexpectedAfterArgumentNames:
+    return "unexpectedAfterArgumentNames"
   case \DeferStmtSyntax.unexpectedBeforeDeferKeyword:
     return "unexpectedBeforeDeferKeyword"
   case \DeferStmtSyntax.deferKeyword:
@@ -1607,16 +1607,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \GuardStmtSyntax.unexpectedAfterBody:
     return "unexpectedAfterBody"
-  case \IdentifierExprSyntax.unexpectedBeforeIdentifier:
-    return "unexpectedBeforeIdentifier"
-  case \IdentifierExprSyntax.identifier:
-    return "identifier"
-  case \IdentifierExprSyntax.unexpectedBetweenIdentifierAndDeclNameArguments:
-    return "unexpectedBetweenIdentifierAndDeclNameArguments"
-  case \IdentifierExprSyntax.declNameArguments:
-    return "declNameArguments"
-  case \IdentifierExprSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
   case \IdentifierPatternSyntax.unexpectedBeforeIdentifier:
     return "unexpectedBeforeIdentifier"
   case \IdentifierPatternSyntax.identifier:
@@ -1687,16 +1677,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTypeAndComma"
   case \ImplementsAttributeArgumentsSyntax.comma:
     return "comma"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenCommaAndDeclBaseName:
-    return "unexpectedBetweenCommaAndDeclBaseName"
-  case \ImplementsAttributeArgumentsSyntax.declBaseName:
-    return "declBaseName"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenDeclBaseNameAndDeclNameArguments:
-    return "unexpectedBetweenDeclBaseNameAndDeclNameArguments"
-  case \ImplementsAttributeArgumentsSyntax.declNameArguments:
-    return "declNameArguments"
-  case \ImplementsAttributeArgumentsSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
+  case \ImplementsAttributeArgumentsSyntax.unexpectedBetweenCommaAndDeclName:
+    return "unexpectedBetweenCommaAndDeclName"
+  case \ImplementsAttributeArgumentsSyntax.declName:
+    return "declName"
+  case \ImplementsAttributeArgumentsSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \ImplicitlyUnwrappedOptionalTypeSyntax.unexpectedBeforeWrappedType:
     return "unexpectedBeforeWrappedType"
   case \ImplicitlyUnwrappedOptionalTypeSyntax.wrappedType:
@@ -1887,16 +1873,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "questionOrExclamationMark"
   case \KeyPathOptionalComponentSyntax.unexpectedAfterQuestionOrExclamationMark:
     return "unexpectedAfterQuestionOrExclamationMark"
-  case \KeyPathPropertyComponentSyntax.unexpectedBeforeProperty:
-    return "unexpectedBeforeProperty"
-  case \KeyPathPropertyComponentSyntax.property:
-    return "property"
-  case \KeyPathPropertyComponentSyntax.unexpectedBetweenPropertyAndDeclNameArguments:
-    return "unexpectedBetweenPropertyAndDeclNameArguments"
-  case \KeyPathPropertyComponentSyntax.declNameArguments:
-    return "declNameArguments"
-  case \KeyPathPropertyComponentSyntax.unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause:
-    return "unexpectedBetweenDeclNameArgumentsAndGenericArgumentClause"
+  case \KeyPathPropertyComponentSyntax.unexpectedBeforeDeclName:
+    return "unexpectedBeforeDeclName"
+  case \KeyPathPropertyComponentSyntax.declName:
+    return "declName"
+  case \KeyPathPropertyComponentSyntax.unexpectedBetweenDeclNameAndGenericArgumentClause:
+    return "unexpectedBetweenDeclNameAndGenericArgumentClause"
   case \KeyPathPropertyComponentSyntax.genericArgumentClause:
     return "genericArgumentClause"
   case \KeyPathPropertyComponentSyntax.unexpectedAfterGenericArgumentClause:
@@ -2135,16 +2117,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBaseAndPeriod"
   case \MemberAccessExprSyntax.period:
     return "period"
-  case \MemberAccessExprSyntax.unexpectedBetweenPeriodAndName:
-    return "unexpectedBetweenPeriodAndName"
-  case \MemberAccessExprSyntax.name:
-    return "name"
-  case \MemberAccessExprSyntax.unexpectedBetweenNameAndDeclNameArguments:
-    return "unexpectedBetweenNameAndDeclNameArguments"
-  case \MemberAccessExprSyntax.declNameArguments:
-    return "declNameArguments"
-  case \MemberAccessExprSyntax.unexpectedAfterDeclNameArguments:
-    return "unexpectedAfterDeclNameArguments"
+  case \MemberAccessExprSyntax.unexpectedBetweenPeriodAndDeclName:
+    return "unexpectedBetweenPeriodAndDeclName"
+  case \MemberAccessExprSyntax.declName:
+    return "declName"
+  case \MemberAccessExprSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \MemberBlockItemSyntax.unexpectedBeforeDecl:
     return "unexpectedBeforeDecl"
   case \MemberBlockItemSyntax.decl:
@@ -2705,16 +2683,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBaseTypeAndPeriod"
   case \QualifiedDeclNameSyntax.period:
     return "period"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenPeriodAndName:
-    return "unexpectedBetweenPeriodAndName"
-  case \QualifiedDeclNameSyntax.name:
-    return "name"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenNameAndArguments:
-    return "unexpectedBetweenNameAndArguments"
-  case \QualifiedDeclNameSyntax.arguments:
-    return "arguments"
-  case \QualifiedDeclNameSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
+  case \QualifiedDeclNameSyntax.unexpectedBetweenPeriodAndDeclName:
+    return "unexpectedBetweenPeriodAndDeclName"
+  case \QualifiedDeclNameSyntax.declName:
+    return "declName"
+  case \QualifiedDeclNameSyntax.unexpectedAfterDeclName:
+    return "unexpectedAfterDeclName"
   case \RegexLiteralExprSyntax.unexpectedBeforeOpeningPounds:
     return "unexpectedBeforeOpeningPounds"
   case \RegexLiteralExprSyntax.openingPounds:

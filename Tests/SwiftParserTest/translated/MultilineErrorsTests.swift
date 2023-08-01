@@ -812,7 +812,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
         abc
       """##,
-      substructure: Syntax(IdentifierExprSyntax(identifier: .identifier("abc"))),
+      substructure: Syntax(DeclReferenceExprSyntax(baseName: .identifier("abc"))),
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "3️⃣",

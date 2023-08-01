@@ -206,7 +206,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -218,7 +218,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .identifierExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       break
     default:
       preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
@@ -267,6 +267,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(ClosureExprSyntax.self),
           .node(ConsumeExprSyntax.self),
           .node(CopyExprSyntax.self),
+          .node(DeclReferenceExprSyntax.self),
           .node(DictionaryExprSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
@@ -274,7 +275,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(ForceUnwrapExprSyntax.self),
           .node(FunctionCallExprSyntax.self),
           .node(GenericSpecializationExprSyntax.self),
-          .node(IdentifierExprSyntax.self),
           .node(IfExprSyntax.self),
           .node(InOutExprSyntax.self),
           .node(InfixOperatorExprSyntax.self),
@@ -753,7 +753,7 @@ extension Syntax {
           .node(DeclNameArgumentListSyntax.self),
           .node(DeclNameArgumentSyntax.self),
           .node(DeclNameArgumentsSyntax.self),
-          .node(DeclNameSyntax.self),
+          .node(DeclReferenceExprSyntax.self),
           .node(DeferStmtSyntax.self),
           .node(DeinitializerDeclSyntax.self),
           .node(DeinitializerEffectSpecifiersSyntax.self),
@@ -814,7 +814,6 @@ extension Syntax {
           .node(GenericSpecializationExprSyntax.self),
           .node(GenericWhereClauseSyntax.self),
           .node(GuardStmtSyntax.self),
-          .node(IdentifierExprSyntax.self),
           .node(IdentifierPatternSyntax.self),
           .node(IdentifierTypeSyntax.self),
           .node(IfConfigClauseListSyntax.self),

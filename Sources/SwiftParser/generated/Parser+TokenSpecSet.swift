@@ -652,26 +652,32 @@ extension DeclModifierSyntax {
   }
 }
 
-extension DeclNameSyntax {
+extension DeclReferenceExprSyntax {
   enum BaseNameOptions: TokenSpecSet {
     case identifier
-    case binaryOperator
-    case `init`
     case `self`
     case `Self`
+    case `init`
+    case dollarIdentifier
+    case binaryOperator
+    case integerLiteral
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.`init`):
-        self = .`init`
       case TokenSpec(.`self`):
         self = .`self`
       case TokenSpec(.`Self`):
         self = .`Self`
+      case TokenSpec(.`init`):
+        self = .`init`
+      case TokenSpec(.dollarIdentifier):
+        self = .dollarIdentifier
+      case TokenSpec(.binaryOperator):
+        self = .binaryOperator
+      case TokenSpec(.integerLiteral):
+        self = .integerLiteral
       default:
         return nil
       }
@@ -681,14 +687,18 @@ extension DeclNameSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .binaryOperator:
-        return .binaryOperator
-      case .`init`:
-        return .keyword(.`init`)
       case .`self`:
         return .keyword(.`self`)
       case .`Self`:
         return .keyword(.`Self`)
+      case .`init`:
+        return .keyword(.`init`)
+      case .dollarIdentifier:
+        return .dollarIdentifier
+      case .binaryOperator:
+        return .binaryOperator
+      case .integerLiteral:
+        return .integerLiteral
       }
     }
   }
@@ -1038,53 +1048,6 @@ extension FunctionParameterSyntax {
   }
 }
 
-extension IdentifierExprSyntax {
-  enum IdentifierOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case dollarIdentifier
-    case binaryOperator
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.dollarIdentifier):
-        self = .dollarIdentifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .dollarIdentifier:
-        return .dollarIdentifier
-      case .binaryOperator:
-        return .binaryOperator
-      }
-    }
-  }
-}
-
 extension IdentifierPatternSyntax {
   enum IdentifierOptions: TokenSpecSet {
     case identifier
@@ -1344,58 +1307,6 @@ extension KeyPathOptionalComponentSyntax {
         return .postfixQuestionMark
       case .exclamationMark:
         return .exclamationMark
-      }
-    }
-  }
-}
-
-extension KeyPathPropertyComponentSyntax {
-  enum PropertyOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case dollarIdentifier
-    case binaryOperator
-    case integerLiteral
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.dollarIdentifier):
-        self = .dollarIdentifier
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      case TokenSpec(.integerLiteral):
-        self = .integerLiteral
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .dollarIdentifier:
-        return .dollarIdentifier
-      case .binaryOperator:
-        return .binaryOperator
-      case .integerLiteral:
-        return .integerLiteral
       }
     }
   }
@@ -1743,48 +1654,6 @@ extension PrecedenceGroupRelationSyntax {
         return .keyword(.higherThan)
       case .lowerThan:
         return .keyword(.lowerThan)
-      }
-    }
-  }
-}
-
-extension QualifiedDeclNameSyntax {
-  enum NameOptions: TokenSpecSet {
-    case identifier
-    case `self`
-    case `Self`
-    case `init`
-    case binaryOperator
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`init`):
-        self = .`init`
-      case TokenSpec(.binaryOperator):
-        self = .binaryOperator
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`init`:
-        return .keyword(.`init`)
-      case .binaryOperator:
-        return .binaryOperator
       }
     }
   }

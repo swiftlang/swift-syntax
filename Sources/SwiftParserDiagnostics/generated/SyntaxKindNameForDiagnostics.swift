@@ -105,8 +105,6 @@ extension SyntaxKind {
       return "'copy' expression"
     case .declModifier:
       return "modifier"
-    case .declName:
-      return "declaration name"
     case .deferStmt:
       return "'defer' statement"
     case .deinitializerDecl:

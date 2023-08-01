@@ -566,11 +566,11 @@ public struct UnwrapMacro: CodeItemMacro {
     let errorThrower = node.trailingClosure
     let identifiers = try node.argumentList.map { argument in
       guard let tupleElement = argument.as(LabeledExprSyntax.self),
-        let identifierExpr = tupleElement.expression.as(IdentifierExprSyntax.self)
+        let declReferenceExpr = tupleElement.expression.as(DeclReferenceExprSyntax.self)
       else {
         throw CustomError.message("Arguments must be identifiers")
       }
-      return identifierExpr.identifier
+      return declReferenceExpr.baseName
     }
 
     func elseBlock(_ token: TokenSyntax) -> CodeBlockSyntax {

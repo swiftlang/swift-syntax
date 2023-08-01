@@ -53,7 +53,7 @@ extension MacroDefinition {
   /// A replacement that occurs as part of an expanded macro definition.
   public struct Replacement {
     /// A reference to a parameter as it occurs in the macro expansion expression.
-    public let reference: IdentifierExprSyntax
+    public let reference: DeclReferenceExprSyntax
 
     /// The index of the parameter in the defining macro.
     public let parameterIndex: Int
@@ -112,12 +112,12 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
 
   // References to declarations. Only accept those that refer to a parameter
   // of a macro.
-  override func visit(_ node: IdentifierExprSyntax) -> SyntaxVisitorContinueKind {
-    let identifier = node.identifier
+  override func visit(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
+    let baseName = node.baseName
     let signature = macro.signature
 
     let matchedParameter = signature.parameterClause.parameters.enumerated().first { (index, parameter) in
-      if identifier.text == "_" {
+      if baseName.text == "_" {
         return false
       }
 
@@ -125,15 +125,15 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
         return false
       }
 
-      return identifier.text == parameterName.text
+      return baseName.text == parameterName.text
     }
 
     guard let (parameterIndex, _) = matchedParameter else {
       // We have a reference to something that isn't a parameter of the macro.
       diagnostics.append(
         Diagnostic(
-          node: Syntax(identifier),
-          message: MacroExpanderError.nonParameterReference(identifier)
+          node: Syntax(baseName),
+          message: MacroExpanderError.nonParameterReference(baseName)
         )
       )
 
@@ -190,9 +190,9 @@ extension MacroDeclSyntax {
     /// handle this themselves.
     if let memberAccess = originalDefinition.as(MemberAccessExprSyntax.self),
       let base = memberAccess.base,
-      let baseName = base.as(IdentifierExprSyntax.self)?.identifier
+      let baseName = base.as(DeclReferenceExprSyntax.self)?.baseName
     {
-      let memberName = memberAccess.name
+      let memberName = memberAccess.declName.baseName
       return .deprecatedExternal(
         node: Syntax(memberAccess),
         module: baseName.trimmedDescription,
@@ -225,16 +225,16 @@ extension MacroDeclSyntax {
 /// Syntax rewrite that performs macro expansion by textually replacing
 /// uses of macro parameters with their corresponding arguments.
 private final class MacroExpansionRewriter: SyntaxRewriter {
-  let parameterReplacements: [IdentifierExprSyntax: Int]
+  let parameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
 
-  init(parameterReplacements: [IdentifierExprSyntax: Int], arguments: [ExprSyntax]) {
+  init(parameterReplacements: [DeclReferenceExprSyntax: Int], arguments: [ExprSyntax]) {
     self.parameterReplacements = parameterReplacements
     self.arguments = arguments
     super.init(viewMode: .sourceAccurate)
   }
 
-  override func visit(_ node: IdentifierExprSyntax) -> ExprSyntax {
+  override func visit(_ node: DeclReferenceExprSyntax) -> ExprSyntax {
     guard let parameterIndex = parameterReplacements[node] else {
       return super.visit(node)
     }

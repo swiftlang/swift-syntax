@@ -990,11 +990,11 @@ final class RegexLiteralTests: XCTestCase {
           .init(
             label: "a",
             colon: .colonToken(),
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1010,15 +1010,15 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: "a"),
+            expression: DeclReferenceExprSyntax(baseName: "a"),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1034,15 +1034,15 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: "a"),
+            expression: DeclReferenceExprSyntax(baseName: "a"),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1060,11 +1060,11 @@ final class RegexLiteralTests: XCTestCase {
           .init(
             label: "a",
             colon: .colonToken(),
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1080,11 +1080,11 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1100,11 +1100,11 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1120,11 +1120,11 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1140,11 +1140,11 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )
@@ -1160,11 +1160,11 @@ final class RegexLiteralTests: XCTestCase {
       substructure: Syntax(
         LabeledExprListSyntax([
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("^/")),
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
             trailingComma: .commaToken()
           ),
           .init(
-            expression: IdentifierExprSyntax(identifier: .binaryOperator("/"))
+            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
           ),
         ])
       )

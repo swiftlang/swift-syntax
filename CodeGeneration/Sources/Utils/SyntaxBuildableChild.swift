@@ -131,7 +131,7 @@ public extension Child {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
-            IdentifierExprSyntax(identifier: .identifier(varName))
+            DeclReferenceExprSyntax(baseName: .identifier(varName))
             BinaryOperatorExprSyntax(text: "==")
             NilLiteralExprSyntax()
           }
@@ -142,7 +142,7 @@ public extension Child {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
-            MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: IdentifierExprSyntax(identifier: .identifier(varName))), name: "text")
+            MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: DeclReferenceExprSyntax(baseName: .identifier(varName))), name: "text")
             BinaryOperatorExprSyntax(text: "==")
             StringLiteralExprSyntax(content: textChoice)
           }

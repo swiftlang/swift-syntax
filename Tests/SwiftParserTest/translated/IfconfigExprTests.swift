@@ -655,7 +655,7 @@ final class IfconfigExprTests: XCTestCase {
       """,
       substructure: Syntax(
         FunctionCallExprSyntax(
-          calledExpression: IdentifierExprSyntax(identifier: .identifier("compiler")),
+          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("compiler")),
           leftParen: .leftParenToken(),
           arguments: LabeledExprListSyntax([
             LabeledExprSyntax(
@@ -711,7 +711,7 @@ final class IfconfigExprTests: XCTestCase {
         IfConfigClauseSyntax(
           poundKeyword: .poundIfToken(),
           condition: FunctionCallExprSyntax(
-            calledExpression: IdentifierExprSyntax(identifier: .identifier("hasFeature")),
+            calledExpression: DeclReferenceExprSyntax(baseName: .identifier("hasFeature")),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax([
               LabeledExprSyntax(

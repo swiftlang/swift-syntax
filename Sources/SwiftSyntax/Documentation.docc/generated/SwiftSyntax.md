@@ -106,6 +106,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ClosureExprSyntax>
 - <doc:SwiftSyntax/ConsumeExprSyntax>
 - <doc:SwiftSyntax/CopyExprSyntax>
+- <doc:SwiftSyntax/DeclReferenceExprSyntax>
 - <doc:SwiftSyntax/DictionaryExprSyntax>
 - <doc:SwiftSyntax/DiscardAssignmentExprSyntax>
 - <doc:SwiftSyntax/EditorPlaceholderExprSyntax>
@@ -113,7 +114,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ForceUnwrapExprSyntax>
 - <doc:SwiftSyntax/FunctionCallExprSyntax>
 - <doc:SwiftSyntax/GenericSpecializationExprSyntax>
-- <doc:SwiftSyntax/IdentifierExprSyntax>
 - <doc:SwiftSyntax/IfExprSyntax>
 - <doc:SwiftSyntax/InOutExprSyntax>
 - <doc:SwiftSyntax/InfixOperatorExprSyntax>
@@ -321,7 +321,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DeclModifierDetailSyntax>
 - <doc:SwiftSyntax/DeclNameArgumentsSyntax>
-- <doc:SwiftSyntax/DeclNameSyntax>
 - <doc:SwiftSyntax/DeinitializerEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/DerivativeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DifferentiabilityArgumentsSyntax>

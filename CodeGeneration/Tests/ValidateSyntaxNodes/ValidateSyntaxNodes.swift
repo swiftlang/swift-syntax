@@ -457,18 +457,6 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        // MARK: DeclNameArguments
-        // FIXME: IdentifierExprSyntax etc. should probably use DeclName as child instead of Name and Arguments
-        ValidationFailure(
-          node: .qualifiedDeclName,
-          message:
-            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
-        ),
-        ValidationFailure(
-          node: .declName,
-          message:
-            "child 'Arguments' is named inconsistently with 'IdentifierExprSyntax.DeclNameArguments', which has the same type ('DeclNameArgumentsSyntax')"
-        ),
         // MARK: Alternate names for InitializerClauseSyntax
         // The cases below don’t have intializers but just a syntactic element that happens to be spelled the same
         ValidationFailure(
@@ -633,8 +621,7 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         // The identifier expr / pattern nodes do actually have a child that’s the identifier
-        ValidationFailure(node: .identifierExpr, message: "child 'Identifier' should generally not contain 'Identifier'"),
-        ValidationFailure(node: .identifierPattern, message: "child 'Identifier' should generally not contain 'Identifier'"),
+        ValidationFailure(node: .identifierPattern, message: "child 'Identifier' should generally not contain 'Identifier'")
       ]
     )
   }

@@ -250,6 +250,117 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testMultilineStringLiteralWithBlankLines() {
+    let source = #"""
+      assertionFailure("""
+
+        First line
+
+        Second line
+
+        """)
+      """#
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testMultilineStringLiteralWithFirstLineBlank() {
+    let source = #"""
+      assertionFailure("""
+
+        """)
+      """#
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testNestedMultilineStringLiterals() {
+    let source = #"""
+      assertionFailure("""
+
+        \("""
+          First Line
+        """)
+      """)
+      """#
+
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testIndentNestedMultilineStringLiterals() throws {
+    let stringLiteral: ExprSyntax = #"""
+      """
+
+        \("""
+          First Line
+        """)
+      """
+      """#
+
+    assertFormatted(tree: stringLiteral, expected: stringLiteral.description)
+
+    let tree = try FunctionDeclSyntax("func test()") {
+      stringLiteral
+    }
+
+    assertFormatted(
+      tree: tree,
+      expected: #"""
+        func test() {
+            """
+
+              \("""
+                First Line
+              """)
+            """
+        }
+        """#
+    )
+  }
+
+  func testIndentNestedIndentedMultilineStringLiterals() throws {
+    let stringLiteral: ExprSyntax = #"""
+      _ = """
+
+            \("""
+              First Line
+            """)
+          """
+      """#
+
+    assertFormatted(tree: stringLiteral, expected: stringLiteral.description)
+
+    let tree = try FunctionDeclSyntax("func test()") {
+      stringLiteral
+    }
+
+    assertFormatted(
+      tree: tree,
+      expected: #"""
+        func test() {
+            _ = """
+
+                  \("""
+                    First Line
+                  """)
+                """
+        }
+        """#
+    )
+  }
+
+  func testClosureInStringInterpolation() {
+    let source = #"""
+      """
+      \(gen { (x) in
+          return """
+          case
+      """
+      })
+      """
+      """#
+
+    assertFormatted(source: source, expected: source)
+  }
+
   func testNestedUserDefinedIndentation() {
     assertFormatted(
       source: """

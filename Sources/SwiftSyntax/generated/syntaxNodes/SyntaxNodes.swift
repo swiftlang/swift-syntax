@@ -14323,7 +14323,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Children
 /// 
-///  - `availabilityVersionRestriction`: ``PlatformVersionSyntax``
+///  - `platformVersion`: ``PlatformVersionSyntax``
 ///  - `trailingComma`: `','`?
 ///
 /// ### Contained in
@@ -14353,9 +14353,9 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil,
-      availabilityVersionRestriction: PlatformVersionSyntax,
-      _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforePlatformVersion: UnexpectedNodesSyntax? = nil,
+      platformVersion: PlatformVersionSyntax,
+      _ unexpectedBetweenPlatformVersionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
@@ -14364,16 +14364,16 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAvailabilityVersionRestriction, 
-            availabilityVersionRestriction, 
-            unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
+            unexpectedBeforePlatformVersion, 
+            platformVersion, 
+            unexpectedBetweenPlatformVersionAndTrailingComma, 
             trailingComma, 
             unexpectedAfterTrailingComma
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeAvailabilityVersionRestriction?.raw, 
-          availabilityVersionRestriction.raw, 
-          unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw, 
+          unexpectedBeforePlatformVersion?.raw, 
+          platformVersion.raw, 
+          unexpectedBetweenPlatformVersionAndTrailingComma?.raw, 
           trailingComma?.raw, 
           unexpectedAfterTrailingComma?.raw
         ]
@@ -14390,7 +14390,7 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? {
+  public var unexpectedBeforePlatformVersion: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14399,7 +14399,7 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var availabilityVersionRestriction: PlatformVersionSyntax {
+  public var platformVersion: PlatformVersionSyntax {
     get {
       return PlatformVersionSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
@@ -14408,7 +14408,7 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenPlatformVersionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -14438,9 +14438,9 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeAvailabilityVersionRestriction, 
-          \Self.availabilityVersionRestriction, 
-          \Self.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
+          \Self.unexpectedBeforePlatformVersion, 
+          \Self.platformVersion, 
+          \Self.unexpectedBetweenPlatformVersionAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
         ])
@@ -14459,7 +14459,7 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/argument``
-///  - ``PlatformVersionItemSyntax``.``PlatformVersionItemSyntax/availabilityVersionRestriction``
+///  - ``PlatformVersionItemSyntax``.``PlatformVersionItemSyntax/platformVersion``
 public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

@@ -914,7 +914,7 @@ extension Parser {
       keepGoing = self.consume(if: .comma)
       elements.append(
         RawPlatformVersionItemSyntax(
-          availabilityVersionRestriction: versionRestriction,
+          platformVersion: versionRestriction,
           trailingComma: keepGoing,
           arena: self.arena
         )
@@ -974,7 +974,7 @@ extension Parser {
       keepGoing = self.consume(if: .comma)
       platforms.append(
         RawPlatformVersionItemSyntax(
-          availabilityVersionRestriction: restriction,
+          platformVersion: restriction,
           trailingComma: keepGoing,
           arena: self.arena
         )

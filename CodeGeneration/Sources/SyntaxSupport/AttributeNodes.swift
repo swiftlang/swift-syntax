@@ -190,7 +190,8 @@ public let ATTRIBUTE_NODES: [Node] = [
     traits: ["WithTrailingComma"],
     children: [
       Child(
-        name: "AvailabilityVersionRestriction",
+        name: "PlatformVersion",
+        deprecatedName: "AvailabilityVersionRestriction",
         kind: .node(kind: .platformVersion)
       ),
       Child(

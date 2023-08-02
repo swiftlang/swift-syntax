@@ -23,7 +23,7 @@ extension SyntaxClassification {
     case .dollarIdentifier: return "dollar"
     case .operatorIdentifier: return "op"
     case .integerLiteral: return "int"
-    case .floatingLiteral: return "float"
+    case .floatLiteral: return "float"
     case .stringLiteral: return "str"
     case .stringInterpolationAnchor: return "anchor"
     case .regexLiteral: return "regex"

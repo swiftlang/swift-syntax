@@ -135,6 +135,11 @@ public extension TokenKind {
     return .regexPoundDelimiter(text)
   }
 
+  @available(*, deprecated, renamed: "floatLiteral")
+  static func floatingLiteral(_ text: String) -> TokenKind {
+    return .floatLiteral(text)
+  }
+
   @available(*, deprecated, renamed: "leftSquare")
   static var leftSquareBracket: TokenKind {
     return .leftSquare
@@ -198,6 +203,21 @@ public extension TokenSyntax {
     presence: SourcePresence = .present
   ) -> TokenSyntax {
     return regexPoundDelimiter(
+      text,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  @available(*, deprecated, renamed: "floatLiteral")
+  static func floatingLiteral(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return floatLiteral(
       text,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,

@@ -26,7 +26,7 @@ public enum TokenKind: Hashable {
   case endOfFile
   case equal
   case exclamationMark
-  case floatingLiteral(String)
+  case floatLiteral(String)
   case identifier(String)
   case infixQuestionMark
   case integerLiteral(String)
@@ -92,7 +92,7 @@ public enum TokenKind: Hashable {
       return #"="#
     case .exclamationMark:
       return #"!"#
-    case .floatingLiteral(let text):
+    case .floatLiteral(let text):
       return text
     case .identifier(let text):
       return text
@@ -283,7 +283,7 @@ public enum TokenKind: Hashable {
       return true
     case .exclamationMark:
       return true
-    case .floatingLiteral:
+    case .floatLiteral:
       return false
     case .identifier:
       return false
@@ -388,7 +388,7 @@ extension TokenKind: Equatable {
       return true
     case (.exclamationMark, .exclamationMark):
       return true
-    case (.floatingLiteral(let lhsText), .floatingLiteral(let rhsText)):
+    case (.floatLiteral(let lhsText), .floatLiteral(let rhsText)):
       return lhsText == rhsText
     case (.identifier(let lhsText), .identifier(let rhsText)):
       return lhsText == rhsText
@@ -487,7 +487,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case endOfFile
   case equal
   case exclamationMark
-  case floatingLiteral
+  case floatLiteral
   case identifier
   case infixQuestionMark
   case integerLiteral
@@ -636,7 +636,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .exclamationMark:
       return true
-    case .floatingLiteral:
+    case .floatLiteral:
       return false
     case .identifier:
       return false
@@ -753,8 +753,8 @@ extension TokenKind {
     case .exclamationMark:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .exclamationMark
-    case .floatingLiteral:
-      return .floatingLiteral(text)
+    case .floatLiteral:
+      return .floatLiteral(text)
     case .identifier:
       return .identifier(text)
     case .infixQuestionMark:
@@ -888,8 +888,8 @@ extension TokenKind {
       return (.equal, nil)
     case .exclamationMark:
       return (.exclamationMark, nil)
-    case .floatingLiteral(let str):
-      return (.floatingLiteral, str)
+    case .floatLiteral(let str):
+      return (.floatLiteral, str)
     case .identifier(let str):
       return (.identifier, str)
     case .infixQuestionMark:

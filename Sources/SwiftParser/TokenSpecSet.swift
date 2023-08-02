@@ -774,7 +774,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case `Self`
   case dollarIdentifier
   case `false`
-  case floatingLiteral
+  case floatLiteral
   case identifier
   case `init`
   case integerLiteral
@@ -804,7 +804,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.Self): self = .Self
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
     case TokenSpec(.false): self = .false
-    case TokenSpec(.floatingLiteral): self = .floatingLiteral
+    case TokenSpec(.floatLiteral): self = .floatLiteral
     case TokenSpec(.identifier): self = .identifier
     case TokenSpec(.`init`): self = .`init`
     case TokenSpec(.integerLiteral): self = .integerLiteral
@@ -837,7 +837,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .Self: return .keyword(.Self)
     case .dollarIdentifier: return .dollarIdentifier
     case .false: return .keyword(.false)
-    case .floatingLiteral: return .floatingLiteral
+    case .floatLiteral: return .floatLiteral
     case .identifier: return .identifier
     case .`init`: return .keyword(.`init`)
     case .integerLiteral: return .integerLiteral

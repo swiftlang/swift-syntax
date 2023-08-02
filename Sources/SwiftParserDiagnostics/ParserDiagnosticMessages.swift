@@ -355,7 +355,7 @@ public struct InvalidIdentifierError: ParserError {
 
   public var message: String {
     switch invalidIdentifier.tokenKind {
-    case .floatingLiteral(let text), .integerLiteral(let text):
+    case .floatLiteral(let text), .integerLiteral(let text):
       fallthrough
     case .unknown(let text) where text.first?.isNumber == true:
       let name = missingIdentifier.childNameInParent ?? "identifier"

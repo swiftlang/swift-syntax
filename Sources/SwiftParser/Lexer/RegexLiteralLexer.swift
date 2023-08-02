@@ -640,7 +640,7 @@ extension Lexer.Cursor {
       return false
 
     // Literals are themselves expressions and therefore don't sequence expressions.
-    case .floatingLiteral, .integerLiteral:
+    case .floatLiteral, .integerLiteral:
       return false
 
     // Pound keywords that do not generally sequence expressions.

@@ -661,7 +661,7 @@ final class IfconfigExprTests: XCTestCase {
             LabeledExprSyntax(
               expression: PrefixOperatorExprSyntax(
                 operator: .prefixOperator("<"),
-                expression: FloatLiteralExprSyntax(literal: .floatingLiteral("10.0"))
+                expression: FloatLiteralExprSyntax(literal: .floatLiteral("10.0"))
               )
             )
           ]),

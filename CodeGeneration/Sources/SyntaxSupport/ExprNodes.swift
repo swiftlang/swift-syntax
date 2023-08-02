@@ -770,7 +770,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Literal",
         deprecatedName: "FloatingDigits",
-        kind: .token(choices: [.token(tokenKind: "FloatingLiteralToken")])
+        kind: .token(choices: [.token(tokenKind: "FloatLiteralToken")])
       )
     ]
   ),

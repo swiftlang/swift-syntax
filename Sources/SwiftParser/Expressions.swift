@@ -1097,7 +1097,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.floatingLiteral, let handle)?:
+    case (.floatLiteral, let handle)?:
       let literal = self.eat(handle)
       return RawExprSyntax(
         RawFloatLiteralExprSyntax(
@@ -1186,7 +1186,7 @@ extension Parser {
         return RawExprSyntax(
           RawFloatLiteralExprSyntax(
             literal: RawTokenSyntax(
-              missing: .floatingLiteral,
+              missing: .floatLiteral,
               text: text,
               arena: self.arena
             ),

@@ -1163,6 +1163,9 @@ public let DECL_NODES: [Node] = [
           .keyword(.let),
           .keyword(.func),
           .keyword(.inout),
+          .keyword(._mutating),
+          .keyword(._consuming),
+          .keyword(._borrowing),
         ]),
         documentation: """
           The kind of declaration being imported. 
@@ -2330,7 +2333,10 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(.let), .keyword(.var), .keyword(.inout)]),
+        kind: .token(choices: [
+          .keyword(.let), .keyword(.var), .keyword(.inout),
+          .keyword(._mutating), .keyword(._borrowing), .keyword(._consuming),
+        ]),
         documentation: """
           The specifier that defines the type of the variables declared (`let` or `var`).
           """

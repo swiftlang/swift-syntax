@@ -738,7 +738,7 @@ public extension SyntaxProtocol {
 
     if let converter {
       let range = sourceRange(converter: converter)
-      target.write(" [\(range.start)...\(range.end)]")
+      target.write(" [\(range.start.line):\(range.start.column)...\(range.end.line):\(range.end.column)]")
     }
 
     if let tokenView = raw.tokenView, tokenView.presence == .missing {

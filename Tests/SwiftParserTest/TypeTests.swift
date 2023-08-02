@@ -192,4 +192,42 @@ final class TypeTests: ParserTestCase {
       """
     )
   }
+
+  func testLowercaseSelf() {
+    assertParse(
+      "1️⃣self2️⃣",
+      { TypeSyntax.parse(from: &$0) },
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'self' keyword before type"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type", fixIts: ["insert type"]),
+      ],
+      fixedSource: "<#type#>self"
+    )
+  }
+
+  func testUppercaseSelf() {
+    assertParse(
+      "Self",
+      { TypeSyntax.parse(from: &$0) },
+      substructure: Syntax(TokenSyntax.keyword(.Self))
+    )
+  }
+
+  func testNestedLowercaseSelf() {
+    assertParse(
+      "Foo.1️⃣self",
+      { TypeSyntax.parse(from: &$0) },
+      substructure: Syntax(TokenSyntax.keyword(.`self`)),
+      substructureAfterMarker: "1️⃣"
+    )
+  }
+
+  func testNestedUppercaseSelf() {
+    assertParse(
+      "Foo.1️⃣Self",
+      { TypeSyntax.parse(from: &$0) },
+      substructure: Syntax(TokenSyntax.identifier("Self")),
+      substructureAfterMarker: "1️⃣"
+    )
+  }
 }

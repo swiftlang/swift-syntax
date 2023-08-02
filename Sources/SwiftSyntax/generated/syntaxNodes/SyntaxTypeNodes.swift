@@ -970,7 +970,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `name`: (`<identifier>` | `'self'` | `'Self'` | `'Any'` | `'_'`)
+///  - `name`: (`<identifier>` | `'Self'` | `'Any'` | `'_'`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -1218,7 +1218,7 @@ public struct ImplicitlyUnwrappedOptionalTypeSyntax: TypeSyntaxProtocol, SyntaxH
 /// 
 ///  - `baseType`: ``TypeSyntax``
 ///  - `period`: `'.'`
-///  - `name`: (`<identifier>` | `'self'` | `'Self'`)
+///  - `name`: (`<identifier>` | `'self'`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

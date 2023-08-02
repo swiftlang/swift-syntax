@@ -151,7 +151,7 @@ extension Parser {
 
     if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
       type = RawExprSyntax(RawTypeExprSyntax(type: self.parseQualifiedTypeIdentifier(), arena: self.arena))
-      period = self.consumePrefix(".", as: .period)
+      period = self.expectWithoutRecovery(prefix: ".", as: .period)
     } else {
       type = nil
       period = nil
@@ -181,52 +181,70 @@ extension Parser {
       return RawTypeSyntax(self.parseAnyType())
     }
 
-    var result: RawTypeSyntax?
-    var keepGoing: RawTokenSyntax? = nil
+    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    let generics: RawGenericArgumentClauseSyntax?
+    if self.atContextualPunctuator("<") {
+      generics = self.parseGenericArguments()
+    } else {
+      generics = nil
+    }
+
+    var result = RawTypeSyntax(
+      RawIdentifierTypeSyntax(
+        unexpectedBeforeName,
+        name: name,
+        genericArgumentClause: generics,
+        arena: self.arena
+      )
+    )
+
+    // If qualified name base type cannot be parsed from the current
+    // point (i.e. the next type identifier is not followed by a '.'),
+    // then the next identifier is the final declaration name component.
+    var backtrack = self.lookahead()
+    guard
+      backtrack.consume(ifPrefix: ".", as: .period) != nil,
+      backtrack.canParseBaseTypeForQualifiedDeclName()
+    else {
+      return result
+    }
+
+    var keepGoing = self.consume(if: .period)
     var loopProgress = LoopProgressCondition()
-    repeat {
-      let (unexpectedBeforeName, name) = self.expect(.identifier, .keyword(.self), .keyword(.Self), default: .identifier)
+    while keepGoing != nil && self.hasProgressed(&loopProgress) {
+      let (unexpectedBeforeName, name) = self.expect(.identifier, .keyword(.self), TokenSpec(.Self, remapping: .identifier), default: .identifier)
       let generics: RawGenericArgumentClauseSyntax?
       if self.atContextualPunctuator("<") {
         generics = self.parseGenericArguments()
       } else {
         generics = nil
       }
-      if let keepGoing {
-        result = RawTypeSyntax(
-          RawMemberTypeSyntax(
-            baseType: result!,
-            period: keepGoing,
-            unexpectedBeforeName,
-            name: name,
-            genericArgumentClause: generics,
-            arena: self.arena
-          )
+      result = RawTypeSyntax(
+        RawMemberTypeSyntax(
+          baseType: result,
+          period: keepGoing!,
+          unexpectedBeforeName,
+          name: name,
+          genericArgumentClause: generics,
+          arena: self.arena
         )
-      } else {
-        result = RawTypeSyntax(
-          RawIdentifierTypeSyntax(
-            unexpectedBeforeName,
-            name: name,
-            genericArgumentClause: generics,
-            arena: self.arena
-          )
-        )
-      }
+      )
 
       // If qualified name base type cannot be parsed from the current
       // point (i.e. the next type identifier is not followed by a '.'),
       // then the next identifier is the final declaration name component.
       var backtrack = self.lookahead()
-      backtrack.consumePrefix(".", as: .period)
-      guard backtrack.canParseBaseTypeForQualifiedDeclName() else {
+      guard
+        backtrack.consume(ifPrefix: ".", as: .period) != nil,
+        backtrack.canParseBaseTypeForQualifiedDeclName()
+      else {
         break
       }
 
       keepGoing = self.consume(if: .period)
-    } while keepGoing != nil && self.hasProgressed(&loopProgress)
+    }
 
-    return result!
+    return result
   }
 }
 

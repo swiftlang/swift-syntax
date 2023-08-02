@@ -300,7 +300,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        kind: .token(choices: [.token(.identifier), .keyword(.self), .keyword(.Self)]),
+        kind: .token(choices: [.token(.identifier), .keyword(.self)]),
         nameForDiagnostics: "name"
       ),
       Child(
@@ -435,7 +435,6 @@ public let TYPE_NODES: [Node] = [
         name: "name",
         kind: .token(choices: [
           .token(.identifier),
-          .keyword(.self),
           .keyword(.Self),
           .keyword(.Any),
           .token(.wildcard),

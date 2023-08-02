@@ -270,7 +270,20 @@ extension Parser {
             )
           )
         } else {
-          let (name, generics) = self.parseTypeNameWithGenerics(allowKeywordAsName: true)
+          let name: RawTokenSyntax
+          if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
+            name = self.eat(handle)
+          } else if self.currentToken.isLexerClassifiedKeyword {
+            name = self.consumeAnyToken(remapping: .identifier)
+          } else {
+            name = missingToken(.identifier)
+          }
+          let generics: RawGenericArgumentClauseSyntax?
+          if self.atContextualPunctuator("<") {
+            generics = self.parseGenericArguments()
+          } else {
+            generics = nil
+          }
           base = RawTypeSyntax(
             RawMemberTypeSyntax(
               baseType: base,
@@ -322,30 +335,23 @@ extension Parser {
     )
   }
 
-  mutating func parseTypeNameWithGenerics(allowKeywordAsName: Bool) -> (RawTokenSyntax, RawGenericArgumentClauseSyntax?) {
-    let name: RawTokenSyntax
-    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) {
-      name = identOrSelf
-    } else if allowKeywordAsName && self.currentToken.isLexerClassifiedKeyword {
-      name = self.consumeAnyToken(remapping: .identifier)
-    } else {
-      name = missingToken(.identifier)
-    }
-    if self.atContextualPunctuator("<") {
-      return (name, self.parseGenericArguments())
-    }
-    return (name, nil)
-  }
-
   /// Parse a type identifier.
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
     if self.at(.keyword(.Any)) {
       return RawTypeSyntax(self.parseAnyType())
     }
 
-    let (name, generics) = parseTypeNameWithGenerics(allowKeywordAsName: false)
+    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    let generics: RawGenericArgumentClauseSyntax?
+    if self.atContextualPunctuator("<") {
+      generics = self.parseGenericArguments()
+    } else {
+      generics = nil
+    }
+
     return RawTypeSyntax(
       RawIdentifierTypeSyntax(
+        unexpectedBeforeName,
         name: name,
         genericArgumentClause: generics,
         arena: self.arena
@@ -479,6 +485,7 @@ extension Parser {
         if let first,
           second == nil,
           colon?.isMissing == true,
+          first.tokenKind == .identifier,
           first.tokenText.isStartingWithUppercase
         {
           elements.append(

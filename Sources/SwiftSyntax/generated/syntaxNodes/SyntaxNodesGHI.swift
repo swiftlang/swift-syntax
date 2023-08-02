@@ -3787,7 +3787,7 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `initKeyword`: `'init'`
-///  - `optionalMark`: (`'?'` | `'?'` | `'!'`)?
+///  - `optionalMark`: (`'?'` | `'!'`)?
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `signature`: ``FunctionSignatureSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?

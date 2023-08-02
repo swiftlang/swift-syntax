@@ -922,7 +922,7 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if let parsedFailable = self.consume(if: .exclamationMark, .postfixQuestionMark, .infixQuestionMark) {
+    if let parsedFailable = self.consume(if: .exclamationMark, .postfixQuestionMark, TokenSpec(.infixQuestionMark, remapping: .postfixQuestionMark)) {
       failable = parsedFailable
     } else if let parsedFailable = self.consumeIfContextualPunctuator("!", remapping: .exclamationMark) {
       failable = parsedFailable

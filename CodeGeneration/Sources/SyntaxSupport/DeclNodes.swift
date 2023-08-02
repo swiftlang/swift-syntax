@@ -1267,7 +1267,6 @@ public let DECL_NODES: [Node] = [
         name: "optionalMark",
         kind: .token(choices: [
           .token(.postfixQuestionMark),
-          .token(.infixQuestionMark),
           .token(.exclamationMark),
         ]),
         documentation: "If the initializer is failable, a question mark to indicate that.",

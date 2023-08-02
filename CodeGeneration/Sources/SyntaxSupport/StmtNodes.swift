@@ -435,7 +435,10 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
+        kind: .token(choices: [
+          .keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout"),
+          .keyword(text: "_mutating"), .keyword(text: "_borrowing"), .keyword(text: "_consuming"),
+        ])
       ),
       Child(
         name: "pattern",

@@ -160,17 +160,24 @@ private struct ClassificationVisitor {
     classifications.append(range)
   }
 
+  /// Classifies `triviaPieces` starting from `offset` and returns the number of bytes the trivia took up in the source
+  private mutating func classify(triviaPieces: [RawTriviaPiece], at offset: Int) -> Int {
+    var classifiedBytes = 0
+    for triviaPiece in triviaPieces {
+      let range = triviaPiece.classify(offset: offset + classifiedBytes)
+      report(range: range)
+      classifiedBytes += triviaPiece.byteLength
+    }
+    return classifiedBytes
+  }
+
   // Report classification ranges in `descriptor.node` that is a token.
   private mutating func handleToken(_ descriptor: Descriptor) -> VisitResult {
     let tokenView = descriptor.node.tokenView!
     var byteOffset = descriptor.byteOffset
 
     // Leading trivia.
-    for piece in tokenView.leadingRawTriviaPieces {
-      let range = piece.classify(offset: byteOffset)
-      report(range: range)
-      byteOffset += piece.byteLength
-    }
+    byteOffset += classify(triviaPieces: tokenView.leadingRawTriviaPieces, at: byteOffset)
     // Token text.
     do {
       let range = TokenKindAndText(kind: tokenView.rawKind, text: tokenView.rawText)
@@ -179,11 +186,7 @@ private struct ClassificationVisitor {
       byteOffset += tokenView.rawText.count
     }
     // Trailing trivia.
-    for piece in tokenView.trailingRawTriviaPieces {
-      let range = piece.classify(offset: byteOffset)
-      report(range: range)
-      byteOffset += piece.byteLength
-    }
+    byteOffset += classify(triviaPieces: tokenView.trailingRawTriviaPieces, at: byteOffset)
 
     precondition(byteOffset == descriptor.byteOffset + descriptor.node.byteLength)
     return .continue
@@ -196,12 +199,37 @@ private struct ClassificationVisitor {
 
     for case (let index, let child?) in children.enumerated() {
 
-      let classification: (SyntaxClassification, Bool)?
+      let classification: (classification: SyntaxClassification, force: Bool)?
       if case .layout(let layout) = descriptor.node.kind.syntaxNodeType.structure {
         classification = SyntaxClassification.classify(layout[index])
       } else {
         classification = nil
       }
+
+      if let classification, classification.force {
+        // Leading trivia.
+        if let leadingTriviaPieces = child.leadingTriviaPieces {
+          byteOffset += classify(triviaPieces: leadingTriviaPieces, at: byteOffset)
+        }
+        // Layout node text.
+        let layoutNodeTextLength = child.byteLength - child.leadingTriviaByteLength - child.trailingTriviaByteLength
+        let range = SyntaxClassifiedRange(
+          kind: classification.classification,
+          range: ByteSourceRange(
+            offset: byteOffset,
+            length: layoutNodeTextLength
+          )
+        )
+        report(range: range)
+        byteOffset += layoutNodeTextLength
+
+        // Trailing trivia.
+        if let trailingTriviaPieces = child.trailingTriviaPieces {
+          byteOffset += classify(triviaPieces: trailingTriviaPieces, at: byteOffset)
+        }
+        continue
+      }
+
       let result = visit(
         .init(
           node: child,

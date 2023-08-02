@@ -30,7 +30,6 @@ extension SyntaxClassification {
     case .poundDirective: return "#kw"
     case .buildConfigId: return "#id"
     case .attribute: return "attr-builtin"
-    case .objectLiteral: return "object-literal"
     case .editorPlaceholder: return "placeholder"
     case .lineComment: return "comment-line"
     case .blockComment: return "comment-block"

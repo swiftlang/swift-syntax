@@ -505,6 +505,16 @@ extension RawSyntax {
     lastToken(viewMode: .sourceAccurate)?.trailingTriviaByteLength ?? 0
   }
 
+  @_spi(RawSyntax)
+  public var leadingTriviaPieces: [RawTriviaPiece]? {
+    firstToken(viewMode: .sourceAccurate)?.leadingRawTriviaPieces
+  }
+
+  @_spi(RawSyntax)
+  public var trailingTriviaPieces: [RawTriviaPiece]? {
+    lastToken(viewMode: .sourceAccurate)?.trailingRawTriviaPieces
+  }
+
   /// The length of this node’s content, without the first leading and the last
   /// trailing trivia. Intermediate trivia inside a layout node is included in
   /// this.

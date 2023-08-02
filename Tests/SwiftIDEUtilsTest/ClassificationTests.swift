@@ -121,4 +121,462 @@ public class ClassificationTests: XCTestCase {
       ]
     )
   }
+
+  public func testFuncDeclaration() {
+    assertClassification(
+      """
+      func foo(x: Int, y: Int) -> Int { return x + y }
+      """,
+      expected: [
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "foo", kind: .identifier),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "y", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "return", kind: .keyword),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "+", kind: .operatorIdentifier),
+        ClassificationSpec(source: "y", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testDocCommentLine() {
+    assertClassification(
+      """
+      /// Brief.
+      ///
+      /// Simple case.
+      ///
+      /// - parameter x: A number
+      /// - parameter y: Another number
+      /// - returns: single-line, 2 spaces
+      """,
+      expected: [
+        ClassificationSpec(source: "/// Brief.", kind: .docLineComment),
+        ClassificationSpec(source: "///", kind: .docLineComment),
+        ClassificationSpec(source: "/// Simple case.", kind: .docLineComment),
+        ClassificationSpec(source: "///", kind: .docLineComment),
+        ClassificationSpec(source: "/// - parameter x: A number", kind: .docLineComment),
+        ClassificationSpec(source: "/// - parameter y: Another number", kind: .docLineComment),
+        ClassificationSpec(source: "/// - returns: single-line, 2 spaces", kind: .docLineComment),
+      ]
+    )
+  }
+
+  public func testDocCommentBlock() {
+    let docCommentBlock =
+      """
+      /**
+        Does pretty much nothing.
+
+        Not a parameter list: improper indentation.
+          - Parameters: sdfadsf
+
+        - WARNING: - WARNING: Should only have one field
+
+        - $$$: Not a field.
+
+        Empty field, OK:
+      */
+      """
+    assertClassification(
+      docCommentBlock,
+      expected: [
+        ClassificationSpec(source: docCommentBlock, kind: .docBlockComment)
+      ]
+    )
+  }
+
+  public func testEmptyDocBlockComment() {
+    assertClassification(
+      "/***/",
+      expected: [
+        ClassificationSpec(source: "/***/", kind: .docBlockComment)
+      ]
+    )
+  }
+
+  public func testPlaygoundCommentLine() {
+    assertClassification(
+      "//: playground doc comment line",
+      expected: [
+        ClassificationSpec(source: "//: playground doc comment line", kind: .lineComment)
+      ]
+    )
+  }
+
+  public func testIfConfig() {
+    assertClassification(
+      """
+      #if os(macOS)
+        var x : Int
+      #elseif
+        var x : Float
+      #else
+      #endif
+      """,
+      expected: [
+        ClassificationSpec(source: "#if", kind: .poundDirective),
+        ClassificationSpec(source: "os", kind: .buildConfigId),
+        ClassificationSpec(source: "macOS", kind: .buildConfigId),
+        ClassificationSpec(source: "var", kind: .keyword),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "#elseif", kind: .poundDirective),
+        ClassificationSpec(source: "var", kind: .keyword),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "Float", kind: .typeIdentifier),
+        ClassificationSpec(source: "#else", kind: .poundDirective),
+        ClassificationSpec(source: "#endif", kind: .poundDirective),
+      ]
+    )
+  }
+
+  public func testIfconfig2() {
+    assertClassification(
+      """
+      #if !CONF
+      #else
+      """,
+      expected: [
+        ClassificationSpec(source: "#if", kind: .poundDirective),
+        ClassificationSpec(source: "!", kind: .operatorIdentifier),
+        ClassificationSpec(source: "CONF", kind: .buildConfigId),
+        ClassificationSpec(source: "#else", kind: .poundDirective),
+      ]
+    )
+  }
+
+  public func testBuiltinMacros() {
+    assertClassification(
+      """
+      #error("Error")
+      #warning("Warning")
+      """,
+      expected: [
+        ClassificationSpec(source: "error", kind: .identifier),
+        ClassificationSpec(source: "\"Error\"", kind: .stringLiteral),
+        ClassificationSpec(source: "warning", kind: .identifier),
+        ClassificationSpec(source: "\"Warning\"", kind: .stringLiteral),
+      ]
+    )
+  }
+
+  public func testSourceLocation() {
+    assertClassification(
+      #"#sourceLocation(file: "x", line: 1)"#,
+      expected: [
+        ClassificationSpec(source: "#sourceLocation", kind: .poundDirective),
+        ClassificationSpec(source: "file", kind: .keyword),
+        ClassificationSpec(source: #""x""#, kind: .stringLiteral),
+        ClassificationSpec(source: "line", kind: .keyword),
+        ClassificationSpec(source: "1", kind: .integerLiteral),
+      ]
+    )
+  }
+
+  public func testColorLiteral() {
+    assertClassification(
+      "#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)",
+      expected: [
+        ClassificationSpec(source: "colorLiteral", kind: .identifier),
+        ClassificationSpec(source: "red", kind: .identifier),
+        ClassificationSpec(source: "0", kind: .integerLiteral),
+        ClassificationSpec(source: "green", kind: .identifier),
+        ClassificationSpec(source: "0", kind: .integerLiteral),
+        ClassificationSpec(source: "blue", kind: .identifier),
+        ClassificationSpec(source: "0", kind: .integerLiteral),
+        ClassificationSpec(source: "alpha", kind: .identifier),
+        ClassificationSpec(source: "1", kind: .integerLiteral),
+      ]
+    )
+  }
+
+  public func testImageLiteral() {
+    assertClassification(
+      "#imageLiteral(resourceName: \"cloud.png\")",
+      expected: [
+        ClassificationSpec(source: "imageLiteral", kind: .identifier),
+        ClassificationSpec(source: "resourceName", kind: .identifier),
+        ClassificationSpec(source: "\"cloud.png\"", kind: .stringLiteral),
+      ]
+    )
+  }
+
+  public func testFileLiteral() {
+    assertClassification(
+      "#fileLiteral(resourceName: \"cloud.png\")",
+      expected: [
+        ClassificationSpec(source: "fileLiteral", kind: .identifier),
+        ClassificationSpec(source: "resourceName", kind: .identifier),
+        ClassificationSpec(source: "\"cloud.png\"", kind: .stringLiteral),
+      ]
+    )
+  }
+
+  public func testAttribute() {
+    assertClassification(
+      """
+      @available(iOS 8.0, OSX 10.10, *)
+      """,
+      expected: [
+        ClassificationSpec(source: "@available", kind: .attribute),
+        ClassificationSpec(source: "iOS", kind: .keyword),
+        ClassificationSpec(source: "8", kind: .integerLiteral),
+        ClassificationSpec(source: "0", kind: .integerLiteral),
+        ClassificationSpec(source: "OSX", kind: .keyword),
+        ClassificationSpec(source: "10", kind: .integerLiteral),
+        ClassificationSpec(source: "10", kind: .integerLiteral),
+        ClassificationSpec(source: "*", kind: .operatorIdentifier),
+      ]
+    )
+  }
+
+  public func testAttribute2() {
+    assertClassification(
+      """
+      @objc @IBOutlet var foo: String
+      """,
+      expected: [
+        ClassificationSpec(source: "@objc", kind: .attribute),
+        ClassificationSpec(source: "@IBOutlet", kind: .attribute),
+        ClassificationSpec(source: "var", kind: .keyword),
+        ClassificationSpec(source: "foo", kind: .identifier),
+        ClassificationSpec(source: "String", kind: .typeIdentifier),
+      ]
+    )
+  }
+
+  public func testIndirectCase() {
+    assertClassification(
+      """
+      enum List {
+        indirect case cons(T, List)
+      }
+      """,
+      expected: [
+        ClassificationSpec(source: "enum", kind: .keyword),
+        ClassificationSpec(source: "List", kind: .identifier),
+        ClassificationSpec(source: "indirect", kind: .keyword),
+        ClassificationSpec(source: "case", kind: .keyword),
+        ClassificationSpec(source: "cons", kind: .identifier),
+        ClassificationSpec(source: "T", kind: .typeIdentifier),
+        ClassificationSpec(source: "List", kind: .typeIdentifier),
+      ]
+    )
+  }
+
+  public func testMutatingKeyword() {
+    assertClassification(
+      "mutating func func_mutating_1() {}",
+      expected: [
+        ClassificationSpec(source: "mutating", kind: .keyword),
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "func_mutating_1", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testNonMutatingKeyword() {
+    assertClassification(
+      "nonmutating func func_mutating_2() {}",
+      expected: [
+        ClassificationSpec(source: "nonmutating", kind: .keyword),
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "func_mutating_2", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testStringLikeLiterals() {
+    assertClassification(
+      "var s1 = \"abc абвгд あいうえお\"",
+      expected: [
+        ClassificationSpec(source: "var", kind: .keyword),
+        ClassificationSpec(source: "s1", kind: .identifier),
+        ClassificationSpec(source: "\"abc абвгд あいうえお\"", kind: .stringLiteral),
+      ]
+    )
+  }
+
+  public func testOperatorDecl() {
+    assertClassification(
+      """
+      infix operator *-* : FunnyPrecedence
+      """,
+      expected: [
+        ClassificationSpec(source: "infix", kind: .keyword),
+        ClassificationSpec(source: "operator", kind: .keyword),
+        ClassificationSpec(source: "*-*", kind: .operatorIdentifier),
+        ClassificationSpec(source: "FunnyPrecedence", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testPrecedenceGroup() {
+    assertClassification(
+      """
+      precedencegroup FunnyPrecedence {
+        associativity: left
+        higherThan: MultiplicationPrecedence
+      }
+      """,
+      expected: [
+        ClassificationSpec(source: "precedencegroup", kind: .keyword),
+        ClassificationSpec(source: "FunnyPrecedence", kind: .identifier),
+        ClassificationSpec(source: "associativity", kind: .keyword),
+        ClassificationSpec(source: "left", kind: .keyword),
+        ClassificationSpec(source: "higherThan", kind: .keyword),
+        ClassificationSpec(source: "MultiplicationPrecedence", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testInheritence() {
+    assertClassification(
+      "protocol Prot2 : Prot {}",
+      expected: [
+        ClassificationSpec(source: "protocol", kind: .keyword),
+        ClassificationSpec(source: "Prot2", kind: .identifier),
+        ClassificationSpec(source: "Prot", kind: .typeIdentifier),
+      ]
+    )
+  }
+
+  public func testGenericType() {
+    assertClassification(
+      "func genFn<T : Prot>(_: T) -> Int where T.Blarg : Prot2 {}",
+      expected: [
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "genFn", kind: .identifier),
+        ClassificationSpec(source: "T", kind: .identifier),
+        ClassificationSpec(source: "Prot", kind: .typeIdentifier),
+        ClassificationSpec(source: "T", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "where", kind: .keyword),
+        ClassificationSpec(source: "T", kind: .typeIdentifier),
+        ClassificationSpec(source: "Blarg", kind: .typeIdentifier),
+        ClassificationSpec(source: "Prot2", kind: .typeIdentifier),
+      ]
+    )
+  }
+
+  public func testStringInterpolationAnchor() {
+    assertClassification(
+      #""This is string \(1) interpolation""#,
+      expected: [
+        ClassificationSpec(source: #""This is string "#, kind: .stringLiteral),
+        ClassificationSpec(source: "(", kind: .stringInterpolationAnchor),
+        ClassificationSpec(source: "1", kind: .integerLiteral),
+        ClassificationSpec(source: ")", kind: .stringInterpolationAnchor),
+        ClassificationSpec(source: #" interpolation""#, kind: .stringLiteral),
+      ]
+    )
+  }
+
+  public func testPlaceHolder() {
+    assertClassification(
+      "func <#test1#> () {}",
+      expected: [
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "<#test1#>", kind: .editorPlaceholder),
+      ]
+    )
+  }
+
+  public func testUnownedAndUnsafe() {
+    assertClassification(
+      "unowned(unsafe) var uu",
+      expected: [
+        ClassificationSpec(source: "unowned", kind: .keyword),
+        ClassificationSpec(source: "unsafe", kind: .identifier),
+        ClassificationSpec(source: "var", kind: .keyword),
+        ClassificationSpec(source: "uu", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testClosure() {
+    assertClassification(
+      "let closure = { [weak x=bindtox, unowned y=bindtoy, unowned(unsafe) z=bindtoz] in }",
+      expected: [
+        ClassificationSpec(source: "let", kind: .keyword),
+        ClassificationSpec(source: "closure", kind: .identifier),
+        ClassificationSpec(source: "weak", kind: .keyword),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "bindtox", kind: .identifier),
+        ClassificationSpec(source: "unowned", kind: .keyword),
+        ClassificationSpec(source: "y", kind: .identifier),
+        ClassificationSpec(source: "bindtoy", kind: .identifier),
+        ClassificationSpec(source: "unowned", kind: .keyword),
+        ClassificationSpec(source: "unsafe", kind: .keyword),
+        ClassificationSpec(source: "z", kind: .identifier),
+        ClassificationSpec(source: "bindtoz", kind: .identifier),
+        ClassificationSpec(source: "in", kind: .keyword),
+      ]
+    )
+  }
+
+  public func testEscapedKeywords() {
+    assertClassification(
+      """
+      func keywordInCaseAndLocalArgLabel(_ for: Int, for in: Int, class _: Int) {
+        
+      }
+      """,
+      expected: [
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "keywordInCaseAndLocalArgLabel", kind: .identifier),
+        ClassificationSpec(source: "for", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "for", kind: .identifier),
+        ClassificationSpec(source: "in", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "class", kind: .identifier),
+        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+      ]
+    )
+  }
+
+  public func testEscapedKeywords2() {
+    assertClassification(
+      """
+      switch(`for`, `in`) {
+          case (let x, let y):
+            print(x, y)
+      }
+      """,
+      expected: [
+        ClassificationSpec(source: "switch", kind: .keyword),
+        ClassificationSpec(source: "`for`", kind: .identifier),
+        ClassificationSpec(source: "`in`", kind: .identifier),
+        ClassificationSpec(source: "case", kind: .keyword),
+        ClassificationSpec(source: "let", kind: .keyword),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "let", kind: .keyword),
+        ClassificationSpec(source: "y", kind: .identifier),
+        ClassificationSpec(source: "print", kind: .identifier),
+        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "y", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testAttributeFollowedByComment() {
+    assertClassification(
+      """
+      @MyAttribute // some comment
+      func foo() {}
+      """,
+      expected: [
+        ClassificationSpec(source: "@MyAttribute", kind: .attribute),
+        ClassificationSpec(source: "// some comment", kind: .lineComment),
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "foo", kind: .identifier),
+      ]
+    )
+  }
 }

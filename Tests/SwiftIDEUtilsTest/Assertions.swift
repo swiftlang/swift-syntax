@@ -71,7 +71,7 @@ func assertClassification(
       line: spec.line
     )
 
-    lastRangeUpperBound = source.index(source.startIndex, offsetBy: range.endOffset)
+    lastRangeUpperBound = source.utf8.index(source.utf8.startIndex, offsetBy: range.endOffset)
   }
 }
 

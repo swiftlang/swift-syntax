@@ -39,8 +39,6 @@ public enum SyntaxClassification {
   case lineComment
   /// The token should not receive syntax coloring.
   case none
-  /// An image, color, etc. literal.
-  case objectLiteral
   /// An identifier referring to an operator.
   case operatorIdentifier
   /// A `#` token like `#warning`.
@@ -66,7 +64,7 @@ extension SyntaxClassification {
   internal static func classify(_ keyPath: AnyKeyPath) -> (SyntaxClassification, Bool)? {
     switch keyPath {
     case \AttributeSyntax.attributeName:
-      return (.attribute, false)
+      return (.attribute, true)
     case \PlatformVersionItemSyntax.availabilityVersionRestriction:
       return (.keyword, false)
     case \AvailabilityVersionRestrictionSyntax.platform:

@@ -15,8 +15,7 @@ public struct SourceLocation: Hashable, Codable {
 
   /// The line in the file where this location resides. 1-based.
   ///
-  /// ### See also
-  /// ``SourceLocation/presumedLine``
+  /// - SeeAlso: ``SourceLocation/presumedLine``
   public var line: Int
 
   /// The UTF-8 byte offset from the beginning of the line where this location
@@ -28,8 +27,7 @@ public struct SourceLocation: Hashable, Codable {
 
   /// The file in which this location resides.
   ///
-  /// ### See also
-  /// ``SourceLocation/presumedFile``
+  /// - SeeAlso: ``SourceLocation/presumedFile``
   public let file: String
 
   /// The line of this location when respecting `#sourceLocation` directives.

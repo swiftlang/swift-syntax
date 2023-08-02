@@ -63,7 +63,7 @@ extension AccessorDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessorSpecifier, parameters argument(s).")
+  @available(*, deprecated, renamed: "AccessorDeclSyntax(leadingTrivia:_:attributes:_:modifier:_:accessorSpecifier:_:parameters:_:effectSpecifiers:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -134,7 +134,7 @@ extension ActorDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "ActorDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -243,7 +243,7 @@ extension ArrayExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, rightSquare argument(s).")
+  @available(*, deprecated, renamed: "ArrayExprSyntax(leadingTrivia:_:leftSquare:_:elements:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -342,7 +342,7 @@ extension ArrayTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, element, rightSquare argument(s).")
+  @available(*, deprecated, renamed: "ArrayTypeSyntax(leadingTrivia:_:leftSquare:_:element:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -401,7 +401,7 @@ extension ArrowExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with arrow argument(s).")
+  @available(*, deprecated, renamed: "ArrowExprSyntax(leadingTrivia:_:effectSpecifiers:_:arrow:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -486,7 +486,7 @@ extension AsExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with asKeyword, type argument(s).")
+  @available(*, deprecated, renamed: "AsExprSyntax(leadingTrivia:_:expression:_:asKeyword:_:questionOrExclamationMark:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -549,7 +549,7 @@ extension AssignmentExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with equal argument(s).")
+  @available(*, deprecated, renamed: "AssignmentExprSyntax(leadingTrivia:_:equal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -600,7 +600,7 @@ extension AssociatedTypeDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "AssociatedTypeDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:associatedtypeKeyword:_:name:_:inheritanceClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -705,7 +705,7 @@ extension AttributeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with atSign, arguments argument(s).")
+  @available(*, deprecated, renamed: "AttributeSyntax(leadingTrivia:_:atSign:_:attributeName:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -772,7 +772,7 @@ extension AvailabilityArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with argument argument(s).")
+  @available(*, deprecated, renamed: "AvailabilityArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -827,7 +827,7 @@ extension AvailabilityConditionSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with availabilityArguments argument(s).")
+  @available(*, deprecated, renamed: "AvailabilityConditionSyntax(leadingTrivia:_:availabilityKeyword:_:leftParen:_:availabilityArguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -895,7 +895,7 @@ extension BackDeployedAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with platforms argument(s).")
+  @available(*, deprecated, renamed: "BackDeployedAttributeArgumentsSyntax(leadingTrivia:_:beforeLabel:_:colon:_:platforms:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -954,7 +954,7 @@ extension BinaryOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @available(*, deprecated, renamed: "BinaryOperatorExprSyntax(leadingTrivia:_:operator:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1005,7 +1005,7 @@ extension BooleanLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with literal argument(s).")
+  @available(*, deprecated, renamed: "BooleanLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1056,7 +1056,7 @@ extension CanImportVersionInfoSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with version argument(s).")
+  @available(*, deprecated, renamed: "CanImportVersionInfoSyntax(leadingTrivia:_:comma:_:label:_:colon:_:version:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1119,7 +1119,7 @@ extension ClassDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "ClassDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1198,7 +1198,7 @@ extension ClosureCaptureSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with equal argument(s).")
+  @available(*, deprecated, renamed: "ClosureCaptureSyntax(leadingTrivia:_:specifier:_:name:_:equal:_:expression:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1265,7 +1265,7 @@ extension ClosureParameterClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @available(*, deprecated, renamed: "ClosureParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1374,7 +1374,7 @@ extension ClosureSignatureSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, inKeyword argument(s).")
+  @available(*, deprecated, renamed: "ClosureSignatureSyntax(leadingTrivia:_:attributes:_:capture:_:parameterClause:_:effectSpecifiers:_:returnClause:_:inKeyword:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1475,7 +1475,7 @@ extension ConformanceRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftType, rightType argument(s).")
+  @available(*, deprecated, renamed: "ConformanceRequirementSyntax(leadingTrivia:_:leftType:_:colon:_:rightType:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1534,7 +1534,7 @@ extension ConsumeExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with consumeKeyword argument(s).")
+  @available(*, deprecated, renamed: "ConsumeExprSyntax(leadingTrivia:_:consumeKeyword:_:expression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1609,7 +1609,7 @@ extension DeclReferenceExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with baseName, argumentNames argument(s).")
+  @available(*, deprecated, renamed: "DeclReferenceExprSyntax(leadingTrivia:_:baseName:_:argumentNames:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1694,7 +1694,7 @@ extension DerivativeAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessorSpecifier, arguments argument(s).")
+  @available(*, deprecated, renamed: "DerivativeAttributeArgumentsSyntax(leadingTrivia:_:ofLabel:_:colon:_:originalDeclName:_:period:_:accessorSpecifier:_:comma:_:arguments:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1799,7 +1799,7 @@ extension DictionaryElementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with key, value argument(s).")
+  @available(*, deprecated, renamed: "DictionaryElementSyntax(leadingTrivia:_:key:_:colon:_:value:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1932,7 +1932,7 @@ extension DictionaryTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, key, value, rightSquare argument(s).")
+  @available(*, deprecated, renamed: "DictionaryTypeSyntax(leadingTrivia:_:leftSquare:_:key:_:colon:_:value:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1999,7 +1999,7 @@ extension DifferentiabilityArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with argument argument(s).")
+  @available(*, deprecated, renamed: "DifferentiabilityArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2054,7 +2054,7 @@ extension DifferentiabilityArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @available(*, deprecated, renamed: "DifferentiabilityArgumentsSyntax(leadingTrivia:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2113,7 +2113,7 @@ extension DifferentiabilityWithRespectToArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @available(*, deprecated, renamed: "DifferentiabilityWithRespectToArgumentSyntax(leadingTrivia:_:wrtLabel:_:colon:_:arguments:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2252,7 +2252,7 @@ extension DifferentiableAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with kindSpecifier, kindSpecifierComma, arguments, argumentsComma, genericWhereClause argument(s).")
+  @available(*, deprecated, renamed: "DifferentiableAttributeArgumentsSyntax(leadingTrivia:_:kindSpecifier:_:kindSpecifierComma:_:arguments:_:argumentsComma:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2319,7 +2319,7 @@ extension DynamicReplacementAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with declName argument(s).")
+  @available(*, deprecated, renamed: "DynamicReplacementAttributeArgumentsSyntax(leadingTrivia:_:forLabel:_:colon:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2378,7 +2378,7 @@ extension EditorPlaceholderDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with placeholder argument(s).")
+  @available(*, deprecated, renamed: "EditorPlaceholderDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:placeholder:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2437,7 +2437,7 @@ extension EditorPlaceholderExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with placeholder argument(s).")
+  @available(*, deprecated, renamed: "EditorPlaceholderExprSyntax(leadingTrivia:_:placeholder:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2508,7 +2508,7 @@ extension EnumCaseElementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name, parameterClause argument(s).")
+  @available(*, deprecated, renamed: "EnumCaseElementSyntax(leadingTrivia:_:name:_:parameterClause:_:rawValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2571,7 +2571,7 @@ extension EnumCaseParameterClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @available(*, deprecated, renamed: "EnumCaseParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2630,7 +2630,7 @@ extension EnumCaseParameterSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with defaultValue argument(s).")
+  @available(*, deprecated, renamed: "EnumCaseParameterSyntax(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2725,7 +2725,7 @@ extension EnumDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name, genericParameterClause argument(s).")
+  @available(*, deprecated, renamed: "EnumDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2804,7 +2804,7 @@ extension ExpressionSegmentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pounds argument(s).")
+  @available(*, deprecated, renamed: "ExpressionSegmentSyntax(leadingTrivia:_:backslash:_:pounds:_:leftParen:_:expressions:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2871,7 +2871,7 @@ extension FloatLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with literal argument(s).")
+  @available(*, deprecated, renamed: "FloatLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2922,7 +2922,7 @@ extension ForStmtSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with sequence argument(s).")
+  @available(*, deprecated, renamed: "ForStmtSyntax(leadingTrivia:_:forKeyword:_:tryKeyword:_:awaitKeyword:_:caseKeyword:_:pattern:_:typeAnnotation:_:inKeyword:_:sequence:_:whereClause:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3009,7 +3009,7 @@ extension FunctionCallExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @available(*, deprecated, renamed: "FunctionCallExprSyntax(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3080,7 +3080,7 @@ extension FunctionDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "FunctionDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:funcKeyword:_:name:_:genericParameterClause:_:signature:_:genericWhereClause:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3159,7 +3159,7 @@ extension FunctionParameterClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters argument(s).")
+  @available(*, deprecated, renamed: "FunctionParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3218,7 +3218,7 @@ extension FunctionParameterSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with defaultValue argument(s).")
+  @available(*, deprecated, renamed: "FunctionParameterSyntax(leadingTrivia:_:attributes:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3331,7 +3331,7 @@ extension FunctionSignatureSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause argument(s).")
+  @available(*, deprecated, renamed: "FunctionSignatureSyntax(leadingTrivia:_:parameterClause:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3425,7 +3425,7 @@ extension FunctionTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameters, returnClause argument(s).")
+  @available(*, deprecated, renamed: "FunctionTypeSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3522,7 +3522,7 @@ extension GenericArgumentClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftAngle, rightAngle argument(s).")
+  @available(*, deprecated, renamed: "GenericArgumentClauseSyntax(leadingTrivia:_:leftAngle:_:arguments:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3581,7 +3581,7 @@ extension GenericArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with argument argument(s).")
+  @available(*, deprecated, renamed: "GenericArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3691,7 +3691,7 @@ extension GenericParameterClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftAngle, parameters, rightAngle argument(s).")
+  @available(*, deprecated, renamed: "GenericParameterClauseSyntax(leadingTrivia:_:leftAngle:_:parameters:_:genericWhereClause:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3754,7 +3754,7 @@ extension GenericParameterSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with eachKeyword argument(s).")
+  @available(*, deprecated, renamed: "GenericParameterSyntax(leadingTrivia:_:attributes:_:eachKeyword:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3825,7 +3825,7 @@ extension GenericRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with requirement argument(s).")
+  @available(*, deprecated, renamed: "GenericRequirementSyntax(leadingTrivia:_:requirement:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3880,7 +3880,7 @@ extension GenericWhereClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with requirements argument(s).")
+  @available(*, deprecated, renamed: "GenericWhereClauseSyntax(leadingTrivia:_:whereKeyword:_:requirements:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3935,7 +3935,7 @@ extension ImplementsAttributeArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with declName argument(s).")
+  @available(*, deprecated, renamed: "ImplementsAttributeArgumentsSyntax(leadingTrivia:_:type:_:comma:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4014,7 +4014,7 @@ extension ImportDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with importKeyword, importKindSpecifier argument(s).")
+  @available(*, deprecated, renamed: "ImportDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:importKeyword:_:importKindSpecifier:_:path:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4081,7 +4081,7 @@ extension ImportPathComponentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with trailingPeriod argument(s).")
+  @available(*, deprecated, renamed: "ImportPathComponentSyntax(leadingTrivia:_:name:_:trailingPeriod:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4136,7 +4136,7 @@ extension InfixOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @available(*, deprecated, renamed: "InfixOperatorExprSyntax(leadingTrivia:_:leftOperand:_:operator:_:rightOperand:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4195,7 +4195,7 @@ extension InheritanceClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with inheritedTypes argument(s).")
+  @available(*, deprecated, renamed: "InheritanceClauseSyntax(leadingTrivia:_:colon:_:inheritedTypes:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4250,7 +4250,7 @@ extension InheritedTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with type argument(s).")
+  @available(*, deprecated, renamed: "InheritedTypeSyntax(leadingTrivia:_:type:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4305,7 +4305,7 @@ extension IntegerLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with literal argument(s).")
+  @available(*, deprecated, renamed: "IntegerLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4376,7 +4376,7 @@ extension IsExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with isKeyword, type argument(s).")
+  @available(*, deprecated, renamed: "IsExprSyntax(leadingTrivia:_:expression:_:isKeyword:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4435,7 +4435,7 @@ extension KeyPathPropertyComponentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with declName argument(s).")
+  @available(*, deprecated, renamed: "KeyPathPropertyComponentSyntax(leadingTrivia:_:declName:_:genericArgumentClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4530,7 +4530,7 @@ extension KeyPathSubscriptComponentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, arguments, rightSquare argument(s).")
+  @available(*, deprecated, renamed: "KeyPathSubscriptComponentSyntax(leadingTrivia:_:leftSquare:_:arguments:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4609,7 +4609,7 @@ extension LabeledStmtSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with label, colon argument(s).")
+  @available(*, deprecated, renamed: "LabeledStmtSyntax(leadingTrivia:_:label:_:colon:_:statement:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4698,7 +4698,7 @@ extension LayoutRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with type, layoutSpecifier argument(s).")
+  @available(*, deprecated, renamed: "LayoutRequirementSyntax(leadingTrivia:_:type:_:colon:_:layoutSpecifier:_:leftParen:_:size:_:comma:_:alignment:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4777,7 +4777,7 @@ extension MacroDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "MacroDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:macroKeyword:_:name:_:genericParameterClause:_:signature:_:definition:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4926,7 +4926,7 @@ extension MacroExpansionDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
+  @available(*, deprecated, renamed: "MacroExpansionDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5083,7 +5083,7 @@ extension MacroExpansionExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
+  @available(*, deprecated, renamed: "MacroExpansionExprSyntax(leadingTrivia:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5162,7 +5162,7 @@ extension MemberAccessExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with period argument(s).")
+  @available(*, deprecated, renamed: "MemberAccessExprSyntax(leadingTrivia:_:base:_:period:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5221,7 +5221,7 @@ extension MetatypeTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with metatypeSpecifier argument(s).")
+  @available(*, deprecated, renamed: "MetatypeTypeSyntax(leadingTrivia:_:baseType:_:period:_:metatypeSpecifier:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5300,7 +5300,7 @@ extension NamedOpaqueReturnTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with genericParameterClause, type argument(s).")
+  @available(*, deprecated, renamed: "NamedOpaqueReturnTypeSyntax(leadingTrivia:_:genericParameterClause:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5385,7 +5385,7 @@ extension OperatorDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with fixitySpecifier, name argument(s).")
+  @available(*, deprecated, renamed: "OperatorDeclSyntax(leadingTrivia:_:fixitySpecifier:_:operatorKeyword:_:name:_:operatorPrecedenceAndTypes:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5448,7 +5448,7 @@ extension OptionalBindingConditionSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with bindingSpecifier argument(s).")
+  @available(*, deprecated, renamed: "OptionalBindingConditionSyntax(leadingTrivia:_:bindingSpecifier:_:pattern:_:typeAnnotation:_:initializer:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5511,7 +5511,7 @@ extension PackElementExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pack argument(s).")
+  @available(*, deprecated, renamed: "PackElementExprSyntax(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5566,7 +5566,7 @@ extension PackElementTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with pack argument(s).")
+  @available(*, deprecated, renamed: "PackElementTypeSyntax(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5621,7 +5621,7 @@ extension PackExpansionExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with repetitionPattern argument(s).")
+  @available(*, deprecated, renamed: "PackExpansionExprSyntax(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5676,7 +5676,7 @@ extension PackExpansionTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with repetitionPattern argument(s).")
+  @available(*, deprecated, renamed: "PackExpansionTypeSyntax(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5731,7 +5731,7 @@ extension PatternBindingSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with accessorBlock argument(s).")
+  @available(*, deprecated, renamed: "PatternBindingSyntax(leadingTrivia:_:pattern:_:typeAnnotation:_:initializer:_:accessorBlock:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5798,7 +5798,7 @@ extension PostfixOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator argument(s).")
+  @available(*, deprecated, renamed: "PostfixOperatorExprSyntax(leadingTrivia:_:expression:_:operator:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5923,7 +5923,7 @@ extension PoundSourceLocationArgumentsSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with fileLabel, fileColon, lineLabel, lineColon argument(s).")
+  @available(*, deprecated, renamed: "PoundSourceLocationArgumentsSyntax(leadingTrivia:_:fileLabel:_:fileColon:_:fileName:_:comma:_:lineLabel:_:lineColon:_:lineNumber:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -5998,7 +5998,7 @@ extension PoundSourceLocationSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with arguments argument(s).")
+  @available(*, deprecated, renamed: "PoundSourceLocationSyntax(leadingTrivia:_:poundSourceLocation:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6091,7 +6091,7 @@ extension PrecedenceGroupAssignmentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with assignmentLabel, value argument(s).")
+  @available(*, deprecated, renamed: "PrecedenceGroupAssignmentSyntax(leadingTrivia:_:assignmentLabel:_:colon:_:value:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6150,7 +6150,7 @@ extension PrecedenceGroupAssociativitySyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with associativityLabel argument(s).")
+  @available(*, deprecated, renamed: "PrecedenceGroupAssociativitySyntax(leadingTrivia:_:associativityLabel:_:colon:_:value:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6209,7 +6209,7 @@ extension PrecedenceGroupDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "PrecedenceGroupDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:precedencegroupKeyword:_:name:_:leftBrace:_:groupAttributes:_:rightBrace:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6314,7 +6314,7 @@ extension PrecedenceGroupRelationSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with higherThanOrLowerThanLabel, precedenceGroups argument(s).")
+  @available(*, deprecated, renamed: "PrecedenceGroupRelationSyntax(leadingTrivia:_:higherThanOrLowerThanLabel:_:colon:_:precedenceGroups:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6393,7 +6393,7 @@ extension PrefixOperatorExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with operator, expression argument(s).")
+  @available(*, deprecated, renamed: "PrefixOperatorExprSyntax(leadingTrivia:_:operator:_:expression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6488,7 +6488,7 @@ extension PrimaryAssociatedTypeClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftAngle, primaryAssociatedTypes, rightAngle argument(s).")
+  @available(*, deprecated, renamed: "PrimaryAssociatedTypeClauseSyntax(leadingTrivia:_:leftAngle:_:primaryAssociatedTypes:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6547,7 +6547,7 @@ extension ProtocolDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "ProtocolDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6626,7 +6626,7 @@ extension QualifiedDeclNameSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with period argument(s).")
+  @available(*, deprecated, renamed: "QualifiedDeclNameSyntax(leadingTrivia:_:baseType:_:period:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6725,7 +6725,7 @@ extension RegexLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with openingSlash, regex, closingSlash argument(s).")
+  @available(*, deprecated, renamed: "RegexLiteralExprSyntax(leadingTrivia:_:openingPounds:_:openingSlash:_:regex:_:closingSlash:_:closingPounds:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6792,7 +6792,7 @@ extension ReturnClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with type argument(s).")
+  @available(*, deprecated, renamed: "ReturnClauseSyntax(leadingTrivia:_:arrow:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6887,7 +6887,7 @@ extension SameTypeRequirementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftType, equal, rightType argument(s).")
+  @available(*, deprecated, renamed: "SameTypeRequirementSyntax(leadingTrivia:_:leftType:_:equal:_:rightType:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -6946,7 +6946,7 @@ extension SomeOrAnyTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with constraint argument(s).")
+  @available(*, deprecated, renamed: "SomeOrAnyTypeSyntax(leadingTrivia:_:someOrAnySpecifier:_:constraint:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7001,7 +7001,7 @@ extension SourceFileSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with endOfFileToken argument(s).")
+  @available(*, deprecated, renamed: "SourceFileSyntax(leadingTrivia:_:statements:_:endOfFileToken:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7091,7 +7091,7 @@ extension SpecializeAvailabilityArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with availabilityLabel, availabilityArguments argument(s).")
+  @available(*, deprecated, renamed: "SpecializeAvailabilityArgumentSyntax(leadingTrivia:_:availabilityLabel:_:colon:_:availabilityArguments:_:semicolon:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7184,7 +7184,7 @@ extension SpecializeTargetFunctionArgumentSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with targetLabel, declName argument(s).")
+  @available(*, deprecated, renamed: "SpecializeTargetFunctionArgumentSyntax(leadingTrivia:_:targetLabel:_:colon:_:declName:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7317,7 +7317,7 @@ extension StringLiteralExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with openingPounds, openingQuote, closingQuote, closingPounds argument(s).")
+  @available(*, deprecated, renamed: "StringLiteralExprSyntax(leadingTrivia:_:openingPounds:_:openingQuote:_:segments:_:closingQuote:_:closingPounds:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7384,7 +7384,7 @@ extension StructDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "StructDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7503,7 +7503,7 @@ extension SubscriptCallExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with leftSquare, arguments, rightSquare argument(s).")
+  @available(*, deprecated, renamed: "SubscriptCallExprSyntax(leadingTrivia:_:calledExpression:_:leftSquare:_:arguments:_:rightSquare:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7624,7 +7624,7 @@ extension SubscriptDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with parameterClause, returnClause, accessorBlock argument(s).")
+  @available(*, deprecated, renamed: "SubscriptDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:subscriptKeyword:_:genericParameterClause:_:parameterClause:_:returnClause:_:genericWhereClause:_:accessorBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7703,7 +7703,7 @@ extension SuppressedTypeSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with type argument(s).")
+  @available(*, deprecated, renamed: "SuppressedTypeSyntax(leadingTrivia:_:withoutTilde:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7758,7 +7758,7 @@ extension SwitchCaseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with attribute argument(s).")
+  @available(*, deprecated, renamed: "SwitchCaseSyntax(leadingTrivia:_:attribute:_:label:_:statements:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7817,7 +7817,7 @@ extension SwitchExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with subject argument(s).")
+  @available(*, deprecated, renamed: "SwitchExprSyntax(leadingTrivia:_:switchKeyword:_:subject:_:leftBrace:_:cases:_:rightBrace:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7954,7 +7954,7 @@ extension TernaryExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with condition, thenExpression, colon, elseExpression argument(s).")
+  @available(*, deprecated, renamed: "TernaryExprSyntax(leadingTrivia:_:condition:_:questionMark:_:thenExpression:_:colon:_:elseExpression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8021,7 +8021,7 @@ extension TupleExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
+  @available(*, deprecated, renamed: "TupleExprSyntax(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8100,7 +8100,7 @@ extension TuplePatternElementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with label, colon argument(s).")
+  @available(*, deprecated, renamed: "TuplePatternElementSyntax(leadingTrivia:_:label:_:colon:_:pattern:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8183,7 +8183,7 @@ extension TupleTypeElementSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with inoutKeyword, firstName argument(s).")
+  @available(*, deprecated, renamed: "TupleTypeElementSyntax(leadingTrivia:_:inoutKeyword:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8258,7 +8258,7 @@ extension TypeAliasDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, renamed: "TypeAliasDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:typealiasKeyword:_:name:_:genericParameterClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8333,7 +8333,7 @@ extension UnresolvedAsExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with asKeyword argument(s).")
+  @available(*, deprecated, renamed: "UnresolvedAsExprSyntax(leadingTrivia:_:asKeyword:_:questionOrExclamationMark:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8388,7 +8388,7 @@ extension UnresolvedIsExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with isKeyword argument(s).")
+  @available(*, deprecated, renamed: "UnresolvedIsExprSyntax(leadingTrivia:_:isKeyword:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8459,7 +8459,7 @@ extension UnresolvedTernaryExprSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with thenExpression, colon argument(s).")
+  @available(*, deprecated, renamed: "UnresolvedTernaryExprSyntax(leadingTrivia:_:questionMark:_:thenExpression:_:colon:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8538,7 +8538,7 @@ extension ValueBindingPatternSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with bindingSpecifier, pattern argument(s).")
+  @available(*, deprecated, renamed: "ValueBindingPatternSyntax(leadingTrivia:_:bindingSpecifier:_:pattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8593,7 +8593,7 @@ extension VariableDeclSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with bindingSpecifier argument(s).")
+  @available(*, deprecated, renamed: "VariableDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:bindingSpecifier:_:bindings:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8656,7 +8656,7 @@ extension WhereClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with condition argument(s).")
+  @available(*, deprecated, renamed: "WhereClauseSyntax(leadingTrivia:_:whereKeyword:_:condition:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8711,7 +8711,7 @@ extension YieldStmtSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with yieldedExpressions argument(s).")
+  @available(*, deprecated, renamed: "YieldStmtSyntax(leadingTrivia:_:yieldKeyword:_:yieldedExpressions:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -8766,7 +8766,7 @@ extension YieldedExpressionsClauseSyntax {
     }
   }
   
-  @available(*, deprecated, message: "Use an initializer with elements argument(s).")
+  @available(*, deprecated, renamed: "YieldedExpressionsClauseSyntax(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,

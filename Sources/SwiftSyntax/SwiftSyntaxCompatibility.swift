@@ -62,11 +62,11 @@ extension GenericRequirementSyntax {
   public typealias Body = Requirement
 }
 
-@available(*, deprecated, renamed: "NamedDecl")
+@available(*, deprecated, renamed: "NamedDeclSyntax")
 public typealias IdentifiedDeclSyntax = NamedDeclSyntax
 
-@available(*, deprecated, renamed: "NamedDecl")
-extension IdentifiedDeclSyntax where Self: NamedDeclSyntax {
+extension NamedDeclSyntax {
+  @available(*, deprecated, renamed: "name")
   public var identifier: TokenSyntax {
     get {
       return self.name

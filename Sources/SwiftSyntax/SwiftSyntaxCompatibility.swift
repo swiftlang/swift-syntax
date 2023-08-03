@@ -21,6 +21,11 @@ extension AttributeSyntax {
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
+extension AvailabilityArgumentSyntax {
+  @available(*, deprecated, renamed: "Argument")
+  public typealias Entry = Argument
+}
+
 extension ClosureSignatureSyntax {
   @available(*, deprecated, renamed: "ParameterClause")
   public typealias Input = ParameterClause
@@ -80,12 +85,22 @@ extension NamedDeclSyntax {
 extension MemberAccessExprSyntax {
   @available(*, deprecated, renamed: "declName.baseName")
   public var name: TokenSyntax {
-    return declName.baseName
+    get {
+      return declName.baseName
+    }
+    set {
+      declName.baseName = newValue
+    }
   }
 
   @available(*, deprecated, renamed: "declName.argumentNames")
   public var declNameArguments: DeclNameArgumentsSyntax? {
-    return declName.argumentNames
+    get {
+      return declName.argumentNames
+    }
+    set {
+      declName.argumentNames = newValue
+    }
   }
 
   @available(*, deprecated, message: "Use initializer taking `DeclReferenceExprSyntax` instead")
@@ -245,7 +260,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundElseifToken")
-  static func poundElseIfKeyword(
+  static func poundElseifKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present

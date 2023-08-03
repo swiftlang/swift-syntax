@@ -70,7 +70,15 @@ struct TemplateSpec {
 @main
 struct GenerateSwiftSyntax: ParsableCommand {
   @Argument(help: "The path to the source directory (i.e. 'swift-syntax/Sources') where the source files are to be generated")
-  var destination: String
+  var destination: String = {
+    let sourcesURL = URL(fileURLWithPath: #filePath)
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .deletingLastPathComponent()
+      .appendingPathComponent("Sources")
+    return sourcesURL.path
+  }()
 
   @Flag(help: "Enable verbose output")
   var verbose: Bool = false

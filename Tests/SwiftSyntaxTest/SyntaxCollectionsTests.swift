@@ -14,136 +14,253 @@ import XCTest
 import SwiftSyntax
 import _SwiftSyntaxTestSupport
 
-fileprivate func integerLiteralElement(_ int: Int) -> ArrayElementSyntax {
+fileprivate func intElement(_ int: Int) -> ArrayElementSyntax {
   let literal = TokenSyntax.integerLiteral("\(int)")
   return ArrayElementSyntax(
-    expression: IntegerLiteralExprSyntax(literal: literal)
+    expression: IntegerLiteralExprSyntax(literal: literal),
+    trailingComma: .commaToken()
   )
 }
 
+fileprivate func assertSyntaxCollectionManipulation(
+  initialElements: [Int],
+  transformation: (_ array: inout ArrayExprSyntax) -> Void,
+  expectedElements: [Int],
+  file: StaticString = #file,
+  line: UInt = #line
+) {
+  var modifiedArray = ArrayExprSyntax {
+    for initialElement in initialElements {
+      intElement(initialElement)
+    }
+  }
+
+  transformation(&modifiedArray)
+
+  let expectedArray = ArrayExprSyntax {
+    for expectedElement in expectedElements {
+      intElement(expectedElement)
+    }
+  }
+
+  do {
+    let subtreeMatcher = SubtreeMatcher(Syntax(modifiedArray), markers: [:])
+    try subtreeMatcher.assertSameStructure(
+      Syntax(expectedArray),
+      includeTrivia: true,
+      file: file,
+      line: line
+    )
+  } catch {
+    XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
+  }
+}
+
 public class SyntaxCollectionsTests: XCTestCase {
-
-  public func testAppendingElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0)
-    ])
-
-    let newArrayElementList = ArrayElementListSyntax(arrayElementList + [integerLiteralElement(1)])
-    XCTAssert(newArrayElementList.kind.isSyntaxCollection)
-    XCTAssertEqual(newArrayElementList.count, 2)
-    XCTAssertNotNil(newArrayElementList.child(at: 1))
-    XCTAssert(!newArrayElementList.child(at: 1)!.kind.isSyntaxCollection)
-    XCTAssertEqual("\(newArrayElementList.child(at: 1)!)", "1")
+  public func testAppendElement() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        $0.elements.append(intElement(1))
+      },
+      expectedElements: [0, 1]
+    )
   }
 
-  public func testInsertingElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(1)
-    ])
-
-    var newArrayElementList = ArrayElementListSyntax([integerLiteralElement(0)] + arrayElementList)
-
-    XCTAssertEqual(newArrayElementList.count, 2)
-    XCTAssertNotNil(newArrayElementList.child(at: 0))
-    XCTAssertEqual("\(newArrayElementList.child(at: 0)!)", "0")
-
-    newArrayElementList = ArrayElementListSyntax(newArrayElementList + [integerLiteralElement(2)])
-
-    XCTAssertEqual(newArrayElementList.count, 3)
-    XCTAssertNotNil(newArrayElementList.child(at: 2))
-    XCTAssertEqual("\(newArrayElementList.child(at: 2)!)", "2")
+  public func testAppendMultipleElement() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        $0.elements.append(contentsOf: [intElement(1), intElement(2)])
+      },
+      expectedElements: [0, 1, 2]
+    )
   }
 
-  public func testPrependingElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(1)
-    ])
-
-    let newArrayElementList = ArrayElementListSyntax([integerLiteralElement(0)] + arrayElementList)
-
-    XCTAssertEqual(newArrayElementList.count, 2)
-    XCTAssertNotNil(newArrayElementList.child(at: 0))
-    XCTAssertEqual("\(newArrayElementList.child(at: 0)!)", "0")
-  }
-
-  public func testRemovingFirstElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0),
-      integerLiteralElement(1),
-    ])
-
-    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropFirst())
-
-    XCTAssertEqual(newArrayElementList.count, 1)
-    XCTAssertNotNil(newArrayElementList.child(at: 0))
-    XCTAssertEqual("\(newArrayElementList.child(at: 0)!)", "1")
-  }
-
-  public func testRemovingLastElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0),
-      integerLiteralElement(1),
-    ])
-
-    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropLast())
-
-    XCTAssertEqual(newArrayElementList.count, 1)
-    XCTAssertNotNil(newArrayElementList.child(at: 0))
-    XCTAssertEqual("\(newArrayElementList.child(at: 0)!)", "0")
-  }
-
-  public func testRemovingElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0)
-    ])
-
-    let newArrayElementList = ArrayElementListSyntax(arrayElementList.dropFirst())
-
-    XCTAssertEqual(newArrayElementList.count, 0)
-    XCTAssertNil(newArrayElementList.child(at: 0))
-  }
-
-  public func testReplacingElement() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0),
-      integerLiteralElement(1),
-      integerLiteralElement(2),
-    ])
-
-    let lastElementIndex = arrayElementList.index(arrayElementList.startIndex, offsetBy: 2)
-
-    let newArrayElementList = arrayElementList.with(
-      \.[lastElementIndex],
-      integerLiteralElement(3)
+  public func testInsertElement() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.startIndex
+        $0.elements.insert(intElement(5), at: index)
+      },
+      expectedElements: [5, 0, 1, 2]
     )
 
-    XCTAssertNotNil(newArrayElementList.child(at: 2))
-    XCTAssertEqual("\(newArrayElementList.child(at: 2)!)", "3")
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.index(after: $0.elements.startIndex)
+        $0.elements.insert(intElement(5), at: index)
+      },
+      expectedElements: [0, 5, 1, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.endIndex
+        $0.elements.insert(intElement(5), at: index)
+      },
+      expectedElements: [0, 1, 2, 5]
+    )
   }
 
-  public func testIteration() {
-    let arrayElementList = ArrayElementListSyntax([
-      integerLiteralElement(0),
-      integerLiteralElement(1),
-      integerLiteralElement(2),
+  public func testInsertMultipleElements() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.startIndex
+        $0.elements.insert(contentsOf: [intElement(5), intElement(6)], at: index)
+      },
+      expectedElements: [5, 6, 0, 1, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.index(after: $0.elements.startIndex)
+        $0.elements.insert(contentsOf: [intElement(5), intElement(6)], at: index)
+      },
+      expectedElements: [0, 5, 6, 1, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.endIndex
+        $0.elements.insert(contentsOf: [intElement(5), intElement(6)], at: index)
+      },
+      expectedElements: [0, 1, 2, 5, 6]
+    )
+  }
+
+  public func testRemoveElement() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.startIndex
+        $0.elements.remove(at: index)
+      },
+      expectedElements: [1, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.index(after: $0.elements.startIndex)
+        $0.elements.remove(at: index)
+      },
+      expectedElements: [0, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let index = $0.elements.index($0.elements.startIndex, offsetBy: 2)
+        $0.elements.remove(at: index)
+      },
+      expectedElements: [0, 1]
+    )
+  }
+
+  public func testRemoveSubrange() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let startIndex = $0.elements.startIndex
+        let endIndex = $0.elements.index(after: $0.elements.startIndex)
+        $0.elements.removeSubrange(startIndex..<endIndex)
+      },
+      expectedElements: [1, 2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let startIndex = $0.elements.startIndex
+        let endIndex = $0.elements.index($0.elements.startIndex, offsetBy: 2)
+        $0.elements.removeSubrange(startIndex..<endIndex)
+      },
+      expectedElements: [2]
+    )
+
+    assertSyntaxCollectionManipulation(
+      initialElements: [0, 1, 2],
+      transformation: {
+        let startIndex = $0.elements.startIndex
+        let endIndex = $0.elements.endIndex
+        $0.elements.removeSubrange(startIndex..<endIndex)
+      },
+      expectedElements: []
+    )
+  }
+
+  public func testAddSequenceAtEnd() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        let newElements = (1...2).lazy.map({ intElement($0) })
+        $0.elements = $0.elements + newElements
+      },
+      expectedElements: [0, 1, 2]
+    )
+  }
+
+  public func testAddArrayAtEnd() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        let newElements = [intElement(1), intElement(2)]
+        $0.elements = $0.elements + newElements
+      },
+      expectedElements: [0, 1, 2]
+    )
+  }
+
+  public func testAddSequenceAtStart() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        let newElements = (1...2).lazy.map({ intElement($0) })
+        $0.elements = newElements + $0.elements
+      },
+      expectedElements: [1, 2, 0]
+    )
+  }
+
+  public func testAddArrayAtStart() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        let newElements = [intElement(1), intElement(2)]
+        $0.elements = newElements + $0.elements
+      },
+      expectedElements: [1, 2, 0]
+    )
+  }
+
+  func testPlusEquals() {
+    assertSyntaxCollectionManipulation(
+      initialElements: [0],
+      transformation: {
+        let newElements = [intElement(1), intElement(2)]
+        $0.elements += newElements
+      },
+      expectedElements: [0, 1, 2]
+    )
+  }
+
+  public func testFilter() {
+    let elements = ArrayElementListSyntax([
+      intElement(0),
+      intElement(1),
+      intElement(2),
     ])
+    let array = ArrayExprSyntax(elements: elements)
 
-    let elems = Array(arrayElementList)
-    XCTAssertEqual(elems.count, 3)
-    guard elems.count == 3 else {
-      return
-    }
-    XCTAssertEqual("\(elems[0])", "0")
-    XCTAssertEqual("\(elems[1])", "1")
-    XCTAssertEqual("\(elems[2])", "2")
-
-    let relems = Array(arrayElementList.reversed())
-    XCTAssertEqual(relems.count, 3)
-    guard relems.count == 3 else {
-      return
-    }
-    XCTAssertEqual("\(relems[2])", "0")
-    XCTAssertEqual("\(relems[1])", "1")
-    XCTAssertEqual("\(relems[0])", "2")
+    let filteredElements = array.elements.filter { _ in true }
+    // The filtered sequence should have the `ArrayExprSyntax` as a parent
+    XCTAssert(filteredElements.parent?.is(ArrayExprSyntax.self) ?? false)
   }
 }

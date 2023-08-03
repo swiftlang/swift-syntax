@@ -340,9 +340,7 @@ public struct AddCompletionHandler: PeerMacro {
         ]
       newParameterList = FunctionParameterListSyntax(newParameterListElements)
     } else {
-      newParameterList = FunctionParameterListSyntax(
-        parameterList + [completionHandlerParam]
-      )
+      newParameterList = parameterList + [completionHandlerParam]
     }
 
     let callArguments: [String] = parameterList.map { param in

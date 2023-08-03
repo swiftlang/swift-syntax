@@ -134,6 +134,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> AccessorDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -404,6 +405,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ActorDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -446,6 +448,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -763,6 +766,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> AssociatedTypeDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -806,6 +810,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> AssociatedTypeDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1112,6 +1117,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ClassDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1155,6 +1161,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ClassDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1442,6 +1449,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1485,6 +1493,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1688,6 +1697,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> EditorPlaceholderDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1731,6 +1741,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> EditorPlaceholderDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1901,6 +1912,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1944,6 +1956,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2006,6 +2019,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: EnumCaseElementSyntax) -> EnumCaseDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2191,6 +2205,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2234,6 +2249,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2524,6 +2540,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2566,6 +2583,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2839,6 +2857,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2881,6 +2900,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> FunctionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3137,6 +3157,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `clauses` collection.
   /// - returns: A copy of the receiver with the provided `Clause`
   ///            appended to its `clauses` collection.
+  @available(*, deprecated, message: "Use node.clauses.append(newElement) instead")
   public func addClause(_ element: IfConfigClauseSyntax) -> IfConfigDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3316,6 +3337,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ImportDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3359,6 +3381,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3440,6 +3463,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `path` collection.
   /// - returns: A copy of the receiver with the provided `PathComponent`
   ///            appended to its `path` collection.
+  @available(*, deprecated, message: "Use node.path.append(newElement) instead")
   public func addPathComponent(_ element: ImportPathComponentSyntax) -> ImportDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3634,6 +3658,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3677,6 +3702,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> InitializerDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3975,6 +4001,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> MacroDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4017,6 +4044,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> MacroDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4324,6 +4352,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4366,6 +4395,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4481,6 +4511,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4559,6 +4590,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `additionalTrailingClosures` collection.
   /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
+  @available(*, deprecated, message: "Use node.additionalTrailingClosures.append(newElement) instead")
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4716,6 +4748,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> MissingDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4759,6 +4792,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5310,6 +5344,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5353,6 +5388,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5451,6 +5487,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `groupAttributes` collection.
   /// - returns: A copy of the receiver with the provided `GroupAttribute`
   ///            appended to its `groupAttributes` collection.
+  @available(*, deprecated, message: "Use node.groupAttributes.append(newElement) instead")
   public func addGroupAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5666,6 +5703,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5709,6 +5747,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6070,6 +6109,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6113,6 +6153,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6411,6 +6452,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6453,6 +6495,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> SubscriptDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6740,6 +6783,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> TypeAliasDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6782,6 +6826,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> TypeAliasDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7026,6 +7071,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
   public func addAttribute(_ element: Syntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7068,6 +7114,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
   public func addModifier(_ element: DeclModifierSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -7128,6 +7175,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///                  `bindings` collection.
   /// - returns: A copy of the receiver with the provided `Binding`
   ///            appended to its `bindings` collection.
+  @available(*, deprecated, message: "Use node.bindings.append(newElement) instead")
   public func addBinding(_ element: PatternBindingSyntax) -> VariableDeclSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

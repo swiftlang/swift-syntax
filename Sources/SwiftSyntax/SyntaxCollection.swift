@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection, MutableCollection where Element: SyntaxProtocol {
+public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
   associatedtype Iterator = SyntaxCollectionIterator<Element>
 
   /// The ``SyntaxKind`` of the syntax node that conforms to ``SyntaxCollection``.
@@ -31,6 +31,17 @@ extension SyntaxCollection {
   /// is undefined.
   internal init(_ data: SyntaxData) {
     self.init(Syntax(data))!
+  }
+
+  /// Initialize the collection from a collection of the same type.
+  ///
+  /// - Note: This initializer is needed to improve source compatibility after
+  ///   the `+` operators have been added. Previously, they created an array
+  ///   that was converted to a ``SyntaxCollection`` and now they create a
+  ///   ``SyntaxCollection``, which makes the initializer a no-op.
+  @available(*, deprecated, message: "Call to initializer is not necessary.")
+  public init(_ collection: Self) {
+    self = collection
   }
 
   public init<Children: Sequence>(_ children: Children) where Children.Element == Element {
@@ -205,6 +216,170 @@ public struct SyntaxCollectionIterator<E: SyntaxProtocol>: IteratorProtocol {
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
     let data = SyntaxData(absoluteRaw, parent: parent)
     return Syntax(data).cast(Element.self)
+  }
+}
+
+// MARK: Functions analogous to RangeReplaceableCollection
+
+/// Defines functions that are similar to those in `RangeReplaceableCollection`.
+///
+/// SyntaxCollection doesn’t conform to `RangeReplaceableCollection` because of
+/// two reasons:
+///  - `RangeReplaceableCollection` assumes that creating a new colleciton and
+///    adding all elements from another collection to it results in the same
+///    collection. This is not true for `SyntaxCollection` because the new
+///    collection wouldn’t have a parent. This causes eg. the default
+///    implementation of `filter` to misbehave.
+///  - It can’t make the complexity guarantees that `RangeReplaceableCollection`
+///    requires, e.g. `append` is `O(tree depth)` instead of `O(1)`.
+extension SyntaxCollection {
+  /// Replace the nodes in `subrange` by `newElements`.
+  public mutating func replaceSubrange(_ subrange: Range<Self.Index>, with newElements: some Collection<Element>) {
+    // We only access the raw nodes of `newElements` below.
+    // Keep `newElements` alive so their arena doesn't get deallocated.
+    withExtendedLifetime(newElements) {
+      var newLayout = layoutView.formLayoutArray()
+      let layoutRangeLowerBound = (subrange.lowerBound.data?.indexInParent).map(Int.init) ?? newLayout.endIndex
+      let layoutRangeUpperBound = (subrange.upperBound.data?.indexInParent).map(Int.init) ?? newLayout.endIndex
+      newLayout.replaceSubrange(layoutRangeLowerBound..<layoutRangeUpperBound, with: newElements.map { $0.raw })
+      self = replacingLayout(newLayout)
+    }
+  }
+
+  /// Adds an element to the end of the collection.
+  ///
+  /// - Parameter newElement: The element to append to the collection.
+  public mutating func append(_ newElement: Element) {
+    insert(newElement, at: endIndex)
+  }
+
+  /// Adds the elements of a sequence to the end of this collection.
+  ///
+  /// - Parameter newElements: The elements to append to the collection.
+  public mutating func append(contentsOf newElements: some Sequence<Element>) {
+    insert(contentsOf: Array(newElements), at: endIndex)
+  }
+
+  /// Inserts a new element into the collection at the specified position.
+  ///
+  /// - Parameter newElement: The new element to insert into the collection.
+  /// - Parameter i: The position at which to insert the new element.
+  ///   `index` must be a valid index into the collection.
+  public mutating func insert(_ newElement: Element, at i: Index) {
+    replaceSubrange(i..<i, with: CollectionOfOne(newElement))
+  }
+
+  /// Inserts the elements of a sequence into the collection at the specified
+  /// position.
+  ///
+  /// - Parameter newElements: The new elements to insert into the collection.
+  /// - Parameter i: The position at which to insert the new elements. `index`
+  ///   must be a valid index of the collection.
+  public mutating func insert(contentsOf newElements: some Collection<Element>, at i: Index) {
+    replaceSubrange(i..<i, with: newElements)
+  }
+
+  /// Removes and returns the element at the specified position.
+  ///
+  /// - Parameter position: The position of the element to remove. `position`
+  ///   must be a valid index of the collection that is not equal to the
+  ///   collection's end index.
+  /// - Returns: The removed element.
+  @discardableResult
+  public mutating func remove(at position: Index) -> Element {
+    precondition(!isEmpty, "Can't remove from an empty collection")
+    let result: Element = self[position]
+    replaceSubrange(position..<index(after: position), with: EmptyCollection())
+    return result
+  }
+
+  /// Removes the elements in the specified subrange from the collection.
+  ///
+  /// - Parameter bounds: The range of the collection to be removed. The
+  ///   bounds of the range must be valid indices of the collection.
+  public mutating func removeSubrange(_ bounds: Range<Index>) {
+    replaceSubrange(bounds, with: EmptyCollection())
+  }
+
+  /// Creates a new collection by concatenating the elements of a collection and
+  /// a sequence.
+  ///
+  /// - Parameters:
+  ///   - lhs: A ``SyntaxCollection``
+  ///   - rhs: A collection or finite sequence.
+  public static func + (lhs: Self, rhs: some Sequence<Element>) -> Self {
+    var result = lhs
+    result.append(contentsOf: rhs)
+    return result
+  }
+
+  /// Creates a new collection by concatenating the elements of a collection and
+  /// a sequence.
+  ///
+  /// - Parameters:
+  ///   - lhs: A ``SyntaxCollection``
+  ///   - rhs: A collection or finite sequence.
+  ///
+  /// - Note: This overload exists to resolve when adding an array to a ``SyntaxCollection``.
+  public static func + (lhs: Self, rhs: some RangeReplaceableCollection<Element>) -> Self {
+    var result = lhs
+    result.append(contentsOf: rhs)
+    return result
+  }
+
+  /// Creates a new collection by concatenating the elements of a sequence and a
+  /// collection.
+  ///
+  /// - Parameters:
+  ///   - lhs: A collection or finite sequence.
+  ///   - rhs: A range-replaceable collection.
+  public static func + (lhs: some Sequence<Element>, rhs: Self) -> Self {
+    var result = rhs
+    result.insert(contentsOf: Array(lhs), at: result.startIndex)
+    return result
+  }
+
+  /// Creates a new collection by concatenating the elements of a sequence and a
+  /// collection.
+  ///
+  /// - Parameters:
+  ///   - lhs: A collection or finite sequence.
+  ///   - rhs: A range-replaceable collection.
+  ///
+  /// - Note: This overload exists to resolve when adding an array to a ``SyntaxCollection``.
+  public static func + (lhs: some RangeReplaceableCollection<Element>, rhs: Self) -> Self {
+    var result = rhs
+    result.insert(contentsOf: Array(lhs), at: result.startIndex)
+    return result
+  }
+
+  /// Appends the elements of a sequence to a range-replaceable collection.
+  ///
+  /// - Parameters:
+  ///   - lhs: The ``SyntaxCollection`` to append to.
+  ///   - rhs: A collection or finite sequence.
+  ///
+  /// - Note: This will result in an allocation of a copy of this node.
+  public static func += (lhs: inout Self, rhs: some Sequence<Element>) {
+    lhs.append(contentsOf: rhs)
+  }
+
+  /// Returns a new ``SyntaxCollection`` that just contains the elements
+  /// satisfying the given predicate.
+  ///
+  /// - Parameter isIncluded: A closure that takes an element of the
+  ///   collection as its argument and returns a Boolean value indicating
+  ///   whether the element should be included in the returned collection.
+  /// - Returns: A ``SyntaxCollection`` of the elements that `isIncluded` allowed.
+  ///
+  /// - Note: This creates a new ``SyntaxCollection`` node. If the resulting node
+  ///   is not needed (e.g. because it’s only being iterated), convert the
+  ///   ``SyntaxCollection`` to an array first or use the `where` clause in
+  ///   a `for` statement.
+  public func filter(_ isIncluded: (Element) throws -> Bool) rethrows -> Self {
+    var result = self
+    result.replaceSubrange(self.startIndex..<self.endIndex, with: try Array(self).filter(isIncluded))
+    return result
   }
 }
 

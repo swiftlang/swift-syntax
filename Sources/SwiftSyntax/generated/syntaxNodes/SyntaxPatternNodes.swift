@@ -504,6 +504,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: TuplePatternElementSyntax) -> TuplePatternSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

@@ -127,6 +127,7 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: ArrayElementSyntax) -> ArrayExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -1507,6 +1508,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
   ///            appended to its `statements` collection.
+  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
   public func addStatement(_ element: CodeBlockItemSyntax) -> ClosureExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2658,6 +2660,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: LabeledExprSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -2736,6 +2739,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `additionalTrailingClosures` collection.
   /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
+  @available(*, deprecated, message: "Use node.additionalTrailingClosures.append(newElement) instead")
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> FunctionCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3079,6 +3083,7 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `conditions` collection.
   /// - returns: A copy of the receiver with the provided `Condition`
   ///            appended to its `conditions` collection.
+  @available(*, deprecated, message: "Use node.conditions.append(newElement) instead")
   public func addCondition(_ element: ConditionElementSyntax) -> IfExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -3827,6 +3832,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `components` collection.
   /// - returns: A copy of the receiver with the provided `KeyPathComponent`
   ///            appended to its `components` collection.
+  @available(*, deprecated, message: "Use node.components.append(newElement) instead")
   public func addKeyPathComponent(_ element: KeyPathComponentSyntax) -> KeyPathExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4073,6 +4079,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: LabeledExprSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -4151,6 +4158,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `additionalTrailingClosures` collection.
   /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
+  @available(*, deprecated, message: "Use node.additionalTrailingClosures.append(newElement) instead")
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> MacroExpansionExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5615,6 +5623,7 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: ExprSyntax) -> SequenceExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -5807,6 +5816,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `segments` collection.
   /// - returns: A copy of the receiver with the provided `Segment`
   ///            appended to its `segments` collection.
+  @available(*, deprecated, message: "Use node.segments.append(newElement) instead")
   public func addSegment(_ element: Syntax) -> StringLiteralExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6041,6 +6051,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
   ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
   public func addArgument(_ element: LabeledExprSyntax) -> SubscriptCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6119,6 +6130,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `additionalTrailingClosures` collection.
   /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
   ///            appended to its `additionalTrailingClosures` collection.
+  @available(*, deprecated, message: "Use node.additionalTrailingClosures.append(newElement) instead")
   public func addAdditionalTrailingClosure(_ element: MultipleTrailingClosureElementSyntax) -> SubscriptCallExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6413,6 +6425,7 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `cases` collection.
   /// - returns: A copy of the receiver with the provided `Case`
   ///            appended to its `cases` collection.
+  @available(*, deprecated, message: "Use node.cases.append(newElement) instead")
   public func addCase(_ element: Syntax) -> SwitchExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
@@ -6942,6 +6955,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
   ///            appended to its `elements` collection.
+  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
   public func addElement(_ element: LabeledExprSyntax) -> TupleExprSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()

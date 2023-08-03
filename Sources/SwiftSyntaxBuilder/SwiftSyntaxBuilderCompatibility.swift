@@ -15,7 +15,7 @@
 
 import SwiftSyntax
 
-@available(*, deprecated, renamed: "ImportPathBuilder")
+@available(*, deprecated, renamed: "ImportPathComponentListBuilder")
 public typealias AccessPathBuilder = ImportPathComponentListBuilder
 
 @available(*, deprecated, renamed: "LabeledExprListBuilder")

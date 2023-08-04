@@ -59,6 +59,8 @@ let nodesSections: String = {
       })
   )
 
+  addSection(heading: "Attributes", types: ATTRIBUTE_NODES.map(\.kind.syntaxType.description).sorted())
+
   addSection(heading: "Miscellaneous Syntax", types: SYNTAX_NODES.map(\.kind.syntaxType.description).filter({ !handledSyntaxTypes.contains($0) }))
 
   addSection(heading: "Traits", types: TRAITS.map { "\($0.protocolName)" })

@@ -405,15 +405,11 @@ def run_lit_tests(toolchain: str, build_dir: Optional[str], release: bool,
     examples_bin_path = find_examples_bin_path(
         toolchain=toolchain, build_dir=build_dir, release=release)
 
-    lit_test_helper_exec = os.path.join(product_bin_path, "lit-test-helper")
-
     lit_call = ["python3", LIT_EXEC]
     lit_call.append(os.path.join(PACKAGE_DIR, "lit_tests"))
 
     if filecheck_exec:
         lit_call.extend(["--param", "FILECHECK=" + filecheck_exec])
-    if lit_test_helper_exec:
-        lit_call.extend(["--param", "LIT_TEST_HELPER=" + lit_test_helper_exec])
     lit_call.extend(["--param", "EXAMPLES_BIN_PATH=" + examples_bin_path])
     lit_call.extend(["--param", "TOOLCHAIN=" + toolchain])
 
@@ -537,7 +533,6 @@ def test_command(args: argparse.Namespace) -> None:
             disable_sandbox=args.disable_sandbox,
         )
 
-        builder.buildProduct("lit-test-helper")
         builder.buildExample("ExamplePlugin")
 
         run_tests(

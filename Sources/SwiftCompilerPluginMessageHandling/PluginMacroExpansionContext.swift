@@ -43,7 +43,7 @@ class SourceManager {
 
     /// Location converter to get line/column in the node.
     lazy var locationConverter: SourceLocationConverter = .init(
-      file: self.location.fileName,
+      fileName: self.location.fileName,
       tree: self.node
     )
   }

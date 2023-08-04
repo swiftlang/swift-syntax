@@ -338,7 +338,7 @@ func assertLocation<T: SyntaxProtocol>(
   line: UInt = #line
 ) {
   if let markerLoc = markerLocations[locationMarker] {
-    let locationConverter = SourceLocationConverter(file: "", tree: tree)
+    let locationConverter = SourceLocationConverter(fileName: "", tree: tree)
     let actualLocation = location
     let expectedLocation = locationConverter.location(for: AbsolutePosition(utf8Offset: markerLoc))
     if actualLocation.line != expectedLocation.line || actualLocation.column != expectedLocation.column {
@@ -362,7 +362,7 @@ func assertNote<T: SyntaxProtocol>(
   expected spec: NoteSpec
 ) {
   XCTAssertEqual(note.message, spec.message, file: spec.file, line: spec.line)
-  let locationConverter = SourceLocationConverter(file: "", tree: tree)
+  let locationConverter = SourceLocationConverter(fileName: "", tree: tree)
   assertLocation(
     note.location(converter: locationConverter),
     in: tree,
@@ -381,7 +381,7 @@ func assertDiagnostic<T: SyntaxProtocol>(
   markerLocations: [String: Int],
   expected spec: DiagnosticSpec
 ) {
-  let locationConverter = SourceLocationConverter(file: "", tree: tree)
+  let locationConverter = SourceLocationConverter(fileName: "", tree: tree)
   assertLocation(
     diag.location(converter: locationConverter),
     in: tree,

@@ -139,10 +139,10 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     fileName: String
   ) -> SourceLocation {
     guard let nodeInOriginalTree = detachedNodes[node.root] else {
-      return SourceLocationConverter(file: fileName, tree: node.root).location(for: position)
+      return SourceLocationConverter(fileName: fileName, tree: node.root).location(for: position)
     }
     let adjustedPosition = position + SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)
-    return SourceLocationConverter(file: fileName, tree: nodeInOriginalTree.root).location(for: adjustedPosition)
+    return SourceLocationConverter(fileName: fileName, tree: nodeInOriginalTree.root).location(for: adjustedPosition)
   }
 
   public func location(
@@ -197,7 +197,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     }
 
     // Do the location lookup.
-    let converter = SourceLocationConverter(file: fileName, tree: rootSourceFile)
+    let converter = SourceLocationConverter(fileName: fileName, tree: rootSourceFile)
     return AbstractSourceLocation(converter.location(for: rawPosition + offsetAdjustment))
   }
 }

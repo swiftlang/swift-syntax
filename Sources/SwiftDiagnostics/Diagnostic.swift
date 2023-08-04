@@ -68,7 +68,7 @@ public struct Diagnostic: CustomDebugStringConvertible {
   }
 
   public var debugDescription: String {
-    let locationConverter = SourceLocationConverter(file: "", tree: node.root)
+    let locationConverter = SourceLocationConverter(fileName: "", tree: node.root)
     let location = location(converter: locationConverter)
     return "\(location.line):\(location.column): \(message)"
   }

@@ -269,15 +269,6 @@ let package = Package(
 
     // MARK: - Deprecated targets
 
-    // MARK: lit-test-helper
-    // TODO: All the lit-based tests should be migrated to XCTest so we don't have a
-    // dependency on FileCheck
-
-    .executableTarget(
-      name: "lit-test-helper",
-      dependencies: ["SwiftIDEUtils", "SwiftSyntax", "SwiftParser"]
-    ),
-
     // MARK: PerformanceTest
     // TODO: Should be included in SwiftParserTest/SwiftSyntaxTest
 

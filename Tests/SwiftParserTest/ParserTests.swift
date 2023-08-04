@@ -23,8 +23,8 @@ public class ParserTests: XCTestCase {
     let fileContents = try Data(contentsOf: fileURL)
     let parsed = fileContents.withUnsafeBytes({ buffer in
       // Release builds are fine with the default maximum nesting level of 256.
-      // Debug builds overflow with any stack size bigger than 25-ish.
-      Parser.parse(source: buffer.bindMemory(to: UInt8.self), maximumNestingLevel: 25)
+      // Debug builds overflow with any stack size bigger than 20-ish.
+      Parser.parse(source: buffer.bindMemory(to: UInt8.self), maximumNestingLevel: 20)
     })
     assertDataEqualWithDiff(
       Data(parsed.syntaxTextBytes),

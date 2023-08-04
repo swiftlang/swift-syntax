@@ -416,7 +416,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .packElementType: return "packReferenceType"
     case .patternExpr: return "unresolvedPatternExpr"
     case .platformVersion: return "availabilityVersionRestriction"
-    case .platformVersionItem: return " availabilityVersionRestrictionListEntry"
+    case .platformVersionItem: return "availabilityVersionRestrictionListEntry"
     case .platformVersionItemList: return "availabilityVersionRestrictionList"
     case .postfixOperatorExpr: return "postfixUnaryExpr"
     case .poundSourceLocationArguments: return "poundSourceLocationArgs"

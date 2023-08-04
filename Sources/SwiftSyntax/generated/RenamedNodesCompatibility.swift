@@ -12,9 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@available(*, deprecated, renamed: "PlatformVersionItemSyntax")
-public typealias  availabilityVersionRestrictionListEntrySyntax = PlatformVersionItemSyntax
-
 @available(*, deprecated, renamed: "ImportPathComponentListSyntax")
 public typealias AccessPathSyntax = ImportPathComponentListSyntax
 
@@ -41,6 +38,9 @@ public typealias AvailabilityVersionRestrictionSyntax = PlatformVersionSyntax
 
 @available(*, deprecated, renamed: "PlatformVersionItemListSyntax")
 public typealias AvailabilityVersionRestrictionListSyntax = PlatformVersionItemListSyntax
+
+@available(*, deprecated, renamed: "PlatformVersionItemSyntax")
+public typealias AvailabilityVersionRestrictionListEntrySyntax = PlatformVersionItemSyntax
 
 @available(*, deprecated, renamed: "BackDeployedAttributeArgumentsSyntax")
 public typealias BackDeployedAttributeSpecListSyntax = BackDeployedAttributeArgumentsSyntax
@@ -211,10 +211,6 @@ public typealias YieldExprListElementSyntax = YieldedExpressionSyntax
 public typealias YieldListSyntax = YieldedExpressionsClauseSyntax
 
 public extension SyntaxKind {
-  static var  availabilityVersionRestrictionListEntry: Self {
-    return .platformVersionItem
-  }
-  
   static var accessPath: Self {
     return .importPathComponentList
   }
@@ -249,6 +245,10 @@ public extension SyntaxKind {
   
   static var availabilityVersionRestrictionList: Self {
     return .platformVersionItemList
+  }
+  
+  static var availabilityVersionRestrictionListEntry: Self {
+    return .platformVersionItem
   }
   
   static var backDeployedAttributeSpecList: Self {

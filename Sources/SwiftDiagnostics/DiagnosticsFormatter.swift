@@ -189,7 +189,7 @@ public struct DiagnosticsFormatter {
     suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
-    let slc = sourceLocationConverter ?? SourceLocationConverter(file: fileName ?? "", tree: tree)
+    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: fileName ?? "", tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()

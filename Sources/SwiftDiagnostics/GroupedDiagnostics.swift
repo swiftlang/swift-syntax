@@ -142,7 +142,7 @@ extension GroupedDiagnostics {
   ) -> String {
     let sourceFile = sourceFiles[sourceFileID.id]
     let slc = SourceLocationConverter(
-      file: sourceFile.displayName,
+      fileName: sourceFile.displayName,
       tree: sourceFile.tree
     )
 

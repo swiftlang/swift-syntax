@@ -302,7 +302,7 @@ public class StringLiteralRepresentedLiteralValueTests: XCTestCase {
 
       super.init(viewMode: .sourceAccurate)
 
-      self.locationConverter = SourceLocationConverter(file: "", tree: syntax)
+      self.locationConverter = SourceLocationConverter(fileName: "", tree: syntax)
       self.walk(syntax)
       self.locationConverter = nil
     }

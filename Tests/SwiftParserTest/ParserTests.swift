@@ -39,7 +39,7 @@ public class ParserTests: XCTestCase {
     let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: parsed)
     if !diagnostics.isEmpty {
       var locationAndDiagnostics: [String] = []
-      let locationConverter = SourceLocationConverter(file: fileURL.lastPathComponent, tree: parsed)
+      let locationConverter = SourceLocationConverter(fileName: fileURL.lastPathComponent, tree: parsed)
       for diag in diagnostics {
         let location = diag.location(converter: locationConverter)
         let message = diag.message

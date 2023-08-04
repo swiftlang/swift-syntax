@@ -57,7 +57,7 @@ public struct Note: CustomDebugStringConvertible {
 
   public var debugDescription: String {
     if let root = node.root.as(SourceFileSyntax.self) {
-      let locationConverter = SourceLocationConverter(file: "", tree: root)
+      let locationConverter = SourceLocationConverter(fileName: "", tree: root)
       let location = location(converter: locationConverter)
       return "\(location): \(message)"
     } else {

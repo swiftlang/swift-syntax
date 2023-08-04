@@ -25,7 +25,7 @@ extension TokenConsumer {
       // misplaced attributes.
       _ = lookahead.consumeAttributeList()
     }
-    return lookahead.isStartOfStatement(allowRecovery: allowRecovery)
+    return lookahead.atStartOfStatement(allowRecovery: allowRecovery)
   }
 }
 
@@ -808,7 +808,7 @@ extension Parser.Lookahead {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  mutating func isStartOfStatement(allowRecovery: Bool = false) -> Bool {
+  mutating func atStartOfStatement(allowRecovery: Bool = false) -> Bool {
     if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign)) && withLookahead({ $0.atStartOfSwitchCaseItem() }) {
       // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
       return true
@@ -884,7 +884,7 @@ extension Parser.Lookahead {
 
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
-  mutating func isAtStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
+  mutating func atStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
@@ -916,9 +916,9 @@ extension Parser.Lookahead {
     }
   }
 
-  mutating func isStartOfConditionalSwitchCases() -> Bool {
+  mutating func atStartOfConditionalSwitchCases() -> Bool {
     guard self.at(.poundIf) else {
-      return self.isAtStartOfSwitchCase()
+      return self.atStartOfSwitchCase()
     }
 
     var lookahead = self.lookahead()
@@ -928,6 +928,6 @@ extension Parser.Lookahead {
       // just find the end of the line
       lookahead.skipUntilEndOfLine()
     } while lookahead.at(.poundIf, .poundElseif, .poundElse) && lookahead.hasProgressed(&loopProgress)
-    return lookahead.isAtStartOfSwitchCase()
+    return lookahead.atStartOfSwitchCase()
   }
 }

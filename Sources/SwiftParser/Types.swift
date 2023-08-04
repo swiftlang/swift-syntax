@@ -45,7 +45,7 @@ extension Parser {
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let (specifier, unexpectedBeforeAttrList, attrList) = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
-    if self.withLookahead({ $0.isAtFunctionTypeArrow() }) {
+    if self.withLookahead({ $0.atFunctionTypeArrow() }) {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
 
@@ -623,7 +623,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.isAtFunctionTypeArrow() {
+    if self.atFunctionTypeArrow() {
       // Handle type-function if we have an '->' with optional
       // 'async' and/or 'throws'.
       var loopProgress = LoopProgressCondition()
@@ -781,7 +781,7 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  mutating func isAtFunctionTypeArrow() -> Bool {
+  mutating func atFunctionTypeArrow() -> Bool {
     if self.at(.arrow) {
       return true
     }
@@ -795,7 +795,7 @@ extension Parser.Lookahead {
         var backtrack = self.lookahead()
         backtrack.consumeAnyToken()
         backtrack.consumeAnyToken()
-        return backtrack.isAtFunctionTypeArrow()
+        return backtrack.atFunctionTypeArrow()
       }
 
       return false

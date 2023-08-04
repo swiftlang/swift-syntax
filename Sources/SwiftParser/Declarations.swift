@@ -1919,7 +1919,7 @@ extension Parser {
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
     if self.at(.leftBrace),
-      self.withLookahead({ $0.isValidTrailingClosure(.trailingClosure) })
+      self.withLookahead({ $0.atValidTrailingClosure(.trailingClosure) })
     {
       (trailingClosure, additionalTrailingClosures) =
         self.parseTrailingClosures(.trailingClosure)

@@ -240,7 +240,7 @@ extension Parser {
     }
 
     let inheritance: RawInheritanceClauseSyntax?
-    if self.at(.colon) || self.isAtPythonStyleInheritanceClause() {
+    if self.at(.colon) || self.atPythonStyleInheritanceClause() {
       inheritance = self.parseInheritance()
     } else {
       inheritance = nil
@@ -363,7 +363,7 @@ extension Parser {
 }
 
 extension Parser {
-  private mutating func isAtPythonStyleInheritanceClause() -> Bool {
+  private mutating func atPythonStyleInheritanceClause() -> Bool {
     guard self.at(.leftParen) else { return false }
     return self.withLookahead {
       $0.consume(if: .leftParen)

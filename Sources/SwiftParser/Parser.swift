@@ -88,8 +88,10 @@
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser {
   var arena: ParsingSyntaxArena
+
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
+
   /// The current token that should be consumed next.
   ///
   /// If the end of the source file is reached, this is `.endOfFile`.

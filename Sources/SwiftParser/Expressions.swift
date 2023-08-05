@@ -354,7 +354,7 @@ extension Parser {
   /// `copy` etc. are only contextually a keyword if they are followed by an
   /// identifier or keyword on the same line. We do this to ensure that we do
   /// not break any copy functions defined by users.
-  private mutating func isContextualExpressionModifier() -> Bool {
+  private mutating func atContextualExpressionModifier() -> Bool {
     return self.peek(
       isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
       TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
@@ -444,7 +444,7 @@ extension Parser {
       )
 
     case (.copy, let handle)?:
-      if !isContextualExpressionModifier() {
+      if !atContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -463,7 +463,7 @@ extension Parser {
       )
 
     case (.consume, let handle)?:
-      if !isContextualExpressionModifier() {
+      if !atContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -486,7 +486,7 @@ extension Parser {
       return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor, pattern: pattern))
 
     case (.each, let handle)?:
-      if !isContextualExpressionModifier() {
+      if !atContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -501,7 +501,7 @@ extension Parser {
       )
 
     case (.any, _)?:
-      if !isContextualExpressionModifier() {
+      if !atContextualExpressionModifier() {
         break EXPR_PREFIX
       }
 
@@ -874,7 +874,7 @@ extension Parser {
             }
           } while lookahead.at(.poundIf) && lookahead.hasProgressed(&loopProgress)
 
-          guard lookahead.isAtStartOfPostfixExprSuffix() else {
+          guard lookahead.atStartOfPostfixExprSuffix() else {
             break
           }
         }
@@ -2149,7 +2149,7 @@ extension Parser {
     while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndif, .poundElseif, .poundElse)
       && self.hasProgressed(&elementsProgress)
     {
-      if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: false) }) {
+      if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: false) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
@@ -2206,7 +2206,7 @@ extension Parser {
             )
           )
         )
-      } else if self.withLookahead({ $0.isAtStartOfSwitchCase(allowRecovery: true) }) {
+      } else if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: true) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else {
         break
@@ -2217,7 +2217,7 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
-      $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse) || $0.withLookahead({ $0.isStartOfConditionalSwitchCases() })
+      $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse) || $0.withLookahead({ $0.atStartOfConditionalSwitchCases() })
     })
   }
 
@@ -2487,7 +2487,7 @@ extension Parser.Lookahead {
 extension Parser.Lookahead {
   // Helper function to see if we can parse member reference like suffixes
   // inside '#if'.
-  fileprivate mutating func isAtStartOfPostfixExprSuffix() -> Bool {
+  fileprivate mutating func atStartOfPostfixExprSuffix() -> Bool {
     guard self.at(.period) else {
       return false
     }

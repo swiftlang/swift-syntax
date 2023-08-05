@@ -2437,12 +2437,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "pattern"
   case \PatternExprSyntax.unexpectedAfterPattern:
     return "unexpectedAfterPattern"
-  case \PlatformVersionItemSyntax.unexpectedBeforeAvailabilityVersionRestriction:
-    return "unexpectedBeforeAvailabilityVersionRestriction"
-  case \PlatformVersionItemSyntax.availabilityVersionRestriction:
-    return "availabilityVersionRestriction"
-  case \PlatformVersionItemSyntax.unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma:
-    return "unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma"
+  case \PlatformVersionItemSyntax.unexpectedBeforePlatformVersion:
+    return "unexpectedBeforePlatformVersion"
+  case \PlatformVersionItemSyntax.platformVersion:
+    return "platformVersion"
+  case \PlatformVersionItemSyntax.unexpectedBetweenPlatformVersionAndTrailingComma:
+    return "unexpectedBetweenPlatformVersionAndTrailingComma"
   case \PlatformVersionItemSyntax.trailingComma:
     return "trailingComma"
   case \PlatformVersionItemSyntax.unexpectedAfterTrailingComma:

@@ -178,7 +178,7 @@ class ValidateSyntaxNodes: XCTestCase {
         }
       }
 
-    case .token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatingLiteralToken"):
+    case .token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatLiteralToken"):
       // We allow arbitrary naming of identifiers and literals
       break
     case .token(tokenKind: "CommaToken"):

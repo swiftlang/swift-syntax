@@ -35,7 +35,7 @@ extension Parser {
   }
 }
 
-/// Accepts a re-used ``Syntax`` node that `IncrementalParseTransition`
+/// Accepts a re-used `Syntax` node that `IncrementalParseTransition`
 /// determined they should be re-used for a parse invocation.
 ///
 /// The client can use this information to potentially avoid unnecessary work

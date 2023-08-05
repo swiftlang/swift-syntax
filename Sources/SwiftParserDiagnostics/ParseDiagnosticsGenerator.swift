@@ -1043,8 +1043,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         addDiagnostic(unexpected, UnknownDirectiveError(unexpected: unexpected), handledNodes: [unexpected.id, node.baseName.id])
       } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
         if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
-          let operatorToken = prefixOperatorExpr.operator,
-          operatorToken.text == "!",
+          prefixOperatorExpr.operator.text == "!",
           let conditionElement = prefixOperatorExpr.parent?.as(ConditionElementSyntax.self)
         {
           // Diagnose !#available(...) and !#unavailable(...)
@@ -1059,7 +1058,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             NegatedAvailabilityCondition(availabilityCondition: availability, negatedAvailabilityKeyword: negatedAvailabilityKeyword),
             fixIts: [
               FixIt(
-                message: ReplaceTokensFixIt(replaceTokens: [operatorToken, availability.availabilityKeyword], replacements: [negatedAvailabilityKeyword]),
+                message: ReplaceTokensFixIt(
+                  replaceTokens: [prefixOperatorExpr.operator, availability.availabilityKeyword],
+                  replacements: [negatedAvailabilityKeyword]
+                ),
                 changes: [
                   .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedConditionElement))
                 ]

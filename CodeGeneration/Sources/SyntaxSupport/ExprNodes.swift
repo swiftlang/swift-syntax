@@ -770,7 +770,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Literal",
         deprecatedName: "FloatingDigits",
-        kind: .token(choices: [.token(tokenKind: "FloatingLiteralToken")])
+        kind: .token(choices: [.token(tokenKind: "FloatLiteralToken")])
       )
     ]
   ),
@@ -1384,8 +1384,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Operator",
         deprecatedName: "OperatorToken",
-        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")]),
-        isOptional: true
+        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")])
       ),
       Child(
         name: "Expression",

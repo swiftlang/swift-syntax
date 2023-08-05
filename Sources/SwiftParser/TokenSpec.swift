@@ -172,7 +172,7 @@ public struct TokenSpec {
     switch rawTokenKind {
     case .binaryOperator: return .binaryOperator("+")
     case .dollarIdentifier: return .dollarIdentifier("$0")
-    case .floatingLiteral: return .floatingLiteral("1.0")
+    case .floatLiteral: return .floatLiteral("1.0")
     case .identifier: return .identifier("myIdent")
     case .integerLiteral: return .integerLiteral("1")
     case .keyword: return .keyword(keyword!)

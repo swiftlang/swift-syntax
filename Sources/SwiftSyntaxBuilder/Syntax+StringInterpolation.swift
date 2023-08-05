@@ -273,7 +273,7 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
       // TODO: Thousands separators?
       let digits = String(self)
-      return ExprSyntax(FloatLiteralExprSyntax(literal: .floatingLiteral(digits)))
+      return ExprSyntax(FloatLiteralExprSyntax(literal: .floatLiteral(digits)))
     }
 
   }

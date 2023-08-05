@@ -1407,7 +1407,7 @@ extension Lexer.Cursor {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
-          .floatingLiteral,
+          .floatLiteral,
           error: LexingDiagnostic(errorKind, position: errorPos)
         )
       }
@@ -1419,13 +1419,13 @@ extension Lexer.Cursor {
         let errorPos = tmp
         self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
         return Lexer.Result(
-          .floatingLiteral,
+          .floatLiteral,
           error: LexingDiagnostic(.invalidFloatingPointExponentDigit, position: errorPos)
         )
       }
     }
 
-    return Lexer.Result(.floatingLiteral)
+    return Lexer.Result(.floatLiteral)
   }
 
   mutating func lexHexNumber() -> Lexer.Result {
@@ -1529,7 +1529,7 @@ extension Lexer.Cursor {
       let errorPos = tmp
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
-        .floatingLiteral,
+        .floatLiteral,
         error: LexingDiagnostic(errorKind, position: errorPos)
       )
     }
@@ -1541,11 +1541,11 @@ extension Lexer.Cursor {
       let errorPos = tmp
       self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       return Lexer.Result(
-        .floatingLiteral,
+        .floatLiteral,
         error: LexingDiagnostic(.invalidFloatingPointExponentDigit, position: errorPos)
       )
     }
-    return Lexer.Result(.floatingLiteral)
+    return Lexer.Result(.floatLiteral)
   }
 }
 

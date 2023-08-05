@@ -210,7 +210,7 @@ extension Parser {
     }
 
     let version: RawVersionTupleSyntax?
-    if self.at(.integerLiteral, .floatingLiteral) {
+    if self.at(.integerLiteral, .floatLiteral) {
       version = self.parseVersionTuple(maxComponentCount: 3)
     } else {
       version = nil
@@ -237,7 +237,7 @@ extension Parser {
     return self.consumeAnyToken()
   }
 
-  /// Consume the unexpected version token(e.g. integerLiteral, floatingLiteral, identifier) until the period no longer appears.
+  /// Consume the unexpected version token(e.g. integerLiteral, floatLiteral, identifier) until the period no longer appears.
   private mutating func parseUnexpectedVersionTokens() -> RawUnexpectedNodesSyntax? {
     var unexpectedTokens: [RawTokenSyntax] = []
     var keepGoing: RawTokenSyntax? = nil
@@ -246,7 +246,7 @@ extension Parser {
       if let keepGoing {
         unexpectedTokens.append(keepGoing)
       }
-      if let unexpectedVersion = self.consume(if: .integerLiteral, .floatingLiteral, .identifier) {
+      if let unexpectedVersion = self.consume(if: .integerLiteral, .floatLiteral, .identifier) {
         unexpectedTokens.append(unexpectedVersion)
       }
       keepGoing = self.consume(if: .period)
@@ -256,7 +256,7 @@ extension Parser {
 
   /// Parse a dot-separated list of version numbers.
   mutating func parseVersionTuple(maxComponentCount: Int) -> RawVersionTupleSyntax {
-    if self.at(.floatingLiteral),
+    if self.at(.floatLiteral),
       let periodIndex = self.currentToken.tokenText.firstIndex(of: UInt8(ascii: ".")),
       self.currentToken.tokenText[0..<periodIndex].allSatisfy({ Unicode.Scalar($0).isDigit })
     {

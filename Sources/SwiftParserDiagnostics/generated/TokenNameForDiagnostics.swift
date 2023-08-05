@@ -41,8 +41,8 @@ extension TokenKind {
       return "="
     case .exclamationMark:
       return "!"
-    case .floatingLiteral:
-      return "floating literal"
+    case .floatLiteral:
+      return "float literal"
     case .identifier:
       return "identifier"
     case .infixQuestionMark:

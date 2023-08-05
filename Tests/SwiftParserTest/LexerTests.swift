@@ -169,19 +169,19 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "1.0",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "1.0")
+        LexemeSpec(.floatLiteral, text: "1.0")
       ]
     )
     assertLexemes(
       "1.0e10",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "1.0e10")
+        LexemeSpec(.floatLiteral, text: "1.0e10")
       ]
     )
     assertLexemes(
       "1.0E10",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "1.0E10")
+        LexemeSpec(.floatLiteral, text: "1.0E10")
       ]
     )
     assertLexemes(
@@ -193,27 +193,27 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "0xff.0p2",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "0xff.0p2")
+        LexemeSpec(.floatLiteral, text: "0xff.0p2")
       ]
     )
     assertLexemes(
       "-0xff.0p2",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "-"),
-        LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
+        LexemeSpec(.floatLiteral, text: "0xff.0p2"),
       ]
     )
     assertLexemes(
       "+0xff.0p2",
       lexemes: [
         LexemeSpec(.prefixOperator, text: "+"),
-        LexemeSpec(.floatingLiteral, text: "0xff.0p2"),
+        LexemeSpec(.floatLiteral, text: "0xff.0p2"),
       ]
     )
     assertLexemes(
       "0x1.921fb4p1",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "0x1.921fb4p1")
+        LexemeSpec(.floatLiteral, text: "0x1.921fb4p1")
       ]
     )
   }
@@ -747,15 +747,15 @@ public class LexerTests: XCTestCase {
         LexemeSpec(.leftParen, text: "("),
         LexemeSpec(.identifier, text: "white"),
         LexemeSpec(.colon, text: ":", trailing: " "),
-        LexemeSpec(.floatingLiteral, text: "216.0"),
+        LexemeSpec(.floatLiteral, text: "216.0"),
         LexemeSpec(.binaryOperator, text: "/"),
-        LexemeSpec(.floatingLiteral, text: "255.0"),
+        LexemeSpec(.floatLiteral, text: "255.0"),
         LexemeSpec(.comma, text: ",", trailing: " "),
         LexemeSpec(.identifier, text: "alpha"),
         LexemeSpec(.colon, text: ":", trailing: " "),
-        LexemeSpec(.floatingLiteral, text: "44.0"),
+        LexemeSpec(.floatLiteral, text: "44.0"),
         LexemeSpec(.binaryOperator, text: "/"),
-        LexemeSpec(.floatingLiteral, text: "255.0"),
+        LexemeSpec(.floatLiteral, text: "255.0"),
         LexemeSpec(.rightParen, text: ")"),
       ]
     )
@@ -898,7 +898,7 @@ public class LexerTests: XCTestCase {
     )
     assertLexemes(
       " 0x1p1️⃣_",
-      lexemes: [LexemeSpec(.floatingLiteral, leading: " ", text: "0x1p_", diagnostic: "'_' is not a valid first character in floating point exponent")]
+      lexemes: [LexemeSpec(.floatLiteral, leading: " ", text: "0x1p_", diagnostic: "'_' is not a valid first character in floating point exponent")]
     )
     assertLexemes(
       "01️⃣QWERTY",
@@ -918,11 +918,11 @@ public class LexerTests: XCTestCase {
     )
     assertLexemes(
       "1.0e+1️⃣QWERTY",
-      lexemes: [LexemeSpec(.floatingLiteral, text: "1.0e+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
+      lexemes: [LexemeSpec(.floatLiteral, text: "1.0e+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
     assertLexemes(
       "0x1p+1️⃣QWERTY",
-      lexemes: [LexemeSpec(.floatingLiteral, text: "0x1p+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
+      lexemes: [LexemeSpec(.floatLiteral, text: "0x1p+QWERTY", diagnostic: "'Q' is not a valid digit in floating point exponent")]
     )
   }
 
@@ -1228,9 +1228,9 @@ public class LexerTests: XCTestCase {
     assertLexemes(
       "0.1...0.2",
       lexemes: [
-        LexemeSpec(.floatingLiteral, text: "0.1"),
+        LexemeSpec(.floatLiteral, text: "0.1"),
         LexemeSpec(.binaryOperator, text: "..."),
-        LexemeSpec(.floatingLiteral, text: "0.2"),
+        LexemeSpec(.floatLiteral, text: "0.2"),
       ]
     )
   }

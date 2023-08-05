@@ -524,7 +524,7 @@ extension Parser {
         self.missingToken(.identifier)
       )
     }
-    if let number = self.consume(if: .integerLiteral, .floatingLiteral, .dollarIdentifier) {
+    if let number = self.consume(if: .integerLiteral, .floatLiteral, .dollarIdentifier) {
       return (
         RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
         self.missingToken(.identifier)

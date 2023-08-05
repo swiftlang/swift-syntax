@@ -117,7 +117,7 @@ enum TokenPrecedence: Comparable {
       self = .unknownToken
     // MARK: Identifier like
     case  // Literals
-    .floatingLiteral, .integerLiteral,
+    .floatLiteral, .integerLiteral,
       // Pound literals
       .poundAvailable, .poundSourceLocation, .poundUnavailable,
       // Identifiers

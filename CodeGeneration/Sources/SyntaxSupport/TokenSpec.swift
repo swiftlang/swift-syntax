@@ -79,7 +79,7 @@ public let SYNTAX_TOKENS: [TokenSpec] = [
   .other(name: "endOfFile", nameForDiagnostics: "end of file", text: ""),
   .punctuator(name: "equal", text: "="),
   .punctuator(name: "exclamationMark", text: "!"),
-  .other(name: "floatingLiteral", nameForDiagnostics: "floating literal"),
+  .other(name: "floatLiteral", nameForDiagnostics: "float literal"),
   .other(name: "identifier", nameForDiagnostics: "identifier"),
   .punctuator(name: "infixQuestionMark", text: "?"),
   .other(name: "integerLiteral", nameForDiagnostics: "integer literal"),

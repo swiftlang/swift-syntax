@@ -185,7 +185,7 @@ extension TokenSyntax {
     )
   }
   
-  public static func floatingLiteral(
+  public static func floatLiteral(
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -193,7 +193,7 @@ extension TokenSyntax {
     
   ) -> TokenSyntax {
     return TokenSyntax(
-      .floatingLiteral(text),
+      .floatLiteral(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

@@ -63,8 +63,8 @@ extension TokenSpec {
     return TokenSpec(.exclamationMark)
   }
   
-  static var floatingLiteral: TokenSpec {
-    return TokenSpec(.floatingLiteral)
+  static var floatLiteral: TokenSpec {
+    return TokenSpec(.floatLiteral)
   }
   
   static var identifier: TokenSpec {

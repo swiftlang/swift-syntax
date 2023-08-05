@@ -5767,6 +5767,61 @@ extension PatternBindingSyntax {
   }
 }
 
+extension PlatformVersionItemSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforePlatformVersion")
+  public var unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforePlatformVersion
+    }
+    set {
+      unexpectedBeforePlatformVersion = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "platformVersion")
+  public var availabilityVersionRestriction: PlatformVersionSyntax {
+    get {
+      return platformVersion
+    }
+    set {
+      platformVersion = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenPlatformVersionAndTrailingComma")
+  public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPlatformVersionAndTrailingComma
+    }
+    set {
+      unexpectedBetweenPlatformVersionAndTrailingComma = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "PlatformVersionItemSyntax(leadingTrivia:_:platformVersion:_:trailingComma:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAvailabilityVersionRestriction: UnexpectedNodesSyntax? = nil,
+      availabilityVersionRestriction: PlatformVersionSyntax,
+      _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAvailabilityVersionRestriction, 
+        platformVersion: availabilityVersionRestriction, 
+        unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension PostfixOperatorExprSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenExpressionAndOperator")
   public var unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? {
@@ -6354,7 +6409,7 @@ extension PrefixOperatorExprSyntax {
   }
   
   @available(*, deprecated, renamed: "operator")
-  public var operatorToken: TokenSyntax? {
+  public var operatorToken: TokenSyntax {
     get {
       return `operator`
     }
@@ -6398,7 +6453,7 @@ extension PrefixOperatorExprSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
-      operatorToken: TokenSyntax? = nil,
+      operatorToken: TokenSyntax,
       _ unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? = nil,
       postfixExpression: some ExprSyntaxProtocol,
       _ unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? = nil,

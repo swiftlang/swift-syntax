@@ -28,7 +28,7 @@ public enum SyntaxClassification {
   /// An editor placeholder of the form `<#content#>`
   case editorPlaceholder
   /// A floating point literal.
-  case floatingLiteral
+  case floatLiteral
   /// A generic identifier.
   case identifier
   /// An integer literal.
@@ -51,6 +51,11 @@ public enum SyntaxClassification {
   case stringLiteral
   /// An identifier referring to a type.
   case typeIdentifier
+
+  @available(*, deprecated, renamed: "floatLiteral")
+  public static var floatingLiteral: Self {
+    return .floatLiteral
+  }
 }
 
 extension SyntaxClassification {
@@ -65,7 +70,7 @@ extension SyntaxClassification {
     switch keyPath {
     case \AttributeSyntax.attributeName:
       return (.attribute, true)
-    case \PlatformVersionItemSyntax.availabilityVersionRestriction:
+    case \PlatformVersionItemSyntax.platformVersion:
       return (.keyword, false)
     case \AvailabilityVersionRestrictionSyntax.platform:
       return (.keyword, false)
@@ -124,8 +129,8 @@ extension RawTokenKind {
       return .none
     case .exclamationMark:
       return .none
-    case .floatingLiteral:
-      return .floatingLiteral
+    case .floatLiteral:
+      return .floatLiteral
     case .identifier:
       return .identifier
     case .infixQuestionMark:

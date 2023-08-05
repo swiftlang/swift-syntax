@@ -2305,7 +2305,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `literal`: `<floatingLiteral>`
+///  - `literal`: `<floatLiteral>`
 public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -5227,7 +5227,7 @@ public struct PostfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `operator`: `<prefixOperator>`?
+///  - `operator`: `<prefixOperator>`
 ///  - `expression`: ``ExprSyntax``
 public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -5253,7 +5253,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeOperator: UnexpectedNodesSyntax? = nil,
-      operator: TokenSyntax? = nil,
+      operator: TokenSyntax,
       _ unexpectedBetweenOperatorAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
@@ -5271,7 +5271,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeOperator?.raw, 
-          `operator`?.raw, 
+          `operator`.raw, 
           unexpectedBetweenOperatorAndExpression?.raw, 
           expression.raw, 
           unexpectedAfterExpression?.raw
@@ -5298,12 +5298,12 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var `operator`: TokenSyntax? {
+  public var `operator`: TokenSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PrefixOperatorExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = PrefixOperatorExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   

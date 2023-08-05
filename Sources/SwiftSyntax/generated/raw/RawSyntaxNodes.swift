@@ -16273,9 +16273,9 @@ public struct RawPlatformVersionItemSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax? = nil, 
-      availabilityVersionRestriction: RawPlatformVersionSyntax, 
-      _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforePlatformVersion: RawUnexpectedNodesSyntax? = nil, 
+      platformVersion: RawPlatformVersionSyntax, 
+      _ unexpectedBetweenPlatformVersionAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
       _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
@@ -16283,24 +16283,24 @@ public struct RawPlatformVersionItemSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .platformVersionItem, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeAvailabilityVersionRestriction?.raw
-      layout[1] = availabilityVersionRestriction.raw
-      layout[2] = unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma?.raw
+      layout[0] = unexpectedBeforePlatformVersion?.raw
+      layout[1] = platformVersion.raw
+      layout[2] = unexpectedBetweenPlatformVersionAndTrailingComma?.raw
       layout[3] = trailingComma?.raw
       layout[4] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeAvailabilityVersionRestriction: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforePlatformVersion: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var availabilityVersionRestriction: RawPlatformVersionSyntax {
+  public var platformVersion: RawPlatformVersionSyntax {
     layoutView.children[1].map(RawPlatformVersionSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenPlatformVersionAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -17361,7 +17361,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeOperator: RawUnexpectedNodesSyntax? = nil, 
-      operator: RawTokenSyntax?, 
+      operator: RawTokenSyntax, 
       _ unexpectedBetweenOperatorAndExpression: RawUnexpectedNodesSyntax? = nil, 
       expression: RawExprSyntax, 
       _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil, 
@@ -17371,7 +17371,7 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
       kind: .prefixOperatorExpr, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeOperator?.raw
-      layout[1] = `operator`?.raw
+      layout[1] = `operator`.raw
       layout[2] = unexpectedBetweenOperatorAndExpression?.raw
       layout[3] = expression.raw
       layout[4] = unexpectedAfterExpression?.raw
@@ -17383,8 +17383,8 @@ public struct RawPrefixOperatorExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var `operator`: RawTokenSyntax? {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+  public var `operator`: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenOperatorAndExpression: RawUnexpectedNodesSyntax? {

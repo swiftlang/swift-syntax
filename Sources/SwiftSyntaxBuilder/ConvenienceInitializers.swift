@@ -155,7 +155,7 @@ extension ExprSyntax {
 
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
   public init(_ value: Float) {
-    self.init(literal: .floatingLiteral(String(value)))
+    self.init(literal: .floatLiteral(String(value)))
   }
 
   public init(floatLiteral value: Float) {

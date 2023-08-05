@@ -642,16 +642,6 @@ public struct DeclsFromStringsMacro: DeclarationMacro, MemberMacro {
   }
 }
 
-public struct SendableConformanceMacro: ConformanceMacro {
-  public static func expansion(
-    of node: AttributeSyntax,
-    providingConformancesOf declaration: some DeclGroupSyntax,
-    in context: some MacroExpansionContext
-  ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] {
-    return [("Sendable", nil)]
-  }
-}
-
 public struct SendableExtensionMacro: ExtensionMacro {
   public static func expansion(
     of node: AttributeSyntax,
@@ -717,7 +707,6 @@ public let testMacros: [String: Macro.Type] = [
   "wrapStoredProperties": WrapStoredProperties.self,
   "customTypeWrapper": CustomTypeWrapperMacro.self,
   "unwrap": UnwrapMacro.self,
-  "AddSendable": SendableConformanceMacro.self,
   "AddSendableExtension": SendableExtensionMacro.self,
 ]
 
@@ -1533,44 +1522,6 @@ final class MacroSystemTests: XCTestCase {
         }
         """,
       macros: ["decls": DeclsFromStringsMacro.self],
-      indentationWidth: indentationWidth
-    )
-  }
-
-  func testConformanceExpansion() {
-    assertMacroExpansion(
-      """
-      @AddSendable
-      struct MyType {
-      }
-      """,
-      expandedSource: """
-
-        struct MyType {
-        }
-
-        extension MyType: Sendable {
-        }
-        """,
-      macros: testMacros,
-      indentationWidth: indentationWidth
-    )
-
-    assertMacroExpansion(
-      """
-      @AddSendable
-      extension A.B {
-      }
-      """,
-      expandedSource: """
-
-        extension A.B {
-        }
-
-        extension A.B: Sendable {
-        }
-        """,
-      macros: testMacros,
       indentationWidth: indentationWidth
     )
   }

@@ -23,7 +23,7 @@ fileprivate func assertPresumedSourceLocation(
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  let converter = SourceLocationConverter(file: "input.swift", tree: source)
+  let converter = SourceLocationConverter(fileName: "input.swift", tree: source)
 
   guard let variableDecl = source.statements.compactMap({ inspectionItemFilter($0.item) }).first else {
     XCTFail("Could not find a node that matches the `inspectionItemFilter` in `source`", file: file, line: line)
@@ -62,7 +62,7 @@ final class SourceLocationConverterTests: XCTestCase {
     // ```
     // assert(tree.byteSize == endOfFile.utf8Offset)
     // ```
-    _ = SourceLocationConverter(file: "", tree: tree)
+    _ = SourceLocationConverter(fileName: "", tree: tree)
   }
 
   func testSingleSourceLocationDirective() {

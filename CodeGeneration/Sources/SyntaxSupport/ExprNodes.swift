@@ -34,7 +34,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -49,7 +49,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "LeftSquare",
         deprecatedName: "LeftSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Elements",
@@ -58,7 +58,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "RightSquare",
         deprecatedName: "RightSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -78,7 +78,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Arrow",
         deprecatedName: "ArrowToken",
-        kind: .token(choices: [.token(tokenKind: "ArrowToken")])
+        kind: .token(choices: [.token(.arrow)])
       ),
     ]
   ),
@@ -103,7 +103,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "QuestionOrExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+        kind: .token(choices: [.token(.postfixQuestionMark), .token(.exclamationMark)]),
         isOptional: true
       ),
       Child(
@@ -123,7 +123,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Equal",
         deprecatedName: "AssignToken",
-        kind: .token(choices: [.token(tokenKind: "EqualToken")])
+        kind: .token(choices: [.token(.equal)])
       )
     ]
   ),
@@ -156,7 +156,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Operator",
         deprecatedName: "OperatorToken",
-        kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken")])
+        kind: .token(choices: [.token(.binaryOperator)])
       )
     ]
   ),
@@ -204,11 +204,11 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "ImportPath",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "VersionInfo",
@@ -217,7 +217,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -229,7 +229,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+        kind: .token(choices: [.token(.comma)])
       ),
       Child(
         name: "Label",
@@ -237,7 +237,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Version",
@@ -267,7 +267,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -291,7 +291,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         isOptional: true
       ),
       Child(
@@ -301,7 +301,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
     ]
@@ -322,13 +322,13 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         isOptional: true
       ),
       Child(
         name: "Equal",
         deprecatedName: "AssignToken",
-        kind: .token(choices: [.token(tokenKind: "EqualToken")]),
+        kind: .token(choices: [.token(.equal)]),
         isOptional: true
       ),
       Child(
@@ -337,7 +337,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -350,7 +350,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Items",
@@ -359,7 +359,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -385,19 +385,19 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "FirstName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         documentation: "The label of this parameter that will be used when the closure is called."
       ),
       Child(
         name: "SecondName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         documentation:
           "If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.",
         isOptional: true
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the parameter's name and type.",
         isOptional: true
       ),
@@ -410,13 +410,13 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Ellipsis",
-        kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+        kind: .token(choices: [.token(.ellipsis)]),
         documentation: "If the parameter is variadic, `...` to indicate that.",
         isOptional: true
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "If the parameter is followed by another parameter, the comma separating them.",
         isOptional: true
       ),
@@ -440,7 +440,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         documentation: "The '(' to open the parameter clause."
       ),
       Child(
@@ -452,7 +452,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         documentation: "The ')' to close the parameter clause."
       ),
     ]
@@ -469,7 +469,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "Signature",
@@ -482,7 +482,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -505,12 +505,12 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -591,7 +591,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false)
+        kind: .token(choices: [.token(.colon)], requiresTrailingSpace: false)
       ),
     ]
   ),
@@ -606,7 +606,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Arguments",
@@ -614,7 +614,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -643,7 +643,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Value",
@@ -653,7 +653,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -667,14 +667,14 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftSquare",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Content",
         kind: .nodeChoices(choices: [
           Child(
             name: "Colon",
-            kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false)
+            kind: .token(choices: [.token(.colon)], requiresTrailingSpace: false)
           ),
           Child(
             name: "Elements",
@@ -684,7 +684,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightSquare",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -697,7 +697,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Wildcard",
-        kind: .token(choices: [.token(tokenKind: "WildcardToken")])
+        kind: .token(choices: [.token(.wildcard)])
       )
     ]
   ),
@@ -711,7 +711,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Placeholder",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       )
     ]
   ),
@@ -735,17 +735,17 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Backslash",
-        kind: .token(choices: [.token(tokenKind: "BackslashToken")])
+        kind: .token(choices: [.token(.backslash)])
       ),
       Child(
         name: "Pounds",
         deprecatedName: "Delimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
+        kind: .token(choices: [.token(.rawStringPoundDelimiter)]),
         isOptional: true
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Expressions",
@@ -753,7 +753,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -770,7 +770,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Literal",
         deprecatedName: "FloatingDigits",
-        kind: .token(choices: [.token(tokenKind: "FloatLiteralToken")])
+        kind: .token(choices: [.token(.floatLiteral)])
       )
     ]
   ),
@@ -787,7 +787,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "ExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "ExclamationMarkToken")])
+        kind: .token(choices: [.token(.exclamationMark)])
       ),
     ]
   ),
@@ -806,7 +806,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         isOptional: true
       ),
       Child(
@@ -817,7 +817,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
       Child(
@@ -845,13 +845,13 @@ public let EXPR_NODES: [Node] = [
         name: "BaseName",
         deprecatedName: "Identifier",
         kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
+          .token(.identifier),
           .keyword(text: "self"),
           .keyword(text: "Self"),
           .keyword(text: "init"),
-          .token(tokenKind: "DollarIdentifierToken"),
-          .token(tokenKind: "BinaryOperatorToken"),
-          .token(tokenKind: "IntegerLiteralToken"),
+          .token(.dollarIdentifier),
+          .token(.binaryOperator),
+          .token(.integerLiteral),
         ])
       ),
       Child(
@@ -921,7 +921,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Ampersand",
-        kind: .token(choices: [.token(tokenKind: "PrefixAmpersandToken")])
+        kind: .token(choices: [.token(.prefixAmpersand)])
       ),
       Child(
         name: "Expression",
@@ -967,7 +967,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Literal",
         deprecatedName: "Digits",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")])
+        kind: .token(choices: [.token(.integerLiteral)])
       )
     ]
   ),
@@ -1026,7 +1026,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Period",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        kind: .token(choices: [.token(.period)]),
         isOptional: true
       ),
       Child(
@@ -1057,7 +1057,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Backslash",
-        kind: .token(choices: [.token(tokenKind: "BackslashToken")])
+        kind: .token(choices: [.token(.backslash)])
       ),
       Child(
         name: "Root",
@@ -1080,7 +1080,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "QuestionOrExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")])
+        kind: .token(choices: [.token(.postfixQuestionMark), .token(.exclamationMark)])
       )
     ]
   ),
@@ -1113,7 +1113,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "LeftSquare",
         deprecatedName: "LeftBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Arguments",
@@ -1124,7 +1124,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "RightSquare",
         deprecatedName: "RightBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -1141,13 +1141,13 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Pound",
         deprecatedName: "PoundToken",
-        kind: .token(choices: [.token(tokenKind: "PoundToken")]),
+        kind: .token(choices: [.token(.pound)]),
         documentation: "The `#` sign."
       ),
       Child(
         name: "MacroName",
         deprecatedName: "Macro",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "GenericArgumentClause",
@@ -1157,7 +1157,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         isOptional: true
       ),
       Child(
@@ -1167,7 +1167,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
       Child(
@@ -1198,7 +1198,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Period",
         deprecatedName: "Dot",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")])
+        kind: .token(choices: [.token(.period)])
       ),
       Child(
         name: "DeclName",
@@ -1257,12 +1257,12 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Label",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "label"
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Closure",
@@ -1296,7 +1296,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "QuestionMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken")])
+        kind: .token(choices: [.token(.postfixQuestionMark)])
       ),
     ]
   ),
@@ -1368,7 +1368,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Operator",
         deprecatedName: "OperatorToken",
-        kind: .token(choices: [.token(tokenKind: "PostfixOperatorToken")])
+        kind: .token(choices: [.token(.postfixOperator)])
       ),
     ]
   ),
@@ -1384,7 +1384,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Operator",
         deprecatedName: "OperatorToken",
-        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")])
+        kind: .token(choices: [.token(.prefixOperator)])
       ),
       Child(
         name: "Expression",
@@ -1403,27 +1403,27 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "OpeningPounds",
-        kind: .token(choices: [.token(tokenKind: "RegexPoundDelimiterToken")]),
+        kind: .token(choices: [.token(.regexPoundDelimiter)]),
         isOptional: true
       ),
       Child(
         name: "OpeningSlash",
         deprecatedName: "OpenSlash",
-        kind: .token(choices: [.token(tokenKind: "RegexSlashToken")])
+        kind: .token(choices: [.token(.regexSlash)])
       ),
       Child(
         name: "Regex",
         deprecatedName: "RegexPattern",
-        kind: .token(choices: [.token(tokenKind: "RegexLiteralPatternToken")])
+        kind: .token(choices: [.token(.regexLiteralPattern)])
       ),
       Child(
         name: "ClosingSlash",
         deprecatedName: "CloseSlash",
-        kind: .token(choices: [.token(tokenKind: "RegexSlashToken")])
+        kind: .token(choices: [.token(.regexSlash)])
       ),
       Child(
         name: "ClosingPounds",
-        kind: .token(choices: [.token(tokenKind: "RegexPoundDelimiterToken")]),
+        kind: .token(choices: [.token(.regexPoundDelimiter)]),
         isOptional: true
       ),
     ]
@@ -1468,13 +1468,13 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "OpeningPounds",
         deprecatedName: "OpenDelimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
+        kind: .token(choices: [.token(.rawStringPoundDelimiter)]),
         isOptional: true
       ),
       Child(
         name: "OpeningQuote",
         deprecatedName: "OpenQuote",
-        kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken"), .token(tokenKind: "SingleQuoteToken")])
+        kind: .token(choices: [.token(.stringQuote), .token(.multilineStringQuote), .token(.singleQuote)])
       ),
       Child(
         name: "Segments",
@@ -1483,12 +1483,12 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "ClosingQuote",
         deprecatedName: "CloseQuote",
-        kind: .token(choices: [.token(tokenKind: "StringQuoteToken"), .token(tokenKind: "MultilineStringQuoteToken"), .token(tokenKind: "SingleQuoteToken")])
+        kind: .token(choices: [.token(.stringQuote), .token(.multilineStringQuote), .token(.singleQuote)])
       ),
       Child(
         name: "ClosingPounds",
         deprecatedName: "CloseDelimiter",
-        kind: .token(choices: [.token(tokenKind: "RawStringPoundDelimiterToken")]),
+        kind: .token(choices: [.token(.rawStringPoundDelimiter)]),
         isOptional: true
       ),
     ]
@@ -1509,7 +1509,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Content",
-        kind: .token(choices: [.token(tokenKind: "StringSegmentToken")])
+        kind: .token(choices: [.token(.stringSegment)])
       )
     ]
   ),
@@ -1528,7 +1528,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "LeftSquare",
         deprecatedName: "LeftBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Arguments",
@@ -1539,7 +1539,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "RightSquare",
         deprecatedName: "RightBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
       Child(
         name: "TrailingClosure",
@@ -1585,7 +1585,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false)
+        kind: .token(choices: [.token(.colon)], requiresTrailingSpace: false)
       ),
     ]
   ),
@@ -1647,7 +1647,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")], requiresTrailingSpace: false)
+        kind: .token(choices: [.token(.colon)], requiresTrailingSpace: false)
       ),
     ]
   ),
@@ -1676,7 +1676,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "Cases",
@@ -1684,7 +1684,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -1706,7 +1706,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "QuestionMark",
-        kind: .token(choices: [.token(tokenKind: "InfixQuestionMarkToken")])
+        kind: .token(choices: [.token(.infixQuestionMark)])
       ),
       Child(
         name: "ThenExpression",
@@ -1717,7 +1717,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Colon",
         deprecatedName: "ColonMark",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "ElseExpression",
@@ -1743,7 +1743,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "QuestionOrExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")], requiresTrailingSpace: true),
+        kind: .token(choices: [.token(.postfixQuestionMark), .token(.exclamationMark)], requiresTrailingSpace: true),
         isOptional: true
       ),
       Child(
@@ -1771,13 +1771,13 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Label",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
@@ -1787,7 +1787,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -1803,7 +1803,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Elements",
@@ -1812,7 +1812,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -1845,7 +1845,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "QuestionOrExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken"), .token(tokenKind: "ExclamationMarkToken")]),
+        kind: .token(choices: [.token(.postfixQuestionMark), .token(.exclamationMark)]),
         isOptional: true
       ),
     ]
@@ -1889,7 +1889,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "QuestionMark",
-        kind: .token(choices: [.token(tokenKind: "InfixQuestionMarkToken")])
+        kind: .token(choices: [.token(.infixQuestionMark)])
       ),
       Child(
         name: "ThenExpression",
@@ -1899,7 +1899,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "Colon",
         deprecatedName: "ColonMark",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
     ]
   ),
@@ -1915,7 +1915,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]

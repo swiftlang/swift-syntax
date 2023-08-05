@@ -18,12 +18,12 @@ struct GrammarGenerator {
     switch tokenChoice {
     case .keyword(text: let text):
       return "`'\(text)'`"
-    case .token(tokenKind: let tokenKind):
-      let token = SYNTAX_TOKEN_MAP[tokenKind]!
-      if let tokenText = token.text {
+    case .token(let token):
+      let tokenSpec = token.spec
+      if let tokenText = tokenSpec.text {
         return "`'\(tokenText)'`"
       } else {
-        return "`<\(token.varOrCaseName)>`"
+        return "`<\(tokenSpec.varOrCaseName)>`"
       }
     }
   }

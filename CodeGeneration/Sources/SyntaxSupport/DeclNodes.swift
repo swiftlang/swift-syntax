@@ -19,17 +19,17 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .token(tokenKind: "BinaryOperatorToken"),
-          .token(tokenKind: "PrefixOperatorToken"),
-          .token(tokenKind: "PostfixOperatorToken"),
+          .token(.identifier),
+          .token(.binaryOperator),
+          .token(.prefixOperator),
+          .token(.postfixOperator),
         ]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "TrailingPeriod",
         deprecatedName: "TrailingDot",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        kind: .token(choices: [.token(.period)]),
         isOptional: true
       ),
     ]
@@ -53,7 +53,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "Accessors",
@@ -70,7 +70,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -151,16 +151,16 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -203,7 +203,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "GenericParameterClause",
@@ -294,7 +294,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this associated type."
       ),
       Child(
@@ -384,7 +384,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the class."
       ),
       Child(
@@ -427,15 +427,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Detail",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -550,7 +550,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeadingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+        kind: .token(choices: [.token(.comma)])
       ),
       Child(
         name: "Name",
@@ -595,7 +595,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Placeholder",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: """
           The actual editor placeholder that starts with `<#` and ends with `#>`.
           """
@@ -613,7 +613,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         documentation: "The '(' to open the parameter clause."
       ),
       Child(
@@ -625,7 +625,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         documentation: "The ')' to close the parameter clause."
       ),
     ]
@@ -653,17 +653,17 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "FirstName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         isOptional: true
       ),
       Child(
         name: "SecondName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         isOptional: true
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "If the parameter has a label, the colon separating the label from the type.",
         isOptional: true
       ),
@@ -683,7 +683,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "If the parameter is followed by another parameter, the comma separating them.",
         isOptional: true
       ),
@@ -748,7 +748,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this case."
       ),
       Child(
@@ -767,7 +767,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "The trailing comma of this element, if the case has multiple elements.",
         isOptional: true
       ),
@@ -809,7 +809,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
@@ -930,10 +930,10 @@ public let DECL_NODES: [Node] = [
         name: "Name",
         deprecatedName: "Identifier",
         kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
-          .token(tokenKind: "BinaryOperatorToken"),
-          .token(tokenKind: "PrefixOperatorToken"),
-          .token(tokenKind: "PostfixOperatorToken"),
+          .token(.identifier),
+          .token(.binaryOperator),
+          .token(.prefixOperator),
+          .token(.postfixOperator),
         ])
       ),
       Child(
@@ -994,19 +994,19 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "FirstName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")])
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)])
       ),
       // One of these two names needs be optional, we choose the second
       // name to avoid backtracking.
       Child(
         name: "SecondName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")], requiresLeadingSpace: true),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)], requiresLeadingSpace: true),
         nameForDiagnostics: "internal name",
         isOptional: true
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Type",
@@ -1015,7 +1015,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Ellipsis",
-        kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+        kind: .token(choices: [.token(.ellipsis)]),
         isOptional: true
       ),
       Child(
@@ -1027,7 +1027,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -1075,7 +1075,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "PoundKeyword",
-        kind: .token(choices: [.token(tokenKind: "PoundIfToken"), .token(tokenKind: "PoundElseifToken"), .token(tokenKind: "PoundElseToken")])
+        kind: .token(choices: [.token(.poundIf), .token(.poundElseif), .token(.poundElse)])
       ),
       Child(
         name: "Condition",
@@ -1125,7 +1125,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "PoundEndif",
-        kind: .token(choices: [.token(tokenKind: "PoundEndifToken")])
+        kind: .token(choices: [.token(.poundEndif)])
       ),
     ]
   ),
@@ -1213,7 +1213,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -1227,7 +1227,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Equal",
-        kind: .token(choices: [.token(tokenKind: "EqualToken")])
+        kind: .token(choices: [.token(.equal)])
       ),
       Child(
         name: "Value",
@@ -1278,9 +1278,9 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "OptionalMark",
         kind: .token(choices: [
-          .token(tokenKind: "PostfixQuestionMarkToken"),
-          .token(tokenKind: "InfixQuestionMarkToken"),
-          .token(tokenKind: "ExclamationMarkToken"),
+          .token(.postfixQuestionMark),
+          .token(.infixQuestionMark),
+          .token(.exclamationMark),
         ]),
         documentation: "If the initializer is failable, a question mark to indicate that.",
         isOptional: true
@@ -1344,7 +1344,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "GenericParameterClause",
@@ -1400,13 +1400,13 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Pound",
         deprecatedName: "PoundToken",
-        kind: .token(choices: [.token(tokenKind: "PoundToken")]),
+        kind: .token(choices: [.token(.pound)]),
         documentation: "The `#` sign."
       ),
       Child(
         name: "MacroName",
         deprecatedName: "Macro",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "GenericArgumentClause",
@@ -1416,7 +1416,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         isOptional: true
       ),
       Child(
@@ -1426,7 +1426,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
       Child(
@@ -1451,7 +1451,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "Members",
@@ -1459,7 +1459,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -1478,7 +1478,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Semicolon",
-        kind: .token(choices: [.token(tokenKind: "SemicolonToken")]),
+        kind: .token(choices: [.token(.semicolon)]),
         documentation: "An optional trailing semicolon.",
         isOptional: true
       ),
@@ -1546,7 +1546,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
+        kind: .token(choices: [.token(.binaryOperator), .token(.prefixOperator), .token(.postfixOperator)])
       ),
       Child(
         name: "OperatorPrecedenceAndTypes",
@@ -1566,11 +1566,11 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "PrecedenceGroup",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "precedence group",
         documentation: "The precedence group for this operator"
       ),
@@ -1592,7 +1592,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Parameters",
@@ -1602,7 +1602,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -1646,7 +1646,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -1665,7 +1665,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "FileColon",
         deprecatedName: "FileArgColon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "FileName",
@@ -1674,7 +1674,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+        kind: .token(choices: [.token(.comma)])
       ),
       Child(
         name: "LineLabel",
@@ -1684,11 +1684,11 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "LineColon",
         deprecatedName: "LineArgColon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "LineNumber",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         nameForDiagnostics: "line number"
       ),
     ]
@@ -1704,11 +1704,11 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "PoundSourceLocation",
-        kind: .token(choices: [.token(tokenKind: "PoundSourceLocationToken")])
+        kind: .token(choices: [.token(.poundSourceLocation)])
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Arguments",
@@ -1719,7 +1719,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -1739,7 +1739,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Value",
@@ -1766,7 +1766,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Value",
@@ -1821,12 +1821,12 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this precedence group."
       ),
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "GroupAttributes",
@@ -1835,7 +1835,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -1848,12 +1848,12 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -1884,7 +1884,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "PrecedenceGroups",
@@ -1937,7 +1937,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the protocol."
       ),
       Child(
@@ -1978,7 +1978,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Arrow",
-        kind: .token(choices: [.token(tokenKind: "ArrowToken")])
+        kind: .token(choices: [.token(.arrow)])
       ),
       Child(
         name: "Type",
@@ -2004,7 +2004,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "EndOfFileToken",
         deprecatedName: "EOFToken",
-        kind: .token(choices: [.token(tokenKind: "EndOfFileToken")])
+        kind: .token(choices: [.token(.endOfFile)])
       ),
     ]
   ),
@@ -2107,7 +2107,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
@@ -2207,7 +2207,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "InheritedTypes",
@@ -2225,7 +2225,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Equal",
-        kind: .token(choices: [.token(tokenKind: "EqualToken")])
+        kind: .token(choices: [.token(.equal)])
       ),
       Child(
         name: "Value",
@@ -2269,7 +2269,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "Name",
         deprecatedName: "Identifier",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "GenericParameterClause",

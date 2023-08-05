@@ -40,8 +40,8 @@ public struct SyntaxBuildableType: Hashable {
   /// The token if this is a token.
   public var token: TokenSpec? {
     switch kind {
-    case .token(let tokenKind):
-      return SYNTAX_TOKEN_MAP[tokenKind]
+    case .token(let token):
+      return token.spec
     default:
       return nil
     }

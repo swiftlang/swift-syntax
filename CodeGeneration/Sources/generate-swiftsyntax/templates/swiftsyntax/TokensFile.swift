@@ -17,17 +17,17 @@ import Utils
 
 let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension TokenSyntax") {
-    for token in SYNTAX_TOKENS {
-      if let text = token.text {
+    for tokenSpec in Token.allCases.map(\.spec) {
+      if let text = tokenSpec.text {
         DeclSyntax(
           """
-          public static func \(token.varOrCaseName)Token(
+          public static func \(tokenSpec.varOrCaseName)Token(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(token.varOrCaseName),
+              .\(tokenSpec.varOrCaseName),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence
@@ -35,17 +35,17 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
           """
         )
-      } else if token.kind == .keyword {
+      } else if tokenSpec.kind == .keyword {
         DeclSyntax(
           """
-          public static func \(token.varOrCaseName)(
+          public static func \(tokenSpec.varOrCaseName)(
             _ value: Keyword,
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(token.varOrCaseName)(value),
+              .\(tokenSpec.varOrCaseName)(value),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence
@@ -56,14 +56,14 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else {
         DeclSyntax(
           """
-          public static func \(token.varOrCaseName)(
+          public static func \(tokenSpec.varOrCaseName)(
             _ text: String,
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(token.varOrCaseName)(text),
+              .\(tokenSpec.varOrCaseName)(text),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence

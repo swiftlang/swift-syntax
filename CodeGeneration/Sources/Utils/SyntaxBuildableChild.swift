@@ -18,7 +18,7 @@ import SyntaxSupport
 /// given token kind.
 public enum SyntaxOrTokenNodeKind: Hashable {
   case node(kind: SyntaxNodeKind)
-  case token(tokenKind: String)
+  case token(Token)
 }
 
 /// Extension to the ``Child`` type to provide functionality specific to
@@ -36,7 +36,7 @@ public extension Child {
     case .collection(let kind, _, _):
       buildableKind = .node(kind: kind)
     case .token:
-      buildableKind = .token(tokenKind: self.tokenKind!)
+      buildableKind = .token(self.tokenKind!)
     }
     return SyntaxBuildableType(
       kind: buildableKind,
@@ -71,18 +71,15 @@ public extension Child {
     if token.text != nil {
       return ExprSyntax(".\(token.varOrCaseName)Token()")
     }
-    guard case .token(let choices, _, _) = kind, choices.count == 1, token.kind == .keyword else {
-      return nil
+    if case .token(let choices, _, _) = kind,
+      case .keyword(var text) = choices.only
+    {
+      if text == "init" {
+        text = "`init`"
+      }
+      return ExprSyntax(".\(token.varOrCaseName)(.\(raw: text))")
     }
-    var textChoice: String
-    switch choices[0] {
-    case .keyword(let text), .token(let text):
-      textChoice = text
-    }
-    if textChoice == "init" {
-      textChoice = "`init`"
-    }
-    return ExprSyntax(".\(token.varOrCaseName)(.\(raw: textChoice))")
+    return nil
   }
 
   /// If the child node has a default value, return an expression of the form
@@ -106,8 +103,10 @@ public extension Child {
 
     let tokenCanContainArbitraryText = choices.contains {
       switch $0 {
-      case .token(tokenKind: let tokenKind): return SYNTAX_TOKEN_MAP["\(tokenKind)Token"]?.text == nil
-      case .keyword: return false
+      case .token(let token):
+        return token.spec.text == nil
+      case .keyword:
+        return false
       }
     }
 
@@ -118,8 +117,10 @@ public extension Child {
     } else if !choices.isEmpty {
       choicesTexts = choices.compactMap {
         switch $0 {
-        case .token(tokenKind: let tokenKind): return SYNTAX_TOKEN_MAP["\(tokenKind)Token"]?.text
-        case .keyword(text: let text): return text
+        case .token(let token):
+          return token.spec.text
+        case .keyword(text: let text):
+          return text
         }
       }
     } else {

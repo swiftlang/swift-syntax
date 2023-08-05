@@ -215,8 +215,8 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                               switch choice {
                               case .keyword(text: let text):
                                 ArrayElementSyntax(expression: ExprSyntax(#".keyword("\#(raw: text)")"#))
-                              case .token(tokenKind: let tokenKind):
-                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(SYNTAX_TOKEN_MAP[tokenKind]!.varOrCaseName))"))
+                              case .token(let token):
+                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(token.spec.varOrCaseName))"))
                               }
                             }
                           }

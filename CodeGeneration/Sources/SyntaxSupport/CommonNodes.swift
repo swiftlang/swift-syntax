@@ -47,7 +47,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "Semicolon",
-        kind: .token(choices: [.token(tokenKind: "SemicolonToken")]),
+        kind: .token(choices: [.token(.semicolon)]),
         documentation: "If present, the trailing semicolon at the end of the item.",
         isOptional: true
       ),
@@ -66,7 +66,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "LeftBrace",
-        kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])
+        kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
         name: "Statements",
@@ -75,7 +75,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "RightBrace",
-        kind: .token(choices: [.token(tokenKind: "RightBraceToken")])
+        kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
   ),
@@ -178,7 +178,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
 
@@ -199,7 +199,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#expression#>`, that can be inserted into the source code to represent the missing expression.
 
@@ -220,7 +220,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#pattern#>`, that can be inserted into the source code to represent the missing pattern.
 
@@ -241,7 +241,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#statement#>`, that can be inserted into the source code to represent the missing pattern.
 
@@ -262,7 +262,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#syntax#>`, that can be inserted into the source code to represent the missing pattern.
 
@@ -283,7 +283,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#type#>`, that can be inserted into the source code to represent the missing type.
 

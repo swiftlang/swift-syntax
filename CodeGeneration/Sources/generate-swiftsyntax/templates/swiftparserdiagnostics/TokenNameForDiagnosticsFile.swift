@@ -21,9 +21,9 @@ let tokenNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
   try! ExtensionDeclSyntax("extension TokenKind") {
     try! VariableDeclSyntax("var nameForDiagnostics: String") {
       try! SwitchExprSyntax("switch self") {
-        for token in SYNTAX_TOKENS where token.kind != .keyword {
-          SwitchCaseSyntax("case .\(token.varOrCaseName):") {
-            StmtSyntax("return \(literal: token.nameForDiagnostics)")
+        for tokenSpec in Token.allCases.map(\.spec) where tokenSpec.kind != .keyword {
+          SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
+            StmtSyntax("return \(literal: tokenSpec.nameForDiagnostics)")
           }
         }
         SwitchCaseSyntax("case .keyword(let keyword):") {

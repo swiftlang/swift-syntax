@@ -24,7 +24,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "RightType",
@@ -45,7 +45,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "LeftAngle",
         deprecatedName: "LeftAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftAngleToken")]),
+        kind: .token(choices: [.token(.leftAngle)]),
         documentation: "The opening angle bracket (`<`) of the generic parameter clause."
       ),
       Child(
@@ -63,7 +63,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "RightAngle",
         deprecatedName: "RightAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "RightAngleToken")]),
+        kind: .token(choices: [.token(.rightAngle)]),
         documentation: "The closing angle bracket (`>`) of the generic parameter clause."
       ),
     ]
@@ -102,12 +102,12 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
@@ -118,7 +118,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -161,7 +161,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -203,7 +203,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "LayoutSpecifier",
@@ -220,29 +220,29 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         isOptional: true
       ),
       Child(
         name: "Size",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         nameForDiagnostics: "size",
         isOptional: true
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
         name: "Alignment",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         nameForDiagnostics: "alignment",
         isOptional: true
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
     ]
@@ -257,7 +257,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "LeftAngle",
         deprecatedName: "LeftAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
+        kind: .token(choices: [.token(.leftAngle)])
       ),
       Child(
         name: "PrimaryAssociatedTypes",
@@ -267,7 +267,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "RightAngle",
         deprecatedName: "RightAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
+        kind: .token(choices: [.token(.rightAngle)])
       ),
     ]
   ),
@@ -290,12 +290,12 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "name"
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -316,7 +316,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "Equal",
         deprecatedName: "EqualityToken",
-        kind: .token(choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "PrefixOperatorToken"), .token(tokenKind: "PostfixOperatorToken")])
+        kind: .token(choices: [.token(.binaryOperator), .token(.prefixOperator), .token(.postfixOperator)])
       ),
       Child(
         name: "RightType",

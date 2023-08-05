@@ -20,7 +20,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "LeftSquare",
         deprecatedName: "LeftSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Element",
@@ -30,7 +30,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "RightSquare",
         deprecatedName: "RightSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -149,7 +149,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "LeftSquare",
         deprecatedName: "LeftSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftSquareToken")])
+        kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "Key",
@@ -159,7 +159,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Value",
@@ -170,7 +170,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "RightSquare",
         deprecatedName: "RightSquareBracket",
-        kind: .token(choices: [.token(tokenKind: "RightSquareToken")])
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -188,7 +188,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Parameters",
@@ -197,7 +197,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
       Child(
         name: "EffectSpecifiers",
@@ -221,7 +221,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "LeftAngle",
         deprecatedName: "LeftAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "LeftAngleToken")])
+        kind: .token(choices: [.token(.leftAngle)])
       ),
       Child(
         name: "Arguments",
@@ -230,7 +230,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "RightAngle",
         deprecatedName: "RightAngleBracket",
-        kind: .token(choices: [.token(tokenKind: "RightAngleToken")])
+        kind: .token(choices: [.token(.rightAngle)])
       ),
     ]
   ),
@@ -261,7 +261,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -279,7 +279,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "ExclamationMark",
-        kind: .token(choices: [.token(tokenKind: "ExclamationMarkToken")])
+        kind: .token(choices: [.token(.exclamationMark)])
       ),
     ]
   ),
@@ -297,11 +297,11 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Period",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")])
+        kind: .token(choices: [.token(.period)])
       ),
       Child(
         name: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .keyword(text: "self"), .keyword(text: "Self")]),
+        kind: .token(choices: [.token(.identifier), .keyword(text: "self"), .keyword(text: "Self")]),
         nameForDiagnostics: "name"
       ),
       Child(
@@ -325,7 +325,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Period",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")])
+        kind: .token(choices: [.token(.period)])
       ),
       Child(
         name: "MetatypeSpecifier",
@@ -367,7 +367,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "QuestionMark",
-        kind: .token(choices: [.token(tokenKind: "PostfixQuestionMarkToken")])
+        kind: .token(choices: [.token(.postfixQuestionMark)])
       ),
     ]
   ),
@@ -380,7 +380,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "WithoutTilde",
-        kind: .token(choices: [.token(tokenKind: "PrefixOperatorToken")])
+        kind: .token(choices: [.token(.prefixOperator)])
       ),
       Child(
         name: "Type",
@@ -435,11 +435,11 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "Name",
         kind: .token(choices: [
-          .token(tokenKind: "IdentifierToken"),
+          .token(.identifier),
           .keyword(text: "self"),
           .keyword(text: "Self"),
           .keyword(text: "Any"),
-          .token(tokenKind: "WildcardToken"),
+          .token(.wildcard),
         ])
       ),
       Child(
@@ -476,19 +476,19 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "FirstName",
         deprecatedName: "Name",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "name",
         isOptional: true
       ),
       Child(
         name: "SecondName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "WildcardToken")]),
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "internal name",
         isOptional: true
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
@@ -497,12 +497,12 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Ellipsis",
-        kind: .token(choices: [.token(tokenKind: "EllipsisToken")]),
+        kind: .token(choices: [.token(.ellipsis)]),
         isOptional: true
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -519,7 +519,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Elements",
@@ -527,7 +527,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),

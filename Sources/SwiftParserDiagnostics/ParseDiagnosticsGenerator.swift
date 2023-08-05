@@ -1226,6 +1226,25 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: LabeledSpecializeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedIdentifier = node.unexpectedBeforeLabel?.onlyPresentToken(where: { $0.tokenKind.isIdentifier }) {
+      addDiagnostic(
+        unexpectedIdentifier,
+        UnknownParameterError(
+          parameter: unexpectedIdentifier,
+          validParameters: LabeledSpecializeArgumentSyntax.LabelOptions.allCases.map { $0.tokenSyntax }
+        ),
+        handledNodes: [unexpectedIdentifier.id, node.label.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -524,6 +524,23 @@ public struct UnknownDirectiveError: ParserError {
   }
 }
 
+public struct UnknownParameterError: ParserError {
+  public let parameter: TokenSyntax
+  public let validParameters: [TokenSyntax]
+
+  public var message: String {
+    var message = "unknown parameter '\(parameter.text)'"
+
+    if let parentTypeName = parameter.parent?.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {
+      message += " in \(parentTypeName)"
+    }
+
+    message += "; valid parameters are \(nodesDescription(validParameters, format: true))"
+
+    return message
+  }
+}
+
 // MARK: - Notes (please sort alphabetically)
 
 public struct EffectSpecifierDeclaredHere: ParserNote {

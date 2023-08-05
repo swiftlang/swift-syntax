@@ -638,55 +638,21 @@ extension Parser {
 }
 
 extension Parser {
-  enum SpecializeParameter: TokenSpecSet {
-    case target
-    case availability
-    case exported
-    case kind
-    case spi
-    case spiModule
-    case available
-
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.target): self = .target
-      case TokenSpec(.availability): self = .availability
-      case TokenSpec(.exported): self = .exported
-      case TokenSpec(.kind): self = .kind
-      case TokenSpec(.spi): self = .spi
-      case TokenSpec(.spiModule): self = .spiModule
-      case TokenSpec(.available): self = .available
-      default: return nil
-      }
-    }
-
-    var spec: TokenSpec {
-      switch self {
-      case .target: return .keyword(.target)
-      case .availability: return .keyword(.availability)
-      case .exported: return .keyword(.exported)
-      case .kind: return .keyword(.kind)
-      case .spi: return .keyword(.spi)
-      case .spiModule: return .keyword(.spiModule)
-      case .available: return .keyword(.available)
-      }
-    }
-  }
   mutating func parseSpecializeAttributeArgumentList() -> RawSpecializeAttributeArgumentListSyntax {
     var elements = [RawSpecializeAttributeArgumentListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
     var loopProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightParen, .keyword(.where)) && self.hasProgressed(&loopProgress) {
-      switch self.at(anyIn: SpecializeParameter.self) {
+    LOOP: while !self.at(.endOfFile, .rightParen, .keyword(.where)) && self.hasProgressed(&loopProgress) {
+      switch self.at(anyIn: LabeledSpecializeArgumentSyntax.LabelOptions.self) {
       case (.target, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let declName = self.parseDeclReferenceExpr([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
         let comma = self.consume(if: .comma)
         elements.append(
           .specializeTargetFunctionArgument(
             RawSpecializeTargetFunctionArgumentSyntax(
-              targetLabel: ident,
+              targetLabel: label,
               unexpectedBeforeColon,
               colon: colon,
               declName: declName,
@@ -696,14 +662,14 @@ extension Parser {
           )
         )
       case (.availability, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let availability = self.parseAvailabilitySpecList()
         let (unexpectedBeforeSemi, semi) = self.expect(.semicolon)
         elements.append(
           .specializeAvailabilityArgument(
             RawSpecializeAvailabilityArgumentSyntax(
-              availabilityLabel: ident,
+              availabilityLabel: label,
               unexpectedBeforeColon,
               colon: colon,
               availabilityArguments: availability,
@@ -714,7 +680,7 @@ extension Parser {
           )
         )
       case (.available, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         // FIXME: I have no idea what this is supposed to be, but the Syntax
         // tree only allows us to insert a token so we'll take anything.
@@ -723,7 +689,7 @@ extension Parser {
         elements.append(
           .labeledSpecializeArgument(
             RawLabeledSpecializeArgumentSyntax(
-              label: ident,
+              label: label,
               unexpectedBeforeColon,
               colon: colon,
               value: available,
@@ -733,14 +699,14 @@ extension Parser {
           )
         )
       case (.exported, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let (unexpectedBeforeValue, value) = self.expect(.keyword(.true), .keyword(.false), default: .keyword(.false))
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeArgument(
             RawLabeledSpecializeArgumentSyntax(
-              label: ident,
+              label: label,
               unexpectedBeforeColon,
               colon: colon,
               unexpectedBeforeValue,
@@ -751,14 +717,14 @@ extension Parser {
           )
         )
       case (.kind, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.parseAnyIdentifier()
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeArgument(
             RawLabeledSpecializeArgumentSyntax(
-              label: ident,
+              label: label,
               unexpectedBeforeColon,
               colon: colon,
               value: valueLabel,
@@ -769,14 +735,14 @@ extension Parser {
         )
       case (.spiModule, let handle)?,
         (.spi, let handle)?:
-        let ident = self.eat(handle)
+        let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let valueLabel = self.consumeAnyToken()
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeArgument(
             RawLabeledSpecializeArgumentSyntax(
-              label: ident,
+              label: label,
               unexpectedBeforeColon,
               colon: colon,
               value: valueLabel,
@@ -786,22 +752,7 @@ extension Parser {
           )
         )
       case nil:
-        let ident = self.consumeAnyToken()
-        let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let valueLabel = self.consumeAnyToken()
-        let comma = self.consume(if: .comma)
-        elements.append(
-          .labeledSpecializeArgument(
-            RawLabeledSpecializeArgumentSyntax(
-              label: ident,
-              unexpectedBeforeColon,
-              colon: colon,
-              value: valueLabel,
-              trailingComma: comma,
-              arena: self.arena
-            )
-          )
-        )
+        break LOOP
       }
     }
 

@@ -22,7 +22,12 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for child in layoutNode.children {
       if case let .token(choices, _, _) = child.kind, choices.count > 1 {
         try! ExtensionDeclSyntax("extension \(raw: layoutNode.kind.syntaxType)") {
-          try EnumDeclSyntax("enum \(raw: child.name)Options: TokenSpecSet") {
+          try EnumDeclSyntax(
+            """
+            @_spi(Diagnostics)
+            public enum \(raw: child.name)Options: TokenSpecSet
+            """
+          ) {
             for choice in choices {
               switch choice {
               case .keyword(let keywordText):
@@ -66,6 +71,39 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                     SwitchCaseSyntax(
                       "case .\(token.varOrCaseName): return .\(token.varOrCaseName)"
                     )
+                  }
+                }
+              }
+            }
+
+            try VariableDeclSyntax(
+              """
+              /// Returns a token that satisfies the `TokenSpec` of this case.
+              ///
+              /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+              @_spi(Diagnostics)
+              public var tokenSyntax: TokenSyntax
+              """
+            ) {
+              try SwitchExprSyntax("switch self") {
+                for choice in choices {
+                  switch choice {
+                  case .keyword(let keywordText):
+                    let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
+                    SwitchCaseSyntax(
+                      "case .\(raw: keyword.escapedName): return .keyword(.\(raw: keyword.escapedName))"
+                    )
+                  case .token(let tokenText):
+                    let token = SYNTAX_TOKEN_MAP[tokenText]!
+                    if token.text != nil {
+                      SwitchCaseSyntax(
+                        "case .\(raw: token.varOrCaseName): return .\(raw: token.varOrCaseName)Token()"
+                      )
+                    } else {
+                      SwitchCaseSyntax(
+                        #"case .\#(raw: token.varOrCaseName): return .\#(raw: token.varOrCaseName)("")"#
+                      )
+                    }
                   }
                 }
               }

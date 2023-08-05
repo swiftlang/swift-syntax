@@ -641,7 +641,15 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "Label",
-        kind: .node(kind: .token),
+        kind: .token(choices: [
+          .keyword(text: "target"),
+          .keyword(text: "availability"),
+          .keyword(text: "exported"),
+          .keyword(text: "kind"),
+          .keyword(text: "spi"),
+          .keyword(text: "spiModule"),
+          .keyword(text: "available"),
+        ]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),

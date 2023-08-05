@@ -12016,7 +12016,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
 ///
 /// ### Children
 /// 
-///  - `label`: ``TokenSyntax``
+///  - `label`: (`'target'` | `'availability'` | `'exported'` | `'kind'` | `'spi'` | `'spiModule'` | `'available'`)
 ///  - `colon`: `':'`
 ///  - `value`: ``TokenSyntax``
 ///  - `trailingComma`: `','`?

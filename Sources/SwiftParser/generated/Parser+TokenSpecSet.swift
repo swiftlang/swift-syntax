@@ -15,7 +15,8 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension AccessorDeclSyntax {
-  enum AccessorSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum AccessorSpecifierOptions: TokenSpecSet {
     case get
     case set
     case didSet
@@ -93,11 +94,47 @@ extension AccessorDeclSyntax {
         return .keyword(.`init`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .get:
+        return .keyword(.get)
+      case .set:
+        return .keyword(.set)
+      case .didSet:
+        return .keyword(.didSet)
+      case .willSet:
+        return .keyword(.willSet)
+      case .unsafeAddress:
+        return .keyword(.unsafeAddress)
+      case .addressWithOwner:
+        return .keyword(.addressWithOwner)
+      case .addressWithNativeOwner:
+        return .keyword(.addressWithNativeOwner)
+      case .unsafeMutableAddress:
+        return .keyword(.unsafeMutableAddress)
+      case .mutableAddressWithOwner:
+        return .keyword(.mutableAddressWithOwner)
+      case .mutableAddressWithNativeOwner:
+        return .keyword(.mutableAddressWithNativeOwner)
+      case ._read:
+        return .keyword(._read)
+      case ._modify:
+        return .keyword(._modify)
+      case .`init`:
+        return .keyword(.`init`)
+      }
+    }
   }
 }
 
 extension AsExprSyntax {
-  enum QuestionOrExclamationMarkOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum QuestionOrExclamationMarkOptions: TokenSpecSet {
     case postfixQuestionMark
     case exclamationMark
     
@@ -120,11 +157,25 @@ extension AsExprSyntax {
         return .exclamationMark
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .postfixQuestionMark:
+        return .postfixQuestionMarkToken()
+      case .exclamationMark:
+        return .exclamationMarkToken()
+      }
+    }
   }
 }
 
 extension AttributedTypeSyntax {
-  enum SpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SpecifierOptions: TokenSpecSet {
     case `inout`
     case __shared
     case __owned
@@ -172,11 +223,35 @@ extension AttributedTypeSyntax {
         return .keyword(.consuming)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`inout`:
+        return .keyword(.`inout`)
+      case .__shared:
+        return .keyword(.__shared)
+      case .__owned:
+        return .keyword(.__owned)
+      case .isolated:
+        return .keyword(.isolated)
+      case ._const:
+        return .keyword(._const)
+      case .borrowing:
+        return .keyword(.borrowing)
+      case .consuming:
+        return .keyword(.consuming)
+      }
+    }
   }
 }
 
 extension AvailabilityConditionSyntax {
-  enum AvailabilityKeywordOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum AvailabilityKeywordOptions: TokenSpecSet {
     case poundAvailable
     case poundUnavailable
     
@@ -199,11 +274,25 @@ extension AvailabilityConditionSyntax {
         return .poundUnavailable
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .poundAvailable:
+        return .poundAvailableToken()
+      case .poundUnavailable:
+        return .poundUnavailableToken()
+      }
+    }
   }
 }
 
 extension AvailabilityLabeledArgumentSyntax {
-  enum LabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
     case message
     case renamed
     case introduced
@@ -241,11 +330,31 @@ extension AvailabilityLabeledArgumentSyntax {
         return .keyword(.deprecated)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .message:
+        return .keyword(.message)
+      case .renamed:
+        return .keyword(.renamed)
+      case .introduced:
+        return .keyword(.introduced)
+      case .obsoleted:
+        return .keyword(.obsoleted)
+      case .deprecated:
+        return .keyword(.deprecated)
+      }
+    }
   }
 }
 
 extension BooleanLiteralExprSyntax {
-  enum LiteralOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LiteralOptions: TokenSpecSet {
     case `true`
     case `false`
     
@@ -268,11 +377,25 @@ extension BooleanLiteralExprSyntax {
         return .keyword(.`false`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`true`:
+        return .keyword(.`true`)
+      case .`false`:
+        return .keyword(.`false`)
+      }
+    }
   }
 }
 
 extension CanImportVersionInfoSyntax {
-  enum LabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
     case _version
     case _underlyingVersion
     
@@ -295,11 +418,25 @@ extension CanImportVersionInfoSyntax {
         return .keyword(._underlyingVersion)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._version:
+        return .keyword(._version)
+      case ._underlyingVersion:
+        return .keyword(._underlyingVersion)
+      }
+    }
   }
 }
 
 extension ClosureCaptureSpecifierSyntax {
-  enum SpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SpecifierOptions: TokenSpecSet {
     case weak
     case unowned
     
@@ -322,11 +459,25 @@ extension ClosureCaptureSpecifierSyntax {
         return .keyword(.unowned)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .weak:
+        return .keyword(.weak)
+      case .unowned:
+        return .keyword(.unowned)
+      }
+    }
   }
 }
 
 extension ClosureCaptureSpecifierSyntax {
-  enum DetailOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum DetailOptions: TokenSpecSet {
     case safe
     case unsafe
     
@@ -349,11 +500,25 @@ extension ClosureCaptureSpecifierSyntax {
         return .keyword(.unsafe)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .safe:
+        return .keyword(.safe)
+      case .unsafe:
+        return .keyword(.unsafe)
+      }
+    }
   }
 }
 
 extension ClosureParameterSyntax {
-  enum FirstNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum FirstNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -376,11 +541,25 @@ extension ClosureParameterSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension ClosureParameterSyntax {
-  enum SecondNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SecondNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -401,13 +580,27 @@ extension ClosureParameterSyntax {
         return .identifier
       case .wildcard:
         return .wildcard
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
       }
     }
   }
 }
 
 extension ClosureShorthandParameterSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -430,11 +623,25 @@ extension ClosureShorthandParameterSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension ConsumeExprSyntax {
-  enum ConsumeKeywordOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ConsumeKeywordOptions: TokenSpecSet {
     case _move
     case consume
     
@@ -457,11 +664,25 @@ extension ConsumeExprSyntax {
         return .keyword(.consume)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._move:
+        return .keyword(._move)
+      case .consume:
+        return .keyword(.consume)
+      }
+    }
   }
 }
 
 extension DeclModifierSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case __consuming
     case __setter_access
     case _const
@@ -649,11 +870,91 @@ extension DeclModifierSyntax {
         return .keyword(.weak)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .__consuming:
+        return .keyword(.__consuming)
+      case .__setter_access:
+        return .keyword(.__setter_access)
+      case ._const:
+        return .keyword(._const)
+      case ._local:
+        return .keyword(._local)
+      case .actor:
+        return .keyword(.actor)
+      case .async:
+        return .keyword(.async)
+      case .borrowing:
+        return .keyword(.borrowing)
+      case .`class`:
+        return .keyword(.`class`)
+      case .consuming:
+        return .keyword(.consuming)
+      case .convenience:
+        return .keyword(.convenience)
+      case .distributed:
+        return .keyword(.distributed)
+      case .dynamic:
+        return .keyword(.dynamic)
+      case .`fileprivate`:
+        return .keyword(.`fileprivate`)
+      case .final:
+        return .keyword(.final)
+      case .indirect:
+        return .keyword(.indirect)
+      case .infix:
+        return .keyword(.infix)
+      case .`internal`:
+        return .keyword(.`internal`)
+      case .isolated:
+        return .keyword(.isolated)
+      case .lazy:
+        return .keyword(.lazy)
+      case .mutating:
+        return .keyword(.mutating)
+      case .nonisolated:
+        return .keyword(.nonisolated)
+      case .nonmutating:
+        return .keyword(.nonmutating)
+      case .open:
+        return .keyword(.open)
+      case .optional:
+        return .keyword(.optional)
+      case .override:
+        return .keyword(.override)
+      case .package:
+        return .keyword(.package)
+      case .postfix:
+        return .keyword(.postfix)
+      case .prefix:
+        return .keyword(.prefix)
+      case .`private`:
+        return .keyword(.`private`)
+      case .`public`:
+        return .keyword(.`public`)
+      case .reasync:
+        return .keyword(.reasync)
+      case .required:
+        return .keyword(.required)
+      case .`static`:
+        return .keyword(.`static`)
+      case .unowned:
+        return .keyword(.unowned)
+      case .weak:
+        return .keyword(.weak)
+      }
+    }
   }
 }
 
 extension DeclReferenceExprSyntax {
-  enum BaseNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum BaseNameOptions: TokenSpecSet {
     case identifier
     case `self`
     case `Self`
@@ -701,11 +1002,35 @@ extension DeclReferenceExprSyntax {
         return .integerLiteral
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .`self`:
+        return .keyword(.`self`)
+      case .`Self`:
+        return .keyword(.`Self`)
+      case .`init`:
+        return .keyword(.`init`)
+      case .dollarIdentifier:
+        return .dollarIdentifier("")
+      case .binaryOperator:
+        return .binaryOperator("")
+      case .integerLiteral:
+        return .integerLiteral("")
+      }
+    }
   }
 }
 
 extension DerivativeAttributeArgumentsSyntax {
-  enum AccessorSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum AccessorSpecifierOptions: TokenSpecSet {
     case get
     case set
     
@@ -728,11 +1053,25 @@ extension DerivativeAttributeArgumentsSyntax {
         return .keyword(.set)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .get:
+        return .keyword(.get)
+      case .set:
+        return .keyword(.set)
+      }
+    }
   }
 }
 
 extension DifferentiabilityArgumentSyntax {
-  enum ArgumentOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ArgumentOptions: TokenSpecSet {
     case identifier
     case integerLiteral
     case `self`
@@ -760,11 +1099,27 @@ extension DifferentiabilityArgumentSyntax {
         return .keyword(.`self`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .integerLiteral:
+        return .integerLiteral("")
+      case .`self`:
+        return .keyword(.`self`)
+      }
+    }
   }
 }
 
 extension DifferentiableAttributeArgumentsSyntax {
-  enum KindSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum KindSpecifierOptions: TokenSpecSet {
     case _forward
     case reverse
     case _linear
@@ -792,11 +1147,27 @@ extension DifferentiableAttributeArgumentsSyntax {
         return .keyword(._linear)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._forward:
+        return .keyword(._forward)
+      case .reverse:
+        return .keyword(.reverse)
+      case ._linear:
+        return .keyword(._linear)
+      }
+    }
   }
 }
 
 extension DiscardStmtSyntax {
-  enum DiscardKeywordOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum DiscardKeywordOptions: TokenSpecSet {
     case _forget
     case discard
     
@@ -819,11 +1190,25 @@ extension DiscardStmtSyntax {
         return .keyword(.discard)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._forget:
+        return .keyword(._forget)
+      case .discard:
+        return .keyword(.discard)
+      }
+    }
   }
 }
 
 extension DocumentationAttributeArgumentSyntax {
-  enum LabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
     case visibility
     case metadata
     
@@ -846,11 +1231,25 @@ extension DocumentationAttributeArgumentSyntax {
         return .keyword(.metadata)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .visibility:
+        return .keyword(.visibility)
+      case .metadata:
+        return .keyword(.metadata)
+      }
+    }
   }
 }
 
 extension EnumCaseParameterSyntax {
-  enum FirstNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum FirstNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -873,11 +1272,25 @@ extension EnumCaseParameterSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension EnumCaseParameterSyntax {
-  enum SecondNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SecondNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -898,13 +1311,27 @@ extension EnumCaseParameterSyntax {
         return .identifier
       case .wildcard:
         return .wildcard
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
       }
     }
   }
 }
 
 extension FunctionDeclSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case identifier
     case binaryOperator
     case prefixOperator
@@ -937,11 +1364,29 @@ extension FunctionDeclSyntax {
         return .postfixOperator
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .binaryOperator:
+        return .binaryOperator("")
+      case .prefixOperator:
+        return .prefixOperator("")
+      case .postfixOperator:
+        return .postfixOperator("")
+      }
+    }
   }
 }
 
 extension FunctionEffectSpecifiersSyntax {
-  enum AsyncSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum AsyncSpecifierOptions: TokenSpecSet {
     case async
     case reasync
     
@@ -964,11 +1409,25 @@ extension FunctionEffectSpecifiersSyntax {
         return .keyword(.reasync)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .async:
+        return .keyword(.async)
+      case .reasync:
+        return .keyword(.reasync)
+      }
+    }
   }
 }
 
 extension FunctionEffectSpecifiersSyntax {
-  enum ThrowsSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ThrowsSpecifierOptions: TokenSpecSet {
     case `throws`
     case `rethrows`
     
@@ -991,11 +1450,25 @@ extension FunctionEffectSpecifiersSyntax {
         return .keyword(.`rethrows`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`throws`:
+        return .keyword(.`throws`)
+      case .`rethrows`:
+        return .keyword(.`rethrows`)
+      }
+    }
   }
 }
 
 extension FunctionParameterSyntax {
-  enum FirstNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum FirstNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1018,11 +1491,25 @@ extension FunctionParameterSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension FunctionParameterSyntax {
-  enum SecondNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SecondNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1043,13 +1530,27 @@ extension FunctionParameterSyntax {
         return .identifier
       case .wildcard:
         return .wildcard
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
       }
     }
   }
 }
 
 extension IdentifierPatternSyntax {
-  enum IdentifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum IdentifierOptions: TokenSpecSet {
     case identifier
     case `self`
     case `init`
@@ -1077,11 +1578,27 @@ extension IdentifierPatternSyntax {
         return .keyword(.`init`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .`self`:
+        return .keyword(.`self`)
+      case .`init`:
+        return .keyword(.`init`)
+      }
+    }
   }
 }
 
 extension IdentifierTypeSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case identifier
     case `self`
     case `Self`
@@ -1119,11 +1636,31 @@ extension IdentifierTypeSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .`self`:
+        return .keyword(.`self`)
+      case .`Self`:
+        return .keyword(.`Self`)
+      case .`Any`:
+        return .keyword(.`Any`)
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension IfConfigClauseSyntax {
-  enum PoundKeywordOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum PoundKeywordOptions: TokenSpecSet {
     case poundIf
     case poundElseif
     case poundElse
@@ -1151,11 +1688,27 @@ extension IfConfigClauseSyntax {
         return .poundElse
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .poundIf:
+        return .poundIfToken()
+      case .poundElseif:
+        return .poundElseifToken()
+      case .poundElse:
+        return .poundElseToken()
+      }
+    }
   }
 }
 
 extension ImportDeclSyntax {
-  enum ImportKindSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ImportKindSpecifierOptions: TokenSpecSet {
     case `typealias`
     case `struct`
     case `class`
@@ -1213,11 +1766,39 @@ extension ImportDeclSyntax {
         return .keyword(.`inout`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`typealias`:
+        return .keyword(.`typealias`)
+      case .`struct`:
+        return .keyword(.`struct`)
+      case .`class`:
+        return .keyword(.`class`)
+      case .`enum`:
+        return .keyword(.`enum`)
+      case .`protocol`:
+        return .keyword(.`protocol`)
+      case .`var`:
+        return .keyword(.`var`)
+      case .`let`:
+        return .keyword(.`let`)
+      case .`func`:
+        return .keyword(.`func`)
+      case .`inout`:
+        return .keyword(.`inout`)
+      }
+    }
   }
 }
 
 extension ImportPathComponentSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case identifier
     case binaryOperator
     case prefixOperator
@@ -1250,11 +1831,29 @@ extension ImportPathComponentSyntax {
         return .postfixOperator
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .binaryOperator:
+        return .binaryOperator("")
+      case .prefixOperator:
+        return .prefixOperator("")
+      case .postfixOperator:
+        return .postfixOperator("")
+      }
+    }
   }
 }
 
 extension InitializerDeclSyntax {
-  enum OptionalMarkOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum OptionalMarkOptions: TokenSpecSet {
     case postfixQuestionMark
     case infixQuestionMark
     case exclamationMark
@@ -1282,11 +1881,27 @@ extension InitializerDeclSyntax {
         return .exclamationMark
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .postfixQuestionMark:
+        return .postfixQuestionMarkToken()
+      case .infixQuestionMark:
+        return .infixQuestionMarkToken()
+      case .exclamationMark:
+        return .exclamationMarkToken()
+      }
+    }
   }
 }
 
 extension KeyPathOptionalComponentSyntax {
-  enum QuestionOrExclamationMarkOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum QuestionOrExclamationMarkOptions: TokenSpecSet {
     case postfixQuestionMark
     case exclamationMark
     
@@ -1309,11 +1924,25 @@ extension KeyPathOptionalComponentSyntax {
         return .exclamationMark
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .postfixQuestionMark:
+        return .postfixQuestionMarkToken()
+      case .exclamationMark:
+        return .exclamationMarkToken()
+      }
+    }
   }
 }
 
 extension LabeledExprSyntax {
-  enum LabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1336,11 +1965,101 @@ extension LabeledExprSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
+  }
+}
+
+extension LabeledSpecializeArgumentSyntax {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
+    case target
+    case availability
+    case exported
+    case kind
+    case spi
+    case spiModule
+    case available
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.target):
+        self = .target
+      case TokenSpec(.availability):
+        self = .availability
+      case TokenSpec(.exported):
+        self = .exported
+      case TokenSpec(.kind):
+        self = .kind
+      case TokenSpec(.spi):
+        self = .spi
+      case TokenSpec(.spiModule):
+        self = .spiModule
+      case TokenSpec(.available):
+        self = .available
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .target:
+        return .keyword(.target)
+      case .availability:
+        return .keyword(.availability)
+      case .exported:
+        return .keyword(.exported)
+      case .kind:
+        return .keyword(.kind)
+      case .spi:
+        return .keyword(.spi)
+      case .spiModule:
+        return .keyword(.spiModule)
+      case .available:
+        return .keyword(.available)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .target:
+        return .keyword(.target)
+      case .availability:
+        return .keyword(.availability)
+      case .exported:
+        return .keyword(.exported)
+      case .kind:
+        return .keyword(.kind)
+      case .spi:
+        return .keyword(.spi)
+      case .spiModule:
+        return .keyword(.spiModule)
+      case .available:
+        return .keyword(.available)
+      }
+    }
   }
 }
 
 extension LayoutRequirementSyntax {
-  enum LayoutSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LayoutSpecifierOptions: TokenSpecSet {
     case _Trivial
     case _TrivialAtMost
     case _UnknownLayout
@@ -1388,11 +2107,35 @@ extension LayoutRequirementSyntax {
         return .keyword(._NativeClass)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._Trivial:
+        return .keyword(._Trivial)
+      case ._TrivialAtMost:
+        return .keyword(._TrivialAtMost)
+      case ._UnknownLayout:
+        return .keyword(._UnknownLayout)
+      case ._RefCountedObject:
+        return .keyword(._RefCountedObject)
+      case ._NativeRefCountedObject:
+        return .keyword(._NativeRefCountedObject)
+      case ._Class:
+        return .keyword(._Class)
+      case ._NativeClass:
+        return .keyword(._NativeClass)
+      }
+    }
   }
 }
 
 extension MemberTypeSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case identifier
     case `self`
     case `Self`
@@ -1420,11 +2163,27 @@ extension MemberTypeSyntax {
         return .keyword(.`Self`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .`self`:
+        return .keyword(.`self`)
+      case .`Self`:
+        return .keyword(.`Self`)
+      }
+    }
   }
 }
 
 extension MetatypeTypeSyntax {
-  enum MetatypeSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum MetatypeSpecifierOptions: TokenSpecSet {
     case `Type`
     case `Protocol`
     
@@ -1447,11 +2206,25 @@ extension MetatypeTypeSyntax {
         return .keyword(.`Protocol`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`Type`:
+        return .keyword(.`Type`)
+      case .`Protocol`:
+        return .keyword(.`Protocol`)
+      }
+    }
   }
 }
 
 extension MultipleTrailingClosureElementSyntax {
-  enum LabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum LabelOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1474,11 +2247,25 @@ extension MultipleTrailingClosureElementSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension OperatorDeclSyntax {
-  enum FixitySpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum FixitySpecifierOptions: TokenSpecSet {
     case prefix
     case postfix
     case infix
@@ -1506,11 +2293,27 @@ extension OperatorDeclSyntax {
         return .keyword(.infix)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .prefix:
+        return .keyword(.prefix)
+      case .postfix:
+        return .keyword(.postfix)
+      case .infix:
+        return .keyword(.infix)
+      }
+    }
   }
 }
 
 extension OperatorDeclSyntax {
-  enum NameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
     case binaryOperator
     case prefixOperator
     case postfixOperator
@@ -1538,11 +2341,27 @@ extension OperatorDeclSyntax {
         return .postfixOperator
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .binaryOperator:
+        return .binaryOperator("")
+      case .prefixOperator:
+        return .prefixOperator("")
+      case .postfixOperator:
+        return .postfixOperator("")
+      }
+    }
   }
 }
 
 extension OptionalBindingConditionSyntax {
-  enum BindingSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`
@@ -1570,11 +2389,27 @@ extension OptionalBindingConditionSyntax {
         return .keyword(.`inout`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`let`:
+        return .keyword(.`let`)
+      case .`var`:
+        return .keyword(.`var`)
+      case .`inout`:
+        return .keyword(.`inout`)
+      }
+    }
   }
 }
 
 extension PrecedenceGroupAssignmentSyntax {
-  enum ValueOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ValueOptions: TokenSpecSet {
     case `true`
     case `false`
     
@@ -1597,11 +2432,25 @@ extension PrecedenceGroupAssignmentSyntax {
         return .keyword(.`false`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`true`:
+        return .keyword(.`true`)
+      case .`false`:
+        return .keyword(.`false`)
+      }
+    }
   }
 }
 
 extension PrecedenceGroupAssociativitySyntax {
-  enum ValueOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ValueOptions: TokenSpecSet {
     case left
     case right
     case none
@@ -1629,11 +2478,27 @@ extension PrecedenceGroupAssociativitySyntax {
         return .keyword(.none)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .left:
+        return .keyword(.left)
+      case .right:
+        return .keyword(.right)
+      case .none:
+        return .keyword(.none)
+      }
+    }
   }
 }
 
 extension PrecedenceGroupRelationSyntax {
-  enum HigherThanOrLowerThanLabelOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum HigherThanOrLowerThanLabelOptions: TokenSpecSet {
     case higherThan
     case lowerThan
     
@@ -1656,11 +2521,25 @@ extension PrecedenceGroupRelationSyntax {
         return .keyword(.lowerThan)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .higherThan:
+        return .keyword(.higherThan)
+      case .lowerThan:
+        return .keyword(.lowerThan)
+      }
+    }
   }
 }
 
 extension SameTypeRequirementSyntax {
-  enum EqualOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum EqualOptions: TokenSpecSet {
     case binaryOperator
     case prefixOperator
     case postfixOperator
@@ -1688,11 +2567,27 @@ extension SameTypeRequirementSyntax {
         return .postfixOperator
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .binaryOperator:
+        return .binaryOperator("")
+      case .prefixOperator:
+        return .prefixOperator("")
+      case .postfixOperator:
+        return .postfixOperator("")
+      }
+    }
   }
 }
 
 extension SomeOrAnyTypeSyntax {
-  enum SomeOrAnySpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SomeOrAnySpecifierOptions: TokenSpecSet {
     case some
     case any
     
@@ -1715,11 +2610,25 @@ extension SomeOrAnyTypeSyntax {
         return .keyword(.any)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .some:
+        return .keyword(.some)
+      case .any:
+        return .keyword(.any)
+      }
+    }
   }
 }
 
 extension StringLiteralExprSyntax {
-  enum OpeningQuoteOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum OpeningQuoteOptions: TokenSpecSet {
     case stringQuote
     case multilineStringQuote
     case singleQuote
@@ -1747,11 +2656,27 @@ extension StringLiteralExprSyntax {
         return .singleQuote
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .stringQuote:
+        return .stringQuoteToken()
+      case .multilineStringQuote:
+        return .multilineStringQuoteToken()
+      case .singleQuote:
+        return .singleQuoteToken()
+      }
+    }
   }
 }
 
 extension StringLiteralExprSyntax {
-  enum ClosingQuoteOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum ClosingQuoteOptions: TokenSpecSet {
     case stringQuote
     case multilineStringQuote
     case singleQuote
@@ -1777,13 +2702,29 @@ extension StringLiteralExprSyntax {
         return .multilineStringQuote
       case .singleQuote:
         return .singleQuote
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .stringQuote:
+        return .stringQuoteToken()
+      case .multilineStringQuote:
+        return .multilineStringQuoteToken()
+      case .singleQuote:
+        return .singleQuoteToken()
       }
     }
   }
 }
 
 extension TryExprSyntax {
-  enum QuestionOrExclamationMarkOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum QuestionOrExclamationMarkOptions: TokenSpecSet {
     case postfixQuestionMark
     case exclamationMark
     
@@ -1806,11 +2747,25 @@ extension TryExprSyntax {
         return .exclamationMark
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .postfixQuestionMark:
+        return .postfixQuestionMarkToken()
+      case .exclamationMark:
+        return .exclamationMarkToken()
+      }
+    }
   }
 }
 
 extension TupleTypeElementSyntax {
-  enum FirstNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum FirstNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1833,11 +2788,25 @@ extension TupleTypeElementSyntax {
         return .wildcard
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
+      }
+    }
   }
 }
 
 extension TupleTypeElementSyntax {
-  enum SecondNameOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum SecondNameOptions: TokenSpecSet {
     case identifier
     case wildcard
     
@@ -1858,13 +2827,27 @@ extension TupleTypeElementSyntax {
         return .identifier
       case .wildcard:
         return .wildcard
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .wildcard:
+        return .wildcardToken()
       }
     }
   }
 }
 
 extension UnresolvedAsExprSyntax {
-  enum QuestionOrExclamationMarkOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum QuestionOrExclamationMarkOptions: TokenSpecSet {
     case postfixQuestionMark
     case exclamationMark
     
@@ -1887,11 +2870,25 @@ extension UnresolvedAsExprSyntax {
         return .exclamationMark
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .postfixQuestionMark:
+        return .postfixQuestionMarkToken()
+      case .exclamationMark:
+        return .exclamationMarkToken()
+      }
+    }
   }
 }
 
 extension ValueBindingPatternSyntax {
-  enum BindingSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`
@@ -1919,11 +2916,27 @@ extension ValueBindingPatternSyntax {
         return .keyword(.`inout`)
       }
     }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .`let`:
+        return .keyword(.`let`)
+      case .`var`:
+        return .keyword(.`var`)
+      case .`inout`:
+        return .keyword(.`inout`)
+      }
+    }
   }
 }
 
 extension VariableDeclSyntax {
-  enum BindingSpecifierOptions: TokenSpecSet {
+  @_spi(Diagnostics)
+  public enum BindingSpecifierOptions: TokenSpecSet {
     case `let`
     case `var`
     case `inout`
@@ -1942,6 +2955,21 @@ extension VariableDeclSyntax {
     }
     
     var spec: TokenSpec {
+      switch self {
+      case .`let`:
+        return .keyword(.`let`)
+      case .`var`:
+        return .keyword(.`var`)
+      case .`inout`:
+        return .keyword(.`inout`)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
       switch self {
       case .`let`:
         return .keyword(.`let`)

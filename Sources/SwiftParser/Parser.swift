@@ -119,7 +119,7 @@ public struct Parser {
   /// explicitly specify one. Debug builds of the parser consume a lot more stack
   /// space and thus have a lower default maximum nesting level.
   #if DEBUG
-  static let defaultMaximumNestingLevel = 25
+  static let defaultMaximumNestingLevel = 20
   #else
   static let defaultMaximumNestingLevel = 256
   #endif

@@ -22,7 +22,7 @@ swift run --package-path CodeGeneration generate-swiftsyntax
 ## Adding and Removing Syntax Nodes
 
 The files containing the definition of all of the syntax nodes are available
-under the [SyntaxSupport](SyntaxSupport) directory. These files
+under the [SyntaxSupport][SyntaxSupport] directory. These files
 are roughly divided according to broad syntactic categories in the Swift
 programming language. That is, the syntax nodes for classes, structs, and actors
 are defined in `DeclNodes.swift`, while the syntax nodes for string literals, 
@@ -67,11 +67,6 @@ Added syntactic elements will require corresponding changes to the included
 SwiftParser library. For an introduction on parsing Swift nodes, see 
 [the article on Parsing Basics][ParserBasics].
 
-@Comment {
-  When docc resolves https://github.com/apple/swift-docc/issues/255, this should
-  be an inter-target link.
-}
-
 When updating nodes, certain clients of SwiftSyntax that are relying upon those
 nodes will need to be changed in tandem. For example, the 
 [swift-stress-tester][swift-stress-tester] uses SwiftSyntax, and the CI
@@ -81,3 +76,8 @@ without a paired change to that repository.
 [SyntaxSupport]: https://github.com/apple/swift-syntax/tree/main/CodeGeneration/Sources/SyntaxSupport
 [swift-stress-tester]: https://github.com/apple/swift-stress-tester
 [ParserBasics]: https://github.com/apple/swift-syntax/tree/main/Sources/SwiftParser/SwiftParser.docc/ParsingBasics.md
+
+@Comment {
+  When docc resolves https://github.com/apple/swift-docc/issues/255, `ParserBasic` should be an inter-target link.
+}
+

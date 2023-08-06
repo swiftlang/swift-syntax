@@ -182,13 +182,13 @@ private func evaluateIfConfig(
 
   // Integer literals evaluate true if that are not "0".
   if let intLiteral = condition.as(IntegerLiteralExprSyntax.self) {
-    return intLiteral.digits.text != "0"
+    return intLiteral.literal.text != "0"
   }
 
   // Declaration references are for custom compilation flags.
-  if let identExpr = condition.as(IdentifierExprSyntax.self) {
+  if let identExpr = condition.as(DeclReferenceExprSyntax.self) {
     // FIXME: Need a real notion of an identifier.
-    let ident = identExpr.identifier.text
+    let ident = identExpr.baseName.text
 
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return try configuration.isCustomConditionSet(name: ident)
@@ -196,21 +196,21 @@ private func evaluateIfConfig(
 
   // Logical '!'.
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-    prefixOp.operatorToken?.text == "!"
+     prefixOp.operator?.text == "!"
   {
-    return try !evaluateIfConfig(condition: prefixOp.postfixExpression, configuration: configuration)
+    return try !evaluateIfConfig(condition: prefixOp.expression, configuration: configuration)
   }
 
   // Logical '&&' and '||'.
   if let binOp = condition.as(InfixOperatorExprSyntax.self),
-    let op = binOp.operatorOperand.as(BinaryOperatorExprSyntax.self),
-    (op.operatorToken.text == "&&" || op.operatorToken.text == "||")
+     let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+     (op.operator.text == "&&" || op.operator.text == "||")
   {
     // Evaluate the left-hand side.
     let lhsResult = try evaluateIfConfig(condition: binOp.leftOperand, configuration: configuration)
 
     // Short-circuit evaluation if we know the answer.
-    switch (lhsResult, op.operatorToken.text) {
+    switch (lhsResult, op.operator.text) {
     case (true, "||"): return true
     case (false, "&&"): return false
     default: break
@@ -235,7 +235,7 @@ private func evaluateIfConfig(
     /// Perform a check for an operation that takes a single identifier argument.
     func doSingleIdentifierArgumentCheck(_ body: (String) throws -> Bool, role: String) throws -> Bool {
       // Ensure that we have a single argument that is a simple identifier.
-      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr
       else {
         throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: role)
@@ -248,16 +248,16 @@ private func evaluateIfConfig(
     func doVersionComparisonCheck(_ actualVersion: VersionTuple) throws -> Bool {
       // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
       // operator applied to a version.
-      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
         let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
-        let opToken = unaryArg.operatorToken
+            let opToken = unaryArg.operator
       else {
         throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "version comparison (>= or <= a version)")
       }
 
       // Parse the version.
-      guard let version = VersionTuple(parsing: unaryArg.postfixExpression.trimmedDescription) else {
-        throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.postfixExpression)
+      guard let version = VersionTuple(parsing: unaryArg.expression.trimmedDescription) else {
+        throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.expression)
       }
 
       switch opToken.text {
@@ -295,7 +295,7 @@ private func evaluateIfConfig(
     case ._endian:
       // Ensure that we have a single argument that is a simple identifier,
       // either "little" or "big".
-      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr,
         let expectedEndianness = Endianness(rawValue: arg)
       else {
@@ -307,7 +307,7 @@ private func evaluateIfConfig(
     case ._pointerBitWidth:
       // Ensure that we have a single argument that is a simple identifier, which
       // is an underscore followed by an integer.
-      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr,
         let argFirst = arg.first,
         argFirst == "_",
@@ -327,7 +327,7 @@ private func evaluateIfConfig(
     case ._compiler_version:
       // Argument is a single unlabeled argument containing a string
       // literal.
-      guard let argExpr = call.argumentList.singleUnlabeledExpression,
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
         let stringLiteral = argExpr.as(StringLiteralExprSyntax.self),
         stringLiteral.segments.count == 1,
         let segment = stringLiteral.segments.first,
@@ -345,7 +345,7 @@ private func evaluateIfConfig(
     case .canImport:
       // Retrieve the first argument, which must not have a label. This is
       // the module import path.
-      guard let firstArg = call.argumentList.first,
+      guard let firstArg = call.arguments.first,
         firstArg.label == nil
       else {
         throw IfConfigError.canImportMissingModule(syntax: ExprSyntax(call))
@@ -358,7 +358,7 @@ private func evaluateIfConfig(
       // If there is a second argument, it shall have the label _version or
       // _underlyingVersion.
       let version: CanImportVersion
-      if let secondArg = call.argumentList.dropFirst().first {
+      if let secondArg = call.arguments.dropFirst().first {
         if secondArg.label?.text != "_version" && secondArg.label?.text != "_underlyingVersion" {
           throw IfConfigError.canImportLabel(syntax: secondArg.expression)
         }
@@ -387,7 +387,7 @@ private func evaluateIfConfig(
           version = .underlyingVersion(versionTuple)
         }
 
-        if call.argumentList.count > 2 {
+        if call.arguments.count > 2 {
           throw IfConfigError.canImportTwoParameters(syntax: ExprSyntax(call))
         }
       } else {

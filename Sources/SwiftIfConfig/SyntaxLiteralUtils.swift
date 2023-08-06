@@ -13,7 +13,7 @@ import SwiftSyntax
 
 extension BooleanLiteralExprSyntax {
   var literalValue: Bool {
-    return booleanLiteral.tokenKind == .keyword(.true)
+    return literal.tokenKind == .keyword(.true)
   }
 }
 
@@ -24,7 +24,7 @@ extension TupleExprSyntax {
   }
 }
 
-extension TupleExprElementListSyntax {
+extension LabeledExprListSyntax {
   /// If this list is a single, unlabeled expression, return it.
   var singleUnlabeledExpression: ExprSyntax? {
     guard count == 1, let element = first else { return nil }
@@ -35,13 +35,13 @@ extension TupleExprElementListSyntax {
 extension ExprSyntax {
   /// Whether this is a simple identifier expression and, if so, what the identifier string is.
   var simpleIdentifierExpr: String? {
-    guard let identExpr = self.as(IdentifierExprSyntax.self),
-      identExpr.declNameArguments == nil
+    guard let identExpr = self.as(DeclReferenceExprSyntax.self),
+          identExpr.argumentNames == nil
     else {
       return nil
     }
 
     // FIXME: Handle escaping here.
-    return identExpr.identifier.text
+    return identExpr.baseName.text
   }
 }

@@ -131,8 +131,8 @@ public class VisitorTests: XCTestCase {
       }
 
       open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-        if let identified = node.asProtocol(IdentifiedDeclSyntax.self) {
-          checkName(name: identified.identifier.text, node: node)
+        if let identified = node.asProtocol(NamedDeclSyntax.self) {
+          checkName(name: identified.name.text, node: node)
         } else if let identPattern = node.as(IdentifierPatternSyntax.self) {
           // FIXME: Should the above be an IdentifiedDeclSyntax?
           checkName(name: identPattern.identifier.text, node: node)

@@ -121,7 +121,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     return super.visit(rewrittenNode)
   }
 
-  override func visit(_ node: MemberDeclListSyntax) -> MemberDeclListSyntax {
+  override func visit(_ node: MemberBlockItemListSyntax) -> MemberBlockItemListSyntax {
     let rewrittenNode = dropInactive(node) { element in
       return element.decl.as(IfConfigDeclSyntax.self)
     }

@@ -85,7 +85,7 @@ public struct SyntaxBuildableType: Hashable {
   ///  - For token: ``TokenSyntax`` (tokens don't have a dedicated type in SwiftSyntaxBuilder)
   /// If the type is optional, the type is wrapped in an `OptionalType`.
   public var buildable: TypeSyntax {
-    optionalWrapped(type: IdentifierTypeSyntax(name: .identifier(syntaxBaseName)))
+    optionalWrapped(type: syntaxBaseName)
   }
 
   /// Whether parameters of this type should be initializable by a result builder.
@@ -120,10 +120,10 @@ public struct SyntaxBuildableType: Hashable {
 
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
   /// without any question marks attached.
-  public var syntaxBaseName: String {
+  public var syntaxBaseName: TypeSyntax {
     switch kind {
     case .node(kind: let kind):
-      return "\(kind.syntaxType)"
+      return kind.syntaxType
     case .token:
       return "TokenSyntax"
     }
@@ -133,12 +133,12 @@ public struct SyntaxBuildableType: Hashable {
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
   public var syntax: TypeSyntax {
-    return optionalWrapped(type: IdentifierTypeSyntax(name: .identifier(syntaxBaseName)))
+    return optionalWrapped(type: syntaxBaseName)
   }
 
   /// The type that is used for parameters in SwiftSyntaxBuilder that take this
   /// type of syntax node.
-  public var parameterBaseType: String {
+  public var parameterBaseType: TypeSyntax {
     if isBaseType {
       return "\(syntaxBaseName)Protocol"
     } else {
@@ -147,7 +147,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   public var parameterType: TypeSyntax {
-    return optionalWrapped(type: IdentifierTypeSyntax(name: .identifier(parameterBaseType)))
+    return optionalWrapped(type: parameterBaseType)
   }
 
   /// Assuming that this is a collection type, the non-optional type of the result builder

@@ -23,7 +23,7 @@ extension PrecedenceGroup {
       switch attr {
       // Relation (lowerThan, higherThan)
       case .precedenceGroupRelation(let relation):
-        let isLowerThan = relation.higherThanOrLowerThanLabel.text == "lowerThan"
+        let isLowerThan = relation.higherThanOrLowerThanLabel.tokenKind == .keyword(.lowerThan)
         for otherGroup in relation.precedenceGroups {
           let otherGroupName = otherGroup.name.text
           let relationKind: PrecedenceRelation.Kind =
@@ -40,18 +40,18 @@ extension PrecedenceGroup {
 
       // Assignment
       case .precedenceGroupAssignment(let assignment):
-        self.assignment = assignment.value.text == "true"
+        self.assignment = assignment.value.tokenKind == .keyword(.true)
 
       // Associativity
       case .precedenceGroupAssociativity(let associativity):
-        switch associativity.value.text {
-        case "left":
+        switch associativity.value.tokenKind {
+        case .keyword(.left):
           self.associativity = .left
 
-        case "right":
+        case .keyword(.right):
           self.associativity = .right
 
-        case "none":
+        case .keyword(.none):
           self.associativity = .none
 
         default:

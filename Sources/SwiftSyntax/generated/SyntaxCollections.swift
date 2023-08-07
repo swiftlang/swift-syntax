@@ -56,6 +56,19 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.arrayElementList
 }
 
+/// A list of attributes that can be attached to a declaration.
+/// 
+/// An element in this collection can either be an attribute itself or an ``IfConfigDeclSyntax``
+/// that contains attributes. This is because attributes can be added conditional on compilcation
+/// conditions, for example.
+/// 
+/// ```swift
+/// #if !DISABLE_DEPRECATIONS
+/// @available(*, deprecated)
+/// #endif
+/// func myFunction() {}
+/// ```
+///
 /// ### Children
 /// 
 /// (``AttributeSyntax`` | ``IfConfigDeclSyntax``) `*`

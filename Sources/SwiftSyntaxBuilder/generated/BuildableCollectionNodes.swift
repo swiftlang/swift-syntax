@@ -28,7 +28,18 @@ extension ArrayElementListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
-/// `AttributeListSyntax` represents a collection of `Syntax`
+/// A list of attributes that can be attached to a declaration.
+/// 
+/// An element in this collection can either be an attribute itself or an ``IfConfigDeclSyntax``
+/// that contains attributes. This is because attributes can be added conditional on compilcation
+/// conditions, for example.
+/// 
+/// ```swift
+/// #if !DISABLE_DEPRECATIONS
+/// @available(*, deprecated)
+/// #endif
+/// func myFunction() {}
+/// ```
 extension AttributeListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)

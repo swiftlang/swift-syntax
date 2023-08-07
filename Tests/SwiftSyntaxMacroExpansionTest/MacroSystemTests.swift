@@ -166,7 +166,7 @@ public struct ErrorMacro: DeclarationMacro {
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
-      case let .stringSegment(messageString) = stringLiteral.segments[0]
+      case let .stringSegment(messageString) = stringLiteral.segments.first
     else {
       throw CustomError.message("#error macro requires a string literal")
     }
@@ -195,7 +195,7 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
-      case let .stringSegment(prefix) = stringLiteral.segments[0]
+      case let .stringSegment(prefix) = stringLiteral.segments.first
     else {
       throw CustomError.message(
         "#bitwidthNumberedStructs macro requires a string literal"

@@ -189,7 +189,10 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    let node = parent.layoutView!.children[Int(index.data!.indexInParent)]
+    guard let indexData = index.data else {
+      preconditionFailure("Cannot get the index after the end index")
+    }
+    let node = parent.layoutView!.children[Int(indexData.indexInParent)]
     return self.index(index, advancedBy: node)
   }
 

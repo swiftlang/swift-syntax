@@ -90,7 +90,7 @@ public class SyntaxCollectionsTests: XCTestCase {
     assertSyntaxCollectionManipulation(
       initialElements: [0, 1, 2],
       transformation: {
-        let index = $0.elements.index(after: $0.elements.startIndex)
+        let index = $0.elements.index(at: 1)
         $0.elements.insert(intElement(5), at: index)
       },
       expectedElements: [0, 5, 1, 2]
@@ -119,7 +119,7 @@ public class SyntaxCollectionsTests: XCTestCase {
     assertSyntaxCollectionManipulation(
       initialElements: [0, 1, 2],
       transformation: {
-        let index = $0.elements.index(after: $0.elements.startIndex)
+        let index = $0.elements.index(at: 1)
         $0.elements.insert(contentsOf: [intElement(5), intElement(6)], at: index)
       },
       expectedElements: [0, 5, 6, 1, 2]
@@ -148,7 +148,7 @@ public class SyntaxCollectionsTests: XCTestCase {
     assertSyntaxCollectionManipulation(
       initialElements: [0, 1, 2],
       transformation: {
-        let index = $0.elements.index(after: $0.elements.startIndex)
+        let index = $0.elements.index(at: 1)
         $0.elements.remove(at: index)
       },
       expectedElements: [0, 2]
@@ -157,7 +157,7 @@ public class SyntaxCollectionsTests: XCTestCase {
     assertSyntaxCollectionManipulation(
       initialElements: [0, 1, 2],
       transformation: {
-        let index = $0.elements.index($0.elements.startIndex, offsetBy: 2)
+        let index = $0.elements.index(at: 2)
         $0.elements.remove(at: index)
       },
       expectedElements: [0, 1]
@@ -169,7 +169,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       initialElements: [0, 1, 2],
       transformation: {
         let startIndex = $0.elements.startIndex
-        let endIndex = $0.elements.index(after: $0.elements.startIndex)
+        let endIndex = $0.elements.index(at: 1)
         $0.elements.removeSubrange(startIndex..<endIndex)
       },
       expectedElements: [1, 2]
@@ -179,7 +179,7 @@ public class SyntaxCollectionsTests: XCTestCase {
       initialElements: [0, 1, 2],
       transformation: {
         let startIndex = $0.elements.startIndex
-        let endIndex = $0.elements.index($0.elements.startIndex, offsetBy: 2)
+        let endIndex = $0.elements.index(at: 2)
         $0.elements.removeSubrange(startIndex..<endIndex)
       },
       expectedElements: [2]

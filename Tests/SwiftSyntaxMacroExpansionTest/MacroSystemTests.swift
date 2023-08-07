@@ -20,17 +20,6 @@ import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-enum CustomError: Error, CustomStringConvertible {
-  case message(String)
-
-  var description: String {
-    switch self {
-    case .message(let text):
-      return text
-    }
-  }
-}
-
 // MARK: Example macros
 public struct StringifyMacro: ExpressionMacro {
   public static func expansion(
@@ -38,7 +27,7 @@ public struct StringifyMacro: ExpressionMacro {
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
     guard let argument = macro.argumentList.first?.expression else {
-      throw CustomError.message("missing argument")
+      throw MacroExpansionErrorMessage("missing argument")
     }
 
     return "(\(argument), \(StringLiteralExprSyntax(content: argument.description)))"
@@ -110,7 +99,7 @@ public struct ColumnMacro: ExpressionMacro {
   ) throws -> ExprSyntax {
     guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
     else {
-      throw CustomError.message("can't find location for macro")
+      throw MacroExpansionErrorMessage("can't find location for macro")
     }
     return sourceLoc.column.with(\.leadingTrivia, macro.leadingTrivia)
   }
@@ -123,7 +112,7 @@ public struct FileIDMacro: ExpressionMacro {
   ) throws -> ExprSyntax {
     guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
     else {
-      throw CustomError.message("can't find location for macro")
+      throw MacroExpansionErrorMessage("can't find location for macro")
     }
     return sourceLoc.file.with(\.leadingTrivia, macro.leadingTrivia)
   }
@@ -147,16 +136,6 @@ struct CheckContextIndependenceMacro: ExpressionMacro {
   }
 }
 
-struct SimpleDiagnosticMessage: DiagnosticMessage {
-  let message: String
-  let diagnosticID: MessageID
-  let severity: DiagnosticSeverity
-}
-
-extension SimpleDiagnosticMessage: FixItMessage {
-  var fixItID: MessageID { diagnosticID }
-}
-
 public struct ErrorMacro: DeclarationMacro {
   public static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
@@ -168,17 +147,13 @@ public struct ErrorMacro: DeclarationMacro {
       stringLiteral.segments.count == 1,
       case let .stringSegment(messageString) = stringLiteral.segments[0]
     else {
-      throw CustomError.message("#error macro requires a string literal")
+      throw MacroExpansionErrorMessage("#error macro requires a string literal")
     }
 
     context.diagnose(
       Diagnostic(
         node: Syntax(node),
-        message: SimpleDiagnosticMessage(
-          message: messageString.content.description,
-          diagnosticID: MessageID(domain: "test", id: "error"),
-          severity: .error
-        )
+        message: MacroExpansionErrorMessage(messageString.content.description)
       )
     )
 
@@ -197,7 +172,7 @@ struct DefineBitwidthNumberedStructsMacro: DeclarationMacro {
       stringLiteral.segments.count == 1,
       case let .stringSegment(prefix) = stringLiteral.segments[0]
     else {
-      throw CustomError.message(
+      throw MacroExpansionErrorMessage(
         "#bitwidthNumberedStructs macro requires a string literal"
       )
     }
@@ -304,12 +279,12 @@ public struct AddCompletionHandler: PeerMacro {
     // Only on functions at the moment. We could handle initializers as well
     // with a bit of work.
     guard let funcDecl = declaration.as(FunctionDeclSyntax.self) else {
-      throw CustomError.message("@addCompletionHandler only works on functions")
+      throw MacroExpansionErrorMessage("@addCompletionHandler only works on functions")
     }
 
     // This only makes sense for async functions.
     if funcDecl.signature.effectSpecifiers?.asyncSpecifier == nil {
-      throw CustomError.message(
+      throw MacroExpansionErrorMessage(
         "@addCompletionHandler requires an async function"
       )
     }
@@ -559,14 +534,14 @@ public struct UnwrapMacro: CodeItemMacro {
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax] {
     guard !node.argumentList.isEmpty else {
-      throw CustomError.message("'#unwrap' requires arguments")
+      throw MacroExpansionErrorMessage("'#unwrap' requires arguments")
     }
     let errorThrower = node.trailingClosure
     let identifiers = try node.argumentList.map { argument in
       guard let tupleElement = argument.as(LabeledExprSyntax.self),
         let declReferenceExpr = tupleElement.expression.as(DeclReferenceExprSyntax.self)
       else {
-        throw CustomError.message("Arguments must be identifiers")
+        throw MacroExpansionErrorMessage("Arguments must be identifiers")
       }
       return declReferenceExpr.baseName
     }

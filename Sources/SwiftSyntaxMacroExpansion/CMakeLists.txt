@@ -3,6 +3,7 @@ add_swift_host_library(SwiftSyntaxMacroExpansion
   FunctionParameterUtils.swift
   IndentationUtils.swift
   MacroExpansion.swift
+  MacroExpansionDiagnosticMessages.swift
   MacroReplacement.swift
   MacroSystem.swift
 )

@@ -420,7 +420,7 @@ private class AttributeRemover: SyntaxRewriter {
   }
 }
 
-private let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
+let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
 
 private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings

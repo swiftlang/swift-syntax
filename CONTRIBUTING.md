@@ -29,6 +29,20 @@ Generated source code is not formatted to make it easier to spot changes when re
 
 If you want to modify the generated files, open the [CodeGeneration](CodeGeneration) package and run the `generate-swift-syntax` executable.
 
+## Authoring commits
+
+Prefer to squash the commits of your PR (*pull request*) and avoid adding commits like “Address review comments”. This creates a clearer git history, which doesn’t need to record the history of how the PR evolved.
+
+We prefer to not squash commits when merging a PR because, especially for larger PRs, it sometimes makes sense to split the PR into multiple self-contained chunks of changes. For example, a PR might do a refactoring first before adding a new feature or fixing a bug. This separation is useful for two reasons:
+- During review, the commits can be reviewed individually, making each review chunk smaller
+- In case this PR introduced a bug that is identified later, it is possible to check if it resulted from the refactoring or the actual change, thereby making it easier find the lines that introduce the issue. 
+
+## Review and CI Testing
+
+After you opened your PR, a maintainer will review it and test your changes in CI (*Continuous Integration*) by adding a `@swift-ci Please test` comment on the pull request. Once your PR is approved and CI has passed, the maintainer will merge your pull request.
+
+Only contributors with [commit access](https://www.swift.org/contributing/#commit-access) are able to approve pull requests and trigger CI. 
+
 ## Additional Verification
 
 swift-syntax has additional verification methods (see the sections below) that provide more extensive validation. They have a significant runtime impact on swift-syntax and are thus not enabled by default when building swift-syntax, but are enabled in CI. If CI fails and you are unable to reproduce the failure locally, make sure that `SKIP_LONG_TESTS` is not set and try enabling these validations.

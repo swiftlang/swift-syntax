@@ -104,6 +104,12 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
     self.appendInterpolation(buildable.formatted(using: format))
   }
 
+  public mutating func appendInterpolation(
+    _ trivia: Trivia
+  ) {
+    self.appendInterpolation(raw: trivia.description)
+  }
+
   /// Interpolates a literal or similar expression syntax equivalent to `value`.
   ///
   /// - SeeAlso: ``SwiftSyntax/ExprSyntax/init(literal:)``

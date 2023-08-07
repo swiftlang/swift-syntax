@@ -39,7 +39,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         """
         // MARK: - \(raw: node.kind.syntaxType)
 
-        \(raw: documentation)
+        \(documentation)
         public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {
@@ -78,7 +78,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
         try! InitializerDeclSyntax(
           """
-          \(raw: node.generateInitializerDocComment())
+          \(node.generateInitializerDocComment())
           \(node.generateInitializerDeclHeader())
           """
         ) {
@@ -163,7 +163,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
           try! VariableDeclSyntax(
             """
-            \(raw: child.documentation)
+            \(child.documentation)
             public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
             """
           ) {

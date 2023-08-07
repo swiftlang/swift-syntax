@@ -36,17 +36,17 @@ public struct Diagnostic: CustomDebugStringConvertible {
   /// If `highlights` is `nil` then `node` will be highlighted. This is a
   /// reasonable default for almost all diagnostics.
   public init(
-    node: Syntax,
+    node: some SyntaxProtocol,
     position: AbsolutePosition? = nil,
     message: DiagnosticMessage,
     highlights: [Syntax]? = nil,
     notes: [Note] = [],
     fixIts: [FixIt] = []
   ) {
-    self.node = node
+    self.node = Syntax(node)
     self.position = position ?? node.positionAfterSkippingLeadingTrivia
     self.diagMessage = message
-    self.highlights = highlights ?? [node]
+    self.highlights = highlights ?? [Syntax(node)]
     self.notes = notes
     self.fixIts = fixIts
   }

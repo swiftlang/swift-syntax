@@ -76,13 +76,16 @@ struct MemberDeprecatedMacro: MemberAttributeMacro {
 }
 
 /// Add 'Equatable' conformance.
-struct EquatableConformanceMacro: ConformanceMacro {
+struct EquatableConformanceMacro: ExtensionMacro {
   static func expansion(
     of node: AttributeSyntax,
-    providingConformancesOf declaration: some DeclGroupSyntax,
+    attachedTo declaration: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
-  ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] {
-    return [("Equatable", nil)]
+  ) throws -> [ExtensionDeclSyntax] {
+    let ext: DeclSyntax = "extension \(type.trimmed): Equatable {}"
+    return [ext.cast(ExtensionDeclSyntax.self)]
   }
 }
 

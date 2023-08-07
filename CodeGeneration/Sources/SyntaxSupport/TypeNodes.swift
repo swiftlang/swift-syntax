@@ -192,7 +192,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Parameters",
-        deprecatedName: "arguments",
+        deprecatedName: "Arguments",
         kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument")
       ),
       Child(

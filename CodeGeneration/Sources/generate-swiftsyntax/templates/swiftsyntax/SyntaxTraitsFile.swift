@@ -21,14 +21,14 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(trait.protocolName)
 
-      \(raw: trait.documentation)
+      \(trait.documentation)
       public protocol \(trait.protocolName): SyntaxProtocol
       """
     ) {
       for child in trait.children {
         DeclSyntax(
           """
-          \(raw: child.documentation)
+          \(child.documentation)
           var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: child.isOptional ? "?" : "") { get set }
           """
         )

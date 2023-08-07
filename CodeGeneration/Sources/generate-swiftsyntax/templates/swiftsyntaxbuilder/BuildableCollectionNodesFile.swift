@@ -29,7 +29,7 @@ let buildableCollectionNodesFile = SourceFileSyntax(leadingTrivia: copyrightHead
     // Generate collection node struct
     try! ExtensionDeclSyntax(
       """
-      \(raw: docComment)
+      \(docComment)
       extension \(raw: node.type.syntaxBaseName): ExpressibleByArrayLiteral
       """
     ) {

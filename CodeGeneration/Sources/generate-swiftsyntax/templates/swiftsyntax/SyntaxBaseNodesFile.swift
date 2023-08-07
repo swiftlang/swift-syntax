@@ -54,7 +54,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! StructDeclSyntax(
       """
-      \(raw: node.documentation)
+      \(node.documentation)
       public struct \(node.kind.syntaxType): \(node.kind.protocolType), SyntaxHashable
       """
     ) {

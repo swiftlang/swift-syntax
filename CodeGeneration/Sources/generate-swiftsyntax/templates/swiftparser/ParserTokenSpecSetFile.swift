@@ -33,9 +33,8 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               case .keyword(let keywordText):
                 let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
                 DeclSyntax("case \(raw: keyword.escapedName)")
-              case .token(let tokenText):
-                let token = SYNTAX_TOKEN_MAP[tokenText]!
-                DeclSyntax("case \(token.varOrCaseName)")
+              case .token(let token):
+                DeclSyntax("case \(token.spec.varOrCaseName)")
               }
             }
 
@@ -46,10 +45,10 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   case .keyword(let keywordText):
                     let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
                     SwitchCaseSyntax("case TokenSpec(.\(raw: keyword.escapedName)): self = .\(raw: keyword.escapedName)")
-                  case .token(let tokenText):
-                    let token = SYNTAX_TOKEN_MAP[tokenText]!
+                  case .token(let token):
+                    let caseName = token.spec.varOrCaseName
                     SwitchCaseSyntax(
-                      "case TokenSpec(.\(token.varOrCaseName)): self = .\(token.varOrCaseName)"
+                      "case TokenSpec(.\(caseName)): self = .\(caseName)"
                     )
                   }
                 }
@@ -66,10 +65,10 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                     SwitchCaseSyntax(
                       "case .\(raw: keyword.escapedName): return .keyword(.\(raw: keyword.escapedName))"
                     )
-                  case .token(let tokenText):
-                    let token = SYNTAX_TOKEN_MAP[tokenText]!
+                  case .token(let token):
+                    let caseName = token.spec.varOrCaseName
                     SwitchCaseSyntax(
-                      "case .\(token.varOrCaseName): return .\(token.varOrCaseName)"
+                      "case .\(caseName): return .\(caseName)"
                     )
                   }
                 }
@@ -93,15 +92,15 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                     SwitchCaseSyntax(
                       "case .\(raw: keyword.escapedName): return .keyword(.\(raw: keyword.escapedName))"
                     )
-                  case .token(let tokenText):
-                    let token = SYNTAX_TOKEN_MAP[tokenText]!
-                    if token.text != nil {
+                  case .token(let token):
+                    let caseName = token.spec.varOrCaseName
+                    if token.spec.text != nil {
                       SwitchCaseSyntax(
-                        "case .\(raw: token.varOrCaseName): return .\(raw: token.varOrCaseName)Token()"
+                        "case .\(caseName): return .\(caseName)Token()"
                       )
                     } else {
                       SwitchCaseSyntax(
-                        #"case .\#(raw: token.varOrCaseName): return .\#(raw: token.varOrCaseName)("")"#
+                        #"case .\#(caseName): return .\#(caseName)("")"#
                       )
                     }
                   }

@@ -39,7 +39,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "AtSign",
         deprecatedName: "AtSignToken",
-        kind: .token(choices: [.token(tokenKind: "AtSignToken")]),
+        kind: .token(choices: [.token(.atSign)]),
         documentation: "The `@` sign."
       ),
       Child(
@@ -50,7 +50,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")]),
+        kind: .token(choices: [.token(.leftParen)]),
         documentation: "If the attribute takes arguments, the opening parenthesis.",
         isOptional: true
       ),
@@ -144,7 +144,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")]),
+        kind: .token(choices: [.token(.rightParen)]),
         documentation: "If the attribute takes arguments, the closing parenthesis.",
         isOptional: true
       ),
@@ -166,7 +166,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
@@ -176,7 +176,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Semicolon",
-        kind: .token(choices: [.token(tokenKind: "SemicolonToken")])
+        kind: .token(choices: [.token(.semicolon)])
       ),
     ]
   ),
@@ -196,7 +196,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if the argument is followed by another argument",
         isOptional: true
       ),
@@ -227,7 +227,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating \"before\" and the parameter list."
       ),
       Child(
@@ -248,12 +248,12 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "ConventionLabel",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: "The convention label."
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
@@ -263,7 +263,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
@@ -287,11 +287,11 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "ProtocolName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")])
+        kind: .token(choices: [.token(.identifier)])
       ),
     ]
   ),
@@ -316,7 +316,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the \"of\" label and the original declaration name."
       ),
       Child(
@@ -326,7 +326,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Period",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        kind: .token(choices: [.token(.period)]),
         documentation: "The period separating the original declaration name and the accessor name.",
         isOptional: true
       ),
@@ -339,7 +339,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
@@ -373,11 +373,11 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Argument",
         deprecatedName: "Parameter",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .keyword(text: "self")])
+        kind: .token(choices: [.token(.identifier), .token(.integerLiteral), .keyword(text: "self")])
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -398,7 +398,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating \"wrt\" and the parameter list."
       ),
       Child(
@@ -430,7 +430,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Arguments",
@@ -440,7 +440,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -465,7 +465,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "KindSpecifierComma",
         deprecatedName: "DiffKindComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability kind, if it exists.",
         isOptional: true
       ),
@@ -478,7 +478,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "ArgumentsComma",
         deprecatedName: "DiffParamsComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability arguments clause, if it exists.",
         isOptional: true
       ),
@@ -507,7 +507,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Value",
@@ -515,7 +515,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           Child(
             name: "Token",
             kind: .token(choices: [
-              .token(tokenKind: "IdentifierToken"),
+              .token(.identifier),
               .keyword(text: "private"),
               .keyword(text: "fileprivate"),
               .keyword(text: "internal"),
@@ -531,7 +531,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
       ),
@@ -558,7 +558,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "DeclName",
@@ -588,7 +588,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
@@ -616,7 +616,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "The comma separating the type and method name"
       ),
       Child(
@@ -656,7 +656,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
@@ -667,7 +667,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
       ),
@@ -690,7 +690,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
     ]
@@ -718,11 +718,11 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+        kind: .token(choices: [.token(.comma)])
       ),
       Child(
         name: "Ordinal",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The ordinal corresponding to the 'some' keyword that introduced this opaque type."
       ),
     ]
@@ -740,7 +740,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "ModuleName",
@@ -748,7 +748,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Comma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")])
+        kind: .token(choices: [.token(.comma)])
       ),
       Child(
         name: "Platforms",
@@ -782,7 +782,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Period",
         deprecatedName: "Dot",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        kind: .token(choices: [.token(.period)]),
         isOptional: true
       ),
       Child(
@@ -827,7 +827,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
@@ -839,7 +839,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
       ),
@@ -858,7 +858,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Message",
@@ -879,7 +879,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Filename",

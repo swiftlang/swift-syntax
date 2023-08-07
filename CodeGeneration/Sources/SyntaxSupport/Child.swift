@@ -16,7 +16,7 @@ import SwiftSyntax
 /// keyword with the given text.
 public enum TokenChoice: Equatable {
   case keyword(text: String)
-  case token(tokenKind: String)
+  case token(Token)
 
   public var isKeyword: Bool {
     switch self {
@@ -113,20 +113,25 @@ public class Child {
 
   /// If the child ends with "token" in the kind, it's considered a token node.
   /// Grab the existing reference to that token from the global list.
-  public var tokenKind: String? {
+  public var tokenKind: Token? {
     switch kind {
-    case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
+    case .token(let choices, _, _):
       if choices.count == 1 {
         switch choices.first! {
-        case .keyword: return "KeywordToken"
-        case .token(tokenKind: let tokenKind): return tokenKind
+        case .keyword: return .keyword
+        case .token(let token): return token
         }
+      } else if choices.allSatisfy(\.isKeyword) {
+        return .keyword
       } else {
-        if choices.allSatisfy({ $0.isKeyword }) {
-          return "KeywordToken"
-        } else {
-          return "Token"
-        }
+        /*
+       FIXME: Technically, returning `.unknown` is not correct here.
+       The old string-based implementation returned "Token" to ensure that `tokenKind` is not nil
+       and that `isToken` computed-property will return true, but the value "Token" had never been
+       used in other cases. We should try to remove this computed property altogether in the issue:
+       https://github.com/apple/swift-syntax/issues/2010
+       */
+        return .unknown
       }
     default:
       return nil
@@ -135,12 +140,11 @@ public class Child {
 
   /// Returns `true` if this child has a token kind.
   public var isToken: Bool {
-    return tokenKind != nil
+    tokenKind != nil
   }
 
   public var token: TokenSpec? {
-    guard let tokenKind = tokenKind else { return nil }
-    return SYNTAX_TOKEN_MAP[tokenKind]
+    tokenKind?.spec
   }
 
   /// Whether this child has syntax kind `UnexpectedNodes`.

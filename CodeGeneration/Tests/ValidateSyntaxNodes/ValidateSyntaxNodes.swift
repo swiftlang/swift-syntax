@@ -91,7 +91,7 @@ fileprivate extension Child {
     guard childIndex + 2 < node.children.count else {
       return false
     }
-    if case .token(choices: [.token(tokenKind: "ColonToken")], _, _) = node.children[childIndex + 2].kind {
+    if case .token(choices: [.token(.colon)], _, _) = node.children[childIndex + 2].kind {
       return true
     } else {
       return false
@@ -178,16 +178,16 @@ class ValidateSyntaxNodes: XCTestCase {
         }
       }
 
-    case .token(tokenKind: "IdentifierToken"), .token(tokenKind: "IntegerLiteralToken"), .token(tokenKind: "FloatLiteralToken"):
+    case .token(.identifier), .token(.integerLiteral), .token(.floatLiteral):
       // We allow arbitrary naming of identifiers and literals
       break
-    case .token(tokenKind: "CommaToken"):
+    case .token(.comma):
       if child.name != "TrailingComma" && child.name != "Comma" {
         return "child '\(child.name)' has a comma keyword as its only token choice and should thus be named 'Comma' or 'TrailingComma'"
       }
-    case .token(tokenKind: let tokenKind):
+    case .token(let token):
       let expectedChildName =
-        tokenKind
+        token.spec.varOrCaseName.text.withFirstCharacterUppercased
         .dropSuffix("Token")
         .dropPrefix("Prefix")
         .dropPrefix("Infix")

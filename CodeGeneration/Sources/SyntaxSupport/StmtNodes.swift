@@ -19,11 +19,11 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "AvailabilityKeyword",
-        kind: .token(choices: [.token(tokenKind: "PoundAvailableToken"), .token(tokenKind: "PoundUnavailableToken")])
+        kind: .token(choices: [.token(.poundAvailable), .token(.poundUnavailable)])
       ),
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "AvailabilityArguments",
@@ -32,7 +32,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),
@@ -49,7 +49,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Label",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
@@ -125,7 +125,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -175,7 +175,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
     ]
@@ -193,7 +193,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "Label",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
@@ -392,13 +392,13 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "Label",
         deprecatedName: "LabelName",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label name"
       ),
       Child(
         name: "Colon",
         deprecatedName: "LabelColon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")])
+        kind: .token(choices: [.token(.colon)])
       ),
       Child(
         name: "Statement",
@@ -572,7 +572,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "LeftParen",
-        kind: .token(choices: [.token(tokenKind: "LeftParenToken")])
+        kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
         name: "Elements",
@@ -581,7 +581,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "RightParen",
-        kind: .token(choices: [.token(tokenKind: "RightParenToken")])
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),

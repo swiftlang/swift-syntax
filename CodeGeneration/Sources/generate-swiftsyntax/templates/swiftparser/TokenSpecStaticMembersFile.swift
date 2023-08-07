@@ -19,8 +19,8 @@ let tokenSpecStaticMembersFile = SourceFileSyntax(leadingTrivia: copyrightHeader
   DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension TokenSpec") {
-    for token in SYNTAX_TOKENS where token.kind != .keyword {
-      DeclSyntax("static var \(token.varOrCaseName): TokenSpec { return TokenSpec(.\(token.varOrCaseName)) }")
+    for tokenSpec in Token.allCases.map(\.spec) where tokenSpec.kind != .keyword {
+      DeclSyntax("static var \(tokenSpec.varOrCaseName): TokenSpec { return TokenSpec(.\(tokenSpec.varOrCaseName)) }")
     }
 
     DeclSyntax("static func keyword(_ keyword: Keyword) -> TokenSpec { return TokenSpec(keyword) }")

@@ -30,8 +30,8 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "Braced",
     children: [
-      Child(name: "LeftBrace", kind: .token(choices: [.token(tokenKind: "LeftBraceToken")])),
-      Child(name: "RightBrace", kind: .token(choices: [.token(tokenKind: "RightBraceToken")])),
+      Child(name: "LeftBrace", kind: .token(choices: [.token(.leftBrace)])),
+      Child(name: "RightBrace", kind: .token(choices: [.token(.rightBrace)])),
     ]
   ),
   Trait(
@@ -62,12 +62,12 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "FreestandingMacroExpansion",
     children: [
-      Child(name: "PoundToken", kind: .token(choices: [.token(tokenKind: "PoundToken")])),
-      Child(name: "Macro", kind: .token(choices: [.token(tokenKind: "IdentifierToken")])),
+      Child(name: "PoundToken", kind: .token(choices: [.token(.pound)])),
+      Child(name: "Macro", kind: .token(choices: [.token(.identifier)])),
       Child(name: "GenericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
-      Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")]), isOptional: true),
+      Child(name: "LeftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),
       Child(name: "ArgumentList", kind: .node(kind: .labeledExprList)),
-      Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")]), isOptional: true),
+      Child(name: "RightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
       Child(name: "TrailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
       Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList), isOptional: true),
     ]
@@ -75,7 +75,7 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "NamedDecl",
     children: [
-      Child(name: "Name", kind: .token(choices: [.token(tokenKind: "IdentifierToken")]))
+      Child(name: "Name", kind: .token(choices: [.token(.identifier)]))
     ]
   ),
   Trait(
@@ -88,7 +88,7 @@ public let TRAITS: [Trait] = [
     children: [
       Child(
         name: "Placeholder",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         documentation: """
           A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
           """
@@ -98,8 +98,8 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "Parenthesized",
     children: [
-      Child(name: "LeftParen", kind: .token(choices: [.token(tokenKind: "LeftParenToken")])),
-      Child(name: "RightParen", kind: .token(choices: [.token(tokenKind: "RightParenToken")])),
+      Child(name: "LeftParen", kind: .token(choices: [.token(.leftParen)])),
+      Child(name: "RightParen", kind: .token(choices: [.token(.rightParen)])),
     ]
   ),
   Trait(
@@ -152,7 +152,7 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "WithTrailingComma",
     children: [
-      Child(name: "TrailingComma", kind: .token(choices: [.token(tokenKind: "CommaToken")]), isOptional: true)
+      Child(name: "TrailingComma", kind: .token(choices: [.token(.comma)]), isOptional: true)
     ]
   ),
 ]

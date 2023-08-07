@@ -30,7 +30,7 @@ public let AVAILABILITY_NODES: [Node] = [
           Child(
             name: "Token",
             kind: .token(
-              choices: [.token(tokenKind: "BinaryOperatorToken"), .token(tokenKind: "IdentifierToken")],
+              choices: [.token(.binaryOperator), .token(.identifier)],
               requiresLeadingSpace: false,
               requiresTrailingSpace: false
             )
@@ -48,7 +48,7 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
       Child(
         name: "TrailingComma",
-        kind: .token(choices: [.token(tokenKind: "CommaToken")]),
+        kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if the argument is followed by another argument",
         isOptional: true
       ),
@@ -77,7 +77,7 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
       Child(
         name: "Colon",
-        kind: .token(choices: [.token(tokenKind: "ColonToken")]),
+        kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating label and value"
       ),
       Child(
@@ -116,7 +116,7 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "Platform",
-        kind: .token(choices: [.token(tokenKind: "IdentifierToken")]),
+        kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "platform",
         documentation:
           "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version."
@@ -139,12 +139,12 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "Period",
-        kind: .token(choices: [.token(tokenKind: "PeriodToken")]),
+        kind: .token(choices: [.token(.period)]),
         documentation: "The period of this version component"
       ),
       Child(
         name: "Number",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The version number of this component"
       ),
     ]
@@ -167,7 +167,7 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "Major",
-        kind: .token(choices: [.token(tokenKind: "IntegerLiteralToken")]),
+        kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The major version."
       ),
       Child(

@@ -21,9 +21,11 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(node.kind.syntaxType)
 
-      /// Protocol to which all ``\(node.kind.syntaxType)`` nodes conform. Extension point to add
-      /// common methods to all ``\(node.kind.syntaxType)`` nodes.
-      /// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+      /// Protocol to which all ``\(node.kind.syntaxType)`` nodes conform. 
+      ///
+      /// Extension point to add common methods to all ``\(node.kind.syntaxType)`` nodes.
+      ///
+      ///  - Warning: Do not conform to this protocol yourself.
       public protocol \(node.kind.protocolType): \(raw: node.base.protocolType) {}
       """
     )
@@ -33,7 +35,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Check whether the non-type erased version of this syntax node conforms to
         /// \(node.kind.protocolType).
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note:  This will incur an existential conversion.
         func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
           return self.asProtocol(\(node.kind.protocolType).self) != nil
         }
@@ -44,7 +47,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Return the non-type erased version of this syntax node if it conforms to
         /// \(node.kind.protocolType). Otherwise return nil.
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note:  This will incur an existential conversion.
         func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType)? {
           return self.asProtocol(SyntaxProtocol.self) as? \(node.kind.protocolType)
         }
@@ -131,9 +135,10 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       try InitializerDeclSyntax(
         """
-        /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. This assumes
-        /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-        /// is undefined.
+        /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``.
+        ///
+        ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+        ///    If it is not, the behaviour is undefined.
         internal init(_ data: SyntaxData)
         """
       ) {
@@ -192,7 +197,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Syntax nodes always conform to `\(node.kind.protocolType)`. This API is just
         /// added for consistency.
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note:  This will incur an existential conversion.
         @available(*, deprecated, message: "Expression always evaluates to true")
         public func isProtocol(_: \(raw: node.kind.protocolType).Protocol) -> Bool {
           return true
@@ -203,7 +209,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Return the non-type erased version of this syntax node.
-        /// Note that this will incur an existential conversion.
+        ///
+        ///  - Note:  This will incur an existential conversion.
         public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType) {
           return Syntax(self).asProtocol(\(node.kind.protocolType).self)!
         }

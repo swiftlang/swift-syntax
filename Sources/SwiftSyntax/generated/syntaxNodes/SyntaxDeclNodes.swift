@@ -36,9 +36,10 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AccessorDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AccessorDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .accessorDecl)
     self._syntaxNode = Syntax(data)
@@ -130,6 +131,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -293,9 +295,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ActorDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ActorDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .actorDecl)
     self._syntaxNode = Syntax(data)
@@ -401,6 +404,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -444,6 +448,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -611,7 +616,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - AssociatedTypeDeclSyntax
 
-/// An associated type declaration like the following.
+/// An `associatedtype` declaration
+/// 
+/// An example of an associatedtype declaration is
 /// 
 /// ```swift
 /// associatedtype Item
@@ -654,9 +661,10 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AssociatedTypeDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AssociatedTypeDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .associatedTypeDecl)
     self._syntaxNode = Syntax(data)
@@ -762,6 +770,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -806,6 +815,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -956,7 +966,9 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ClassDeclSyntax
 
-/// A class declaration like the following.
+/// A `class` declaration
+/// 
+/// An example of a class declaration is
 /// 
 /// ```swift
 /// class SomeClass {
@@ -998,9 +1010,10 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClassDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClassDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .classDecl)
     self._syntaxNode = Syntax(data)
@@ -1113,6 +1126,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -1157,6 +1171,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -1328,7 +1343,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - DeinitializerDeclSyntax
 
-/// A deinitializer declaration like the following.
+/// A `deint` declaration
+/// 
+/// An example of a deinitializer is
 /// 
 /// ```swift
 /// deinit {
@@ -1352,9 +1369,10 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeinitializerDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeinitializerDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .deinitializerDecl)
     self._syntaxNode = Syntax(data)
@@ -1445,6 +1463,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -1489,6 +1508,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -1613,9 +1633,10 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EditorPlaceholderDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EditorPlaceholderDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .editorPlaceholderDecl)
     self._syntaxNode = Syntax(data)
@@ -1693,6 +1714,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -1737,6 +1759,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -1821,9 +1844,10 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EnumCaseDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EnumCaseDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .enumCaseDecl)
     self._syntaxNode = Syntax(data)
@@ -1908,6 +1932,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -1952,6 +1977,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -2015,6 +2041,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `elements`
   /// collection.
+  ///
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`
@@ -2086,9 +2113,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EnumDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EnumDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .enumDecl)
     self._syntaxNode = Syntax(data)
@@ -2201,6 +2229,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -2245,6 +2274,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -2435,9 +2465,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExtensionDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ExtensionDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .extensionDecl)
     self._syntaxNode = Syntax(data)
@@ -2536,6 +2567,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -2579,6 +2611,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -2745,9 +2778,10 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FunctionDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FunctionDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionDecl)
     self._syntaxNode = Syntax(data)
@@ -2853,6 +2887,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -2896,6 +2931,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -3083,9 +3119,10 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``IfConfigDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``IfConfigDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .ifConfigDecl)
     self._syntaxNode = Syntax(data)
@@ -3153,6 +3190,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `clauses`
   /// collection.
+  ///
   /// - param element: The new `Clause` to add to the node's
   ///                  `clauses` collection.
   /// - returns: A copy of the receiver with the provided `Clause`
@@ -3216,7 +3254,9 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ImportDeclSyntax
 
-/// An import declaration like the following.
+/// An `import` declaration
+/// 
+/// An example of an import declaration is
 /// 
 /// ```swift
 /// import Foundation
@@ -3239,9 +3279,10 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ImportDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ImportDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .importDecl)
     self._syntaxNode = Syntax(data)
@@ -3252,7 +3293,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   ///   - attributes: Attributes attached to the import declaration, for example `@testable`.
   ///   - modifiers: Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.
   ///   - importKeyword: The `import` keyword for this declaration.
-  ///   - importKindSpecifier: The kind of declaration being imported. For example, a struct can be imported from a specific module.
+  ///   - importKindSpecifier: The kind of declaration being imported. 
   ///   - path: The path to the module, submodule or symbol being imported.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -3333,6 +3374,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -3377,6 +3419,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -3428,7 +3471,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The kind of declaration being imported. For example, a struct can be imported from a specific module.
+  /// The kind of declaration being imported. 
+  /// 
+  /// A struct can be imported from a specific module.
   public var importKindSpecifier: TokenSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
@@ -3459,6 +3504,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `path`
   /// collection.
+  ///
   /// - param element: The new `PathComponent` to add to the node's
   ///                  `path` collection.
   /// - returns: A copy of the receiver with the provided `PathComponent`
@@ -3510,7 +3556,9 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - InitializerDeclSyntax
 
-/// An initializer declaration like the following.
+/// An `init` declaration
+/// 
+/// An example of an initializer is
 /// 
 /// ```swift
 /// init(someParameter: Int) {
@@ -3539,9 +3587,10 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``InitializerDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``InitializerDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .initializerDecl)
     self._syntaxNode = Syntax(data)
@@ -3654,6 +3703,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -3698,6 +3748,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -3889,9 +3940,10 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MacroDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MacroDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .macroDecl)
     self._syntaxNode = Syntax(data)
@@ -3997,6 +4049,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -4040,6 +4093,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -4229,9 +4283,10 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MacroExpansionDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MacroExpansionDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .macroExpansionDecl)
     self._syntaxNode = Syntax(data)
@@ -4348,6 +4403,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -4391,6 +4447,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -4507,6 +4564,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `arguments`
   /// collection.
+  ///
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
@@ -4586,6 +4644,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `additionalTrailingClosures`
   /// collection.
+  ///
   /// - param element: The new `AdditionalTrailingClosure` to add to the node's
   ///                  `additionalTrailingClosures` collection.
   /// - returns: A copy of the receiver with the provided `AdditionalTrailingClosure`
@@ -4664,9 +4723,10 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MissingDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MissingDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .missingDecl)
     self._syntaxNode = Syntax(data)
@@ -4744,6 +4804,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -4788,6 +4849,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -4874,9 +4936,10 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``OperatorDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``OperatorDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .operatorDecl)
     self._syntaxNode = Syntax(data)
@@ -5054,9 +5117,10 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PoundSourceLocationSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PoundSourceLocationSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .poundSourceLocation)
     self._syntaxNode = Syntax(data)
@@ -5235,9 +5299,10 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrecedenceGroupDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrecedenceGroupDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .precedenceGroupDecl)
     self._syntaxNode = Syntax(data)
@@ -5340,6 +5405,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -5384,6 +5450,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -5483,6 +5550,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `groupAttributes`
   /// collection.
+  ///
   /// - param element: The new `GroupAttribute` to add to the node's
   ///                  `groupAttributes` collection.
   /// - returns: A copy of the receiver with the provided `GroupAttribute`
@@ -5556,7 +5624,9 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ProtocolDeclSyntax
 
-/// A protocol declaration like the following.
+/// A `protocol` declaration
+/// 
+/// An example of a protocol declaration is
 /// 
 /// ```swift
 /// protocol Example {
@@ -5584,9 +5654,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ProtocolDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ProtocolDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .protocolDecl)
     self._syntaxNode = Syntax(data)
@@ -5699,6 +5770,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -5743,6 +5815,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -5914,61 +5987,63 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - StructDeclSyntax
 
-///     A struct declaration like the following.
+/// A `struct` declaration
 /// 
-///     ```swift
-///     struct SomeStruct {
-///       let someMember: String
-///       var anotherMember: Int
+/// An example of a struct declaration is
 /// 
-///       func foo() {
-///         print(someMember)
-///       }
+/// ```swift
+/// struct SomeStruct {
+///   let someMember: String
+///   var anotherMember: Int
 /// 
-///       mutating func bar() {
-///         anotherMember = 42
-///       }
-///     }
-///     ```
+///   func foo() {
+///     print(someMember)
+///   }
 /// 
-///     A struct declaration may be declared without any members.
+///   mutating func bar() {
+///     anotherMember = 42
+///   }
+/// }
+/// ```
 /// 
-///     ```swift
-///     struct EmptyStruct {
+/// A struct declaration may be declared without any members.
 /// 
-///     }
-///     ```
+/// ```swift
+/// struct EmptyStruct {
 /// 
-///     A struct declaration may include a type inheritance clause listing
-///     one or more protocols the struct conforms to.
+/// }
+/// ```
 /// 
-///     The example below uses Hashable and Equatable protocols whose members
-///     are automatically synthesized by the compiler if the struct contains
-///     stored members that are themselves `Hashable` and `Equatable`.
+/// A struct declaration may include a type inheritance clause listing
+/// one or more protocols the struct conforms to.
 /// 
-///     ```swift
-///     struct AdvancedStruct: Hashable, Equatable {
-///       let someMember: String
-///       var anotherMember: Int
-///     }
-///     ```
+/// The example below uses Hashable and Equatable protocols whose members
+/// are automatically synthesized by the compiler if the struct contains
+/// stored members that are themselves `Hashable` and `Equatable`.
 /// 
-///     A struct declaration may include a generic parameter clause as well
-///     as a generic where clause.
+/// ```swift
+/// struct AdvancedStruct: Hashable, Equatable {
+///   let someMember: String
+///   var anotherMember: Int
+/// }
+/// ```
 /// 
-///     ```swift
-///     struct Stack<Element> {
-///       var items: [Element] = []
+/// A struct declaration may include a generic parameter clause as well
+/// as a generic where clause.
 /// 
-///       mutating func push(_ item: Element) {
-///         items.append(item)
-///       }
+/// ```swift
+/// struct Stack<Element> {
+///   var items: [Element] = []
 /// 
-///       mutating func pop() -> Element {
-///         return items.removeLast()
-///       }
-///    }
-///    ```
+///   mutating func push(_ item: Element) {
+///     items.append(item)
+///   }
+/// 
+///   mutating func pop() -> Element {
+///     return items.removeLast()
+///   }
+/// }
+/// ```
 ///
 /// ### Children
 /// 
@@ -5990,9 +6065,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``StructDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``StructDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .structDecl)
     self._syntaxNode = Syntax(data)
@@ -6105,6 +6181,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -6149,6 +6226,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -6340,9 +6418,10 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SubscriptDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SubscriptDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .subscriptDecl)
     self._syntaxNode = Syntax(data)
@@ -6448,6 +6527,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -6491,6 +6571,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -6677,9 +6758,10 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TypeAliasDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TypeAliasDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .typeAliasDecl)
     self._syntaxNode = Syntax(data)
@@ -6779,6 +6861,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -6822,6 +6905,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -6985,9 +7069,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``VariableDeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``VariableDeclSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .variableDecl)
     self._syntaxNode = Syntax(data)
@@ -7067,6 +7152,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -7110,6 +7196,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -7171,6 +7258,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `bindings`
   /// collection.
+  ///
   /// - param element: The new `Binding` to add to the node's
   ///                  `bindings` collection.
   /// - returns: A copy of the receiver with the provided `Binding`

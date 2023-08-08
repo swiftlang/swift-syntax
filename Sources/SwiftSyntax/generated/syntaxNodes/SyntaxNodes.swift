@@ -76,9 +76,10 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AccessorBlockSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AccessorBlockSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .accessorBlock)
     self._syntaxNode = Syntax(data)
@@ -228,9 +229,10 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AccessorEffectSpecifiersSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AccessorEffectSpecifiersSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .accessorEffectSpecifiers)
     self._syntaxNode = Syntax(data)
@@ -355,9 +357,10 @@ public struct AccessorParametersSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AccessorParametersSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AccessorParametersSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .accessorParameters)
     self._syntaxNode = Syntax(data)
@@ -507,9 +510,10 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ArrayElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ArrayElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .arrayElement)
     self._syntaxNode = Syntax(data)
@@ -900,9 +904,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AttributeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AttributeSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .attribute)
     self._syntaxNode = Syntax(data)
@@ -1169,9 +1174,10 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AvailabilityArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AvailabilityArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .availabilityArgument)
     self._syntaxNode = Syntax(data)
@@ -1301,9 +1307,10 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AvailabilityConditionSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AvailabilityConditionSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .availabilityCondition)
     self._syntaxNode = Syntax(data)
@@ -1419,6 +1426,7 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `availabilityArguments`
   /// collection.
+  ///
   /// - param element: The new `AvailabilityArgument` to add to the node's
   ///                  `availabilityArguments` collection.
   /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
@@ -1549,9 +1557,10 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable 
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``AvailabilityLabeledArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``AvailabilityLabeledArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .availabilityLabeledArgument)
     self._syntaxNode = Syntax(data)
@@ -1710,9 +1719,10 @@ public struct BackDeployedAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashab
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``BackDeployedAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``BackDeployedAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .backDeployedAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -1828,6 +1838,7 @@ public struct BackDeployedAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashab
   
   /// Adds the provided `element` to the node's `platforms`
   /// collection.
+  ///
   /// - param element: The new `Platform` to add to the node's
   ///                  `platforms` collection.
   /// - returns: A copy of the receiver with the provided `Platform`
@@ -1894,9 +1905,10 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``CatchClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``CatchClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .catchClause)
     self._syntaxNode = Syntax(data)
@@ -1988,6 +2000,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `catchItems`
   /// collection.
+  ///
   /// - param element: The new `CatchItem` to add to the node's
   ///                  `catchItems` collection.
   /// - returns: A copy of the receiver with the provided `CatchItem`
@@ -2072,9 +2085,10 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``CatchItemSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``CatchItemSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .catchItem)
     self._syntaxNode = Syntax(data)
@@ -2225,9 +2239,10 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureCaptureClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureCaptureClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureCaptureClause)
     self._syntaxNode = Syntax(data)
@@ -2319,6 +2334,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `items`
   /// collection.
+  ///
   /// - param element: The new `Item` to add to the node's
   ///                  `items` collection.
   /// - returns: A copy of the receiver with the provided `Item`
@@ -2404,9 +2420,10 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureCaptureSpecifierSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureCaptureSpecifierSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureCaptureSpecifier)
     self._syntaxNode = Syntax(data)
@@ -2585,9 +2602,10 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureCaptureSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureCaptureSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureCapture)
     self._syntaxNode = Syntax(data)
@@ -2790,9 +2808,10 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureParameterClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureParameterClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureParameterClause)
     self._syntaxNode = Syntax(data)
@@ -2889,6 +2908,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `parameters`
   /// collection.
+  ///
   /// - param element: The new `Parameter` to add to the node's
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
@@ -2979,9 +2999,10 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureParameterSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureParameterSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureParameter)
     self._syntaxNode = Syntax(data)
@@ -3091,6 +3112,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -3134,6 +3156,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -3323,9 +3346,10 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureShorthandParameterSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureShorthandParameterSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureShorthandParameter)
     self._syntaxNode = Syntax(data)
@@ -3495,9 +3519,10 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ClosureSignatureSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ClosureSignatureSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .closureSignature)
     self._syntaxNode = Syntax(data)
@@ -3589,6 +3614,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -3805,9 +3831,10 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``CodeBlockItemSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``CodeBlockItemSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .codeBlockItem)
     self._syntaxNode = Syntax(data)
@@ -3948,9 +3975,10 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``CodeBlockSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``CodeBlockSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .codeBlock)
     self._syntaxNode = Syntax(data)
@@ -4042,6 +4070,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `statements`
   /// collection.
+  ///
   /// - param element: The new `Statement` to add to the node's
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
@@ -4125,9 +4154,10 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``CompositionTypeElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``CompositionTypeElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .compositionTypeElement)
     self._syntaxNode = Syntax(data)
@@ -4320,9 +4350,10 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ConditionElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ConditionElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .conditionElement)
     self._syntaxNode = Syntax(data)
@@ -4447,9 +4478,10 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ConformanceRequirementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ConformanceRequirementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .conformanceRequirement)
     self._syntaxNode = Syntax(data)
@@ -4604,9 +4636,10 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ConventionAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ConventionAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .conventionAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -4813,9 +4846,10 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ConventionWitnessMethodAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ConventionWitnessMethodAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .conventionWitnessMethodAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -4966,9 +5000,10 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeclModifierDetailSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeclModifierDetailSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .declModifierDetail)
     self._syntaxNode = Syntax(data)
@@ -5119,9 +5154,10 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeclModifierSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeclModifierSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .declModifier)
     self._syntaxNode = Syntax(data)
@@ -5245,9 +5281,10 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeclNameArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeclNameArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .declNameArgument)
     self._syntaxNode = Syntax(data)
@@ -5372,9 +5409,10 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeclNameArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeclNameArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .declNameArguments)
     self._syntaxNode = Syntax(data)
@@ -5466,6 +5504,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `arguments`
   /// collection.
+  ///
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
@@ -5548,9 +5587,10 @@ public struct DeinitializerEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashabl
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeinitializerEffectSpecifiersSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeinitializerEffectSpecifiersSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .deinitializerEffectSpecifiers)
     self._syntaxNode = Syntax(data)
@@ -5643,9 +5683,10 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DerivativeAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DerivativeAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .derivativeAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -5909,9 +5950,10 @@ public struct DesignatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DesignatedTypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DesignatedTypeSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .designatedType)
     self._syntaxNode = Syntax(data)
@@ -6037,9 +6079,10 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DictionaryElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DictionaryElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .dictionaryElement)
     self._syntaxNode = Syntax(data)
@@ -6218,9 +6261,10 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DifferentiabilityArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DifferentiabilityArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .differentiabilityArgument)
     self._syntaxNode = Syntax(data)
@@ -6347,9 +6391,10 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DifferentiabilityArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DifferentiabilityArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .differentiabilityArguments)
     self._syntaxNode = Syntax(data)
@@ -6443,6 +6488,7 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `arguments`
   /// collection.
+  ///
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
@@ -6572,9 +6618,10 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DifferentiabilityWithRespectToArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DifferentiabilityWithRespectToArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .differentiabilityWithRespectToArgument)
     self._syntaxNode = Syntax(data)
@@ -6733,9 +6780,10 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DifferentiableAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DifferentiableAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .differentiableAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -6987,9 +7035,10 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DocumentationAttributeArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DocumentationAttributeArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .documentationAttributeArgument)
     self._syntaxNode = Syntax(data)
@@ -7170,9 +7219,10 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DynamicReplacementAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DynamicReplacementAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .dynamicReplacementAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -7326,9 +7376,10 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EnumCaseElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EnumCaseElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .enumCaseElement)
     self._syntaxNode = Syntax(data)
@@ -7513,9 +7564,10 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EnumCaseParameterClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EnumCaseParameterClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .enumCaseParameterClause)
     self._syntaxNode = Syntax(data)
@@ -7612,6 +7664,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `parameters`
   /// collection.
+  ///
   /// - param element: The new `Parameter` to add to the node's
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
@@ -7701,9 +7754,10 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``EnumCaseParameterSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``EnumCaseParameterSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .enumCaseParameter)
     self._syntaxNode = Syntax(data)
@@ -7805,6 +7859,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -7993,9 +8048,10 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExposeAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ExposeAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .exposeAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -8148,9 +8204,10 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExpressionSegmentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ExpressionSegmentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .expressionSegment)
     self._syntaxNode = Syntax(data)
@@ -8290,6 +8347,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `expressions`
   /// collection.
+  ///
   /// - param element: The new `Expression` to add to the node's
   ///                  `expressions` collection.
   /// - returns: A copy of the receiver with the provided `Expression`
@@ -8377,9 +8435,10 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FunctionEffectSpecifiersSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FunctionEffectSpecifiersSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionEffectSpecifiers)
     self._syntaxNode = Syntax(data)
@@ -8505,9 +8564,10 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FunctionParameterClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FunctionParameterClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionParameterClause)
     self._syntaxNode = Syntax(data)
@@ -8599,6 +8659,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `parameters`
   /// collection.
+  ///
   /// - param element: The new `Parameter` to add to the node's
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
@@ -8689,9 +8750,10 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FunctionParameterSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FunctionParameterSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionParameter)
     self._syntaxNode = Syntax(data)
@@ -8801,6 +8863,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -8844,6 +8907,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
+  ///
   /// - param element: The new `Modifier` to add to the node's
   ///                  `modifiers` collection.
   /// - returns: A copy of the receiver with the provided `Modifier`
@@ -9050,9 +9114,10 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FunctionSignatureSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FunctionSignatureSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionSignature)
     self._syntaxNode = Syntax(data)
@@ -9208,9 +9273,10 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericArgumentClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericArgumentClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericArgumentClause)
     self._syntaxNode = Syntax(data)
@@ -9302,6 +9368,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `arguments`
   /// collection.
+  ///
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
@@ -9385,9 +9452,10 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericArgument)
     self._syntaxNode = Syntax(data)
@@ -9524,9 +9592,10 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericParameterClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericParameterClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericParameterClause)
     self._syntaxNode = Syntax(data)
@@ -9630,6 +9699,7 @@ public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `parameters`
   /// collection.
+  ///
   /// - param element: The new `Parameter` to add to the node's
   ///                  `parameters` collection.
   /// - returns: A copy of the receiver with the provided `Parameter`
@@ -9739,9 +9809,10 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericParameterSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericParameterSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericParameter)
     self._syntaxNode = Syntax(data)
@@ -9833,6 +9904,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
+  ///
   /// - param element: The new `Attribute` to add to the node's
   ///                  `attributes` collection.
   /// - returns: A copy of the receiver with the provided `Attribute`
@@ -10047,9 +10119,10 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericRequirementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericRequirementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericRequirement)
     self._syntaxNode = Syntax(data)
@@ -10189,9 +10262,10 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GenericWhereClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GenericWhereClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .genericWhereClause)
     self._syntaxNode = Syntax(data)
@@ -10281,6 +10355,7 @@ public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `requirements`
   /// collection.
+  ///
   /// - param element: The new `Requirement` to add to the node's
   ///                  `requirements` collection.
   /// - returns: A copy of the receiver with the provided `Requirement`
@@ -10426,9 +10501,10 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``IfConfigClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``IfConfigClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .ifConfigClause)
     self._syntaxNode = Syntax(data)
@@ -10581,9 +10657,10 @@ public struct ImplementsAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ImplementsAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ImplementsAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .implementsAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -10739,9 +10816,10 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ImportPathComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ImportPathComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .importPathComponent)
     self._syntaxNode = Syntax(data)
@@ -10871,9 +10949,10 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``InheritanceClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``InheritanceClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .inheritanceClause)
     self._syntaxNode = Syntax(data)
@@ -10959,6 +11038,7 @@ public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `inheritedTypes`
   /// collection.
+  ///
   /// - param element: The new `InheritedType` to add to the node's
   ///                  `inheritedTypes` collection.
   /// - returns: A copy of the receiver with the provided `InheritedType`
@@ -11022,9 +11102,10 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``InheritedTypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``InheritedTypeSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .inheritedType)
     self._syntaxNode = Syntax(data)
@@ -11154,9 +11235,10 @@ public struct InitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``InitializerClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``InitializerClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .initializerClause)
     self._syntaxNode = Syntax(data)
@@ -11333,9 +11415,10 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``KeyPathComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``KeyPathComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .keyPathComponent)
     self._syntaxNode = Syntax(data)
@@ -11458,9 +11541,10 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``KeyPathOptionalComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``KeyPathOptionalComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .keyPathOptionalComponent)
     self._syntaxNode = Syntax(data)
@@ -11546,9 +11630,10 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``KeyPathPropertyComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``KeyPathPropertyComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .keyPathPropertyComponent)
     self._syntaxNode = Syntax(data)
@@ -11673,9 +11758,10 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``KeyPathSubscriptComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``KeyPathSubscriptComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .keyPathSubscriptComponent)
     self._syntaxNode = Syntax(data)
@@ -11767,6 +11853,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `arguments`
   /// collection.
+  ///
   /// - param element: The new `Argument` to add to the node's
   ///                  `arguments` collection.
   /// - returns: A copy of the receiver with the provided `Argument`
@@ -11852,9 +11939,10 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``LabeledExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``LabeledExprSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .labeledExpr)
     self._syntaxNode = Syntax(data)
@@ -12034,9 +12122,10 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``LabeledSpecializeArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``LabeledSpecializeArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .labeledSpecializeArgument)
     self._syntaxNode = Syntax(data)
@@ -12226,9 +12315,10 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``LayoutRequirementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``LayoutRequirementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .layoutRequirement)
     self._syntaxNode = Syntax(data)
@@ -12510,9 +12600,10 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MatchingPatternConditionSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MatchingPatternConditionSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .matchingPatternCondition)
     self._syntaxNode = Syntax(data)
@@ -12690,9 +12781,10 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MemberBlockItemSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MemberBlockItemSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .memberBlockItem)
     self._syntaxNode = Syntax(data)
@@ -12826,9 +12918,10 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MemberBlockSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MemberBlockSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .memberBlock)
     self._syntaxNode = Syntax(data)
@@ -12920,6 +13013,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `members`
   /// collection.
+  ///
   /// - param element: The new `Member` to add to the node's
   ///                  `members` collection.
   /// - returns: A copy of the receiver with the provided `Member`
@@ -13000,9 +13094,10 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MissingSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MissingSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .missing)
     self._syntaxNode = Syntax(data)
@@ -13093,9 +13188,10 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MultipleTrailingClosureElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MultipleTrailingClosureElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .multipleTrailingClosureElement)
     self._syntaxNode = Syntax(data)
@@ -13247,9 +13343,10 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ObjCSelectorPieceSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ObjCSelectorPieceSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .objCSelectorPiece)
     self._syntaxNode = Syntax(data)
@@ -13376,9 +13473,10 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .opaqueReturnTypeOfAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -13535,9 +13633,10 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``OperatorPrecedenceAndTypesSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``OperatorPrecedenceAndTypesSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .operatorPrecedenceAndTypes)
     self._syntaxNode = Syntax(data)
@@ -13651,6 +13750,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `designatedTypes`
   /// collection.
+  ///
   /// - param element: The new `DesignatedTypeElement` to add to the node's
   ///                  `designatedTypes` collection.
   /// - returns: A copy of the receiver with the provided `DesignatedTypeElement`
@@ -13718,9 +13818,10 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``OptionalBindingConditionSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``OptionalBindingConditionSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .optionalBindingCondition)
     self._syntaxNode = Syntax(data)
@@ -13901,9 +14002,10 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``OriginallyDefinedInAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``OriginallyDefinedInAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .originallyDefinedInAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -14061,6 +14163,7 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
   
   /// Adds the provided `element` to the node's `platforms`
   /// collection.
+  ///
   /// - param element: The new `Platform` to add to the node's
   ///                  `platforms` collection.
   /// - returns: A copy of the receiver with the provided `Platform`
@@ -14133,9 +14236,10 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PatternBindingSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PatternBindingSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .patternBinding)
     self._syntaxNode = Syntax(data)
@@ -14339,9 +14443,10 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PlatformVersionItemSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PlatformVersionItemSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .platformVersionItem)
     self._syntaxNode = Syntax(data)
@@ -14470,9 +14575,10 @@ public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PlatformVersionSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PlatformVersionSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .platformVersion)
     self._syntaxNode = Syntax(data)
@@ -14603,9 +14709,10 @@ public struct PoundSourceLocationArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PoundSourceLocationArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PoundSourceLocationArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .poundSourceLocationArguments)
     self._syntaxNode = Syntax(data)
@@ -14862,9 +14969,10 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrecedenceGroupAssignmentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrecedenceGroupAssignmentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .precedenceGroupAssignment)
     self._syntaxNode = Syntax(data)
@@ -15019,9 +15127,10 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrecedenceGroupAssociativitySyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrecedenceGroupAssociativitySyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .precedenceGroupAssociativity)
     self._syntaxNode = Syntax(data)
@@ -15173,9 +15282,10 @@ public struct PrecedenceGroupNameSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrecedenceGroupNameSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrecedenceGroupNameSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .precedenceGroupName)
     self._syntaxNode = Syntax(data)
@@ -15302,9 +15412,10 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrecedenceGroupRelationSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrecedenceGroupRelationSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .precedenceGroupRelation)
     self._syntaxNode = Syntax(data)
@@ -15418,6 +15529,7 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `precedenceGroups`
   /// collection.
+  ///
   /// - param element: The new `OtherName` to add to the node's
   ///                  `precedenceGroups` collection.
   /// - returns: A copy of the receiver with the provided `OtherName`
@@ -15484,9 +15596,10 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrimaryAssociatedTypeClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrimaryAssociatedTypeClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .primaryAssociatedTypeClause)
     self._syntaxNode = Syntax(data)
@@ -15578,6 +15691,7 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable 
   
   /// Adds the provided `element` to the node's `primaryAssociatedTypes`
   /// collection.
+  ///
   /// - param element: The new `PrimaryAssociatedType` to add to the node's
   ///                  `primaryAssociatedTypes` collection.
   /// - returns: A copy of the receiver with the provided `PrimaryAssociatedType`
@@ -15661,9 +15775,10 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``PrimaryAssociatedTypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PrimaryAssociatedTypeSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .primaryAssociatedType)
     self._syntaxNode = Syntax(data)
@@ -15790,9 +15905,10 @@ public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``QualifiedDeclNameSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``QualifiedDeclNameSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .qualifiedDeclName)
     self._syntaxNode = Syntax(data)
@@ -15949,9 +16065,10 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ReturnClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ReturnClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .returnClause)
     self._syntaxNode = Syntax(data)
@@ -16076,9 +16193,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SameTypeRequirementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SameTypeRequirementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .sameTypeRequirement)
     self._syntaxNode = Syntax(data)
@@ -16224,9 +16342,10 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SourceFileSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SourceFileSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .sourceFile)
     self._syntaxNode = Syntax(data)
@@ -16294,6 +16413,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `statements`
   /// collection.
+  ///
   /// - param element: The new `Statement` to add to the node's
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
@@ -16379,9 +16499,10 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SpecializeAvailabilityArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SpecializeAvailabilityArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .specializeAvailabilityArgument)
     self._syntaxNode = Syntax(data)
@@ -16501,6 +16622,7 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
   
   /// Adds the provided `element` to the node's `availabilityArguments`
   /// collection.
+  ///
   /// - param element: The new `AvailabilityArgument` to add to the node's
   ///                  `availabilityArguments` collection.
   /// - returns: A copy of the receiver with the provided `AvailabilityArgument`
@@ -16590,9 +16712,10 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SpecializeTargetFunctionArgumentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SpecializeTargetFunctionArgumentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .specializeTargetFunctionArgument)
     self._syntaxNode = Syntax(data)
@@ -16775,9 +16898,10 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``StringSegmentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``StringSegmentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .stringSegment)
     self._syntaxNode = Syntax(data)
@@ -16864,9 +16988,10 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SwitchCaseItemSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SwitchCaseItemSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .switchCaseItem)
     self._syntaxNode = Syntax(data)
@@ -17017,9 +17142,10 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SwitchCaseLabelSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SwitchCaseLabelSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .switchCaseLabel)
     self._syntaxNode = Syntax(data)
@@ -17111,6 +17237,7 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `caseItems`
   /// collection.
+  ///
   /// - param element: The new `CaseItem` to add to the node's
   ///                  `caseItems` collection.
   /// - returns: A copy of the receiver with the provided `CaseItem`
@@ -17237,9 +17364,10 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SwitchCaseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SwitchCaseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .switchCase)
     self._syntaxNode = Syntax(data)
@@ -17351,6 +17479,7 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `statements`
   /// collection.
+  ///
   /// - param element: The new `Statement` to add to the node's
   ///                  `statements` collection.
   /// - returns: A copy of the receiver with the provided `Statement`
@@ -17416,9 +17545,10 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SwitchDefaultLabelSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SwitchDefaultLabelSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .switchDefaultLabel)
     self._syntaxNode = Syntax(data)
@@ -17544,9 +17674,10 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TuplePatternElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TuplePatternElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .tuplePatternElement)
     self._syntaxNode = Syntax(data)
@@ -17727,9 +17858,10 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TupleTypeElementSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TupleTypeElementSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .tupleTypeElement)
     self._syntaxNode = Syntax(data)
@@ -17987,9 +18119,10 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TypeAnnotationSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TypeAnnotationSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .typeAnnotation)
     self._syntaxNode = Syntax(data)
@@ -18115,9 +18248,10 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TypeEffectSpecifiersSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TypeEffectSpecifiersSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .typeEffectSpecifiers)
     self._syntaxNode = Syntax(data)
@@ -18242,9 +18376,10 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``TypeInitializerClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TypeInitializerClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .typeInitializerClause)
     self._syntaxNode = Syntax(data)
@@ -18371,9 +18506,10 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``UnavailableFromAsyncAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``UnavailableFromAsyncAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .unavailableFromAsyncAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -18526,9 +18662,10 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``UnderscorePrivateAttributeArgumentsSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``UnderscorePrivateAttributeArgumentsSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .underscorePrivateAttributeArguments)
     self._syntaxNode = Syntax(data)
@@ -18680,9 +18817,10 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``VersionComponentSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``VersionComponentSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .versionComponent)
     self._syntaxNode = Syntax(data)
@@ -18814,9 +18952,10 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``VersionTupleSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``VersionTupleSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .versionTuple)
     self._syntaxNode = Syntax(data)
@@ -18906,6 +19045,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `components`
   /// collection.
+  ///
   /// - param element: The new `VersionComponent` to add to the node's
   ///                  `components` collection.
   /// - returns: A copy of the receiver with the provided `VersionComponent`
@@ -18971,9 +19111,10 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``WhereClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``WhereClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .whereClause)
     self._syntaxNode = Syntax(data)
@@ -19097,9 +19238,10 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``YieldedExpressionSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``YieldedExpressionSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .yieldedExpression)
     self._syntaxNode = Syntax(data)
@@ -19224,9 +19366,10 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``YieldedExpressionsClauseSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``YieldedExpressionsClauseSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .yieldedExpressionsClause)
     self._syntaxNode = Syntax(data)
@@ -19318,6 +19461,7 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `elements`
   /// collection.
+  ///
   /// - param element: The new `Element` to add to the node's
   ///                  `elements` collection.
   /// - returns: A copy of the receiver with the provided `Element`

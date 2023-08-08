@@ -14,22 +14,26 @@
 
 // MARK: - DeclSyntax
 
-/// Protocol to which all ``DeclSyntax`` nodes conform. Extension point to add
-/// common methods to all ``DeclSyntax`` nodes.
-/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+/// Protocol to which all ``DeclSyntax`` nodes conform. 
+///
+/// Extension point to add common methods to all ``DeclSyntax`` nodes.
+///
+///  - Warning: Do not conform to this protocol yourself.
 public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// DeclSyntaxProtocol.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(DeclSyntaxProtocol.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// DeclSyntaxProtocol. Otherwise return nil.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol
   }
@@ -78,9 +82,10 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a ``DeclSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeclSyntax`` node from the given ``SyntaxData``.
+  ///
+  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
     case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
@@ -105,14 +110,16 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
   /// added for consistency.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return true
   }
   
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol {
     return Syntax(self).asProtocol(DeclSyntaxProtocol.self)!
   }
@@ -149,22 +156,26 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - ExprSyntax
 
-/// Protocol to which all ``ExprSyntax`` nodes conform. Extension point to add
-/// common methods to all ``ExprSyntax`` nodes.
-/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+/// Protocol to which all ``ExprSyntax`` nodes conform. 
+///
+/// Extension point to add common methods to all ``ExprSyntax`` nodes.
+///
+///  - Warning: Do not conform to this protocol yourself.
 public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// ExprSyntaxProtocol.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(ExprSyntaxProtocol.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// ExprSyntaxProtocol. Otherwise return nil.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? ExprSyntaxProtocol
   }
@@ -213,9 +224,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a ``ExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ExprSyntax`` node from the given ``SyntaxData``.
+  ///
+  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
     case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
@@ -240,14 +252,16 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
   /// added for consistency.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return true
   }
   
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol {
     return Syntax(self).asProtocol(ExprSyntaxProtocol.self)!
   }
@@ -311,22 +325,26 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 // MARK: - PatternSyntax
 
-/// Protocol to which all ``PatternSyntax`` nodes conform. Extension point to add
-/// common methods to all ``PatternSyntax`` nodes.
-/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+/// Protocol to which all ``PatternSyntax`` nodes conform. 
+///
+/// Extension point to add common methods to all ``PatternSyntax`` nodes.
+///
+///  - Warning: Do not conform to this protocol yourself.
 public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// PatternSyntaxProtocol.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(PatternSyntaxProtocol.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// PatternSyntaxProtocol. Otherwise return nil.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? PatternSyntaxProtocol
   }
@@ -375,9 +393,10 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a ``PatternSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``PatternSyntax`` node from the given ``SyntaxData``.
+  ///
+  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
     case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
@@ -402,14 +421,16 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just
   /// added for consistency.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return true
   }
   
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol {
     return Syntax(self).asProtocol(PatternSyntaxProtocol.self)!
   }
@@ -429,22 +450,26 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 // MARK: - StmtSyntax
 
-/// Protocol to which all ``StmtSyntax`` nodes conform. Extension point to add
-/// common methods to all ``StmtSyntax`` nodes.
-/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+/// Protocol to which all ``StmtSyntax`` nodes conform. 
+///
+/// Extension point to add common methods to all ``StmtSyntax`` nodes.
+///
+///  - Warning: Do not conform to this protocol yourself.
 public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// StmtSyntaxProtocol.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(StmtSyntaxProtocol.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// StmtSyntaxProtocol. Otherwise return nil.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? StmtSyntaxProtocol
   }
@@ -493,9 +518,10 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a ``StmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``StmtSyntax`` node from the given ``SyntaxData``.
+  ///
+  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
     case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
@@ -520,14 +546,16 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
   /// added for consistency.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return true
   }
   
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol {
     return Syntax(self).asProtocol(StmtSyntaxProtocol.self)!
   }
@@ -556,22 +584,26 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 // MARK: - TypeSyntax
 
-/// Protocol to which all ``TypeSyntax`` nodes conform. Extension point to add
-/// common methods to all ``TypeSyntax`` nodes.
-/// DO NOT CONFORM TO THIS PROTOCOL YOURSELF!
+/// Protocol to which all ``TypeSyntax`` nodes conform. 
+///
+/// Extension point to add common methods to all ``TypeSyntax`` nodes.
+///
+///  - Warning: Do not conform to this protocol yourself.
 public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 
 public extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// TypeSyntaxProtocol.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(TypeSyntaxProtocol.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// TypeSyntaxProtocol. Otherwise return nil.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? TypeSyntaxProtocol
   }
@@ -620,9 +652,10 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// Creates a ``TypeSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the ``SyntaxData`` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``TypeSyntax`` node from the given ``SyntaxData``.
+  ///
+  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
     case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
@@ -647,14 +680,16 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just
   /// added for consistency.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return true
   }
   
   /// Return the non-type erased version of this syntax node.
-  /// Note that this will incur an existential conversion.
+  ///
+  ///  - Note:  This will incur an existential conversion.
   public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol {
     return Syntax(self).asProtocol(TypeSyntaxProtocol.self)!
   }

@@ -66,9 +66,10 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. This assumes
-          /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-          /// is undefined.
+          /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. 
+          ///
+          ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+          ///    If it is not, the behaviour is undefined.
           internal init(_ data: SyntaxData) {
             precondition(data.raw.kind == .\(raw: node.varOrCaseName))
             self._syntaxNode = Syntax(data)
@@ -199,6 +200,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
               """
               /// Adds the provided `element` to the node's `\(child.varOrCaseName)`
               /// collection.
+              ///
               /// - param element: The new `\(raw: childElt)` to add to the node's
               ///                  `\(child.varOrCaseName)` collection.
               /// - returns: A copy of the receiver with the provided `\(raw: childElt)`

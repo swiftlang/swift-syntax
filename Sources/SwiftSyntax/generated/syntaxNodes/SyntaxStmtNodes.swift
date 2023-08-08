@@ -28,9 +28,10 @@ public struct BreakStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``BreakStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``BreakStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .breakStmt)
     self._syntaxNode = Syntax(data)
@@ -150,9 +151,10 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ContinueStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ContinueStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .continueStmt)
     self._syntaxNode = Syntax(data)
@@ -272,9 +274,10 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DeferStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DeferStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .deferStmt)
     self._syntaxNode = Syntax(data)
@@ -394,9 +397,10 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DiscardStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DiscardStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .discardStmt)
     self._syntaxNode = Syntax(data)
@@ -517,9 +521,10 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``DoStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``DoStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .doStmt)
     self._syntaxNode = Syntax(data)
@@ -629,6 +634,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `catchClauses`
   /// collection.
+  ///
   /// - param element: The new `CatchClause` to add to the node's
   ///                  `catchClauses` collection.
   /// - returns: A copy of the receiver with the provided `CatchClause`
@@ -689,9 +695,10 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ExpressionStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ExpressionStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .expressionStmt)
     self._syntaxNode = Syntax(data)
@@ -772,9 +779,10 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``FallThroughStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``FallThroughStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .fallThroughStmt)
     self._syntaxNode = Syntax(data)
@@ -864,9 +872,10 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ForStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ForStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .forStmt)
     self._syntaxNode = Syntax(data)
@@ -1196,9 +1205,10 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``GuardStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``GuardStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .guardStmt)
     self._syntaxNode = Syntax(data)
@@ -1296,6 +1306,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `conditions`
   /// collection.
+  ///
   /// - param element: The new `Condition` to add to the node's
   ///                  `conditions` collection.
   /// - returns: A copy of the receiver with the provided `Condition`
@@ -1396,9 +1407,10 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``LabeledStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``LabeledStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .labeledStmt)
     self._syntaxNode = Syntax(data)
@@ -1545,9 +1557,10 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``MissingStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``MissingStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .missingStmt)
     self._syntaxNode = Syntax(data)
@@ -1635,9 +1648,10 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``RepeatStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``RepeatStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .repeatStmt)
     self._syntaxNode = Syntax(data)
@@ -1809,9 +1823,10 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ReturnStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ReturnStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .returnStmt)
     self._syntaxNode = Syntax(data)
@@ -1931,9 +1946,10 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``ThrowStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``ThrowStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .throwStmt)
     self._syntaxNode = Syntax(data)
@@ -2054,9 +2070,10 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``WhileStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``WhileStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .whileStmt)
     self._syntaxNode = Syntax(data)
@@ -2148,6 +2165,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   /// Adds the provided `element` to the node's `conditions`
   /// collection.
+  ///
   /// - param element: The new `Condition` to add to the node's
   ///                  `conditions` collection.
   /// - returns: A copy of the receiver with the provided `Condition`
@@ -2269,9 +2287,10 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``YieldStmtSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``YieldStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .yieldStmt)
     self._syntaxNode = Syntax(data)

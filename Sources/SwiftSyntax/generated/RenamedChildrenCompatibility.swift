@@ -3361,7 +3361,7 @@ extension FunctionSignatureSyntax {
 
 extension FunctionTypeSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenLeftParenAndParameters")
-  public var unexpectedBetweenLeftParenAndarguments: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
       return unexpectedBetweenLeftParenAndParameters
     }
@@ -3386,7 +3386,7 @@ extension FunctionTypeSyntax {
   }
   
   @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
-  public var unexpectedBetweenargumentsAndRightParen: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return unexpectedBetweenParametersAndRightParen
     }
@@ -3431,9 +3431,9 @@ extension FunctionTypeSyntax {
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
       leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndarguments: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
       arguments: TupleTypeElementListSyntax,
-      _ unexpectedBetweenargumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
       effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
@@ -3447,9 +3447,9 @@ extension FunctionTypeSyntax {
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeLeftParen, 
         leftParen: leftParen, 
-        unexpectedBetweenLeftParenAndarguments, 
+        unexpectedBetweenLeftParenAndArguments, 
         parameters: arguments, 
-        unexpectedBetweenargumentsAndRightParen, 
+        unexpectedBetweenArgumentsAndRightParen, 
         rightParen: rightParen, 
         unexpectedBetweenRightParenAndEffectSpecifiers, 
         effectSpecifiers: effectSpecifiers, 

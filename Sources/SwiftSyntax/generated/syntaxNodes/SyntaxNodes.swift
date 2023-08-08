@@ -14112,6 +14112,8 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
 
 // MARK: - PatternBindingSyntax
 
+/// Defines variables inside a variable declaration.
+///
 /// ### Children
 /// 
 ///  - `pattern`: ``PatternSyntax``
@@ -14143,6 +14145,10 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - pattern: The pattern that defines the variables.
+  ///   - typeAnnotation: The type of the variables defined by the pattern.
+  ///   - initializer: If the variables have a default value, the clause that initializes them.
+  ///   - accessorBlock: If the variable is computed, the accessors that get (and optionally set) the value.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -14210,6 +14216,17 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The pattern that defines the variables.
+  /// 
+  /// In simple variable declarations this is an ``IdentifierPatternSyntax``, which defines
+  /// the name of a single variable.
+  /// 
+  /// In more complex variable declaration, this can, for example, be a ``TuplePatternSyntax``
+  /// that destructures a tuple.
+  /// 
+  /// ```swift
+  /// let (x, y) = (1, 2)
+  /// ```
   public var pattern: PatternSyntax {
     get {
       return PatternSyntax(data.child(at: 1, parent: Syntax(self))!)
@@ -14228,6 +14245,9 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The type of the variables defined by the pattern.
+  /// 
+  /// Can be omitted, in which case the variables’ types are inferred from the initializer.
   public var typeAnnotation: TypeAnnotationSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
@@ -14246,6 +14266,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the variables have a default value, the clause that initializes them.
   public var initializer: InitializerClauseSyntax? {
     get {
       return data.child(at: 5, parent: Syntax(self)).map(InitializerClauseSyntax.init)
@@ -14264,6 +14285,7 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// If the variable is computed, the accessors that get (and optionally set) the value.
   public var accessorBlock: AccessorBlockSyntax? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(AccessorBlockSyntax.init)

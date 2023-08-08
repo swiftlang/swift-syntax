@@ -6969,6 +6969,11 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
 // MARK: - VariableDeclSyntax
 
+/// Declaration of one or more variables
+/// 
+/// The core of a variable declaration consists of a binding specifier (`let` or `var),
+/// followed by any number of pattern bindings, which define the variables.
+///
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -6995,6 +7000,8 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - bindingSpecifier: The specifier that defines the type of the variables declared (`let` or `var`).
+  ///   - bindings: The pattern bindings that define the actual variables.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -7142,6 +7149,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The specifier that defines the type of the variables declared (`let` or `var`).
   public var bindingSpecifier: TokenSyntax {
     get {
       return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
@@ -7160,6 +7168,17 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The pattern bindings that define the actual variables.
+  /// 
+  /// The pattern bindings contain the declared variables’ names, their types,
+  /// initializers and accessors.
+  /// 
+  /// A variable declaration can contain multiple pattern bindings, because it’s possible
+  /// to define multiple variables after a single `let` keyword as follows.
+  /// 
+  /// ```swift
+  /// let x: Int = 1, y: Int = 2
+  /// ```
   public var bindings: PatternBindingListSyntax {
     get {
       return PatternBindingListSyntax(data.child(at: 7, parent: Syntax(self))!)

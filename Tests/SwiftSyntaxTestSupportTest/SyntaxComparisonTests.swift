@@ -41,7 +41,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenKind() throws {
-    let expected = Syntax(makeFunc(name: .binaryOperator("f")))
+    let expected = makeFunc(name: .binaryOperator("f"))
 
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
@@ -58,7 +58,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTokenText() throws {
-    let expected = Syntax(makeFunc(name: .identifier("f")))
+    let expected = makeFunc(name: .identifier("f"))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
@@ -74,7 +74,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentTrivia() throws {
-    let expected = Syntax(makeFunc(name: .identifier("f"), indent: 2))
+    let expected = makeFunc(name: .identifier("f"), indent: 2)
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .trivia)
@@ -92,14 +92,12 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testDifferentPresence() throws {
-    let expected = Syntax(
-      makeFunc(
-        name: .identifier("f"),
-        body: CodeBlockSyntax(
-          leftBrace: .leftBraceToken(presence: .missing),
-          statements: CodeBlockItemListSyntax([]),
-          rightBrace: .rightBraceToken(presence: .missing)
-        )
+    let expected = makeFunc(
+      name: .identifier("f"),
+      body: CodeBlockSyntax(
+        leftBrace: .leftBraceToken(presence: .missing),
+        statements: CodeBlockItemListSyntax([]),
+        rightBrace: .rightBraceToken(presence: .missing)
       )
     )
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
@@ -131,7 +129,7 @@ public class SyntaxComparisonTests: XCTestCase {
   }
 
   public func testAdditionalNode() throws {
-    let expected = Syntax(makeFunc(name: .identifier("f")))
+    let expected = makeFunc(name: .identifier("f"))
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .additionalNode)

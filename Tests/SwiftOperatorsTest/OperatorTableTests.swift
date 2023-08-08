@@ -90,9 +90,9 @@ extension OperatorTable {
     XCTAssertFalse(parenthesizedSyntax.containsExprSequence)
 
     // Make sure the two have the same structure.
-    let subtreeMatcher = SubtreeMatcher(Syntax(foldedSyntax), markers: [:])
+    let subtreeMatcher = SubtreeMatcher(foldedSyntax, markers: [:])
     do {
-      try subtreeMatcher.assertSameStructure(Syntax(parenthesizedSyntax))
+      try subtreeMatcher.assertSameStructure(parenthesizedSyntax)
     } catch {
       XCTFail("Matching for a subtree failed with error: \(error)")
     }

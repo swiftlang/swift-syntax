@@ -18,7 +18,7 @@ import SwiftSyntax
 
 func assertParseWithAllNewlineEndings(
   _ markedSource: String,
-  substructure expectedSubstructure: Syntax? = nil,
+  substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
@@ -812,7 +812,7 @@ final class MultilineErrorsTests: XCTestCase {
         """
         abc
       """##,
-      substructure: Syntax(DeclReferenceExprSyntax(baseName: .identifier("abc"))),
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("abc")),
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "3️⃣",

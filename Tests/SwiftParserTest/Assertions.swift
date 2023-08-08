@@ -531,7 +531,7 @@ public struct AssertParseOptions: OptionSet {
 /// parsing the resulting `String` as a ``SourceFileSyntax``.
 func assertParse(
   _ markedSource: String,
-  substructure expectedSubstructure: Syntax? = nil,
+  substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
@@ -609,7 +609,7 @@ fileprivate func assertRoundTrip<S: SyntaxProtocol>(
 func assertParse<S: SyntaxProtocol>(
   _ markedSource: String,
   _ parse: (inout Parser) -> S,
-  substructure expectedSubstructure: Syntax? = nil,
+  substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
   substructureAfterMarker: String = "START",
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   applyFixIts: [String]? = nil,
@@ -648,11 +648,11 @@ func assertParse<S: SyntaxProtocol>(
 
   // Substructure
   if let expectedSubstructure {
-    let subtreeMatcher = SubtreeMatcher(Syntax(tree), markers: markerLocations)
+    let subtreeMatcher = SubtreeMatcher(tree, markers: markerLocations)
     do {
       try subtreeMatcher.assertSameStructure(
         afterMarker: substructureAfterMarker,
-        Syntax(expectedSubstructure),
+        expectedSubstructure,
         includeTrivia: options.contains(.substructureCheckTrivia),
         file: file,
         line: line
@@ -760,9 +760,9 @@ func assertBasicFormat<S: SyntaxProtocol>(
   let formattedReparsed = Syntax(parse(&formattedParser))
 
   do {
-    let subtreeMatcher = SubtreeMatcher(Syntax(formattedReparsed), markers: [:])
+    let subtreeMatcher = SubtreeMatcher(formattedReparsed, markers: [:])
     try subtreeMatcher.assertSameStructure(
-      Syntax(sourceTree),
+      sourceTree,
       includeTrivia: false,
       additionalInfo: """
         Removing trivia, formatting using BasicFormat and re-parsing did not produce the same syntax tree.

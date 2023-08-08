@@ -84,13 +84,11 @@ final class DeclarationTests: XCTestCase {
       """
       func name(_ default: Int) {}
       """,
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .wildcardToken(),
-          secondName: .identifier("default"),
-          colon: .colonToken(),
-          type: IdentifierTypeSyntax(name: .identifier("Int"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .wildcardToken(),
+        secondName: .identifier("default"),
+        colon: .colonToken(),
+        type: IdentifierTypeSyntax(name: .identifier("Int"))
       )
     )
   }
@@ -807,16 +805,14 @@ final class DeclarationTests: XCTestCase {
         func withParameters() {}
       }
       """,
-      substructure: Syntax(
-        FunctionDeclSyntax(
-          funcKeyword: .keyword(.func),
-          name: .identifier("withoutParameters"),
-          signature: FunctionSignatureSyntax(
-            parameterClause: FunctionParameterClauseSyntax(
-              leftParen: .leftParenToken(presence: .missing),
-              parameters: FunctionParameterListSyntax([]),
-              rightParen: .rightParenToken(presence: .missing)
-            )
+      substructure: FunctionDeclSyntax(
+        funcKeyword: .keyword(.func),
+        name: .identifier("withoutParameters"),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(
+            leftParen: .leftParenToken(presence: .missing),
+            parameters: FunctionParameterListSyntax([]),
+            rightParen: .rightParenToken(presence: .missing)
           )
         )
       ),
@@ -1009,20 +1005,18 @@ final class DeclarationTests: XCTestCase {
         var prop : Int { get 1️⃣bogus rethrows set }
       }
       """,
-      substructure: Syntax(
-        AccessorBlockSyntax(
-          accessors: .accessors(
-            AccessorDeclListSyntax([
-              AccessorDeclSyntax(
-                accessorSpecifier: .keyword(.get)
-              )
-            ])
-          ),
-          UnexpectedNodesSyntax([
-            TokenSyntax.identifier("bogus"), TokenSyntax.keyword(.rethrows),
-            TokenSyntax.identifier("set"),
+      substructure: AccessorBlockSyntax(
+        accessors: .accessors(
+          AccessorDeclListSyntax([
+            AccessorDeclSyntax(
+              accessorSpecifier: .keyword(.get)
+            )
           ])
-        )
+        ),
+        UnexpectedNodesSyntax([
+          TokenSyntax.identifier("bogus"), TokenSyntax.keyword(.rethrows),
+          TokenSyntax.identifier("set"),
+        ])
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'bogus rethrows set' in variable")
@@ -1107,14 +1101,12 @@ final class DeclarationTests: XCTestCase {
   func testRecoverOneExtraLabel() {
     assertParse(
       "func test(first second 1️⃣third: Int)",
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
-          colon: .colonToken(),
-          type: IdentifierTypeSyntax(name: .identifier("Int"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        UnexpectedNodesSyntax([TokenSyntax.identifier("third")]),
+        colon: .colonToken(),
+        type: IdentifierTypeSyntax(name: .identifier("Int"))
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third' in parameter")
@@ -1125,14 +1117,12 @@ final class DeclarationTests: XCTestCase {
   func testRecoverTwoExtraLabels() {
     assertParse(
       "func test(first second 1️⃣third fourth: Int)",
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
-          colon: .colonToken(),
-          type: IdentifierTypeSyntax(name: .identifier("Int"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
+        colon: .colonToken(),
+        type: IdentifierTypeSyntax(name: .identifier("Int"))
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code 'third fourth' in parameter")
@@ -1143,13 +1133,11 @@ final class DeclarationTests: XCTestCase {
   func testDontRecoverFromDeclKeyword() {
     assertParse(
       "func fooℹ️(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          colon: .colonToken(presence: .missing),
-          type: IdentifierTypeSyntax(name: .identifier("third"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        colon: .colonToken(presence: .missing),
+        type: IdentifierTypeSyntax(name: .identifier("third"))
       ),
       diagnostics: [
         DiagnosticSpec(
@@ -1182,19 +1170,17 @@ final class DeclarationTests: XCTestCase {
   func testRecoverFromParens() {
     assertParse(
       "func test(first second 1️⃣[third fourth]: Int)",
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          UnexpectedNodesSyntax([
-            TokenSyntax.leftSquareToken(),
-            TokenSyntax.identifier("third"),
-            TokenSyntax.identifier("fourth"),
-            TokenSyntax.rightSquareToken(),
-          ]),
-          colon: .colonToken(),
-          type: IdentifierTypeSyntax(name: .identifier("Int"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        UnexpectedNodesSyntax([
+          TokenSyntax.leftSquareToken(),
+          TokenSyntax.identifier("third"),
+          TokenSyntax.identifier("fourth"),
+          TokenSyntax.rightSquareToken(),
+        ]),
+        colon: .colonToken(),
+        type: IdentifierTypeSyntax(name: .identifier("Int"))
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '[third fourth]' in parameter")
@@ -1205,16 +1191,14 @@ final class DeclarationTests: XCTestCase {
   func testDontRecoverFromUnbalancedParens() {
     assertParse(
       "func foo(first second 1️⃣[third 2️⃣fourth: Int) {}",
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          colon: .colonToken(presence: .missing),
-          type: ArrayTypeSyntax(
-            leftSquare: .leftSquareToken(),
-            element: IdentifierTypeSyntax(name: .identifier("third")),
-            rightSquare: .rightSquareToken(presence: .missing)
-          )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        colon: .colonToken(presence: .missing),
+        type: ArrayTypeSyntax(
+          leftSquare: .leftSquareToken(),
+          element: IdentifierTypeSyntax(name: .identifier("third")),
+          rightSquare: .rightSquareToken(presence: .missing)
         )
       ),
       diagnostics: [
@@ -1246,13 +1230,11 @@ final class DeclarationTests: XCTestCase {
       func fooℹ️(first second 1️⃣third2️⃣
       3️⃣: Int) {}
       """,
-      substructure: Syntax(
-        FunctionParameterSyntax(
-          firstName: .identifier("first"),
-          secondName: .identifier("second"),
-          colon: .colonToken(presence: .missing),
-          type: IdentifierTypeSyntax(name: .identifier("third"))
-        )
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("first"),
+        secondName: .identifier("second"),
+        colon: .colonToken(presence: .missing),
+        type: IdentifierTypeSyntax(name: .identifier("third"))
       ),
       diagnostics: [
         DiagnosticSpec(
@@ -1603,12 +1585,10 @@ final class DeclarationTests: XCTestCase {
       """
       #expand
       """,
-      substructure: Syntax(
-        SourceFileSyntax(
-          CodeBlockItemListSyntax {
-            MacroExpansionDeclSyntax(macroName: "expand") {}
-          }
-        )
+      substructure: SourceFileSyntax(
+        CodeBlockItemListSyntax {
+          MacroExpansionDeclSyntax(macroName: "expand") {}
+        }
       )
     )
   }
@@ -1620,12 +1600,10 @@ final class DeclarationTests: XCTestCase {
         #case
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          pound: .poundToken(),
-          macroName: .identifier("case"),
-          arguments: LabeledExprListSyntax([])
-        )
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("case"),
+        arguments: LabeledExprListSyntax([])
       )
     )
   }
@@ -1635,12 +1613,10 @@ final class DeclarationTests: XCTestCase {
       """
       @attribute #topLevelWithAttr
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macroName: "topLevelWithAttr",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+        macroName: "topLevelWithAttr",
+        arguments: []
       )
     )
 
@@ -1648,12 +1624,10 @@ final class DeclarationTests: XCTestCase {
       """
       public #topLevelWithModifier
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macroName: "topLevelWithModifier",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+        macroName: "topLevelWithModifier",
+        arguments: []
       )
     )
 
@@ -1661,11 +1635,9 @@ final class DeclarationTests: XCTestCase {
       """
       #topLevelBare
       """,
-      substructure: Syntax(
-        MacroExpansionExprSyntax(
-          macroName: "topLevelBare",
-          arguments: []
-        )
+      substructure: MacroExpansionExprSyntax(
+        macroName: "topLevelBare",
+        arguments: []
       )
     )
 
@@ -1675,12 +1647,10 @@ final class DeclarationTests: XCTestCase {
         @attribute #memberWithAttr
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macroName: "memberWithAttr",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+        macroName: "memberWithAttr",
+        arguments: []
       )
     )
 
@@ -1690,12 +1660,10 @@ final class DeclarationTests: XCTestCase {
         public #memberWithModifier
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macroName: "memberWithModifier",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+        macroName: "memberWithModifier",
+        arguments: []
       )
     )
 
@@ -1705,11 +1673,9 @@ final class DeclarationTests: XCTestCase {
         #memberBare
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          macroName: "memberBare",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        macroName: "memberBare",
+        arguments: []
       )
     )
 
@@ -1719,12 +1685,10 @@ final class DeclarationTests: XCTestCase {
         @attribute #bodyWithAttr
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
-          macroName: "bodyWithAttr",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attribute")))],
+        macroName: "bodyWithAttr",
+        arguments: []
       )
     )
 
@@ -1734,12 +1698,10 @@ final class DeclarationTests: XCTestCase {
         public #bodyWithModifier
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macroName: "bodyWithModifier",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+        macroName: "bodyWithModifier",
+        arguments: []
 
       )
     )
@@ -1750,11 +1712,9 @@ final class DeclarationTests: XCTestCase {
         #bodyBare
       }
       """,
-      substructure: Syntax(
-        MacroExpansionExprSyntax(
-          macroName: "bodyBare",
-          arguments: []
-        )
+      substructure: MacroExpansionExprSyntax(
+        macroName: "bodyBare",
+        arguments: []
       )
     )
 
@@ -1767,16 +1727,14 @@ final class DeclarationTests: XCTestCase {
         #declMacro
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          attributes: [
-            .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib1"))),
-            .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
-          ],
-          modifiers: [DeclModifierSyntax(name: .keyword(.public))],
-          macroName: "declMacro",
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        attributes: [
+          .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib1"))),
+          .attribute(AttributeSyntax(attributeName: TypeSyntax("attrib2"))),
+        ],
+        modifiers: [DeclModifierSyntax(name: .keyword(.public))],
+        macroName: "declMacro",
+        arguments: []
       )
     )
 
@@ -1786,13 +1744,11 @@ final class DeclarationTests: XCTestCase {
         @attrib #class
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
-          pound: .poundToken(),
-          macroName: .identifier("class"),
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        attributes: [.attribute(AttributeSyntax(attributeName: TypeSyntax("attrib")))],
+        pound: .poundToken(),
+        macroName: .identifier("class"),
+        arguments: []
       )
     )
 
@@ -1802,12 +1758,10 @@ final class DeclarationTests: XCTestCase {
         #struct
       }
       """,
-      substructure: Syntax(
-        MacroExpansionDeclSyntax(
-          pound: .poundToken(),
-          macroName: .identifier("struct"),
-          arguments: []
-        )
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("struct"),
+        arguments: []
       )
     )
   }
@@ -2016,51 +1970,50 @@ final class DeclarationTests: XCTestCase {
       class B {
       }
       """,
-      substructure: Syntax(
-        CodeBlockItemListSyntax([
-          CodeBlockItemSyntax(
-            item: .init(
-              ClassDeclSyntax(
-                classKeyword: .keyword(.class),
-                name: .identifier("A"),
-                memberBlock: MemberBlockSyntax(
-                  leftBrace: .leftBraceToken(),
-                  members: MemberBlockItemListSyntax([
-                    MemberBlockItemSyntax(
-                      decl: DeclSyntax(
-                        FunctionDeclSyntax(
-                          funcKeyword: .keyword(.func, presence: .missing),
-                          name: .binaryOperator("^"),
-                          signature: FunctionSignatureSyntax(
-                            parameterClause: FunctionParameterClauseSyntax(
-                              leftParen: .leftParenToken(presence: .missing),
-                              parameters: FunctionParameterListSyntax([]),
-                              rightParen: .rightParenToken(presence: .missing)
-                            )
+      substructure: CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: .init(
+            ClassDeclSyntax(
+              classKeyword: .keyword(.class),
+              name: .identifier("A"),
+              memberBlock: MemberBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberBlockItemListSyntax([
+                  MemberBlockItemSyntax(
+                    decl: DeclSyntax(
+                      FunctionDeclSyntax(
+                        funcKeyword: .keyword(.func, presence: .missing),
+                        name: .binaryOperator("^"),
+                        signature: FunctionSignatureSyntax(
+                          parameterClause: FunctionParameterClauseSyntax(
+                            leftParen: .leftParenToken(presence: .missing),
+                            parameters: FunctionParameterListSyntax([]),
+                            rightParen: .rightParenToken(presence: .missing)
                           )
                         )
                       )
                     )
-                  ]),
-                  rightBrace: .rightBraceToken()
-                )
+                  )
+                ]),
+                rightBrace: .rightBraceToken()
               )
             )
-          ),
-          CodeBlockItemSyntax(
-            item: .init(
-              ClassDeclSyntax(
-                classKeyword: .keyword(.class),
-                name: .identifier("B"),
-                memberBlock: MemberBlockSyntax(
-                  leftBrace: .leftBraceToken(),
-                  members: MemberBlockItemListSyntax([]),
-                  rightBrace: .rightBraceToken()
-                )
+          )
+        ),
+        CodeBlockItemSyntax(
+          item: .init(
+            ClassDeclSyntax(
+              classKeyword: .keyword(.class),
+              name: .identifier("B"),
+              memberBlock: MemberBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberBlockItemListSyntax([]),
+                rightBrace: .rightBraceToken()
               )
             )
-          ),
-        ])
+          )
+        ),
+      ]
       ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
@@ -2159,9 +2112,7 @@ final class DeclarationTests: XCTestCase {
         1️⃣<#code#>
       }
       """,
-      substructure: Syntax(
-        MemberBlockItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>")))
-      ),
+      substructure: MemberBlockItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>"))),
       diagnostics: [
         DiagnosticSpec(message: "editor placeholder in source file")
       ]
@@ -2201,17 +2152,15 @@ final class DeclarationTests: XCTestCase {
         var foo = 2
       }
       """,
-      substructure: Syntax(
-        FunctionCallExprSyntax(
-          calledExpression: DeclReferenceExprSyntax(baseName: .identifier("open")),
-          leftParen: .leftParenToken(),
-          arguments: LabeledExprListSyntax([
-            LabeledExprSyntax(
-              expression: DeclReferenceExprSyntax(baseName: .identifier("set"))
-            )
-          ]),
-          rightParen: .rightParenToken()
-        )
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("open")),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            expression: DeclReferenceExprSyntax(baseName: .identifier("set"))
+          )
+        ]),
+        rightParen: .rightParenToken()
       )
     )
   }
@@ -2226,21 +2175,19 @@ final class DeclarationTests: XCTestCase {
         var foo = 2
       }
       """,
-      substructure: Syntax(
-        VariableDeclSyntax(
-          modifiers: DeclModifierListSyntax([
-            DeclModifierSyntax(name: .keyword(.open))
-          ]),
-          bindingSpecifier: .keyword(.var),
-          bindings: PatternBindingListSyntax([
-            PatternBindingSyntax(
-              pattern: IdentifierPatternSyntax(identifier: .identifier("foo")),
-              initializer: InitializerClauseSyntax(
-                value: IntegerLiteralExprSyntax(literal: .integerLiteral("2"))
-              )
+      substructure: VariableDeclSyntax(
+        modifiers: DeclModifierListSyntax([
+          DeclModifierSyntax(name: .keyword(.open))
+        ]),
+        bindingSpecifier: .keyword(.var),
+        bindings: PatternBindingListSyntax([
+          PatternBindingSyntax(
+            pattern: IdentifierPatternSyntax(identifier: .identifier("foo")),
+            initializer: InitializerClauseSyntax(
+              value: IntegerLiteralExprSyntax(literal: .integerLiteral("2"))
             )
-          ])
-        )
+          )
+        ])
       )
     )
   }
@@ -2252,7 +2199,7 @@ final class DeclarationTests: XCTestCase {
         open var foo = 2
       }
       """,
-      substructure: Syntax(DeclModifierSyntax(name: .keyword(.open)))
+      substructure: DeclModifierSyntax(name: .keyword(.open))
     )
   }
 
@@ -2335,12 +2282,10 @@ final class DeclarationTests: XCTestCase {
       """
       struct Hello: ~Copyable {}
       """,
-      substructure: Syntax(
-        InheritedTypeSyntax(
-          type: SuppressedTypeSyntax(
-            withoutTilde: .prefixOperator("~"),
-            type: TypeSyntax(stringLiteral: "Copyable")
-          )
+      substructure: InheritedTypeSyntax(
+        type: SuppressedTypeSyntax(
+          withoutTilde: .prefixOperator("~"),
+          type: TypeSyntax(stringLiteral: "Copyable")
         )
       )
     )
@@ -2349,26 +2294,23 @@ final class DeclarationTests: XCTestCase {
       """
       enum Whatever: Int, ~ Hashable, Equatable {}
       """,
-      substructure:
-        Syntax(
-          InheritanceClauseSyntax(
-            colon: .colonToken(),
-            inheritedTypes: InheritedTypeListSyntax([
-              InheritedTypeSyntax(
-                type: TypeSyntax(stringLiteral: "Int"),
-                trailingComma: .commaToken()
-              ),
-              InheritedTypeSyntax(
-                type: SuppressedTypeSyntax(
-                  withoutTilde: .prefixOperator("~"),
-                  type: TypeSyntax(stringLiteral: "Hashable")
-                ),
-                trailingComma: .commaToken()
-              ),
-              InheritedTypeSyntax(type: TypeSyntax(stringLiteral: "Equatable")),
-            ])
-          )
-        )
+      substructure: InheritanceClauseSyntax(
+        colon: .colonToken(),
+        inheritedTypes: InheritedTypeListSyntax([
+          InheritedTypeSyntax(
+            type: TypeSyntax(stringLiteral: "Int"),
+            trailingComma: .commaToken()
+          ),
+          InheritedTypeSyntax(
+            type: SuppressedTypeSyntax(
+              withoutTilde: .prefixOperator("~"),
+              type: TypeSyntax(stringLiteral: "Hashable")
+            ),
+            trailingComma: .commaToken()
+          ),
+          InheritedTypeSyntax(type: TypeSyntax(stringLiteral: "Equatable")),
+        ])
+      )
     )
 
     assertParse(
@@ -2396,16 +2338,13 @@ final class DeclarationTests: XCTestCase {
       """
       typealias T = ~(Int) -> Bool
       """,
-      substructure:
-        Syntax(
-          SuppressedTypeSyntax(
-            withoutTilde: .prefixOperator("~"),
-            type: FunctionTypeSyntax(
-              parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
-              returnClause: ReturnClauseSyntax(type: TypeSyntax("Bool"))
-            )
-          )
+      substructure: SuppressedTypeSyntax(
+        withoutTilde: .prefixOperator("~"),
+        type: FunctionTypeSyntax(
+          parameters: [TupleTypeElementSyntax(type: TypeSyntax("Int"))],
+          returnClause: ReturnClauseSyntax(type: TypeSyntax("Bool"))
         )
+      )
     )
   }
 
@@ -2515,27 +2454,25 @@ final class DeclarationTests: XCTestCase {
         }
       }
       """,
-      substructure: Syntax(
-        InitializerDeclSyntax(
-          initKeyword: .keyword(.`init`),
-          signature: FunctionSignatureSyntax(
-            parameterClause: FunctionParameterClauseSyntax(
-              leftParen: .leftParenToken(),
-              parameters: FunctionParameterListSyntax([
-                FunctionParameterSyntax(
-                  firstName: .identifier("initialValue"),
-                  colon: .colonToken(presence: .missing),
-                  type: TypeSyntax(MissingTypeSyntax(placeholder: .identifier("<#type#>", presence: .missing)))
-                )
-              ]),
-              rightParen: .rightParenToken(trailingTrivia: .space)
-            )
-          ),
-          body: CodeBlockSyntax(
-            leftBrace: .leftBraceToken(),
-            statements: CodeBlockItemListSyntax([]),
-            rightBrace: .rightBraceToken()
+      substructure: InitializerDeclSyntax(
+        initKeyword: .keyword(.`init`),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(
+            leftParen: .leftParenToken(),
+            parameters: FunctionParameterListSyntax([
+              FunctionParameterSyntax(
+                firstName: .identifier("initialValue"),
+                colon: .colonToken(presence: .missing),
+                type: TypeSyntax(MissingTypeSyntax(placeholder: .identifier("<#type#>", presence: .missing)))
+              )
+            ]),
+            rightParen: .rightParenToken(trailingTrivia: .space)
           )
+        ),
+        body: CodeBlockSyntax(
+          leftBrace: .leftBraceToken(),
+          statements: CodeBlockItemListSyntax([]),
+          rightBrace: .rightBraceToken()
         )
       ),
       diagnostics: [

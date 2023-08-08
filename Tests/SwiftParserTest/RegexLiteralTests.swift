@@ -985,19 +985,17 @@ final class RegexLiteralTests: XCTestCase {
       """
       foo(a: /, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            label: "a",
-            colon: .colonToken(),
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          label: "a",
+          colon: .colonToken(),
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1007,21 +1005,19 @@ final class RegexLiteralTests: XCTestCase {
       """
       foo(a, /, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: "a"),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: "a"),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1031,21 +1027,19 @@ final class RegexLiteralTests: XCTestCase {
       """
       foo(a, ^/, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: "a"),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: "a"),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1055,19 +1049,17 @@ final class RegexLiteralTests: XCTestCase {
       """
       foo(a: ^/, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            label: "a",
-            colon: .colonToken(),
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          label: "a",
+          colon: .colonToken(),
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1077,17 +1069,15 @@ final class RegexLiteralTests: XCTestCase {
       """
       foo(^/, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1097,17 +1087,15 @@ final class RegexLiteralTests: XCTestCase {
       """
       (^/, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1117,17 +1105,15 @@ final class RegexLiteralTests: XCTestCase {
       """
       (/, /)
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1137,17 +1123,15 @@ final class RegexLiteralTests: XCTestCase {
       """
       x[/, /]
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1157,17 +1141,15 @@ final class RegexLiteralTests: XCTestCase {
       """
       x[^/, /]
       """,
-      substructure: Syntax(
-        LabeledExprListSyntax([
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
-            trailingComma: .commaToken()
-          ),
-          .init(
-            expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
-          ),
-        ])
-      )
+      substructure: LabeledExprListSyntax([
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("^/")),
+          trailingComma: .commaToken()
+        ),
+        .init(
+          expression: DeclReferenceExprSyntax(baseName: .binaryOperator("/"))
+        ),
+      ])
     )
   }
 
@@ -1190,7 +1172,7 @@ final class RegexLiteralTests: XCTestCase {
       """
       [/,/]
       """,
-      substructure: Syntax(RegexLiteralExprSyntax(regex: .regexLiteralPattern(",")))
+      substructure: RegexLiteralExprSyntax(regex: .regexLiteralPattern(","))
     )
   }
 
@@ -1261,7 +1243,7 @@ final class RegexLiteralTests: XCTestCase {
       """
       let x = true?/abc/1️⃣:/def/
       """,
-      substructure: Syntax(BinaryOperatorExprSyntax(operator: .binaryOperator("/"))),
+      substructure: BinaryOperatorExprSyntax(operator: .binaryOperator("/")),
       diagnostics: [
         DiagnosticSpec(message: "extraneous code ':/def/' at top level")
       ]
@@ -1273,14 +1255,12 @@ final class RegexLiteralTests: XCTestCase {
       """
       let x = true ?/abc/ : /def/
       """,
-      substructure: Syntax(
-        SequenceExprSyntax(
-          elements: .init([
-            BooleanLiteralExprSyntax(booleanLiteral: true),
-            UnresolvedTernaryExprSyntax(thenExpression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
-            RegexLiteralExprSyntax(regex: .regexLiteralPattern("def")),
-          ])
-        )
+      substructure: SequenceExprSyntax(
+        elements: .init([
+          BooleanLiteralExprSyntax(booleanLiteral: true),
+          UnresolvedTernaryExprSyntax(thenExpression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
+          RegexLiteralExprSyntax(regex: .regexLiteralPattern("def")),
+        ])
       )
     )
   }
@@ -1290,11 +1270,9 @@ final class RegexLiteralTests: XCTestCase {
       """
       let x = &/abc/
       """,
-      substructure: Syntax(
-        InOutExprSyntax(
-          expression: RegexLiteralExprSyntax(
-            regex: .regexLiteralPattern("abc")
-          )
+      substructure: InOutExprSyntax(
+        expression: RegexLiteralExprSyntax(
+          regex: .regexLiteralPattern("abc")
         )
       )
     )

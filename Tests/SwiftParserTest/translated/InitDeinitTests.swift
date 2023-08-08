@@ -435,7 +435,7 @@ final class InitDeinitTests: XCTestCase {
         final func foo()
       }
       """,
-      substructure: Syntax(DeinitializerDeclSyntax())
+      substructure: DeinitializerDeclSyntax()
     )
   }
 

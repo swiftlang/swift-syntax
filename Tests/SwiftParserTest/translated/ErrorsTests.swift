@@ -283,27 +283,25 @@ final class ErrorsTests: XCTestCase {
         let _: () 1️⃣throws
       }
       """,
-      substructure: Syntax(
-        CodeBlockSyntax(
-          statements: CodeBlockItemListSyntax([
-            CodeBlockItemSyntax(
-              item: .decl(
-                DeclSyntax(
-                  VariableDeclSyntax(
-                    bindingSpecifier: .keyword(.let),
-                    bindings: PatternBindingListSyntax([
-                      PatternBindingSyntax(
-                        pattern: WildcardPatternSyntax(),
-                        typeAnnotation: TypeAnnotationSyntax(type: TupleTypeSyntax(elements: TupleTypeElementListSyntax([])))
-                      )
-                    ])
-                  )
+      substructure: CodeBlockSyntax(
+        statements: CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                VariableDeclSyntax(
+                  bindingSpecifier: .keyword(.let),
+                  bindings: PatternBindingListSyntax([
+                    PatternBindingSyntax(
+                      pattern: WildcardPatternSyntax(),
+                      typeAnnotation: TypeAnnotationSyntax(type: TupleTypeSyntax(elements: TupleTypeElementListSyntax([])))
+                    )
+                  ])
                 )
               )
             )
-          ]),
-          UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)])
-        )
+          )
+        ]),
+        UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)])
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected 'throws' keyword in function")

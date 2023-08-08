@@ -75,7 +75,7 @@ final class ExpressionTypeTests: XCTestCase {
       assertParse(
         "G<\(type)>.self",
         ExprSyntax.parse,
-        substructure: Syntax(IdentifierTypeSyntax(name: .identifier("X"))),
+        substructure: IdentifierTypeSyntax(name: .identifier("X")),
         substructureAfterMarker: "1️⃣",
         line: line
       )
@@ -85,7 +85,7 @@ final class ExpressionTypeTests: XCTestCase {
     assertParse(
       "G<1️⃣()>.self",
       ExprSyntax.parse,
-      substructure: Syntax(TupleTypeSyntax(elements: .init([]))),
+      substructure: TupleTypeSyntax(elements: .init([])),
       substructureAfterMarker: "1️⃣"
     )
 
@@ -93,7 +93,7 @@ final class ExpressionTypeTests: XCTestCase {
     assertParse(
       "G<1️⃣Any>.self",
       ExprSyntax.parse,
-      substructure: Syntax(IdentifierTypeSyntax(name: .keyword(.Any))),
+      substructure: IdentifierTypeSyntax(name: .keyword(.Any)),
       substructureAfterMarker: "1️⃣"
     )
 
@@ -101,7 +101,7 @@ final class ExpressionTypeTests: XCTestCase {
     assertParse(
       "G<1️⃣Self>.self",
       ExprSyntax.parse,
-      substructure: Syntax(IdentifierTypeSyntax(name: .keyword(.Self))),
+      substructure: IdentifierTypeSyntax(name: .keyword(.Self)),
       substructureAfterMarker: "1️⃣"
     )
   }

@@ -25,32 +25,30 @@ final class HashbangLibraryTests: XCTestCase {
       #!/usr/bin/swift
       class Foo {}
       """,
-      substructure: Syntax(
-        SourceFileSyntax(
-          statements: CodeBlockItemListSyntax([
-            CodeBlockItemSyntax(
-              item: .decl(
-                DeclSyntax(
-                  ClassDeclSyntax(
-                    classKeyword: .keyword(
-                      .class,
-                      leadingTrivia: [
-                        .shebang("#!/usr/bin/swift"),
-                        .newlines(1),
-                      ],
-                      trailingTrivia: .space
-                    ),
-                    name: .identifier("Foo", trailingTrivia: .space),
-                    memberBlock: MemberBlockSyntax(
-                      members: MemberBlockItemListSyntax([])
-                    )
+      substructure: SourceFileSyntax(
+        statements: CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                ClassDeclSyntax(
+                  classKeyword: .keyword(
+                    .class,
+                    leadingTrivia: [
+                      .shebang("#!/usr/bin/swift"),
+                      .newlines(1),
+                    ],
+                    trailingTrivia: .space
+                  ),
+                  name: .identifier("Foo", trailingTrivia: .space),
+                  memberBlock: MemberBlockSyntax(
+                    members: MemberBlockItemListSyntax([])
                   )
                 )
               )
             )
-          ]),
-          endOfFileToken: .endOfFileToken()
-        )
+          )
+        ]),
+        endOfFileToken: .endOfFileToken()
       ),
       options: [.substructureCheckTrivia]
     )

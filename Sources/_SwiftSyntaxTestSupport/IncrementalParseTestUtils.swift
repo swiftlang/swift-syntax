@@ -72,9 +72,9 @@ public func assertIncrementalParse(
   )
 
   // Substructure
-  let subtreeMatcher = SubtreeMatcher(Syntax(incrementallyParsedNewTree), markers: [:])
+  let subtreeMatcher = SubtreeMatcher(incrementallyParsedNewTree, markers: [:])
   do {
-    try subtreeMatcher.assertSameStructure(Syntax(newTree), includeTrivia: true, file: file, line: line)
+    try subtreeMatcher.assertSameStructure(newTree, includeTrivia: true, file: file, line: line)
   } catch {
     XCTFail("Matching for a subtree failed with error: \(error)", file: file, line: line)
   }

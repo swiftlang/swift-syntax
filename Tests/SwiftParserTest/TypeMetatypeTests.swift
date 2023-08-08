@@ -56,11 +56,9 @@ final class TypeMetatypeTests: XCTestCase {
         assertParse(
           "\(baseType).\(metaKind)",
           TypeSyntax.parse,
-          substructure: Syntax(
-            MetatypeTypeSyntax(
-              baseType: baseTypeSyntax,
-              metatypeSpecifier: .keyword(metaKind)
-            )
+          substructure: MetatypeTypeSyntax(
+            baseType: baseTypeSyntax,
+            metatypeSpecifier: .keyword(metaKind)
           ),
           line: line
         )

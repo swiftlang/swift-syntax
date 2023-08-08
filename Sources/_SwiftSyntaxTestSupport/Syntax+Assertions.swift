@@ -88,15 +88,15 @@ public struct SubtreeMatcher {
     self.actualTree = try parse(text)
   }
 
-  public init(_ actualTree: Syntax, markers: [String: Int]) {
+  public init(_ actualTree: some SyntaxProtocol, markers: [String: Int]) {
     self.markers = markers.isEmpty ? ["DEFAULT": 0] : markers
-    self.actualTree = actualTree
+    self.actualTree = Syntax(actualTree)
   }
 
   /// Same as `Syntax.findFirstDifference(baseline:includeTrivia:)`, but
   /// matches against the first subtree from parsing `markedText` that is after
   /// `afterMarker` with the root matching the root type of `baseline`.
-  public func findFirstDifference(afterMarker: String? = nil, baseline: Syntax, includeTrivia: Bool = false) throws -> TreeDifference? {
+  public func findFirstDifference(afterMarker: String? = nil, baseline: some SyntaxProtocol, includeTrivia: Bool = false) throws -> TreeDifference? {
     let afterMarker = afterMarker ?? markers.first!.key
     guard let subtreeStart = markers[afterMarker] else {
       throw SubtreeError.invalidMarker(name: afterMarker)
@@ -113,7 +113,7 @@ public struct SubtreeMatcher {
   /// `init(markedText:)` has the same structure as `expected`.
   public func assertSameStructure(
     afterMarker: String? = nil,
-    _ expected: Syntax,
+    _ expected: some SyntaxProtocol,
     includeTrivia: Bool = false,
     additionalInfo: String? = nil,
     file: StaticString = #filePath,

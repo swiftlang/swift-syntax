@@ -178,19 +178,17 @@ final class TrailingClosuresTests: XCTestCase {
       """
       fn {} g: 1️⃣<#T##() -> Void#>
       """,
-      substructure: Syntax(
-        MultipleTrailingClosureElementSyntax(
-          label: .identifier("g"),
-          colon: .colonToken(trailingTrivia: .space),
-          closure: ClosureExprSyntax(
-            leftBrace: .leftBraceToken(presence: .missing),
-            statements: CodeBlockItemListSyntax([
-              CodeBlockItemSyntax(
-                item: .init(EditorPlaceholderExprSyntax(placeholder: .identifier("<#T##() -> Void#>")))
-              )
-            ]),
-            rightBrace: .rightBraceToken(presence: .missing)
-          )
+      substructure: MultipleTrailingClosureElementSyntax(
+        label: .identifier("g"),
+        colon: .colonToken(trailingTrivia: .space),
+        closure: ClosureExprSyntax(
+          leftBrace: .leftBraceToken(presence: .missing),
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .init(EditorPlaceholderExprSyntax(placeholder: .identifier("<#T##() -> Void#>")))
+            )
+          ]),
+          rightBrace: .rightBraceToken(presence: .missing)
         )
       ),
       diagnostics: [

@@ -125,6 +125,13 @@ public let AVAILABILITY_NODES: [Node] = [
         name: "Version",
         kind: .node(kind: .versionTuple),
         nameForDiagnostics: "version",
+        documentation: """
+          The version of this platform.
+
+          This parameter is optional because a custom platform alias can be specified using the `-define-availability` 
+          argument to the Swift compiler. For example, when passing `-define-availability "_iOS8Aligned:macOS 10.10, iOS 8.0"`
+          to the Swift compiler, then `@available(_iOS8Aligned, *)` is interpreted as `@available(macOS 10.10, iOS 8.0, *)`.
+          """,
         isOptional: true
       ),
     ]

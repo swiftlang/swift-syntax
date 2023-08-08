@@ -14481,6 +14481,7 @@ public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable {
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - platform: The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version.
+  ///   - version: The version of this platform.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -14549,6 +14550,11 @@ public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The version of this platform.
+  /// 
+  /// This parameter is optional because a custom platform alias can be specified using the `-define-availability` 
+  /// argument to the Swift compiler. For example, when passing `-define-availability "_iOS8Aligned:macOS 10.10, iOS 8.0"`
+  /// to the Swift compiler, then `@available(_iOS8Aligned, *)` is interpreted as `@available(macOS 10.10, iOS 8.0, *)`.
   public var version: VersionTupleSyntax? {
     get {
       return data.child(at: 3, parent: Syntax(self)).map(VersionTupleSyntax.init)

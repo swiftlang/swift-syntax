@@ -90,17 +90,15 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a < b, c > (d))
       """,
-      substructure: Syntax(
-        GenericArgumentListSyntax([
-          GenericArgumentSyntax(
-            argument: IdentifierTypeSyntax(name: .identifier("b")),
-            trailingComma: .commaToken()
-          ),
-          GenericArgumentSyntax(
-            argument: IdentifierTypeSyntax(name: .identifier("c"))
-          ),
-        ])
-      )
+      substructure: GenericArgumentListSyntax([
+        GenericArgumentSyntax(
+          argument: IdentifierTypeSyntax(name: .identifier("b")),
+          trailingComma: .commaToken()
+        ),
+        GenericArgumentSyntax(
+          argument: IdentifierTypeSyntax(name: .identifier("c"))
+        ),
+      ])
     )
   }
 
@@ -110,17 +108,15 @@ final class GenericDisambiguationTests: XCTestCase {
       """
       (a<b, c>(d))
       """,
-      substructure: Syntax(
-        GenericArgumentListSyntax([
-          GenericArgumentSyntax(
-            argument: IdentifierTypeSyntax(name: .identifier("b")),
-            trailingComma: .commaToken()
-          ),
-          GenericArgumentSyntax(
-            argument: IdentifierTypeSyntax(name: .identifier("c"))
-          ),
-        ])
-      )
+      substructure: GenericArgumentListSyntax([
+        GenericArgumentSyntax(
+          argument: IdentifierTypeSyntax(name: .identifier("b")),
+          trailingComma: .commaToken()
+        ),
+        GenericArgumentSyntax(
+          argument: IdentifierTypeSyntax(name: .identifier("c"))
+        ),
+      ])
     )
   }
 

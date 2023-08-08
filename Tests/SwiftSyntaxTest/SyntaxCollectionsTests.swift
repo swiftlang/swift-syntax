@@ -44,9 +44,9 @@ fileprivate func assertSyntaxCollectionManipulation(
   }
 
   do {
-    let subtreeMatcher = SubtreeMatcher(Syntax(modifiedArray), markers: [:])
+    let subtreeMatcher = SubtreeMatcher(modifiedArray, markers: [:])
     try subtreeMatcher.assertSameStructure(
-      Syntax(expectedArray),
+      expectedArray,
       includeTrivia: true,
       file: file,
       line: line

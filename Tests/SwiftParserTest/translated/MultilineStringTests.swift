@@ -495,19 +495,17 @@ final class MultilineStringTests: XCTestCase {
       Gamma
       """#
       """##,
-      substructure: Syntax(
-        StringLiteralExprSyntax(
-          openingPounds: .rawStringPoundDelimiter("#"),
-          openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
-          segments: StringLiteralSegmentListSyntax([
-            .stringSegment(
-              StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
-            ),
-            .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma", trailingTrivia: .newline))),
-          ]),
-          closingQuote: .multilineStringQuoteToken(),
-          closingPounds: .rawStringPoundDelimiter("#")
-        )
+      substructure: StringLiteralExprSyntax(
+        openingPounds: .rawStringPoundDelimiter("#"),
+        openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
+        segments: StringLiteralSegmentListSyntax([
+          .stringSegment(
+            StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
+          ),
+          .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma", trailingTrivia: .newline))),
+        ]),
+        closingQuote: .multilineStringQuoteToken(),
+        closingPounds: .rawStringPoundDelimiter("#")
       ),
       options: .substructureCheckTrivia
     )
@@ -524,19 +522,17 @@ final class MultilineStringTests: XCTestCase {
       Gamma \#
       """#
       """##,
-      substructure: Syntax(
-        StringLiteralExprSyntax(
-          openingPounds: .rawStringPoundDelimiter("#"),
-          openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
-          segments: StringLiteralSegmentListSyntax([
-            .stringSegment(
-              StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
-            ),
-            .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))),
-          ]),
-          closingQuote: .multilineStringQuoteToken(),
-          closingPounds: .rawStringPoundDelimiter("#")
-        )
+      substructure: StringLiteralExprSyntax(
+        openingPounds: .rawStringPoundDelimiter("#"),
+        openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
+        segments: StringLiteralSegmentListSyntax([
+          .stringSegment(
+            StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
+          ),
+          .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))),
+        ]),
+        closingQuote: .multilineStringQuoteToken(),
+        closingPounds: .rawStringPoundDelimiter("#")
       ),
       options: .substructureCheckTrivia
     )

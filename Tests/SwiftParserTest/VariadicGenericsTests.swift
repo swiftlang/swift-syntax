@@ -21,14 +21,12 @@ final class VariadicGenericsTests: XCTestCase {
         return (1️⃣repeat each t)
       }
       """,
-      substructure: Syntax(
-        PackExpansionExprSyntax(
-          repeatKeyword: .keyword(.repeat),
-          repetitionPattern: PackElementExprSyntax(
-            eachKeyword: .keyword(.each),
-            pack: DeclReferenceExprSyntax(
-              baseName: .identifier("t")
-            )
+      substructure: PackExpansionExprSyntax(
+        repeatKeyword: .keyword(.repeat),
+        repetitionPattern: PackElementExprSyntax(
+          eachKeyword: .keyword(.each),
+          pack: DeclReferenceExprSyntax(
+            baseName: .identifier("t")
           )
         )
       ),
@@ -160,7 +158,7 @@ final class VariadicGenericsTests: XCTestCase {
       1️⃣each(x)
       }
       """,
-      substructure: Syntax(callExpr),
+      substructure: callExpr,
       substructureAfterMarker: "1️⃣"
     )
 
@@ -170,7 +168,7 @@ final class VariadicGenericsTests: XCTestCase {
       1️⃣each (x)
       }
       """,
-      substructure: Syntax(callExpr),
+      substructure: callExpr,
       substructureAfterMarker: "1️⃣"
     )
 
@@ -180,12 +178,10 @@ final class VariadicGenericsTests: XCTestCase {
       1️⃣each x
       }
       """,
-      substructure: Syntax(
-        PackElementExprSyntax(
-          eachKeyword: .keyword(.each),
-          pack: DeclReferenceExprSyntax(
-            baseName: .identifier("x")
-          )
+      substructure: PackElementExprSyntax(
+        eachKeyword: .keyword(.each),
+        pack: DeclReferenceExprSyntax(
+          baseName: .identifier("x")
         )
       ),
       substructureAfterMarker: "1️⃣"
@@ -199,27 +195,25 @@ final class VariadicGenericsTests: XCTestCase {
         1️⃣repeat (each t).member()
       }
       """,
-      substructure: Syntax(
-        PackExpansionExprSyntax(
-          repeatKeyword: .keyword(.repeat),
-          repetitionPattern: FunctionCallExprSyntax(
-            callee: MemberAccessExprSyntax(
-              base: ExprSyntax(
-                TupleExprSyntax(
-                  elements: .init([
-                    LabeledExprSyntax(
-                      expression: PackElementExprSyntax(
-                        eachKeyword: .keyword(.each),
-                        pack: DeclReferenceExprSyntax(
-                          baseName: .identifier("t")
-                        )
+      substructure: PackExpansionExprSyntax(
+        repeatKeyword: .keyword(.repeat),
+        repetitionPattern: FunctionCallExprSyntax(
+          callee: MemberAccessExprSyntax(
+            base: ExprSyntax(
+              TupleExprSyntax(
+                elements: .init([
+                  LabeledExprSyntax(
+                    expression: PackElementExprSyntax(
+                      eachKeyword: .keyword(.each),
+                      pack: DeclReferenceExprSyntax(
+                        baseName: .identifier("t")
                       )
                     )
-                  ])
-                )
-              ),
-              name: "member"
-            )
+                  )
+                ])
+              )
+            ),
+            name: "member"
           )
         )
       ),
@@ -232,19 +226,17 @@ final class VariadicGenericsTests: XCTestCase {
         1️⃣repeat each t.member
       }
       """,
-      substructure: Syntax(
-        PackExpansionExprSyntax(
-          repeatKeyword: .keyword(.repeat),
-          repetitionPattern: PackElementExprSyntax(
-            eachKeyword: .keyword(.each),
-            pack: MemberAccessExprSyntax(
-              base: ExprSyntax(
-                DeclReferenceExprSyntax(
-                  baseName: .identifier("t")
-                )
-              ),
-              name: "member"
-            )
+      substructure: PackExpansionExprSyntax(
+        repeatKeyword: .keyword(.repeat),
+        repetitionPattern: PackElementExprSyntax(
+          eachKeyword: .keyword(.each),
+          pack: MemberAccessExprSyntax(
+            base: ExprSyntax(
+              DeclReferenceExprSyntax(
+                baseName: .identifier("t")
+              )
+            ),
+            name: "member"
           )
         )
       ),
@@ -257,41 +249,39 @@ final class VariadicGenericsTests: XCTestCase {
         1️⃣repeat x + each t + 10
       }
       """,
-      substructure: Syntax(
-        PackExpansionExprSyntax(
-          repeatKeyword: .keyword(.repeat),
-          repetitionPattern: SequenceExprSyntax(
-            elements: .init([
-              ExprSyntax(
-                DeclReferenceExprSyntax(
-                  baseName: .identifier("x")
+      substructure: PackExpansionExprSyntax(
+        repeatKeyword: .keyword(.repeat),
+        repetitionPattern: SequenceExprSyntax(
+          elements: .init([
+            ExprSyntax(
+              DeclReferenceExprSyntax(
+                baseName: .identifier("x")
+              )
+            ),
+            ExprSyntax(
+              BinaryOperatorExprSyntax(
+                operator: .binaryOperator("+")
+              )
+            ),
+            ExprSyntax(
+              PackElementExprSyntax(
+                eachKeyword: .keyword(.each),
+                pack: DeclReferenceExprSyntax(
+                  baseName: .identifier("t")
                 )
-              ),
-              ExprSyntax(
-                BinaryOperatorExprSyntax(
-                  operator: .binaryOperator("+")
-                )
-              ),
-              ExprSyntax(
-                PackElementExprSyntax(
-                  eachKeyword: .keyword(.each),
-                  pack: DeclReferenceExprSyntax(
-                    baseName: .identifier("t")
-                  )
-                )
-              ),
-              ExprSyntax(
-                BinaryOperatorExprSyntax(
-                  operator: .binaryOperator("+")
-                )
-              ),
-              ExprSyntax(
-                IntegerLiteralExprSyntax(
-                  integerLiteral: 10
-                )
-              ),
-            ])
-          )
+              )
+            ),
+            ExprSyntax(
+              BinaryOperatorExprSyntax(
+                operator: .binaryOperator("+")
+              )
+            ),
+            ExprSyntax(
+              IntegerLiteralExprSyntax(
+                integerLiteral: 10
+              )
+            ),
+          ])
         )
       ),
       substructureAfterMarker: "1️⃣"

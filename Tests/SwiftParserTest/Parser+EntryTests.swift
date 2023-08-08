@@ -51,15 +51,13 @@ public class EntryTests: XCTestCase {
     assertParse(
       "1️⃣operator 2️⃣test 3️⃣{} other tokens",
       { DeclSyntax.parse(from: &$0) },
-      substructure: Syntax(
-        UnexpectedNodesSyntax([
-          TokenSyntax.leftBraceToken(),
-          PrecedenceGroupAttributeListSyntax([]),
-          TokenSyntax.rightBraceToken(),
-          TokenSyntax.identifier("other"),
-          TokenSyntax.identifier("tokens"),
-        ])
-      ),
+      substructure: UnexpectedNodesSyntax([
+        TokenSyntax.leftBraceToken(),
+        PrecedenceGroupAttributeListSyntax([]),
+        TokenSyntax.rightBraceToken(),
+        TokenSyntax.identifier("other"),
+        TokenSyntax.identifier("tokens"),
+      ]),
       substructureAfterMarker: "3️⃣",
       diagnostics: [
         DiagnosticSpec(

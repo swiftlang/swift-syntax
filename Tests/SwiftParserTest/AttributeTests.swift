@@ -149,7 +149,7 @@ final class AttributeTests: XCTestCase {
       @1️⃣rethrows
       protocol P { }
       """,
-      substructure: Syntax(TokenSyntax.identifier("rethrows")),
+      substructure: TokenSyntax.identifier("rethrows"),
       substructureAfterMarker: "1️⃣"
     )
   }
@@ -327,7 +327,7 @@ final class AttributeTests: XCTestCase {
       assertParse(
         "@_implements(1️⃣\(baseType), f())",
         AttributeSyntax.parse,
-        substructure: Syntax(TypeSyntax.parse(from: &parser)),
+        substructure: TypeSyntax.parse(from: &parser),
         substructureAfterMarker: "1️⃣",
         line: line
       )

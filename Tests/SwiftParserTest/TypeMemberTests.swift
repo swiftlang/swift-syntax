@@ -19,13 +19,11 @@ final class TypeMemberTests: XCTestCase {
     assertParse(
       "MyType.class",
       TypeSyntax.parse,
-      substructure: Syntax(
-        MemberTypeSyntax(
-          baseType: IdentifierTypeSyntax(
-            name: .identifier("MyType")
-          ),
-          name: .identifier("class")
-        )
+      substructure: MemberTypeSyntax(
+        baseType: IdentifierTypeSyntax(
+          name: .identifier("MyType")
+        ),
+        name: .identifier("class")
       )
     )
   }
@@ -34,13 +32,11 @@ final class TypeMemberTests: XCTestCase {
     assertParse(
       "MyType.1️⃣",
       TypeSyntax.parse,
-      substructure: Syntax(
-        MemberTypeSyntax(
-          baseType: IdentifierTypeSyntax(
-            name: .identifier("MyType")
-          ),
-          name: .identifier("", presence: .missing)
-        )
+      substructure: MemberTypeSyntax(
+        baseType: IdentifierTypeSyntax(
+          name: .identifier("MyType")
+        ),
+        name: .identifier("", presence: .missing)
       ),
       diagnostics: [
         DiagnosticSpec(message: "expected name in member type", fixIts: ["insert name"])
@@ -141,21 +137,19 @@ final class TypeMemberTests: XCTestCase {
       assertParse(
         "\(baseType).Z",
         TypeSyntax.parse,
-        substructure: Syntax(expectedSyntax),
+        substructure: expectedSyntax,
         line: line
       )
 
       assertParse(
         "\(baseType).Z<W>",
         TypeSyntax.parse,
-        substructure: Syntax(
-          expectedSyntax.with(
-            \.genericArgumentClause,
-            GenericArgumentClauseSyntax(
-              arguments: .init([
-                GenericArgumentSyntax(argument: IdentifierTypeSyntax(name: .identifier("W")))
-              ])
-            )
+        substructure: expectedSyntax.with(
+          \.genericArgumentClause,
+          GenericArgumentClauseSyntax(
+            arguments: .init([
+              GenericArgumentSyntax(argument: IdentifierTypeSyntax(name: .identifier("W")))
+            ])
           )
         ),
         line: line

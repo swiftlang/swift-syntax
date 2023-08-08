@@ -153,7 +153,12 @@ public let ATTRIBUTE_NODES: [Node] = [
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
         ]),
-        documentation: "The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.",
+        documentation: """
+          The arguments of the attribute.
+
+          In case of user-defined attributes, such as macros, property wrappers or result builders,
+          this is always either an `argumentList` of type ``LabeledExprListSyntax`` or `nil`.
+          """,
         isOptional: true
       ),
       Child(

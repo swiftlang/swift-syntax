@@ -2326,7 +2326,7 @@ public let DECL_NODES: [Node] = [
     documentation: """
       Declaration of one or more variables
 
-      The core of a variable declaration consists of a binding specifier (`let` or `var),
+      The core of a variable declaration consists of a binding specifier (`let` or `var`),
       followed by any number of pattern bindings, which define the variables.
       """,
     traits: [
@@ -2364,7 +2364,7 @@ public let DECL_NODES: [Node] = [
           initializers and accessors.
 
           A variable declaration can contain multiple pattern bindings, because it’s possible
-          to define multiple variables after a single `let` keyword as follows.
+          to define multiple variables after a single `let` keyword, for example
 
           ```swift
           let x: Int = 1, y: Int = 2

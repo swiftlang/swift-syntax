@@ -913,7 +913,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
   ///   - atSign: The `@` sign.
   ///   - attributeName: The name of the attribute.
   ///   - leftParen: If the attribute takes arguments, the opening parenthesis.
-  ///   - arguments: The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.
+  ///   - arguments: The arguments of the attribute.
   ///   - rightParen: If the attribute takes arguments, the closing parenthesis.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -1039,7 +1039,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  /// The arguments of the attribute. In case the attribute takes multiple arguments, they are gather in the appropriate takes first.
+  /// The arguments of the attribute.
+  /// 
+  /// In case of user-defined attributes, such as macros, property wrappers or result builders,
+  /// this is always either an `argumentList` of type ``LabeledExprListSyntax`` or `nil`.
   public var arguments: Arguments? {
     get {
       return data.child(at: 7, parent: Syntax(self)).map(Arguments.init)

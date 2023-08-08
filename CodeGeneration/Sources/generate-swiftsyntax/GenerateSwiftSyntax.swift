@@ -113,7 +113,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
-        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTransform.swift"], syntaxTransformFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxVisitor.swift"], syntaxVisitorFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TokenKind.swift"], tokenKindFile),
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Tokens.swift"], tokensFile),

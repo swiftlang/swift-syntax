@@ -90,7 +90,7 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "let", kind: .keyword),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
       ]
     )
   }
@@ -103,11 +103,11 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "let", kind: .keyword),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "4", kind: .integerLiteral),
-        ClassificationSpec(source: "+", kind: .operatorIdentifier),
+        ClassificationSpec(source: "+", kind: .operator),
         ClassificationSpec(source: "5", kind: .integerLiteral),
-        ClassificationSpec(source: "/", kind: .operatorIdentifier),
+        ClassificationSpec(source: "/", kind: .operator),
         ClassificationSpec(source: "6", kind: .integerLiteral),
       ]
     )
@@ -117,7 +117,7 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "infix", kind: .keyword),
         ClassificationSpec(source: "operator", kind: .keyword),
-        ClassificationSpec(source: "*--*", kind: .operatorIdentifier),
+        ClassificationSpec(source: "*--*", kind: .operator),
       ]
     )
   }
@@ -131,13 +131,13 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "func", kind: .keyword),
         ClassificationSpec(source: "foo", kind: .identifier),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "y", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "return", kind: .keyword),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "+", kind: .operatorIdentifier),
+        ClassificationSpec(source: "+", kind: .operator),
         ClassificationSpec(source: "y", kind: .identifier),
       ]
     )
@@ -219,18 +219,18 @@ public class ClassificationTests: XCTestCase {
       #endif
       """,
       expected: [
-        ClassificationSpec(source: "#if", kind: .poundDirective),
-        ClassificationSpec(source: "os", kind: .buildConfigId),
-        ClassificationSpec(source: "macOS", kind: .buildConfigId),
+        ClassificationSpec(source: "#if", kind: .ifConfigDirective),
+        ClassificationSpec(source: "os", kind: .ifConfigDirective),
+        ClassificationSpec(source: "macOS", kind: .ifConfigDirective),
         ClassificationSpec(source: "var", kind: .keyword),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
-        ClassificationSpec(source: "#elseif", kind: .poundDirective),
+        ClassificationSpec(source: "Int", kind: .type),
+        ClassificationSpec(source: "#elseif", kind: .ifConfigDirective),
         ClassificationSpec(source: "var", kind: .keyword),
         ClassificationSpec(source: "x", kind: .identifier),
-        ClassificationSpec(source: "Float", kind: .typeIdentifier),
-        ClassificationSpec(source: "#else", kind: .poundDirective),
-        ClassificationSpec(source: "#endif", kind: .poundDirective),
+        ClassificationSpec(source: "Float", kind: .type),
+        ClassificationSpec(source: "#else", kind: .ifConfigDirective),
+        ClassificationSpec(source: "#endif", kind: .ifConfigDirective),
       ]
     )
   }
@@ -242,10 +242,10 @@ public class ClassificationTests: XCTestCase {
       #else
       """,
       expected: [
-        ClassificationSpec(source: "#if", kind: .poundDirective),
-        ClassificationSpec(source: "!", kind: .operatorIdentifier),
-        ClassificationSpec(source: "CONF", kind: .buildConfigId),
-        ClassificationSpec(source: "#else", kind: .poundDirective),
+        ClassificationSpec(source: "#if", kind: .ifConfigDirective),
+        ClassificationSpec(source: "!", kind: .operator),
+        ClassificationSpec(source: "CONF", kind: .ifConfigDirective),
+        ClassificationSpec(source: "#else", kind: .ifConfigDirective),
       ]
     )
   }
@@ -269,7 +269,7 @@ public class ClassificationTests: XCTestCase {
     assertClassification(
       #"#sourceLocation(file: "x", line: 1)"#,
       expected: [
-        ClassificationSpec(source: "#sourceLocation", kind: .poundDirective),
+        ClassificationSpec(source: "#sourceLocation", kind: .keyword),
         ClassificationSpec(source: "file", kind: .keyword),
         ClassificationSpec(source: #""x""#, kind: .stringLiteral),
         ClassificationSpec(source: "line", kind: .keyword),
@@ -330,7 +330,7 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "OSX", kind: .keyword),
         ClassificationSpec(source: "10", kind: .integerLiteral),
         ClassificationSpec(source: "10", kind: .integerLiteral),
-        ClassificationSpec(source: "*", kind: .operatorIdentifier),
+        ClassificationSpec(source: "*", kind: .operator),
       ]
     )
   }
@@ -345,7 +345,7 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "@IBOutlet", kind: .attribute),
         ClassificationSpec(source: "var", kind: .keyword),
         ClassificationSpec(source: "foo", kind: .identifier),
-        ClassificationSpec(source: "String", kind: .typeIdentifier),
+        ClassificationSpec(source: "String", kind: .type),
       ]
     )
   }
@@ -363,8 +363,8 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "indirect", kind: .keyword),
         ClassificationSpec(source: "case", kind: .keyword),
         ClassificationSpec(source: "cons", kind: .identifier),
-        ClassificationSpec(source: "T", kind: .typeIdentifier),
-        ClassificationSpec(source: "List", kind: .typeIdentifier),
+        ClassificationSpec(source: "T", kind: .type),
+        ClassificationSpec(source: "List", kind: .type),
       ]
     )
   }
@@ -410,7 +410,7 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "infix", kind: .keyword),
         ClassificationSpec(source: "operator", kind: .keyword),
-        ClassificationSpec(source: "*-*", kind: .operatorIdentifier),
+        ClassificationSpec(source: "*-*", kind: .operator),
         ClassificationSpec(source: "FunnyPrecedence", kind: .identifier),
       ]
     )
@@ -441,7 +441,7 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "protocol", kind: .keyword),
         ClassificationSpec(source: "Prot2", kind: .identifier),
-        ClassificationSpec(source: "Prot", kind: .typeIdentifier),
+        ClassificationSpec(source: "Prot", kind: .type),
       ]
     )
   }
@@ -453,13 +453,13 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "func", kind: .keyword),
         ClassificationSpec(source: "genFn", kind: .identifier),
         ClassificationSpec(source: "T", kind: .identifier),
-        ClassificationSpec(source: "Prot", kind: .typeIdentifier),
-        ClassificationSpec(source: "T", kind: .typeIdentifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Prot", kind: .type),
+        ClassificationSpec(source: "T", kind: .type),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "where", kind: .keyword),
-        ClassificationSpec(source: "T", kind: .typeIdentifier),
-        ClassificationSpec(source: "Blarg", kind: .typeIdentifier),
-        ClassificationSpec(source: "Prot2", kind: .typeIdentifier),
+        ClassificationSpec(source: "T", kind: .type),
+        ClassificationSpec(source: "Blarg", kind: .type),
+        ClassificationSpec(source: "Prot2", kind: .type),
       ]
     )
   }
@@ -469,9 +469,7 @@ public class ClassificationTests: XCTestCase {
       #""This is string \(1) interpolation""#,
       expected: [
         ClassificationSpec(source: #""This is string "#, kind: .stringLiteral),
-        ClassificationSpec(source: "(", kind: .stringInterpolationAnchor),
         ClassificationSpec(source: "1", kind: .integerLiteral),
-        ClassificationSpec(source: ")", kind: .stringInterpolationAnchor),
         ClassificationSpec(source: #" interpolation""#, kind: .stringLiteral),
       ]
     )
@@ -531,12 +529,12 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "func", kind: .keyword),
         ClassificationSpec(source: "keywordInCaseAndLocalArgLabel", kind: .identifier),
         ClassificationSpec(source: "for", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "for", kind: .identifier),
         ClassificationSpec(source: "in", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "class", kind: .identifier),
-        ClassificationSpec(source: "Int", kind: .typeIdentifier),
+        ClassificationSpec(source: "Int", kind: .type),
       ]
     )
   }

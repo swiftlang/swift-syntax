@@ -8,6 +8,7 @@
 
 add_swift_host_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
+  DeclSyntaxParseable.swift
   Indenter.swift
   ResultBuilderExtensions.swift
   SwiftSyntaxBuilderCompatibility.swift

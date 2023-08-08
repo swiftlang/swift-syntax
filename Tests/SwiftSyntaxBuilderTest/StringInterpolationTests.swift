@@ -12,7 +12,7 @@
 
 import _SwiftSyntaxTestSupport
 import SwiftSyntax
-import SwiftSyntaxBuilder
+@_spi(Testing) import SwiftSyntaxBuilder
 import SwiftParser
 import SwiftBasicFormat
 
@@ -499,5 +499,17 @@ final class StringInterpolationTests: XCTestCase {
         """
       )
     }
+  }
+
+  func testExtensionDeclFromStringInterpolation() throws {
+    let extensionDecl = try ExtensionDeclSyntax("extension Foo {}")
+    XCTAssertFalse(extensionDecl.hasError)
+
+    try withStringInterpolationParsingErrorsSuppressed {
+      let extensionWithError = try ExtensionDeclSyntax("extension Foo {")
+      XCTAssert(extensionWithError.hasError)
+    }
+
+    XCTAssertThrowsError(try ExtensionDeclSyntax("class Foo {}"))
   }
 }

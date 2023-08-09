@@ -33,6 +33,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! StructDeclSyntax(
       """
       \(documentation)
+      \(node.node.apiAttributes())\
       public struct \(node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {

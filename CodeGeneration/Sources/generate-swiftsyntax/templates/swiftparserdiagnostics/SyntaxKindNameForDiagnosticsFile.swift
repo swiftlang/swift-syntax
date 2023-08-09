@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let syntaxKindNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax("@_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
 
   try! ExtensionDeclSyntax("extension SyntaxKind") {
     try VariableDeclSyntax("var nameForDiagnostics: String?") {

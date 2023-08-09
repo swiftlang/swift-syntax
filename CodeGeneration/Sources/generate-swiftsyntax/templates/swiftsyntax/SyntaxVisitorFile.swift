@@ -56,6 +56,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// Visiting ``\(node.kind.syntaxType)`` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
+        \(node.apiAttributes())\
         open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
           return .visitChildren
         }
@@ -66,6 +67,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// The function called after visiting ``\(node.kind.syntaxType)`` and its descendants.
         ///   - node: the node we just finished visiting.
+        \(node.apiAttributes())\
         open func visitPost(_ node: \(node.kind.syntaxType)) {}
         """
       )

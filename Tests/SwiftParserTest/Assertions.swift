@@ -12,7 +12,7 @@
 
 import XCTest
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) import SwiftParser
+@_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
 import SwiftDiagnostics
 import _SwiftSyntaxTestSupport
@@ -537,6 +537,7 @@ func assertParse(
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
   options: AssertParseOptions = [],
+  experimentalFeatures: Parser.ExperimentalFeatures = [],
   file: StaticString = #file,
   line: UInt = #line
 ) {
@@ -549,6 +550,7 @@ func assertParse(
     applyFixIts: applyFixIts,
     fixedSource: expectedFixedSource,
     options: options,
+    experimentalFeatures: experimentalFeatures,
     file: file,
     line: line
   )
@@ -559,6 +561,7 @@ func assertParse(
 fileprivate func assertRoundTrip<S: SyntaxProtocol>(
   source: [UInt8],
   _ parse: (inout Parser) -> S,
+  experimentalFeatures: Parser.ExperimentalFeatures,
   file: StaticString,
   line: UInt
 ) {
@@ -566,7 +569,7 @@ fileprivate func assertRoundTrip<S: SyntaxProtocol>(
     let mutatedSource = String(decoding: buf, as: UTF8.self)
     // Check that we don't hit any assertions in the parser while parsing
     // the mutated source and that it round-trips
-    var mutatedParser = Parser(buf)
+    var mutatedParser = Parser(buf, experimentalFeatures: experimentalFeatures)
     let mutatedTree = parse(&mutatedParser)
     // Run the diagnostic generator to make sure it doesn’t crash
     _ = ParseDiagnosticsGenerator.diagnostics(for: mutatedTree)
@@ -615,6 +618,7 @@ func assertParse<S: SyntaxProtocol>(
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
   options: AssertParseOptions = [],
+  experimentalFeatures: Parser.ExperimentalFeatures = [],
   file: StaticString = #file,
   line: UInt = #line
 ) {
@@ -624,7 +628,7 @@ func assertParse<S: SyntaxProtocol>(
 
   let enableLongTests = ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] != "1"
 
-  var parser = Parser(source)
+  var parser = Parser(source, experimentalFeatures: experimentalFeatures)
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
   if enableLongTests {
     parser.enableAlternativeTokenChoices()
@@ -704,14 +708,14 @@ func assertParse<S: SyntaxProtocol>(
   }
 
   if expectedDiagnostics.isEmpty {
-    assertBasicFormat(source: source, parse: parse, file: file, line: line)
+    assertBasicFormat(source: source, parse: parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
   }
 
   if enableLongTests {
     DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
       let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
       _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
-      assertRoundTrip(source: flippedTokenTree.syntaxTextBytes, parse, file: file, line: line)
+      assertRoundTrip(source: flippedTokenTree.syntaxTextBytes, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
     }
 
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
@@ -721,7 +725,7 @@ func assertParse<S: SyntaxProtocol>(
     DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
       let mutation = mutations[index]
       let alternateSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: [mutation.offset: mutation.replacement])
-      assertRoundTrip(source: alternateSource, parse, file: file, line: line)
+      assertRoundTrip(source: alternateSource, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
     }
     #endif
   }
@@ -758,15 +762,16 @@ class TriviaRemover: SyntaxRewriter {
 func assertBasicFormat<S: SyntaxProtocol>(
   source: String,
   parse: (inout Parser) -> S,
+  experimentalFeatures: Parser.ExperimentalFeatures,
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  var parser = Parser(source)
+  var parser = Parser(source, experimentalFeatures: experimentalFeatures)
   let sourceTree = parse(&parser)
   let withoutTrivia = TriviaRemover(viewMode: .sourceAccurate).rewrite(sourceTree)
   let formatted = withoutTrivia.formatted()
 
-  var formattedParser = Parser(formatted.description)
+  var formattedParser = Parser(formatted.description, experimentalFeatures: experimentalFeatures)
   let formattedReparsed = Syntax(parse(&formattedParser))
 
   do {

@@ -28,7 +28,9 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax("func visit(_ token: TokenSyntax) -> ResultType")
 
-    for node in SYNTAX_NODES where !node.kind.isBase {
+    // Don't bother including experimental nodes here since we want to remove
+    // SyntaxTransformVisitor anyway.
+    for node in SYNTAX_NODES where !node.kind.isBase && !node.isExperimental {
       DeclSyntax(
         """
         /// Visiting ``\(node.kind.syntaxType)`` specifically.
@@ -55,6 +57,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// Visiting ``\(node.kind.syntaxType)`` specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: nil by default.
+        \(node.apiAttributes())\
         public func visit(_ node: \(node.kind.syntaxType)) -> ResultType {
           visitAny(Syntax(node))
         }

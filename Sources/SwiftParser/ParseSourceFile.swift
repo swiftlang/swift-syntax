@@ -22,6 +22,16 @@ extension Parser {
     return SourceFileSyntax.parse(from: &parser)
   }
 
+  /// A compiler interface that allows the enabling of experimental features.
+  @_spi(ExperimentalLanguageFeatures)
+  public static func parse(
+    source: UnsafeBufferPointer<UInt8>,
+    experimentalFeatures: ExperimentalFeatures
+  ) -> SourceFileSyntax {
+    var parser = Parser(source, experimentalFeatures: experimentalFeatures)
+    return SourceFileSyntax.parse(from: &parser)
+  }
+
   /// Parse the source code in the given buffer as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(

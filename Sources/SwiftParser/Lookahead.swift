@@ -27,22 +27,36 @@ extension Parser {
     /// i.e. how far it looked ahead.
     var tokensConsumed: Int = 0
 
+    /// The experimental features that have been enabled in the underlying
+    /// parser.
+    let experimentalFeatures: ExperimentalFeatures
+
     private init(
       lexemes: Lexer.LexemeSequence,
-      currentToken: Lexer.Lexeme
+      currentToken: Lexer.Lexeme,
+      experimentalFeatures: ExperimentalFeatures
     ) {
       self.lexemes = lexemes
       self.currentToken = currentToken
+      self.experimentalFeatures = experimentalFeatures
     }
 
     fileprivate init(cloning other: Parser) {
-      self.init(lexemes: other.lexemes, currentToken: other.currentToken)
+      self.init(
+        lexemes: other.lexemes,
+        currentToken: other.currentToken,
+        experimentalFeatures: other.experimentalFeatures
+      )
     }
 
     /// Initiates a lookahead session from the current point in this
     /// lookahead session.
     func lookahead() -> Lookahead {
-      return Lookahead(lexemes: self.lexemes, currentToken: self.currentToken)
+      return Lookahead(
+        lexemes: self.lexemes,
+        currentToken: self.currentToken,
+        experimentalFeatures: self.experimentalFeatures
+      )
     }
   }
 

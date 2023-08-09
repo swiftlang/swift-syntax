@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 /// Describes how distinctive a token is for parser recovery. When expecting a
 /// token, tokens with a lower token precedence may be skipped and considered

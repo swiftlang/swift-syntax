@@ -117,6 +117,9 @@ public struct Parser {
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   let lookaheadTrackerOwner: LookaheadTrackerOwner
 
+  /// The experimental features that have been enabled.
+  let experimentalFeatures: ExperimentalFeatures
+
   /// A default maximum nesting level that is used if the client didn't
   /// explicitly specify one. Debug builds of the parser consume a lot more stack
   /// space and thus have a lower default maximum nesting level.
@@ -145,11 +148,13 @@ public struct Parser {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be within its registered
   ///            source buffer or allocator.
+  ///  - experimentalFeatures: The experimental features enabled for the parser.
   private init(
-    input: UnsafeBufferPointer<UInt8>,
+    buffer input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
-    arena: ParsingSyntaxArena?
+    arena: ParsingSyntaxArena?,
+    experimentalFeatures: ExperimentalFeatures
   ) {
     var input = input
     if let arena {
@@ -163,6 +168,7 @@ public struct Parser {
     }
 
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+    self.experimentalFeatures = experimentalFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
 
     self.lexemes = Lexer.tokenize(input, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
@@ -174,22 +180,39 @@ public struct Parser {
     }
   }
 
+  /// Private initializer for creating a ``Parser`` from the given string.
+  private init(
+    string input: String,
+    maximumNestingLevel: Int?,
+    parseTransition: IncrementalParseTransition?,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    var input = input
+    input.makeContiguousUTF8()
+    self = input.withUTF8 { buffer in
+      Parser(
+        buffer: buffer,
+        maximumNestingLevel: maximumNestingLevel,
+        parseTransition: parseTransition,
+        arena: nil,
+        experimentalFeatures: experimentalFeatures
+      )
+    }
+  }
+
   /// Initializes a ``Parser`` from the given string.
   public init(
     _ input: String,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil
   ) {
-    var input = input
-    input.makeContiguousUTF8()
-    self = input.withUTF8 { buffer in
-      Parser(
-        input: buffer,
-        maximumNestingLevel: maximumNestingLevel,
-        parseTransition: parseTransition,
-        arena: nil
-      )
-    }
+    // Chain to the private String initializer.
+    self.init(
+      string: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      experimentalFeatures: []
+    )
   }
 
   /// Initializes a ``Parser`` from the given input buffer.
@@ -217,11 +240,51 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingSyntaxArena? = nil
   ) {
+    // Chain to the private buffer initializer.
     self.init(
-      input: input,
+      buffer: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
-      arena: arena
+      arena: arena,
+      experimentalFeatures: []
+    )
+  }
+
+  /// Initializes a ``Parser`` from the given input string, with a given set
+  /// of experimental language features.
+  @_spi(ExperimentalLanguageFeatures)
+  public init(
+    _ input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    // Chain to the private String initializer.
+    self.init(
+      string: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      experimentalFeatures: experimentalFeatures
+    )
+  }
+
+  /// Initializes a ``Parser`` from the given input buffer, with a given set
+  /// of experimental language features.
+  @_spi(ExperimentalLanguageFeatures)
+  public init(
+    _ input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    arena: ParsingSyntaxArena? = nil,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    // Chain to the private buffer initializer.
+    self.init(
+      buffer: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      arena: arena,
+      experimentalFeatures: experimentalFeatures
     )
   }
 

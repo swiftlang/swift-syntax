@@ -24,7 +24,12 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     DeclSyntax("case token(TokenSyntax)")
     for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax("case \(node.varOrCaseName)(\(node.kind.syntaxType))")
+      DeclSyntax(
+        """
+        \(node.apiAttributes())\
+        case \(node.varOrCaseName)(\(node.kind.syntaxType))
+        """
+      )
     }
   }
 

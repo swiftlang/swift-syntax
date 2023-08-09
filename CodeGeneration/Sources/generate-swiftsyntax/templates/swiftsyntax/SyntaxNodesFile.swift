@@ -40,6 +40,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         // MARK: - \(raw: node.kind.syntaxType)
 
         \(documentation)
+        \(node.node.apiAttributes())\
         public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {

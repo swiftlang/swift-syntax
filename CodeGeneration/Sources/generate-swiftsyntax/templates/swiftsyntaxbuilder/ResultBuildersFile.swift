@@ -26,6 +26,7 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! StructDeclSyntax(
       """
       @resultBuilder
+      \(node.node.apiAttributes())\
       public struct \(type.resultBuilderType)
       """
     ) {

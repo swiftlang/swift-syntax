@@ -343,14 +343,12 @@ public struct AddCompletionHandler: PeerMacro {
       """
 
     // Drop the @addCompletionHandler attribute from the new declaration.
-    let newAttributeList = AttributeListSyntax(
-      funcDecl.attributes?.filter {
-        guard case let .attribute(attribute) = $0 else {
-          return true
-        }
-        return attribute.attributeName.as(IdentifierTypeSyntax.self)?.name == "addCompletionHandler"
-      } ?? []
-    )
+    let newAttributeList = funcDecl.attributes.filter {
+      guard case let .attribute(attribute) = $0 else {
+        return true
+      }
+      return attribute.attributeName.as(IdentifierTypeSyntax.self)?.name == "addCompletionHandler"
+    }
 
     let newFunc =
       funcDecl

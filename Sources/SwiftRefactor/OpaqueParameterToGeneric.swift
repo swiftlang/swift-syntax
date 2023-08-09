@@ -55,7 +55,7 @@ fileprivate class SomeParameterRewriter: SyntaxRewriter {
     }
 
     let genericParam = GenericParameterSyntax(
-      attributes: nil,
+      attributes: [],
       eachKeyword: nil,
       name: paramNameSyntax,
       colon: colon,

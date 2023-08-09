@@ -57,7 +57,15 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // The missing item is not necessary to be a declaration,
           // which is just a placeholder here
           return RawCodeBlockItemSyntax(
-            item: .decl(RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: self.emptyCollection(RawDeclModifierListSyntax.self), arena: self.arena))),
+            item: .decl(
+              RawDeclSyntax(
+                RawMissingDeclSyntax(
+                  attributes: self.emptyCollection(RawAttributeListSyntax.self),
+                  modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+                  arena: self.arena
+                )
+              )
+            ),
             semicolon: nil,
             arena: self.arena
           )

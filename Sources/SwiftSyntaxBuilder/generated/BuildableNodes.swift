@@ -19,7 +19,7 @@ extension AccessorDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil, 
       modifier: DeclModifierSyntax? = nil, 
       unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil, 
@@ -60,7 +60,7 @@ extension ActorDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil, 
@@ -161,7 +161,7 @@ extension ClassDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil, 
@@ -316,7 +316,7 @@ extension DeinitializerDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil, 
@@ -380,7 +380,7 @@ extension EnumCaseDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil, 
@@ -411,7 +411,7 @@ extension EnumDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil, 
@@ -493,7 +493,7 @@ extension ExtensionDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil, 
@@ -630,7 +630,7 @@ extension FunctionDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil, 
@@ -876,7 +876,7 @@ extension InitializerDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil, 
@@ -952,7 +952,7 @@ extension MacroExpansionDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil, 
@@ -1081,7 +1081,7 @@ extension ProtocolDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil, 
@@ -1201,7 +1201,7 @@ extension StructDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil, 
@@ -1430,7 +1430,7 @@ extension VariableDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil, 
       unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil, 
-      attributes: AttributeListSyntax? = nil, 
+      attributes: AttributeListSyntax = [], 
       unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil, 
       modifiers: DeclModifierListSyntax = [], 
       unexpectedBetweenModifiersAndBindingSpecifier: UnexpectedNodesSyntax? = nil, 

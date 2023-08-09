@@ -13,9 +13,9 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  mutating func parseAttributeList() -> RawAttributeListSyntax? {
+  mutating func parseAttributeList() -> RawAttributeListSyntax {
     guard self.at(.atSign, .poundIf) else {
-      return nil
+      return self.emptyCollection(RawAttributeListSyntax.self)
     }
 
     var elements = [RawAttributeListSyntax.Element]()

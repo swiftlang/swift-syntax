@@ -12,7 +12,7 @@
 
 public extension MissingDeclSyntax {
   init(
-    attributes: AttributeListSyntax?,
+    attributes: AttributeListSyntax,
     modifiers: DeclModifierListSyntax,
     arena: __shared SyntaxArena
   ) {
@@ -68,7 +68,7 @@ public extension MissingSyntax {
 
 public extension RawMissingDeclSyntax {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     arena: __shared SyntaxArena
   ) {

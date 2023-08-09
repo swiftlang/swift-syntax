@@ -58,7 +58,7 @@ public extension SyntaxProtocol {
 
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? {
+  var attributes: AttributeListSyntax {
     get
     set
   }
@@ -364,7 +364,7 @@ public extension SyntaxProtocol {
 
 
 public protocol WithAttributesSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? {
+  var attributes: AttributeListSyntax {
     get
     set
   }

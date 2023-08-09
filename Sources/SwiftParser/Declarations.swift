@@ -157,10 +157,10 @@ extension TokenConsumer {
 
 extension Parser {
   struct DeclAttributes {
-    var attributes: RawAttributeListSyntax?
+    var attributes: RawAttributeListSyntax
     var modifiers: RawDeclModifierListSyntax
 
-    init(attributes: RawAttributeListSyntax?, modifiers: RawDeclModifierListSyntax) {
+    init(attributes: RawAttributeListSyntax, modifiers: RawDeclModifierListSyntax) {
       self.attributes = attributes
       self.modifiers = modifiers
     }
@@ -393,7 +393,7 @@ extension Parser {
         var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes == nil && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.at(prefix: ">") {
+        if attributes.isEmpty && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.at(prefix: ">") {
           break
         }
 
@@ -678,7 +678,7 @@ extension Parser {
         remainingTokens,
         decl: RawDeclSyntax(
           RawMissingDeclSyntax(
-            attributes: nil,
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
             modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
             arena: self.arena
           )
@@ -1301,7 +1301,7 @@ extension Parser {
   }
 
   struct AccessorIntroducer {
-    var attributes: RawAttributeListSyntax?
+    var attributes: RawAttributeListSyntax
     var modifier: RawDeclModifierSyntax?
     var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
@@ -1533,7 +1533,7 @@ extension Parser {
       }
     }
 
-    var unexpectedBeforeFixity = RawUnexpectedNodesSyntax(attrs.attributes?.elements ?? [], arena: self.arena)
+    var unexpectedBeforeFixity = RawUnexpectedNodesSyntax(attrs.attributes.elements, arena: self.arena)
 
     var fixity: RawTokenSyntax?
     var unexpectedAfterFixity: RawUnexpectedNodesSyntax?

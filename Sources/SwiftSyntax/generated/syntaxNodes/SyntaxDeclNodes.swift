@@ -51,7 +51,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
       modifier: DeclModifierSyntax? = nil,
       _ unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
@@ -85,7 +85,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifier?.raw, 
           modifier?.raw, 
           unexpectedBetweenModifierAndAccessorSpecifier?.raw, 
@@ -120,12 +120,12 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = AccessorDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = AccessorDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -312,7 +312,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
@@ -354,7 +354,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndActorKeyword?.raw, 
@@ -393,12 +393,12 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ActorDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ActorDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -683,7 +683,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil,
@@ -721,7 +721,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndAssociatedtypeKeyword?.raw, 
@@ -759,12 +759,12 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes attached to the associated type declaration.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = AssociatedTypeDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = AssociatedTypeDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1033,7 +1033,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
@@ -1075,7 +1075,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndClassKeyword?.raw, 
@@ -1115,12 +1115,12 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes attached to the class declaration, such as an `@available` attribute.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClassDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ClassDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1388,7 +1388,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? = nil,
@@ -1418,7 +1418,7 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndDeinitKeyword?.raw, 
@@ -1452,12 +1452,12 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes that are attached to the deinitializer.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = DeinitializerDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = DeinitializerDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1651,7 +1651,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? = nil,
@@ -1673,7 +1673,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndPlaceholder?.raw, 
@@ -1703,12 +1703,12 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EditorPlaceholderDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = EditorPlaceholderDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -1863,7 +1863,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndCaseKeyword: UnexpectedNodesSyntax? = nil,
@@ -1889,7 +1889,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndCaseKeyword?.raw, 
@@ -1921,12 +1921,12 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The attributes applied to the case declaration.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EnumCaseDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = EnumCaseDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2136,7 +2136,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
@@ -2178,7 +2178,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndEnumKeyword?.raw, 
@@ -2218,12 +2218,12 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The attributes applied to the enum declaration.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EnumDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = EnumDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2481,7 +2481,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil,
@@ -2519,7 +2519,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndExtensionKeyword?.raw, 
@@ -2556,12 +2556,12 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ExtensionDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ExtensionDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2795,7 +2795,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil,
@@ -2837,7 +2837,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndFuncKeyword?.raw, 
@@ -2876,12 +2876,12 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = FunctionDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3299,7 +3299,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndImportKeyword: UnexpectedNodesSyntax? = nil,
@@ -3329,7 +3329,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndImportKeyword?.raw, 
@@ -3363,12 +3363,12 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes attached to the import declaration, for example `@testable`.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ImportDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ImportDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3610,7 +3610,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndInitKeyword: UnexpectedNodesSyntax? = nil,
@@ -3652,7 +3652,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndInitKeyword?.raw, 
@@ -3692,12 +3692,12 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes that are attached to the initializer.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = InitializerDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = InitializerDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3957,7 +3957,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
@@ -3999,7 +3999,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndMacroKeyword?.raw, 
@@ -4038,12 +4038,12 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = MacroDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4299,7 +4299,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
@@ -4349,7 +4349,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndPound?.raw, 
@@ -4392,12 +4392,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -4741,7 +4741,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? = nil,
@@ -4763,7 +4763,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndPlaceholder?.raw, 
@@ -4793,12 +4793,12 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = MissingDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = MissingDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5318,7 +5318,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil,
@@ -5356,7 +5356,7 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndPrecedencegroupKeyword?.raw, 
@@ -5394,12 +5394,12 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// The attributes applied to the 'precedencegroup' declaration.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = PrecedenceGroupDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = PrecedenceGroupDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -5677,7 +5677,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
@@ -5719,7 +5719,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndProtocolKeyword?.raw, 
@@ -5759,12 +5759,12 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes attached to the protocol declaration, such as an `@available` attribute.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ProtocolDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ProtocolDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6088,7 +6088,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
@@ -6130,7 +6130,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndStructKeyword?.raw, 
@@ -6170,12 +6170,12 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
   
   /// Attributes that are attached to the struct declaration.
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = StructDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = StructDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6435,7 +6435,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
@@ -6477,7 +6477,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndSubscriptKeyword?.raw, 
@@ -6516,12 +6516,12 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = SubscriptDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6775,7 +6775,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
@@ -6813,7 +6813,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndTypealiasKeyword?.raw, 
@@ -6850,12 +6850,12 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = TypeAliasDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = TypeAliasDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -7091,7 +7091,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndBindingSpecifier: UnexpectedNodesSyntax? = nil,
@@ -7117,7 +7117,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndBindingSpecifier?.raw, 
@@ -7148,12 +7148,12 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = VariableDeclSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = VariableDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   

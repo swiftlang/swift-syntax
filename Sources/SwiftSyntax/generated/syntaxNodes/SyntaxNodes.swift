@@ -3023,7 +3023,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
@@ -3065,7 +3065,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
@@ -3104,12 +3104,12 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ClosureParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3537,7 +3537,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
       capture: ClosureCaptureClauseSyntax? = nil,
       _ unexpectedBetweenCaptureAndParameterClause: UnexpectedNodesSyntax? = nil,
@@ -3571,7 +3571,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndCapture?.raw, 
           capture?.raw, 
           unexpectedBetweenCaptureAndParameterClause?.raw, 
@@ -3606,12 +3606,12 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureSignatureSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ClosureSignatureSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8768,7 +8768,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
@@ -8814,7 +8814,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
           modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
@@ -8855,12 +8855,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -9827,7 +9827,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? = nil,
       eachKeyword: TokenSyntax? = nil,
       _ unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? = nil,
@@ -9861,7 +9861,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndEachKeyword?.raw, 
           eachKeyword?.raw, 
           unexpectedBetweenEachKeywordAndName?.raw, 
@@ -9896,12 +9896,12 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = GenericParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = GenericParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   

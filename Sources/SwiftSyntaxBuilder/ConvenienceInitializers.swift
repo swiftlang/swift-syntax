@@ -358,7 +358,7 @@ extension VariableDeclSyntax {
   /// Creates an optionally initialized property.
   public init(
     leadingTrivia: Trivia = [],
-    attributes: AttributeListSyntax? = nil,
+    attributes: AttributeListSyntax = [],
     modifiers: DeclModifierListSyntax = [],
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
@@ -367,7 +367,7 @@ extension VariableDeclSyntax {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.with(\.trailingTrivia, .space),
+      attributes: attributes.with(\.trailingTrivia, .space),
       modifiers: modifiers,
       bindingSpecifier: .keyword(bindingSpecifier)
     ) {

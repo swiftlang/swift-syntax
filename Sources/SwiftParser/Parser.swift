@@ -155,6 +155,19 @@ public struct Parser {
     return _emptyRawDeclModifierListSyntax!
   }
 
+  var _emptyRawAttributeListSyntax: RawAttributeListSyntax?
+
+  /// Create an empty collection of the given type.
+  ///
+  /// These empty collections are only created once and the same node is returned
+  /// on subsequent calls, reducing memory usage.
+  mutating func emptyCollection(_: RawAttributeListSyntax.Type) -> RawAttributeListSyntax {
+    if _emptyRawAttributeListSyntax == nil {
+      _emptyRawAttributeListSyntax = RawAttributeListSyntax(elements: [], arena: self.arena)
+    }
+    return _emptyRawAttributeListSyntax!
+  }
+
   /// The delegated initializer for the parser.
   ///
   /// - Parameters

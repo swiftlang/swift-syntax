@@ -16,7 +16,7 @@ protocol NominalTypeDeclarationTrait {
   associatedtype PrimaryOrGenerics
 
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
@@ -34,7 +34,7 @@ protocol NominalTypeDeclarationTrait {
 
 extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
@@ -68,7 +68,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
@@ -102,7 +102,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
@@ -136,7 +136,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
@@ -170,7 +170,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
+    attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,

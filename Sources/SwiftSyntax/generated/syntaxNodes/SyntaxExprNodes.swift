@@ -5707,6 +5707,193 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - SimpleStringLiteralExprSyntax
+
+/// A simple string that can’t contain string interpolation and cannot have raw string delimiters.
+///
+/// ### Children
+/// 
+///  - `openingQuote`: (`'"'` | `'"""'`)
+///  - `segments`: ``SimpleStringLiteralSegmentListSyntax``
+///  - `closingQuote`: (`'"'` | `'"""'`)
+///
+/// ### Contained in
+/// 
+///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
+///  - ``PoundSourceLocationArgumentsSyntax``.``PoundSourceLocationArgumentsSyntax/fileName``
+public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .simpleStringLiteralExpr else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``SimpleStringLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
+  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
+  /// is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .simpleStringLiteralExpr)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - openingQuote: Open quote for the string literal
+  ///   - segments: String content
+  ///   - closingQuote: Close quote for the string literal
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeOpeningQuote: UnexpectedNodesSyntax? = nil,
+      openingQuote: TokenSyntax,
+      _ unexpectedBetweenOpeningQuoteAndSegments: UnexpectedNodesSyntax? = nil,
+      segments: SimpleStringLiteralSegmentListSyntax,
+      _ unexpectedBetweenSegmentsAndClosingQuote: UnexpectedNodesSyntax? = nil,
+      closingQuote: TokenSyntax,
+      _ unexpectedAfterClosingQuote: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeOpeningQuote, 
+            openingQuote, 
+            unexpectedBetweenOpeningQuoteAndSegments, 
+            segments, 
+            unexpectedBetweenSegmentsAndClosingQuote, 
+            closingQuote, 
+            unexpectedAfterClosingQuote
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeOpeningQuote?.raw, 
+          openingQuote.raw, 
+          unexpectedBetweenOpeningQuoteAndSegments?.raw, 
+          segments.raw, 
+          unexpectedBetweenSegmentsAndClosingQuote?.raw, 
+          closingQuote.raw, 
+          unexpectedAfterClosingQuote?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.simpleStringLiteralExpr,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeOpeningQuote: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Open quote for the string literal
+  public var openingQuote: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenOpeningQuoteAndSegments: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  /// String content
+  public var segments: SimpleStringLiteralSegmentListSyntax {
+    get {
+      return SimpleStringLiteralSegmentListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Adds the provided `element` to the node's `segments`
+  /// collection.
+  /// - param element: The new `Segment` to add to the node's
+  ///                  `segments` collection.
+  /// - returns: A copy of the receiver with the provided `Segment`
+  ///            appended to its `segments` collection.
+  @available(*, deprecated, message: "Use node.segments.append(newElement) instead")
+  public func addSegment(_ element: StringSegmentSyntax) -> SimpleStringLiteralExprSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.simpleStringLiteralSegmentList,
+                                        from: [element.raw], arena: arena)
+    }
+    let newData = data.replacingChild(
+        at: 3, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
+    return SimpleStringLiteralExprSyntax(newData)
+  }
+  
+  public var unexpectedBetweenSegmentsAndClosingQuote: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  /// Close quote for the string literal
+  public var closingQuote: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterClosingQuote: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SimpleStringLiteralExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeOpeningQuote, 
+          \Self.openingQuote, 
+          \Self.unexpectedBetweenOpeningQuoteAndSegments, 
+          \Self.segments, 
+          \Self.unexpectedBetweenSegmentsAndClosingQuote, 
+          \Self.closingQuote, 
+          \Self.unexpectedAfterClosingQuote
+        ])
+  }
+}
+
 // MARK: - StringLiteralExprSyntax
 
 /// ### Children
@@ -5720,13 +5907,11 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
 ///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/cTypeString``
 ///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/value``
 ///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/cxxName``
 ///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/mangledName``
 ///  - ``OriginallyDefinedInAttributeArgumentsSyntax``.``OriginallyDefinedInAttributeArgumentsSyntax/moduleName``
-///  - ``PoundSourceLocationArgumentsSyntax``.``PoundSourceLocationArgumentsSyntax/fileName``
 ///  - ``UnavailableFromAsyncAttributeArgumentsSyntax``.``UnavailableFromAsyncAttributeArgumentsSyntax/message``
 ///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/filename``
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {

@@ -1503,6 +1503,38 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.stringSegment, .expressionSegment]
   ),
 
+  Node(
+    kind: .simpleStringLiteralExpr,
+    base: .expr,
+    nameForDiagnostics: "simple string literal",
+    documentation: "A simple string that can’t contain string interpolation and cannot have raw string delimiters.",
+    children: [
+      Child(
+        name: "OpeningQuote",
+        kind: .token(choices: [.token(.stringQuote), .token(.multilineStringQuote)]),
+        documentation: "Open quote for the string literal"
+      ),
+      Child(
+        name: "Segments",
+        kind: .collection(kind: .simpleStringLiteralSegmentList, collectionElementName: "Segment"),
+        documentation: "String content"
+      ),
+      Child(
+        name: "ClosingQuote",
+        kind: .token(choices: [.token(.stringQuote), .token(.multilineStringQuote)]),
+        documentation: "Close quote for the string literal"
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .simpleStringLiteralSegmentList,
+    base: .syntaxCollection,
+    nameForDiagnostics: nil,
+    documentation: "String literal segments that only can contain non string interpolated or extended escaped strings",
+    elementChoices: [.stringSegment]
+  ),
+
   // string literal segment in a string interpolation expression.
   Node(
     kind: .stringSegment,

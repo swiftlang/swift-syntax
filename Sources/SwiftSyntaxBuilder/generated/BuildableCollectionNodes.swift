@@ -254,6 +254,12 @@ extension PrimaryAssociatedTypeListSyntax: ExpressibleByArrayLiteral {
   }
 }
 
+extension SimpleStringLiteralSegmentListSyntax: ExpressibleByArrayLiteral {
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
+  }
+}
+
 extension SpecializeAttributeArgumentListSyntax: ExpressibleByArrayLiteral {
   public init(arrayLiteral elements: Element...) {
     self.init(elements)

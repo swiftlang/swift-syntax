@@ -331,6 +331,8 @@ extension SyntaxKind {
       return "'return' statement"
     case .sameTypeRequirement:
       return "same type requirement"
+    case .simpleStringLiteralExpr:
+      return "simple string literal"
     case .someOrAnyType:
       return "type"
     case .sourceFile:

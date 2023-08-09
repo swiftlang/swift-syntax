@@ -165,6 +165,12 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var extraRightBracket: Self {
     .init("unexpected ']' in type; did you mean to write an array type?")
   }
+  public static var forbiddenExtendedEscapingString: Self {
+    .init("argument cannot be an extended escaping string literal")
+  }
+  public static var forbiddenInterpolatedString: Self {
+    return .init("argument cannot be an interpolated string literal")
+  }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }

@@ -1506,6 +1506,56 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: SimpleStringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    var rawDelimiters: [TokenSyntax] = []
+
+    if let unexpectedBeforeOpenQuote = node.unexpectedBeforeOpeningQuote?.onlyPresentToken(where: { $0.tokenKind.isRawStringDelimiter }) {
+      rawDelimiters += [unexpectedBeforeOpenQuote]
+    }
+
+    if let unexpectedAfterCloseQuote = node.unexpectedAfterClosingQuote?.onlyPresentToken(where: { $0.tokenKind.isRawStringDelimiter }) {
+      rawDelimiters += [unexpectedAfterCloseQuote]
+    }
+
+    if !rawDelimiters.isEmpty {
+      addDiagnostic(
+        node,
+        .forbiddenExtendedEscapingString,
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt(rawDelimiters),
+            changes: rawDelimiters.map { .makeMissing($0) }
+          )
+        ],
+        handledNodes: rawDelimiters.map { $0.id }
+      )
+    }
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    for segment in node {
+      if let unexpectedAfterContent = segment.unexpectedAfterContent {
+        addDiagnostic(
+          node,
+          .forbiddenInterpolatedString,
+          handledNodes: [unexpectedAfterContent.id]
+        )
+      }
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

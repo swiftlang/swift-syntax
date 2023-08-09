@@ -102,8 +102,7 @@ extension Parser {
         (.renamed, let handle)?:
         let argumentLabel = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        // FIXME: Make sure this is a string literal with no interpolation.
-        let stringValue = self.parseStringLiteral()
+        let stringValue = self.parseSimpleString()
 
         entry = .availabilityLabeledArgument(
           RawAvailabilityLabeledArgumentSyntax(

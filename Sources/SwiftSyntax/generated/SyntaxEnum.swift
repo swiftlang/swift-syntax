@@ -236,6 +236,8 @@ public enum SyntaxEnum {
   case returnStmt(ReturnStmtSyntax)
   case sameTypeRequirement(SameTypeRequirementSyntax)
   case sequenceExpr(SequenceExprSyntax)
+  case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
+  case simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax)
   case someOrAnyType(SomeOrAnyTypeSyntax)
   case sourceFile(SourceFileSyntax)
   case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
@@ -739,6 +741,10 @@ public extension Syntax {
       return .sameTypeRequirement(SameTypeRequirementSyntax(self)!)
     case .sequenceExpr:
       return .sequenceExpr(SequenceExprSyntax(self)!)
+    case .simpleStringLiteralExpr:
+      return .simpleStringLiteralExpr(SimpleStringLiteralExprSyntax(self)!)
+    case .simpleStringLiteralSegmentList:
+      return .simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax(self)!)
     case .someOrAnyType:
       return .someOrAnyType(SomeOrAnyTypeSyntax(self)!)
     case .sourceFile:

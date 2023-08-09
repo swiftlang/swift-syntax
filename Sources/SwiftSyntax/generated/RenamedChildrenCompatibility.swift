@@ -5987,7 +5987,7 @@ extension PoundSourceLocationArgumentsSyntax {
       _ unexpectedBetweenFileArgLabelAndFileArgColon: UnexpectedNodesSyntax? = nil,
       fileArgColon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenFileArgColonAndFileName: UnexpectedNodesSyntax? = nil,
-      fileName: StringLiteralExprSyntax,
+      fileName: SimpleStringLiteralExprSyntax,
       _ unexpectedBetweenFileNameAndComma: UnexpectedNodesSyntax? = nil,
       comma: TokenSyntax = .commaToken(),
       _ unexpectedBetweenCommaAndLineArgLabel: UnexpectedNodesSyntax? = nil,

@@ -1124,6 +1124,16 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: SequenceExprSyntax) -> ResultType
   
+  /// Visiting ``SimpleStringLiteralExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SimpleStringLiteralExprSyntax) -> ResultType
+  
+  /// Visiting ``SimpleStringLiteralSegmentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> ResultType
+  
   /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2942,6 +2952,20 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``SimpleStringLiteralExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SimpleStringLiteralExprSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
+  /// Visiting ``SimpleStringLiteralSegmentListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3758,6 +3782,10 @@ extension SyntaxTransformVisitor {
     case .sameTypeRequirement(let derived):
       return visit(derived)
     case .sequenceExpr(let derived):
+      return visit(derived)
+    case .simpleStringLiteralExpr(let derived):
+      return visit(derived)
+    case .simpleStringLiteralSegmentList(let derived):
       return visit(derived)
     case .someOrAnyType(let derived):
       return visit(derived)

@@ -2585,6 +2585,88 @@ extension SameTypeRequirementSyntax {
   }
 }
 
+extension SimpleStringLiteralExprSyntax {
+  @_spi(Diagnostics)
+  public enum OpeningQuoteOptions: TokenSpecSet {
+    case stringQuote
+    case multilineStringQuote
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.stringQuote):
+        self = .stringQuote
+      case TokenSpec(.multilineStringQuote):
+        self = .multilineStringQuote
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .stringQuote:
+        return .stringQuote
+      case .multilineStringQuote:
+        return .multilineStringQuote
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .stringQuote:
+        return .stringQuoteToken()
+      case .multilineStringQuote:
+        return .multilineStringQuoteToken()
+      }
+    }
+  }
+}
+
+extension SimpleStringLiteralExprSyntax {
+  @_spi(Diagnostics)
+  public enum ClosingQuoteOptions: TokenSpecSet {
+    case stringQuote
+    case multilineStringQuote
+    
+    init?(lexeme: Lexer.Lexeme) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.stringQuote):
+        self = .stringQuote
+      case TokenSpec(.multilineStringQuote):
+        self = .multilineStringQuote
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .stringQuote:
+        return .stringQuote
+      case .multilineStringQuote:
+        return .multilineStringQuote
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .stringQuote:
+        return .stringQuoteToken()
+      case .multilineStringQuote:
+        return .multilineStringQuoteToken()
+      }
+    }
+  }
+}
+
 extension SomeOrAnyTypeSyntax {
   @_spi(Diagnostics)
   public enum SomeOrAnySpecifierOptions: TokenSpecSet {

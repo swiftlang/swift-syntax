@@ -727,20 +727,30 @@ func assertParse<S: SyntaxProtocol>(
   }
 }
 
+/// Removes trivia from all tokens that don’t occur inside multiline string
+/// literals.
+///
+/// We keep trivia inside multiline string literals because the indentation of
+/// the closing quote of a multi-line string literals has impact on how much
+/// leading trivia is stripped from the literal’s content.
 class TriviaRemover: SyntaxRewriter {
+  override func visit(_ node: StringLiteralExprSyntax) -> ExprSyntax {
+    if node.openingQuote.tokenKind == .multilineStringQuote {
+      return ExprSyntax(node)
+    } else {
+      return super.visit(node)
+    }
+  }
+
+  override func visit(_ node: SimpleStringLiteralExprSyntax) -> ExprSyntax {
+    if node.openingQuote.tokenKind == .multilineStringQuote {
+      return ExprSyntax(node)
+    } else {
+      return super.visit(node)
+    }
+  }
+
   override func visit(_ token: TokenSyntax) -> TokenSyntax {
-    var ancestor = Syntax(token)
-    while let parent = ancestor.parent {
-      ancestor = parent
-      if ancestor.is(StringLiteralExprSyntax.self) || ancestor.is(RegexLiteralExprSyntax.self) {
-        // Don't mess with indentation inside string or regex literals.
-        // BasicFormat doesn't know where to re-apply newlines and how much to indent the string literal contents.
-        return token
-      }
-    }
-    if token.parent?.is(StringSegmentSyntax.self) ?? false {
-      return token
-    }
     return token.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
   }
 }

@@ -133,6 +133,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PrefixOperatorExprSyntax>
 - <doc:SwiftSyntax/RegexLiteralExprSyntax>
 - <doc:SwiftSyntax/SequenceExprSyntax>
+- <doc:SwiftSyntax/SimpleStringLiteralExprSyntax>
 - <doc:SwiftSyntax/StringLiteralExprSyntax>
 - <doc:SwiftSyntax/SubscriptCallExprSyntax>
 - <doc:SwiftSyntax/SuperExprSyntax>
@@ -282,6 +283,8 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PrecedenceGroupNameSyntax>
 - <doc:SwiftSyntax/PrimaryAssociatedTypeListSyntax>
 - <doc:SwiftSyntax/PrimaryAssociatedTypeSyntax>
+- <doc:SwiftSyntax/SimpleStringLiteralSegmentListSyntax>
+- <doc:SwiftSyntax/StringSegmentSyntax>
 - <doc:SwiftSyntax/SpecializeAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/LabeledSpecializeArgumentSyntax>
 - <doc:SwiftSyntax/SpecializeAvailabilityArgumentSyntax>

@@ -2040,3859 +2040,14 @@ open class SyntaxRewriter {
     return visit(node.data).cast(TypeSyntax.self)
   }
   
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorBlockSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorBlockSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorDeclListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorDeclListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAccessorParametersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AccessorParametersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplActorDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ActorDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplArrayElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ArrayElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplArrayElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ArrayElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplArrayExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ArrayExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplArrayTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ArrayTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplArrowExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ArrowExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAsExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AsExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AssignmentExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAssociatedTypeDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AssociatedTypeDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAttributeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AttributeListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAttributeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AttributeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAttributedTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AttributedTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAvailabilityArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AvailabilityArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AvailabilityArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAvailabilityConditionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AvailabilityConditionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AvailabilityLabeledArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplAwaitExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = AwaitExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBackDeployedAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BackDeployedAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BinaryOperatorExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BooleanLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBorrowExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BorrowExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplBreakStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = BreakStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCanImportExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CanImportExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCanImportVersionInfoSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CanImportVersionInfoSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCatchClauseListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CatchClauseListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCatchClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CatchClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCatchItemListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CatchItemListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCatchItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CatchItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClassDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClassDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClassRestrictionTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClassRestrictionTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureCaptureClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureCaptureClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureCaptureListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureCaptureListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureCaptureSpecifierSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureCaptureSpecifierSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureCaptureSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureCaptureSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureParameterClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureParameterListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureParameterSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureParameterSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureShorthandParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureShorthandParameterListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureShorthandParameterSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureShorthandParameterSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplClosureSignatureSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ClosureSignatureSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCodeBlockItemListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CodeBlockItemListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCodeBlockItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CodeBlockItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCodeBlockSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CodeBlockSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCompositionTypeElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CompositionTypeElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCompositionTypeElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CompositionTypeElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCompositionTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CompositionTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConditionElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConditionElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConditionElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConditionElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConformanceRequirementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConformanceRequirementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConsumeExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConsumeExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplContinueStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ContinueStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConventionAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConventionAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplCopyExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = CopyExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclModifierDetailSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclModifierListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclModifierListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclModifierSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclModifierSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclNameArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclNameArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclNameArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclNameArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeclReferenceExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeclReferenceExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeferStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeferStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeinitializerDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDeinitializerEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DeinitializerEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDerivativeAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DerivativeAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DesignatedTypeListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDesignatedTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DesignatedTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DictionaryElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDictionaryElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DictionaryElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDictionaryExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DictionaryExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDictionaryTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DictionaryTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiabilityArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiabilityArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiabilityArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiabilityWithRespectToArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiabilityWithRespectToArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDifferentiableAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DifferentiableAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDiscardAssignmentExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DiscardAssignmentExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDiscardStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DiscardStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDoStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DoStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDocumentationAttributeArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DocumentationAttributeArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDocumentationAttributeArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DocumentationAttributeArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplDynamicReplacementAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = DynamicReplacementAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEditorPlaceholderDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EditorPlaceholderDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EditorPlaceholderExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEffectsAttributeArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EffectsAttributeArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseParameterClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseParameterListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumCaseParameterSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumCaseParameterSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplEnumDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = EnumDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExposeAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExposeAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExprListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExprListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExpressionPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExpressionPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExpressionSegmentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExpressionStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplExtensionDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ExtensionDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFallThroughStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FallThroughStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FloatLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplForStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ForStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplForceUnwrapExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ForceUnwrapExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionCallExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionParameterClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionParameterListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionParameterSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionParameterSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionSignatureSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionSignatureSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplFunctionTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = FunctionTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericArgumentClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericArgumentClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericParameterClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericParameterListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericParameterListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericParameterSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericParameterSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericRequirementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericRequirementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericRequirementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericRequirementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericSpecializationExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericSpecializationExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GenericWhereClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplGuardStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = GuardStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IdentifierPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIdentifierTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IdentifierTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfConfigClauseListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfConfigClauseListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfConfigClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfConfigClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfConfigDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfConfigDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIfExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IfExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplImplementsAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ImplementsAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplImplicitlyUnwrappedOptionalTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplImportDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ImportDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplImportPathComponentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ImportPathComponentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplImportPathComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ImportPathComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInOutExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InOutExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InfixOperatorExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInheritanceClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InheritanceClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInheritedTypeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InheritedTypeListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInheritedTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InheritedTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInitializerClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InitializerClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplInitializerDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = InitializerDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IntegerLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIsExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IsExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplIsTypePatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = IsTypePatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathComponentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathComponentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathOptionalComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathOptionalComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathPropertyComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathPropertyComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplKeyPathSubscriptComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = KeyPathSubscriptComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplLabeledExprListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = LabeledExprListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplLabeledExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = LabeledExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplLabeledSpecializeArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = LabeledSpecializeArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplLabeledStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = LabeledStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplLayoutRequirementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = LayoutRequirementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMacroDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MacroDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMacroExpansionDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MacroExpansionDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMacroExpansionExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MacroExpansionExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMatchingPatternConditionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MatchingPatternConditionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMemberAccessExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MemberAccessExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMemberBlockItemListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MemberBlockItemListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMemberBlockItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MemberBlockItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMemberBlockSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MemberBlockSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMemberTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MemberTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMetatypeTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MetatypeTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMissingTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MissingTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMultipleTrailingClosureElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MultipleTrailingClosureElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = MultipleTrailingClosureElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplNamedOpaqueReturnTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = NamedOpaqueReturnTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplNilLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = NilLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplObjCSelectorPieceListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ObjCSelectorPieceListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ObjCSelectorPieceSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOperatorDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OperatorDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOperatorPrecedenceAndTypesSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OperatorPrecedenceAndTypesSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOptionalBindingConditionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OptionalBindingConditionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OptionalChainingExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOptionalTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OptionalTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplOriginallyDefinedInAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = OriginallyDefinedInAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPackElementExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PackElementExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPackElementTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PackElementTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPackExpansionExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PackExpansionExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPackExpansionTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PackExpansionTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPatternBindingListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PatternBindingListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPatternBindingSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PatternBindingSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPatternExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PatternExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPlatformVersionItemListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PlatformVersionItemListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPlatformVersionItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PlatformVersionItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPlatformVersionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PlatformVersionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PostfixIfConfigExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPostfixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PostfixOperatorExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundSourceLocationArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundSourceLocationArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PoundSourceLocationSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupAssignmentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupAssignmentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupAssociativitySyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupAttributeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupAttributeListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupNameListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupNameSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrecedenceGroupRelationSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrecedenceGroupRelationSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrefixOperatorExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrefixOperatorExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrimaryAssociatedTypeClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrimaryAssociatedTypeListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = PrimaryAssociatedTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplProtocolDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ProtocolDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = RegexLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplRepeatStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = RepeatStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplReturnClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ReturnClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplReturnStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ReturnStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSameTypeRequirementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SameTypeRequirementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSequenceExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SequenceExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSimpleStringLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SimpleStringLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSimpleStringLiteralSegmentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SimpleStringLiteralSegmentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSomeOrAnyTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SomeOrAnyTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSourceFileSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SourceFileSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSpecializeAttributeArgumentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SpecializeAttributeArgumentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSpecializeAvailabilityArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SpecializeAvailabilityArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSpecializeTargetFunctionArgumentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SpecializeTargetFunctionArgumentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplStringLiteralExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = StringLiteralExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplStringLiteralSegmentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = StringLiteralSegmentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplStringSegmentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = StringSegmentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplStructDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = StructDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSubscriptCallExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SubscriptCallExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SubscriptDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSuperExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SuperExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSuppressedTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SuppressedTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseItemListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseItemListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseItemSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseItemSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseLabelSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchCaseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchDefaultLabelSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplSwitchExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = SwitchExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTernaryExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TernaryExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplThrowStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ThrowStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTryExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TryExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTuplePatternElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TuplePatternElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTuplePatternElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TuplePatternElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTuplePatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TuplePatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleTypeElementListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleTypeElementListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleTypeElementSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTupleTypeSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TupleTypeSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTypeAliasDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TypeAliasDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TypeAnnotationSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTypeEffectSpecifiersSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TypeEffectSpecifiersSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTypeExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TypeExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TypeInitializerClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnavailableFromAsyncAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnavailableFromAsyncAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnderscorePrivateAttributeArgumentsSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnderscorePrivateAttributeArgumentsSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnexpectedNodesSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnresolvedAsExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnresolvedIsExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplUnresolvedTernaryExprSyntax(_ data: SyntaxData) -> Syntax {
-    let node = UnresolvedTernaryExprSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplValueBindingPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = ValueBindingPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplVariableDeclSyntax(_ data: SyntaxData) -> Syntax {
-    let node = VariableDeclSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplVersionComponentListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = VersionComponentListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplVersionComponentSyntax(_ data: SyntaxData) -> Syntax {
-    let node = VersionComponentSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplVersionTupleSyntax(_ data: SyntaxData) -> Syntax {
-    let node = VersionTupleSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplWhereClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = WhereClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplWhileStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = WhileStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplWildcardPatternSyntax(_ data: SyntaxData) -> Syntax {
-    let node = WildcardPatternSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldStmtSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldStmtSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldedExpressionListSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldedExpressionListSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldedExpressionSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldedExpressionSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplYieldedExpressionsClauseSyntax(_ data: SyntaxData) -> Syntax {
-    let node = YieldedExpressionsClauseSyntax(data)
-    // Accessing _syntaxNode directly is faster than calling Syntax(node)
-    visitPre(node._syntaxNode)
-    defer {
-      visitPost(node._syntaxNode)
-    }
-    if let newNode = visitAny(node._syntaxNode) {
-      return newNode
-    }
-    return Syntax(visit(node))
-  }
-  
-  /// Implementation detail of visit(_:). Do not call directly.
-  private func visitImplTokenSyntax(_ data: SyntaxData) -> Syntax {
-    let node = TokenSyntax(data)
+  /// Interpret `data` as a node of type `nodeType`, visit it, calling
+  /// the `visit` to transform the node.
+  private func visitImpl<NodeType: SyntaxProtocol>(
+    _ data: SyntaxData,
+    _ nodeType: NodeType.Type,
+    _ visit: (NodeType) -> some SyntaxProtocol
+  ) -> Syntax {
+    let node = Syntax(data).cast(NodeType.self)
     // Accessing _syntaxNode directly is faster than calling Syntax(node)
     visitPre(node._syntaxNode)
     defer {
@@ -5931,557 +2086,1109 @@ open class SyntaxRewriter {
   private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax) {
     switch data.raw.kind {
     case .token:
-      return visitImplTokenSyntax
+      return {
+        self.visitImpl($0, TokenSyntax.self, self.visit)
+      }
     case .accessorBlock:
-      return visitImplAccessorBlockSyntax
+      return {
+        self.visitImpl($0, AccessorBlockSyntax.self, self.visit)
+      }
     case .accessorDeclList:
-      return visitImplAccessorDeclListSyntax
+      return {
+        self.visitImpl($0, AccessorDeclListSyntax.self, self.visit)
+      }
     case .accessorDecl:
-      return visitImplAccessorDeclSyntax
+      return {
+        self.visitImpl($0, AccessorDeclSyntax.self, self.visit)
+      }
     case .accessorEffectSpecifiers:
-      return visitImplAccessorEffectSpecifiersSyntax
+      return {
+        self.visitImpl($0, AccessorEffectSpecifiersSyntax.self, self.visit)
+      }
     case .accessorParameters:
-      return visitImplAccessorParametersSyntax
+      return {
+        self.visitImpl($0, AccessorParametersSyntax.self, self.visit)
+      }
     case .actorDecl:
-      return visitImplActorDeclSyntax
+      return {
+        self.visitImpl($0, ActorDeclSyntax.self, self.visit)
+      }
     case .arrayElementList:
-      return visitImplArrayElementListSyntax
+      return {
+        self.visitImpl($0, ArrayElementListSyntax.self, self.visit)
+      }
     case .arrayElement:
-      return visitImplArrayElementSyntax
+      return {
+        self.visitImpl($0, ArrayElementSyntax.self, self.visit)
+      }
     case .arrayExpr:
-      return visitImplArrayExprSyntax
+      return {
+        self.visitImpl($0, ArrayExprSyntax.self, self.visit)
+      }
     case .arrayType:
-      return visitImplArrayTypeSyntax
+      return {
+        self.visitImpl($0, ArrayTypeSyntax.self, self.visit)
+      }
     case .arrowExpr:
-      return visitImplArrowExprSyntax
+      return {
+        self.visitImpl($0, ArrowExprSyntax.self, self.visit)
+      }
     case .asExpr:
-      return visitImplAsExprSyntax
+      return {
+        self.visitImpl($0, AsExprSyntax.self, self.visit)
+      }
     case .assignmentExpr:
-      return visitImplAssignmentExprSyntax
+      return {
+        self.visitImpl($0, AssignmentExprSyntax.self, self.visit)
+      }
     case .associatedTypeDecl:
-      return visitImplAssociatedTypeDeclSyntax
+      return {
+        self.visitImpl($0, AssociatedTypeDeclSyntax.self, self.visit)
+      }
     case .attributeList:
-      return visitImplAttributeListSyntax
+      return {
+        self.visitImpl($0, AttributeListSyntax.self, self.visit)
+      }
     case .attribute:
-      return visitImplAttributeSyntax
+      return {
+        self.visitImpl($0, AttributeSyntax.self, self.visit)
+      }
     case .attributedType:
-      return visitImplAttributedTypeSyntax
+      return {
+        self.visitImpl($0, AttributedTypeSyntax.self, self.visit)
+      }
     case .availabilityArgumentList:
-      return visitImplAvailabilityArgumentListSyntax
+      return {
+        self.visitImpl($0, AvailabilityArgumentListSyntax.self, self.visit)
+      }
     case .availabilityArgument:
-      return visitImplAvailabilityArgumentSyntax
+      return {
+        self.visitImpl($0, AvailabilityArgumentSyntax.self, self.visit)
+      }
     case .availabilityCondition:
-      return visitImplAvailabilityConditionSyntax
+      return {
+        self.visitImpl($0, AvailabilityConditionSyntax.self, self.visit)
+      }
     case .availabilityLabeledArgument:
-      return visitImplAvailabilityLabeledArgumentSyntax
+      return {
+        self.visitImpl($0, AvailabilityLabeledArgumentSyntax.self, self.visit)
+      }
     case .awaitExpr:
-      return visitImplAwaitExprSyntax
+      return {
+        self.visitImpl($0, AwaitExprSyntax.self, self.visit)
+      }
     case .backDeployedAttributeArguments:
-      return visitImplBackDeployedAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, BackDeployedAttributeArgumentsSyntax.self, self.visit)
+      }
     case .binaryOperatorExpr:
-      return visitImplBinaryOperatorExprSyntax
+      return {
+        self.visitImpl($0, BinaryOperatorExprSyntax.self, self.visit)
+      }
     case .booleanLiteralExpr:
-      return visitImplBooleanLiteralExprSyntax
+      return {
+        self.visitImpl($0, BooleanLiteralExprSyntax.self, self.visit)
+      }
     case .borrowExpr:
-      return visitImplBorrowExprSyntax
+      return {
+        self.visitImpl($0, BorrowExprSyntax.self, self.visit)
+      }
     case .breakStmt:
-      return visitImplBreakStmtSyntax
+      return {
+        self.visitImpl($0, BreakStmtSyntax.self, self.visit)
+      }
     case .canImportExpr:
-      return visitImplCanImportExprSyntax
+      return {
+        self.visitImpl($0, CanImportExprSyntax.self, self.visit)
+      }
     case .canImportVersionInfo:
-      return visitImplCanImportVersionInfoSyntax
+      return {
+        self.visitImpl($0, CanImportVersionInfoSyntax.self, self.visit)
+      }
     case .catchClauseList:
-      return visitImplCatchClauseListSyntax
+      return {
+        self.visitImpl($0, CatchClauseListSyntax.self, self.visit)
+      }
     case .catchClause:
-      return visitImplCatchClauseSyntax
+      return {
+        self.visitImpl($0, CatchClauseSyntax.self, self.visit)
+      }
     case .catchItemList:
-      return visitImplCatchItemListSyntax
+      return {
+        self.visitImpl($0, CatchItemListSyntax.self, self.visit)
+      }
     case .catchItem:
-      return visitImplCatchItemSyntax
+      return {
+        self.visitImpl($0, CatchItemSyntax.self, self.visit)
+      }
     case .classDecl:
-      return visitImplClassDeclSyntax
+      return {
+        self.visitImpl($0, ClassDeclSyntax.self, self.visit)
+      }
     case .classRestrictionType:
-      return visitImplClassRestrictionTypeSyntax
+      return {
+        self.visitImpl($0, ClassRestrictionTypeSyntax.self, self.visit)
+      }
     case .closureCaptureClause:
-      return visitImplClosureCaptureClauseSyntax
+      return {
+        self.visitImpl($0, ClosureCaptureClauseSyntax.self, self.visit)
+      }
     case .closureCaptureList:
-      return visitImplClosureCaptureListSyntax
+      return {
+        self.visitImpl($0, ClosureCaptureListSyntax.self, self.visit)
+      }
     case .closureCaptureSpecifier:
-      return visitImplClosureCaptureSpecifierSyntax
+      return {
+        self.visitImpl($0, ClosureCaptureSpecifierSyntax.self, self.visit)
+      }
     case .closureCapture:
-      return visitImplClosureCaptureSyntax
+      return {
+        self.visitImpl($0, ClosureCaptureSyntax.self, self.visit)
+      }
     case .closureExpr:
-      return visitImplClosureExprSyntax
+      return {
+        self.visitImpl($0, ClosureExprSyntax.self, self.visit)
+      }
     case .closureParameterClause:
-      return visitImplClosureParameterClauseSyntax
+      return {
+        self.visitImpl($0, ClosureParameterClauseSyntax.self, self.visit)
+      }
     case .closureParameterList:
-      return visitImplClosureParameterListSyntax
+      return {
+        self.visitImpl($0, ClosureParameterListSyntax.self, self.visit)
+      }
     case .closureParameter:
-      return visitImplClosureParameterSyntax
+      return {
+        self.visitImpl($0, ClosureParameterSyntax.self, self.visit)
+      }
     case .closureShorthandParameterList:
-      return visitImplClosureShorthandParameterListSyntax
+      return {
+        self.visitImpl($0, ClosureShorthandParameterListSyntax.self, self.visit)
+      }
     case .closureShorthandParameter:
-      return visitImplClosureShorthandParameterSyntax
+      return {
+        self.visitImpl($0, ClosureShorthandParameterSyntax.self, self.visit)
+      }
     case .closureSignature:
-      return visitImplClosureSignatureSyntax
+      return {
+        self.visitImpl($0, ClosureSignatureSyntax.self, self.visit)
+      }
     case .codeBlockItemList:
-      return visitImplCodeBlockItemListSyntax
+      return {
+        self.visitImpl($0, CodeBlockItemListSyntax.self, self.visit)
+      }
     case .codeBlockItem:
-      return visitImplCodeBlockItemSyntax
+      return {
+        self.visitImpl($0, CodeBlockItemSyntax.self, self.visit)
+      }
     case .codeBlock:
-      return visitImplCodeBlockSyntax
+      return {
+        self.visitImpl($0, CodeBlockSyntax.self, self.visit)
+      }
     case .compositionTypeElementList:
-      return visitImplCompositionTypeElementListSyntax
+      return {
+        self.visitImpl($0, CompositionTypeElementListSyntax.self, self.visit)
+      }
     case .compositionTypeElement:
-      return visitImplCompositionTypeElementSyntax
+      return {
+        self.visitImpl($0, CompositionTypeElementSyntax.self, self.visit)
+      }
     case .compositionType:
-      return visitImplCompositionTypeSyntax
+      return {
+        self.visitImpl($0, CompositionTypeSyntax.self, self.visit)
+      }
     case .conditionElementList:
-      return visitImplConditionElementListSyntax
+      return {
+        self.visitImpl($0, ConditionElementListSyntax.self, self.visit)
+      }
     case .conditionElement:
-      return visitImplConditionElementSyntax
+      return {
+        self.visitImpl($0, ConditionElementSyntax.self, self.visit)
+      }
     case .conformanceRequirement:
-      return visitImplConformanceRequirementSyntax
+      return {
+        self.visitImpl($0, ConformanceRequirementSyntax.self, self.visit)
+      }
     case .consumeExpr:
-      return visitImplConsumeExprSyntax
+      return {
+        self.visitImpl($0, ConsumeExprSyntax.self, self.visit)
+      }
     case .continueStmt:
-      return visitImplContinueStmtSyntax
+      return {
+        self.visitImpl($0, ContinueStmtSyntax.self, self.visit)
+      }
     case .conventionAttributeArguments:
-      return visitImplConventionAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, ConventionAttributeArgumentsSyntax.self, self.visit)
+      }
     case .conventionWitnessMethodAttributeArguments:
-      return visitImplConventionWitnessMethodAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, ConventionWitnessMethodAttributeArgumentsSyntax.self, self.visit)
+      }
     case .copyExpr:
-      return visitImplCopyExprSyntax
+      return {
+        self.visitImpl($0, CopyExprSyntax.self, self.visit)
+      }
     case .declModifierDetail:
-      return visitImplDeclModifierDetailSyntax
+      return {
+        self.visitImpl($0, DeclModifierDetailSyntax.self, self.visit)
+      }
     case .declModifierList:
-      return visitImplDeclModifierListSyntax
+      return {
+        self.visitImpl($0, DeclModifierListSyntax.self, self.visit)
+      }
     case .declModifier:
-      return visitImplDeclModifierSyntax
+      return {
+        self.visitImpl($0, DeclModifierSyntax.self, self.visit)
+      }
     case .declNameArgumentList:
-      return visitImplDeclNameArgumentListSyntax
+      return {
+        self.visitImpl($0, DeclNameArgumentListSyntax.self, self.visit)
+      }
     case .declNameArgument:
-      return visitImplDeclNameArgumentSyntax
+      return {
+        self.visitImpl($0, DeclNameArgumentSyntax.self, self.visit)
+      }
     case .declNameArguments:
-      return visitImplDeclNameArgumentsSyntax
+      return {
+        self.visitImpl($0, DeclNameArgumentsSyntax.self, self.visit)
+      }
     case .declReferenceExpr:
-      return visitImplDeclReferenceExprSyntax
+      return {
+        self.visitImpl($0, DeclReferenceExprSyntax.self, self.visit)
+      }
     case .deferStmt:
-      return visitImplDeferStmtSyntax
+      return {
+        self.visitImpl($0, DeferStmtSyntax.self, self.visit)
+      }
     case .deinitializerDecl:
-      return visitImplDeinitializerDeclSyntax
+      return {
+        self.visitImpl($0, DeinitializerDeclSyntax.self, self.visit)
+      }
     case .deinitializerEffectSpecifiers:
-      return visitImplDeinitializerEffectSpecifiersSyntax
+      return {
+        self.visitImpl($0, DeinitializerEffectSpecifiersSyntax.self, self.visit)
+      }
     case .derivativeAttributeArguments:
-      return visitImplDerivativeAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, DerivativeAttributeArgumentsSyntax.self, self.visit)
+      }
     case .designatedTypeList:
-      return visitImplDesignatedTypeListSyntax
+      return {
+        self.visitImpl($0, DesignatedTypeListSyntax.self, self.visit)
+      }
     case .designatedType:
-      return visitImplDesignatedTypeSyntax
+      return {
+        self.visitImpl($0, DesignatedTypeSyntax.self, self.visit)
+      }
     case .dictionaryElementList:
-      return visitImplDictionaryElementListSyntax
+      return {
+        self.visitImpl($0, DictionaryElementListSyntax.self, self.visit)
+      }
     case .dictionaryElement:
-      return visitImplDictionaryElementSyntax
+      return {
+        self.visitImpl($0, DictionaryElementSyntax.self, self.visit)
+      }
     case .dictionaryExpr:
-      return visitImplDictionaryExprSyntax
+      return {
+        self.visitImpl($0, DictionaryExprSyntax.self, self.visit)
+      }
     case .dictionaryType:
-      return visitImplDictionaryTypeSyntax
+      return {
+        self.visitImpl($0, DictionaryTypeSyntax.self, self.visit)
+      }
     case .differentiabilityArgumentList:
-      return visitImplDifferentiabilityArgumentListSyntax
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentListSyntax.self, self.visit)
+      }
     case .differentiabilityArgument:
-      return visitImplDifferentiabilityArgumentSyntax
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentSyntax.self, self.visit)
+      }
     case .differentiabilityArguments:
-      return visitImplDifferentiabilityArgumentsSyntax
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentsSyntax.self, self.visit)
+      }
     case .differentiabilityWithRespectToArgument:
-      return visitImplDifferentiabilityWithRespectToArgumentSyntax
+      return {
+        self.visitImpl($0, DifferentiabilityWithRespectToArgumentSyntax.self, self.visit)
+      }
     case .differentiableAttributeArguments:
-      return visitImplDifferentiableAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, DifferentiableAttributeArgumentsSyntax.self, self.visit)
+      }
     case .discardAssignmentExpr:
-      return visitImplDiscardAssignmentExprSyntax
+      return {
+        self.visitImpl($0, DiscardAssignmentExprSyntax.self, self.visit)
+      }
     case .discardStmt:
-      return visitImplDiscardStmtSyntax
+      return {
+        self.visitImpl($0, DiscardStmtSyntax.self, self.visit)
+      }
     case .doStmt:
-      return visitImplDoStmtSyntax
+      return {
+        self.visitImpl($0, DoStmtSyntax.self, self.visit)
+      }
     case .documentationAttributeArgumentList:
-      return visitImplDocumentationAttributeArgumentListSyntax
+      return {
+        self.visitImpl($0, DocumentationAttributeArgumentListSyntax.self, self.visit)
+      }
     case .documentationAttributeArgument:
-      return visitImplDocumentationAttributeArgumentSyntax
+      return {
+        self.visitImpl($0, DocumentationAttributeArgumentSyntax.self, self.visit)
+      }
     case .dynamicReplacementAttributeArguments:
-      return visitImplDynamicReplacementAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, DynamicReplacementAttributeArgumentsSyntax.self, self.visit)
+      }
     case .editorPlaceholderDecl:
-      return visitImplEditorPlaceholderDeclSyntax
+      return {
+        self.visitImpl($0, EditorPlaceholderDeclSyntax.self, self.visit)
+      }
     case .editorPlaceholderExpr:
-      return visitImplEditorPlaceholderExprSyntax
+      return {
+        self.visitImpl($0, EditorPlaceholderExprSyntax.self, self.visit)
+      }
     case .effectsAttributeArgumentList:
-      return visitImplEffectsAttributeArgumentListSyntax
+      return {
+        self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visit)
+      }
     case .enumCaseDecl:
-      return visitImplEnumCaseDeclSyntax
+      return {
+        self.visitImpl($0, EnumCaseDeclSyntax.self, self.visit)
+      }
     case .enumCaseElementList:
-      return visitImplEnumCaseElementListSyntax
+      return {
+        self.visitImpl($0, EnumCaseElementListSyntax.self, self.visit)
+      }
     case .enumCaseElement:
-      return visitImplEnumCaseElementSyntax
+      return {
+        self.visitImpl($0, EnumCaseElementSyntax.self, self.visit)
+      }
     case .enumCaseParameterClause:
-      return visitImplEnumCaseParameterClauseSyntax
+      return {
+        self.visitImpl($0, EnumCaseParameterClauseSyntax.self, self.visit)
+      }
     case .enumCaseParameterList:
-      return visitImplEnumCaseParameterListSyntax
+      return {
+        self.visitImpl($0, EnumCaseParameterListSyntax.self, self.visit)
+      }
     case .enumCaseParameter:
-      return visitImplEnumCaseParameterSyntax
+      return {
+        self.visitImpl($0, EnumCaseParameterSyntax.self, self.visit)
+      }
     case .enumDecl:
-      return visitImplEnumDeclSyntax
+      return {
+        self.visitImpl($0, EnumDeclSyntax.self, self.visit)
+      }
     case .exposeAttributeArguments:
-      return visitImplExposeAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, ExposeAttributeArgumentsSyntax.self, self.visit)
+      }
     case .exprList:
-      return visitImplExprListSyntax
+      return {
+        self.visitImpl($0, ExprListSyntax.self, self.visit)
+      }
     case .expressionPattern:
-      return visitImplExpressionPatternSyntax
+      return {
+        self.visitImpl($0, ExpressionPatternSyntax.self, self.visit)
+      }
     case .expressionSegment:
-      return visitImplExpressionSegmentSyntax
+      return {
+        self.visitImpl($0, ExpressionSegmentSyntax.self, self.visit)
+      }
     case .expressionStmt:
-      return visitImplExpressionStmtSyntax
+      return {
+        self.visitImpl($0, ExpressionStmtSyntax.self, self.visit)
+      }
     case .extensionDecl:
-      return visitImplExtensionDeclSyntax
+      return {
+        self.visitImpl($0, ExtensionDeclSyntax.self, self.visit)
+      }
     case .fallThroughStmt:
-      return visitImplFallThroughStmtSyntax
+      return {
+        self.visitImpl($0, FallThroughStmtSyntax.self, self.visit)
+      }
     case .floatLiteralExpr:
-      return visitImplFloatLiteralExprSyntax
+      return {
+        self.visitImpl($0, FloatLiteralExprSyntax.self, self.visit)
+      }
     case .forStmt:
-      return visitImplForStmtSyntax
+      return {
+        self.visitImpl($0, ForStmtSyntax.self, self.visit)
+      }
     case .forceUnwrapExpr:
-      return visitImplForceUnwrapExprSyntax
+      return {
+        self.visitImpl($0, ForceUnwrapExprSyntax.self, self.visit)
+      }
     case .functionCallExpr:
-      return visitImplFunctionCallExprSyntax
+      return {
+        self.visitImpl($0, FunctionCallExprSyntax.self, self.visit)
+      }
     case .functionDecl:
-      return visitImplFunctionDeclSyntax
+      return {
+        self.visitImpl($0, FunctionDeclSyntax.self, self.visit)
+      }
     case .functionEffectSpecifiers:
-      return visitImplFunctionEffectSpecifiersSyntax
+      return {
+        self.visitImpl($0, FunctionEffectSpecifiersSyntax.self, self.visit)
+      }
     case .functionParameterClause:
-      return visitImplFunctionParameterClauseSyntax
+      return {
+        self.visitImpl($0, FunctionParameterClauseSyntax.self, self.visit)
+      }
     case .functionParameterList:
-      return visitImplFunctionParameterListSyntax
+      return {
+        self.visitImpl($0, FunctionParameterListSyntax.self, self.visit)
+      }
     case .functionParameter:
-      return visitImplFunctionParameterSyntax
+      return {
+        self.visitImpl($0, FunctionParameterSyntax.self, self.visit)
+      }
     case .functionSignature:
-      return visitImplFunctionSignatureSyntax
+      return {
+        self.visitImpl($0, FunctionSignatureSyntax.self, self.visit)
+      }
     case .functionType:
-      return visitImplFunctionTypeSyntax
+      return {
+        self.visitImpl($0, FunctionTypeSyntax.self, self.visit)
+      }
     case .genericArgumentClause:
-      return visitImplGenericArgumentClauseSyntax
+      return {
+        self.visitImpl($0, GenericArgumentClauseSyntax.self, self.visit)
+      }
     case .genericArgumentList:
-      return visitImplGenericArgumentListSyntax
+      return {
+        self.visitImpl($0, GenericArgumentListSyntax.self, self.visit)
+      }
     case .genericArgument:
-      return visitImplGenericArgumentSyntax
+      return {
+        self.visitImpl($0, GenericArgumentSyntax.self, self.visit)
+      }
     case .genericParameterClause:
-      return visitImplGenericParameterClauseSyntax
+      return {
+        self.visitImpl($0, GenericParameterClauseSyntax.self, self.visit)
+      }
     case .genericParameterList:
-      return visitImplGenericParameterListSyntax
+      return {
+        self.visitImpl($0, GenericParameterListSyntax.self, self.visit)
+      }
     case .genericParameter:
-      return visitImplGenericParameterSyntax
+      return {
+        self.visitImpl($0, GenericParameterSyntax.self, self.visit)
+      }
     case .genericRequirementList:
-      return visitImplGenericRequirementListSyntax
+      return {
+        self.visitImpl($0, GenericRequirementListSyntax.self, self.visit)
+      }
     case .genericRequirement:
-      return visitImplGenericRequirementSyntax
+      return {
+        self.visitImpl($0, GenericRequirementSyntax.self, self.visit)
+      }
     case .genericSpecializationExpr:
-      return visitImplGenericSpecializationExprSyntax
+      return {
+        self.visitImpl($0, GenericSpecializationExprSyntax.self, self.visit)
+      }
     case .genericWhereClause:
-      return visitImplGenericWhereClauseSyntax
+      return {
+        self.visitImpl($0, GenericWhereClauseSyntax.self, self.visit)
+      }
     case .guardStmt:
-      return visitImplGuardStmtSyntax
+      return {
+        self.visitImpl($0, GuardStmtSyntax.self, self.visit)
+      }
     case .identifierPattern:
-      return visitImplIdentifierPatternSyntax
+      return {
+        self.visitImpl($0, IdentifierPatternSyntax.self, self.visit)
+      }
     case .identifierType:
-      return visitImplIdentifierTypeSyntax
+      return {
+        self.visitImpl($0, IdentifierTypeSyntax.self, self.visit)
+      }
     case .ifConfigClauseList:
-      return visitImplIfConfigClauseListSyntax
+      return {
+        self.visitImpl($0, IfConfigClauseListSyntax.self, self.visit)
+      }
     case .ifConfigClause:
-      return visitImplIfConfigClauseSyntax
+      return {
+        self.visitImpl($0, IfConfigClauseSyntax.self, self.visit)
+      }
     case .ifConfigDecl:
-      return visitImplIfConfigDeclSyntax
+      return {
+        self.visitImpl($0, IfConfigDeclSyntax.self, self.visit)
+      }
     case .ifExpr:
-      return visitImplIfExprSyntax
+      return {
+        self.visitImpl($0, IfExprSyntax.self, self.visit)
+      }
     case .implementsAttributeArguments:
-      return visitImplImplementsAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, ImplementsAttributeArgumentsSyntax.self, self.visit)
+      }
     case .implicitlyUnwrappedOptionalType:
-      return visitImplImplicitlyUnwrappedOptionalTypeSyntax
+      return {
+        self.visitImpl($0, ImplicitlyUnwrappedOptionalTypeSyntax.self, self.visit)
+      }
     case .importDecl:
-      return visitImplImportDeclSyntax
+      return {
+        self.visitImpl($0, ImportDeclSyntax.self, self.visit)
+      }
     case .importPathComponentList:
-      return visitImplImportPathComponentListSyntax
+      return {
+        self.visitImpl($0, ImportPathComponentListSyntax.self, self.visit)
+      }
     case .importPathComponent:
-      return visitImplImportPathComponentSyntax
+      return {
+        self.visitImpl($0, ImportPathComponentSyntax.self, self.visit)
+      }
     case .inOutExpr:
-      return visitImplInOutExprSyntax
+      return {
+        self.visitImpl($0, InOutExprSyntax.self, self.visit)
+      }
     case .infixOperatorExpr:
-      return visitImplInfixOperatorExprSyntax
+      return {
+        self.visitImpl($0, InfixOperatorExprSyntax.self, self.visit)
+      }
     case .inheritanceClause:
-      return visitImplInheritanceClauseSyntax
+      return {
+        self.visitImpl($0, InheritanceClauseSyntax.self, self.visit)
+      }
     case .inheritedTypeList:
-      return visitImplInheritedTypeListSyntax
+      return {
+        self.visitImpl($0, InheritedTypeListSyntax.self, self.visit)
+      }
     case .inheritedType:
-      return visitImplInheritedTypeSyntax
+      return {
+        self.visitImpl($0, InheritedTypeSyntax.self, self.visit)
+      }
     case .initializerClause:
-      return visitImplInitializerClauseSyntax
+      return {
+        self.visitImpl($0, InitializerClauseSyntax.self, self.visit)
+      }
     case .initializerDecl:
-      return visitImplInitializerDeclSyntax
+      return {
+        self.visitImpl($0, InitializerDeclSyntax.self, self.visit)
+      }
     case .integerLiteralExpr:
-      return visitImplIntegerLiteralExprSyntax
+      return {
+        self.visitImpl($0, IntegerLiteralExprSyntax.self, self.visit)
+      }
     case .isExpr:
-      return visitImplIsExprSyntax
+      return {
+        self.visitImpl($0, IsExprSyntax.self, self.visit)
+      }
     case .isTypePattern:
-      return visitImplIsTypePatternSyntax
+      return {
+        self.visitImpl($0, IsTypePatternSyntax.self, self.visit)
+      }
     case .keyPathComponentList:
-      return visitImplKeyPathComponentListSyntax
+      return {
+        self.visitImpl($0, KeyPathComponentListSyntax.self, self.visit)
+      }
     case .keyPathComponent:
-      return visitImplKeyPathComponentSyntax
+      return {
+        self.visitImpl($0, KeyPathComponentSyntax.self, self.visit)
+      }
     case .keyPathExpr:
-      return visitImplKeyPathExprSyntax
+      return {
+        self.visitImpl($0, KeyPathExprSyntax.self, self.visit)
+      }
     case .keyPathOptionalComponent:
-      return visitImplKeyPathOptionalComponentSyntax
+      return {
+        self.visitImpl($0, KeyPathOptionalComponentSyntax.self, self.visit)
+      }
     case .keyPathPropertyComponent:
-      return visitImplKeyPathPropertyComponentSyntax
+      return {
+        self.visitImpl($0, KeyPathPropertyComponentSyntax.self, self.visit)
+      }
     case .keyPathSubscriptComponent:
-      return visitImplKeyPathSubscriptComponentSyntax
+      return {
+        self.visitImpl($0, KeyPathSubscriptComponentSyntax.self, self.visit)
+      }
     case .labeledExprList:
-      return visitImplLabeledExprListSyntax
+      return {
+        self.visitImpl($0, LabeledExprListSyntax.self, self.visit)
+      }
     case .labeledExpr:
-      return visitImplLabeledExprSyntax
+      return {
+        self.visitImpl($0, LabeledExprSyntax.self, self.visit)
+      }
     case .labeledSpecializeArgument:
-      return visitImplLabeledSpecializeArgumentSyntax
+      return {
+        self.visitImpl($0, LabeledSpecializeArgumentSyntax.self, self.visit)
+      }
     case .labeledStmt:
-      return visitImplLabeledStmtSyntax
+      return {
+        self.visitImpl($0, LabeledStmtSyntax.self, self.visit)
+      }
     case .layoutRequirement:
-      return visitImplLayoutRequirementSyntax
+      return {
+        self.visitImpl($0, LayoutRequirementSyntax.self, self.visit)
+      }
     case .macroDecl:
-      return visitImplMacroDeclSyntax
+      return {
+        self.visitImpl($0, MacroDeclSyntax.self, self.visit)
+      }
     case .macroExpansionDecl:
-      return visitImplMacroExpansionDeclSyntax
+      return {
+        self.visitImpl($0, MacroExpansionDeclSyntax.self, self.visit)
+      }
     case .macroExpansionExpr:
-      return visitImplMacroExpansionExprSyntax
+      return {
+        self.visitImpl($0, MacroExpansionExprSyntax.self, self.visit)
+      }
     case .matchingPatternCondition:
-      return visitImplMatchingPatternConditionSyntax
+      return {
+        self.visitImpl($0, MatchingPatternConditionSyntax.self, self.visit)
+      }
     case .memberAccessExpr:
-      return visitImplMemberAccessExprSyntax
+      return {
+        self.visitImpl($0, MemberAccessExprSyntax.self, self.visit)
+      }
     case .memberBlockItemList:
-      return visitImplMemberBlockItemListSyntax
+      return {
+        self.visitImpl($0, MemberBlockItemListSyntax.self, self.visit)
+      }
     case .memberBlockItem:
-      return visitImplMemberBlockItemSyntax
+      return {
+        self.visitImpl($0, MemberBlockItemSyntax.self, self.visit)
+      }
     case .memberBlock:
-      return visitImplMemberBlockSyntax
+      return {
+        self.visitImpl($0, MemberBlockSyntax.self, self.visit)
+      }
     case .memberType:
-      return visitImplMemberTypeSyntax
+      return {
+        self.visitImpl($0, MemberTypeSyntax.self, self.visit)
+      }
     case .metatypeType:
-      return visitImplMetatypeTypeSyntax
+      return {
+        self.visitImpl($0, MetatypeTypeSyntax.self, self.visit)
+      }
     case .missingDecl:
-      return visitImplMissingDeclSyntax
+      return {
+        self.visitImpl($0, MissingDeclSyntax.self, self.visit)
+      }
     case .missingExpr:
-      return visitImplMissingExprSyntax
+      return {
+        self.visitImpl($0, MissingExprSyntax.self, self.visit)
+      }
     case .missingPattern:
-      return visitImplMissingPatternSyntax
+      return {
+        self.visitImpl($0, MissingPatternSyntax.self, self.visit)
+      }
     case .missingStmt:
-      return visitImplMissingStmtSyntax
+      return {
+        self.visitImpl($0, MissingStmtSyntax.self, self.visit)
+      }
     case .missing:
-      return visitImplMissingSyntax
+      return {
+        self.visitImpl($0, MissingSyntax.self, self.visit)
+      }
     case .missingType:
-      return visitImplMissingTypeSyntax
+      return {
+        self.visitImpl($0, MissingTypeSyntax.self, self.visit)
+      }
     case .multipleTrailingClosureElementList:
-      return visitImplMultipleTrailingClosureElementListSyntax
+      return {
+        self.visitImpl($0, MultipleTrailingClosureElementListSyntax.self, self.visit)
+      }
     case .multipleTrailingClosureElement:
-      return visitImplMultipleTrailingClosureElementSyntax
+      return {
+        self.visitImpl($0, MultipleTrailingClosureElementSyntax.self, self.visit)
+      }
     case .namedOpaqueReturnType:
-      return visitImplNamedOpaqueReturnTypeSyntax
+      return {
+        self.visitImpl($0, NamedOpaqueReturnTypeSyntax.self, self.visit)
+      }
     case .nilLiteralExpr:
-      return visitImplNilLiteralExprSyntax
+      return {
+        self.visitImpl($0, NilLiteralExprSyntax.self, self.visit)
+      }
     case .objCSelectorPieceList:
-      return visitImplObjCSelectorPieceListSyntax
+      return {
+        self.visitImpl($0, ObjCSelectorPieceListSyntax.self, self.visit)
+      }
     case .objCSelectorPiece:
-      return visitImplObjCSelectorPieceSyntax
+      return {
+        self.visitImpl($0, ObjCSelectorPieceSyntax.self, self.visit)
+      }
     case .opaqueReturnTypeOfAttributeArguments:
-      return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, self.visit)
+      }
     case .operatorDecl:
-      return visitImplOperatorDeclSyntax
+      return {
+        self.visitImpl($0, OperatorDeclSyntax.self, self.visit)
+      }
     case .operatorPrecedenceAndTypes:
-      return visitImplOperatorPrecedenceAndTypesSyntax
+      return {
+        self.visitImpl($0, OperatorPrecedenceAndTypesSyntax.self, self.visit)
+      }
     case .optionalBindingCondition:
-      return visitImplOptionalBindingConditionSyntax
+      return {
+        self.visitImpl($0, OptionalBindingConditionSyntax.self, self.visit)
+      }
     case .optionalChainingExpr:
-      return visitImplOptionalChainingExprSyntax
+      return {
+        self.visitImpl($0, OptionalChainingExprSyntax.self, self.visit)
+      }
     case .optionalType:
-      return visitImplOptionalTypeSyntax
+      return {
+        self.visitImpl($0, OptionalTypeSyntax.self, self.visit)
+      }
     case .originallyDefinedInAttributeArguments:
-      return visitImplOriginallyDefinedInAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, OriginallyDefinedInAttributeArgumentsSyntax.self, self.visit)
+      }
     case .packElementExpr:
-      return visitImplPackElementExprSyntax
+      return {
+        self.visitImpl($0, PackElementExprSyntax.self, self.visit)
+      }
     case .packElementType:
-      return visitImplPackElementTypeSyntax
+      return {
+        self.visitImpl($0, PackElementTypeSyntax.self, self.visit)
+      }
     case .packExpansionExpr:
-      return visitImplPackExpansionExprSyntax
+      return {
+        self.visitImpl($0, PackExpansionExprSyntax.self, self.visit)
+      }
     case .packExpansionType:
-      return visitImplPackExpansionTypeSyntax
+      return {
+        self.visitImpl($0, PackExpansionTypeSyntax.self, self.visit)
+      }
     case .patternBindingList:
-      return visitImplPatternBindingListSyntax
+      return {
+        self.visitImpl($0, PatternBindingListSyntax.self, self.visit)
+      }
     case .patternBinding:
-      return visitImplPatternBindingSyntax
+      return {
+        self.visitImpl($0, PatternBindingSyntax.self, self.visit)
+      }
     case .patternExpr:
-      return visitImplPatternExprSyntax
+      return {
+        self.visitImpl($0, PatternExprSyntax.self, self.visit)
+      }
     case .platformVersionItemList:
-      return visitImplPlatformVersionItemListSyntax
+      return {
+        self.visitImpl($0, PlatformVersionItemListSyntax.self, self.visit)
+      }
     case .platformVersionItem:
-      return visitImplPlatformVersionItemSyntax
+      return {
+        self.visitImpl($0, PlatformVersionItemSyntax.self, self.visit)
+      }
     case .platformVersion:
-      return visitImplPlatformVersionSyntax
+      return {
+        self.visitImpl($0, PlatformVersionSyntax.self, self.visit)
+      }
     case .postfixIfConfigExpr:
-      return visitImplPostfixIfConfigExprSyntax
+      return {
+        self.visitImpl($0, PostfixIfConfigExprSyntax.self, self.visit)
+      }
     case .postfixOperatorExpr:
-      return visitImplPostfixOperatorExprSyntax
+      return {
+        self.visitImpl($0, PostfixOperatorExprSyntax.self, self.visit)
+      }
     case .poundSourceLocationArguments:
-      return visitImplPoundSourceLocationArgumentsSyntax
+      return {
+        self.visitImpl($0, PoundSourceLocationArgumentsSyntax.self, self.visit)
+      }
     case .poundSourceLocation:
-      return visitImplPoundSourceLocationSyntax
+      return {
+        self.visitImpl($0, PoundSourceLocationSyntax.self, self.visit)
+      }
     case .precedenceGroupAssignment:
-      return visitImplPrecedenceGroupAssignmentSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupAssignmentSyntax.self, self.visit)
+      }
     case .precedenceGroupAssociativity:
-      return visitImplPrecedenceGroupAssociativitySyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupAssociativitySyntax.self, self.visit)
+      }
     case .precedenceGroupAttributeList:
-      return visitImplPrecedenceGroupAttributeListSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupAttributeListSyntax.self, self.visit)
+      }
     case .precedenceGroupDecl:
-      return visitImplPrecedenceGroupDeclSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupDeclSyntax.self, self.visit)
+      }
     case .precedenceGroupNameList:
-      return visitImplPrecedenceGroupNameListSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupNameListSyntax.self, self.visit)
+      }
     case .precedenceGroupName:
-      return visitImplPrecedenceGroupNameSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupNameSyntax.self, self.visit)
+      }
     case .precedenceGroupRelation:
-      return visitImplPrecedenceGroupRelationSyntax
+      return {
+        self.visitImpl($0, PrecedenceGroupRelationSyntax.self, self.visit)
+      }
     case .prefixOperatorExpr:
-      return visitImplPrefixOperatorExprSyntax
+      return {
+        self.visitImpl($0, PrefixOperatorExprSyntax.self, self.visit)
+      }
     case .primaryAssociatedTypeClause:
-      return visitImplPrimaryAssociatedTypeClauseSyntax
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeClauseSyntax.self, self.visit)
+      }
     case .primaryAssociatedTypeList:
-      return visitImplPrimaryAssociatedTypeListSyntax
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeListSyntax.self, self.visit)
+      }
     case .primaryAssociatedType:
-      return visitImplPrimaryAssociatedTypeSyntax
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeSyntax.self, self.visit)
+      }
     case .protocolDecl:
-      return visitImplProtocolDeclSyntax
+      return {
+        self.visitImpl($0, ProtocolDeclSyntax.self, self.visit)
+      }
     case .regexLiteralExpr:
-      return visitImplRegexLiteralExprSyntax
+      return {
+        self.visitImpl($0, RegexLiteralExprSyntax.self, self.visit)
+      }
     case .repeatStmt:
-      return visitImplRepeatStmtSyntax
+      return {
+        self.visitImpl($0, RepeatStmtSyntax.self, self.visit)
+      }
     case .returnClause:
-      return visitImplReturnClauseSyntax
+      return {
+        self.visitImpl($0, ReturnClauseSyntax.self, self.visit)
+      }
     case .returnStmt:
-      return visitImplReturnStmtSyntax
+      return {
+        self.visitImpl($0, ReturnStmtSyntax.self, self.visit)
+      }
     case .sameTypeRequirement:
-      return visitImplSameTypeRequirementSyntax
+      return {
+        self.visitImpl($0, SameTypeRequirementSyntax.self, self.visit)
+      }
     case .sequenceExpr:
-      return visitImplSequenceExprSyntax
+      return {
+        self.visitImpl($0, SequenceExprSyntax.self, self.visit)
+      }
     case .simpleStringLiteralExpr:
-      return visitImplSimpleStringLiteralExprSyntax
+      return {
+        self.visitImpl($0, SimpleStringLiteralExprSyntax.self, self.visit)
+      }
     case .simpleStringLiteralSegmentList:
-      return visitImplSimpleStringLiteralSegmentListSyntax
+      return {
+        self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit)
+      }
     case .someOrAnyType:
-      return visitImplSomeOrAnyTypeSyntax
+      return {
+        self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit)
+      }
     case .sourceFile:
-      return visitImplSourceFileSyntax
+      return {
+        self.visitImpl($0, SourceFileSyntax.self, self.visit)
+      }
     case .specializeAttributeArgumentList:
-      return visitImplSpecializeAttributeArgumentListSyntax
+      return {
+        self.visitImpl($0, SpecializeAttributeArgumentListSyntax.self, self.visit)
+      }
     case .specializeAvailabilityArgument:
-      return visitImplSpecializeAvailabilityArgumentSyntax
+      return {
+        self.visitImpl($0, SpecializeAvailabilityArgumentSyntax.self, self.visit)
+      }
     case .specializeTargetFunctionArgument:
-      return visitImplSpecializeTargetFunctionArgumentSyntax
+      return {
+        self.visitImpl($0, SpecializeTargetFunctionArgumentSyntax.self, self.visit)
+      }
     case .stringLiteralExpr:
-      return visitImplStringLiteralExprSyntax
+      return {
+        self.visitImpl($0, StringLiteralExprSyntax.self, self.visit)
+      }
     case .stringLiteralSegmentList:
-      return visitImplStringLiteralSegmentListSyntax
+      return {
+        self.visitImpl($0, StringLiteralSegmentListSyntax.self, self.visit)
+      }
     case .stringSegment:
-      return visitImplStringSegmentSyntax
+      return {
+        self.visitImpl($0, StringSegmentSyntax.self, self.visit)
+      }
     case .structDecl:
-      return visitImplStructDeclSyntax
+      return {
+        self.visitImpl($0, StructDeclSyntax.self, self.visit)
+      }
     case .subscriptCallExpr:
-      return visitImplSubscriptCallExprSyntax
+      return {
+        self.visitImpl($0, SubscriptCallExprSyntax.self, self.visit)
+      }
     case .subscriptDecl:
-      return visitImplSubscriptDeclSyntax
+      return {
+        self.visitImpl($0, SubscriptDeclSyntax.self, self.visit)
+      }
     case .superExpr:
-      return visitImplSuperExprSyntax
+      return {
+        self.visitImpl($0, SuperExprSyntax.self, self.visit)
+      }
     case .suppressedType:
-      return visitImplSuppressedTypeSyntax
+      return {
+        self.visitImpl($0, SuppressedTypeSyntax.self, self.visit)
+      }
     case .switchCaseItemList:
-      return visitImplSwitchCaseItemListSyntax
+      return {
+        self.visitImpl($0, SwitchCaseItemListSyntax.self, self.visit)
+      }
     case .switchCaseItem:
-      return visitImplSwitchCaseItemSyntax
+      return {
+        self.visitImpl($0, SwitchCaseItemSyntax.self, self.visit)
+      }
     case .switchCaseLabel:
-      return visitImplSwitchCaseLabelSyntax
+      return {
+        self.visitImpl($0, SwitchCaseLabelSyntax.self, self.visit)
+      }
     case .switchCaseList:
-      return visitImplSwitchCaseListSyntax
+      return {
+        self.visitImpl($0, SwitchCaseListSyntax.self, self.visit)
+      }
     case .switchCase:
-      return visitImplSwitchCaseSyntax
+      return {
+        self.visitImpl($0, SwitchCaseSyntax.self, self.visit)
+      }
     case .switchDefaultLabel:
-      return visitImplSwitchDefaultLabelSyntax
+      return {
+        self.visitImpl($0, SwitchDefaultLabelSyntax.self, self.visit)
+      }
     case .switchExpr:
-      return visitImplSwitchExprSyntax
+      return {
+        self.visitImpl($0, SwitchExprSyntax.self, self.visit)
+      }
     case .ternaryExpr:
-      return visitImplTernaryExprSyntax
+      return {
+        self.visitImpl($0, TernaryExprSyntax.self, self.visit)
+      }
     case .throwStmt:
-      return visitImplThrowStmtSyntax
+      return {
+        self.visitImpl($0, ThrowStmtSyntax.self, self.visit)
+      }
     case .tryExpr:
-      return visitImplTryExprSyntax
+      return {
+        self.visitImpl($0, TryExprSyntax.self, self.visit)
+      }
     case .tupleExpr:
-      return visitImplTupleExprSyntax
+      return {
+        self.visitImpl($0, TupleExprSyntax.self, self.visit)
+      }
     case .tuplePatternElementList:
-      return visitImplTuplePatternElementListSyntax
+      return {
+        self.visitImpl($0, TuplePatternElementListSyntax.self, self.visit)
+      }
     case .tuplePatternElement:
-      return visitImplTuplePatternElementSyntax
+      return {
+        self.visitImpl($0, TuplePatternElementSyntax.self, self.visit)
+      }
     case .tuplePattern:
-      return visitImplTuplePatternSyntax
+      return {
+        self.visitImpl($0, TuplePatternSyntax.self, self.visit)
+      }
     case .tupleTypeElementList:
-      return visitImplTupleTypeElementListSyntax
+      return {
+        self.visitImpl($0, TupleTypeElementListSyntax.self, self.visit)
+      }
     case .tupleTypeElement:
-      return visitImplTupleTypeElementSyntax
+      return {
+        self.visitImpl($0, TupleTypeElementSyntax.self, self.visit)
+      }
     case .tupleType:
-      return visitImplTupleTypeSyntax
+      return {
+        self.visitImpl($0, TupleTypeSyntax.self, self.visit)
+      }
     case .typeAliasDecl:
-      return visitImplTypeAliasDeclSyntax
+      return {
+        self.visitImpl($0, TypeAliasDeclSyntax.self, self.visit)
+      }
     case .typeAnnotation:
-      return visitImplTypeAnnotationSyntax
+      return {
+        self.visitImpl($0, TypeAnnotationSyntax.self, self.visit)
+      }
     case .typeEffectSpecifiers:
-      return visitImplTypeEffectSpecifiersSyntax
+      return {
+        self.visitImpl($0, TypeEffectSpecifiersSyntax.self, self.visit)
+      }
     case .typeExpr:
-      return visitImplTypeExprSyntax
+      return {
+        self.visitImpl($0, TypeExprSyntax.self, self.visit)
+      }
     case .typeInitializerClause:
-      return visitImplTypeInitializerClauseSyntax
+      return {
+        self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit)
+      }
     case .unavailableFromAsyncAttributeArguments:
-      return visitImplUnavailableFromAsyncAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visit)
+      }
     case .underscorePrivateAttributeArguments:
-      return visitImplUnderscorePrivateAttributeArgumentsSyntax
+      return {
+        self.visitImpl($0, UnderscorePrivateAttributeArgumentsSyntax.self, self.visit)
+      }
     case .unexpectedNodes:
-      return visitImplUnexpectedNodesSyntax
+      return {
+        self.visitImpl($0, UnexpectedNodesSyntax.self, self.visit)
+      }
     case .unresolvedAsExpr:
-      return visitImplUnresolvedAsExprSyntax
+      return {
+        self.visitImpl($0, UnresolvedAsExprSyntax.self, self.visit)
+      }
     case .unresolvedIsExpr:
-      return visitImplUnresolvedIsExprSyntax
+      return {
+        self.visitImpl($0, UnresolvedIsExprSyntax.self, self.visit)
+      }
     case .unresolvedTernaryExpr:
-      return visitImplUnresolvedTernaryExprSyntax
+      return {
+        self.visitImpl($0, UnresolvedTernaryExprSyntax.self, self.visit)
+      }
     case .valueBindingPattern:
-      return visitImplValueBindingPatternSyntax
+      return {
+        self.visitImpl($0, ValueBindingPatternSyntax.self, self.visit)
+      }
     case .variableDecl:
-      return visitImplVariableDeclSyntax
+      return {
+        self.visitImpl($0, VariableDeclSyntax.self, self.visit)
+      }
     case .versionComponentList:
-      return visitImplVersionComponentListSyntax
+      return {
+        self.visitImpl($0, VersionComponentListSyntax.self, self.visit)
+      }
     case .versionComponent:
-      return visitImplVersionComponentSyntax
+      return {
+        self.visitImpl($0, VersionComponentSyntax.self, self.visit)
+      }
     case .versionTuple:
-      return visitImplVersionTupleSyntax
+      return {
+        self.visitImpl($0, VersionTupleSyntax.self, self.visit)
+      }
     case .whereClause:
-      return visitImplWhereClauseSyntax
+      return {
+        self.visitImpl($0, WhereClauseSyntax.self, self.visit)
+      }
     case .whileStmt:
-      return visitImplWhileStmtSyntax
+      return {
+        self.visitImpl($0, WhileStmtSyntax.self, self.visit)
+      }
     case .wildcardPattern:
-      return visitImplWildcardPatternSyntax
+      return {
+        self.visitImpl($0, WildcardPatternSyntax.self, self.visit)
+      }
     case .yieldStmt:
-      return visitImplYieldStmtSyntax
+      return {
+        self.visitImpl($0, YieldStmtSyntax.self, self.visit)
+      }
     case .yieldedExpressionList:
-      return visitImplYieldedExpressionListSyntax
+      return {
+        self.visitImpl($0, YieldedExpressionListSyntax.self, self.visit)
+      }
     case .yieldedExpression:
-      return visitImplYieldedExpressionSyntax
+      return {
+        self.visitImpl($0, YieldedExpressionSyntax.self, self.visit)
+      }
     case .yieldedExpressionsClause:
-      return visitImplYieldedExpressionsClauseSyntax
+      return {
+        self.visitImpl($0, YieldedExpressionsClauseSyntax.self, self.visit)
+      }
     }
   }
   private func visit(_ data: SyntaxData) -> Syntax {
@@ -6491,557 +3198,557 @@ open class SyntaxRewriter {
   private func visit(_ data: SyntaxData) -> Syntax {
     switch data.raw.kind {
     case .token:
-      return visitImplTokenSyntax(data)
+      return visitImpl(data, TokenSyntax.self, visit)
     case .accessorBlock:
-      return visitImplAccessorBlockSyntax(data)
+      return visitImpl(data, AccessorBlockSyntax.self, visit)
     case .accessorDeclList:
-      return visitImplAccessorDeclListSyntax(data)
+      return visitImpl(data, AccessorDeclListSyntax.self, visit)
     case .accessorDecl:
-      return visitImplAccessorDeclSyntax(data)
+      return visitImpl(data, AccessorDeclSyntax.self, visit)
     case .accessorEffectSpecifiers:
-      return visitImplAccessorEffectSpecifiersSyntax(data)
+      return visitImpl(data, AccessorEffectSpecifiersSyntax.self, visit)
     case .accessorParameters:
-      return visitImplAccessorParametersSyntax(data)
+      return visitImpl(data, AccessorParametersSyntax.self, visit)
     case .actorDecl:
-      return visitImplActorDeclSyntax(data)
+      return visitImpl(data, ActorDeclSyntax.self, visit)
     case .arrayElementList:
-      return visitImplArrayElementListSyntax(data)
+      return visitImpl(data, ArrayElementListSyntax.self, visit)
     case .arrayElement:
-      return visitImplArrayElementSyntax(data)
+      return visitImpl(data, ArrayElementSyntax.self, visit)
     case .arrayExpr:
-      return visitImplArrayExprSyntax(data)
+      return visitImpl(data, ArrayExprSyntax.self, visit)
     case .arrayType:
-      return visitImplArrayTypeSyntax(data)
+      return visitImpl(data, ArrayTypeSyntax.self, visit)
     case .arrowExpr:
-      return visitImplArrowExprSyntax(data)
+      return visitImpl(data, ArrowExprSyntax.self, visit)
     case .asExpr:
-      return visitImplAsExprSyntax(data)
+      return visitImpl(data, AsExprSyntax.self, visit)
     case .assignmentExpr:
-      return visitImplAssignmentExprSyntax(data)
+      return visitImpl(data, AssignmentExprSyntax.self, visit)
     case .associatedTypeDecl:
-      return visitImplAssociatedTypeDeclSyntax(data)
+      return visitImpl(data, AssociatedTypeDeclSyntax.self, visit)
     case .attributeList:
-      return visitImplAttributeListSyntax(data)
+      return visitImpl(data, AttributeListSyntax.self, visit)
     case .attribute:
-      return visitImplAttributeSyntax(data)
+      return visitImpl(data, AttributeSyntax.self, visit)
     case .attributedType:
-      return visitImplAttributedTypeSyntax(data)
+      return visitImpl(data, AttributedTypeSyntax.self, visit)
     case .availabilityArgumentList:
-      return visitImplAvailabilityArgumentListSyntax(data)
+      return visitImpl(data, AvailabilityArgumentListSyntax.self, visit)
     case .availabilityArgument:
-      return visitImplAvailabilityArgumentSyntax(data)
+      return visitImpl(data, AvailabilityArgumentSyntax.self, visit)
     case .availabilityCondition:
-      return visitImplAvailabilityConditionSyntax(data)
+      return visitImpl(data, AvailabilityConditionSyntax.self, visit)
     case .availabilityLabeledArgument:
-      return visitImplAvailabilityLabeledArgumentSyntax(data)
+      return visitImpl(data, AvailabilityLabeledArgumentSyntax.self, visit)
     case .awaitExpr:
-      return visitImplAwaitExprSyntax(data)
+      return visitImpl(data, AwaitExprSyntax.self, visit)
     case .backDeployedAttributeArguments:
-      return visitImplBackDeployedAttributeArgumentsSyntax(data)
+      return visitImpl(data, BackDeployedAttributeArgumentsSyntax.self, visit)
     case .binaryOperatorExpr:
-      return visitImplBinaryOperatorExprSyntax(data)
+      return visitImpl(data, BinaryOperatorExprSyntax.self, visit)
     case .booleanLiteralExpr:
-      return visitImplBooleanLiteralExprSyntax(data)
+      return visitImpl(data, BooleanLiteralExprSyntax.self, visit)
     case .borrowExpr:
-      return visitImplBorrowExprSyntax(data)
+      return visitImpl(data, BorrowExprSyntax.self, visit)
     case .breakStmt:
-      return visitImplBreakStmtSyntax(data)
+      return visitImpl(data, BreakStmtSyntax.self, visit)
     case .canImportExpr:
-      return visitImplCanImportExprSyntax(data)
+      return visitImpl(data, CanImportExprSyntax.self, visit)
     case .canImportVersionInfo:
-      return visitImplCanImportVersionInfoSyntax(data)
+      return visitImpl(data, CanImportVersionInfoSyntax.self, visit)
     case .catchClauseList:
-      return visitImplCatchClauseListSyntax(data)
+      return visitImpl(data, CatchClauseListSyntax.self, visit)
     case .catchClause:
-      return visitImplCatchClauseSyntax(data)
+      return visitImpl(data, CatchClauseSyntax.self, visit)
     case .catchItemList:
-      return visitImplCatchItemListSyntax(data)
+      return visitImpl(data, CatchItemListSyntax.self, visit)
     case .catchItem:
-      return visitImplCatchItemSyntax(data)
+      return visitImpl(data, CatchItemSyntax.self, visit)
     case .classDecl:
-      return visitImplClassDeclSyntax(data)
+      return visitImpl(data, ClassDeclSyntax.self, visit)
     case .classRestrictionType:
-      return visitImplClassRestrictionTypeSyntax(data)
+      return visitImpl(data, ClassRestrictionTypeSyntax.self, visit)
     case .closureCaptureClause:
-      return visitImplClosureCaptureClauseSyntax(data)
+      return visitImpl(data, ClosureCaptureClauseSyntax.self, visit)
     case .closureCaptureList:
-      return visitImplClosureCaptureListSyntax(data)
+      return visitImpl(data, ClosureCaptureListSyntax.self, visit)
     case .closureCaptureSpecifier:
-      return visitImplClosureCaptureSpecifierSyntax(data)
+      return visitImpl(data, ClosureCaptureSpecifierSyntax.self, visit)
     case .closureCapture:
-      return visitImplClosureCaptureSyntax(data)
+      return visitImpl(data, ClosureCaptureSyntax.self, visit)
     case .closureExpr:
-      return visitImplClosureExprSyntax(data)
+      return visitImpl(data, ClosureExprSyntax.self, visit)
     case .closureParameterClause:
-      return visitImplClosureParameterClauseSyntax(data)
+      return visitImpl(data, ClosureParameterClauseSyntax.self, visit)
     case .closureParameterList:
-      return visitImplClosureParameterListSyntax(data)
+      return visitImpl(data, ClosureParameterListSyntax.self, visit)
     case .closureParameter:
-      return visitImplClosureParameterSyntax(data)
+      return visitImpl(data, ClosureParameterSyntax.self, visit)
     case .closureShorthandParameterList:
-      return visitImplClosureShorthandParameterListSyntax(data)
+      return visitImpl(data, ClosureShorthandParameterListSyntax.self, visit)
     case .closureShorthandParameter:
-      return visitImplClosureShorthandParameterSyntax(data)
+      return visitImpl(data, ClosureShorthandParameterSyntax.self, visit)
     case .closureSignature:
-      return visitImplClosureSignatureSyntax(data)
+      return visitImpl(data, ClosureSignatureSyntax.self, visit)
     case .codeBlockItemList:
-      return visitImplCodeBlockItemListSyntax(data)
+      return visitImpl(data, CodeBlockItemListSyntax.self, visit)
     case .codeBlockItem:
-      return visitImplCodeBlockItemSyntax(data)
+      return visitImpl(data, CodeBlockItemSyntax.self, visit)
     case .codeBlock:
-      return visitImplCodeBlockSyntax(data)
+      return visitImpl(data, CodeBlockSyntax.self, visit)
     case .compositionTypeElementList:
-      return visitImplCompositionTypeElementListSyntax(data)
+      return visitImpl(data, CompositionTypeElementListSyntax.self, visit)
     case .compositionTypeElement:
-      return visitImplCompositionTypeElementSyntax(data)
+      return visitImpl(data, CompositionTypeElementSyntax.self, visit)
     case .compositionType:
-      return visitImplCompositionTypeSyntax(data)
+      return visitImpl(data, CompositionTypeSyntax.self, visit)
     case .conditionElementList:
-      return visitImplConditionElementListSyntax(data)
+      return visitImpl(data, ConditionElementListSyntax.self, visit)
     case .conditionElement:
-      return visitImplConditionElementSyntax(data)
+      return visitImpl(data, ConditionElementSyntax.self, visit)
     case .conformanceRequirement:
-      return visitImplConformanceRequirementSyntax(data)
+      return visitImpl(data, ConformanceRequirementSyntax.self, visit)
     case .consumeExpr:
-      return visitImplConsumeExprSyntax(data)
+      return visitImpl(data, ConsumeExprSyntax.self, visit)
     case .continueStmt:
-      return visitImplContinueStmtSyntax(data)
+      return visitImpl(data, ContinueStmtSyntax.self, visit)
     case .conventionAttributeArguments:
-      return visitImplConventionAttributeArgumentsSyntax(data)
+      return visitImpl(data, ConventionAttributeArgumentsSyntax.self, visit)
     case .conventionWitnessMethodAttributeArguments:
-      return visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+      return visitImpl(data, ConventionWitnessMethodAttributeArgumentsSyntax.self, visit)
     case .copyExpr:
-      return visitImplCopyExprSyntax(data)
+      return visitImpl(data, CopyExprSyntax.self, visit)
     case .declModifierDetail:
-      return visitImplDeclModifierDetailSyntax(data)
+      return visitImpl(data, DeclModifierDetailSyntax.self, visit)
     case .declModifierList:
-      return visitImplDeclModifierListSyntax(data)
+      return visitImpl(data, DeclModifierListSyntax.self, visit)
     case .declModifier:
-      return visitImplDeclModifierSyntax(data)
+      return visitImpl(data, DeclModifierSyntax.self, visit)
     case .declNameArgumentList:
-      return visitImplDeclNameArgumentListSyntax(data)
+      return visitImpl(data, DeclNameArgumentListSyntax.self, visit)
     case .declNameArgument:
-      return visitImplDeclNameArgumentSyntax(data)
+      return visitImpl(data, DeclNameArgumentSyntax.self, visit)
     case .declNameArguments:
-      return visitImplDeclNameArgumentsSyntax(data)
+      return visitImpl(data, DeclNameArgumentsSyntax.self, visit)
     case .declReferenceExpr:
-      return visitImplDeclReferenceExprSyntax(data)
+      return visitImpl(data, DeclReferenceExprSyntax.self, visit)
     case .deferStmt:
-      return visitImplDeferStmtSyntax(data)
+      return visitImpl(data, DeferStmtSyntax.self, visit)
     case .deinitializerDecl:
-      return visitImplDeinitializerDeclSyntax(data)
+      return visitImpl(data, DeinitializerDeclSyntax.self, visit)
     case .deinitializerEffectSpecifiers:
-      return visitImplDeinitializerEffectSpecifiersSyntax(data)
+      return visitImpl(data, DeinitializerEffectSpecifiersSyntax.self, visit)
     case .derivativeAttributeArguments:
-      return visitImplDerivativeAttributeArgumentsSyntax(data)
+      return visitImpl(data, DerivativeAttributeArgumentsSyntax.self, visit)
     case .designatedTypeList:
-      return visitImplDesignatedTypeListSyntax(data)
+      return visitImpl(data, DesignatedTypeListSyntax.self, visit)
     case .designatedType:
-      return visitImplDesignatedTypeSyntax(data)
+      return visitImpl(data, DesignatedTypeSyntax.self, visit)
     case .dictionaryElementList:
-      return visitImplDictionaryElementListSyntax(data)
+      return visitImpl(data, DictionaryElementListSyntax.self, visit)
     case .dictionaryElement:
-      return visitImplDictionaryElementSyntax(data)
+      return visitImpl(data, DictionaryElementSyntax.self, visit)
     case .dictionaryExpr:
-      return visitImplDictionaryExprSyntax(data)
+      return visitImpl(data, DictionaryExprSyntax.self, visit)
     case .dictionaryType:
-      return visitImplDictionaryTypeSyntax(data)
+      return visitImpl(data, DictionaryTypeSyntax.self, visit)
     case .differentiabilityArgumentList:
-      return visitImplDifferentiabilityArgumentListSyntax(data)
+      return visitImpl(data, DifferentiabilityArgumentListSyntax.self, visit)
     case .differentiabilityArgument:
-      return visitImplDifferentiabilityArgumentSyntax(data)
+      return visitImpl(data, DifferentiabilityArgumentSyntax.self, visit)
     case .differentiabilityArguments:
-      return visitImplDifferentiabilityArgumentsSyntax(data)
+      return visitImpl(data, DifferentiabilityArgumentsSyntax.self, visit)
     case .differentiabilityWithRespectToArgument:
-      return visitImplDifferentiabilityWithRespectToArgumentSyntax(data)
+      return visitImpl(data, DifferentiabilityWithRespectToArgumentSyntax.self, visit)
     case .differentiableAttributeArguments:
-      return visitImplDifferentiableAttributeArgumentsSyntax(data)
+      return visitImpl(data, DifferentiableAttributeArgumentsSyntax.self, visit)
     case .discardAssignmentExpr:
-      return visitImplDiscardAssignmentExprSyntax(data)
+      return visitImpl(data, DiscardAssignmentExprSyntax.self, visit)
     case .discardStmt:
-      return visitImplDiscardStmtSyntax(data)
+      return visitImpl(data, DiscardStmtSyntax.self, visit)
     case .doStmt:
-      return visitImplDoStmtSyntax(data)
+      return visitImpl(data, DoStmtSyntax.self, visit)
     case .documentationAttributeArgumentList:
-      return visitImplDocumentationAttributeArgumentListSyntax(data)
+      return visitImpl(data, DocumentationAttributeArgumentListSyntax.self, visit)
     case .documentationAttributeArgument:
-      return visitImplDocumentationAttributeArgumentSyntax(data)
+      return visitImpl(data, DocumentationAttributeArgumentSyntax.self, visit)
     case .dynamicReplacementAttributeArguments:
-      return visitImplDynamicReplacementAttributeArgumentsSyntax(data)
+      return visitImpl(data, DynamicReplacementAttributeArgumentsSyntax.self, visit)
     case .editorPlaceholderDecl:
-      return visitImplEditorPlaceholderDeclSyntax(data)
+      return visitImpl(data, EditorPlaceholderDeclSyntax.self, visit)
     case .editorPlaceholderExpr:
-      return visitImplEditorPlaceholderExprSyntax(data)
+      return visitImpl(data, EditorPlaceholderExprSyntax.self, visit)
     case .effectsAttributeArgumentList:
-      return visitImplEffectsAttributeArgumentListSyntax(data)
+      return visitImpl(data, EffectsAttributeArgumentListSyntax.self, visit)
     case .enumCaseDecl:
-      return visitImplEnumCaseDeclSyntax(data)
+      return visitImpl(data, EnumCaseDeclSyntax.self, visit)
     case .enumCaseElementList:
-      return visitImplEnumCaseElementListSyntax(data)
+      return visitImpl(data, EnumCaseElementListSyntax.self, visit)
     case .enumCaseElement:
-      return visitImplEnumCaseElementSyntax(data)
+      return visitImpl(data, EnumCaseElementSyntax.self, visit)
     case .enumCaseParameterClause:
-      return visitImplEnumCaseParameterClauseSyntax(data)
+      return visitImpl(data, EnumCaseParameterClauseSyntax.self, visit)
     case .enumCaseParameterList:
-      return visitImplEnumCaseParameterListSyntax(data)
+      return visitImpl(data, EnumCaseParameterListSyntax.self, visit)
     case .enumCaseParameter:
-      return visitImplEnumCaseParameterSyntax(data)
+      return visitImpl(data, EnumCaseParameterSyntax.self, visit)
     case .enumDecl:
-      return visitImplEnumDeclSyntax(data)
+      return visitImpl(data, EnumDeclSyntax.self, visit)
     case .exposeAttributeArguments:
-      return visitImplExposeAttributeArgumentsSyntax(data)
+      return visitImpl(data, ExposeAttributeArgumentsSyntax.self, visit)
     case .exprList:
-      return visitImplExprListSyntax(data)
+      return visitImpl(data, ExprListSyntax.self, visit)
     case .expressionPattern:
-      return visitImplExpressionPatternSyntax(data)
+      return visitImpl(data, ExpressionPatternSyntax.self, visit)
     case .expressionSegment:
-      return visitImplExpressionSegmentSyntax(data)
+      return visitImpl(data, ExpressionSegmentSyntax.self, visit)
     case .expressionStmt:
-      return visitImplExpressionStmtSyntax(data)
+      return visitImpl(data, ExpressionStmtSyntax.self, visit)
     case .extensionDecl:
-      return visitImplExtensionDeclSyntax(data)
+      return visitImpl(data, ExtensionDeclSyntax.self, visit)
     case .fallThroughStmt:
-      return visitImplFallThroughStmtSyntax(data)
+      return visitImpl(data, FallThroughStmtSyntax.self, visit)
     case .floatLiteralExpr:
-      return visitImplFloatLiteralExprSyntax(data)
+      return visitImpl(data, FloatLiteralExprSyntax.self, visit)
     case .forStmt:
-      return visitImplForStmtSyntax(data)
+      return visitImpl(data, ForStmtSyntax.self, visit)
     case .forceUnwrapExpr:
-      return visitImplForceUnwrapExprSyntax(data)
+      return visitImpl(data, ForceUnwrapExprSyntax.self, visit)
     case .functionCallExpr:
-      return visitImplFunctionCallExprSyntax(data)
+      return visitImpl(data, FunctionCallExprSyntax.self, visit)
     case .functionDecl:
-      return visitImplFunctionDeclSyntax(data)
+      return visitImpl(data, FunctionDeclSyntax.self, visit)
     case .functionEffectSpecifiers:
-      return visitImplFunctionEffectSpecifiersSyntax(data)
+      return visitImpl(data, FunctionEffectSpecifiersSyntax.self, visit)
     case .functionParameterClause:
-      return visitImplFunctionParameterClauseSyntax(data)
+      return visitImpl(data, FunctionParameterClauseSyntax.self, visit)
     case .functionParameterList:
-      return visitImplFunctionParameterListSyntax(data)
+      return visitImpl(data, FunctionParameterListSyntax.self, visit)
     case .functionParameter:
-      return visitImplFunctionParameterSyntax(data)
+      return visitImpl(data, FunctionParameterSyntax.self, visit)
     case .functionSignature:
-      return visitImplFunctionSignatureSyntax(data)
+      return visitImpl(data, FunctionSignatureSyntax.self, visit)
     case .functionType:
-      return visitImplFunctionTypeSyntax(data)
+      return visitImpl(data, FunctionTypeSyntax.self, visit)
     case .genericArgumentClause:
-      return visitImplGenericArgumentClauseSyntax(data)
+      return visitImpl(data, GenericArgumentClauseSyntax.self, visit)
     case .genericArgumentList:
-      return visitImplGenericArgumentListSyntax(data)
+      return visitImpl(data, GenericArgumentListSyntax.self, visit)
     case .genericArgument:
-      return visitImplGenericArgumentSyntax(data)
+      return visitImpl(data, GenericArgumentSyntax.self, visit)
     case .genericParameterClause:
-      return visitImplGenericParameterClauseSyntax(data)
+      return visitImpl(data, GenericParameterClauseSyntax.self, visit)
     case .genericParameterList:
-      return visitImplGenericParameterListSyntax(data)
+      return visitImpl(data, GenericParameterListSyntax.self, visit)
     case .genericParameter:
-      return visitImplGenericParameterSyntax(data)
+      return visitImpl(data, GenericParameterSyntax.self, visit)
     case .genericRequirementList:
-      return visitImplGenericRequirementListSyntax(data)
+      return visitImpl(data, GenericRequirementListSyntax.self, visit)
     case .genericRequirement:
-      return visitImplGenericRequirementSyntax(data)
+      return visitImpl(data, GenericRequirementSyntax.self, visit)
     case .genericSpecializationExpr:
-      return visitImplGenericSpecializationExprSyntax(data)
+      return visitImpl(data, GenericSpecializationExprSyntax.self, visit)
     case .genericWhereClause:
-      return visitImplGenericWhereClauseSyntax(data)
+      return visitImpl(data, GenericWhereClauseSyntax.self, visit)
     case .guardStmt:
-      return visitImplGuardStmtSyntax(data)
+      return visitImpl(data, GuardStmtSyntax.self, visit)
     case .identifierPattern:
-      return visitImplIdentifierPatternSyntax(data)
+      return visitImpl(data, IdentifierPatternSyntax.self, visit)
     case .identifierType:
-      return visitImplIdentifierTypeSyntax(data)
+      return visitImpl(data, IdentifierTypeSyntax.self, visit)
     case .ifConfigClauseList:
-      return visitImplIfConfigClauseListSyntax(data)
+      return visitImpl(data, IfConfigClauseListSyntax.self, visit)
     case .ifConfigClause:
-      return visitImplIfConfigClauseSyntax(data)
+      return visitImpl(data, IfConfigClauseSyntax.self, visit)
     case .ifConfigDecl:
-      return visitImplIfConfigDeclSyntax(data)
+      return visitImpl(data, IfConfigDeclSyntax.self, visit)
     case .ifExpr:
-      return visitImplIfExprSyntax(data)
+      return visitImpl(data, IfExprSyntax.self, visit)
     case .implementsAttributeArguments:
-      return visitImplImplementsAttributeArgumentsSyntax(data)
+      return visitImpl(data, ImplementsAttributeArgumentsSyntax.self, visit)
     case .implicitlyUnwrappedOptionalType:
-      return visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
+      return visitImpl(data, ImplicitlyUnwrappedOptionalTypeSyntax.self, visit)
     case .importDecl:
-      return visitImplImportDeclSyntax(data)
+      return visitImpl(data, ImportDeclSyntax.self, visit)
     case .importPathComponentList:
-      return visitImplImportPathComponentListSyntax(data)
+      return visitImpl(data, ImportPathComponentListSyntax.self, visit)
     case .importPathComponent:
-      return visitImplImportPathComponentSyntax(data)
+      return visitImpl(data, ImportPathComponentSyntax.self, visit)
     case .inOutExpr:
-      return visitImplInOutExprSyntax(data)
+      return visitImpl(data, InOutExprSyntax.self, visit)
     case .infixOperatorExpr:
-      return visitImplInfixOperatorExprSyntax(data)
+      return visitImpl(data, InfixOperatorExprSyntax.self, visit)
     case .inheritanceClause:
-      return visitImplInheritanceClauseSyntax(data)
+      return visitImpl(data, InheritanceClauseSyntax.self, visit)
     case .inheritedTypeList:
-      return visitImplInheritedTypeListSyntax(data)
+      return visitImpl(data, InheritedTypeListSyntax.self, visit)
     case .inheritedType:
-      return visitImplInheritedTypeSyntax(data)
+      return visitImpl(data, InheritedTypeSyntax.self, visit)
     case .initializerClause:
-      return visitImplInitializerClauseSyntax(data)
+      return visitImpl(data, InitializerClauseSyntax.self, visit)
     case .initializerDecl:
-      return visitImplInitializerDeclSyntax(data)
+      return visitImpl(data, InitializerDeclSyntax.self, visit)
     case .integerLiteralExpr:
-      return visitImplIntegerLiteralExprSyntax(data)
+      return visitImpl(data, IntegerLiteralExprSyntax.self, visit)
     case .isExpr:
-      return visitImplIsExprSyntax(data)
+      return visitImpl(data, IsExprSyntax.self, visit)
     case .isTypePattern:
-      return visitImplIsTypePatternSyntax(data)
+      return visitImpl(data, IsTypePatternSyntax.self, visit)
     case .keyPathComponentList:
-      return visitImplKeyPathComponentListSyntax(data)
+      return visitImpl(data, KeyPathComponentListSyntax.self, visit)
     case .keyPathComponent:
-      return visitImplKeyPathComponentSyntax(data)
+      return visitImpl(data, KeyPathComponentSyntax.self, visit)
     case .keyPathExpr:
-      return visitImplKeyPathExprSyntax(data)
+      return visitImpl(data, KeyPathExprSyntax.self, visit)
     case .keyPathOptionalComponent:
-      return visitImplKeyPathOptionalComponentSyntax(data)
+      return visitImpl(data, KeyPathOptionalComponentSyntax.self, visit)
     case .keyPathPropertyComponent:
-      return visitImplKeyPathPropertyComponentSyntax(data)
+      return visitImpl(data, KeyPathPropertyComponentSyntax.self, visit)
     case .keyPathSubscriptComponent:
-      return visitImplKeyPathSubscriptComponentSyntax(data)
+      return visitImpl(data, KeyPathSubscriptComponentSyntax.self, visit)
     case .labeledExprList:
-      return visitImplLabeledExprListSyntax(data)
+      return visitImpl(data, LabeledExprListSyntax.self, visit)
     case .labeledExpr:
-      return visitImplLabeledExprSyntax(data)
+      return visitImpl(data, LabeledExprSyntax.self, visit)
     case .labeledSpecializeArgument:
-      return visitImplLabeledSpecializeArgumentSyntax(data)
+      return visitImpl(data, LabeledSpecializeArgumentSyntax.self, visit)
     case .labeledStmt:
-      return visitImplLabeledStmtSyntax(data)
+      return visitImpl(data, LabeledStmtSyntax.self, visit)
     case .layoutRequirement:
-      return visitImplLayoutRequirementSyntax(data)
+      return visitImpl(data, LayoutRequirementSyntax.self, visit)
     case .macroDecl:
-      return visitImplMacroDeclSyntax(data)
+      return visitImpl(data, MacroDeclSyntax.self, visit)
     case .macroExpansionDecl:
-      return visitImplMacroExpansionDeclSyntax(data)
+      return visitImpl(data, MacroExpansionDeclSyntax.self, visit)
     case .macroExpansionExpr:
-      return visitImplMacroExpansionExprSyntax(data)
+      return visitImpl(data, MacroExpansionExprSyntax.self, visit)
     case .matchingPatternCondition:
-      return visitImplMatchingPatternConditionSyntax(data)
+      return visitImpl(data, MatchingPatternConditionSyntax.self, visit)
     case .memberAccessExpr:
-      return visitImplMemberAccessExprSyntax(data)
+      return visitImpl(data, MemberAccessExprSyntax.self, visit)
     case .memberBlockItemList:
-      return visitImplMemberBlockItemListSyntax(data)
+      return visitImpl(data, MemberBlockItemListSyntax.self, visit)
     case .memberBlockItem:
-      return visitImplMemberBlockItemSyntax(data)
+      return visitImpl(data, MemberBlockItemSyntax.self, visit)
     case .memberBlock:
-      return visitImplMemberBlockSyntax(data)
+      return visitImpl(data, MemberBlockSyntax.self, visit)
     case .memberType:
-      return visitImplMemberTypeSyntax(data)
+      return visitImpl(data, MemberTypeSyntax.self, visit)
     case .metatypeType:
-      return visitImplMetatypeTypeSyntax(data)
+      return visitImpl(data, MetatypeTypeSyntax.self, visit)
     case .missingDecl:
-      return visitImplMissingDeclSyntax(data)
+      return visitImpl(data, MissingDeclSyntax.self, visit)
     case .missingExpr:
-      return visitImplMissingExprSyntax(data)
+      return visitImpl(data, MissingExprSyntax.self, visit)
     case .missingPattern:
-      return visitImplMissingPatternSyntax(data)
+      return visitImpl(data, MissingPatternSyntax.self, visit)
     case .missingStmt:
-      return visitImplMissingStmtSyntax(data)
+      return visitImpl(data, MissingStmtSyntax.self, visit)
     case .missing:
-      return visitImplMissingSyntax(data)
+      return visitImpl(data, MissingSyntax.self, visit)
     case .missingType:
-      return visitImplMissingTypeSyntax(data)
+      return visitImpl(data, MissingTypeSyntax.self, visit)
     case .multipleTrailingClosureElementList:
-      return visitImplMultipleTrailingClosureElementListSyntax(data)
+      return visitImpl(data, MultipleTrailingClosureElementListSyntax.self, visit)
     case .multipleTrailingClosureElement:
-      return visitImplMultipleTrailingClosureElementSyntax(data)
+      return visitImpl(data, MultipleTrailingClosureElementSyntax.self, visit)
     case .namedOpaqueReturnType:
-      return visitImplNamedOpaqueReturnTypeSyntax(data)
+      return visitImpl(data, NamedOpaqueReturnTypeSyntax.self, visit)
     case .nilLiteralExpr:
-      return visitImplNilLiteralExprSyntax(data)
+      return visitImpl(data, NilLiteralExprSyntax.self, visit)
     case .objCSelectorPieceList:
-      return visitImplObjCSelectorPieceListSyntax(data)
+      return visitImpl(data, ObjCSelectorPieceListSyntax.self, visit)
     case .objCSelectorPiece:
-      return visitImplObjCSelectorPieceSyntax(data)
+      return visitImpl(data, ObjCSelectorPieceSyntax.self, visit)
     case .opaqueReturnTypeOfAttributeArguments:
-      return visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+      return visitImpl(data, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, visit)
     case .operatorDecl:
-      return visitImplOperatorDeclSyntax(data)
+      return visitImpl(data, OperatorDeclSyntax.self, visit)
     case .operatorPrecedenceAndTypes:
-      return visitImplOperatorPrecedenceAndTypesSyntax(data)
+      return visitImpl(data, OperatorPrecedenceAndTypesSyntax.self, visit)
     case .optionalBindingCondition:
-      return visitImplOptionalBindingConditionSyntax(data)
+      return visitImpl(data, OptionalBindingConditionSyntax.self, visit)
     case .optionalChainingExpr:
-      return visitImplOptionalChainingExprSyntax(data)
+      return visitImpl(data, OptionalChainingExprSyntax.self, visit)
     case .optionalType:
-      return visitImplOptionalTypeSyntax(data)
+      return visitImpl(data, OptionalTypeSyntax.self, visit)
     case .originallyDefinedInAttributeArguments:
-      return visitImplOriginallyDefinedInAttributeArgumentsSyntax(data)
+      return visitImpl(data, OriginallyDefinedInAttributeArgumentsSyntax.self, visit)
     case .packElementExpr:
-      return visitImplPackElementExprSyntax(data)
+      return visitImpl(data, PackElementExprSyntax.self, visit)
     case .packElementType:
-      return visitImplPackElementTypeSyntax(data)
+      return visitImpl(data, PackElementTypeSyntax.self, visit)
     case .packExpansionExpr:
-      return visitImplPackExpansionExprSyntax(data)
+      return visitImpl(data, PackExpansionExprSyntax.self, visit)
     case .packExpansionType:
-      return visitImplPackExpansionTypeSyntax(data)
+      return visitImpl(data, PackExpansionTypeSyntax.self, visit)
     case .patternBindingList:
-      return visitImplPatternBindingListSyntax(data)
+      return visitImpl(data, PatternBindingListSyntax.self, visit)
     case .patternBinding:
-      return visitImplPatternBindingSyntax(data)
+      return visitImpl(data, PatternBindingSyntax.self, visit)
     case .patternExpr:
-      return visitImplPatternExprSyntax(data)
+      return visitImpl(data, PatternExprSyntax.self, visit)
     case .platformVersionItemList:
-      return visitImplPlatformVersionItemListSyntax(data)
+      return visitImpl(data, PlatformVersionItemListSyntax.self, visit)
     case .platformVersionItem:
-      return visitImplPlatformVersionItemSyntax(data)
+      return visitImpl(data, PlatformVersionItemSyntax.self, visit)
     case .platformVersion:
-      return visitImplPlatformVersionSyntax(data)
+      return visitImpl(data, PlatformVersionSyntax.self, visit)
     case .postfixIfConfigExpr:
-      return visitImplPostfixIfConfigExprSyntax(data)
+      return visitImpl(data, PostfixIfConfigExprSyntax.self, visit)
     case .postfixOperatorExpr:
-      return visitImplPostfixOperatorExprSyntax(data)
+      return visitImpl(data, PostfixOperatorExprSyntax.self, visit)
     case .poundSourceLocationArguments:
-      return visitImplPoundSourceLocationArgumentsSyntax(data)
+      return visitImpl(data, PoundSourceLocationArgumentsSyntax.self, visit)
     case .poundSourceLocation:
-      return visitImplPoundSourceLocationSyntax(data)
+      return visitImpl(data, PoundSourceLocationSyntax.self, visit)
     case .precedenceGroupAssignment:
-      return visitImplPrecedenceGroupAssignmentSyntax(data)
+      return visitImpl(data, PrecedenceGroupAssignmentSyntax.self, visit)
     case .precedenceGroupAssociativity:
-      return visitImplPrecedenceGroupAssociativitySyntax(data)
+      return visitImpl(data, PrecedenceGroupAssociativitySyntax.self, visit)
     case .precedenceGroupAttributeList:
-      return visitImplPrecedenceGroupAttributeListSyntax(data)
+      return visitImpl(data, PrecedenceGroupAttributeListSyntax.self, visit)
     case .precedenceGroupDecl:
-      return visitImplPrecedenceGroupDeclSyntax(data)
+      return visitImpl(data, PrecedenceGroupDeclSyntax.self, visit)
     case .precedenceGroupNameList:
-      return visitImplPrecedenceGroupNameListSyntax(data)
+      return visitImpl(data, PrecedenceGroupNameListSyntax.self, visit)
     case .precedenceGroupName:
-      return visitImplPrecedenceGroupNameSyntax(data)
+      return visitImpl(data, PrecedenceGroupNameSyntax.self, visit)
     case .precedenceGroupRelation:
-      return visitImplPrecedenceGroupRelationSyntax(data)
+      return visitImpl(data, PrecedenceGroupRelationSyntax.self, visit)
     case .prefixOperatorExpr:
-      return visitImplPrefixOperatorExprSyntax(data)
+      return visitImpl(data, PrefixOperatorExprSyntax.self, visit)
     case .primaryAssociatedTypeClause:
-      return visitImplPrimaryAssociatedTypeClauseSyntax(data)
+      return visitImpl(data, PrimaryAssociatedTypeClauseSyntax.self, visit)
     case .primaryAssociatedTypeList:
-      return visitImplPrimaryAssociatedTypeListSyntax(data)
+      return visitImpl(data, PrimaryAssociatedTypeListSyntax.self, visit)
     case .primaryAssociatedType:
-      return visitImplPrimaryAssociatedTypeSyntax(data)
+      return visitImpl(data, PrimaryAssociatedTypeSyntax.self, visit)
     case .protocolDecl:
-      return visitImplProtocolDeclSyntax(data)
+      return visitImpl(data, ProtocolDeclSyntax.self, visit)
     case .regexLiteralExpr:
-      return visitImplRegexLiteralExprSyntax(data)
+      return visitImpl(data, RegexLiteralExprSyntax.self, visit)
     case .repeatStmt:
-      return visitImplRepeatStmtSyntax(data)
+      return visitImpl(data, RepeatStmtSyntax.self, visit)
     case .returnClause:
-      return visitImplReturnClauseSyntax(data)
+      return visitImpl(data, ReturnClauseSyntax.self, visit)
     case .returnStmt:
-      return visitImplReturnStmtSyntax(data)
+      return visitImpl(data, ReturnStmtSyntax.self, visit)
     case .sameTypeRequirement:
-      return visitImplSameTypeRequirementSyntax(data)
+      return visitImpl(data, SameTypeRequirementSyntax.self, visit)
     case .sequenceExpr:
-      return visitImplSequenceExprSyntax(data)
+      return visitImpl(data, SequenceExprSyntax.self, visit)
     case .simpleStringLiteralExpr:
-      return visitImplSimpleStringLiteralExprSyntax(data)
+      return visitImpl(data, SimpleStringLiteralExprSyntax.self, visit)
     case .simpleStringLiteralSegmentList:
-      return visitImplSimpleStringLiteralSegmentListSyntax(data)
+      return visitImpl(data, SimpleStringLiteralSegmentListSyntax.self, visit)
     case .someOrAnyType:
-      return visitImplSomeOrAnyTypeSyntax(data)
+      return visitImpl(data, SomeOrAnyTypeSyntax.self, visit)
     case .sourceFile:
-      return visitImplSourceFileSyntax(data)
+      return visitImpl(data, SourceFileSyntax.self, visit)
     case .specializeAttributeArgumentList:
-      return visitImplSpecializeAttributeArgumentListSyntax(data)
+      return visitImpl(data, SpecializeAttributeArgumentListSyntax.self, visit)
     case .specializeAvailabilityArgument:
-      return visitImplSpecializeAvailabilityArgumentSyntax(data)
+      return visitImpl(data, SpecializeAvailabilityArgumentSyntax.self, visit)
     case .specializeTargetFunctionArgument:
-      return visitImplSpecializeTargetFunctionArgumentSyntax(data)
+      return visitImpl(data, SpecializeTargetFunctionArgumentSyntax.self, visit)
     case .stringLiteralExpr:
-      return visitImplStringLiteralExprSyntax(data)
+      return visitImpl(data, StringLiteralExprSyntax.self, visit)
     case .stringLiteralSegmentList:
-      return visitImplStringLiteralSegmentListSyntax(data)
+      return visitImpl(data, StringLiteralSegmentListSyntax.self, visit)
     case .stringSegment:
-      return visitImplStringSegmentSyntax(data)
+      return visitImpl(data, StringSegmentSyntax.self, visit)
     case .structDecl:
-      return visitImplStructDeclSyntax(data)
+      return visitImpl(data, StructDeclSyntax.self, visit)
     case .subscriptCallExpr:
-      return visitImplSubscriptCallExprSyntax(data)
+      return visitImpl(data, SubscriptCallExprSyntax.self, visit)
     case .subscriptDecl:
-      return visitImplSubscriptDeclSyntax(data)
+      return visitImpl(data, SubscriptDeclSyntax.self, visit)
     case .superExpr:
-      return visitImplSuperExprSyntax(data)
+      return visitImpl(data, SuperExprSyntax.self, visit)
     case .suppressedType:
-      return visitImplSuppressedTypeSyntax(data)
+      return visitImpl(data, SuppressedTypeSyntax.self, visit)
     case .switchCaseItemList:
-      return visitImplSwitchCaseItemListSyntax(data)
+      return visitImpl(data, SwitchCaseItemListSyntax.self, visit)
     case .switchCaseItem:
-      return visitImplSwitchCaseItemSyntax(data)
+      return visitImpl(data, SwitchCaseItemSyntax.self, visit)
     case .switchCaseLabel:
-      return visitImplSwitchCaseLabelSyntax(data)
+      return visitImpl(data, SwitchCaseLabelSyntax.self, visit)
     case .switchCaseList:
-      return visitImplSwitchCaseListSyntax(data)
+      return visitImpl(data, SwitchCaseListSyntax.self, visit)
     case .switchCase:
-      return visitImplSwitchCaseSyntax(data)
+      return visitImpl(data, SwitchCaseSyntax.self, visit)
     case .switchDefaultLabel:
-      return visitImplSwitchDefaultLabelSyntax(data)
+      return visitImpl(data, SwitchDefaultLabelSyntax.self, visit)
     case .switchExpr:
-      return visitImplSwitchExprSyntax(data)
+      return visitImpl(data, SwitchExprSyntax.self, visit)
     case .ternaryExpr:
-      return visitImplTernaryExprSyntax(data)
+      return visitImpl(data, TernaryExprSyntax.self, visit)
     case .throwStmt:
-      return visitImplThrowStmtSyntax(data)
+      return visitImpl(data, ThrowStmtSyntax.self, visit)
     case .tryExpr:
-      return visitImplTryExprSyntax(data)
+      return visitImpl(data, TryExprSyntax.self, visit)
     case .tupleExpr:
-      return visitImplTupleExprSyntax(data)
+      return visitImpl(data, TupleExprSyntax.self, visit)
     case .tuplePatternElementList:
-      return visitImplTuplePatternElementListSyntax(data)
+      return visitImpl(data, TuplePatternElementListSyntax.self, visit)
     case .tuplePatternElement:
-      return visitImplTuplePatternElementSyntax(data)
+      return visitImpl(data, TuplePatternElementSyntax.self, visit)
     case .tuplePattern:
-      return visitImplTuplePatternSyntax(data)
+      return visitImpl(data, TuplePatternSyntax.self, visit)
     case .tupleTypeElementList:
-      return visitImplTupleTypeElementListSyntax(data)
+      return visitImpl(data, TupleTypeElementListSyntax.self, visit)
     case .tupleTypeElement:
-      return visitImplTupleTypeElementSyntax(data)
+      return visitImpl(data, TupleTypeElementSyntax.self, visit)
     case .tupleType:
-      return visitImplTupleTypeSyntax(data)
+      return visitImpl(data, TupleTypeSyntax.self, visit)
     case .typeAliasDecl:
-      return visitImplTypeAliasDeclSyntax(data)
+      return visitImpl(data, TypeAliasDeclSyntax.self, visit)
     case .typeAnnotation:
-      return visitImplTypeAnnotationSyntax(data)
+      return visitImpl(data, TypeAnnotationSyntax.self, visit)
     case .typeEffectSpecifiers:
-      return visitImplTypeEffectSpecifiersSyntax(data)
+      return visitImpl(data, TypeEffectSpecifiersSyntax.self, visit)
     case .typeExpr:
-      return visitImplTypeExprSyntax(data)
+      return visitImpl(data, TypeExprSyntax.self, visit)
     case .typeInitializerClause:
-      return visitImplTypeInitializerClauseSyntax(data)
+      return visitImpl(data, TypeInitializerClauseSyntax.self, visit)
     case .unavailableFromAsyncAttributeArguments:
-      return visitImplUnavailableFromAsyncAttributeArgumentsSyntax(data)
+      return visitImpl(data, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit)
     case .underscorePrivateAttributeArguments:
-      return visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
+      return visitImpl(data, UnderscorePrivateAttributeArgumentsSyntax.self, visit)
     case .unexpectedNodes:
-      return visitImplUnexpectedNodesSyntax(data)
+      return visitImpl(data, UnexpectedNodesSyntax.self, visit)
     case .unresolvedAsExpr:
-      return visitImplUnresolvedAsExprSyntax(data)
+      return visitImpl(data, UnresolvedAsExprSyntax.self, visit)
     case .unresolvedIsExpr:
-      return visitImplUnresolvedIsExprSyntax(data)
+      return visitImpl(data, UnresolvedIsExprSyntax.self, visit)
     case .unresolvedTernaryExpr:
-      return visitImplUnresolvedTernaryExprSyntax(data)
+      return visitImpl(data, UnresolvedTernaryExprSyntax.self, visit)
     case .valueBindingPattern:
-      return visitImplValueBindingPatternSyntax(data)
+      return visitImpl(data, ValueBindingPatternSyntax.self, visit)
     case .variableDecl:
-      return visitImplVariableDeclSyntax(data)
+      return visitImpl(data, VariableDeclSyntax.self, visit)
     case .versionComponentList:
-      return visitImplVersionComponentListSyntax(data)
+      return visitImpl(data, VersionComponentListSyntax.self, visit)
     case .versionComponent:
-      return visitImplVersionComponentSyntax(data)
+      return visitImpl(data, VersionComponentSyntax.self, visit)
     case .versionTuple:
-      return visitImplVersionTupleSyntax(data)
+      return visitImpl(data, VersionTupleSyntax.self, visit)
     case .whereClause:
-      return visitImplWhereClauseSyntax(data)
+      return visitImpl(data, WhereClauseSyntax.self, visit)
     case .whileStmt:
-      return visitImplWhileStmtSyntax(data)
+      return visitImpl(data, WhileStmtSyntax.self, visit)
     case .wildcardPattern:
-      return visitImplWildcardPatternSyntax(data)
+      return visitImpl(data, WildcardPatternSyntax.self, visit)
     case .yieldStmt:
-      return visitImplYieldStmtSyntax(data)
+      return visitImpl(data, YieldStmtSyntax.self, visit)
     case .yieldedExpressionList:
-      return visitImplYieldedExpressionListSyntax(data)
+      return visitImpl(data, YieldedExpressionListSyntax.self, visit)
     case .yieldedExpression:
-      return visitImplYieldedExpressionSyntax(data)
+      return visitImpl(data, YieldedExpressionSyntax.self, visit)
     case .yieldedExpressionsClause:
-      return visitImplYieldedExpressionsClauseSyntax(data)
+      return visitImpl(data, YieldedExpressionsClauseSyntax.self, visit)
     }
   }
   #endif

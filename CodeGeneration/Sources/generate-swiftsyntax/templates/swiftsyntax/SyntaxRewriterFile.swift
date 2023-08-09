@@ -161,31 +161,24 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       )
     }
 
-    for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax(
-        """
-        /// Implementation detail of visit(_:). Do not call directly.
-        private func visitImpl\(node.kind.syntaxType)(_ data: SyntaxData) -> Syntax {
-          let node = \(node.kind.syntaxType)(data)
-          // Accessing _syntaxNode directly is faster than calling Syntax(node)
-          visitPre(node._syntaxNode)
-          defer { visitPost(node._syntaxNode) }
-          if let newNode = visitAny(node._syntaxNode) { return newNode }
-          return Syntax(visit(node))
-        }
-        """
-      )
-    }
-
     DeclSyntax(
       """
-      /// Implementation detail of visit(_:). Do not call directly.
-      private func visitImplTokenSyntax(_ data: SyntaxData) -> Syntax {
-        let node = TokenSyntax(data)
+      /// Interpret `data` as a node of type `nodeType`, visit it, calling
+      /// the `visit` to transform the node.
+      private func visitImpl<NodeType: SyntaxProtocol>(
+        _ data: SyntaxData,
+        _ nodeType: NodeType.Type,
+        _ visit: (NodeType) -> some SyntaxProtocol
+      ) -> Syntax {
+        let node = Syntax(data).cast(NodeType.self)
         // Accessing _syntaxNode directly is faster than calling Syntax(node)
         visitPre(node._syntaxNode)
-        defer { visitPost(node._syntaxNode) }
-        if let newNode = visitAny(node._syntaxNode) { return newNode }
+        defer {
+          visitPost(node._syntaxNode)
+        }
+        if let newNode = visitAny(node._syntaxNode) {
+          return newNode
+        }
         return Syntax(visit(node))
       }
       """
@@ -232,12 +225,12 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               ) {
                 try SwitchExprSyntax("switch data.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return visitImplTokenSyntax")
+                    StmtSyntax("return { self.visitImpl($0, TokenSyntax.self, self.visit) }")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return visitImpl\(node.kind.syntaxType)")
+                      StmtSyntax("return { self.visitImpl($0, \(node.kind.syntaxType).self, self.visit) }")
                     }
                   }
                 }
@@ -260,12 +253,12 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
                 try SwitchExprSyntax("switch data.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return visitImplTokenSyntax(data)")
+                    StmtSyntax("return visitImpl(data, TokenSyntax.self, visit)")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return visitImpl\(node.kind.syntaxType)(data)")
+                      StmtSyntax("return visitImpl(data, \(node.kind.syntaxType).self, visit)")
                     }
                   }
                 }

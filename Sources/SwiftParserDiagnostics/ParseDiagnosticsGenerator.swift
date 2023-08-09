@@ -1926,8 +1926,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    if let modifiers = node.modifiers, modifiers.hasError {
-      for modifier in modifiers {
+    if node.modifiers.hasError {
+      for modifier in node.modifiers {
         guard let detail = modifier.detail else {
           continue
         }

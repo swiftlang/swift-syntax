@@ -107,7 +107,7 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
         attributes: nil,
-        modifiers: nil,
+        modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
         placeholder: RawTokenSyntax(missing: .identifier, text: "<#declaration#>", arena: arena),
         RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena

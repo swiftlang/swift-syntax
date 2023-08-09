@@ -158,9 +158,9 @@ extension TokenConsumer {
 extension Parser {
   struct DeclAttributes {
     var attributes: RawAttributeListSyntax?
-    var modifiers: RawDeclModifierListSyntax?
+    var modifiers: RawDeclModifierListSyntax
 
-    init(attributes: RawAttributeListSyntax?, modifiers: RawDeclModifierListSyntax?) {
+    init(attributes: RawAttributeListSyntax?, modifiers: RawDeclModifierListSyntax) {
       self.attributes = attributes
       self.modifiers = modifiers
     }
@@ -676,7 +676,13 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberBlockItemSyntax(
         remainingTokens,
-        decl: RawDeclSyntax(RawMissingDeclSyntax(attributes: nil, modifiers: nil, arena: self.arena)),
+        decl: RawDeclSyntax(
+          RawMissingDeclSyntax(
+            attributes: nil,
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            arena: self.arena
+          )
+        ),
         semicolon: nil,
         arena: self.arena
       )
@@ -1532,33 +1538,32 @@ extension Parser {
     var fixity: RawTokenSyntax?
     var unexpectedAfterFixity: RawUnexpectedNodesSyntax?
 
-    if let modifiers = attrs.modifiers?.elements {
-      if let firstFixityIndex = modifiers.firstIndex(where: { isFixity($0) }) {
-        let fixityModifier = modifiers[firstFixityIndex]
-        fixity = fixityModifier.name
+    let modifiers = attrs.modifiers.elements
+    if let firstFixityIndex = modifiers.firstIndex(where: { isFixity($0) }) {
+      let fixityModifier = modifiers[firstFixityIndex]
+      fixity = fixityModifier.name
 
-        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
-          combining: unexpectedBeforeFixity,
-          RawUnexpectedNodesSyntax(Array(modifiers[0..<firstFixityIndex]), arena: self.arena),
-          fixityModifier.unexpectedBeforeName,
-          arena: self.arena
-        )
+      unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
+        combining: unexpectedBeforeFixity,
+        RawUnexpectedNodesSyntax(Array(modifiers[0..<firstFixityIndex]), arena: self.arena),
+        fixityModifier.unexpectedBeforeName,
+        arena: self.arena
+      )
 
-        unexpectedAfterFixity = RawUnexpectedNodesSyntax(
-          combining: fixityModifier.unexpectedBetweenNameAndDetail,
-          RawUnexpectedNodesSyntax([fixityModifier.detail], arena: self.arena),
-          fixityModifier.unexpectedAfterDetail,
-          RawUnexpectedNodesSyntax(Array(modifiers[modifiers.index(after: firstFixityIndex)...]), arena: self.arena),
-          arena: self.arena
-        )
+      unexpectedAfterFixity = RawUnexpectedNodesSyntax(
+        combining: fixityModifier.unexpectedBetweenNameAndDetail,
+        RawUnexpectedNodesSyntax([fixityModifier.detail], arena: self.arena),
+        fixityModifier.unexpectedAfterDetail,
+        RawUnexpectedNodesSyntax(Array(modifiers[modifiers.index(after: firstFixityIndex)...]), arena: self.arena),
+        arena: self.arena
+      )
 
-      } else {
-        unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
-          combining: unexpectedBeforeFixity,
-          RawUnexpectedNodesSyntax(modifiers, arena: self.arena),
-          arena: self.arena
-        )
-      }
+    } else {
+      unexpectedBeforeFixity = RawUnexpectedNodesSyntax(
+        combining: unexpectedBeforeFixity,
+        RawUnexpectedNodesSyntax(modifiers, arena: self.arena),
+        arena: self.arena
+      )
     }
 
     var (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.expect(.keyword(.operator))

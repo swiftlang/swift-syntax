@@ -54,7 +54,7 @@ fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   )
   return RawStructDeclSyntax(
     attributes: nil,
-    modifiers: nil,
+    modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
     structKeyword: structKW,
     name: fooID,
     genericParameterClause: nil,

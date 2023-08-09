@@ -63,7 +63,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol {
     set
   }
   
-  var modifiers: DeclModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax {
     get
     set
   }
@@ -484,7 +484,7 @@ public extension SyntaxProtocol {
 
 
 public protocol WithModifiersSyntax: SyntaxProtocol {
-  var modifiers: DeclModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax {
     get
     set
   }

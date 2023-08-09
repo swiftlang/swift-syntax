@@ -379,9 +379,8 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "FirstName",

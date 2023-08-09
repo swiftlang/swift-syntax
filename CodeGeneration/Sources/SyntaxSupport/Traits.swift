@@ -38,7 +38,7 @@ public let TRAITS: [Trait] = [
     traitName: "DeclGroup",
     children: [
       Child(name: "Attributes", kind: .node(kind: .attributeList), isOptional: true),
-      Child(name: "Modifiers", kind: .node(kind: .declModifierList), isOptional: true),
+      Child(name: "Modifiers", kind: .node(kind: .declModifierList)),
       Child(name: "InheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
       Child(
         name: "GenericWhereClause",
@@ -140,7 +140,7 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "WithModifiers",
     children: [
-      Child(name: "Modifiers", kind: .node(kind: .declModifierList), isOptional: true)
+      Child(name: "Modifiers", kind: .node(kind: .declModifierList))
     ]
   ),
   Trait(

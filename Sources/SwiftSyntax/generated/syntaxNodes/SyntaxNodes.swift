@@ -3025,7 +3025,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -3067,7 +3067,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -3148,12 +3148,12 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureParameterSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = ClosureParameterSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -7776,7 +7776,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax? = nil,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -7814,7 +7814,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName?.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -7851,12 +7851,12 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EnumCaseParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8770,7 +8770,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax? = nil,
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -8816,7 +8816,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBeforeAttributes?.raw, 
           attributes?.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -8899,12 +8899,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   

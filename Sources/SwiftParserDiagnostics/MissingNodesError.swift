@@ -251,7 +251,7 @@ public struct MissingNodesError: ParserError {
       return nil
     }
     if let missingDecl = firstMissingNode.as(MissingDeclSyntax.self) {
-      if let lastModifier = missingDecl.modifiers?.last {
+      if let lastModifier = missingDecl.modifiers.last {
         return "after '\(lastModifier.name.text)' modifier"
       } else if missingDecl.attributes != nil {
         return "after attribute"

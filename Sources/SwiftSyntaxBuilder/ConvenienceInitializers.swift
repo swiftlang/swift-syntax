@@ -359,7 +359,7 @@ extension VariableDeclSyntax {
   public init(
     leadingTrivia: Trivia = [],
     attributes: AttributeListSyntax? = nil,
-    modifiers: DeclModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,

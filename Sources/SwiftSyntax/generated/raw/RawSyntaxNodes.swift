@@ -492,7 +492,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? = nil, 
       actorKeyword: RawTokenSyntax, 
       _ unexpectedBetweenActorKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -514,7 +514,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndActorKeyword?.raw
       layout[5] = actorKeyword.raw
       layout[6] = unexpectedBetweenActorKeywordAndName?.raw
@@ -544,8 +544,8 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? {
@@ -1140,7 +1140,7 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax? = nil, 
       associatedtypeKeyword: RawTokenSyntax, 
       _ unexpectedBetweenAssociatedtypeKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -1160,7 +1160,7 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndAssociatedtypeKeyword?.raw
       layout[5] = associatedtypeKeyword.raw
       layout[6] = unexpectedBetweenAssociatedtypeKeywordAndName?.raw
@@ -1188,8 +1188,8 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndAssociatedtypeKeyword: RawUnexpectedNodesSyntax? {
@@ -2929,7 +2929,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax? = nil, 
       classKeyword: RawTokenSyntax, 
       _ unexpectedBetweenClassKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -2951,7 +2951,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndClassKeyword?.raw
       layout[5] = classKeyword.raw
       layout[6] = unexpectedBetweenClassKeywordAndName?.raw
@@ -2981,8 +2981,8 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndClassKeyword: RawUnexpectedNodesSyntax? {
@@ -3687,7 +3687,7 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? = nil, 
       firstName: RawTokenSyntax, 
       _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil, 
@@ -3709,7 +3709,7 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndFirstName?.raw
       layout[5] = firstName.raw
       layout[6] = unexpectedBetweenFirstNameAndSecondName?.raw
@@ -3739,8 +3739,8 @@ public struct RawClosureParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? {
@@ -5741,7 +5741,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? = nil, 
       deinitKeyword: RawTokenSyntax, 
       _ unexpectedBetweenDeinitKeywordAndEffectSpecifiers: RawUnexpectedNodesSyntax? = nil, 
@@ -5757,7 +5757,7 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndDeinitKeyword?.raw
       layout[5] = deinitKeyword.raw
       layout[6] = unexpectedBetweenDeinitKeywordAndEffectSpecifiers?.raw
@@ -5781,8 +5781,8 @@ public struct RawDeinitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndDeinitKeyword: RawUnexpectedNodesSyntax? {
@@ -7403,7 +7403,7 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? = nil, 
       placeholder: RawTokenSyntax, 
       _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
@@ -7415,7 +7415,7 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
       layout[5] = placeholder.raw
       layout[6] = unexpectedAfterPlaceholder?.raw
@@ -7435,8 +7435,8 @@ public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? {
@@ -7593,7 +7593,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax? = nil, 
       caseKeyword: RawTokenSyntax, 
       _ unexpectedBetweenCaseKeywordAndElements: RawUnexpectedNodesSyntax? = nil, 
@@ -7607,7 +7607,7 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndCaseKeyword?.raw
       layout[5] = caseKeyword.raw
       layout[6] = unexpectedBetweenCaseKeywordAndElements?.raw
@@ -7629,8 +7629,8 @@ public struct RawEnumCaseDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndCaseKeyword: RawUnexpectedNodesSyntax? {
@@ -7961,7 +7961,7 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? = nil, 
       firstName: RawTokenSyntax?, 
       _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil, 
@@ -7981,7 +7981,7 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
       kind: .enumCaseParameter, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeModifiers?.raw
-      layout[1] = modifiers?.raw
+      layout[1] = modifiers.raw
       layout[2] = unexpectedBetweenModifiersAndFirstName?.raw
       layout[3] = firstName?.raw
       layout[4] = unexpectedBetweenFirstNameAndSecondName?.raw
@@ -8003,8 +8003,8 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[1].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[1].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? {
@@ -8093,7 +8093,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax? = nil, 
       enumKeyword: RawTokenSyntax, 
       _ unexpectedBetweenEnumKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -8115,7 +8115,7 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndEnumKeyword?.raw
       layout[5] = enumKeyword.raw
       layout[6] = unexpectedBetweenEnumKeywordAndName?.raw
@@ -8145,8 +8145,8 @@ public struct RawEnumDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndEnumKeyword: RawUnexpectedNodesSyntax? {
@@ -8628,7 +8628,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? = nil, 
       extensionKeyword: RawTokenSyntax, 
       _ unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax? = nil, 
@@ -8648,7 +8648,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndExtensionKeyword?.raw
       layout[5] = extensionKeyword.raw
       layout[6] = unexpectedBetweenExtensionKeywordAndExtendedType?.raw
@@ -8676,8 +8676,8 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? {
@@ -9228,7 +9228,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax? = nil, 
       funcKeyword: RawTokenSyntax, 
       _ unexpectedBetweenFuncKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -9250,7 +9250,7 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndFuncKeyword?.raw
       layout[5] = funcKeyword.raw
       layout[6] = unexpectedBetweenFuncKeywordAndName?.raw
@@ -9280,8 +9280,8 @@ public struct RawFunctionDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndFuncKeyword: RawUnexpectedNodesSyntax? {
@@ -9572,7 +9572,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? = nil, 
       firstName: RawTokenSyntax, 
       _ unexpectedBetweenFirstNameAndSecondName: RawUnexpectedNodesSyntax? = nil, 
@@ -9596,7 +9596,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndFirstName?.raw
       layout[5] = firstName.raw
       layout[6] = unexpectedBetweenFirstNameAndSecondName?.raw
@@ -9628,8 +9628,8 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndFirstName: RawUnexpectedNodesSyntax? {
@@ -11438,7 +11438,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndImportKeyword: RawUnexpectedNodesSyntax? = nil, 
       importKeyword: RawTokenSyntax, 
       _ unexpectedBetweenImportKeywordAndImportKindSpecifier: RawUnexpectedNodesSyntax? = nil, 
@@ -11454,7 +11454,7 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndImportKeyword?.raw
       layout[5] = importKeyword.raw
       layout[6] = unexpectedBetweenImportKeywordAndImportKindSpecifier?.raw
@@ -11478,8 +11478,8 @@ public struct RawImportDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndImportKeyword: RawUnexpectedNodesSyntax? {
@@ -12076,7 +12076,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax? = nil, 
       initKeyword: RawTokenSyntax, 
       _ unexpectedBetweenInitKeywordAndOptionalMark: RawUnexpectedNodesSyntax? = nil, 
@@ -12098,7 +12098,7 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndInitKeyword?.raw
       layout[5] = initKeyword.raw
       layout[6] = unexpectedBetweenInitKeywordAndOptionalMark?.raw
@@ -12128,8 +12128,8 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndInitKeyword: RawUnexpectedNodesSyntax? {
@@ -13339,7 +13339,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndMacroKeyword: RawUnexpectedNodesSyntax? = nil, 
       macroKeyword: RawTokenSyntax, 
       _ unexpectedBetweenMacroKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -13361,7 +13361,7 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndMacroKeyword?.raw
       layout[5] = macroKeyword.raw
       layout[6] = unexpectedBetweenMacroKeywordAndName?.raw
@@ -13391,8 +13391,8 @@ public struct RawMacroDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndMacroKeyword: RawUnexpectedNodesSyntax? {
@@ -13481,7 +13481,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndPound: RawUnexpectedNodesSyntax? = nil, 
       pound: RawTokenSyntax, 
       _ unexpectedBetweenPoundAndMacroName: RawUnexpectedNodesSyntax? = nil, 
@@ -13507,7 +13507,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndPound?.raw
       layout[5] = pound.raw
       layout[6] = unexpectedBetweenPoundAndMacroName?.raw
@@ -13541,8 +13541,8 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndPound: RawUnexpectedNodesSyntax? {
@@ -14343,7 +14343,7 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? = nil, 
       placeholder: RawTokenSyntax, 
       _ unexpectedAfterPlaceholder: RawUnexpectedNodesSyntax? = nil, 
@@ -14355,7 +14355,7 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
       layout[5] = placeholder.raw
       layout[6] = unexpectedAfterPlaceholder?.raw
@@ -14375,8 +14375,8 @@ public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? {
@@ -17031,7 +17031,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax? = nil, 
       precedencegroupKeyword: RawTokenSyntax, 
       _ unexpectedBetweenPrecedencegroupKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -17051,7 +17051,7 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndPrecedencegroupKeyword?.raw
       layout[5] = precedencegroupKeyword.raw
       layout[6] = unexpectedBetweenPrecedencegroupKeywordAndName?.raw
@@ -17079,8 +17079,8 @@ public struct RawPrecedenceGroupDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndPrecedencegroupKeyword: RawUnexpectedNodesSyntax? {
@@ -17635,7 +17635,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax? = nil, 
       protocolKeyword: RawTokenSyntax, 
       _ unexpectedBetweenProtocolKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -17657,7 +17657,7 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndProtocolKeyword?.raw
       layout[5] = protocolKeyword.raw
       layout[6] = unexpectedBetweenProtocolKeywordAndName?.raw
@@ -17687,8 +17687,8 @@ public struct RawProtocolDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndProtocolKeyword: RawUnexpectedNodesSyntax? {
@@ -19176,7 +19176,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? = nil, 
       structKeyword: RawTokenSyntax, 
       _ unexpectedBetweenStructKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -19198,7 +19198,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndStructKeyword?.raw
       layout[5] = structKeyword.raw
       layout[6] = unexpectedBetweenStructKeywordAndName?.raw
@@ -19228,8 +19228,8 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndStructKeyword: RawUnexpectedNodesSyntax? {
@@ -19436,7 +19436,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? = nil, 
       subscriptKeyword: RawTokenSyntax, 
       _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil, 
@@ -19458,7 +19458,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndSubscriptKeyword?.raw
       layout[5] = subscriptKeyword.raw
       layout[6] = unexpectedBetweenSubscriptKeywordAndGenericParameterClause?.raw
@@ -19488,8 +19488,8 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndSubscriptKeyword: RawUnexpectedNodesSyntax? {
@@ -21116,7 +21116,7 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? = nil, 
       typealiasKeyword: RawTokenSyntax, 
       _ unexpectedBetweenTypealiasKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
@@ -21136,7 +21136,7 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndTypealiasKeyword?.raw
       layout[5] = typealiasKeyword.raw
       layout[6] = unexpectedBetweenTypealiasKeywordAndName?.raw
@@ -21164,8 +21164,8 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? {
@@ -22047,7 +22047,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax?, 
       _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil, 
-      modifiers: RawDeclModifierListSyntax?, 
+      modifiers: RawDeclModifierListSyntax, 
       _ unexpectedBetweenModifiersAndBindingSpecifier: RawUnexpectedNodesSyntax? = nil, 
       bindingSpecifier: RawTokenSyntax, 
       _ unexpectedBetweenBindingSpecifierAndBindings: RawUnexpectedNodesSyntax? = nil, 
@@ -22061,7 +22061,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes?.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndBindingSpecifier?.raw
       layout[5] = bindingSpecifier.raw
       layout[6] = unexpectedBetweenBindingSpecifierAndBindings?.raw
@@ -22083,8 +22083,8 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenModifiersAndBindingSpecifier: RawUnexpectedNodesSyntax? {

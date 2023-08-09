@@ -20,6 +20,21 @@ import SwiftParserDiagnostics
 import OSLog
 #endif
 
+fileprivate var suppressStringInterpolationParsingErrors = false
+
+/// Run the body, disabling any runtime warnings about syntax error in string
+/// interpolation inside the body.
+///
+/// Used to test the behavior of string interpolation with syntax errors.
+@_spi(Testing)
+public func withStringInterpolationParsingErrorsSuppressed<T>(_ body: () throws -> T) rethrows -> T {
+  suppressStringInterpolationParsingErrors = true
+  defer {
+    suppressStringInterpolationParsingErrors = false
+  }
+  return try body()
+}
+
 extension SyntaxParseable {
   public typealias StringInterpolation = SyntaxStringInterpolation
 
@@ -27,7 +42,9 @@ extension SyntaxParseable {
   /// are on a platform that supports OSLog, otherwise don't do anything.
   private func logStringInterpolationParsingError() {
     #if canImport(OSLog) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
-    if #available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, macCatalyst 14.0, *) {
+    if #available(macOS 11.0, iOS 14.0, tvOS 14.0, watchOS 7.0, macCatalyst 14.0, *),
+      !suppressStringInterpolationParsingErrors
+    {
       let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: self)
       let formattedDiagnostics = DiagnosticsFormatter().annotatedSource(tree: self, diags: diagnostics)
       Logger(subsystem: "SwiftSyntax", category: "ParseError").fault(

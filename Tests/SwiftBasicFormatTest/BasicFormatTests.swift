@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftParser
-import SwiftSyntaxBuilder
+@_spi(Testing) import SwiftSyntaxBuilder
 import SwiftSyntax
 
 import XCTest
@@ -491,15 +491,17 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testUnexpectedIsNotFormatted() {
-    let expr: ExprSyntax = """
-      let foo=1
-      """
-
-    assertFormatted(
-      tree: expr,
-      expected: """
+    withStringInterpolationParsingErrorsSuppressed {
+      let expr: ExprSyntax = """
         let foo=1
         """
-    )
+
+      assertFormatted(
+        tree: expr,
+        expected: """
+          let foo=1
+          """
+      )
+    }
   }
 }

@@ -1619,29 +1619,56 @@ public let DECL_NODES: [Node] = [
     kind: .patternBinding,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      Defines variables inside a variable declaration.
+      """,
     traits: [
       "WithTrailingComma"
     ],
     children: [
       Child(
         name: "Pattern",
-        kind: .node(kind: .pattern)
+        kind: .node(kind: .pattern),
+        documentation: """
+          The pattern that defines the variables.
+
+          In simple variable declarations this is an ``IdentifierPatternSyntax``, which defines
+          the name of a single variable.
+
+          In more complex variable declaration, this can, for example, be a ``TuplePatternSyntax``
+          that destructures a tuple.
+
+          ```swift
+          let (x, y) = (1, 2)
+          ```
+          """
       ),
       Child(
         name: "TypeAnnotation",
         kind: .node(kind: .typeAnnotation),
         nameForDiagnostics: "type annotation",
+        documentation: """
+          The type of the variables defined by the pattern.
+
+          Can be omitted, in which case the variables’ types are inferred from the initializer.
+          """,
         isOptional: true
       ),
       Child(
         name: "Initializer",
         kind: .node(kind: .initializerClause),
+        documentation: """
+          If the variables have a default value, the clause that initializes them.
+          """,
         isOptional: true
       ),
       Child(
         name: "AccessorBlock",
         deprecatedName: "Accessor",
         kind: .node(kind: .accessorBlock),
+        documentation: """
+          If the variable is computed, the accessors that get (and optionally set) the value.
+          """,
         isOptional: true
       ),
       Child(
@@ -2296,6 +2323,12 @@ public let DECL_NODES: [Node] = [
     kind: .variableDecl,
     base: .decl,
     nameForDiagnostics: "variable",
+    documentation: """
+      Declaration of one or more variables
+
+      The core of a variable declaration consists of a binding specifier (`let` or `var`),
+      followed by any number of pattern bindings, which define the variables.
+      """,
     traits: [
       "WithAttributes",
       "WithModifiers",
@@ -2316,13 +2349,28 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "BindingSpecifier",
         deprecatedName: "BindingKeyword",
-        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
+        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")]),
+        documentation: """
+          The specifier that defines the type of the variables declared (`let` or `var`).
+          """
       ),
       Child(
         name: "Bindings",
-        kind: .collection(kind: .patternBindingList, collectionElementName: "Binding")
+        kind: .collection(kind: .patternBindingList, collectionElementName: "Binding"),
+        documentation: """
+          The pattern bindings that define the actual variables.
+
+          The pattern bindings contain the declared variables’ names, their types,
+          initializers and accessors.
+
+          A variable declaration can contain multiple pattern bindings, because it’s possible
+          to define multiple variables after a single `let` keyword, for example
+
+          ```swift
+          let x: Int = 1, y: Int = 2
+          ```
+          """
       ),
     ]
   ),
-
 ]

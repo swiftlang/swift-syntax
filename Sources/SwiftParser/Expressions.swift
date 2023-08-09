@@ -734,7 +734,7 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
-        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.isValidTrailingClosure(flavor) }) {
+        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
         } else {
           trailingClosure = nil
@@ -770,7 +770,7 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
-        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.isValidTrailingClosure(flavor) }) {
+        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
         } else {
           trailingClosure = nil
@@ -793,7 +793,7 @@ extension Parser {
       }
 
       // Check for a trailing closure, if allowed.
-      if self.at(.leftBrace) && self.withLookahead({ $0.isValidTrailingClosure(flavor) }) {
+      if self.at(.leftBrace) && self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
         // FIXME: if Result has a trailing closure, break out.
         // Add dummy blank argument list to the call expression syntax.
         let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
@@ -1321,7 +1321,7 @@ extension Parser {
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
-    if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.isValidTrailingClosure(flavor) }) {
+    if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
       (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
     } else {
       trailingClosure = nil
@@ -1915,7 +1915,7 @@ extension Parser {
     // Parse labeled trailing closures.
     var elements = [RawMultipleTrailingClosureElementSyntax]()
     var loopProgress = LoopProgressCondition()
-    while self.withLookahead({ $0.isStartOfLabelledTrailingClosure() }) && self.hasProgressed(&loopProgress) {
+    while self.withLookahead({ $0.atStartOfLabelledTrailingClosure() }) && self.hasProgressed(&loopProgress) {
       let (unexpectedBeforeLabel, label) = self.parseArgumentLabel()
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let closure = self.parseClosureExpression()
@@ -1937,7 +1937,7 @@ extension Parser {
 }
 
 extension Parser.Lookahead {
-  mutating func isStartOfLabelledTrailingClosure() -> Bool {
+  mutating func atStartOfLabelledTrailingClosure() -> Bool {
     // Fast path: the next two tokens must be a label and a colon.
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
@@ -1967,12 +1967,12 @@ extension Parser.Lookahead {
   /// where the parser requires an expr-basic (which does not allow them).  We
   /// handle this by doing some lookahead in common situations. And later, Sema
   /// will emit a diagnostic with a fixit to add wrapping parens.
-  mutating func isValidTrailingClosure(_ flavor: Parser.ExprFlavor) -> Bool {
+  mutating func atValidTrailingClosure(_ flavor: Parser.ExprFlavor) -> Bool {
     precondition(self.at(.leftBrace), "Couldn't be a trailing closure")
 
     // If this is the start of a get/set accessor, then it isn't a trailing
     // closure.
-    guard !self.withLookahead({ $0.isStartOfGetSetAccessor() }) else {
+    guard !self.withLookahead({ $0.atStartOfGetSetAccessor() }) else {
       return false
     }
 

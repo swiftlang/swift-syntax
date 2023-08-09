@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension SyntaxKind {
   var nameForDiagnostics: String? {

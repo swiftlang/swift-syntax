@@ -12,6 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(SyntaxTransformVisitor)
 public protocol SyntaxTransformVisitor {
   associatedtype ResultType = Void
   

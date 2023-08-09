@@ -981,7 +981,9 @@ public let EXPR_NODES: [Node] = [
     base: .expr,
     nameForDiagnostics: "'is'",
     documentation: """
-      An `is` expression like the following.
+      Checks if an expression is of a given type.
+
+      An example of an `is` expression is
 
       ```swift
       value is Double

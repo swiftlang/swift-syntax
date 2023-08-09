@@ -242,7 +242,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "associatedtype declaration",
     documentation: """
-      An associated type declaration like the following.
+      An `associatedtype` declaration
+
+      An example of an associatedtype declaration is
 
       ```swift
       associatedtype Item
@@ -332,7 +334,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "class",
     documentation: """
-      A class declaration like the following.
+      A `class` declaration
+
+      An example of a class declaration is
 
       ```swift
       class SomeClass {
@@ -498,7 +502,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "deinitializer",
     documentation: """
-      A deinitializer declaration like the following.
+      A `deint` declaration
+
+      An example of a deinitializer is
 
       ```swift
       deinit {
@@ -1135,7 +1141,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "import",
     documentation: """
-      An import declaration like the following.
+      An `import` declaration
+
+      An example of an import declaration is
 
       ```swift
       import Foundation
@@ -1180,7 +1188,11 @@ public let DECL_NODES: [Node] = [
           .keyword(text: "func"),
           .keyword(text: "inout"),
         ]),
-        documentation: "The kind of declaration being imported. For example, a struct can be imported from a specific module.",
+        documentation: """
+          The kind of declaration being imported. 
+
+          A struct can be imported from a specific module.
+          """,
         isOptional: true
       ),
       Child(
@@ -1241,7 +1253,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "initializer",
     documentation: """
-      An initializer declaration like the following.
+      An `init` declaration
+
+      An example of an initializer is
 
       ```swift
       init(someParameter: Int) {
@@ -1927,7 +1941,9 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "protocol",
     documentation: """
-      A protocol declaration like the following.
+      A `protocol` declaration
+
+      An example of a protocol declaration is
 
       ```swift
       protocol Example {
@@ -2048,61 +2064,63 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "struct",
     documentation: """
-          A struct declaration like the following.
+      A `struct` declaration
 
-          ```swift
-          struct SomeStruct {
-            let someMember: String
-            var anotherMember: Int
+      An example of a struct declaration is
 
-            func foo() {
-              print(someMember)
-            }
+      ```swift
+      struct SomeStruct {
+        let someMember: String
+        var anotherMember: Int
 
-            mutating func bar() {
-              anotherMember = 42
-            }
-          }
-          ```
+        func foo() {
+          print(someMember)
+        }
 
-          A struct declaration may be declared without any members.
+        mutating func bar() {
+          anotherMember = 42
+        }
+      }
+      ```
 
-          ```swift
-          struct EmptyStruct {
+      A struct declaration may be declared without any members.
 
-          }
-          ```
+      ```swift
+      struct EmptyStruct {
 
-          A struct declaration may include a type inheritance clause listing
-          one or more protocols the struct conforms to.
+      }
+      ```
 
-          The example below uses Hashable and Equatable protocols whose members
-          are automatically synthesized by the compiler if the struct contains
-          stored members that are themselves `Hashable` and `Equatable`.
+      A struct declaration may include a type inheritance clause listing
+      one or more protocols the struct conforms to.
 
-          ```swift
-          struct AdvancedStruct: Hashable, Equatable {
-            let someMember: String
-            var anotherMember: Int
-          }
-          ```
+      The example below uses Hashable and Equatable protocols whose members
+      are automatically synthesized by the compiler if the struct contains
+      stored members that are themselves `Hashable` and `Equatable`.
 
-          A struct declaration may include a generic parameter clause as well
-          as a generic where clause.
+      ```swift
+      struct AdvancedStruct: Hashable, Equatable {
+        let someMember: String
+        var anotherMember: Int
+      }
+      ```
 
-          ```swift
-          struct Stack<Element> {
-            var items: [Element] = []
+      A struct declaration may include a generic parameter clause as well
+      as a generic where clause.
 
-            mutating func push(_ item: Element) {
-              items.append(item)
-            }
+      ```swift
+      struct Stack<Element> {
+        var items: [Element] = []
 
-            mutating func pop() -> Element {
-              return items.removeLast()
-            }
-         }
-         ```
+        mutating func push(_ item: Element) {
+          items.append(item)
+        }
+
+        mutating func pop() -> Element {
+          return items.removeLast()
+        }
+      }
+      ```
       """,
     traits: [
       "DeclGroup",

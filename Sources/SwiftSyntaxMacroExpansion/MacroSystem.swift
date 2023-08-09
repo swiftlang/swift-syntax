@@ -66,7 +66,7 @@ private func expandFreestandingMemberDeclList(
   let indentedSource =
     expanded
     .indented(by: node.indentationOfFirstLine)
-    .wrappingInNonCommentTrivia(from: node)
+    .wrappingInTrivia(from: node)
   return "\(raw: indentedSource)"
 }
 
@@ -94,7 +94,7 @@ private func expandFreestandingCodeItemList(
   let indentedSource =
     expanded
     .indented(by: node.indentationOfFirstLine)
-    .wrappingInNonCommentTrivia(from: node)
+    .wrappingInTrivia(from: node)
   return "\(raw: indentedSource)"
 }
 
@@ -119,7 +119,7 @@ private func expandFreestandingExpr(
   let indentedSource =
     expanded
     .indented(by: node.indentationOfFirstLine)
-    .wrappingInNonCommentTrivia(from: node)
+    .wrappingInTrivia(from: node)
   return "\(raw: indentedSource)"
 }
 
@@ -947,17 +947,18 @@ private extension AccessorBlockSyntax {
 }
 
 private extension String {
-  /// Add any non-comment trivia from `node` before/after this string.
+  /// Add any trivia from `node` before/after this string.
   ///
-  /// We need to do this because the macro is responsible for copying trivia
-  /// from the freestanding macro to the generated declaration.
-  ///
-  /// Essentially, what we want to keep any empty newlines in front of the
-  /// freestanding macro that separate it from the previous declarations.
-  func wrappingInNonCommentTrivia(from node: some SyntaxProtocol) -> String {
-    return node.leadingTrivia.removingComments.removingIndentation.description
+  /// We need to do this because we are replacing the entire macro expansion
+  /// declaration / expression with the expanded source but semantically, the
+  /// user should think about it as just replacing the `#...` expression without
+  /// any trivia.
+  func wrappingInTrivia(from node: some SyntaxProtocol) -> String {
+    // We need to remove the indentation from the last line because the macro
+    // expansion buffer already contains the indentation.
+    return node.leadingTrivia.removingIndentationOnLastLine.description
       + self
-      + node.leadingTrivia.removingComments.removingIndentation.description
+      + node.trailingTrivia.description
   }
 }
 
@@ -970,39 +971,5 @@ private extension SyntaxProtocol {
     }
 
     return self.detached
-  }
-}
-
-private extension Trivia {
-  /// Drop all comments from the trivia.
-  ///
-  /// If a comment is the only entry on a line, drop the entire line instead of
-  /// leaving an empty line.
-  var removingComments: Trivia {
-    var result: [TriviaPiece] = []
-
-    var lineContainedComment = false
-    var lineContainedNonWhitespaceNonComment = false
-    for piece in self.pieces {
-      switch piece {
-      case .spaces, .tabs:
-        result.append(piece)
-      case .backslashes, .formfeeds, .pounds, .unexpectedText, .verticalTabs:
-        lineContainedNonWhitespaceNonComment = true
-        result.append(piece)
-      case .blockComment, .docBlockComment, .docLineComment, .lineComment:
-        lineContainedComment = true
-      case .carriageReturns, .carriageReturnLineFeeds, .newlines:
-        if lineContainedComment && !lineContainedNonWhitespaceNonComment {
-          continue
-        } else {
-          result.append(piece)
-        }
-        lineContainedComment = false
-        lineContainedNonWhitespaceNonComment = false
-      }
-    }
-
-    return Trivia(pieces: result)
   }
 }

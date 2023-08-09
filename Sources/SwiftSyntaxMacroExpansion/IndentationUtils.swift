@@ -85,6 +85,13 @@ extension Trivia {
     }
     return Trivia(pieces: resultPieces)
   }
+
+  /// Remove all indentation from the last line of this trivia
+  var removingIndentationOnLastLine: Trivia {
+    let lastNewlineIndex = pieces.lastIndex(where: \.isNewline) ?? pieces.startIndex
+
+    return Trivia(pieces: pieces[..<lastNewlineIndex]) + Trivia(pieces: pieces[lastNewlineIndex...]).removingIndentation
+  }
 }
 
 extension SyntaxProtocol {

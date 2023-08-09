@@ -701,6 +701,25 @@ final class MacroSystemTests: XCTestCase {
     )
   }
 
+  func testTriviaTransferOnExpressionMacro() {
+    assertMacroExpansion(
+      """
+      // Ignore me
+      \t
+      // Capture me
+      #stringify(x)
+      """,
+      expandedSource: """
+        // Ignore me
+        \t
+        // Capture me
+        (x, "x")
+        """,
+      macros: testMacros,
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testCommentsOnExpressionMacro() {
     assertMacroExpansion(
       """
@@ -709,7 +728,7 @@ final class MacroSystemTests: XCTestCase {
       """,
       expandedSource: """
         let b = 
-        (x + y, "x + y")
+        /*leading */ (x + y, "x + y") /*trailing*/
         """,
       macros: testMacros,
       indentationWidth: indentationWidth
@@ -1441,10 +1460,11 @@ final class MacroSystemTests: XCTestCase {
       ) /* trailing comment */
       """,
       expandedSource: """
+        // some comment
         func foo() {
         }
         func bar() {
-        }
+        } /* trailing comment */
         """,
       macros: ["decls": DeclsFromStringsMacro.self],
       indentationWidth: indentationWidth
@@ -1464,10 +1484,11 @@ final class MacroSystemTests: XCTestCase {
       """,
       expandedSource: """
         struct Foo {
+          // some comment
           func foo() {
           }
           func bar() {
-          }
+          } /* trailing comment */
         }
         """,
       macros: ["decls": DeclsFromStringsMacro.self],

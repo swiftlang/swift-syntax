@@ -12,7 +12,7 @@
 
 import XCTest
 import SwiftParser
-import SwiftSyntax
+@_spi(SyntaxTransformVisitor) import SwiftSyntax
 
 final class SyntaxTransformVisitorTest: XCTestCase {
   public func testFunctionCounter() {

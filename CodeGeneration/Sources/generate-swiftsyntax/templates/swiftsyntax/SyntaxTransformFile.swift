@@ -16,7 +16,12 @@ import SyntaxSupport
 import Utils
 
 let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  try! ProtocolDeclSyntax("public protocol SyntaxTransformVisitor") {
+  try! ProtocolDeclSyntax(
+    """
+    @_spi(SyntaxTransformVisitor)
+    public protocol SyntaxTransformVisitor
+    """
+  ) {
     DeclSyntax("associatedtype ResultType = Void")
 
     DeclSyntax("func visitAny(_ node: Syntax) -> ResultType")

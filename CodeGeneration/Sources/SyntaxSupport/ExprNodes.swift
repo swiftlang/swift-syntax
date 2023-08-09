@@ -1184,11 +1184,13 @@ public let EXPR_NODES: [Node] = [
     kind: .memberAccessExpr,
     base: .expr,
     nameForDiagnostics: "member access",
+    documentation: "An expression that access a member like a function or a property.",
     children: [
       Child(
         name: "Base",
         kind: .node(kind: .expr),
         nameForDiagnostics: "base",
+        documentation: "The base of the member access, optionally specified.",
         isOptional: true
       ),
       Child(
@@ -1199,7 +1201,8 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "DeclName",
         kind: .node(kind: .declReferenceExpr),
-        nameForDiagnostics: "name"
+        nameForDiagnostics: "name",
+        documentation: "The name of the referenced function or a property."
       ),
     ]
   ),

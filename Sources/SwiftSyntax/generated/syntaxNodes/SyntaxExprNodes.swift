@@ -1841,7 +1841,6 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declName``
 ///  - ``MemberAccessExprSyntax``.``MemberAccessExprSyntax/declName``
-///  - ``QualifiedDeclNameSyntax``.``QualifiedDeclNameSyntax/declName``
 ///  - ``SpecializeTargetFunctionArgumentSyntax``.``SpecializeTargetFunctionArgumentSyntax/declName``
 public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -4249,6 +4248,8 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
 // MARK: - MemberAccessExprSyntax
 
+/// An expression that access a member like a function or a property.
+///
 /// ### Children
 /// 
 ///  - `base`: ``ExprSyntax``?
@@ -4275,6 +4276,8 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - base: The base of the member access, optionally specified.
+  ///   - declName: The name of the referenced function or a property.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -4330,6 +4333,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The base of the member access, optionally specified.
   public var base: ExprSyntax? {
     get {
       return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
@@ -4366,6 +4370,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
+  /// The name of the referenced function or a property.
   public var declName: DeclReferenceExprSyntax {
     get {
       return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)

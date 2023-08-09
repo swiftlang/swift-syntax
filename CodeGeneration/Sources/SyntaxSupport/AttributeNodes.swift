@@ -340,7 +340,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "OriginalDeclName",
-        kind: .node(kind: .qualifiedDeclName),
+        kind: .node(kind: .expr),
         documentation: "The referenced original declaration name."
       ),
       Child(
@@ -772,43 +772,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "Platforms",
         kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform")
-      ),
-    ]
-  ),
-
-  // An optionally qualified declaration name.
-  // Currently used only for `@derivative` and `@transpose` attribute.
-  // TODO(TF-1066): Use module qualified name syntax/parsing instead of custom
-  // qualified name syntax/parsing.
-  //
-  // qualified-decl-name ->
-  //     base-type? '.'? (identifier | operator) decl-name-arguments?
-  // base-type ->
-  //     member-type-identifier | base-type-identifier
-  Node(
-    kind: .qualifiedDeclName,
-    base: .syntax,
-    nameForDiagnostics: "declaration name",
-    documentation: "An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).",
-    children: [
-      Child(
-        name: "BaseType",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "base type",
-        documentation: "The base type of the qualified name, optionally specified.",
-        isOptional: true
-      ),
-      Child(
-        name: "Period",
-        deprecatedName: "Dot",
-        kind: .token(choices: [.token(.period)]),
-        isOptional: true
-      ),
-      Child(
-        name: "DeclName",
-        kind: .node(kind: .declReferenceExpr),
-        nameForDiagnostics: "name",
-        documentation: "The name of the referenced function."
       ),
     ]
   ),

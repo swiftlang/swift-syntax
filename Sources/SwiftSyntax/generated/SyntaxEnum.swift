@@ -229,7 +229,6 @@ public enum SyntaxEnum {
   case primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax)
   case primaryAssociatedType(PrimaryAssociatedTypeSyntax)
   case protocolDecl(ProtocolDeclSyntax)
-  case qualifiedDeclName(QualifiedDeclNameSyntax)
   case regexLiteralExpr(RegexLiteralExprSyntax)
   case repeatStmt(RepeatStmtSyntax)
   case returnClause(ReturnClauseSyntax)
@@ -727,8 +726,6 @@ public extension Syntax {
       return .primaryAssociatedType(PrimaryAssociatedTypeSyntax(self)!)
     case .protocolDecl:
       return .protocolDecl(ProtocolDeclSyntax(self)!)
-    case .qualifiedDeclName:
-      return .qualifiedDeclName(QualifiedDeclNameSyntax(self)!)
     case .regexLiteralExpr:
       return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
     case .repeatStmt:

@@ -333,7 +333,6 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/OriginallyDefinedInAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/PlatformVersionItemListSyntax>
 - <doc:SwiftSyntax/PlatformVersionItemSyntax>
-- <doc:SwiftSyntax/QualifiedDeclNameSyntax>
 - <doc:SwiftSyntax/SpecializeAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/SpecializeAvailabilityArgumentSyntax>
 - <doc:SwiftSyntax/SpecializeTargetFunctionArgumentSyntax>

@@ -145,11 +145,12 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseQualifiedDeclarationName() -> RawQualifiedDeclNameSyntax {
-    let type: RawTypeSyntax?
+  mutating func parseQualifiedDeclarationName() -> RawExprSyntax {
+    let type: RawExprSyntax?
     let period: RawTokenSyntax?
+
     if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
-      type = self.parseQualifiedTypeIdentifier()
+      type = RawExprSyntax(RawTypeExprSyntax(type: self.parseQualifiedTypeIdentifier(), arena: self.arena))
       period = self.consumePrefix(".", as: .period)
     } else {
       type = nil
@@ -161,12 +162,18 @@ extension Parser {
       .keywordsUsingSpecialNames,
       .operators,
     ])
-    return RawQualifiedDeclNameSyntax(
-      baseType: type,
-      period: period,
-      declName: declName,
-      arena: self.arena
-    )
+    if let period = period {
+      return RawExprSyntax(
+        RawMemberAccessExprSyntax(
+          base: type,
+          period: period,
+          declName: declName,
+          arena: self.arena
+        )
+      )
+    } else {
+      return RawExprSyntax(declName)
+    }
   }
 
   mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {

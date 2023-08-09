@@ -937,7 +937,6 @@ extension Syntax {
           .node(PrimaryAssociatedTypeListSyntax.self),
           .node(PrimaryAssociatedTypeSyntax.self),
           .node(ProtocolDeclSyntax.self),
-          .node(QualifiedDeclNameSyntax.self),
           .node(RegexLiteralExprSyntax.self),
           .node(RepeatStmtSyntax.self),
           .node(ReturnClauseSyntax.self),

@@ -229,7 +229,6 @@ public enum SyntaxKind: CaseIterable {
   case primaryAssociatedTypeList
   case primaryAssociatedType
   case protocolDecl
-  case qualifiedDeclName
   case regexLiteralExpr
   case repeatStmt
   case returnClause
@@ -848,8 +847,6 @@ public enum SyntaxKind: CaseIterable {
       return PrimaryAssociatedTypeSyntax.self
     case .protocolDecl:
       return ProtocolDeclSyntax.self
-    case .qualifiedDeclName:
-      return QualifiedDeclNameSyntax.self
     case .regexLiteralExpr:
       return RegexLiteralExprSyntax.self
     case .repeatStmt:

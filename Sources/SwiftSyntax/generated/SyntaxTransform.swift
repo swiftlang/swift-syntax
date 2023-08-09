@@ -1090,11 +1090,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ProtocolDeclSyntax) -> ResultType
   
-  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: QualifiedDeclNameSyntax) -> ResultType
-  
   /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2904,13 +2899,6 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
-  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: nil by default.
-  public func visit(_ node: QualifiedDeclNameSyntax) -> ResultType {
-    visitAny(Syntax(node))
-  }
-  
   /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3769,8 +3757,6 @@ extension SyntaxTransformVisitor {
     case .primaryAssociatedType(let derived):
       return visit(derived)
     case .protocolDecl(let derived):
-      return visit(derived)
-    case .qualifiedDeclName(let derived):
       return visit(derived)
     case .regexLiteralExpr(let derived):
       return visit(derived)

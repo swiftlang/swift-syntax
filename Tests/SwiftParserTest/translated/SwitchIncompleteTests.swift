@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class SwitchIncompleteTests: XCTestCase {
+final class SwitchIncompleteTests: ParserTestCase {
   func testSwitchIncomplete1() {
     // <rdar://problem/15971438> Incomplete switch was parsing to an AST that
     // triggered an assertion failure.

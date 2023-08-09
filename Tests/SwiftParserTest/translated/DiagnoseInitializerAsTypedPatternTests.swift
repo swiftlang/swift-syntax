@@ -15,7 +15,7 @@
 import XCTest
 
 // https://github.com/apple/swift/issues/44070
-final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
+final class DiagnoseInitializerAsTypedPatternTests: ParserTestCase {
   func testDiagnoseInitializerAsTypedPattern3a() {
     assertParse(
       """

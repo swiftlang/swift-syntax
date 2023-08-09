@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class StatementTests: XCTestCase {
+final class StatementTests: ParserTestCase {
   func testIf() {
     assertParse(
       """

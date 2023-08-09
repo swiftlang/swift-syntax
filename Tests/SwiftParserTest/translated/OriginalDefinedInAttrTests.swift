@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class OriginalDefinedInAttrTests: XCTestCase {
+final class OriginalDefinedInAttrTests: ParserTestCase {
   func testOriginalDefinedInAttr1() {
     assertParse(
       #"""

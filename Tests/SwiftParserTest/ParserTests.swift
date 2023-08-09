@@ -17,7 +17,7 @@ import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
 
-public class ParserTests: XCTestCase {
+public class ParserTests: ParserTestCase {
   /// Run a single parse test.
   func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
     let fileContents = try Data(contentsOf: fileURL)

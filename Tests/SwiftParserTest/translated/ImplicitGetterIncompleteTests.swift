@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ImplicitGetterIncompleteTests: XCTestCase {
+final class ImplicitGetterIncompleteTests: ParserTestCase {
   func testImplicitGetterIncomplete1() {
     assertParse(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class MetatypeObjectConversionTests: XCTestCase {
+final class MetatypeObjectConversionTests: ParserTestCase {
   func testMetatypeObjectConversion1() {
     assertParse(
       """

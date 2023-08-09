@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class AvailabilityTests: XCTestCase {
+final class AvailabilityTests: ParserTestCase {
   func testAvailableMember() {
     assertParse(
       """

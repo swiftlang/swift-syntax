@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftParser
 import XCTest
 
-public class EntryTests: XCTestCase {
+public class EntryTests: ParserTestCase {
   func testTopLevelStringParse() throws {
     let source = "func test() {}"
     let tree = Parser.parse(source: source)

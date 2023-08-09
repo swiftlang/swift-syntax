@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class MoveExprTests: XCTestCase {
+final class MoveExprTests: ParserTestCase {
   func testMoveExpr1() {
     assertParse(
       """

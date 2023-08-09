@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class DiagnoseAvailabilityTests: XCTestCase {
+final class DiagnoseAvailabilityTests: ParserTestCase {
   func testDiagnoseAvailability1() {
     assertParse(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ForeachTests: XCTestCase {
+final class ForeachTests: ParserTestCase {
   func testForeach1() {
     assertParse(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class MatchingPatternsTests: XCTestCase {
+final class MatchingPatternsTests: ParserTestCase {
   func testMatchingPatterns1() {
     assertParse(
       """

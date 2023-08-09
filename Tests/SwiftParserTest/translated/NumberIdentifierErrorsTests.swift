@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class NumberIdentifierErrorsTests: XCTestCase {
+final class NumberIdentifierErrorsTests: ParserTestCase {
   func testNumberIdentifierErrors1() {
     assertParse(
       """

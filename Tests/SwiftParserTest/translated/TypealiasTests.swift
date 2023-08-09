@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class TypealiasTests: XCTestCase {
+final class TypealiasTests: ParserTestCase {
   func testTypealias2a() {
     assertParse(
       """

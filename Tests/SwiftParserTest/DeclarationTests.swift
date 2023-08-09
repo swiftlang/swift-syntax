@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 import SwiftBasicFormat
 import XCTest
 
-final class DeclarationTests: XCTestCase {
+final class DeclarationTests: ParserTestCase {
   func testImports() {
     assertParse("import Foundation")
 

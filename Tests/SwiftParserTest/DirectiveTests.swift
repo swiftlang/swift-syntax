@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class DirectiveTests: XCTestCase {
+final class DirectiveTests: ParserTestCase {
   func testSwitchIfConfig() {
     assertParse(
       """

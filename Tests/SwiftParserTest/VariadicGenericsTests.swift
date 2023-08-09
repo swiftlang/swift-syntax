@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-final class VariadicGenericsTests: XCTestCase {
+final class VariadicGenericsTests: ParserTestCase {
   func testSimpleForwarding() {
     assertParse(
       """
@@ -297,7 +297,7 @@ final class VariadicGenericsTests: XCTestCase {
   }
 }
 
-final class TypeParameterPackTests: XCTestCase {
+final class TypeParameterPackTests: ParserTestCase {
   func testParameterPacks1() {
     assertParse(
       """

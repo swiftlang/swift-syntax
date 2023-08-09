@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ConsecutiveStatementsTests: XCTestCase {
+final class ConsecutiveStatementsTests: ParserTestCase {
   func testSimple1() {
     assertParse(
       "let x = 21️⃣ let y = 3",

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ForwardSlashRegexSkippingTests: XCTestCase {
+final class ForwardSlashRegexSkippingTests: ParserTestCase {
   func testForwardSlashRegexSkipping3() {
     assertParse(
       #"""

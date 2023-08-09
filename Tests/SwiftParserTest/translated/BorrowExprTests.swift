@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class BorrowExprTests: XCTestCase {
+final class BorrowExprTests: ParserTestCase {
   func testBorrowExpr1() {
     assertParse(
       """

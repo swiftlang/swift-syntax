@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ConflictMarkersTests: XCTestCase {
+final class ConflictMarkersTests: ParserTestCase {
   func testConflictMarkers1() {
     assertParse(
       """

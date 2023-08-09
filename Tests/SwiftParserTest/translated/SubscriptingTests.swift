@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class SubscriptingTests: XCTestCase {
+final class SubscriptingTests: ParserTestCase {
   func testSubscripting1() {
     assertParse(
       """

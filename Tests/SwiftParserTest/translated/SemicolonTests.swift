@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class SemicolonTests: XCTestCase {
+final class SemicolonTests: ParserTestCase {
   func testSemicolon1() {
     assertParse(
       #"""

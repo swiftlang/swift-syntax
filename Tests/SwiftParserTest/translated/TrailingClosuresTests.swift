@@ -15,7 +15,7 @@
 import SwiftSyntax
 import XCTest
 
-final class TrailingClosuresTests: XCTestCase {
+final class TrailingClosuresTests: ParserTestCase {
   func testTrailingClosures1() {
     assertParse(
       """

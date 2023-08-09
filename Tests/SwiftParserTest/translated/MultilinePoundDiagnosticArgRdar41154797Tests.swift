@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
+final class MultilinePoundDiagnosticArgRdar41154797Tests: ParserTestCase {
   func testMultilinePoundDiagnosticArgRdar411547971() {
     assertParse(
       ##"""

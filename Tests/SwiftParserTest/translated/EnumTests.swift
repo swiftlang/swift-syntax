@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class EnumTests: XCTestCase {
+final class EnumTests: ParserTestCase {
   func testEnum1() {
     assertParse(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class DiagnoseDynamicReplacementTests: XCTestCase {
+final class DiagnoseDynamicReplacementTests: ParserTestCase {
   func testDiagnoseDynamicReplacement1() {
     assertParse(
       """

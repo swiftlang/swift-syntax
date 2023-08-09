@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class DiagnosticMissingFuncKeywordTests: XCTestCase {
+final class DiagnosticMissingFuncKeywordTests: ParserTestCase {
   func testDiagnosticMissingFuncKeyword2a() {
     // https://github.com/apple/swift/issues/52877
     assertParse(

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class SwitchTests: XCTestCase {
+final class SwitchTests: ParserTestCase {
   func testSwitch1() {
     assertParse(
       """

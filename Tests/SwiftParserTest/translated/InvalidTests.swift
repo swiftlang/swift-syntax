@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class InvalidTests: XCTestCase {
+final class InvalidTests: ParserTestCase {
   func testInvalid1a() {
     // rdar://15946844
     assertParse(

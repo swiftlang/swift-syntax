@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class RegexParseEndOfBufferTests: XCTestCase {
+final class RegexParseEndOfBufferTests: ParserTestCase {
   func testRegexParseEndOfBuffer1() {
     assertParse(
       "var unterminated = #/(xy1️⃣",

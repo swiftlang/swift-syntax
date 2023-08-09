@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class PoundAssertTests: XCTestCase {
+final class PoundAssertTests: ParserTestCase {
   func testPoundAssert1() {
     assertParse(
       """

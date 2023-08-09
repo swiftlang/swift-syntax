@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class PlaygroundLvaluesTests: XCTestCase {
+final class PlaygroundLvaluesTests: ParserTestCase {
   func testPlaygroundLvalues1() {
     assertParse(
       """

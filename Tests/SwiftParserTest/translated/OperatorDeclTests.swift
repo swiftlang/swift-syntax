@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class OperatorDeclTests: XCTestCase {
+final class OperatorDeclTests: ParserTestCase {
   func testOperatorDecl1a() {
     assertParse(
       """

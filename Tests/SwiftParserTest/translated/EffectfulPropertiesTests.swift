@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class EffectfulPropertiesTests: XCTestCase {
+final class EffectfulPropertiesTests: ParserTestCase {
   func testEffectfulProperties1() {
     assertParse(
       """

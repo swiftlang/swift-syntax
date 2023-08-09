@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class RecoveryLibraryTests: XCTestCase {
+final class RecoveryLibraryTests: ParserTestCase {
   func testRecoveryLibrary() {
     assertParse(
       """

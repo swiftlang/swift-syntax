@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class OptionalLvaluesTests: XCTestCase {
+final class OptionalLvaluesTests: ParserTestCase {
   func testOptionalLvalues1() {
     assertParse(
       """

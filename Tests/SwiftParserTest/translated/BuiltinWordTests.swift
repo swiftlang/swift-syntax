@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class BuiltinWordTests: XCTestCase {
+final class BuiltinWordTests: ParserTestCase {
   func testBuiltinWord1() {
     assertParse(
       """

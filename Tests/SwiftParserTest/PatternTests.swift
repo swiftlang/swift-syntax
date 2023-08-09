@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class PatternTests: XCTestCase {
+final class PatternTests: ParserTestCase {
   private var genericArgEnumPattern: Syntax {
     // let E<Int>.e(y)
     Syntax(

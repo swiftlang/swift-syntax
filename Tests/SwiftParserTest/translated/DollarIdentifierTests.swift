@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class DollarIdentifierTests: XCTestCase {
+final class DollarIdentifierTests: ParserTestCase {
   func testDollarIdentifier1() {
     assertParse(
       """

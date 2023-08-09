@@ -15,7 +15,7 @@
 import SwiftSyntax
 import XCTest
 
-final class SuperTests: XCTestCase {
+final class SuperTests: ParserTestCase {
   func testSuper1() {
     assertParse(
       """

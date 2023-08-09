@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ToplevelLibraryTests: XCTestCase {
+final class ToplevelLibraryTests: ParserTestCase {
   func testToplevelLibrary1() {
     assertParse(
       """

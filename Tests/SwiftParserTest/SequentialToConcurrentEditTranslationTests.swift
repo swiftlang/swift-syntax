@@ -46,7 +46,7 @@ func verifySequentialToConcurrentTranslation(
   )
 }
 
-final class TranslateSequentialToConcurrentEditsTests: XCTestCase {
+final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testEmpty() {
     verifySequentialToConcurrentTranslation([], [])
   }

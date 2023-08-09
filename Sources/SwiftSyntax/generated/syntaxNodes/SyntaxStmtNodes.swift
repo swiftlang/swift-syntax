@@ -540,7 +540,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
       _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil,
-      catchClauses: CatchClauseListSyntax? = nil,
+      catchClauses: CatchClauseListSyntax = [],
       _ unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -562,7 +562,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           unexpectedBetweenDoKeywordAndBody?.raw, 
           body.raw, 
           unexpectedBetweenBodyAndCatchClauses?.raw, 
-          catchClauses?.raw, 
+          catchClauses.raw, 
           unexpectedAfterCatchClauses?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -623,12 +623,12 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var catchClauses: CatchClauseListSyntax? {
+  public var catchClauses: CatchClauseListSyntax {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(CatchClauseListSyntax.init)
+      return CatchClauseListSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
-      self = DoStmtSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
+      self = DoStmtSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
     }
   }
   

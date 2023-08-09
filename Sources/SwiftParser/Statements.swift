@@ -384,7 +384,7 @@ extension Parser {
       unexpectedBeforeDoKeyword,
       doKeyword: doKeyword,
       body: body,
-      catchClauses: elements.isEmpty ? nil : RawCatchClauseListSyntax(elements: elements, arena: self.arena),
+      catchClauses: RawCatchClauseListSyntax(elements: elements, arena: self.arena),
       arena: self.arena
     )
   }
@@ -416,7 +416,7 @@ extension Parser {
     return RawCatchClauseSyntax(
       unexpectedBeforeCatchKeyword,
       catchKeyword: catchKeyword,
-      catchItems: catchItems.isEmpty ? nil : RawCatchItemListSyntax(elements: catchItems, arena: self.arena),
+      catchItems: RawCatchItemListSyntax(elements: catchItems, arena: self.arena),
       body: body,
       arena: self.arena
     )

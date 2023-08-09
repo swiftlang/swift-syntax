@@ -760,4 +760,23 @@ class ValidateSyntaxNodes: XCTestCase {
 
     assertFailuresMatchXFails(failures, expectedFailures: [])
   }
+
+  func testNoOptionalSyntaxCollections() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.children {
+        if case .collection = child.kind, child.isOptional, !child.isUnexpectedNodes {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' is an optional syntax collection. All syntax collections should be non-optional."
+            )
+          )
+        }
+      }
+    }
+
+    assertFailuresMatchXFails(failures, expectedFailures: [])
+  }
 }

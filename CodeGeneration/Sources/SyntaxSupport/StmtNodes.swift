@@ -86,8 +86,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "CatchItems",
-        kind: .collection(kind: .catchItemList, collectionElementName: "CatchItem"),
-        isOptional: true
+        kind: .collection(kind: .catchItemList, collectionElementName: "CatchItem", defaultsToEmpty: true)
       ),
       Child(
         name: "Body",
@@ -240,8 +239,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "CatchClauses",
-        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause"),
-        isOptional: true
+        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause", defaultsToEmpty: true)
       ),
     ]
   ),

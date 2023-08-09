@@ -354,8 +354,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Items",
-        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item"),
-        isOptional: true
+        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item")
       ),
       Child(
         name: "RightSquare",

@@ -1986,19 +1986,17 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     }
 
     if let unexpectedAfterComponents = node.unexpectedAfterComponents {
-      if let components = node.components,
-        unexpectedAfterComponents.allSatisfy({ $0.is(VersionComponentSyntax.self) })
-      {
+      if unexpectedAfterComponents.allSatisfy({ $0.is(VersionComponentSyntax.self) }) {
         addDiagnostic(
           unexpectedAfterComponents,
-          TrailingVersionAreIgnored(major: node.major, components: components),
+          TrailingVersionAreIgnored(major: node.major, components: node.components),
           handledNodes: [unexpectedAfterComponents.id]
         )
       } else {
         addDiagnostic(
           unexpectedAfterComponents,
           CannotParseVersionTuple(versionTuple: unexpectedAfterComponents),
-          handledNodes: [node.major.id, node.components?.id, unexpectedAfterComponents.id].compactMap { $0 }
+          handledNodes: [node.major.id, node.components.id, unexpectedAfterComponents.id]
         )
       }
     }

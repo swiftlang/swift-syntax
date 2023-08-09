@@ -136,7 +136,7 @@ extension CatchClauseSyntax {
       unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil, 
       catchKeyword: TokenSyntax = .keyword(.catch), 
       unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil, 
-      catchItems: CatchItemListSyntax? = nil, 
+      catchItems: CatchItemListSyntax = [], 
       unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedAfterBody: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, 
@@ -213,7 +213,7 @@ extension ClosureCaptureClauseSyntax {
       unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil, 
       rightSquare: TokenSyntax = .rightSquareToken(), 
       unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil, 
-      @ClosureCaptureListBuilder itemsBuilder: () throws -> ClosureCaptureListSyntax?, 
+      @ClosureCaptureListBuilder itemsBuilder: () throws -> ClosureCaptureListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
     try self.init(
@@ -356,7 +356,7 @@ extension DoStmtSyntax {
       doKeyword: TokenSyntax = .keyword(.do), 
       unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, 
-      catchClauses: CatchClauseListSyntax? = nil, 
+      catchClauses: CatchClauseListSyntax = [], 
       unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil

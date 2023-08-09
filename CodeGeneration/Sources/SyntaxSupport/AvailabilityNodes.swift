@@ -180,8 +180,7 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "Components",
         kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
-        documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`",
-        isOptional: true
+        documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`"
       ),
     ]
   ),

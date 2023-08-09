@@ -107,7 +107,8 @@ final class AvailabilityTests: ParserTestCase {
       func test() {}
       """,
       substructure: VersionTupleSyntax(
-        major: .integerLiteral("10")
+        major: .integerLiteral("10"),
+        components: []
       )
     )
 

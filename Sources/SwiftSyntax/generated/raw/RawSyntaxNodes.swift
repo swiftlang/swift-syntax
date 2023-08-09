@@ -2715,7 +2715,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeCatchKeyword: RawUnexpectedNodesSyntax? = nil, 
       catchKeyword: RawTokenSyntax, 
       _ unexpectedBetweenCatchKeywordAndCatchItems: RawUnexpectedNodesSyntax? = nil, 
-      catchItems: RawCatchItemListSyntax?, 
+      catchItems: RawCatchItemListSyntax, 
       _ unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax? = nil, 
       body: RawCodeBlockSyntax, 
       _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil, 
@@ -2727,7 +2727,7 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeCatchKeyword?.raw
       layout[1] = catchKeyword.raw
       layout[2] = unexpectedBetweenCatchKeywordAndCatchItems?.raw
-      layout[3] = catchItems?.raw
+      layout[3] = catchItems.raw
       layout[4] = unexpectedBetweenCatchItemsAndBody?.raw
       layout[5] = body.raw
       layout[6] = unexpectedAfterBody?.raw
@@ -2747,8 +2747,8 @@ public struct RawCatchClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var catchItems: RawCatchItemListSyntax? {
-    layoutView.children[3].map(RawCatchItemListSyntax.init(raw:))
+  public var catchItems: RawCatchItemListSyntax {
+    layoutView.children[3].map(RawCatchItemListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenCatchItemsAndBody: RawUnexpectedNodesSyntax? {
@@ -3129,7 +3129,7 @@ public struct RawClosureCaptureClauseSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil, 
       leftSquare: RawTokenSyntax, 
       _ unexpectedBetweenLeftSquareAndItems: RawUnexpectedNodesSyntax? = nil, 
-      items: RawClosureCaptureListSyntax?, 
+      items: RawClosureCaptureListSyntax, 
       _ unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax? = nil, 
       rightSquare: RawTokenSyntax, 
       _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil, 
@@ -3141,7 +3141,7 @@ public struct RawClosureCaptureClauseSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeLeftSquare?.raw
       layout[1] = leftSquare.raw
       layout[2] = unexpectedBetweenLeftSquareAndItems?.raw
-      layout[3] = items?.raw
+      layout[3] = items.raw
       layout[4] = unexpectedBetweenItemsAndRightSquare?.raw
       layout[5] = rightSquare.raw
       layout[6] = unexpectedAfterRightSquare?.raw
@@ -3161,8 +3161,8 @@ public struct RawClosureCaptureClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var items: RawClosureCaptureListSyntax? {
-    layoutView.children[3].map(RawClosureCaptureListSyntax.init(raw:))
+  public var items: RawClosureCaptureListSyntax {
+    layoutView.children[3].map(RawClosureCaptureListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenItemsAndRightSquare: RawUnexpectedNodesSyntax? {
@@ -7067,7 +7067,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
       _ unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? = nil, 
       body: RawCodeBlockSyntax, 
       _ unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? = nil, 
-      catchClauses: RawCatchClauseListSyntax?, 
+      catchClauses: RawCatchClauseListSyntax, 
       _ unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -7079,7 +7079,7 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
       layout[2] = unexpectedBetweenDoKeywordAndBody?.raw
       layout[3] = body.raw
       layout[4] = unexpectedBetweenBodyAndCatchClauses?.raw
-      layout[5] = catchClauses?.raw
+      layout[5] = catchClauses.raw
       layout[6] = unexpectedAfterCatchClauses?.raw
     }
     self.init(unchecked: raw)
@@ -7105,8 +7105,8 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var catchClauses: RawCatchClauseListSyntax? {
-    layoutView.children[5].map(RawCatchClauseListSyntax.init(raw:))
+  public var catchClauses: RawCatchClauseListSyntax {
+    layoutView.children[5].map(RawCatchClauseListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax? {
@@ -22261,7 +22261,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeMajor: RawUnexpectedNodesSyntax? = nil, 
       major: RawTokenSyntax, 
       _ unexpectedBetweenMajorAndComponents: RawUnexpectedNodesSyntax? = nil, 
-      components: RawVersionComponentListSyntax?, 
+      components: RawVersionComponentListSyntax, 
       _ unexpectedAfterComponents: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -22271,7 +22271,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeMajor?.raw
       layout[1] = major.raw
       layout[2] = unexpectedBetweenMajorAndComponents?.raw
-      layout[3] = components?.raw
+      layout[3] = components.raw
       layout[4] = unexpectedAfterComponents?.raw
     }
     self.init(unchecked: raw)
@@ -22289,8 +22289,8 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var components: RawVersionComponentListSyntax? {
-    layoutView.children[3].map(RawVersionComponentListSyntax.init(raw:))
+  public var components: RawVersionComponentListSyntax {
+    layoutView.children[3].map(RawVersionComponentListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterComponents: RawUnexpectedNodesSyntax? {

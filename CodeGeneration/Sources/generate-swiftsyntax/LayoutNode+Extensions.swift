@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 extension LayoutNode {
-  func generateInitializerDeclHeader(useDeprecatedChildName: Bool = false) -> PartialSyntaxNodeString {
+  func generateInitializerDeclHeader(useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
     if children.isEmpty {
       return "public init()"
     }

@@ -5731,9 +5731,10 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable 
     self._syntaxNode = node._syntaxNode
   }
   
-  /// Creates a ``SimpleStringLiteralExprSyntax`` node from the given ``SyntaxData``. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
+  /// Creates a ``SimpleStringLiteralExprSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .simpleStringLiteralExpr)
     self._syntaxNode = Syntax(data)
@@ -5830,6 +5831,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable 
   
   /// Adds the provided `element` to the node's `segments`
   /// collection.
+  ///
   /// - param element: The new `Segment` to add to the node's
   ///                  `segments` collection.
   /// - returns: A copy of the receiver with the provided `Segment`

@@ -538,7 +538,7 @@ extension ParserTestCase {
     applyFixIts: [String]? = nil,
     fixedSource expectedFixedSource: String? = nil,
     options: AssertParseOptions = [],
-    experimentalFeatures: Parser.ExperimentalFeatures = [],
+    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
     file: StaticString = #file,
     line: UInt = #line
   ) {
@@ -610,6 +610,8 @@ extension ParserTestCase {
   ///   - applyFixIts: Applies only the fix-its with these messages.
   ///   - fixedSource: Asserts that the source after applying fix-its matches
   ///     this string.
+  ///   - experimentalFeatures: A list of experimental features to enable, or
+  ///     `nil` to enable the default set of features provided by the test case.
   func assertParse<S: SyntaxProtocol>(
     _ markedSource: String,
     _ parse: (inout Parser) -> S,
@@ -619,10 +621,12 @@ extension ParserTestCase {
     applyFixIts: [String]? = nil,
     fixedSource expectedFixedSource: String? = nil,
     options: AssertParseOptions = [],
-    experimentalFeatures: Parser.ExperimentalFeatures = [],
+    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
     file: StaticString = #file,
     line: UInt = #line
   ) {
+    let experimentalFeatures = experimentalFeatures ?? self.experimentalFeatures
+
     // Verify the parser can round-trip the source
     var (markerLocations, source) = extractMarkers(markedSource)
     markerLocations["START"] = 0

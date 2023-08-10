@@ -9118,7 +9118,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
       _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil, 
       trailingClosure: RawClosureExprSyntax?, 
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, 
+      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax, 
       _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -9136,7 +9136,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
       layout[8] = unexpectedBetweenRightParenAndTrailingClosure?.raw
       layout[9] = trailingClosure?.raw
       layout[10] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[11] = additionalTrailingClosures?.raw
+      layout[11] = additionalTrailingClosures.raw
       layout[12] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(unchecked: raw)
@@ -9186,8 +9186,8 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax {
+    layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
@@ -13497,7 +13497,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil, 
       trailingClosure: RawClosureExprSyntax?, 
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, 
+      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax, 
       _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -13523,7 +13523,7 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[16] = unexpectedBetweenRightParenAndTrailingClosure?.raw
       layout[17] = trailingClosure?.raw
       layout[18] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[19] = additionalTrailingClosures?.raw
+      layout[19] = additionalTrailingClosures.raw
       layout[20] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(unchecked: raw)
@@ -13605,8 +13605,8 @@ public struct RawMacroExpansionDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[19].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax {
+    layoutView.children[19].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
@@ -13659,7 +13659,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
       _ unexpectedBetweenRightParenAndTrailingClosure: RawUnexpectedNodesSyntax? = nil, 
       trailingClosure: RawClosureExprSyntax?, 
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, 
+      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax, 
       _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -13681,7 +13681,7 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
       layout[12] = unexpectedBetweenRightParenAndTrailingClosure?.raw
       layout[13] = trailingClosure?.raw
       layout[14] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[15] = additionalTrailingClosures?.raw
+      layout[15] = additionalTrailingClosures.raw
       layout[16] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(unchecked: raw)
@@ -13747,8 +13747,8 @@ public struct RawMacroExpansionExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[15].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax {
+    layoutView.children[15].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {
@@ -19326,7 +19326,7 @@ public struct RawSubscriptCallExprSyntax: RawExprSyntaxNodeProtocol {
       _ unexpectedBetweenRightSquareAndTrailingClosure: RawUnexpectedNodesSyntax? = nil, 
       trailingClosure: RawClosureExprSyntax?, 
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?, 
+      additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax, 
       _ unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -19344,7 +19344,7 @@ public struct RawSubscriptCallExprSyntax: RawExprSyntaxNodeProtocol {
       layout[8] = unexpectedBetweenRightSquareAndTrailingClosure?.raw
       layout[9] = trailingClosure?.raw
       layout[10] = unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw
-      layout[11] = additionalTrailingClosures?.raw
+      layout[11] = additionalTrailingClosures.raw
       layout[12] = unexpectedAfterAdditionalTrailingClosures?.raw
     }
     self.init(unchecked: raw)
@@ -19394,8 +19394,8 @@ public struct RawSubscriptCallExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax? {
-    layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))
+  public var additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax {
+    layoutView.children[11].map(RawMultipleTrailingClosureElementListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterAdditionalTrailingClosures: RawUnexpectedNodesSyntax? {

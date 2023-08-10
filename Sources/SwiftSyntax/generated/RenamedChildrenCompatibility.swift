@@ -3024,7 +3024,7 @@ extension FunctionCallExprSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -4949,7 +4949,7 @@ extension MacroExpansionDeclSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5102,7 +5102,7 @@ extension MacroExpansionExprSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7573,7 +7573,7 @@ extension SubscriptCallExprSyntax {
       _ unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     

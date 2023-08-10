@@ -1220,7 +1220,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawClosureExprSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawMultipleTrailingClosureElementListSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawMultipleTrailingClosureElementListSyntax.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
   case .functionDecl:
     assert(layout.count == 17)
@@ -1737,7 +1737,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 17, verify(layout[17], as: RawClosureExprSyntax?.self))
     assertNoError(kind, 18, verify(layout[18], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 19, verify(layout[19], as: RawMultipleTrailingClosureElementListSyntax?.self))
+    assertNoError(kind, 19, verify(layout[19], as: RawMultipleTrailingClosureElementListSyntax.self))
     assertNoError(kind, 20, verify(layout[20], as: RawUnexpectedNodesSyntax?.self))
   case .macroExpansionExpr:
     assert(layout.count == 17)
@@ -1756,7 +1756,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawClosureExprSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMultipleTrailingClosureElementListSyntax?.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMultipleTrailingClosureElementListSyntax.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .matchingPatternCondition:
     assert(layout.count == 9)
@@ -2348,7 +2348,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawClosureExprSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawMultipleTrailingClosureElementListSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawMultipleTrailingClosureElementListSyntax.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
   case .subscriptDecl:
     assert(layout.count == 17)

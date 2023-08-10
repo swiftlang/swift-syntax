@@ -172,7 +172,7 @@ extension FunctionCallExprSyntax {
   public init(
     callee: some ExprSyntaxProtocol,
     trailingClosure: ClosureExprSyntax? = nil,
-    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
     @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax = { [] }
   ) {
     let argumentList = argumentList()

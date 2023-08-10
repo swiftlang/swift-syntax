@@ -32,7 +32,7 @@ public enum ChildKind {
   /// The child always contains a node that matches one of the `choices`.
   case nodeChoices(choices: [Child])
   /// The child is a collection of `kind`.
-  case collection(kind: SyntaxNodeKind, collectionElementName: String, deprecatedCollectionElementName: String? = nil)
+  case collection(kind: SyntaxNodeKind, collectionElementName: String, defaultsToEmpty: Bool = false, deprecatedCollectionElementName: String? = nil)
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
@@ -91,7 +91,7 @@ public class Child {
       return kind
     case .nodeChoices:
       return .syntax
-    case .collection(kind: let kind, _, _):
+    case .collection(kind: let kind, _, _, _):
       return kind
     case .token:
       return .token
@@ -150,7 +150,7 @@ public class Child {
   /// Whether this child has syntax kind `UnexpectedNodes`.
   public var isUnexpectedNodes: Bool {
     switch kind {
-    case .collection(kind: .unexpectedNodes, _, _):
+    case .collection(kind: .unexpectedNodes, _, _, _):
       return true
     default:
       return false
@@ -165,7 +165,7 @@ public class Child {
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
-    case .collection(let kind, _, _):
+    case .collection(kind: let kind, _, _, _):
       return kind.isBase
     case .token:
       return false

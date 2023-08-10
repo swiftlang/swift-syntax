@@ -192,7 +192,8 @@ public class DebugDescriptionTests: XCTestCase {
                                 ),
                               LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
-                        rightParen: .rightParenToken()
+                        rightParen: .rightParenToken(),
+                        additionalTrailingClosures: MultipleTrailingClosureElementListSyntax([])
                       )))
               ]),
           endOfFileToken: .endOfFileToken()
@@ -215,7 +216,8 @@ public class DebugDescriptionTests: XCTestCase {
                                 ),
                               LabeledExprSyntax(expression: ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))))
                             ]),
-                        rightParen: .rightParenToken()
+                        rightParen: .rightParenToken(),
+                        additionalTrailingClosures: MultipleTrailingClosureElementListSyntax([])
                       )))
               ]),
           endOfFileToken: .endOfFileToken()

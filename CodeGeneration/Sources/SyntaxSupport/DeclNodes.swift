@@ -1450,8 +1450,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
-        isOptional: true
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true)
       ),
     ]
   ),

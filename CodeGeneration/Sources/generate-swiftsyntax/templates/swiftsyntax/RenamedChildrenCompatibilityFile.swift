@@ -38,7 +38,8 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           )
           if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
             !child.isUnexpectedNodes,
-            case .collection(_, let collectionElementName, let deprecatedCollectionElementName) = child.kind,
+            case .collection(_, collectionElementName: let collectionElementName, _, deprecatedCollectionElementName: let deprecatedCollectionElementName) =
+              child.kind,
             let deprecatedCollectionElementName
           {
             let childEltType = childNode.collectionElementType.syntaxBaseName

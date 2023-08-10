@@ -1917,7 +1917,7 @@ extension Parser {
 
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
-    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
     if self.at(.leftBrace),
       self.withLookahead({ $0.atValidTrailingClosure(.trailingClosure) })
     {
@@ -1925,7 +1925,7 @@ extension Parser {
         self.parseTrailingClosures(.trailingClosure)
     } else {
       trailingClosure = nil
-      additionalTrailingClosures = nil
+      additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
     }
 
     return RawMacroExpansionDeclSyntax(

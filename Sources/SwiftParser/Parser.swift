@@ -129,6 +129,19 @@ public struct Parser {
   static let defaultMaximumNestingLevel = 256
   #endif
 
+  var _emptyRawMultipleTrailingClosureElementListSyntax: RawMultipleTrailingClosureElementListSyntax?
+
+  /// Create an empty collection of the given type.
+  ///
+  /// These empty collections are only created once and the same node is returned
+  /// on subsequent calls, reducing memory usage.
+  mutating func emptyCollection(_: RawMultipleTrailingClosureElementListSyntax.Type) -> RawMultipleTrailingClosureElementListSyntax {
+    if _emptyRawMultipleTrailingClosureElementListSyntax == nil {
+      _emptyRawMultipleTrailingClosureElementListSyntax = RawMultipleTrailingClosureElementListSyntax(elements: [], arena: self.arena)
+    }
+    return _emptyRawMultipleTrailingClosureElementListSyntax!
+  }
+
   /// The delegated initializer for the parser.
   ///
   /// - Parameters

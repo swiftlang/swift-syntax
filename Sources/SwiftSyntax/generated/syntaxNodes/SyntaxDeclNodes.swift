@@ -4317,7 +4317,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -4367,7 +4367,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           unexpectedBetweenRightParenAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
           unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw, 
-          additionalTrailingClosures?.raw, 
+          additionalTrailingClosures.raw, 
           unexpectedAfterAdditionalTrailingClosures?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -4633,12 +4633,12 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return data.child(at: 19, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 19, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionDeclSyntax(data.replacingChild(at: 19, with: value?.data, arena: SyntaxArena()))
+      self = MacroExpansionDeclSyntax(data.replacingChild(at: 19, with: value.data, arena: SyntaxArena()))
     }
   }
   

@@ -343,7 +343,7 @@ extension FunctionCallExprSyntax {
       unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
       trailingClosure: ClosureExprSyntax? = nil, 
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [], 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       @LabeledExprListBuilder argumentListBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
@@ -613,7 +613,7 @@ extension MacroExpansionDeclSyntax {
       unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
       trailingClosure: ClosureExprSyntax? = nil, 
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [], 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       @LabeledExprListBuilder argumentListBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
@@ -666,7 +666,7 @@ extension MacroExpansionExprSyntax {
       unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
       trailingClosure: ClosureExprSyntax? = nil, 
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [], 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       @LabeledExprListBuilder argumentListBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil
@@ -834,7 +834,7 @@ extension SubscriptCallExprSyntax {
       unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil, 
       trailingClosure: ClosureExprSyntax? = nil, 
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil, 
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [], 
       unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil, 
       @LabeledExprListBuilder argumentListBuilder: () throws -> LabeledExprListSyntax, 
       trailingTrivia: Trivia? = nil

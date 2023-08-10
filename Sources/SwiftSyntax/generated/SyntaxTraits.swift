@@ -208,7 +208,7 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
   
-  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get
     set
   }

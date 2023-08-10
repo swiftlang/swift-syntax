@@ -69,7 +69,7 @@ public let TRAITS: [Trait] = [
       Child(name: "ArgumentList", kind: .node(kind: .labeledExprList)),
       Child(name: "RightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
       Child(name: "TrailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
-      Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList), isOptional: true),
+      Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList)),
     ]
   ),
   Trait(

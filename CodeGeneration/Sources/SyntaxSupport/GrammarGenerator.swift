@@ -36,7 +36,7 @@ struct GrammarGenerator {
     case .nodeChoices(let choices):
       let choicesDescriptions = choices.map { grammar(for: $0) }
       return "(\(choicesDescriptions.joined(separator: " | ")))\(optionality)"
-    case .collection(let kind, _, _):
+    case .collection(kind: let kind, _, _, _):
       return "``\(kind.syntaxType)``"
     case .token(let choices, _, _):
       if choices.count == 1 {

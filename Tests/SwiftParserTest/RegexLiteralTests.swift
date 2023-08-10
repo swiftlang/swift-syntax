@@ -1255,13 +1255,11 @@ final class RegexLiteralTests: ParserTestCase {
       """
       let x = true ?/abc/ : /def/
       """,
-      substructure: SequenceExprSyntax(
-        elements: .init([
-          BooleanLiteralExprSyntax(booleanLiteral: true),
-          UnresolvedTernaryExprSyntax(thenExpression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc"))),
-          RegexLiteralExprSyntax(regex: .regexLiteralPattern("def")),
-        ])
-      )
+      substructure: SequenceExprSyntax {
+        BooleanLiteralExprSyntax(booleanLiteral: true)
+        UnresolvedTernaryExprSyntax(thenExpression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("abc")))
+        RegexLiteralExprSyntax(regex: .regexLiteralPattern("def"))
+      }
     )
   }
 

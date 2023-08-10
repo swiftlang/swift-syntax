@@ -120,7 +120,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
         GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TriviaPieces.swift"], triviaPiecesFile),
 
         // SwiftSyntaxBuilder
-        GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableCollectionNodes.swift"], buildableCollectionNodesFile),
         GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableNodes.swift"], buildableNodesFile),
         GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["ResultBuilders.swift"], resultBuildersFile),
         GeneratedFileSpec(

@@ -361,19 +361,17 @@ final class ForwardSlashRegexTests: ParserTestCase {
       """
       _ = /x/??/x/
       """,
-      substructure: SequenceExprSyntax(
-        elements: .init([
-          DiscardAssignmentExprSyntax(),
-          AssignmentExprSyntax(),
-          OptionalChainingExprSyntax(
-            expression: OptionalChainingExprSyntax(
-              expression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("x"))
-            )
-          ),
-          BinaryOperatorExprSyntax(operator: .binaryOperator("/")),
-          PostfixOperatorExprSyntax(expression: DeclReferenceExprSyntax(baseName: "x"), operator: .postfixOperator("/")),
-        ])
-      )
+      substructure: SequenceExprSyntax {
+        DiscardAssignmentExprSyntax()
+        AssignmentExprSyntax()
+        OptionalChainingExprSyntax(
+          expression: OptionalChainingExprSyntax(
+            expression: RegexLiteralExprSyntax(regex: .regexLiteralPattern("x"))
+          )
+        )
+        BinaryOperatorExprSyntax(operator: .binaryOperator("/"))
+        PostfixOperatorExprSyntax(expression: DeclReferenceExprSyntax(baseName: "x"), operator: .postfixOperator("/"))
+      }
     )
   }
 

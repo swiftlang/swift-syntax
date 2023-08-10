@@ -10,7 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
+public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection, ExpressibleByArrayLiteral
+where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
   associatedtype Iterator = SyntaxCollectionIterator<Element>
 
   /// The ``SyntaxKind`` of the syntax node that conforms to ``SyntaxCollection``.
@@ -56,6 +57,10 @@ extension SyntaxCollection {
       )
     }
     self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
+  }
+
+  public init(arrayLiteral elements: Element...) {
+    self.init(elements)
   }
 
   /// The number of elements, `present` or `missing`, in this collection.

@@ -7056,11 +7056,13 @@ extension SourceFileSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "SourceFileSyntax(leadingTrivia:_:statements:_:endOfFileToken:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "SourceFileSyntax(leadingTrivia:_:shebang:_:statements:_:endOfFileToken:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeShebang: UnexpectedNodesSyntax? = nil,
+      shebang: TokenSyntax? = nil,
+      _ unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
       _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
       eofToken: TokenSyntax = .endOfFileToken(),
@@ -7070,7 +7072,9 @@ extension SourceFileSyntax {
   ) {
     self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeStatements, 
+        unexpectedBeforeShebang, 
+        shebang: shebang, 
+        unexpectedBetweenShebangAndStatements, 
         statements: statements, 
         unexpectedBetweenStatementsAndEOFToken, 
         endOfFileToken: eofToken, 

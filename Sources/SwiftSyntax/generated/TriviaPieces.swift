@@ -41,8 +41,6 @@ public enum TriviaPiece {
   case newlines(Int)
   /// A '#' that is at the end of a line in a multi-line string literal to escape the newline.
   case pounds(Int)
-  /// A script command, starting with '#!'.
-  case shebang(String)
   /// A space ' ' character.
   case spaces(Int)
   /// A tab '\t' character.
@@ -84,8 +82,6 @@ extension TriviaPiece: TextOutputStreamable {
       printRepeated("\n", count: count)
     case let .pounds(count):
       printRepeated("#", count: count)
-    case let .shebang(text):
-      target.write(text)
     case let .spaces(count):
       printRepeated(" ", count: count)
     case let .tabs(count):
@@ -122,8 +118,6 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "newlines(\(data))"
     case .pounds(let data):
       return "pounds(\(data))"
-    case .shebang(let name):
-      return "shebang(\(name.debugDescription))"
     case .spaces(let data):
       return "spaces(\(data))"
     case .tabs(let data):
@@ -217,11 +211,6 @@ extension Trivia {
     return .pounds(1)
   }
   
-  /// Returns a piece of trivia for Shebang.
-  public static func shebang(_ text: String) -> Trivia {
-    return [.shebang(text)]
-  }
-  
   /// Returns a piece of trivia for some number of " " characters.
   public static func spaces(_ count: Int) -> Trivia {
     return [.spaces(count)]
@@ -283,8 +272,6 @@ extension TriviaPiece {
       return SourceLength(utf8Length: count)
     case let .pounds(count):
       return SourceLength(utf8Length: count)
-    case let .shebang(text):
-      return SourceLength(of: text)
     case let .spaces(count):
       return SourceLength(utf8Length: count)
     case let .tabs(count):
@@ -313,7 +300,6 @@ public enum RawTriviaPiece: Equatable {
   case lineComment(SyntaxText)
   case newlines(Int)
   case pounds(Int)
-  case shebang(SyntaxText)
   case spaces(Int)
   case tabs(Int)
   case unexpectedText(SyntaxText)
@@ -341,8 +327,6 @@ public enum RawTriviaPiece: Equatable {
       return .newlines(count)
     case let .pounds(count):
       return .pounds(count)
-    case let .shebang(text):
-      return .shebang(arena.intern(text))
     case let .spaces(count):
       return .spaces(count)
     case let .tabs(count):
@@ -378,8 +362,6 @@ extension TriviaPiece {
       self = .newlines(count)
     case let .pounds(count):
       self = .pounds(count)
-    case let .shebang(text):
-      self = .shebang(String(syntaxText: text))
     case let .spaces(count):
       self = .spaces(count)
     case let .tabs(count):
@@ -415,8 +397,6 @@ extension RawTriviaPiece {
       return count
     case let .pounds(count):
       return count
-    case let .shebang(text):
-      return text.count
     case let .spaces(count):
       return count
     case let .tabs(count):
@@ -450,8 +430,6 @@ extension RawTriviaPiece {
       return nil
     case .pounds(_):
       return nil
-    case .shebang(let text):
-      return text
     case .spaces(_):
       return nil
     case .tabs(_):

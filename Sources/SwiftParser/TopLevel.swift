@@ -40,10 +40,12 @@ extension Parser {
   /// ``Parser/parse(source:parseTransition:filenameForDiagnostics:languageVersion:enableBareSlashRegexLiteral:)-7tndx``
   /// API calls.
   mutating func parseSourceFile() -> RawSourceFileSyntax {
+    let shebang = self.consume(if: .shebang)
     let items = self.parseTopLevelCodeBlockItems()
     let unexpectedBeforeEndOfFileToken = consumeRemainingTokens()
     let endOfFile = self.consume(if: .endOfFile)!
     return .init(
+      shebang: shebang,
       statements: items,
       RawUnexpectedNodesSyntax(unexpectedBeforeEndOfFileToken, arena: self.arena),
       endOfFileToken: endOfFile,

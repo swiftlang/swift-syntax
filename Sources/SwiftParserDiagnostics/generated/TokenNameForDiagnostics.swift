@@ -103,6 +103,8 @@ extension TokenKind {
       return "]"
     case .semicolon:
       return ";"
+    case .shebang:
+      return "shebang"
     case .singleQuote:
       return "'"
     case .stringQuote:

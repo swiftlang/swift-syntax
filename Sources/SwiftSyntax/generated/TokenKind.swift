@@ -58,6 +58,7 @@ public enum TokenKind: Hashable {
   case rightParen
   case rightSquare
   case semicolon
+  case shebang(String)
   case singleQuote
   case stringQuote
   case stringSegment(String)
@@ -156,6 +157,8 @@ public enum TokenKind: Hashable {
       return #"]"#
     case .semicolon:
       return #";"#
+    case .shebang(let text):
+      return text
     case .singleQuote:
       return #"'"#
     case .stringQuote:
@@ -347,6 +350,8 @@ public enum TokenKind: Hashable {
       return true
     case .semicolon:
       return true
+    case .shebang:
+      return false
     case .singleQuote:
       return true
     case .stringQuote:
@@ -452,6 +457,8 @@ extension TokenKind: Equatable {
       return true
     case (.semicolon, .semicolon):
       return true
+    case (.shebang(let lhsText), .shebang(let rhsText)):
+      return lhsText == rhsText
     case (.singleQuote, .singleQuote):
       return true
     case (.stringQuote, .stringQuote):
@@ -519,6 +526,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case rightParen
   case rightSquare
   case semicolon
+  case shebang
   case singleQuote
   case stringQuote
   case stringSegment
@@ -700,6 +708,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .semicolon:
       return true
+    case .shebang:
+      return false
     case .singleQuote:
       return true
     case .stringQuote:
@@ -843,6 +853,8 @@ extension TokenKind {
     case .semicolon:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .semicolon
+    case .shebang:
+      return .shebang(text)
     case .singleQuote:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .singleQuote
@@ -952,6 +964,8 @@ extension TokenKind {
       return (.rightSquare, nil)
     case .semicolon:
       return (.semicolon, nil)
+    case .shebang(let str):
+      return (.shebang, str)
     case .singleQuote:
       return (.singleQuote, nil)
     case .stringQuote:

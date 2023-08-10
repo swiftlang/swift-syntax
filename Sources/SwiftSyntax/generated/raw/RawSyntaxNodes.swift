@@ -18406,7 +18406,9 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeStatements: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeShebang: RawUnexpectedNodesSyntax? = nil, 
+      shebang: RawTokenSyntax?, 
+      _ unexpectedBetweenShebangAndStatements: RawUnexpectedNodesSyntax? = nil, 
       statements: RawCodeBlockItemListSyntax, 
       _ unexpectedBetweenStatementsAndEndOfFileToken: RawUnexpectedNodesSyntax? = nil, 
       endOfFileToken: RawTokenSyntax, 
@@ -18414,35 +18416,45 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .sourceFile, uninitializedCount: 5, arena: arena) { layout in
+      kind: .sourceFile, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeStatements?.raw
-      layout[1] = statements.raw
-      layout[2] = unexpectedBetweenStatementsAndEndOfFileToken?.raw
-      layout[3] = endOfFileToken.raw
-      layout[4] = unexpectedAfterEndOfFileToken?.raw
+      layout[0] = unexpectedBeforeShebang?.raw
+      layout[1] = shebang?.raw
+      layout[2] = unexpectedBetweenShebangAndStatements?.raw
+      layout[3] = statements.raw
+      layout[4] = unexpectedBetweenStatementsAndEndOfFileToken?.raw
+      layout[5] = endOfFileToken.raw
+      layout[6] = unexpectedAfterEndOfFileToken?.raw
     }
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeStatements: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeShebang: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var statements: RawCodeBlockItemListSyntax {
-    layoutView.children[1].map(RawCodeBlockItemListSyntax.init(raw:))!
+  public var shebang: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenStatementsAndEndOfFileToken: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenShebangAndStatements: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
+  public var statements: RawCodeBlockItemListSyntax {
+    layoutView.children[3].map(RawCodeBlockItemListSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenStatementsAndEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
   public var endOfFileToken: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
   
   public var unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

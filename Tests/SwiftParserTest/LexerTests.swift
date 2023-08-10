@@ -279,7 +279,8 @@ public class LexerTests: XCTestCase {
       let x = 42
       """,
       lexemes: [
-        LexemeSpec(.keyword, leading: "#!/usr/bin/swiftc\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.shebang, text: "#!/usr/bin/swiftc"),
+        LexemeSpec(.keyword, leading: "\n", text: "let", trailing: " ", flags: [.isAtStartOfLine]),
         LexemeSpec(.identifier, text: "x", trailing: " "),
         LexemeSpec(.equal, text: "=", trailing: " "),
         LexemeSpec(.integerLiteral, text: "42"),

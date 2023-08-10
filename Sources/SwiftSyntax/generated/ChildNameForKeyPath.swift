@@ -2779,8 +2779,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "constraint"
   case \SomeOrAnyTypeSyntax.unexpectedAfterConstraint:
     return "unexpectedAfterConstraint"
-  case \SourceFileSyntax.unexpectedBeforeStatements:
-    return "unexpectedBeforeStatements"
+  case \SourceFileSyntax.unexpectedBeforeShebang:
+    return "unexpectedBeforeShebang"
+  case \SourceFileSyntax.shebang:
+    return "shebang"
+  case \SourceFileSyntax.unexpectedBetweenShebangAndStatements:
+    return "unexpectedBetweenShebangAndStatements"
   case \SourceFileSyntax.statements:
     return "statements"
   case \SourceFileSyntax.unexpectedBetweenStatementsAndEndOfFileToken:

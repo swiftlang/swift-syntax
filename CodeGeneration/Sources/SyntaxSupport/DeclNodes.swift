@@ -1998,6 +1998,12 @@ public let DECL_NODES: [Node] = [
     traits: ["WithStatements"],
     children: [
       Child(
+        name: "Shebang",
+        kind: .token(choices: [.token(.shebang)]),
+        documentation: "A shebang can specify the path of the compiler when using Swift source file as a script.",
+        isOptional: true
+      ),
+      Child(
         name: "Statements",
         kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
       ),

@@ -616,8 +616,7 @@ fileprivate extension RawTriviaPiece {
         body(carriageReturnLineLength)
       }
       lineLength = .zero
-    case let .shebang(text),
-      let .lineComment(text),
+    case let .lineComment(text),
       let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       precondition(!text.containsSwiftNewline(), "line comment created that contained a new-line character")

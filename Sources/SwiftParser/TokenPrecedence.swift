@@ -124,8 +124,8 @@ enum TokenPrecedence: Comparable {
       .dollarIdentifier, .identifier,
       // '_' can occur in types to replace a type identifier
       .wildcard,
-      // String segment, string interpolation anchor, pound, and regex pattern don't really fit anywhere else
-      .pound, .stringSegment, .regexLiteralPattern:
+      // String segment, string interpolation anchor, pound, shebang and regex pattern don't really fit anywhere else
+      .pound, .stringSegment, .regexLiteralPattern, .shebang:
       self = .identifierLike
 
     // MARK: Expr keyword

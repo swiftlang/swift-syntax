@@ -651,6 +651,22 @@ extension TokenSyntax {
     )
   }
   
+  public static func shebang(
+    _ text: String,
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+    
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .shebang(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+      
+    )
+  }
+  
   public static func singleQuoteToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

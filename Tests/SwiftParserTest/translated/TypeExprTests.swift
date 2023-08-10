@@ -17,7 +17,7 @@ import SwiftSyntax
 
 // Types in expression contexts must be followed by a member access or
 // constructor call.
-final class TypeExprTests: XCTestCase {
+final class TypeExprTests: ParserTestCase {
   func testTypeExpr3() {
     assertParse(
       """

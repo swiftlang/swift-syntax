@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class EscapedIdentifiersTests: XCTestCase {
+final class EscapedIdentifiersTests: ParserTestCase {
   func testEscapedIdentifiers1() {
     assertParse(
       """

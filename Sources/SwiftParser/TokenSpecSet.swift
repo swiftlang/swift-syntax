@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 /// A set of `TokenSpecs`. We expect to consume one of the sets specs in the
 /// parser.

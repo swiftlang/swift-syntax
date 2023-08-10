@@ -115,7 +115,10 @@ public struct Parser {
   public internal(set) var lookaheadRanges = LookaheadRanges()
 
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
-  let lookaheadTrackerOwner = LookaheadTrackerOwner()
+  let lookaheadTrackerOwner: LookaheadTrackerOwner
+
+  /// The experimental features that have been enabled.
+  let experimentalFeatures: ExperimentalFeatures
 
   /// A default maximum nesting level that is used if the client didn't
   /// explicitly specify one. Debug builds of the parser consume a lot more stack
@@ -126,25 +129,49 @@ public struct Parser {
   static let defaultMaximumNestingLevel = 256
   #endif
 
-  /// Initializes a ``Parser`` from the given string.
-  public init(
-    _ input: String,
-    maximumNestingLevel: Int? = nil,
-    parseTransition: IncrementalParseTransition? = nil
+  /// The delegated initializer for the parser.
+  ///
+  /// - Parameters
+  ///   - input: An input buffer containing Swift source text. If a non-`nil`
+  ///            arena is provided, the buffer must be present in it. Otherwise
+  ///            the buffer is copied into a new arena and can thus be freed
+  ///            after the initializer has been called.
+  ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
+  ///                          stop if a nesting level greater than this value
+  ///                          is reached. The nesting level is increased
+  ///                          whenever a bracketed expression like `(` or `{`
+  ///                          is started. `defaultMaximumNestingLevel` is used
+  ///                          if this is `nil`.
+  ///   - parseTransition: The previously recorded state for an incremental
+  ///                      parse, or `nil`.
+  ///   - arena: Arena the parsing syntax are made into. If it's `nil`, a new
+  ///            arena is created automatically, and `input` copied into the
+  ///            arena. If non-`nil`, `input` must be within its registered
+  ///            source buffer or allocator.
+  ///  - experimentalFeatures: The experimental features enabled for the parser.
+  private init(
+    buffer input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int?,
+    parseTransition: IncrementalParseTransition?,
+    arena: ParsingSyntaxArena?,
+    experimentalFeatures: ExperimentalFeatures
   ) {
-    self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
-
-    self.arena = ParsingSyntaxArena(
-      parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
-    )
-
     var input = input
-    input.makeContiguousUTF8()
-    let interned = input.withUTF8 { [arena] buffer in
-      return arena.internSourceBuffer(buffer)
+    if let arena {
+      self.arena = arena
+      precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
+    } else {
+      self.arena = ParsingSyntaxArena(
+        parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
+      )
+      input = self.arena.internSourceBuffer(input)
     }
 
-    self.lexemes = Lexer.tokenize(interned, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
+    self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+    self.experimentalFeatures = experimentalFeatures
+    self.lookaheadTrackerOwner = LookaheadTrackerOwner()
+
+    self.lexemes = Lexer.tokenize(input, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
     self.currentToken = self.lexemes.advance()
     if let parseTransition {
       self.parseLookup = IncrementalParseLookup(transition: parseTransition)
@@ -153,16 +180,56 @@ public struct Parser {
     }
   }
 
+  /// Private initializer for creating a ``Parser`` from the given string.
+  private init(
+    string input: String,
+    maximumNestingLevel: Int?,
+    parseTransition: IncrementalParseTransition?,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    var input = input
+    input.makeContiguousUTF8()
+    self = input.withUTF8 { buffer in
+      Parser(
+        buffer: buffer,
+        maximumNestingLevel: maximumNestingLevel,
+        parseTransition: parseTransition,
+        arena: nil,
+        experimentalFeatures: experimentalFeatures
+      )
+    }
+  }
+
+  /// Initializes a ``Parser`` from the given string.
+  public init(
+    _ input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil
+  ) {
+    // Chain to the private String initializer.
+    self.init(
+      string: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      experimentalFeatures: []
+    )
+  }
+
   /// Initializes a ``Parser`` from the given input buffer.
   ///
   /// - Parameters
-  ///   - input: An input buffer containing Swift source text.
+  ///   - input: An input buffer containing Swift source text. If a non-`nil`
+  ///            arena is provided, the buffer must be present in it. Otherwise
+  ///            the buffer is copied into a new arena and can thus be freed
+  ///            after the initializer has been called.
   ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
   ///                          stop if a nesting level greater than this value
   ///                          is reached. The nesting level is increased
   ///                          whenever a bracketed expression like `(` or `{`
   ///                          is started. `defaultMaximumNestingLevel` is used
   ///                          if this is `nil`.
+  ///   - parseTransition: The previously recorded state for an incremental
+  ///                      parse, or `nil`.
   ///   - arena: Arena the parsing syntax are made into. If it's `nil`, a new
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be within its registered
@@ -173,27 +240,52 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingSyntaxArena? = nil
   ) {
-    self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+    // Chain to the private buffer initializer.
+    self.init(
+      buffer: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      arena: arena,
+      experimentalFeatures: []
+    )
+  }
 
-    var sourceBuffer: UnsafeBufferPointer<UInt8>
-    if let arena {
-      self.arena = arena
-      sourceBuffer = input
-      precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
-    } else {
-      self.arena = ParsingSyntaxArena(
-        parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
-      )
-      sourceBuffer = self.arena.internSourceBuffer(input)
-    }
+  /// Initializes a ``Parser`` from the given input string, with a given set
+  /// of experimental language features.
+  @_spi(ExperimentalLanguageFeatures)
+  public init(
+    _ input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    // Chain to the private String initializer.
+    self.init(
+      string: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      experimentalFeatures: experimentalFeatures
+    )
+  }
 
-    self.lexemes = Lexer.tokenize(sourceBuffer, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
-    self.currentToken = self.lexemes.advance()
-    if let parseTransition {
-      self.parseLookup = IncrementalParseLookup(transition: parseTransition)
-    } else {
-      self.parseLookup = nil
-    }
+  /// Initializes a ``Parser`` from the given input buffer, with a given set
+  /// of experimental language features.
+  @_spi(ExperimentalLanguageFeatures)
+  public init(
+    _ input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    arena: ParsingSyntaxArena? = nil,
+    experimentalFeatures: ExperimentalFeatures
+  ) {
+    // Chain to the private buffer initializer.
+    self.init(
+      buffer: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      arena: arena,
+      experimentalFeatures: experimentalFeatures
+    )
   }
 
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
+final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
   func testForwardSlashRegexSkippingInvalid1() {
     // We don't consider this a regex literal when skipping as it has an initial
     // space.

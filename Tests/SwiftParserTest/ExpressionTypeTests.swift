@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-final class ExpressionTypeTests: XCTestCase {
+final class ExpressionTypeTests: ParserTestCase {
   func testTypeExpression() {
     assertParse("_ = (any Sequence<Int>).self")
   }

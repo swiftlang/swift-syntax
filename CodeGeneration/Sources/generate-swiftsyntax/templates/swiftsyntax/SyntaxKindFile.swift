@@ -24,7 +24,12 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   ) {
     DeclSyntax("case token")
     for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax("case \(node.varOrCaseName)")
+      DeclSyntax(
+        """
+        \(node.apiAttributes())\
+        case \(node.varOrCaseName)
+        """
+      )
     }
 
     try VariableDeclSyntax("public var isSyntaxCollection: Bool") {

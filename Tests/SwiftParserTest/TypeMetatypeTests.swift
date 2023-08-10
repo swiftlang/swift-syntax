@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftParser
 import XCTest
 
-final class TypeMetatypeTests: XCTestCase {
+final class TypeMetatypeTests: ParserTestCase {
   func testBaseType() {
     let cases: [UInt: String] = [
       // Identifiers and member types

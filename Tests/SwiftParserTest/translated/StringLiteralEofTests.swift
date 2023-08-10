@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class StringLiteralEofTests: XCTestCase {
+final class StringLiteralEofTests: ParserTestCase {
   func testStringLiteralEof1() {
     assertParse(
       ##"""

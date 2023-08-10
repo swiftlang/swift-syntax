@@ -37,7 +37,7 @@ let nodesSections: String = {
 
   for (baseKind, heading) in nodeKinds {
     let baseTypes = ["\(baseKind.syntaxType)", "\(baseKind.syntaxType)Protocol", "Missing\(baseKind.syntaxType)"]
-    let leafTypes = SYNTAX_NODES.filter({ $0.base == baseKind && !$0.kind.isMissing }).map(\.kind.syntaxType.description)
+    let leafTypes = SYNTAX_NODES.filter({ $0.base == baseKind && !$0.kind.isMissing && !$0.isExperimental }).map(\.kind.syntaxType.description)
     addSection(heading: heading, types: baseTypes + leafTypes)
   }
 
@@ -48,7 +48,7 @@ let nodesSections: String = {
       "SyntaxChildrenIndex",
     ]
       + SYNTAX_NODES.flatMap({ (node: Node) -> [String] in
-        guard let node = node.collectionNode else {
+        guard let node = node.collectionNode, !node.isExperimental else {
           return []
         }
         return [node.kind.syntaxType.description]
@@ -59,9 +59,12 @@ let nodesSections: String = {
       })
   )
 
-  addSection(heading: "Attributes", types: ATTRIBUTE_NODES.map(\.kind.syntaxType.description).sorted())
+  addSection(heading: "Attributes", types: ATTRIBUTE_NODES.filter({ !$0.isExperimental }).map(\.kind.syntaxType.description).sorted())
 
-  addSection(heading: "Miscellaneous Syntax", types: SYNTAX_NODES.map(\.kind.syntaxType.description).filter({ !handledSyntaxTypes.contains($0) }))
+  addSection(
+    heading: "Miscellaneous Syntax",
+    types: SYNTAX_NODES.filter({ !$0.isExperimental }).map(\.kind.syntaxType.description).filter({ !handledSyntaxTypes.contains($0) })
+  )
 
   addSection(heading: "Traits", types: TRAITS.map { "\($0.protocolName)" })
 

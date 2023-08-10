@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class AttributeTests: XCTestCase {
+final class AttributeTests: ParserTestCase {
   func testMissingArgumentToAttribute() {
     assertParse(
       """

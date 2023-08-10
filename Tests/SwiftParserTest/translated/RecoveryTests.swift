@@ -2,7 +2,7 @@
 
 import XCTest
 
-final class RecoveryTests: XCTestCase {
+final class RecoveryTests: ParserTestCase {
   func testRecovery4() {
     assertParse(
       #"""

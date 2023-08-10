@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class SelfRebindingTests: XCTestCase {
+final class SelfRebindingTests: ParserTestCase {
   func testSelfRebinding1() {
     assertParse(
       #"""

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class ObjcEnumTests: XCTestCase {
+final class ObjcEnumTests: ParserTestCase {
   func testObjcEnum1() {
     assertParse(
       """

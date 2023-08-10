@@ -16,7 +16,7 @@ import SwiftSyntax
 
 import XCTest
 
-final class MultilineStringTests: XCTestCase {
+final class MultilineStringTests: ParserTestCase {
   func testMultilineString1() {
     assertParse(
       """

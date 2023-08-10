@@ -40,6 +40,10 @@ public class Node {
   /// The kind of node’s supertype. This kind must have `isBase == true`
   public let base: SyntaxNodeKind
 
+  /// If `true`, this is for an experimental language feature, and any public
+  /// API generated should be SPI.
+  public let isExperimental: Bool
+
   /// When the node name is printed for diagnostics, this name is used.
   /// If `nil`, `nameForDiagnostics` will print the parent node’s name.
   public let nameForDiagnostics: String?
@@ -85,10 +89,25 @@ public class Node {
     }
   }
 
+  /// Retrieve the attributes that should be printed on any API for the
+  /// generated node. If `forRaw` is true, this is for the raw syntax node.
+  public func apiAttributes(forRaw: Bool = false) -> AttributeListSyntax {
+    let attrList = AttributeListSyntax {
+      if isExperimental {
+        "@_spi(ExperimentalLanguageFeatures)"
+      }
+      if forRaw {
+        "@_spi(RawSyntax)"
+      }
+    }
+    return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
+  }
+
   /// Construct the specification for a layout syntax node.
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
+    isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: String? = nil,
@@ -100,6 +119,7 @@ public class Node {
 
     self.kind = kind
     self.base = base
+    self.isExperimental = isExperimental
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
@@ -204,6 +224,7 @@ public class Node {
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
+    isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: String? = nil,
@@ -212,6 +233,7 @@ public class Node {
     self.kind = kind
     precondition(base == .syntaxCollection)
     self.base = base
+    self.isExperimental = isExperimental
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction

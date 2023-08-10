@@ -42,7 +42,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES where node.kind.isBase {
     DeclSyntax(
       """
-      @_spi(RawSyntax)
+      \(node.apiAttributes(forRaw: true))\
       public protocol \(node.kind.rawType)NodeProtocol: \(raw: node.base.rawProtocolType) {}
       """
     )
@@ -51,7 +51,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES {
     try! StructDeclSyntax(
       """
-      @_spi(RawSyntax)
+      \(node.apiAttributes(forRaw: true))\
       public struct \(node.kind.rawType): \(node.kind.isBase ? node.kind.rawProtocolType : node.base.rawProtocolType)
       """
     ) {

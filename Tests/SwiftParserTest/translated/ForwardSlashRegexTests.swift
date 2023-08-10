@@ -16,7 +16,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class ForwardSlashRegexTests: XCTestCase {
+final class ForwardSlashRegexTests: ParserTestCase {
   func testForwardSlashRegex1() {
     assertParse(
       """

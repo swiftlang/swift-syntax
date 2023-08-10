@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class GuardTests: XCTestCase {
+final class GuardTests: ParserTestCase {
   func testGuard1() {
     assertParse(
       """

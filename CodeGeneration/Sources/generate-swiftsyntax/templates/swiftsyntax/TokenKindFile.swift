@@ -26,11 +26,26 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       // Tokens that don't have a set text have an associated value that
       // contains their text.
       if tokenSpec.kind == .keyword {
-        DeclSyntax("case \(tokenSpec.varOrCaseName)(Keyword)")
+        DeclSyntax(
+          """
+          \(tokenSpec.apiAttributes)\
+          case \(tokenSpec.varOrCaseName)(Keyword)
+          """
+        )
       } else if tokenSpec.text == nil {
-        DeclSyntax("case \(tokenSpec.varOrCaseName)(String)")
+        DeclSyntax(
+          """
+          \(tokenSpec.apiAttributes)\
+          case \(tokenSpec.varOrCaseName)(String)
+          """
+        )
       } else {
-        DeclSyntax("case \(tokenSpec.varOrCaseName)")
+        DeclSyntax(
+          """
+          \(tokenSpec.apiAttributes)\
+          case \(tokenSpec.varOrCaseName)
+          """
+        )
       }
     }
 
@@ -140,7 +155,12 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     for tokenSpec in Token.allCases.map(\.spec) {
-      DeclSyntax("case \(tokenSpec.varOrCaseName)")
+      DeclSyntax(
+        """
+        \(tokenSpec.apiAttributes)\
+        case \(tokenSpec.varOrCaseName)
+        """
+      )
     }
 
     try VariableDeclSyntax(

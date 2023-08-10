@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class TypeTests: XCTestCase {
+final class TypeTests: ParserTestCase {
   func testMissingColonInType() {
     assertParse(
       """

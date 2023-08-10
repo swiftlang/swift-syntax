@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class RegexParseErrorTests: XCTestCase {
+final class RegexParseErrorTests: ParserTestCase {
   func testRegexParseError1() {
     assertParse(
       """

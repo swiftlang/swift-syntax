@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftParser
 import XCTest
 
-final class ExpressionTests: XCTestCase {
+final class ExpressionTests: ParserTestCase {
   func testTernary() {
     assertParse(
       "let a =1️⃣",
@@ -1474,7 +1474,7 @@ final class ExpressionTests: XCTestCase {
   }
 }
 
-final class MemberExprTests: XCTestCase {
+final class MemberExprTests: ParserTestCase {
   func testMissing() {
     let cases: [UInt: String] = [
       #line: "",
@@ -1494,7 +1494,7 @@ final class MemberExprTests: XCTestCase {
   }
 }
 
-final class StatementExpressionTests: XCTestCase {
+final class StatementExpressionTests: ParserTestCase {
   private func ifZeroElseOne() -> ExprSyntax {
     .init(
       IfExprSyntax(

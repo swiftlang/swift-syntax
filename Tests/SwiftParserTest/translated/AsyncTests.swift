@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class AsyncTests: XCTestCase {
+final class AsyncTests: ParserTestCase {
   func testAsync1() {
     assertParse(
       """

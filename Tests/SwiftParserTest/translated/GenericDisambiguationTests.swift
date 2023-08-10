@@ -16,7 +16,7 @@ import SwiftSyntax
 
 import XCTest
 
-final class GenericDisambiguationTests: XCTestCase {
+final class GenericDisambiguationTests: ParserTestCase {
   func testGenericDisambiguation1() {
     assertParse(
       """

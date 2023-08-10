@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class AvailabilityQueryTests: XCTestCase {
+final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery1() {
     assertParse(
       """

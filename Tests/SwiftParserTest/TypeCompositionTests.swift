@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftParser
 import XCTest
 
-final class TypeCompositionTests: XCTestCase {
+final class TypeCompositionTests: ParserTestCase {
   func testComponents() {
     let cases: [UInt: String] = [
       // Identifiers and member types

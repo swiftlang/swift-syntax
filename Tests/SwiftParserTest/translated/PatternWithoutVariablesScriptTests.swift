@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class PatternWithoutVariablesScriptTests: XCTestCase {
+final class PatternWithoutVariablesScriptTests: ParserTestCase {
   func testPatternWithoutVariablesScript1() {
     assertParse(
       """

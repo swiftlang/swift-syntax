@@ -16,7 +16,7 @@ import XCTest
 
 // TODO: The generic where clause next to generic parameters is only valid in language mode 4. We should disallow them in language mode 5.
 
-final class DeprecatedWhereTests: XCTestCase {
+final class DeprecatedWhereTests: ParserTestCase {
   func testDeprecatedWhere1() {
     assertParse(
       """

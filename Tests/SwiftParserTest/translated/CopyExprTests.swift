@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class CopyExprTests: XCTestCase {
+final class CopyExprTests: ParserTestCase {
   func testGlobal() {
     assertParse(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class InvalidStringInterpolationProtocolTests: XCTestCase {
+final class InvalidStringInterpolationProtocolTests: ParserTestCase {
   func testInvalidStringInterpolationProtocol1() {
     assertParse(
       """

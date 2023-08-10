@@ -22,20 +22,34 @@ public struct TokenSpec {
   }
 
   public let varOrCaseName: TokenSyntax
+
+  /// If `true`, this is for an experimental language feature, and any public
+  /// API generated should be SPI.
+  public let isExperimental: Bool
+
   public let nameForDiagnostics: String
   public let text: String?
   public let kind: Kind
 
   fileprivate init(
     name: String,
+    isExperimental: Bool = false,
     nameForDiagnostics: String,
     text: String? = nil,
     kind: Kind
   ) {
     self.varOrCaseName = .identifier(name)
+    self.isExperimental = isExperimental
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
     self.kind = kind
+  }
+
+  /// Retrieve the attributes that should be printed on any API for the
+  /// generated token.
+  public var apiAttributes: AttributeListSyntax {
+    guard isExperimental else { return "" }
+    return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
   }
 
   static func punctuator(name: String, text: String) -> TokenSpec {

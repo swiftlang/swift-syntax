@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class BuiltinBridgeObjectTests: XCTestCase {
+final class BuiltinBridgeObjectTests: ParserTestCase {
   func testBuiltinBridgeObject1() {
     assertParse(
       """

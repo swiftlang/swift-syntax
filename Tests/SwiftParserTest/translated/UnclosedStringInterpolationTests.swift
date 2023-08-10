@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class UnclosedStringInterpolationTests: XCTestCase {
+final class UnclosedStringInterpolationTests: ParserTestCase {
   func testUnclosedStringInterpolation1() {
     assertParse(
       #"""

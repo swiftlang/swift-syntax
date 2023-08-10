@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class NoimplicitcopyAttrTests: XCTestCase {
+final class NoimplicitcopyAttrTests: ParserTestCase {
   func testNoimplicitcopyAttr1() {
     assertParse(
       """

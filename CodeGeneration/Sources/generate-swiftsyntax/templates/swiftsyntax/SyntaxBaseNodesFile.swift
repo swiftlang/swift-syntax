@@ -26,6 +26,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Extension point to add common methods to all ``\(node.kind.syntaxType)`` nodes.
       ///
       ///  - Warning: Do not conform to this protocol yourself.
+      \(node.apiAttributes())\
       public protocol \(node.kind.protocolType): \(raw: node.base.protocolType) {}
       """
     )
@@ -59,6 +60,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try! StructDeclSyntax(
       """
       \(node.documentation)
+      \(node.apiAttributes())\
       public struct \(node.kind.syntaxType): \(node.kind.protocolType), SyntaxHashable
       """
     ) {

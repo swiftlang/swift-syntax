@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class RawStringTests: XCTestCase {
+final class RawStringTests: ParserTestCase {
   func testRawString1() {
     assertParse(
       """

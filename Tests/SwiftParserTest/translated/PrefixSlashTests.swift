@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class PrefixSlashTests: XCTestCase {
+final class PrefixSlashTests: ParserTestCase {
   func testPrefixSlash2() {
     assertParse(
       """

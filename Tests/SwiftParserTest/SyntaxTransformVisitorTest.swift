@@ -12,9 +12,9 @@
 
 import XCTest
 import SwiftParser
-import SwiftSyntax
+@_spi(SyntaxTransformVisitor) import SwiftSyntax
 
-final class SyntaxTransformVisitorTest: XCTestCase {
+final class SyntaxTransformVisitorTest: ParserTestCase {
   public func testFunctionCounter() {
     struct FuncCounter: SyntaxTransformVisitor {
       public func visitAny(_ node: Syntax) -> Int {

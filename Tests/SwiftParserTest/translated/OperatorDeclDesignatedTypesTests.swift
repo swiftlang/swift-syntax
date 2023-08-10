@@ -16,7 +16,7 @@ import XCTest
 
 // TODO: Designated operator types are only valid in langauge mode 4. We should disallow them in language mode 5.
 
-final class OperatorDeclDesignatedTypesTests: XCTestCase {
+final class OperatorDeclDesignatedTypesTests: ParserTestCase {
   func testOperatorDeclDesignatedTypes1() {
     assertParse(
       """

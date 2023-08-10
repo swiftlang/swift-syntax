@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class DelayedExtensionTests: XCTestCase {
+final class DelayedExtensionTests: ParserTestCase {
   func testDelayedExtension1() {
     assertParse(
       """

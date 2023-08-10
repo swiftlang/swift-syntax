@@ -15,7 +15,7 @@ import SwiftSyntax
 import SwiftParser
 import _SwiftSyntaxTestSupport
 
-public class AbsolutePositionTests: XCTestCase {
+public class AbsolutePositionTests: ParserTestCase {
   public func testTokenAt() {
     let source =
       """

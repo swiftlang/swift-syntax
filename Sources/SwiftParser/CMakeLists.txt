@@ -13,6 +13,7 @@ add_swift_host_library(SwiftParser
   CollectionNodes+Parsable.swift
   Declarations.swift
   Directives.swift
+  ExperimentalFeatures.swift
   Expressions.swift
   IncrementalParseTransition.swift
   Lookahead.swift

@@ -16,32 +16,34 @@ import XCTest
 
 import SwiftSyntax
 
-func assertParseWithAllNewlineEndings(
-  _ markedSource: String,
-  substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
-  substructureAfterMarker: String = "START",
-  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
-  applyFixIts: [String]? = nil,
-  fixedSource expectedFixedSource: String? = nil,
-  file: StaticString = #file,
-  line: UInt = #line
-) {
-  for newline in ["\n", "\r", "\r\n"] {
-    assertParse(
-      markedSource.replacingOccurrences(of: "\n", with: newline),
-      substructure: expectedSubstructure,
-      substructureAfterMarker: substructureAfterMarker,
-      diagnostics: expectedDiagnostics,
-      applyFixIts: applyFixIts,
-      fixedSource: expectedFixedSource,
-      options: [.normalizeNewlinesInFixedSource],
-      file: file,
-      line: line
-    )
+extension ParserTestCase {
+  fileprivate func assertParseWithAllNewlineEndings(
+    _ markedSource: String,
+    substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
+    substructureAfterMarker: String = "START",
+    diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+    applyFixIts: [String]? = nil,
+    fixedSource expectedFixedSource: String? = nil,
+    file: StaticString = #file,
+    line: UInt = #line
+  ) {
+    for newline in ["\n", "\r", "\r\n"] {
+      assertParse(
+        markedSource.replacingOccurrences(of: "\n", with: newline),
+        substructure: expectedSubstructure,
+        substructureAfterMarker: substructureAfterMarker,
+        diagnostics: expectedDiagnostics,
+        applyFixIts: applyFixIts,
+        fixedSource: expectedFixedSource,
+        options: [.normalizeNewlinesInFixedSource],
+        file: file,
+        line: line
+      )
+    }
   }
 }
 
-final class MultilineErrorsTests: XCTestCase {
+final class MultilineErrorsTests: ParserTestCase {
   func testMultilineErrors1() {
     assertParseWithAllNewlineEndings(
       """

@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class TrailingSemiTests: XCTestCase {
+final class TrailingSemiTests: ParserTestCase {
   func testTrailingSemi1() {
     assertParse(
       """

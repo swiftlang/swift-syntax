@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class InvalidIfExprTests: XCTestCase {
+final class InvalidIfExprTests: ParserTestCase {
   func testInvalidIfExpr1() {
     assertParse(
       """

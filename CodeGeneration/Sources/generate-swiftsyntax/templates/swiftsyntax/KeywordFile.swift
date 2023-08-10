@@ -28,7 +28,12 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     for (index, keyword) in KEYWORDS.enumerated() {
-      DeclSyntax("case \(raw: keyword.escapedName)")
+      DeclSyntax(
+        """
+        \(keyword.apiAttributes)\
+        case \(raw: keyword.escapedName)
+        """
+      )
     }
 
     try! InitializerDeclSyntax("@_spi(RawSyntax) public init?(_ text: SyntaxText)") {

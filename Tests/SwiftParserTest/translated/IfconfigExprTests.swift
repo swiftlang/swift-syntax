@@ -15,7 +15,7 @@
 import XCTest
 import SwiftSyntax
 
-final class IfconfigExprTests: XCTestCase {
+final class IfconfigExprTests: ParserTestCase {
   func testIfconfigExpr1() {
     assertParse(
       """

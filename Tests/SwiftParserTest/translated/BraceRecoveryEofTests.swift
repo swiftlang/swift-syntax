@@ -14,7 +14,7 @@
 
 import XCTest
 
-final class BraceRecoveryEofTests: XCTestCase {
+final class BraceRecoveryEofTests: ParserTestCase {
   func testBraceRecoveryEof1() {
     assertParse(
       """

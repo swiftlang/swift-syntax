@@ -16,7 +16,7 @@ import SwiftSyntax
 
 import XCTest
 
-final class HashbangLibraryTests: XCTestCase {
+final class HashbangLibraryTests: ParserTestCase {
   func testHashbangLibrary1() {
     // Check that we diagnose and skip the hashbang at the beginning of the file
     // when compiling in library mode.

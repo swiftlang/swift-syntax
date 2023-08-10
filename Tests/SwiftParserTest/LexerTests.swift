@@ -60,7 +60,7 @@ fileprivate func assertRawBytesLexeme(
   XCTAssertEqual(lexeme.diagnostic, error, file: file, line: line)
 }
 
-public class LexerTests: XCTestCase {
+public class LexerTests: ParserTestCase {
   func testIdentifiers() {
     assertLexemes(
       "Hello World",

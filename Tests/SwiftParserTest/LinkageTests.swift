@@ -14,7 +14,7 @@
 import Darwin
 import XCTest
 
-final class LinkageTest: XCTestCase {
+final class LinkageTest: ParserTestCase {
   // Assert that SwiftSyntax and SwiftParser do not introduce more link-time
   // dependencies than are strictly necessary. We want to minimize our link-time
   // dependencies. If this set changes - in particular, if it grows - consult

@@ -15,9 +15,34 @@
 
 public extension SyntaxClassification {
   /// A `#` keyword like `#warning`.
-  @available(*, deprecated, renamed: "poundDirective")
-  static var poundDirectiveKeyword: SyntaxClassification {
-    return .poundDirective
+  @available(*, deprecated, renamed: "ifConfigDirective")
+  static var poundDirective: SyntaxClassification {
+    return .ifConfigDirective
+  }
+
+  @available(*, deprecated, renamed: "ifConfigDirective")
+  static var buildConfigId: SyntaxClassification {
+    return .ifConfigDirective
+  }
+
+  @available(*, deprecated, message: "String interpolation anchors are now classified as .none")
+  static var stringInterpolationAnchor: SyntaxClassification {
+    return .none
+  }
+
+  @available(*, deprecated, renamed: "type")
+  static var typeIdentifier: SyntaxClassification {
+    return .type
+  }
+
+  @available(*, deprecated, renamed: "operator")
+  static var operatorIdentifier: SyntaxClassification {
+    return .operator
+  }
+
+  @available(*, deprecated, renamed: "floatLiteral")
+  static var floatingLiteral: SyntaxClassification {
+    return .floatLiteral
   }
 }
 

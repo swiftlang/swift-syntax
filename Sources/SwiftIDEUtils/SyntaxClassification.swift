@@ -17,8 +17,6 @@ public enum SyntaxClassification {
   case attribute
   /// A block comment starting with `/**` and ending with `*/.
   case blockComment
-  /// A build configuration directive like `#if`, `#elseif`, `#else`.
-  case buildConfigId
   /// A doc block comment starting with `/**` and ending with `*/.
   case docBlockComment
   /// A doc line comment starting with `///`.
@@ -31,6 +29,8 @@ public enum SyntaxClassification {
   case floatLiteral
   /// A generic identifier.
   case identifier
+  /// A directive starting with `#if`, `#elseif`or `#else`.
+  case ifConfigDirective
   /// An integer literal.
   case integerLiteral
   /// A Swift keyword, including contextual keywords.
@@ -40,22 +40,13 @@ public enum SyntaxClassification {
   /// The token should not receive syntax coloring.
   case none
   /// An identifier referring to an operator.
-  case operatorIdentifier
-  /// A `#` token like `#warning`.
-  case poundDirective
+  case `operator`
   /// A regex literal, including multiline regex literals.
   case regexLiteral
-  /// The opening and closing parenthesis of string interpolation.
-  case stringInterpolationAnchor
   /// A string literal including multiline string literals.
   case stringLiteral
   /// An identifier referring to a type.
-  case typeIdentifier
-
-  @available(*, deprecated, renamed: "floatLiteral")
-  public static var floatingLiteral: Self {
-    return .floatLiteral
-  }
+  case type
 }
 
 extension SyntaxClassification {
@@ -76,26 +67,22 @@ extension SyntaxClassification {
       return (.keyword, false)
     case \DeclModifierSyntax.name:
       return (.attribute, false)
-    case \ExpressionSegmentSyntax.leftParen:
-      return (.stringInterpolationAnchor, true)
-    case \ExpressionSegmentSyntax.rightParen:
-      return (.stringInterpolationAnchor, true)
     case \IfConfigClauseSyntax.poundKeyword:
-      return (.buildConfigId, false)
+      return (.ifConfigDirective, false)
     case \IfConfigClauseSyntax.condition:
-      return (.buildConfigId, false)
+      return (.ifConfigDirective, false)
     case \IfConfigDeclSyntax.poundEndif:
-      return (.buildConfigId, false)
+      return (.ifConfigDirective, false)
     case \MemberTypeIdentifierSyntax.name:
-      return (.typeIdentifier, false)
+      return (.type, false)
     case \OperatorDeclSyntax.name:
-      return (.operatorIdentifier, false)
+      return (.operator, false)
     case \PrecedenceGroupAssociativitySyntax.associativityLabel:
       return (.keyword, false)
     case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanLabel:
       return (.keyword, false)
     case \SimpleTypeIdentifierSyntax.name:
-      return (.typeIdentifier, false)
+      return (.type, false)
     default:
       return nil
     }
@@ -114,7 +101,7 @@ extension RawTokenKind {
     case .backtick:
       return .none
     case .binaryOperator:
-      return .operatorIdentifier
+      return .operator
     case .colon:
       return .none
     case .comma:
@@ -152,7 +139,7 @@ extension RawTokenKind {
     case .period:
       return .none
     case .postfixOperator:
-      return .operatorIdentifier
+      return .operator
     case .postfixQuestionMark:
       return .none
     case .pound:
@@ -160,21 +147,21 @@ extension RawTokenKind {
     case .poundAvailable:
       return .none
     case .poundElse:
-      return .poundDirective
+      return .ifConfigDirective
     case .poundElseif:
-      return .poundDirective
+      return .ifConfigDirective
     case .poundEndif:
-      return .poundDirective
+      return .ifConfigDirective
     case .poundIf:
-      return .poundDirective
+      return .ifConfigDirective
     case .poundSourceLocation:
-      return .poundDirective
+      return .keyword
     case .poundUnavailable:
       return .none
     case .prefixAmpersand:
       return .none
     case .prefixOperator:
-      return .operatorIdentifier
+      return .operator
     case .rawStringPoundDelimiter:
       return .none
     case .regexLiteralPattern:

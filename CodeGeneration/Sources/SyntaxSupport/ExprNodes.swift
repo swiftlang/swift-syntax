@@ -354,8 +354,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "Items",
-        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item"),
-        isOptional: true
+        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item")
       ),
       Child(
         name: "RightSquare",
@@ -373,15 +372,13 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "FirstName",
@@ -526,9 +523,8 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Capture",
@@ -828,9 +824,8 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
-        nameForDiagnostics: "trailing closures",
-        isOptional: true
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true),
+        nameForDiagnostics: "trailing closures"
       ),
     ]
   ),
@@ -1179,8 +1174,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
-        isOptional: true
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true)
       ),
     ]
   ),
@@ -1583,9 +1577,8 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
-        nameForDiagnostics: "trailing closures",
-        isOptional: true
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true),
+        nameForDiagnostics: "trailing closures"
       ),
     ]
   ),

@@ -491,7 +491,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
     if let declSyntax = node.as(DeclSyntax.self),
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
-      !(attributedNode.attributes?.isEmpty ?? true)
+      !attributedNode.attributes.isEmpty
     {
       // Visit the node, disabling the `visitAny` handling.
       skipVisitAnyHandling.insert(node)
@@ -579,9 +579,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         )
         .map { visit($0) }
         if !newAttributes.isEmpty {
-          if let existingAttrs = decl.attributes {
-            newAttributes.insert(contentsOf: existingAttrs, at: 0)
-          }
+          newAttributes.insert(contentsOf: decl.attributes, at: 0)
           item.decl = decl.with(\.attributes, AttributeListSyntax(newAttributes)).cast(DeclSyntax.self)
         }
       }
@@ -626,13 +624,11 @@ extension MacroApplication {
   private func macroAttributes(
     attachedTo decl: DeclSyntax
   ) -> [(attributeNode: AttributeSyntax, definition: Macro.Type)] {
-    guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self),
-      let attributes = attributedNode.attributes
-    else {
+    guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self) else {
       return []
     }
 
-    return attributes.compactMap {
+    return attributedNode.attributes.compactMap {
       guard case let .attribute(attribute) = $0,
         let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
         let macro = macroSystem.lookup(attributeName)

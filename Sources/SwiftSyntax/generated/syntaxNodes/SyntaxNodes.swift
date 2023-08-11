@@ -1925,7 +1925,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
       catchKeyword: TokenSyntax = .keyword(.catch),
       _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
-      catchItems: CatchItemListSyntax? = nil,
+      catchItems: CatchItemListSyntax = [],
       _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
@@ -1947,7 +1947,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBeforeCatchKeyword?.raw, 
           catchKeyword.raw, 
           unexpectedBetweenCatchKeywordAndCatchItems?.raw, 
-          catchItems?.raw, 
+          catchItems.raw, 
           unexpectedBetweenCatchItemsAndBody?.raw, 
           body.raw, 
           unexpectedAfterBody?.raw
@@ -1992,12 +1992,12 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var catchItems: CatchItemListSyntax? {
+  public var catchItems: CatchItemListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(CatchItemListSyntax.init)
+      return CatchItemListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = CatchClauseSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = CatchClauseSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -2259,7 +2259,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
       leftSquare: TokenSyntax = .leftSquareToken(),
       _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
-      items: ClosureCaptureListSyntax? = nil,
+      items: ClosureCaptureListSyntax,
       _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
       rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
@@ -2281,7 +2281,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBeforeLeftSquare?.raw, 
           leftSquare.raw, 
           unexpectedBetweenLeftSquareAndItems?.raw, 
-          items?.raw, 
+          items.raw, 
           unexpectedBetweenItemsAndRightSquare?.raw, 
           rightSquare.raw, 
           unexpectedAfterRightSquare?.raw
@@ -2326,12 +2326,12 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var items: ClosureCaptureListSyntax? {
+  public var items: ClosureCaptureListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(ClosureCaptureListSyntax.init)
+      return ClosureCaptureListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureCaptureClauseSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = ClosureCaptureClauseSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3023,9 +3023,9 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -3065,9 +3065,9 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -3104,12 +3104,12 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ClosureParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3148,12 +3148,12 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureParameterSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = ClosureParameterSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3537,7 +3537,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
       capture: ClosureCaptureClauseSyntax? = nil,
       _ unexpectedBetweenCaptureAndParameterClause: UnexpectedNodesSyntax? = nil,
@@ -3571,7 +3571,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndCapture?.raw, 
           capture?.raw, 
           unexpectedBetweenCaptureAndParameterClause?.raw, 
@@ -3606,12 +3606,12 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = ClosureSignatureSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = ClosureSignatureSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -7776,7 +7776,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax? = nil,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -7814,7 +7814,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName?.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -7851,12 +7851,12 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = EnumCaseParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = EnumCaseParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8768,9 +8768,9 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -8814,9 +8814,9 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers?.raw, 
+          modifiers.raw, 
           unexpectedBetweenModifiersAndFirstName?.raw, 
           firstName.raw, 
           unexpectedBetweenFirstNameAndSecondName?.raw, 
@@ -8855,12 +8855,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -8899,12 +8899,12 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var modifiers: DeclModifierListSyntax? {
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(DeclModifierListSyntax.init)
+      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionParameterSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = FunctionParameterSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -9827,7 +9827,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? = nil,
       eachKeyword: TokenSyntax? = nil,
       _ unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? = nil,
@@ -9861,7 +9861,7 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndEachKeyword?.raw, 
           eachKeyword?.raw, 
           unexpectedBetweenEachKeywordAndName?.raw, 
@@ -9896,12 +9896,12 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
     }
     set(value) {
-      self = GenericParameterSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+      self = GenericParameterSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -19003,7 +19003,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeMajor: UnexpectedNodesSyntax? = nil,
       major: TokenSyntax,
       _ unexpectedBetweenMajorAndComponents: UnexpectedNodesSyntax? = nil,
-      components: VersionComponentListSyntax? = nil,
+      components: VersionComponentListSyntax,
       _ unexpectedAfterComponents: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -19021,7 +19021,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
           unexpectedBeforeMajor?.raw, 
           major.raw, 
           unexpectedBetweenMajorAndComponents?.raw, 
-          components?.raw, 
+          components.raw, 
           unexpectedAfterComponents?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -19066,12 +19066,12 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable {
   }
   
   /// Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`
-  public var components: VersionComponentListSyntax? {
+  public var components: VersionComponentListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(VersionComponentListSyntax.init)
+      return VersionComponentListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = VersionTupleSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = VersionTupleSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   

@@ -537,13 +537,11 @@ final class StatementTests: ParserTestCase {
         1️⃣yield & 5
       }
       """,
-      substructure: SequenceExprSyntax(
-        elements: ExprListSyntax([
-          DeclReferenceExprSyntax(baseName: .identifier("yield")),
-          BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
-          IntegerLiteralExprSyntax(5),
-        ])
-      ),
+      substructure: SequenceExprSyntax {
+        DeclReferenceExprSyntax(baseName: .identifier("yield"))
+        BinaryOperatorExprSyntax(operator: .binaryOperator("&"))
+        IntegerLiteralExprSyntax(5)
+      },
       substructureAfterMarker: "1️⃣"
     )
 
@@ -553,13 +551,11 @@ final class StatementTests: ParserTestCase {
         1️⃣yield&5
       }
       """,
-      substructure: SequenceExprSyntax(
-        elements: ExprListSyntax([
-          DeclReferenceExprSyntax(baseName: .identifier("yield")),
-          BinaryOperatorExprSyntax(operator: .binaryOperator("&")),
-          IntegerLiteralExprSyntax(5),
-        ])
-      ),
+      substructure: SequenceExprSyntax {
+        DeclReferenceExprSyntax(baseName: .identifier("yield"))
+        BinaryOperatorExprSyntax(operator: .binaryOperator("&"))
+        IntegerLiteralExprSyntax(5)
+      },
       substructureAfterMarker: "1️⃣"
     )
   }

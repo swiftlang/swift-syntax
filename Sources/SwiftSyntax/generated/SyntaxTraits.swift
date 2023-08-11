@@ -58,12 +58,12 @@ public extension SyntaxProtocol {
 
 
 public protocol DeclGroupSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? {
+  var attributes: AttributeListSyntax {
     get
     set
   }
   
-  var modifiers: DeclModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax {
     get
     set
   }
@@ -208,7 +208,7 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
   
-  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get
     set
   }
@@ -364,7 +364,7 @@ public extension SyntaxProtocol {
 
 
 public protocol WithAttributesSyntax: SyntaxProtocol {
-  var attributes: AttributeListSyntax? {
+  var attributes: AttributeListSyntax {
     get
     set
   }
@@ -484,7 +484,7 @@ public extension SyntaxProtocol {
 
 
 public protocol WithModifiersSyntax: SyntaxProtocol {
-  var modifiers: DeclModifierListSyntax? {
+  var modifiers: DeclModifierListSyntax {
     get
     set
   }

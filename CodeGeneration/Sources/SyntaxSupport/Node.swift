@@ -367,7 +367,7 @@ fileprivate extension Child {
       return [kind]
     case .nodeChoices(let choices):
       return choices.flatMap(\.kinds)
-    case .collection(let kind, _, _):
+    case .collection(kind: let kind, _, _, _):
       return [kind]
     case .token:
       return [.token]

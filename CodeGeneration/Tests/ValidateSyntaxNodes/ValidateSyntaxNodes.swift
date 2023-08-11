@@ -56,13 +56,13 @@ fileprivate extension ChildKind {
       return kind == otherKind
     case (.nodeChoices(let choices), .nodeChoices(let otherChoices)):
       return choices.count == otherChoices.count && zip(choices, otherChoices).allSatisfy { $0.hasSameType(as: $1) }
-    case (.collection(let kind, _, _), .collection(let otherKind, _, _)):
+    case (.collection(kind: let kind, _, _, _), .collection(kind: let otherKind, _, _, _)):
       return kind == otherKind
     case (.token(let choices, _, _), .token(let otherChoices, _, _)):
       return choices == otherChoices
-    case (.node(let kind), .collection(let otherKind, _, _)):
+    case (.node(let kind), .collection(kind: let otherKind, _, _, _)):
       return kind == otherKind
-    case (.collection(let kind, _, _), .node(let otherKind)):
+    case (.collection(kind: let kind, _, _, _), .node(let otherKind)):
       return kind == otherKind
     default:
       return false
@@ -755,6 +755,25 @@ class ValidateSyntaxNodes: XCTestCase {
               "non-collection node shouldn’t contain 'List'"
           )
         )
+      }
+    }
+
+    assertFailuresMatchXFails(failures, expectedFailures: [])
+  }
+
+  func testNoOptionalSyntaxCollections() {
+    var failures: [ValidationFailure] = []
+
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+      for child in node.children {
+        if case .collection = child.kind, child.isOptional, !child.isUnexpectedNodes {
+          failures.append(
+            ValidationFailure(
+              node: node.kind,
+              message: "child '\(child.name)' is an optional syntax collection. All syntax collections should be non-optional."
+            )
+          )
+        }
       }
     }
 

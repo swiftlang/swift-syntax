@@ -16,8 +16,8 @@ protocol NominalTypeDeclarationTrait {
   associatedtype PrimaryOrGenerics
 
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
@@ -34,8 +34,8 @@ protocol NominalTypeDeclarationTrait {
 
 extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
@@ -68,8 +68,8 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
@@ -102,8 +102,8 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
@@ -136,8 +136,8 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
@@ -170,8 +170,8 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
 
 extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
   init(
-    attributes: RawAttributeListSyntax?,
-    modifiers: RawDeclModifierListSyntax?,
+    attributes: RawAttributeListSyntax,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,

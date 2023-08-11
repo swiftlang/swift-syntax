@@ -828,12 +828,14 @@ extension RawSyntax {
     if leadingTrivia != nil || trailingTrivia != nil {
       var layout = Array(collection)
       if let leadingTrivia = leadingTrivia,
-        let idx = layout.firstIndex(where: { $0 != nil })
+        // Find the index of the first non-empty node so we can attach the trivia to it.
+        let idx = layout.firstIndex(where: { $0 != nil && ($0!.isToken || $0!.totalNodes > 1) })
       {
         layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia + (layout[idx]?.formLeadingTrivia() ?? []), arena: arena)
       }
       if let trailingTrivia = trailingTrivia,
-        let idx = layout.lastIndex(where: { $0 != nil })
+        // Find the index of the first non-empty node so we can attach the trivia to it.
+        let idx = layout.lastIndex(where: { $0 != nil && ($0!.isToken || $0!.totalNodes > 1) })
       {
         layout[idx] = layout[idx]!.withTrailingTrivia((layout[idx]?.formTrailingTrivia() ?? []) + trailingTrivia, arena: arena)
       }

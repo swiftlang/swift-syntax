@@ -90,8 +90,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true)
       ),
       Child(
         name: "EachKeyword",

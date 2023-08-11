@@ -100,7 +100,7 @@ extension Parser {
       )
     }
 
-    if unexpectedBeforeAttrList != nil || specifier != nil || attrList != nil {
+    if unexpectedBeforeAttrList != nil || specifier != nil || !attrList.isEmpty {
       return RawTypeSyntax(
         RawAttributedTypeSyntax(
           specifier: specifier,
@@ -862,7 +862,7 @@ extension Parser.Lookahead {
 
 extension Parser {
   mutating func parseTypeAttributeList(misplacedSpecifiers: [RawTokenSyntax] = []) -> (
-    specifier: RawTokenSyntax?, unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, attributes: RawAttributeListSyntax?
+    specifier: RawTokenSyntax?, unexpectedBeforeAttributes: RawUnexpectedNodesSyntax?, attributes: RawAttributeListSyntax
   ) {
     var specifier: RawTokenSyntax? = nil
     if canHaveParameterSpecifier {
@@ -889,7 +889,7 @@ extension Parser {
       return (specifier, unexpectedBeforeAttributeList, self.parseTypeAttributeListPresent())
     }
 
-    return (specifier, unexpectedBeforeAttributeList, nil)
+    return (specifier, unexpectedBeforeAttributeList, self.emptyCollection(RawAttributeListSyntax.self))
   }
 
   mutating func parseTypeAttributeListPresent() -> RawAttributeListSyntax {

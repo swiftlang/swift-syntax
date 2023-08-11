@@ -68,7 +68,7 @@ extension AccessorDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
       modifier: DeclModifierSyntax? = nil,
       _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil,
@@ -139,9 +139,9 @@ extension ActorDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
       actorKeyword: TokenSyntax = .keyword(.actor),
       _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -605,9 +605,9 @@ extension AssociatedTypeDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndAssociatedtypeKeyword: UnexpectedNodesSyntax? = nil,
       associatedtypeKeyword: TokenSyntax = .keyword(.associatedtype),
       _ unexpectedBetweenAssociatedtypeKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -1124,9 +1124,9 @@ extension ClassDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
       classKeyword: TokenSyntax = .keyword(.class),
       _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -1379,7 +1379,7 @@ extension ClosureSignatureSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
       capture: ClosureCaptureClauseSyntax? = nil,
       _ unexpectedBetweenCaptureAndInput: UnexpectedNodesSyntax? = nil,
@@ -2383,9 +2383,9 @@ extension EditorPlaceholderDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
@@ -2635,7 +2635,7 @@ extension EnumCaseParameterSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax? = nil,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -2730,9 +2730,9 @@ extension EnumDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
       enumKeyword: TokenSyntax = .keyword(.enum),
       _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -3024,7 +3024,7 @@ extension FunctionCallExprSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -3085,9 +3085,9 @@ extension FunctionDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFuncKeyword: UnexpectedNodesSyntax? = nil,
       funcKeyword: TokenSyntax = .keyword(.func),
       _ unexpectedBetweenFuncKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -3223,9 +3223,9 @@ extension FunctionParameterSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax,
       _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
@@ -3759,7 +3759,7 @@ extension GenericParameterSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil,
       each: TokenSyntax? = nil,
       _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil,
@@ -4019,9 +4019,9 @@ extension ImportDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndImportTok: UnexpectedNodesSyntax? = nil,
       importTok: TokenSyntax = .keyword(.import),
       _ unexpectedBetweenImportTokAndImportKind: UnexpectedNodesSyntax? = nil,
@@ -4782,9 +4782,9 @@ extension MacroDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? = nil,
       macroKeyword: TokenSyntax = .keyword(.macro),
       _ unexpectedBetweenMacroKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -4931,9 +4931,9 @@ extension MacroExpansionDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? = nil,
       poundToken: TokenSyntax = .poundToken(),
       _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
@@ -4949,7 +4949,7 @@ extension MacroExpansionDeclSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -5102,7 +5102,7 @@ extension MacroExpansionExprSyntax {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6269,9 +6269,9 @@ extension PrecedenceGroupDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? = nil,
       precedencegroupKeyword: TokenSyntax = .keyword(.precedencegroup),
       _ unexpectedBetweenPrecedencegroupKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -6607,9 +6607,9 @@ extension ProtocolDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
       protocolKeyword: TokenSyntax = .keyword(.protocol),
       _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -7444,9 +7444,9 @@ extension StructDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
       structKeyword: TokenSyntax = .keyword(.struct),
       _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -7573,7 +7573,7 @@ extension SubscriptCallExprSyntax {
       _ unexpectedBetweenRightBracketAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -7684,9 +7684,9 @@ extension SubscriptDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndSubscriptKeyword: UnexpectedNodesSyntax? = nil,
       subscriptKeyword: TokenSyntax = .keyword(.subscript),
       _ unexpectedBetweenSubscriptKeywordAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
@@ -8318,9 +8318,9 @@ extension TypeAliasDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
       typealiasKeyword: TokenSyntax = .keyword(.typealias),
       _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
@@ -8653,9 +8653,9 @@ extension VariableDeclSyntax {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax? = nil,
+      modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndBindingKeyword: UnexpectedNodesSyntax? = nil,
       bindingKeyword: TokenSyntax,
       _ unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? = nil,

@@ -733,12 +733,12 @@ extension Parser {
 
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
-        let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+        let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
         if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
         } else {
           trailingClosure = nil
-          additionalTrailingClosures = nil
+          additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
         }
 
         leadingExpr = RawExprSyntax(
@@ -769,12 +769,12 @@ extension Parser {
 
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
-        let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+        let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
         if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
         } else {
           trailingClosure = nil
-          additionalTrailingClosures = nil
+          additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
         }
 
         leadingExpr = RawExprSyntax(
@@ -1320,12 +1320,12 @@ extension Parser {
 
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
-    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax?
+    let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
     if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
       (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
     } else {
       trailingClosure = nil
-      additionalTrailingClosures = nil
+      additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
     }
 
     return RawMacroExpansionExprSyntax(
@@ -1733,7 +1733,7 @@ extension Parser {
 
       captures = RawClosureCaptureClauseSyntax(
         leftSquare: lsquare,
-        items: elements.isEmpty ? nil : RawClosureCaptureListSyntax(elements: elements, arena: self.arena),
+        items: RawClosureCaptureListSyntax(elements: elements, arena: self.arena),
         RawUnexpectedNodesSyntax(unexpectedNodes, arena: self.arena),
         rightSquare: rsquare,
         arena: self.arena
@@ -1908,7 +1908,7 @@ extension Parser {
 
 extension Parser {
   /// Parse the trailing closure(s) following a call expression.
-  mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax?) {
+  mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax) {
     // Parse the closure.
     let closure = self.parseClosureExpression()
 
@@ -1931,7 +1931,10 @@ extension Parser {
       )
     }
 
-    let trailing = elements.isEmpty ? nil : RawMultipleTrailingClosureElementListSyntax(elements: elements, arena: self.arena)
+    let trailing =
+      elements.isEmpty
+      ? self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
+      : RawMultipleTrailingClosureElementListSyntax(elements: elements, arena: self.arena)
     return (closure, trailing)
   }
 }

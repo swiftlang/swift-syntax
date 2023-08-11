@@ -511,7 +511,7 @@ public struct UnexpectedNodesError: ParserError {
     var message = "unexpected \(unexpectedNodes.shortSingleLineContentDescription)"
     if let parent = unexpectedNodes.parent {
       if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false),
-        parent.children(viewMode: .sourceAccurate).first?.id == unexpectedNodes.id
+        parent.children(viewMode: .sourceAccurate).first(where: { $0.totalLength.utf8Length > 0 })?.id == unexpectedNodes.id
       {
         message += " before \(parentTypeName)"
       } else if let parentTypeName = parent.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {

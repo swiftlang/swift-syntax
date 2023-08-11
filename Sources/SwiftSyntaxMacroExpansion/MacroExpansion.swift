@@ -106,8 +106,8 @@ public func expandFreestandingMacro(
       if let expansionDecl = node.as(MacroExpansionDeclSyntax.self) {
         // Strip any indentation from the attributes and modifiers that we are
         // inheriting. The expanded macro should start at the leftmost column.
-        let attributes = declMacroDef.propagateFreestandingMacroAttributes ? expansionDecl.attributes?.withIndentationRemoved : nil
-        let modifiers = declMacroDef.propagateFreestandingMacroModifiers ? expansionDecl.modifiers?.withIndentationRemoved : nil
+        let attributes = declMacroDef.propagateFreestandingMacroAttributes ? expansionDecl.attributes.withIndentationRemoved : nil
+        let modifiers = declMacroDef.propagateFreestandingMacroModifiers ? expansionDecl.modifiers.withIndentationRemoved : nil
         rewritten = rewritten.map {
           $0.applying(attributes: attributes, modifiers: modifiers)
         }
@@ -363,7 +363,7 @@ fileprivate extension DeclSyntax {
     attributes: AttributeListSyntax?,
     modifiers: DeclModifierListSyntax?
   ) -> DeclSyntax {
-    func _combine<C: SyntaxCollection>(_ left: C, _ right: C?) -> C? {
+    func _combine<C: SyntaxCollection>(_ left: C, _ right: C?) -> C {
       guard let right = right else { return left }
       var elems: [C.Element] = []
       elems += left

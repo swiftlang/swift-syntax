@@ -298,7 +298,7 @@ extension Parser {
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
-        components: nil,
+        components: RawVersionComponentListSyntax(elements: [], arena: self.arena),
         unexpectedAfterComponents,
         arena: self.arena
       )

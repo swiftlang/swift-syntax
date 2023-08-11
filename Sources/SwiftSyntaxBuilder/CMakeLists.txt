@@ -19,7 +19,6 @@ add_swift_host_library(SwiftSyntaxBuilder
   WithTrailingCommaSyntax+EnsuringTrailingComma.swift
 
 
-  generated/BuildableCollectionNodes.swift
   generated/BuildableNodes.swift
   generated/ResultBuilders.swift
   generated/RenamedChildrenBuilderCompatibility.swift

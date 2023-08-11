@@ -60,8 +60,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true)
       ),
       Child(
         name: "BaseType",

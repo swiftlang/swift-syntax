@@ -54,7 +54,7 @@ public struct CallToTrailingClosures: SyntaxRefactoringProvider {
 
 extension FunctionCallExprSyntax {
   fileprivate func convertToTrailingClosures(from startAtArgument: Int) -> FunctionCallExprSyntax? {
-    guard trailingClosure == nil, additionalTrailingClosures == nil, leftParen != nil, rightParen != nil else {
+    guard trailingClosure == nil, additionalTrailingClosures.isEmpty, leftParen != nil, rightParen != nil else {
       // Already have trailing closures
       return nil
     }

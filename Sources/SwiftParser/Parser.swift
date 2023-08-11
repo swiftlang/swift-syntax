@@ -129,6 +129,45 @@ public struct Parser {
   static let defaultMaximumNestingLevel = 256
   #endif
 
+  var _emptyRawMultipleTrailingClosureElementListSyntax: RawMultipleTrailingClosureElementListSyntax?
+
+  /// Create an empty collection of the given type.
+  ///
+  /// These empty collections are only created once and the same node is returned
+  /// on subsequent calls, reducing memory usage.
+  mutating func emptyCollection(_: RawMultipleTrailingClosureElementListSyntax.Type) -> RawMultipleTrailingClosureElementListSyntax {
+    if _emptyRawMultipleTrailingClosureElementListSyntax == nil {
+      _emptyRawMultipleTrailingClosureElementListSyntax = RawMultipleTrailingClosureElementListSyntax(elements: [], arena: self.arena)
+    }
+    return _emptyRawMultipleTrailingClosureElementListSyntax!
+  }
+
+  var _emptyRawDeclModifierListSyntax: RawDeclModifierListSyntax?
+
+  /// Create an empty collection of the given type.
+  ///
+  /// These empty collections are only created once and the same node is returned
+  /// on subsequent calls, reducing memory usage.
+  mutating func emptyCollection(_: RawDeclModifierListSyntax.Type) -> RawDeclModifierListSyntax {
+    if _emptyRawDeclModifierListSyntax == nil {
+      _emptyRawDeclModifierListSyntax = RawDeclModifierListSyntax(elements: [], arena: self.arena)
+    }
+    return _emptyRawDeclModifierListSyntax!
+  }
+
+  var _emptyRawAttributeListSyntax: RawAttributeListSyntax?
+
+  /// Create an empty collection of the given type.
+  ///
+  /// These empty collections are only created once and the same node is returned
+  /// on subsequent calls, reducing memory usage.
+  mutating func emptyCollection(_: RawAttributeListSyntax.Type) -> RawAttributeListSyntax {
+    if _emptyRawAttributeListSyntax == nil {
+      _emptyRawAttributeListSyntax = RawAttributeListSyntax(elements: [], arena: self.arena)
+    }
+    return _emptyRawAttributeListSyntax!
+  }
+
   /// The delegated initializer for the parser.
   ///
   /// - Parameters

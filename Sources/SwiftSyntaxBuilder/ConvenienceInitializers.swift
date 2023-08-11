@@ -172,7 +172,7 @@ extension FunctionCallExprSyntax {
   public init(
     callee: some ExprSyntaxProtocol,
     trailingClosure: ClosureExprSyntax? = nil,
-    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
     @LabeledExprListBuilder argumentList: () -> LabeledExprListSyntax = { [] }
   ) {
     let argumentList = argumentList()
@@ -358,8 +358,8 @@ extension VariableDeclSyntax {
   /// Creates an optionally initialized property.
   public init(
     leadingTrivia: Trivia = [],
-    attributes: AttributeListSyntax? = nil,
-    modifiers: DeclModifierListSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    modifiers: DeclModifierListSyntax = [],
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,
@@ -367,7 +367,7 @@ extension VariableDeclSyntax {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      attributes: attributes?.with(\.trailingTrivia, .space),
+      attributes: attributes.with(\.trailingTrivia, .space),
       modifiers: modifiers,
       bindingSpecifier: .keyword(bindingSpecifier)
     ) {

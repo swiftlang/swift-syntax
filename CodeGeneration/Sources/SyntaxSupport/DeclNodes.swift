@@ -84,9 +84,8 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifier",
@@ -186,15 +185,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "ActorKeyword",
@@ -276,17 +273,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes attached to the associated type declaration.",
-        isOptional: true
+        documentation: "Attributes attached to the associated type declaration."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the associated type declaration.",
-        isOptional: true
+        documentation: "Modifiers attached to the associated type declaration."
       ),
       Child(
         name: "AssociatedtypeKeyword",
@@ -368,17 +363,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes attached to the class declaration, such as an `@available` attribute.",
-        isOptional: true
+        documentation: "Attributes attached to the class declaration, such as an `@available` attribute."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the class declaration, such as `public`.",
-        isOptional: true
+        documentation: "Modifiers attached to the class declaration, such as `public`."
       ),
       Child(
         name: "ClassKeyword",
@@ -518,17 +511,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes that are attached to the deinitializer.",
-        isOptional: true
+        documentation: "Attributes that are attached to the deinitializer."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers that are attached to the deinitializer.",
-        isOptional: true
+        documentation: "Modifiers that are attached to the deinitializer."
       ),
       Child(
         name: "DeinitKeyword",
@@ -588,15 +579,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these.",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        documentation: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these.",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        documentation: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these."
       ),
       Child(
         name: "Placeholder",
@@ -653,9 +642,8 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "FirstName",
@@ -708,17 +696,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "The attributes applied to the case declaration.",
-        isOptional: true
+        documentation: "The attributes applied to the case declaration."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "The declaration modifiers applied to the case declaration.",
-        isOptional: true
+        documentation: "The declaration modifiers applied to the case declaration."
       ),
       Child(
         name: "CaseKeyword",
@@ -795,17 +781,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "The attributes applied to the enum declaration.",
-        isOptional: true
+        documentation: "The attributes applied to the enum declaration."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "The declaration modifiers applied to the enum declaration.",
-        isOptional: true
+        documentation: "The declaration modifiers applied to the enum declaration."
       ),
       Child(
         name: "EnumKeyword",
@@ -867,15 +851,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "ExtensionKeyword",
@@ -918,15 +900,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "FuncKeyword",
@@ -988,15 +968,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "FirstName",
@@ -1156,17 +1134,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes attached to the import declaration, for example `@testable`.",
-        isOptional: true
+        documentation: "Attributes attached to the import declaration, for example `@testable`."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.",
-        isOptional: true
+        documentation: "Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift."
       ),
       Child(
         name: "ImportKeyword",
@@ -1272,17 +1248,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes that are attached to the initializer.",
-        isOptional: true
+        documentation: "Attributes that are attached to the initializer."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the initializer",
-        isOptional: true
+        documentation: "Modifiers attached to the initializer"
       ),
       Child(
         name: "InitKeyword",
@@ -1341,15 +1315,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "MacroKeyword",
@@ -1401,15 +1373,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "Pound",
@@ -1450,8 +1420,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "AdditionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure"),
-        isOptional: true
+        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true)
       ),
     ]
   ),
@@ -1843,17 +1812,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "The attributes applied to the 'precedencegroup' declaration.",
-        isOptional: true
+        documentation: "The attributes applied to the 'precedencegroup' declaration."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "The declaration modifiers applied to the 'precedencegroup' declaration.",
-        isOptional: true
+        documentation: "The declaration modifiers applied to the 'precedencegroup' declaration."
       ),
       Child(
         name: "PrecedencegroupKeyword",
@@ -1960,17 +1927,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes attached to the protocol declaration, such as an `@available` attribute.",
-        isOptional: true
+        documentation: "Attributes attached to the protocol declaration, such as an `@available` attribute."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the protocol declaration, such as `public`.",
-        isOptional: true
+        documentation: "Modifiers attached to the protocol declaration, such as `public`."
       ),
       Child(
         name: "ProtocolKeyword",
@@ -2132,17 +2097,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         nameForDiagnostics: "attributes",
-        documentation: "Attributes that are attached to the struct declaration.",
-        isOptional: true
+        documentation: "Attributes that are attached to the struct declaration."
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers that are attached to the struct declaration.",
-        isOptional: true
+        documentation: "Modifiers that are attached to the struct declaration."
       ),
       Child(
         name: "StructKeyword",
@@ -2197,15 +2160,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "SubscriptKeyword",
@@ -2297,15 +2258,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "TypealiasKeyword",
@@ -2354,15 +2313,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "Attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute"),
-        nameForDiagnostics: "attributes",
-        isOptional: true
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
       ),
       Child(
         name: "Modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier"),
-        nameForDiagnostics: "modifiers",
-        isOptional: true
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers"
       ),
       Child(
         name: "BindingSpecifier",

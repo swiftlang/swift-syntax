@@ -196,7 +196,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
       specifier: TokenSyntax? = nil,
       _ unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax? = nil,
+      attributes: AttributeListSyntax = [],
       _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil,
       baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
@@ -218,7 +218,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           unexpectedBeforeSpecifier?.raw, 
           specifier?.raw, 
           unexpectedBetweenSpecifierAndAttributes?.raw, 
-          attributes?.raw, 
+          attributes.raw, 
           unexpectedBetweenAttributesAndBaseType?.raw, 
           baseType.raw, 
           unexpectedAfterBaseType?.raw
@@ -263,12 +263,12 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var attributes: AttributeListSyntax? {
+  public var attributes: AttributeListSyntax {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(AttributeListSyntax.init)
+      return AttributeListSyntax(data.child(at: 3, parent: Syntax(self))!)
     }
     set(value) {
-      self = AttributedTypeSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
+      self = AttributedTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   

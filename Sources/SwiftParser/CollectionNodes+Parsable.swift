@@ -58,7 +58,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
       return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
     } makeMissing: { remainingTokens, arena in
       return RawAccessorDeclSyntax(
-        attributes: nil,
+        attributes: RawAttributeListSyntax(elements: [], arena: arena),
         modifier: nil,
         accessorSpecifier: RawTokenSyntax(missing: .keyword, text: "get", arena: arena),
         parameters: nil,
@@ -73,8 +73,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
 extension AttributeListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     return parse(from: &parser) { parser in
-      let node = parser.parseAttributeList() ?? RawAttributeListSyntax(elements: [], arena: parser.arena)
-      return RawSyntax(node)
+      return RawSyntax(parser.parseAttributeList())
     } makeMissing: { remainingTokens, arena in
       return RawAttributeSyntax(
         atSign: RawTokenSyntax(missing: .atSign, arena: arena),
@@ -106,8 +105,8 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
       return RawSyntax(parser.parseMemberDeclList())
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
-        attributes: nil,
-        modifiers: nil,
+        attributes: RawAttributeListSyntax(elements: [], arena: arena),
+        modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
         placeholder: RawTokenSyntax(missing: .identifier, text: "<#declaration#>", arena: arena),
         RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena

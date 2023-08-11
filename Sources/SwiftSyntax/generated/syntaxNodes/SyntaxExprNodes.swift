@@ -2572,7 +2572,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -2606,7 +2606,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           unexpectedBetweenRightParenAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
           unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw, 
-          additionalTrailingClosures?.raw, 
+          additionalTrailingClosures.raw, 
           unexpectedAfterAdditionalTrailingClosures?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -2747,12 +2747,12 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 11, parent: Syntax(self))!)
     }
     set(value) {
-      self = FunctionCallExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
+      self = FunctionCallExprSyntax(data.replacingChild(at: 11, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -3960,7 +3960,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -4002,7 +4002,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           unexpectedBetweenRightParenAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
           unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw, 
-          additionalTrailingClosures?.raw, 
+          additionalTrailingClosures.raw, 
           unexpectedAfterAdditionalTrailingClosures?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -4180,12 +4180,12 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 15, parent: Syntax(self))!)
     }
     set(value) {
-      self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
+      self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -6182,7 +6182,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       _ unexpectedBetweenRightSquareAndTrailingClosure: UnexpectedNodesSyntax? = nil,
       trailingClosure: ClosureExprSyntax? = nil,
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -6216,7 +6216,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           unexpectedBetweenRightSquareAndTrailingClosure?.raw, 
           trailingClosure?.raw, 
           unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw, 
-          additionalTrailingClosures?.raw, 
+          additionalTrailingClosures.raw, 
           unexpectedAfterAdditionalTrailingClosures?.raw
         ]
       let raw = RawSyntax.makeLayout(
@@ -6357,12 +6357,12 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax? {
+  public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(MultipleTrailingClosureElementListSyntax.init)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 11, parent: Syntax(self))!)
     }
     set(value) {
-      self = SubscriptCallExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
+      self = SubscriptCallExprSyntax(data.replacingChild(at: 11, with: value.data, arena: SyntaxArena()))
     }
   }
   

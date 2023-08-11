@@ -234,7 +234,10 @@ extension Parser {
     case (.subscript, let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
     case (.let, let handle)?, (.var, let handle)?,
-      (.inout, let handle)?:
+      (.inout, let handle)?,
+      (._borrowing, let handle)?,
+      (._mutating, let handle)?,
+      (._consuming, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case (.`init`, let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))

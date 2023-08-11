@@ -248,6 +248,9 @@ enum DeclarationKeyword: TokenSpecSet {
   case `typealias`
   case `var`
   case `inout`
+  case _borrowing
+  case _mutating
+  case _consuming
   case pound
 
   init?(lexeme: Lexer.Lexeme) {
@@ -273,6 +276,9 @@ enum DeclarationKeyword: TokenSpecSet {
     case TokenSpec(.var): self = .var
     case TokenSpec(.inout): self = .inout
     case TokenSpec(.pound): self = .pound
+    case TokenSpec(._borrowing): self = ._borrowing
+    case TokenSpec(._mutating): self = ._mutating
+    case TokenSpec(._consuming): self = ._consuming
     default: return nil
     }
   }
@@ -300,6 +306,9 @@ enum DeclarationKeyword: TokenSpecSet {
     case .var: return .keyword(.var)
     case .inout: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+    case ._borrowing: return TokenSpec(._borrowing, recoveryPrecedence: .declKeyword)
+    case ._mutating: return TokenSpec(._mutating, recoveryPrecedence: .declKeyword)
+    case ._consuming: return TokenSpec(._consuming, recoveryPrecedence: .declKeyword)
     }
   }
 }

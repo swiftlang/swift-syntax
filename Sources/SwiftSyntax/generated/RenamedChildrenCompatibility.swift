@@ -4404,61 +4404,6 @@ extension IsExprSyntax {
   }
 }
 
-extension KeyPathPropertyComponentSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeDeclName")
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBeforeDeclName
-    }
-    set {
-      unexpectedBeforeDeclName = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "declName")
-  public var identifier: DeclReferenceExprSyntax {
-    get {
-      return declName
-    }
-    set {
-      declName = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenDeclNameAndGenericArgumentClause")
-  public var unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenDeclNameAndGenericArgumentClause
-    }
-    set {
-      unexpectedBetweenDeclNameAndGenericArgumentClause = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "KeyPathPropertyComponentSyntax(leadingTrivia:_:declName:_:genericArgumentClause:_:trailingTrivia:)")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
-      identifier: DeclReferenceExprSyntax,
-      _ unexpectedBetweenIdentifierAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
-      genericArgumentClause: GenericArgumentClauseSyntax? = nil,
-      _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeIdentifier, 
-        declName: identifier, 
-        unexpectedBetweenIdentifierAndGenericArgumentClause, 
-        genericArgumentClause: genericArgumentClause, 
-        unexpectedAfterGenericArgumentClause, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
 extension KeyPathSubscriptComponentSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeLeftSquare")
   public var unexpectedBeforeLeftBracket: UnexpectedNodesSyntax? {

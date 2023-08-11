@@ -21,6 +21,38 @@ protocol TokenSpecSet: CaseIterable {
   init?(lexeme: Lexer.Lexeme)
 }
 
+// A way to combine two token spec sets into an aggregate token spec set.
+enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
+  case lhs(LHS)
+  case rhs(RHS)
+
+  init?(lexeme: Lexer.Lexeme) {
+    if let x = LHS.init(lexeme: lexeme) {
+      self = .lhs(x)
+      return
+    }
+    if let y = RHS.init(lexeme: lexeme) {
+      self = .rhs(y)
+      return
+    }
+
+    return nil
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .lhs(let x):
+      return x.spec
+    case .rhs(let y):
+      return y.spec
+    }
+  }
+
+  static var allCases: [EitherTokenSpecSet] {
+    return LHS.allCases.map(Self.lhs) + RHS.allCases.map(Self.rhs)
+  }
+}
+
 // MARK: - Subsets
 
 enum AccessorModifier: TokenSpecSet {
@@ -227,7 +259,10 @@ enum ContextualDeclKeyword: TokenSpecSet {
   }
 }
 
-enum DeclarationKeyword: TokenSpecSet {
+/// DeclarationKeywords that are only semantic DeclarationKeywords.
+///
+/// Excludes things like ValueBindingPatterns. They are injected into DeclarationKeyword via an either.
+enum PureDeclarationKeyword: TokenSpecSet {
   case actor
   case `associatedtype`
   case `case`
@@ -238,7 +273,6 @@ enum DeclarationKeyword: TokenSpecSet {
   case `func`
   case `import`
   case `init`
-  case `let`
   case macro
   case `operator`
   case `precedencegroup`
@@ -246,11 +280,6 @@ enum DeclarationKeyword: TokenSpecSet {
   case `struct`
   case `subscript`
   case `typealias`
-  case `var`
-  case `inout`
-  case _borrowing
-  case _mutating
-  case _consuming
   case pound
 
   init?(lexeme: Lexer.Lexeme) {
@@ -266,19 +295,13 @@ enum DeclarationKeyword: TokenSpecSet {
     case TokenSpec(.func): self = .func
     case TokenSpec(.import): self = .import
     case TokenSpec(.`init`): self = .`init`
-    case TokenSpec(.let): self = .let
     case TokenSpec(.operator): self = .operator
     case TokenSpec(.precedencegroup): self = .precedencegroup
     case TokenSpec(.protocol): self = .protocol
     case TokenSpec(.struct): self = .struct
     case TokenSpec(.subscript): self = .subscript
     case TokenSpec(.typealias): self = .typealias
-    case TokenSpec(.var): self = .var
-    case TokenSpec(.inout): self = .inout
     case TokenSpec(.pound): self = .pound
-    case TokenSpec(._borrowing): self = ._borrowing
-    case TokenSpec(._mutating): self = ._mutating
-    case TokenSpec(._consuming): self = ._consuming
     default: return nil
     }
   }
@@ -295,7 +318,6 @@ enum DeclarationKeyword: TokenSpecSet {
     case .func: return .keyword(.func)
     case .import: return .keyword(.import)
     case .`init`: return .keyword(.`init`)
-    case .let: return .keyword(.let)
     case .macro: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
     case .operator: return .keyword(.operator)
     case .precedencegroup: return .keyword(.precedencegroup)
@@ -303,15 +325,15 @@ enum DeclarationKeyword: TokenSpecSet {
     case .struct: return .keyword(.struct)
     case .subscript: return .keyword(.subscript)
     case .typealias: return .keyword(.typealias)
-    case .var: return .keyword(.var)
-    case .inout: return TokenSpec(.inout, recoveryPrecedence: .declKeyword)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
-    case ._borrowing: return TokenSpec(._borrowing, recoveryPrecedence: .declKeyword)
-    case ._mutating: return TokenSpec(._mutating, recoveryPrecedence: .declKeyword)
-    case ._consuming: return TokenSpec(._consuming, recoveryPrecedence: .declKeyword)
     }
   }
 }
+
+typealias DeclarationKeyword = EitherTokenSpecSet<
+  PureDeclarationKeyword,
+  ValueBindingPatternSyntax.BindingSpecifierOptions
+>
 
 enum DeclarationModifier: TokenSpecSet {
   case __consuming

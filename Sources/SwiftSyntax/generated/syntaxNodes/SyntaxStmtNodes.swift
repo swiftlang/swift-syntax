@@ -385,7 +385,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `discardKeyword`: (`'_forget'` | `'discard'`)
+///  - `discardKeyword`: `'discard'`
 ///  - `expression`: ``ExprSyntax``
 public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -412,7 +412,7 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeDiscardKeyword: UnexpectedNodesSyntax? = nil,
-      discardKeyword: TokenSyntax,
+      discardKeyword: TokenSyntax = .keyword(.discard),
       _ unexpectedBetweenDiscardKeywordAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,

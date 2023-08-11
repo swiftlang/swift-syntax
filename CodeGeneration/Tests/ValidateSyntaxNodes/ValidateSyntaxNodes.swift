@@ -382,11 +382,6 @@ class ValidateSyntaxNodes: XCTestCase {
       expectedFailures: [
         // MARK: Only one non-deprecated keyword
         ValidationFailure(
-          node: .discardStmt,
-          message: "child 'discardKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
-            // DiscardKeyword can be 'discard' or '_forget' and '_forget' is deprecated
-        ),
-        ValidationFailure(
           node: .consumeExpr,
           message: "child 'consumeKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
             // ConsumeKeyword can be 'consume' or '_move' and '_move' is deprecated

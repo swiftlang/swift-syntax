@@ -561,17 +561,6 @@ final class StatementTests: ParserTestCase {
   }
 
   func testDiscard() {
-    // ensure the old spelling '_forget' can be parsed for now.
-    assertParse(
-      """
-      _forget self
-      """,
-      substructure: DiscardStmtSyntax(
-        discardKeyword: .keyword(._forget),
-        expression: DeclReferenceExprSyntax(baseName: .keyword(.`self`))
-      )
-    )
-
     assertParse(
       """
       discard self

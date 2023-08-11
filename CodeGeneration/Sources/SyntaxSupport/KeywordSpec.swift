@@ -155,7 +155,6 @@ public let KEYWORDS: [KeywordSpec] = [
   KeywordSpec("fileprivate", isLexerClassified: true, requiresTrailingSpace: true),
   KeywordSpec("final"),
   KeywordSpec("for", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("_forget"),  // NOTE: support for deprecated _forget
   KeywordSpec("discard"),
   KeywordSpec("forward"),
   KeywordSpec("func", isLexerClassified: true, requiresTrailingSpace: true),

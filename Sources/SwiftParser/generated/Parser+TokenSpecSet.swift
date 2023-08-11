@@ -1165,47 +1165,6 @@ extension DifferentiableAttributeArgumentsSyntax {
   }
 }
 
-extension DiscardStmtSyntax {
-  @_spi(Diagnostics)
-  public enum DiscardKeywordOptions: TokenSpecSet {
-    case _forget
-    case discard
-    
-    init?(lexeme: Lexer.Lexeme) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._forget):
-        self = ._forget
-      case TokenSpec(.discard):
-        self = .discard
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case ._forget:
-        return .keyword(._forget)
-      case .discard:
-        return .keyword(.discard)
-      }
-    }
-    
-    /// Returns a token that satisfies the `TokenSpec` of this case.
-    ///
-    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
-    @_spi(Diagnostics)
-    public var tokenSyntax: TokenSyntax {
-      switch self {
-      case ._forget:
-        return .keyword(._forget)
-      case .discard:
-        return .keyword(.discard)
-      }
-    }
-  }
-}
-
 extension DocumentationAttributeArgumentSyntax {
   @_spi(Diagnostics)
   public enum LabelOptions: TokenSpecSet {

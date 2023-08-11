@@ -339,10 +339,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "DiscardKeyword",
-        kind: .token(choices: [
-          .keyword(text: "_forget"),  // NOTE: support for deprecated _forget
-          .keyword(text: "discard"),
-        ])
+        kind: .token(choices: [.keyword(text: "discard")])
       ),
       Child(
         name: "Expression",

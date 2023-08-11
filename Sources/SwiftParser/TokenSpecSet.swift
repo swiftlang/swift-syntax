@@ -751,24 +751,16 @@ enum ExpressionPrefixOperator: TokenSpecSet {
   }
 }
 
-enum MatchingPatternStart: TokenSpecSet {
+/// A `MatchingPatternStart` that is not a `ValueBindingPatternSyntax.BindingSpecifierOptions`.
+///
+/// We use an `EitherTokenSpecSet` to inject `ValueBindingPatternSyntax.BindingSpecifierOptions` into
+/// `MatchingPatternStart`.
+enum PureMatchingPatternStart: TokenSpecSet {
   case `is`
-  case `let`
-  case `var`
-  case `inout`
-  case _mutating
-  case _borrowing
-  case _consuming
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.is): self = .is
-    case TokenSpec(.let): self = .let
-    case TokenSpec(.var): self = .var
-    case TokenSpec(.inout): self = .inout
-    case TokenSpec(._mutating): self = ._mutating
-    case TokenSpec(._borrowing): self = ._borrowing
-    case TokenSpec(._consuming): self = ._consuming
     default: return nil
     }
   }
@@ -776,15 +768,14 @@ enum MatchingPatternStart: TokenSpecSet {
   var spec: TokenSpec {
     switch self {
     case .is: return .keyword(.is)
-    case .let: return .keyword(.let)
-    case .var: return .keyword(.var)
-    case .inout: return .keyword(.inout)
-    case ._mutating: return .keyword(._mutating)
-    case ._borrowing: return .keyword(._borrowing)
-    case ._consuming: return .keyword(._consuming)
     }
   }
 }
+
+typealias MatchingPatternStart = EitherTokenSpecSet<
+  PureMatchingPatternStart,
+  ValueBindingPatternSyntax.BindingSpecifierOptions
+>
 
 enum ParameterModifier: TokenSpecSet {
   case _const

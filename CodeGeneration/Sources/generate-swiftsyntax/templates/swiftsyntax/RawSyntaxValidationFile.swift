@@ -204,7 +204,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                           let verifiedChoices = ArrayExprSyntax {
                             ArrayElementSyntax(
                               leadingTrivia: .newline,
-                              expression: ExprSyntax("verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self)")
+                              expression: ExprSyntax("verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self)")
                             )
                           }
 
@@ -220,10 +220,12 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                               }
                             }
                           }
-                          let verifyCall = ExprSyntax("verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self, tokenChoices: \(choices))")
+                          let verifyCall = ExprSyntax(
+                            "verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self, tokenChoices: \(choices))"
+                          )
                           ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
                         default:
-                          ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(raw: child.type.buildable).self))")
+                          ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self))")
                         }
                       }
                     } else if let node = node.collectionNode {

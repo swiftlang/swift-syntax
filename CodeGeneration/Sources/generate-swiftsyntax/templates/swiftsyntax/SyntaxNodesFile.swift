@@ -104,7 +104,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             for child in node.children {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.type.optionalChained(expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")),
+                  base: child.buildableType.optionalChained(expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")),
                   period: .periodToken(),
                   name: "raw"
                 )
@@ -160,7 +160,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           // Children properties
           // ===================
 
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name)"
+          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
           let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
 
           try! VariableDeclSyntax(
@@ -245,7 +245,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
     return nil
   }
 
-  return try! EnumDeclSyntax("public enum \(raw: child.name): SyntaxChildChoices, SyntaxHashable") {
+  return try! EnumDeclSyntax("public enum \(child.syntaxChoicesType): SyntaxChildChoices, SyntaxHashable") {
     for choice in choices {
       DeclSyntax("case `\(choice.varOrCaseName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
     }

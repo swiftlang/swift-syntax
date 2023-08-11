@@ -26,7 +26,7 @@ public enum SyntaxOrTokenNodeKind: Hashable {
 public extension Child {
   /// The type of this child, represented by a ``SyntaxBuildableType``, which can
   /// be used to create the corresponding `Buildable` and `ExpressibleAs` types.
-  var type: SyntaxBuildableType {
+  var buildableType: SyntaxBuildableType {
     let buildableKind: SyntaxOrTokenNodeKind
     switch kind {
     case .node(kind: let kind):
@@ -44,23 +44,23 @@ public extension Child {
     )
   }
 
-  var parameterBaseType: String {
+  var parameterBaseType: TypeSyntax {
     switch kind {
     case .nodeChoices:
-      return self.name
+      return self.syntaxChoicesType
     default:
-      return type.parameterBaseType
+      return buildableType.parameterBaseType
     }
   }
 
   var parameterType: TypeSyntax {
-    return self.type.optionalWrapped(type: IdentifierTypeSyntax(name: .identifier(parameterBaseType)))
+    return self.buildableType.optionalWrapped(type: parameterBaseType)
   }
 
   var defaultValue: ExprSyntax? {
     if isOptional || isUnexpectedNodes {
-      if type.isBaseType && kind.isNodeChoicesEmpty {
-        return ExprSyntax("\(type.buildable).none")
+      if buildableType.isBaseType && kind.isNodeChoicesEmpty {
+        return ExprSyntax("\(buildableType.buildable).none")
       } else {
         return ExprSyntax("nil")
       }
@@ -69,7 +69,7 @@ public extension Child {
       return ExprSyntax("[]")
     }
     guard let token = token, isToken else {
-      return type.defaultValue
+      return buildableType.defaultValue
     }
     if token.text != nil {
       return ExprSyntax(".\(token.varOrCaseName)Token()")
@@ -131,7 +131,7 @@ public extension Child {
     }
 
     var preconditionChoices: [ExprSyntax] = []
-    if type.isOptional {
+    if buildableType.isOptional {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
@@ -146,7 +146,7 @@ public extension Child {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
-            MemberAccessExprSyntax(base: type.forceUnwrappedIfNeeded(expr: DeclReferenceExprSyntax(baseName: .identifier(varName))), name: "text")
+            MemberAccessExprSyntax(base: buildableType.forceUnwrappedIfNeeded(expr: DeclReferenceExprSyntax(baseName: .identifier(varName))), name: "text")
             BinaryOperatorExprSyntax(text: "==")
             StringLiteralExprSyntax(content: textChoice)
           }

@@ -46,6 +46,14 @@ public enum ChildKind {
     }
   }
 
+  public var isToken: Bool {
+    if case .token = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
   public var isNodeChoicesEmpty: Bool {
     if case .nodeChoices(let nodeChoices) = self {
       return nodeChoices.isEmpty
@@ -103,12 +111,33 @@ public class Child {
     return .identifier(lowercaseFirstWord(name: name))
   }
 
+  /// If this child has node choices, the type that the nested `SyntaxChildChoices` type should get.
+  ///
+  /// For any other kind of child nodes, accessing this property crashes.
+  public var syntaxChoicesType: TypeSyntax {
+    precondition(kind.isNodeChoices, "Cannot get `syntaxChoicesType` for node that doesn’t have nodeChoices")
+    return "\(raw: name.withFirstCharacterUppercased)"
+  }
+
+  /// If this child only has tokens, the type that the generated `TokenSpecSet` should get.
+  ///
+  /// For any other kind of child nodes, accessing this property crashes.
+  public var tokenSpecSetType: TypeSyntax {
+    precondition(kind.isToken, "Cannot get `tokenSpecSetType` for node that isn’t a token")
+    return "\(raw: name.withFirstCharacterUppercased)Options"
+  }
+
   /// The deprecated name of this child that's suitable to be used for variable or enum case names.
   public var deprecatedVarName: TokenSyntax? {
     guard let deprecatedName = deprecatedName else {
       return nil
     }
     return .identifier(lowercaseFirstWord(name: deprecatedName))
+  }
+
+  /// Determines if this child has a deprecated name
+  public var hasDeprecatedName: Bool {
+    return deprecatedName != nil
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.

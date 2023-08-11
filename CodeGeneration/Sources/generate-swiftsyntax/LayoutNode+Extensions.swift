@@ -24,7 +24,7 @@ extension LayoutNode {
     func createFunctionParameterSyntax(for child: Child) -> FunctionParameterSyntax {
       var paramType: TypeSyntax
       if !child.kind.isNodeChoicesEmpty {
-        paramType = "\(raw: child.name)"
+        paramType = "\(child.syntaxChoicesType)"
       } else if child.hasBaseType {
         paramType = "some \(raw: child.syntaxNodeKind.protocolType)"
       } else {
@@ -119,16 +119,16 @@ extension LayoutNode {
         childName = child.varOrCaseName
       }
 
-      if child.type.isBuilderInitializable {
+      if child.buildableType.isBuilderInitializable {
         // Allow initializing certain syntax collections with result builders
         shouldCreateInitializer = true
-        let builderInitializableType = child.type.builderInitializableType
-        if child.type.builderInitializableType != child.type {
-          let param = Node.from(type: child.type).layoutNode!.singleNonDefaultedChild
+        let builderInitializableType = child.buildableType.builderInitializableType
+        if child.buildableType.builderInitializableType != child.buildableType {
+          let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
           if child.isOptional {
-            produceExpr = ExprSyntax("\(childName)Builder().map { \(raw: child.type.syntaxBaseName)(\(param.varOrCaseName): $0) }")
+            produceExpr = ExprSyntax("\(childName)Builder().map { \(raw: child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }")
           } else {
-            produceExpr = ExprSyntax("\(raw: child.type.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
+            produceExpr = ExprSyntax("\(raw: child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
           }
         } else {
           produceExpr = ExprSyntax("\(childName)Builder()")
@@ -195,8 +195,8 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecat
     childName = child.varOrCaseName
   }
 
-  if child.type.isBaseType && !child.kind.isNodeChoices {
-    return ExprSyntax("\(raw: child.type.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
+  if child.buildableType.isBaseType && !child.kind.isNodeChoices {
+    return ExprSyntax("\(raw: child.buildableType.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
   }
   return ExprSyntax("\(raw: childName.backtickedIfNeeded)")
 }

@@ -16,13 +16,13 @@ import SyntaxSupport
 import Utils
 
 fileprivate extension Node {
-  var childrenChoicesEnums: [(name: TokenSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])] {
+  var childrenChoicesEnums: [(name: TypeSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])] {
     let node = self
     if let node = node.layoutNode {
-      return node.children.compactMap { child -> (name: TokenSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])? in
+      return node.children.compactMap { child -> (name: TypeSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])? in
         switch child.kind {
         case .nodeChoices(let choices):
-          return (.identifier(child.name), choices.map { ($0.varOrCaseName, $0.syntaxNodeKind) })
+          return (child.syntaxChoicesType, choices.map { ($0.varOrCaseName, $0.syntaxNodeKind) })
         default:
           return nil
         }
@@ -31,7 +31,7 @@ fileprivate extension Node {
       let choices = node.elementChoices.map { choice -> (TokenSyntax, SyntaxNodeKind) in
         (SYNTAX_NODE_MAP[choice]!.varOrCaseName, SYNTAX_NODE_MAP[choice]!.kind)
       }
-      return [(.identifier("Element"), choices)]
+      return [("Element", choices)]
     } else {
       return []
     }
@@ -238,7 +238,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for (index, child) in node.children.enumerated() {
-          try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(raw: child.type.buildable)") {
+          try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(raw: child.buildableType.buildable)") {
             let iuoMark = child.isOptional ? "" : "!"
 
             if child.syntaxNodeKind == .syntax {
@@ -257,11 +257,11 @@ fileprivate extension Child {
   var rawParameterType: TypeSyntax {
     let paramType: TypeSyntax
     if case ChildKind.nodeChoices = kind {
-      paramType = "\(raw: name)"
+      paramType = syntaxChoicesType
     } else {
       paramType = syntaxNodeKind.rawType
     }
 
-    return type.optionalWrapped(type: paramType)
+    return buildableType.optionalWrapped(type: paramType)
   }
 }

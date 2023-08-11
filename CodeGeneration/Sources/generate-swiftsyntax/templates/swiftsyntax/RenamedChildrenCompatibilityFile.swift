@@ -20,8 +20,8 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
     try ExtensionDeclSyntax("extension \(raw: layoutNode.type.syntaxBaseName)") {
       for child in layoutNode.children {
         if let deprecatedVarName = child.deprecatedVarName {
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : "\(raw: child.name)"
-          let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
+          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+          let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
 
           DeclSyntax(
             """
@@ -57,7 +57,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
       }
 
       let deprecatedNames = layoutNode.children
-        .filter { !$0.isUnexpectedNodes && $0.deprecatedName != nil }
+        .filter { !$0.isUnexpectedNodes && $0.hasDeprecatedName }
         .map { $0.varOrCaseName.description }
         .joined(separator: ", ")
 

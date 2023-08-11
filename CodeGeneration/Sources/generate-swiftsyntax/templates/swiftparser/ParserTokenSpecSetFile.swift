@@ -25,7 +25,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           try EnumDeclSyntax(
             """
             @_spi(Diagnostics)
-            public enum \(raw: child.name)Options: TokenSpecSet
+            public enum \(child.tokenSpecSetType): TokenSpecSet
             """
           ) {
             for choice in choices {

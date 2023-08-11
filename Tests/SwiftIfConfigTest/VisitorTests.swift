@@ -31,6 +31,43 @@ class AllActiveVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
   }
 }
 
+class NameCheckingVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
+  /// The set of names we are expected to visit. Any syntax nodes with
+  /// names that aren't here will be rejected, and each of the names listed
+  /// here must occur exactly once.
+  var expectedNames: Set<String>
+
+  init(configuration: TestingBuildConfiguration, expectedNames: Set<String>) {
+    self.expectedNames = expectedNames
+
+    super.init(viewMode: .sourceAccurate, configuration: configuration)
+  }
+
+  deinit {
+    if !expectedNames.isEmpty {
+      XCTFail("No nodes with expected names visited: \(expectedNames)")
+    }
+  }
+
+  func checkName(name: String, node: Syntax) {
+    if !expectedNames.contains(name) {
+      XCTFail("syntax node with unexpected name \(name) found: \(node.debugDescription)")
+    }
+
+    expectedNames.remove(name)
+  }
+
+  open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+    if let identified = node.asProtocol(NamedDeclSyntax.self) {
+      checkName(name: identified.name.text, node: node)
+    } else if let identPattern = node.as(IdentifierPatternSyntax.self) {
+      // FIXME: Should the above be an IdentifiedDeclSyntax?
+      checkName(name: identPattern.identifier.text, node: node)
+    }
+
+    return .visitChildren
+  }
+}
 public class VisitorTests: XCTestCase {
   let linuxBuildConfig = TestingBuildConfiguration(
     customConditions: ["DEBUG", "ASSERTS"],
@@ -95,6 +132,12 @@ public class VisitorTests: XCTestCase {
       #endif
     }
     #endif
+
+    #if hasAttribute(available)
+    func withAvail() { }
+    #else
+    func notAvail() { }
+    #endif
     """
 
   func testAnyVisitorVisitsOnlyActive() throws {
@@ -104,54 +147,27 @@ public class VisitorTests: XCTestCase {
   }
 
   func testVisitsExpectedNodes() throws {
-    class NameCheckingVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
-      /// The set of names we are expected to visit. Any syntax nodes with
-      /// names that aren't here will be rejected, and each of the names listed
-      /// here must occur exactly once.
-      var expectedNames: Set<String>
-
-      init(configuration: TestingBuildConfiguration, expectedNames: Set<String>) {
-        self.expectedNames = expectedNames
-
-        super.init(viewMode: .sourceAccurate, configuration: configuration)
-      }
-
-      deinit {
-        if !expectedNames.isEmpty {
-          XCTFail("No nodes with expected names visited: \(expectedNames)")
-        }
-      }
-
-      func checkName(name: String, node: Syntax) {
-        if !expectedNames.contains(name) {
-          XCTFail("syntax node with unexpected name \(name) found: \(node.debugDescription)")
-        }
-
-        expectedNames.remove(name)
-      }
-
-      open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-        if let identified = node.asProtocol(NamedDeclSyntax.self) {
-          checkName(name: identified.name.text, node: node)
-        } else if let identPattern = node.as(IdentifierPatternSyntax.self) {
-          // FIXME: Should the above be an IdentifiedDeclSyntax?
-          checkName(name: identPattern.identifier.text, node: node)
-        }
-
-        return .visitChildren
-      }
-    }
-
     // Check that the right set of names is visited.
     NameCheckingVisitor(
       configuration: linuxBuildConfig,
-      expectedNames: ["f", "h", "i", "S", "generationCount", "value"]
+      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "withAvail"]
     ).walk(inputSource)
 
     NameCheckingVisitor(
       configuration: iosBuildConfig,
-      expectedNames: ["g", "h", "i", "a", "S", "generationCount", "value", "error"]
+      expectedNames: ["g", "h", "i", "a", "S", "generationCount", "value", "error", "withAvail"]
     ).walk(inputSource)
+  }
+
+  func testVisitorWithErrors() throws {
+    var configuration = linuxBuildConfig
+    configuration.badAttributes.insert("available")
+    let visitor = NameCheckingVisitor(
+      configuration: configuration,
+      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "withAvail", "notAvail"]
+    )
+    visitor.walk(inputSource)
+    XCTAssertEqual(visitor.diagnostics.count, 3)
   }
 
   func testRemoveInactive() {
@@ -179,6 +195,7 @@ public class VisitorTests: XCTestCase {
           .c
           .d()
       }
+      func withAvail() { }
       """
     )
   }

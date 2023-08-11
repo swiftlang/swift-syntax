@@ -9,6 +9,7 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+import SwiftDiagnostics
 import SwiftSyntax
 
 /// A syntax visitor that only visits the syntax nodes that are active
@@ -36,29 +37,48 @@ import SwiftSyntax
 ///
 /// All notes visited by this visitor will have the "active" state, i.e.,
 /// `node.isActive(in: configuration)` will evaluate to `.active` or will
-/// throw.
-///
-/// TODO: This visitor currently swallows errors uncovered while checking `#if`
-/// conditions, which is deeply unfortunate. We need a better answer here.
+/// throw. When errors occur, they will be reported via a call to
+/// `reportEvaluationError`, which can report the errors (the default is to
+/// turn them into diagnostics that go into the `diagnostics` array) and then
+/// choose whether to visit all of the `#if` clauses (the default) or skip them.
 open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
+
+  /// The set of diagnostics accumulated during this walk of active syntax.
+  public var diagnostics: [Diagnostic] = []
 
   public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: viewMode)
   }
 
-  open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    // If there is an active clause, visit it's children.
-    // FIXME: try? suppresses errors here. How shall we report them?
-    if let activeClause = try? node.activeClause(in: configuration),
-      let elements = activeClause.elements
-    {
-      walk(Syntax(elements))
-    }
+  /// Called when the evaluation of an `#if` condition produces an error.
+  ///
+  /// By default, this records diagnostics from the error into the `diagnostics`
+  /// array.
+  ///
+  /// - Returns: Whether to visit the children of the `#if` or not after the
+  /// error. By default, this function returns `.visitChildren`.
+  open func reportEvaluationError(at node: IfConfigDeclSyntax, error: Error) -> SyntaxVisitorContinueKind {
+    let newDiagnostics = error.asDiagnostics(at: node)
+    diagnostics.append(contentsOf: newDiagnostics)
+    return .visitChildren
+  }
 
-    return .skipChildren
+  open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    do {
+      // If there is an active clause, visit it's children.
+      if let activeClause = try node.activeClause(in: configuration),
+         let elements = activeClause.elements {
+        walk(Syntax(elements))
+      }
+
+      // Skip everything else in the
+      return .skipChildren
+    } catch {
+      return reportEvaluationError(at: node, error: error)
+    }
   }
 }
 
@@ -89,26 +109,49 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
 /// `node.isActive(in: configuration)` will evaluate to `.active` or will
 /// throw.
 ///
-/// TODO: This visitor currently swallows errors uncovered while checking `#if`
-/// conditions, which is deeply unfortunate. We need a better answer here.
+/// All notes visited by this visitor will have the "active" state, i.e.,
+/// `node.isActive(in: configuration)` will evaluate to `.active` or will
+/// throw. When errors occur, they will be reported via a call to
+/// `reportEvaluationError`, which can report the errors (the default is to
+/// turn them into diagnostics that go into the `diagnostics` array) and then
+/// choose whether to visit all of the `#if` clauses (the default) or skip them.
 open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
+
+  /// The set of diagnostics accumulated during this walk of active syntax.
+  public var diagnostics: [Diagnostic] = []
 
   public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: viewMode)
   }
 
-  open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    // If there is an active clause, visit it's children.
-    // FIXME: try? suppresses errors here. How shall we report them?
-    if let activeClause = try? node.activeClause(in: configuration),
-      let elements = activeClause.elements
-    {
-      walk(Syntax(elements))
-    }
+  /// Called when the evaluation of an `#if` condition produces an error.
+  ///
+  /// By default, this records diagnostics from the error into the `diagnostics`
+  /// array.
+  ///
+  /// - Returns: Whether to visit the children of the `#if` or not after the
+  /// error. By default, this function returns `.visitChildren`.
+  open func reportEvaluationError(at node: IfConfigDeclSyntax, error: Error) -> SyntaxVisitorContinueKind {
+    let newDiagnostics = error.asDiagnostics(at: node)
+    diagnostics.append(contentsOf: newDiagnostics)
+    return .visitChildren
+  }
 
-    return .skipChildren
+  open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    do {
+      // If there is an active clause, visit it's children.
+      if let activeClause = try node.activeClause(in: configuration),
+         let elements = activeClause.elements {
+        walk(Syntax(elements))
+      }
+
+      // Skip everything else in the
+      return .skipChildren
+    } catch {
+      return reportEvaluationError(at: node, error: error)
+    }
   }
 }

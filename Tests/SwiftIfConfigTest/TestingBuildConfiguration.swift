@@ -12,11 +12,26 @@
 import SwiftIfConfig
 import SwiftSyntax
 
+enum BuildConfigurationError: Error, CustomStringConvertible {
+  case badAttribute(String)
+
+  var description: String {
+    switch self {
+    case .badAttribute(let attribute):
+      return "unacceptable attribute \(attribute)"
+    }
+  }
+}
+
 struct TestingBuildConfiguration: BuildConfiguration {
   var platformName: String = "Linux"
   var customConditions: Set<String> = []
   var features: Set<String> = []
   var attributes: Set<String> = []
+
+  /// A set of attribute names that are "bad", causing the build configuration
+  /// to throw an error if queried.
+  var badAttributes: Set<String> = []
 
   func isCustomConditionSet(name: String) -> Bool {
     customConditions.contains(name)
@@ -26,8 +41,12 @@ struct TestingBuildConfiguration: BuildConfiguration {
     features.contains(name)
   }
 
-  func hasAttribute(name: String) -> Bool {
-    attributes.contains(name)
+  func hasAttribute(name: String) throws -> Bool {
+    if badAttributes.contains(name) {
+      throw BuildConfigurationError.badAttribute(name)
+    }
+
+    return attributes.contains(name)
   }
 
   func canImport(

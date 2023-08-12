@@ -141,13 +141,13 @@ public class Node {
 
           if i == 0 {
             unexpectedName = "unexpectedBefore\(childName)"
-            unexpectedDeprecatedName = child.deprecatedName.map { "UnexpectedBefore\($0.withFirstCharacterUppercased)" }
+            unexpectedDeprecatedName = child.deprecatedName.map { "unexpectedBefore\($0.withFirstCharacterUppercased)" }
           } else {
             unexpectedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(childName)"
             if let deprecatedName = children[i - 1].deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName = "UnexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
+              unexpectedDeprecatedName = "unexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
             } else if let deprecatedName = child.deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName = "UnexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
+              unexpectedDeprecatedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
             } else {
               unexpectedDeprecatedName = nil
             }
@@ -162,7 +162,7 @@ public class Node {
         } + [
           Child(
             name: "unexpectedAfter\(children.last!.name.withFirstCharacterUppercased)",
-            deprecatedName: children.last!.deprecatedName.map { "UnexpectedAfter\($0.withFirstCharacterUppercased)" },
+            deprecatedName: children.last!.deprecatedName.map { "unexpectedAfter\($0.withFirstCharacterUppercased)" },
             kind: .collection(kind: .unexpectedNodes, collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"),
             isOptional: true
           )

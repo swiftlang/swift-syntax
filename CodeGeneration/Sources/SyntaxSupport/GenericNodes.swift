@@ -19,7 +19,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftType",
-        deprecatedName: "LeftTypeIdentifier",
+        deprecatedName: "leftTypeIdentifier",
         kind: .node(kind: .type)
       ),
       Child(
@@ -28,7 +28,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "rightType",
-        deprecatedName: "RightTypeIdentifier",
+        deprecatedName: "rightTypeIdentifier",
         kind: .node(kind: .type)
       ),
     ]
@@ -44,13 +44,13 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftAngle",
-        deprecatedName: "LeftAngleBracket",
+        deprecatedName: "leftAngleBracket",
         kind: .token(choices: [.token(.leftAngle)]),
         documentation: "The opening angle bracket (`<`) of the generic parameter clause."
       ),
       Child(
         name: "parameters",
-        deprecatedName: "GenericParameterList",
+        deprecatedName: "genericParameterList",
         kind: .collection(kind: .genericParameterList, collectionElementName: "Parameter", deprecatedCollectionElementName: "GenericParameter"),
         documentation: "The list of generic parameters in the clause."
       ),
@@ -62,7 +62,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "rightAngle",
-        deprecatedName: "RightAngleBracket",
+        deprecatedName: "rightAngleBracket",
         kind: .token(choices: [.token(.rightAngle)]),
         documentation: "The closing angle bracket (`>`) of the generic parameter clause."
       ),
@@ -94,7 +94,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "eachKeyword",
-        deprecatedName: "Each",
+        deprecatedName: "each",
         kind: .token(choices: [.keyword(text: "each")]),
         nameForDiagnostics: "parameter pack specifier",
         isOptional: true
@@ -142,7 +142,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "requirement",
-        deprecatedName: "Body",
+        deprecatedName: "body",
         kind: .nodeChoices(choices: [
           Child(
             name: "sameTypeRequirement",
@@ -180,7 +180,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "requirements",
-        deprecatedName: "RequirementList",
+        deprecatedName: "requirementList",
         kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
         documentation: "The list of requirements in the clause."
       ),
@@ -196,7 +196,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "type",
-        deprecatedName: "TypeIdentifier",
+        deprecatedName: "typeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "constrained type"
       ),
@@ -206,7 +206,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "layoutSpecifier",
-        deprecatedName: "LayoutConstraint",
+        deprecatedName: "layoutConstraint",
         kind: .token(choices: [
           .keyword(text: "_Trivial"),
           .keyword(text: "_TrivialAtMost"),
@@ -255,17 +255,17 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftAngle",
-        deprecatedName: "LeftAngleBracket",
+        deprecatedName: "leftAngleBracket",
         kind: .token(choices: [.token(.leftAngle)])
       ),
       Child(
         name: "primaryAssociatedTypes",
-        deprecatedName: "PrimaryAssociatedTypeList",
+        deprecatedName: "primaryAssociatedTypeList",
         kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(
         name: "rightAngle",
-        deprecatedName: "RightAngleBracket",
+        deprecatedName: "rightAngleBracket",
         kind: .token(choices: [.token(.rightAngle)])
       ),
     ]
@@ -308,18 +308,18 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftType",
-        deprecatedName: "LeftTypeIdentifier",
+        deprecatedName: "leftTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "left-hand type"
       ),
       Child(
         name: "equal",
-        deprecatedName: "EqualityToken",
+        deprecatedName: "equalityToken",
         kind: .token(choices: [.token(.binaryOperator), .token(.prefixOperator), .token(.postfixOperator)])
       ),
       Child(
         name: "rightType",
-        deprecatedName: "RightTypeIdentifier",
+        deprecatedName: "rightTypeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "right-hand type"
       ),

@@ -28,7 +28,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "trailingPeriod",
-        deprecatedName: "TrailingDot",
+        deprecatedName: "trailingDot",
         kind: .token(choices: [.token(.period)]),
         isOptional: true
       ),
@@ -95,7 +95,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "accessorSpecifier",
-        deprecatedName: "AccessorKind",
+        deprecatedName: "accessorKind",
         kind: .token(choices: [
           .keyword(text: "get"),
           .keyword(text: "set"),
@@ -114,7 +114,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        deprecatedName: "Parameter",
+        deprecatedName: "parameter",
         kind: .node(kind: .accessorParameters),
         nameForDiagnostics: "parameter",
         isOptional: true
@@ -199,7 +199,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)])
       ),
       Child(
@@ -290,7 +290,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this associated type."
       ),
@@ -380,7 +380,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the class."
       ),
@@ -589,7 +589,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "placeholder",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: """
           The actual editor placeholder that starts with `<#` and ends with `#>`.
@@ -613,7 +613,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        deprecatedName: "ParameterList",
+        deprecatedName: "parameterList",
         kind: .collection(kind: .enumCaseParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters",
         documentation: "The actual parameters."
@@ -669,7 +669,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "defaultValue",
-        deprecatedName: "DefaultArgument",
+        deprecatedName: "defaultArgument",
         kind: .node(kind: .initializerClause),
         nameForDiagnostics: "default value",
         documentation: "If the parameter has a default value, the initializer clause describing the default value.",
@@ -739,13 +739,13 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this case."
       ),
       Child(
         name: "parameterClause",
-        deprecatedName: "AssociatedValue",
+        deprecatedName: "associatedValue",
         kind: .node(kind: .enumCaseParameterClause),
         nameForDiagnostics: "associated values",
         documentation: "The set of associated values of the case.",
@@ -798,13 +798,13 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "genericParameterClause",
-        deprecatedName: "GenericParameters",
+        deprecatedName: "genericParameters",
         kind: .node(kind: .genericParameterClause),
         nameForDiagnostics: "generic parameter clause",
         documentation: "The generic parameters, if any, for this enum declaration.",
@@ -914,7 +914,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [
           .token(.identifier),
           .token(.binaryOperator),
@@ -1004,7 +1004,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "defaultValue",
-        deprecatedName: "DefaultArgument",
+        deprecatedName: "defaultArgument",
         kind: .node(kind: .initializerClause),
         nameForDiagnostics: "default value",
         isOptional: true
@@ -1026,7 +1026,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "parameterClause",
-        deprecatedName: "Input",
+        deprecatedName: "input",
         kind: .node(kind: .functionParameterClause)
       ),
       Child(
@@ -1036,7 +1036,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "returnClause",
-        deprecatedName: "Output",
+        deprecatedName: "output",
         kind: .node(kind: .returnClause),
         isOptional: true
       ),
@@ -1146,13 +1146,13 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "importKeyword",
-        deprecatedName: "ImportTok",
+        deprecatedName: "importTok",
         kind: .token(choices: [.keyword(text: "import")]),
         documentation: "The `import` keyword for this declaration."
       ),
       Child(
         name: "importKindSpecifier",
-        deprecatedName: "ImportKind",
+        deprecatedName: "importKind",
         kind: .token(choices: [
           .keyword(text: "typealias"),
           .keyword(text: "struct"),
@@ -1196,7 +1196,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "type",
-        deprecatedName: "TypeName",
+        deprecatedName: "typeName",
         kind: .node(kind: .type)
       ),
       Child(
@@ -1329,7 +1329,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)])
       ),
       Child(
@@ -1383,18 +1383,18 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "pound",
-        deprecatedName: "PoundToken",
+        deprecatedName: "poundToken",
         kind: .token(choices: [.token(.pound)]),
         documentation: "The `#` sign."
       ),
       Child(
         name: "macroName",
-        deprecatedName: "Macro",
+        deprecatedName: "macro",
         kind: .token(choices: [.token(.identifier)])
       ),
       Child(
         name: "genericArgumentClause",
-        deprecatedName: "GenericArguments",
+        deprecatedName: "genericArguments",
         kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
@@ -1405,7 +1405,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "ArgumentList",
+        deprecatedName: "argumentList",
         kind: .collection(kind: .labeledExprList, collectionElementName: "Argument")
       ),
       Child(
@@ -1517,7 +1517,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "fixitySpecifier",
-        deprecatedName: "Fixity",
+        deprecatedName: "fixity",
         kind: .token(choices: [.keyword(text: "prefix"), .keyword(text: "postfix"), .keyword(text: "infix")]),
         nameForDiagnostics: "fixity",
         documentation: "The fixity applied to the 'operator' declaration."
@@ -1528,7 +1528,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.binaryOperator), .token(.prefixOperator), .token(.postfixOperator)])
       ),
       Child(
@@ -1579,7 +1579,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        deprecatedName: "ParameterList",
+        deprecatedName: "parameterList",
         kind: .collection(kind: .functionParameterList, collectionElementName: "Parameter"),
         nameForDiagnostics: "parameters"
       ),
@@ -1647,7 +1647,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "accessorBlock",
-        deprecatedName: "Accessor",
+        deprecatedName: "accessor",
         kind: .node(kind: .accessorBlock),
         documentation: """
           If the variable is computed, the accessors that get (and optionally set) the value.
@@ -1669,12 +1669,12 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "fileLabel",
-        deprecatedName: "FileArgLabel",
+        deprecatedName: "fileArgLabel",
         kind: .token(choices: [.keyword(text: "file")])
       ),
       Child(
         name: "fileColon",
-        deprecatedName: "FileArgColon",
+        deprecatedName: "fileArgColon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
@@ -1688,12 +1688,12 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "lineLabel",
-        deprecatedName: "LineArgLabel",
+        deprecatedName: "lineArgLabel",
         kind: .token(choices: [.keyword(text: "line")])
       ),
       Child(
         name: "lineColon",
-        deprecatedName: "LineArgColon",
+        deprecatedName: "lineArgColon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
@@ -1722,7 +1722,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "Args",
+        deprecatedName: "args",
         kind: .node(kind: .poundSourceLocationArguments),
         nameForDiagnostics: "arguments",
         isOptional: true
@@ -1744,7 +1744,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "assignmentLabel",
-        deprecatedName: "AssignmentKeyword",
+        deprecatedName: "assignmentKeyword",
         kind: .token(choices: [.keyword(text: "assignment")])
       ),
       Child(
@@ -1753,7 +1753,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "value",
-        deprecatedName: "Flag",
+        deprecatedName: "flag",
         kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]),
         documentation:
           "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment."
@@ -1771,7 +1771,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "associativityLabel",
-        deprecatedName: "AssociativityKeyword",
+        deprecatedName: "associativityKeyword",
         kind: .token(choices: [.keyword(text: "associativity")])
       ),
       Child(
@@ -1828,7 +1828,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of this precedence group."
       ),
@@ -1886,7 +1886,7 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "higherThanOrLowerThanLabel",
-        deprecatedName: "HigherThanOrLowerThan",
+        deprecatedName: "higherThanOrLowerThan",
         kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
         documentation: "The relation to specified other precedence groups."
       ),
@@ -1896,7 +1896,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "precedenceGroups",
-        deprecatedName: "OtherNames",
+        deprecatedName: "otherNames",
         kind: .collection(kind: .precedenceGroupNameList, collectionElementName: "OtherName"),
         documentation: "The name of other precedence group to which this precedence group relates."
       ),
@@ -1944,7 +1944,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the protocol."
       ),
@@ -1990,7 +1990,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "type",
-        deprecatedName: "ReturnType",
+        deprecatedName: "returnType",
         kind: .node(kind: .type),
         nameForDiagnostics: "return type"
       ),
@@ -2017,7 +2017,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "endOfFileToken",
-        deprecatedName: "EOFToken",
+        deprecatedName: "eofToken",
         kind: .token(choices: [.token(.endOfFile)])
       ),
     ]
@@ -2120,7 +2120,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
       ),
@@ -2187,12 +2187,12 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "parameterClause",
-        deprecatedName: "Indices",
+        deprecatedName: "indices",
         kind: .node(kind: .functionParameterClause)
       ),
       Child(
         name: "returnClause",
-        deprecatedName: "Result",
+        deprecatedName: "result",
         kind: .node(kind: .returnClause)
       ),
       Child(
@@ -2204,7 +2204,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "accessorBlock",
-        deprecatedName: "Accessor",
+        deprecatedName: "accessor",
         kind: .node(kind: .accessorBlock),
         isOptional: true
       ),
@@ -2223,7 +2223,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "inheritedTypes",
-        deprecatedName: "InheritedTypeCollection",
+        deprecatedName: "inheritedTypeCollection",
         kind: .collection(kind: .inheritedTypeList, collectionElementName: "InheritedType")
       ),
     ]
@@ -2278,7 +2278,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        deprecatedName: "Identifier",
+        deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)])
       ),
       Child(
@@ -2329,7 +2329,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "bindingSpecifier",
-        deprecatedName: "BindingKeyword",
+        deprecatedName: "bindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")]),
         documentation: """
           The specifier that defines the type of the variables declared (`let` or `var`).

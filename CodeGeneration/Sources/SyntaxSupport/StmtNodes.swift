@@ -27,7 +27,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "availabilityArguments",
-        deprecatedName: "AvailabilitySpec",
+        deprecatedName: "availabilitySpec",
         kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument")
       ),
       Child(
@@ -315,7 +315,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "sequence",
-        deprecatedName: "SequenceExpr",
+        deprecatedName: "sequenceExpr",
         kind: .node(kind: .expr)
       ),
       Child(
@@ -386,13 +386,13 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "label",
-        deprecatedName: "LabelName",
+        deprecatedName: "labelName",
         kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label name"
       ),
       Child(
         name: "colon",
-        deprecatedName: "LabelColon",
+        deprecatedName: "labelColon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
@@ -434,7 +434,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "bindingSpecifier",
-        deprecatedName: "BindingKeyword",
+        deprecatedName: "bindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(
@@ -530,7 +530,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "condition",
-        deprecatedName: "GuardResult",
+        deprecatedName: "guardResult",
         kind: .node(kind: .expr)
       ),
     ]
@@ -571,7 +571,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        deprecatedName: "ElementList",
+        deprecatedName: "elementList",
         kind: .collection(kind: .yieldedExpressionList, collectionElementName: "Element")
       ),
       Child(
@@ -593,16 +593,16 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "yieldedExpressions",
-        deprecatedName: "Yields",
+        deprecatedName: "yields",
         kind: .nodeChoices(choices: [
           Child(
             name: "multiple",
-            deprecatedName: "YieldList",
+            deprecatedName: "yieldList",
             kind: .node(kind: .yieldedExpressionsClause)
           ),
           Child(
             name: "single",
-            deprecatedName: "SimpleYield",
+            deprecatedName: "simpleYield",
             kind: .node(kind: .expr)
           ),
         ])

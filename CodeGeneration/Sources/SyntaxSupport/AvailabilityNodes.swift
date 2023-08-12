@@ -25,7 +25,7 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        deprecatedName: "Entry",
+        deprecatedName: "entry",
         kind: .nodeChoices(choices: [
           Child(
             name: "token",

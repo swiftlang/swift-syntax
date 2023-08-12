@@ -73,14 +73,14 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "label",
-        deprecatedName: "LabelName",
+        deprecatedName: "labelName",
         kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
       Child(
         name: "colon",
-        deprecatedName: "LabelColon",
+        deprecatedName: "labelColon",
         kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
@@ -147,12 +147,12 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "bindingSpecifier",
-        deprecatedName: "BindingKeyword",
+        deprecatedName: "bindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(
         name: "pattern",
-        deprecatedName: "ValuePattern",
+        deprecatedName: "valuePattern",
         kind: .node(kind: .pattern)
       ),
     ]

@@ -6913,7 +6913,7 @@ extension SomeOrAnyTypeSyntax {
 
 extension SourceFileSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenStatementsAndEndOfFileToken")
-  public var unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenStatementsAndEofToken: UnexpectedNodesSyntax? {
     get {
       return unexpectedBetweenStatementsAndEndOfFileToken
     }
@@ -6933,7 +6933,7 @@ extension SourceFileSyntax {
   }
   
   @available(*, deprecated, renamed: "unexpectedAfterEndOfFileToken")
-  public var unexpectedAfterEOFToken: UnexpectedNodesSyntax? {
+  public var unexpectedAfterEofToken: UnexpectedNodesSyntax? {
     get {
       return unexpectedAfterEndOfFileToken
     }
@@ -6950,9 +6950,9 @@ extension SourceFileSyntax {
       shebang: TokenSyntax? = nil,
       _ unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
-      _ unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenStatementsAndEofToken: UnexpectedNodesSyntax? = nil,
       eofToken: TokenSyntax = .endOfFileToken(),
-      _ unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil,
+      _ unexpectedAfterEofToken: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -6962,9 +6962,9 @@ extension SourceFileSyntax {
         shebang: shebang, 
         unexpectedBetweenShebangAndStatements, 
         statements: statements, 
-        unexpectedBetweenStatementsAndEOFToken, 
+        unexpectedBetweenStatementsAndEofToken, 
         endOfFileToken: eofToken, 
-        unexpectedAfterEOFToken, 
+        unexpectedAfterEofToken, 
         trailingTrivia: trailingTrivia
       )
   }

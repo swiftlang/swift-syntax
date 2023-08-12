@@ -19,17 +19,17 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "leftSquare",
-        deprecatedName: "LeftSquareBracket",
+        deprecatedName: "leftSquareBracket",
         kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "element",
-        deprecatedName: "ElementType",
+        deprecatedName: "elementType",
         kind: .node(kind: .type)
       ),
       Child(
         name: "rightSquare",
-        deprecatedName: "RightSquareBracket",
+        deprecatedName: "rightSquareBracket",
         kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
@@ -133,7 +133,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "constraint",
-        deprecatedName: "BaseType",
+        deprecatedName: "baseType",
         kind: .node(kind: .type)
       ),
     ]
@@ -147,12 +147,12 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "leftSquare",
-        deprecatedName: "LeftSquareBracket",
+        deprecatedName: "leftSquareBracket",
         kind: .token(choices: [.token(.leftSquare)])
       ),
       Child(
         name: "key",
-        deprecatedName: "KeyType",
+        deprecatedName: "keyType",
         kind: .node(kind: .type),
         nameForDiagnostics: "key type"
       ),
@@ -162,13 +162,13 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "value",
-        deprecatedName: "ValueType",
+        deprecatedName: "valueType",
         kind: .node(kind: .type),
         nameForDiagnostics: "value type"
       ),
       Child(
         name: "rightSquare",
-        deprecatedName: "RightSquareBracket",
+        deprecatedName: "rightSquareBracket",
         kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
@@ -191,7 +191,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        deprecatedName: "Arguments",
+        deprecatedName: "arguments",
         kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument")
       ),
       Child(
@@ -205,7 +205,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "returnClause",
-        deprecatedName: "Output",
+        deprecatedName: "output",
         kind: .node(kind: .returnClause)
       ),
     ]
@@ -219,7 +219,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "leftAngle",
-        deprecatedName: "LeftAngleBracket",
+        deprecatedName: "leftAngleBracket",
         kind: .token(choices: [.token(.leftAngle)])
       ),
       Child(
@@ -228,7 +228,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "rightAngle",
-        deprecatedName: "RightAngleBracket",
+        deprecatedName: "rightAngleBracket",
         kind: .token(choices: [.token(.rightAngle)])
       ),
     ]
@@ -255,7 +255,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        deprecatedName: "ArgumentType",
+        deprecatedName: "argumentType",
         kind: .node(kind: .type)
       ),
       Child(
@@ -328,7 +328,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "metatypeSpecifier",
-        deprecatedName: "TypeOrProtocol",
+        deprecatedName: "typeOrProtocol",
         kind: .token(choices: [.keyword(text: "Type"), .keyword(text: "Protocol")])
       ),
     ]
@@ -342,13 +342,13 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "genericParameterClause",
-        deprecatedName: "GenericParameters",
+        deprecatedName: "genericParameters",
         kind: .node(kind: .genericParameterClause),
         documentation: "The parameter clause that defines the generic parameters."
       ),
       Child(
         name: "type",
-        deprecatedName: "BaseType",
+        deprecatedName: "baseType",
         kind: .node(kind: .type)
       ),
     ]
@@ -383,7 +383,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "type",
-        deprecatedName: "PatternType",
+        deprecatedName: "patternType",
         kind: .node(kind: .type)
       ),
     ]
@@ -401,7 +401,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "repetitionPattern",
-        deprecatedName: "PatternType",
+        deprecatedName: "patternType",
         kind: .node(kind: .type)
       ),
     ]
@@ -419,7 +419,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "pack",
-        deprecatedName: "PackType",
+        deprecatedName: "packType",
         kind: .node(kind: .type)
       ),
     ]
@@ -468,13 +468,13 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "inoutKeyword",
-        deprecatedName: "InOut",
+        deprecatedName: "inOut",
         kind: .token(choices: [.keyword(text: "inout")]),
         isOptional: true
       ),
       Child(
         name: "firstName",
-        deprecatedName: "Name",
+        deprecatedName: "name",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         nameForDiagnostics: "name",
         isOptional: true

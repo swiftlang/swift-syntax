@@ -753,9 +753,9 @@ extension SourceFileSyntax {
       unexpectedBeforeShebang: UnexpectedNodesSyntax? = nil, 
       shebang: TokenSyntax? = nil, 
       unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? = nil, 
-      unexpectedBetweenStatementsAndEOFToken: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenStatementsAndEofToken: UnexpectedNodesSyntax? = nil, 
       eofToken: TokenSyntax = .endOfFileToken(), 
-      unexpectedAfterEOFToken: UnexpectedNodesSyntax? = nil, 
+      unexpectedAfterEofToken: UnexpectedNodesSyntax? = nil, 
       @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax, 
       trailingTrivia: Trivia? = nil
     ) rethrows {
@@ -765,9 +765,9 @@ extension SourceFileSyntax {
         shebang: shebang, 
         unexpectedBetweenShebangAndStatements, 
         statements: statementsBuilder(), 
-        unexpectedBetweenStatementsAndEOFToken, 
+        unexpectedBetweenStatementsAndEofToken, 
         endOfFileToken: eofToken, 
-        unexpectedAfterEOFToken, 
+        unexpectedAfterEofToken, 
         trailingTrivia: trailingTrivia
       )
   }

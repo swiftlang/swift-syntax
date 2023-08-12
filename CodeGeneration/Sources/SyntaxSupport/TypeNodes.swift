@@ -48,13 +48,13 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "specifier",
         kind: .token(choices: [
-          .keyword(text: "inout"),
-          .keyword(text: "__shared"),
-          .keyword(text: "__owned"),
-          .keyword(text: "isolated"),
-          .keyword(text: "_const"),
-          .keyword(text: "borrowing"),
-          .keyword(text: "consuming"),
+          .keyword(.inout),
+          .keyword(.__shared),
+          .keyword(.__owned),
+          .keyword(.isolated),
+          .keyword(._const),
+          .keyword(.borrowing),
+          .keyword(.consuming),
         ]),
         isOptional: true
       ),
@@ -76,7 +76,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "classKeyword",
-        kind: .token(choices: [.keyword(text: "class")])
+        kind: .token(choices: [.keyword(.class)])
       )
     ]
   ),
@@ -129,7 +129,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "someOrAnySpecifier",
-        kind: .token(choices: [.keyword(text: "some"), .keyword(text: "any")])
+        kind: .token(choices: [.keyword(.some), .keyword(.any)])
       ),
       Child(
         name: "constraint",
@@ -300,7 +300,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        kind: .token(choices: [.token(.identifier), .keyword(text: "self"), .keyword(text: "Self")]),
+        kind: .token(choices: [.token(.identifier), .keyword(.self), .keyword(.Self)]),
         nameForDiagnostics: "name"
       ),
       Child(
@@ -329,7 +329,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "metatypeSpecifier",
         deprecatedName: "typeOrProtocol",
-        kind: .token(choices: [.keyword(text: "Type"), .keyword(text: "Protocol")])
+        kind: .token(choices: [.keyword(.Type), .keyword(.Protocol)])
       ),
     ]
   ),
@@ -397,7 +397,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "repeatKeyword",
-        kind: .token(choices: [.keyword(text: "repeat")])
+        kind: .token(choices: [.keyword(.repeat)])
       ),
       Child(
         name: "repetitionPattern",
@@ -415,7 +415,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "eachKeyword",
-        kind: .token(choices: [.keyword(text: "each")])
+        kind: .token(choices: [.keyword(.each)])
       ),
       Child(
         name: "pack",
@@ -435,9 +435,9 @@ public let TYPE_NODES: [Node] = [
         name: "name",
         kind: .token(choices: [
           .token(.identifier),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-          .keyword(text: "Any"),
+          .keyword(.self),
+          .keyword(.Self),
+          .keyword(.Any),
           .token(.wildcard),
         ])
       ),
@@ -469,7 +469,7 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "inoutKeyword",
         deprecatedName: "inOut",
-        kind: .token(choices: [.keyword(text: "inout")]),
+        kind: .token(choices: [.keyword(.inout)]),
         isOptional: true
       ),
       Child(

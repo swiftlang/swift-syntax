@@ -66,11 +66,11 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "label",
         kind: .token(choices: [
-          .keyword(text: "message"),
-          .keyword(text: "renamed"),
-          .keyword(text: "introduced"),
-          .keyword(text: "obsoleted"),
-          .keyword(text: "deprecated"),
+          .keyword(.message),
+          .keyword(.renamed),
+          .keyword(.introduced),
+          .keyword(.obsoleted),
+          .keyword(.deprecated),
         ]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"

@@ -30,9 +30,8 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ) {
             for choice in choices {
               switch choice {
-              case .keyword(let keywordText):
-                let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
-                DeclSyntax("case \(raw: keyword.escapedName)")
+              case .keyword(let keyword):
+                DeclSyntax("case \(raw: keyword.spec.escapedName)")
               case .token(let token):
                 DeclSyntax("case \(token.spec.varOrCaseName)")
               }
@@ -42,14 +41,12 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               try SwitchExprSyntax("switch PrepareForKeywordMatch(lexeme)") {
                 for choice in choices {
                   switch choice {
-                  case .keyword(let keywordText):
-                    let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
-                    SwitchCaseSyntax("case TokenSpec(.\(raw: keyword.escapedName)): self = .\(raw: keyword.escapedName)")
+                  case .keyword(let keyword):
+                    let escapedName = keyword.spec.escapedName
+                    SwitchCaseSyntax("case TokenSpec(.\(raw: escapedName)): self = .\(raw: escapedName)")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
-                    SwitchCaseSyntax(
-                      "case TokenSpec(.\(caseName)): self = .\(caseName)"
-                    )
+                    SwitchCaseSyntax("case TokenSpec(.\(caseName)): self = .\(caseName)")
                   }
                 }
                 SwitchCaseSyntax("default: return nil")
@@ -60,16 +57,12 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               try SwitchExprSyntax("switch self") {
                 for choice in choices {
                   switch choice {
-                  case .keyword(let keywordText):
-                    let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
-                    SwitchCaseSyntax(
-                      "case .\(raw: keyword.escapedName): return .keyword(.\(raw: keyword.escapedName))"
-                    )
+                  case .keyword(let keyword):
+                    let escapedName = keyword.spec.escapedName
+                    SwitchCaseSyntax("case .\(raw: escapedName): return .keyword(.\(raw: escapedName))")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
-                    SwitchCaseSyntax(
-                      "case .\(caseName): return .\(caseName)"
-                    )
+                    SwitchCaseSyntax("case .\(caseName): return .\(caseName)")
                   }
                 }
               }
@@ -87,21 +80,15 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               try SwitchExprSyntax("switch self") {
                 for choice in choices {
                   switch choice {
-                  case .keyword(let keywordText):
-                    let keyword = KEYWORDS.first(where: { $0.name == keywordText })!
-                    SwitchCaseSyntax(
-                      "case .\(raw: keyword.escapedName): return .keyword(.\(raw: keyword.escapedName))"
-                    )
+                  case .keyword(let keyword):
+                    let escapedName = keyword.spec.escapedName
+                    SwitchCaseSyntax("case .\(raw: escapedName): return .keyword(.\(raw: escapedName))")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
                     if token.spec.text != nil {
-                      SwitchCaseSyntax(
-                        "case .\(caseName): return .\(caseName)Token()"
-                      )
+                      SwitchCaseSyntax("case .\(caseName): return .\(caseName)Token()")
                     } else {
-                      SwitchCaseSyntax(
-                        #"case .\#(caseName): return .\#(caseName)("")"#
-                      )
+                      SwitchCaseSyntax(#"case .\#(caseName): return .\#(caseName)("")"#)
                     }
                   }
                 }

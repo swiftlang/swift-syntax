@@ -95,7 +95,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "eachKeyword",
         deprecatedName: "each",
-        kind: .token(choices: [.keyword(text: "each")]),
+        kind: .token(choices: [.keyword(.each)]),
         nameForDiagnostics: "parameter pack specifier",
         isOptional: true
       ),
@@ -175,7 +175,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "whereKeyword",
-        kind: .token(choices: [.keyword(text: "where")]),
+        kind: .token(choices: [.keyword(.where)]),
         documentation: "The `where` keyword in the clause."
       ),
       Child(
@@ -208,13 +208,13 @@ public let GENERIC_NODES: [Node] = [
         name: "layoutSpecifier",
         deprecatedName: "layoutConstraint",
         kind: .token(choices: [
-          .keyword(text: "_Trivial"),
-          .keyword(text: "_TrivialAtMost"),
-          .keyword(text: "_UnknownLayout"),
-          .keyword(text: "_RefCountedObject"),
-          .keyword(text: "_NativeRefCountedObject"),
-          .keyword(text: "_Class"),
-          .keyword(text: "_NativeClass"),
+          .keyword(._Trivial),
+          .keyword(._TrivialAtMost),
+          .keyword(._UnknownLayout),
+          .keyword(._RefCountedObject),
+          .keyword(._NativeRefCountedObject),
+          .keyword(._Class),
+          .keyword(._NativeClass),
         ])
       ),
       Child(

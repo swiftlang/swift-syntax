@@ -45,7 +45,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "breakKeyword",
-        kind: .token(choices: [.keyword(text: "break")], requiresTrailingSpace: false)
+        kind: .token(choices: [.keyword(.break)], requiresTrailingSpace: false)
       ),
       Child(
         name: "label",
@@ -82,7 +82,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "catchKeyword",
-        kind: .token(choices: [.keyword(text: "catch")])
+        kind: .token(choices: [.keyword(.catch)])
       ),
       Child(
         name: "catchItems",
@@ -188,7 +188,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "continueKeyword",
-        kind: .token(choices: [.keyword(text: "continue")])
+        kind: .token(choices: [.keyword(.continue)])
       ),
       Child(
         name: "label",
@@ -210,7 +210,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "deferKeyword",
-        kind: .token(choices: [.keyword(text: "defer")])
+        kind: .token(choices: [.keyword(.defer)])
       ),
       Child(
         name: "body",
@@ -230,7 +230,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "doKeyword",
-        kind: .token(choices: [.keyword(text: "do")])
+        kind: .token(choices: [.keyword(.do)])
       ),
       Child(
         name: "body",
@@ -265,7 +265,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "fallthroughKeyword",
-        kind: .token(choices: [.keyword(text: "fallthrough")])
+        kind: .token(choices: [.keyword(.fallthrough)])
       )
     ]
   ),
@@ -283,21 +283,21 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "forKeyword",
-        kind: .token(choices: [.keyword(text: "for")])
+        kind: .token(choices: [.keyword(.for)])
       ),
       Child(
         name: "tryKeyword",
-        kind: .token(choices: [.keyword(text: "try")]),
+        kind: .token(choices: [.keyword(.try)]),
         isOptional: true
       ),
       Child(
         name: "awaitKeyword",
-        kind: .token(choices: [.keyword(text: "await")]),
+        kind: .token(choices: [.keyword(.await)]),
         isOptional: true
       ),
       Child(
         name: "caseKeyword",
-        kind: .token(choices: [.keyword(text: "case")]),
+        kind: .token(choices: [.keyword(.case)]),
         isOptional: true
       ),
       Child(
@@ -311,7 +311,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "inKeyword",
-        kind: .token(choices: [.keyword(text: "in")])
+        kind: .token(choices: [.keyword(.in)])
       ),
       Child(
         name: "sequence",
@@ -339,7 +339,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "discardKeyword",
-        kind: .token(choices: [.keyword(text: "discard")])
+        kind: .token(choices: [.keyword(.discard)])
       ),
       Child(
         name: "expression",
@@ -359,7 +359,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "guardKeyword",
-        kind: .token(choices: [.keyword(text: "guard")])
+        kind: .token(choices: [.keyword(.guard)])
       ),
       Child(
         name: "conditions",
@@ -368,7 +368,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "elseKeyword",
-        kind: .token(choices: [.keyword(text: "else")])
+        kind: .token(choices: [.keyword(.else)])
       ),
       Child(
         name: "body",
@@ -409,7 +409,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "caseKeyword",
-        kind: .token(choices: [.keyword(text: "case")])
+        kind: .token(choices: [.keyword(.case)])
       ),
       Child(
         name: "pattern",
@@ -435,7 +435,7 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
+        kind: .token(choices: [.keyword(.let), .keyword(.var), .keyword(.inout)])
       ),
       Child(
         name: "pattern",
@@ -465,7 +465,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "repeatKeyword",
-        kind: .token(choices: [.keyword(text: "repeat")])
+        kind: .token(choices: [.keyword(.repeat)])
       ),
       Child(
         name: "body",
@@ -474,7 +474,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "whileKeyword",
-        kind: .token(choices: [.keyword(text: "while")])
+        kind: .token(choices: [.keyword(.while)])
       ),
       Child(
         name: "condition",
@@ -492,7 +492,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "returnKeyword",
-        kind: .token(choices: [.keyword(text: "return")])
+        kind: .token(choices: [.keyword(.return)])
       ),
       Child(
         name: "expression",
@@ -510,7 +510,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "throwKeyword",
-        kind: .token(choices: [.keyword(text: "throw")])
+        kind: .token(choices: [.keyword(.throw)])
       ),
       Child(
         name: "expression",
@@ -526,7 +526,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "whereKeyword",
-        kind: .token(choices: [.keyword(text: "where")])
+        kind: .token(choices: [.keyword(.where)])
       ),
       Child(
         name: "condition",
@@ -547,7 +547,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "whileKeyword",
-        kind: .token(choices: [.keyword(text: "while")])
+        kind: .token(choices: [.keyword(.while)])
       ),
       Child(
         name: "conditions",
@@ -589,7 +589,7 @@ public let STMT_NODES: [Node] = [
     children: [
       Child(
         name: "yieldKeyword",
-        kind: .token(choices: [.keyword(text: "yield")])
+        kind: .token(choices: [.keyword(.yield)])
       ),
       Child(
         name: "yieldedExpressions",

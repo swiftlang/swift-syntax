@@ -31,9 +31,9 @@ let isLexerClassifiedFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       try! SwitchExprSyntax("switch self") {
-        for keyword in KEYWORDS {
-          if keyword.isLexerClassified {
-            SwitchCaseSyntax("case .\(raw: keyword.escapedName): return true")
+        for keyword in Keyword.allCases {
+          if keyword.spec.isLexerClassified {
+            SwitchCaseSyntax("case .\(raw: keyword.spec.escapedName): return true")
           }
         }
         SwitchCaseSyntax("default: return false")

@@ -16,8 +16,8 @@ import SwiftSyntax
 struct GrammarGenerator {
   private func grammar(for tokenChoice: TokenChoice) -> String {
     switch tokenChoice {
-    case .keyword(text: let text):
-      return "`'\(text)'`"
+    case .keyword(let keyword):
+      return "`'\(keyword.spec.name)'`"
     case .token(let token):
       let tokenSpec = token.spec
       if let tokenText = tokenSpec.text {

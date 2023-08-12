@@ -46,7 +46,7 @@ struct Main {
     ]
 
     let source = SourceFileSyntax {
-      StructDeclSyntax(identifier: "Person") {
+      StructDeclSyntax(name: "Person") {
         for (propertyName, propertyType) in properties {
           DeclSyntax("var \(raw: propertyName): \(raw: propertyType)")
 

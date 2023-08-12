@@ -214,7 +214,7 @@ public class Child {
     documentation: String? = nil,
     isOptional: Bool = false
   ) {
-    precondition(name.first?.isUppercase ?? true, "The first letter of a child’s name should be uppercase")
+    precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
     precondition(deprecatedName?.first?.isUppercase ?? true, "The first letter of a child’s name should be uppercase")
     self.name = name
     self.deprecatedName = deprecatedName

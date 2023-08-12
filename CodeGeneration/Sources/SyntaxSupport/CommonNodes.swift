@@ -28,25 +28,25 @@ public let COMMON_NODES: [Node] = [
     parserFunction: "parseNonOptionalCodeBlockItem",
     children: [
       Child(
-        name: "Item",
+        name: "item",
         kind: .nodeChoices(choices: [
           Child(
-            name: "Decl",
+            name: "decl",
             kind: .node(kind: .decl)
           ),
           Child(
-            name: "Stmt",
+            name: "stmt",
             kind: .node(kind: .stmt)
           ),
           Child(
-            name: "Expr",
+            name: "expr",
             kind: .node(kind: .expr)
           ),
         ]),
         documentation: "The underlying node inside the code block."
       ),
       Child(
-        name: "Semicolon",
+        name: "semicolon",
         kind: .token(choices: [.token(.semicolon)]),
         documentation: "If present, the trailing semicolon at the end of the item.",
         isOptional: true
@@ -65,16 +65,16 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "LeftBrace",
+        name: "leftBrace",
         kind: .token(choices: [.token(.leftBrace)])
       ),
       Child(
-        name: "Statements",
+        name: "statements",
         kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
         nameForDiagnostics: "statements"
       ),
       Child(
-        name: "RightBrace",
+        name: "rightBrace",
         kind: .token(choices: [.token(.rightBrace)])
       ),
     ]
@@ -90,12 +90,12 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "AsyncSpecifier",
+        name: "asyncSpecifier",
         kind: .token(choices: [.keyword(text: "async")]),
         isOptional: true
       ),
       Child(
-        name: "ThrowsSpecifier",
+        name: "throwsSpecifier",
         kind: .token(choices: [.keyword(text: "throws")]),
         isOptional: true
       ),
@@ -112,12 +112,12 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "AsyncSpecifier",
+        name: "asyncSpecifier",
         kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]),
         isOptional: true
       ),
       Child(
-        name: "ThrowsSpecifier",
+        name: "throwsSpecifier",
         kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]),
         isOptional: true
       ),
@@ -132,7 +132,7 @@ public let COMMON_NODES: [Node] = [
     traits: [],
     children: [
       Child(
-        name: "AsyncSpecifier",
+        name: "asyncSpecifier",
         kind: .token(choices: [.keyword(text: "async")]),
         isOptional: true
       )
@@ -165,17 +165,17 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Attributes",
+        name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
         documentation: "If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
       ),
       Child(
-        name: "Modifiers",
+        name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         documentation: "If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
       ),
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
@@ -196,7 +196,7 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#expression#>`, that can be inserted into the source code to represent the missing expression.
@@ -217,7 +217,7 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#pattern#>`, that can be inserted into the source code to represent the missing pattern.
@@ -238,7 +238,7 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#statement#>`, that can be inserted into the source code to represent the missing pattern.
@@ -259,7 +259,7 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#syntax#>`, that can be inserted into the source code to represent the missing pattern.
@@ -280,7 +280,7 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
         documentation: """
           A placeholder, i.e. `<#type#>`, that can be inserted into the source code to represent the missing type.
@@ -315,12 +315,12 @@ public let COMMON_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "AsyncSpecifier",
+        name: "asyncSpecifier",
         kind: .token(choices: [.keyword(text: "async")]),
         isOptional: true
       ),
       Child(
-        name: "ThrowsSpecifier",
+        name: "throwsSpecifier",
         kind: .token(choices: [.keyword(text: "throws")]),
         isOptional: true
       ),

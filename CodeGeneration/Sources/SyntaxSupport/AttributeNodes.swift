@@ -51,105 +51,105 @@ public let ATTRIBUTE_NODES: [Node] = [
     parserFunction: "parseAttribute",
     children: [
       Child(
-        name: "AtSign",
+        name: "atSign",
         deprecatedName: "AtSignToken",
         kind: .token(choices: [.token(.atSign)]),
         documentation: "The `@` sign."
       ),
       Child(
-        name: "AttributeName",
+        name: "attributeName",
         kind: .node(kind: .type),
         nameForDiagnostics: "name",
         documentation: "The name of the attribute."
       ),
       Child(
-        name: "LeftParen",
+        name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
         documentation: "If the attribute takes arguments, the opening parenthesis.",
         isOptional: true
       ),
       Child(
-        name: "Arguments",
+        name: "arguments",
         deprecatedName: "Argument",
         kind: .nodeChoices(choices: [
           Child(
-            name: "ArgumentList",
+            name: "argumentList",
             kind: .node(kind: .labeledExprList)
           ),
           Child(
-            name: "Token",
+            name: "token",
             kind: .node(kind: .token)
           ),
           Child(
-            name: "String",
+            name: "string",
             kind: .node(kind: .stringLiteralExpr)
           ),
           Child(
-            name: "Availability",
+            name: "availability",
             kind: .node(kind: .availabilityArgumentList)
           ),
           Child(
-            name: "SpecializeArguments",
+            name: "specializeArguments",
             kind: .node(kind: .specializeAttributeArgumentList)
           ),
           Child(
-            name: "ObjCName",
+            name: "objCName",
             kind: .node(kind: .objCSelectorPieceList)
           ),
           Child(
-            name: "ImplementsArguments",
+            name: "implementsArguments",
             kind: .node(kind: .implementsAttributeArguments)
           ),
           Child(
-            name: "DifferentiableArguments",
+            name: "differentiableArguments",
             kind: .node(kind: .differentiableAttributeArguments)
           ),
           Child(
-            name: "DerivativeRegistrationArguments",
+            name: "derivativeRegistrationArguments",
             kind: .node(kind: .derivativeAttributeArguments)
           ),
           Child(
-            name: "BackDeployedArguments",
+            name: "backDeployedArguments",
             kind: .node(kind: .backDeployedAttributeArguments)
           ),
           Child(
-            name: "ConventionArguments",
+            name: "conventionArguments",
             kind: .node(kind: .conventionAttributeArguments)
           ),
           Child(
-            name: "ConventionWitnessMethodArguments",
+            name: "conventionWitnessMethodArguments",
             kind: .node(kind: .conventionWitnessMethodAttributeArguments)
           ),
           Child(
-            name: "OpaqueReturnTypeOfAttributeArguments",
+            name: "opaqueReturnTypeOfAttributeArguments",
             kind: .node(kind: .opaqueReturnTypeOfAttributeArguments)
           ),
           Child(
-            name: "ExposeAttributeArguments",
+            name: "exposeAttributeArguments",
             kind: .node(kind: .exposeAttributeArguments)
           ),
           Child(
-            name: "OriginallyDefinedInArguments",
+            name: "originallyDefinedInArguments",
             kind: .node(kind: .originallyDefinedInAttributeArguments)
           ),
           Child(
-            name: "UnderscorePrivateAttributeArguments",
+            name: "underscorePrivateAttributeArguments",
             kind: .node(kind: .underscorePrivateAttributeArguments)
           ),
           Child(
-            name: "DynamicReplacementArguments",
+            name: "dynamicReplacementArguments",
             kind: .node(kind: .dynamicReplacementAttributeArguments)
           ),
           Child(
-            name: "UnavailableFromAsyncArguments",
+            name: "unavailableFromAsyncArguments",
             kind: .node(kind: .unavailableFromAsyncAttributeArguments)
           ),
           Child(
-            name: "EffectsArguments",
+            name: "effectsArguments",
             kind: .node(kind: .effectsAttributeArgumentList)
           ),
           Child(
-            name: "DocumentationArguments",
+            name: "documentationArguments",
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
         ]),
@@ -162,7 +162,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "RightParen",
+        name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
         documentation: "If the attribute takes arguments, the closing parenthesis.",
         isOptional: true
@@ -177,24 +177,24 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The availability argument for the _specialize attribute",
     children: [
       Child(
-        name: "AvailabilityLabel",
+        name: "availabilityLabel",
         deprecatedName: "Label",
         kind: .token(choices: [.keyword(text: "availability")]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
-        name: "AvailabilityArguments",
+        name: "availabilityArguments",
         deprecatedName: "AvailabilityList",
         kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument", deprecatedCollectionElementName: "Availability")
       ),
       Child(
-        name: "Semicolon",
+        name: "semicolon",
         kind: .token(choices: [.token(.semicolon)])
       ),
     ]
@@ -209,12 +209,12 @@ public let ATTRIBUTE_NODES: [Node] = [
     traits: ["WithTrailingComma"],
     children: [
       Child(
-        name: "PlatformVersion",
+        name: "platformVersion",
         deprecatedName: "AvailabilityVersionRestriction",
         kind: .node(kind: .platformVersion)
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if the argument is followed by another argument",
         isOptional: true
@@ -240,17 +240,17 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "A collection of arguments for the `@backDeployed` attribute",
     children: [
       Child(
-        name: "BeforeLabel",
+        name: "beforeLabel",
         kind: .token(choices: [.keyword(text: "before")]),
         documentation: "The \"before\" label."
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating \"before\" and the parameter list."
       ),
       Child(
-        name: "Platforms",
+        name: "platforms",
         deprecatedName: "VersionList",
         kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform", deprecatedCollectionElementName: "Availability"),
         documentation: "The list of OS versions in which the declaration became ABI stable."
@@ -266,27 +266,27 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@convention(...)'.",
     children: [
       Child(
-        name: "ConventionLabel",
+        name: "conventionLabel",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The convention label."
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
-        name: "CTypeLabel",
+        name: "cTypeLabel",
         kind: .token(choices: [.keyword(text: "cType")]),
         isOptional: true
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
-        name: "CTypeString",
+        name: "cTypeString",
         kind: .node(kind: .stringLiteralExpr),
         isOptional: true
       ),
@@ -301,15 +301,15 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@convention(witness_method: ...)'.",
     children: [
       Child(
-        name: "WitnessMethodLabel",
+        name: "witnessMethodLabel",
         kind: .token(choices: [.keyword(text: "witness_method")])
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "ProtocolName",
+        name: "protocolName",
         kind: .token(choices: [.token(.identifier)])
       ),
     ]
@@ -329,40 +329,40 @@ public let ATTRIBUTE_NODES: [Node] = [
       "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
     children: [
       Child(
-        name: "OfLabel",
+        name: "ofLabel",
         kind: .token(choices: [.keyword(text: "of")]),
         documentation: "The \"of\" label."
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the \"of\" label and the original declaration name."
       ),
       Child(
-        name: "OriginalDeclName",
+        name: "originalDeclName",
         kind: .node(kind: .expr),
         documentation: "The referenced original declaration name."
       ),
       Child(
-        name: "Period",
+        name: "period",
         kind: .token(choices: [.token(.period)]),
         documentation: "The period separating the original declaration name and the accessor name.",
         isOptional: true
       ),
       Child(
-        name: "AccessorSpecifier",
+        name: "accessorSpecifier",
         deprecatedName: "AccessorKind",
         kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set")]),
         documentation: "The accessor name.",
         isOptional: true
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
-        name: "Arguments",
+        name: "arguments",
         deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
@@ -390,12 +390,12 @@ public let ATTRIBUTE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Argument",
+        name: "argument",
         deprecatedName: "Parameter",
         kind: .token(choices: [.token(.identifier), .token(.integerLiteral), .keyword(text: "self")])
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
@@ -411,26 +411,26 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "A clause containing differentiability parameters.",
     children: [
       Child(
-        name: "WrtLabel",
+        name: "wrtLabel",
         kind: .token(choices: [.keyword(text: "wrt")]),
         documentation: "The \"wrt\" label."
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating \"wrt\" and the parameter list."
       ),
       Child(
-        name: "Arguments",
+        name: "arguments",
         deprecatedName: "Parameters",
         kind: .nodeChoices(choices: [
           Child(
-            name: "Argument",
+            name: "argument",
             deprecatedName: "Parameter",
             kind: .node(kind: .differentiabilityArgument)
           ),
           Child(
-            name: "ArgumentList",
+            name: "argumentList",
             deprecatedName: "ParameterList",
             kind: .node(kind: .differentiabilityArguments)
           ),
@@ -448,17 +448,17 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The differentiability arguments.",
     children: [
       Child(
-        name: "LeftParen",
+        name: "leftParen",
         kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
-        name: "Arguments",
+        name: "arguments",
         deprecatedName: "DifferentiabilityParameters",
         kind: .collection(kind: .differentiabilityArgumentList, collectionElementName: "Argument"),
         documentation: "The parameters for differentiation."
       ),
       Child(
-        name: "RightParen",
+        name: "rightParen",
         kind: .token(choices: [.token(.rightParen)])
       ),
     ]
@@ -476,33 +476,33 @@ public let ATTRIBUTE_NODES: [Node] = [
       "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
     children: [
       Child(
-        name: "KindSpecifier",
+        name: "kindSpecifier",
         deprecatedName: "DiffKind",
         kind: .token(choices: [.keyword(text: "_forward"), .keyword(text: "reverse"), .keyword(text: "_linear")]),
         isOptional: true
       ),
       Child(
-        name: "KindSpecifierComma",
+        name: "kindSpecifierComma",
         deprecatedName: "DiffKindComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability kind, if it exists.",
         isOptional: true
       ),
       Child(
-        name: "Arguments",
+        name: "arguments",
         deprecatedName: "DiffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
       ),
       Child(
-        name: "ArgumentsComma",
+        name: "argumentsComma",
         deprecatedName: "DiffParamsComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability arguments clause, if it exists.",
         isOptional: true
       ),
       Child(
-        name: "GenericWhereClause",
+        name: "genericWhereClause",
         deprecatedName: "WhereClause",
         kind: .node(kind: .genericWhereClause),
         documentation: "A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.",
@@ -520,19 +520,19 @@ public let ATTRIBUTE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Label",
+        name: "label",
         kind: .token(choices: [.keyword(text: "visibility"), .keyword(text: "metadata")]),
         nameForDiagnostics: "label"
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "Value",
+        name: "value",
         kind: .nodeChoices(choices: [
           Child(
-            name: "Token",
+            name: "token",
             kind: .token(choices: [
               .token(.identifier),
               .keyword(text: "private"),
@@ -543,13 +543,13 @@ public let ATTRIBUTE_NODES: [Node] = [
             ])
           ),  // Keywords can be: public, internal, private, fileprivate, open
           Child(
-            name: "String",
+            name: "string",
             kind: .node(kind: .stringLiteralExpr)
           ),
         ])
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
@@ -572,15 +572,15 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_dynamicReplacement' attribute",
     children: [
       Child(
-        name: "ForLabel",
+        name: "forLabel",
         kind: .token(choices: [.keyword(text: "for")], requiresTrailingSpace: false)
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "DeclName",
+        name: "declName",
         deprecatedName: "Declname",
         kind: .node(kind: .declReferenceExpr)
       ),
@@ -602,16 +602,16 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_expose' attribute",
     children: [
       Child(
-        name: "Language",
+        name: "language",
         kind: .node(kind: .token)
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
       Child(
-        name: "CxxName",
+        name: "cxxName",
         kind: .node(kind: .stringLiteralExpr),
         isOptional: true
       ),
@@ -628,18 +628,18 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
     children: [
       Child(
-        name: "Type",
+        name: "type",
         kind: .node(kind: .type),
         nameForDiagnostics: "type",
         documentation: "The type for which the method with this attribute implements a requirement."
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "The comma separating the type and method name"
       ),
       Child(
-        name: "DeclName",
+        name: "declName",
         deprecatedName: "Declname",
         kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
@@ -660,7 +660,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Label",
+        name: "label",
         kind: .token(choices: [
           .keyword(text: "target"),
           .keyword(text: "availability"),
@@ -674,18 +674,18 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "The label of the argument"
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
-        name: "Value",
+        name: "value",
         kind: .node(kind: .token),
         nameForDiagnostics: "value",
         documentation: "The value for this argument"
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
@@ -702,13 +702,13 @@ public let ATTRIBUTE_NODES: [Node] = [
       "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
     children: [
       Child(
-        name: "Name",
+        name: "name",
         kind: .node(kind: .token),
         nameForDiagnostics: "name",
         isOptional: true
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
@@ -731,16 +731,16 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_opaqueReturnTypeOf()'.",
     children: [
       Child(
-        name: "MangledName",
+        name: "mangledName",
         kind: .node(kind: .stringLiteralExpr),
         documentation: "The mangled name of a declaration."
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)])
       ),
       Child(
-        name: "Ordinal",
+        name: "ordinal",
         kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The ordinal corresponding to the 'some' keyword that introduced this opaque type."
       ),
@@ -754,23 +754,23 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_originallyDefinedIn' attribute",
     children: [
       Child(
-        name: "ModuleLabel",
+        name: "moduleLabel",
         kind: .token(choices: [.keyword(text: "module")])
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "ModuleName",
+        name: "moduleName",
         kind: .node(kind: .stringLiteralExpr)
       ),
       Child(
-        name: "Comma",
+        name: "comma",
         kind: .token(choices: [.token(.comma)])
       ),
       Child(
-        name: "Platforms",
+        name: "platforms",
         kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform")
       ),
     ]
@@ -801,26 +801,26 @@ public let ATTRIBUTE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "TargetLabel",
+        name: "targetLabel",
         deprecatedName: "Label",
         kind: .token(choices: [.keyword(text: "target")]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating the label and the value"
       ),
       Child(
-        name: "DeclName",
+        name: "declName",
         deprecatedName: "Declname",
         kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
@@ -835,15 +835,15 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_unavailableFromAsync' attribute",
     children: [
       Child(
-        name: "MessageLabel",
+        name: "messageLabel",
         kind: .token(choices: [.keyword(text: "message")])
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "Message",
+        name: "message",
         kind: .node(kind: .stringLiteralExpr)
       ),
     ]
@@ -856,15 +856,15 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "The arguments for the '@_private' attribute",
     children: [
       Child(
-        name: "SourceFileLabel",
+        name: "sourceFileLabel",
         kind: .token(choices: [.keyword(text: "sourceFile")])
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "Filename",
+        name: "filename",
         kind: .node(kind: .stringLiteralExpr)
       ),
     ]

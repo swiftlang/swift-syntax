@@ -24,11 +24,11 @@ public let AVAILABILITY_NODES: [Node] = [
     traits: ["WithTrailingComma"],
     children: [
       Child(
-        name: "Argument",
+        name: "argument",
         deprecatedName: "Entry",
         kind: .nodeChoices(choices: [
           Child(
-            name: "Token",
+            name: "token",
             kind: .token(
               choices: [.token(.binaryOperator), .token(.identifier)],
               requiresLeadingSpace: false,
@@ -36,18 +36,18 @@ public let AVAILABILITY_NODES: [Node] = [
             )
           ),
           Child(
-            name: "AvailabilityVersionRestriction",
+            name: "availabilityVersionRestriction",
             kind: .node(kind: .platformVersion)
           ),
           Child(
-            name: "AvailabilityLabeledArgument",
+            name: "availabilityLabeledArgument",
             kind: .node(kind: .availabilityLabeledArgument)
           ),
         ]),
         documentation: "The actual argument"
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "A trailing comma if the argument is followed by another argument",
         isOptional: true
@@ -64,7 +64,7 @@ public let AVAILABILITY_NODES: [Node] = [
     documentation: "An argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
     children: [
       Child(
-        name: "Label",
+        name: "label",
         kind: .token(choices: [
           .keyword(text: "message"),
           .keyword(text: "renamed"),
@@ -76,19 +76,19 @@ public let AVAILABILITY_NODES: [Node] = [
         documentation: "The label of the argument"
       ),
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)]),
         documentation: "The colon separating label and value"
       ),
       Child(
-        name: "Value",
+        name: "value",
         kind: .nodeChoices(choices: [
           Child(
-            name: "String",
+            name: "string",
             kind: .node(kind: .simpleStringLiteralExpr)
           ),
           Child(
-            name: "Version",
+            name: "version",
             kind: .node(kind: .versionTuple)
           ),
         ]),
@@ -115,14 +115,14 @@ public let AVAILABILITY_NODES: [Node] = [
     documentation: "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
     children: [
       Child(
-        name: "Platform",
+        name: "platform",
         kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "platform",
         documentation:
           "The name of the OS on which the availability should be restricted or 'swift' if the availability should be restricted based on a Swift version."
       ),
       Child(
-        name: "Version",
+        name: "version",
         kind: .node(kind: .versionTuple),
         nameForDiagnostics: "version",
         documentation: """
@@ -145,12 +145,12 @@ public let AVAILABILITY_NODES: [Node] = [
     documentation: "An element to represent a single component in a version, like `.1`.",
     children: [
       Child(
-        name: "Period",
+        name: "period",
         kind: .token(choices: [.token(.period)]),
         documentation: "The period of this version component"
       ),
       Child(
-        name: "Number",
+        name: "number",
         kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The version number of this component"
       ),
@@ -173,12 +173,12 @@ public let AVAILABILITY_NODES: [Node] = [
     documentation: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
     children: [
       Child(
-        name: "Major",
+        name: "major",
         kind: .token(choices: [.token(.integerLiteral)]),
         documentation: "The major version."
       ),
       Child(
-        name: "Components",
+        name: "components",
         kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
         documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`"
       ),

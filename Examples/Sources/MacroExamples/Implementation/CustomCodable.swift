@@ -32,7 +32,7 @@ public struct CustomCodable: MemberMacro {
       }
 
       // if it has a CodableKey macro on it
-      if let customKeyMacro = member.decl.as(VariableDeclSyntax.self)?.attributes?.first(where: { element in
+      if let customKeyMacro = member.decl.as(VariableDeclSyntax.self)?.attributes.first(where: { element in
         element.as(AttributeSyntax.self)?.attributeName.as(IdentifierTypeSyntax.self)?.description == "CodableKey"
       }) {
 

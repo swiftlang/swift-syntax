@@ -15,7 +15,44 @@ import SwiftSyntaxMacros
 
 public struct DictionaryStorageMacro {}
 
-extension DictionaryStorageMacro: AccessorMacro {
+extension DictionaryStorageMacro: MemberMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingMembersOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    let storage: DeclSyntax = "var _storage: [String: Any] = [:]"
+    return [
+      storage.with(\.leadingTrivia, [.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
+extension DictionaryStorageMacro: MemberAttributeMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: some DeclGroupSyntax,
+    providingAttributesFor member: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [AttributeSyntax] {
+    guard let property = member.as(VariableDeclSyntax.self),
+      property.isStoredProperty
+    else {
+      return []
+    }
+
+    return [
+      AttributeSyntax(
+        attributeName: IdentifierTypeSyntax(
+          name: .identifier("DictionaryStorageProperty")
+        )
+      )
+      .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
+    ]
+  }
+}
+
+public struct DictionaryStoragePropertyMacro: AccessorMacro {
   public static func expansion<
     Context: MacroExpansionContext,
     Declaration: DeclSyntaxProtocol
@@ -55,43 +92,6 @@ extension DictionaryStorageMacro: AccessorMacro {
             _storage[\(literal: identifier.text)] = newValue
         }
       """,
-    ]
-  }
-}
-
-extension DictionaryStorageMacro: MemberMacro {
-  public static func expansion(
-    of node: AttributeSyntax,
-    providingMembersOf declaration: some DeclGroupSyntax,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
-    let storage: DeclSyntax = "var _storage: [String: Any] = [:]"
-    return [
-      storage.with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-    ]
-  }
-}
-
-extension DictionaryStorageMacro: MemberAttributeMacro {
-  public static func expansion(
-    of node: AttributeSyntax,
-    attachedTo declaration: some DeclGroupSyntax,
-    providingAttributesFor member: some DeclSyntaxProtocol,
-    in context: some MacroExpansionContext
-  ) throws -> [AttributeSyntax] {
-    guard let property = member.as(VariableDeclSyntax.self),
-      property.isStoredProperty
-    else {
-      return []
-    }
-
-    return [
-      AttributeSyntax(
-        attributeName: IdentifierTypeSyntax(
-          name: .identifier("DictionaryStorage")
-        )
-      )
-      .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
     ]
   }
 }

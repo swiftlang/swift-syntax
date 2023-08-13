@@ -13,7 +13,8 @@
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-import MacroExamplesPlugin
+import MacroExamplesImplementation
+import SwiftSyntaxMacroExpansion
 import XCTest
 
 final class NewTypePluginTests: XCTestCase {
@@ -44,9 +45,14 @@ final class NewTypePluginTests: XCTestCase {
       #"""
 
       public struct MyString {
-      public typealias RawValue = String
-      public var rawValue: RawValue
-      public init(_ rawValue: RawValue) { self.rawValue = rawValue }
+
+          public typealias RawValue = String
+
+          public var rawValue: RawValue
+
+          public init(_ rawValue: RawValue) {
+              self.rawValue = rawValue
+          }
       }
       """#
     )

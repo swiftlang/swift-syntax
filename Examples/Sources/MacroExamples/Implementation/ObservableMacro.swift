@@ -120,13 +120,15 @@ public struct ObservableMacro: MemberMacro, MemberAttributeMacro {
 
 }
 
-extension ObservableMacro: ConformanceMacro {
-  public static func expansion<Declaration, Context>(
+extension ObservableMacro: ExtensionMacro {
+  public static func expansion(
     of node: AttributeSyntax,
-    providingConformancesOf declaration: Declaration,
-    in context: Context
-  ) throws -> [(TypeSyntax, GenericWhereClauseSyntax?)] where Declaration: DeclGroupSyntax, Context: MacroExpansionContext {
-    return [("Observable", nil)]
+    attachedTo declaration: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
+    in context: some MacroExpansionContext
+  ) throws -> [ExtensionDeclSyntax] {
+    [try ExtensionDeclSyntax("extension \(type): Observable {}")]
   }
 }
 

@@ -23,6 +23,7 @@ struct MyPlugin: CompilerPlugin {
     FontLiteralMacro.self,
     WrapStoredPropertiesMacro.self,
     DictionaryStorageMacro.self,
+    DictionaryStoragePropertyMacro.self,
     ObservableMacro.self,
     ObservablePropertyMacro.self,
     AddCompletionHandlerMacro.self,

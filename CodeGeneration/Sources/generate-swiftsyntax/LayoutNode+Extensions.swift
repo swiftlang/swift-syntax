@@ -26,7 +26,7 @@ extension LayoutNode {
       if !child.kind.isNodeChoicesEmpty {
         paramType = "\(child.syntaxChoicesType)"
       } else if child.hasBaseType {
-        paramType = "some \(raw: child.syntaxNodeKind.protocolType)"
+        paramType = "some \(child.syntaxNodeKind.protocolType)"
       } else {
         paramType = child.syntaxNodeKind.syntaxType
       }
@@ -126,16 +126,16 @@ extension LayoutNode {
         if child.buildableType.builderInitializableType != child.buildableType {
           let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
           if child.isOptional {
-            produceExpr = ExprSyntax("\(childName)Builder().map { \(raw: child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }")
+            produceExpr = ExprSyntax("\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }")
           } else {
-            produceExpr = ExprSyntax("\(raw: child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
+            produceExpr = ExprSyntax("\(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
           }
         } else {
           produceExpr = ExprSyntax("\(childName)Builder()")
         }
         builderParameters.append(
           FunctionParameterSyntax(
-            "@\(builderInitializableType.resultBuilderType) \(raw: childName)Builder: () throws-> \(raw: builderInitializableType.syntax)"
+            "@\(builderInitializableType.resultBuilderType) \(childName)Builder: () throws-> \(builderInitializableType.syntax)"
           )
         )
       } else {
@@ -196,7 +196,7 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecat
   }
 
   if child.buildableType.isBaseType && !child.kind.isNodeChoices {
-    return ExprSyntax("\(raw: child.buildableType.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
+    return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
   }
-  return ExprSyntax("\(raw: childName.backtickedIfNeeded)")
+  return ExprSyntax("\(childName.backtickedIfNeeded)")
 }

@@ -24,7 +24,7 @@ let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     if let convenienceInit = try! node.createConvenienceBuilderInitializer() {
       DeclSyntax(
         """
-        extension \(raw: type.syntaxBaseName) {
+        extension \(type.syntaxBaseName) {
         \(convenienceInit)
         }
         """

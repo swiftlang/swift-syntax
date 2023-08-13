@@ -138,8 +138,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
-          open func visit(_ node: \(node.kind.syntaxType)) -> \(raw: node.baseType.syntaxBaseName) {
-            return \(raw: node.baseType.syntaxBaseName)(visitChildren(node))
+          open func visit(_ node: \(node.kind.syntaxType)) -> \(node.baseType.syntaxBaseName) {
+            return \(node.baseType.syntaxBaseName)(visitChildren(node))
           }
           """
         )
@@ -150,12 +150,12 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       let baseKind = baseNode.kind
       DeclSyntax(
         """
-        /// Visit any \(raw: baseKind.syntaxType) node.
+        /// Visit any \(baseKind.syntaxType) node.
         ///   - Parameter node: the node that is being visited
         ///   - Returns: the rewritten node
         \(baseNode.apiAttributes())\
-        public func visit(_ node: \(raw: baseKind.syntaxType)) -> \(raw: baseKind.syntaxType) {
-          return visit(node.data).cast(\(raw: baseKind.syntaxType).self)
+        public func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
+          return visit(node.data).cast(\(baseKind.syntaxType).self)
         }
         """
       )

@@ -27,7 +27,7 @@ let renamedChildrenBuilderCompatibilityFile = try! SourceFileSyntax(leadingTrivi
 
       DeclSyntax(
         """
-        extension \(raw: layoutNode.type.syntaxBaseName) {
+        extension \(layoutNode.type.syntaxBaseName) {
         @available(*, deprecated, message: "Use an initializer with \(raw: deprecatedNames) argument(s).")
         @_disfavoredOverload
         \(convenienceInit)

@@ -17,7 +17,7 @@ import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
-    try ExtensionDeclSyntax("extension \(raw: layoutNode.type.syntaxBaseName)") {
+    try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
       for child in layoutNode.children {
         if let deprecatedVarName = child.deprecatedVarName {
           let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
@@ -26,7 +26,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           DeclSyntax(
             """
             @available(*, deprecated, renamed: "\(child.varOrCaseName)")
-            public var \(raw: deprecatedVarName): \(raw: type) {
+            public var \(deprecatedVarName): \(type) {
               get {
                 return \(child.varOrCaseName.backtickedIfNeeded)
               }
@@ -47,7 +47,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
             DeclSyntax(
               """
               @available(*, deprecated, renamed: "add\(raw: collectionElementName)")
-              public func add\(raw: deprecatedCollectionElementName)(_ element: \(raw: childEltType)) -> \(raw: layoutNode.kind.syntaxType) {
+              public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> \(layoutNode.kind.syntaxType) {
                 return add\(raw: collectionElementName)(element)
               }
               """
@@ -83,7 +83,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
           for child in layoutNode.children {
             if child.isUnexpectedNodes {
-              LabeledExprSyntax(expression: ExprSyntax("\(raw: child.deprecatedVarName ?? child.varOrCaseName)"))
+              LabeledExprSyntax(expression: ExprSyntax("\(child.deprecatedVarName ?? child.varOrCaseName)"))
             } else {
               LabeledExprSyntax(
                 label: child.varOrCaseName,

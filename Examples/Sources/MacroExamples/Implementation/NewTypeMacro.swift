@@ -37,7 +37,7 @@ extension NewTypeMacro: MemberMacro {
         throw CustomError.message("@NewType can only be applied to a struct declarations.")
       }
 
-      let access = declaration.modifiers?.first(where: \.isNeededAccessLevelModifier)
+      let access = declaration.modifiers.first(where: \.isNeededAccessLevelModifier)
 
       return [
         "\(access)typealias RawValue = \(rawType)",

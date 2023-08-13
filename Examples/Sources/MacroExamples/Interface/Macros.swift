@@ -54,17 +54,17 @@ public macro wrapStoredProperties(_ attributeName: String) = #externalMacro(modu
 /// Wrap up the stored properties of the given type in a dictionary,
 /// turning them into computed properties.
 ///
-/// This macro composes three different kinds of macro expansion:
-///   * Member-attribute macro expansion, to put itself on all stored properties
-///     of the type it is attached to.
+/// This macro composes two different kinds of macro expansion:
+///   * Member-attribute macro expansion, to put `DictionaryStorageProperty` macro on
+///    all stored properties of the type it is attached to.
 ///   * Member macro expansion, to add a `_storage` property with the actual
 ///     dictionary.
-///   * Accessor macro expansion, to turn the stored properties into computed
-///     properties that look for values in the `_storage` property.
-@attached(accessor)
-@attached(member, names: named(_storage))
 @attached(memberAttribute)
+@attached(member, names: named(_storage))
 public macro DictionaryStorage() = #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStorageMacro")
+
+@attached(accessor)
+public macro DictionaryStorageProperty() = #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStoragePropertyMacro")
 
 public protocol Observable {}
 
@@ -102,7 +102,7 @@ public struct ObservationRegistrar<Subject: Observable> {
 
 @attached(member, names: named(Storage), named(_storage), named(_registrar), named(addObserver), named(removeObserver), named(withTransaction))
 @attached(memberAttribute)
-@attached(conformance)
+@attached(extension, conformances: Observable)
 public macro Observable() = #externalMacro(module: "MacroExamplesImplementation", type: "ObservableMacro")
 
 @attached(accessor)
@@ -126,7 +126,7 @@ public macro CaseDetection() = #externalMacro(module: "MacroExamplesImplementati
 @attached(member, names: named(Meta))
 public macro MetaEnum() = #externalMacro(module: "MacroExamplesImplementation", type: "MetaEnumMacro")
 
-@attached(member)
+@attached(peer)
 public macro CodableKey(name: String) = #externalMacro(module: "MacroExamplesImplementation", type: "CodableKey")
 
 @attached(member, names: named(CodingKeys))
@@ -157,5 +157,5 @@ public macro CustomCodable() = #externalMacro(module: "MacroExamplesImplementati
 ///       }
 ///     }
 @attached(member, names: arbitrary)
-@attached(conformance)
+@attached(extension, conformances: OptionSet)
 public macro MyOptionSet<RawType>() = #externalMacro(module: "MacroExamplesImplementation", type: "OptionSetMacro")

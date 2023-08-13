@@ -14,6 +14,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import MacroExamplesImplementation
+import SwiftSyntaxMacroExpansion
 import XCTest
 
 var testMacros: [String: Macro.Type] = [
@@ -43,7 +44,7 @@ final class MacroExamplesPluginTests: XCTestCase {
   func testURL() throws {
     let sf: SourceFileSyntax =
       #"""
-      let invalid = #URL("not a url")
+      let invalid = #URL("https://not a url.com")
       let valid = #URL("https://swift.org/")
       """#
     let context = BasicMacroExpansionContext.init(
@@ -53,13 +54,13 @@ final class MacroExamplesPluginTests: XCTestCase {
     XCTAssertEqual(
       transformedSF.description,
       #"""
-      let invalid = #URL("not a url")
+      let invalid = #URL("https://not a url.com")
       let valid = URL(string: "https://swift.org/")!
       """#
     )
     XCTAssertEqual(context.diagnostics.count, 1)
     let diagnostic = try XCTUnwrap(context.diagnostics.first)
-    XCTAssertEqual(diagnostic.message, #"malformed url: "not a url""#)
+    XCTAssertEqual(diagnostic.message, #"malformed url: "https://not a url.com""#)
     XCTAssertEqual(diagnostic.diagMessage.severity, .error)
   }
 }

@@ -14,7 +14,8 @@ import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
-import MacroExamplesPlugin
+import MacroExamplesImplementation
+import SwiftSyntaxMacroExpansion
 
 final class CaseMacroTests: XCTestCase {
   let testMacros: [String: Macro.Type] = [
@@ -44,25 +45,26 @@ final class CaseMacroTests: XCTestCase {
         case text(String)
         case boolean(Bool)
         case null
-        enum Meta {
-          case integer
-          case text
-          case boolean
-          case null
 
-          init(_ __macro_local_6parentfMu_: Cell) {
-            switch __macro_local_6parentfMu_ {
-            case .integer:
-              self = .integer
-            case .text:
-              self = .text
-            case .boolean:
-              self = .boolean
-            case .null:
-              self = .null
+          enum Meta {
+                  case integer
+                  case text
+                  case boolean
+                  case null
+
+                  init(_ __macro_local_6parentfMu_: Cell) {
+                      switch __macro_local_6parentfMu_ {
+                      case .integer:
+                          self = .integer
+                      case .text:
+                          self = .text
+                      case .boolean:
+                          self = .boolean
+                      case .null:
+                          self = .null
+                      }
+                  }
             }
-          }
-        }
       }
       """
     )
@@ -89,22 +91,23 @@ final class CaseMacroTests: XCTestCase {
         case integer(Int)
         case text(String)
         case boolean(Bool)
-        public enum Meta {
-          case integer
-          case text
-          case boolean
 
-          public init(_ __macro_local_6parentfMu_: Cell) {
-            switch __macro_local_6parentfMu_ {
-            case .integer:
-              self = .integer
-            case .text:
-              self = .text
-            case .boolean:
-              self = .boolean
+          public enum Meta {
+                  case integer
+                  case text
+                  case boolean
+
+                  public init(_ __macro_local_6parentfMu_: Cell) {
+                      switch __macro_local_6parentfMu_ {
+                      case .integer:
+                          self = .integer
+                      case .text:
+                          self = .text
+                      case .boolean:
+                          self = .boolean
+                      }
+                  }
             }
-          }
-        }
       }
       """
     )

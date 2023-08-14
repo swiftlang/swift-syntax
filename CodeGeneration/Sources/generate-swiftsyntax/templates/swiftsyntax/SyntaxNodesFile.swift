@@ -37,11 +37,11 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
       // We are actually handling this node now
       try! StructDeclSyntax(
         """
-        // MARK: - \(raw: node.kind.syntaxType)
+        // MARK: - \(node.kind.syntaxType)
 
         \(documentation)
         \(node.node.apiAttributes())\
-        public struct \(raw: node.kind.syntaxType): \(raw: node.baseType.syntaxBaseName)Protocol, SyntaxHashable
+        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable
         """
       ) {
         for child in node.children {
@@ -59,7 +59,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
         DeclSyntax(
           """
           public init?(_ node: some SyntaxProtocol) {
-            guard node.raw.kind == .\(raw: node.varOrCaseName) else { return nil }
+            guard node.raw.kind == .\(node.varOrCaseName) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
           """
@@ -72,7 +72,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
           ///    If it is not, the behaviour is undefined.
           internal init(_ data: SyntaxData) {
-            precondition(data.raw.kind == .\(raw: node.varOrCaseName))
+            precondition(data.raw.kind == .\(node.varOrCaseName))
             self._syntaxNode = Syntax(data)
           }
           """
@@ -121,13 +121,13 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
               if node.children.isEmpty {
-                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(raw: node.varOrCaseName), arena: arena)")
+                DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(node.varOrCaseName), arena: arena)")
               } else {
                 DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
                 DeclSyntax(
                   """
                   let raw = RawSyntax.makeLayout(
-                    kind: SyntaxKind.\(raw: node.varOrCaseName),
+                    kind: SyntaxKind.\(node.varOrCaseName),
                     from: layout,
                     arena: arena,
                     leadingTrivia: leadingTrivia,
@@ -161,7 +161,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           // ===================
 
           let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(raw: childType)?") : TypeSyntax("\(raw: childType)")
+          let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
 
           try! VariableDeclSyntax(
             """
@@ -171,9 +171,9 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
               if child.isOptional {
-                StmtSyntax("return data.child(at: \(raw: index), parent: Syntax(self)).map(\(raw: childType).init)")
+                StmtSyntax("return data.child(at: \(raw: index), parent: Syntax(self)).map(\(childType).init)")
               } else {
-                StmtSyntax("return \(raw: childType)(data.child(at: \(raw: index), parent: Syntax(self))!)")
+                StmtSyntax("return \(childType)(data.child(at: \(raw: index), parent: Syntax(self))!)")
               }
             }
 
@@ -213,7 +213,7 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
                 if let col = raw.layoutView!.children[\(raw: index)] {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
-                  collection = RawSyntax.makeLayout(kind: SyntaxKind.\(raw: childNode.varOrCaseName),
+                  collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.varOrCaseName),
                                                     from: [element.raw], arena: arena)
                 }
                 let newData = data.replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
@@ -247,7 +247,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
 
   return try! EnumDeclSyntax("public enum \(child.syntaxChoicesType): SyntaxChildChoices, SyntaxHashable") {
     for choice in choices {
-      DeclSyntax("case `\(choice.varOrCaseName)`(\(raw: choice.syntaxNodeKind.syntaxType))")
+      DeclSyntax("case `\(choice.varOrCaseName)`(\(choice.syntaxNodeKind.syntaxType))")
     }
 
     try! VariableDeclSyntax("public var _syntaxNode: Syntax") {

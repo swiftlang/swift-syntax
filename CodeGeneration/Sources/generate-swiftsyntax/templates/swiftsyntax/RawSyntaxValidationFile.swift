@@ -204,7 +204,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                           let verifiedChoices = ArrayExprSyntax {
                             ArrayElementSyntax(
                               leadingTrivia: .newline,
-                              expression: ExprSyntax("verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self)")
+                              expression: ExprSyntax("verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self)")
                             )
                           }
 
@@ -221,11 +221,11 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                             }
                           }
                           let verifyCall = ExprSyntax(
-                            "verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self, tokenChoices: \(choices))"
+                            "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self, tokenChoices: \(choices))"
                           )
                           ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
                         default:
-                          ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(raw: child.buildableType.buildable).self))")
+                          ExprSyntax("assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self))")
                         }
                       }
                     } else if let node = node.collectionNode {
@@ -238,7 +238,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                               let choice = SYNTAX_NODE_MAP[choiceName]!
                               ArrayElementSyntax(
                                 leadingTrivia: .newline,
-                                expression: ExprSyntax("verify(element, as: \(raw: choice.kind.rawType).self)")
+                                expression: ExprSyntax("verify(element, as: \(choice.kind.rawType).self)")
                               )
                             }
                           }

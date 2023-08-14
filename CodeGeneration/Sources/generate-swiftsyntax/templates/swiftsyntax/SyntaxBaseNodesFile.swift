@@ -27,7 +27,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///
       ///  - Warning: Do not conform to this protocol yourself.
       \(node.apiAttributes())\
-      public protocol \(node.kind.protocolType): \(raw: node.base.protocolType) {}
+      public protocol \(node.kind.protocolType): \(node.base.protocolType) {}
       """
     )
 
@@ -202,7 +202,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///
         ///  - Note:  This will incur an existential conversion.
         @available(*, deprecated, message: "Expression always evaluates to true")
-        public func isProtocol(_: \(raw: node.kind.protocolType).Protocol) -> Bool {
+        public func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
           return true
         }
         """

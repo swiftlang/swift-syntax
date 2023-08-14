@@ -43,7 +43,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       \(node.apiAttributes(forRaw: true))\
-      public protocol \(node.kind.rawType)NodeProtocol: \(raw: node.base.rawProtocolType) {}
+      public protocol \(node.kind.rawType)NodeProtocol: \(node.base.rawProtocolType) {}
       """
     )
   }
@@ -76,7 +76,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           try VariableDeclSyntax("public var raw: RawSyntax") {
             try SwitchExprSyntax("switch self") {
               for (swiftName, _) in choices {
-                SwitchCaseSyntax("case .\(raw: swiftName)(let node): return node.raw")
+                SwitchCaseSyntax("case .\(swiftName)(let node): return node.raw")
               }
             }
           }
@@ -86,7 +86,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               StmtSyntax(
                 """
                 if let node = \(kind.rawType)(other) {
-                  self = .\(raw: swiftName)(node)
+                  self = .\(swiftName)(node)
                   return
                 }
                 """
@@ -114,7 +114,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             for n in SYNTAX_NODES where n.base == node.kind {
               SwitchCaseItemSyntax(
                 pattern: ExpressionPatternSyntax(
-                  expression: ExprSyntax(".\(raw: n.varOrCaseName)")
+                  expression: ExprSyntax(".\(n.varOrCaseName)")
                 )
               )
             }
@@ -191,8 +191,8 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         DeclSyntax(
           """
-          public var elements: [Raw\(raw: node.collectionElementType.syntaxBaseName)] {
-            layoutView.children.map { Raw\(raw: node.collectionElementType.syntaxBaseName)(raw: $0!) }
+          public var elements: [Raw\(node.collectionElementType.syntaxBaseName)] {
+            layoutView.children.map { Raw\(node.collectionElementType.syntaxBaseName)(raw: $0!) }
           }
           """
         )
@@ -238,7 +238,7 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         for (index, child) in node.children.enumerated() {
-          try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(raw: child.buildableType.buildable)") {
+          try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(child.buildableType.buildable)") {
             let iuoMark = child.isOptional ? "" : "!"
 
             if child.syntaxNodeKind == .syntax {

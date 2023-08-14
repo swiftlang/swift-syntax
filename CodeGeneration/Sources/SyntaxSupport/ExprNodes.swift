@@ -1090,7 +1090,6 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "DeclName",
-        deprecatedName: "Identifier",
         kind: .node(kind: .declReferenceExpr)
       ),
       Child(

@@ -70,6 +70,28 @@ extension GenericRequirementSyntax {
 @available(*, deprecated, renamed: "NamedDeclSyntax")
 public typealias IdentifiedDeclSyntax = NamedDeclSyntax
 
+extension KeyPathPropertyComponentSyntax {
+  @available(*, deprecated, renamed: "declName.baseName")
+  public var identifier: TokenSyntax {
+    get {
+      return declName.baseName
+    }
+    set {
+      declName.baseName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "declName.argumentNames")
+  public var declNameArguments: DeclNameArgumentsSyntax? {
+    get {
+      return declName.argumentNames
+    }
+    set {
+      declName.argumentNames = newValue
+    }
+  }
+}
+
 extension NamedDeclSyntax {
   @available(*, deprecated, renamed: "name")
   public var identifier: TokenSyntax {

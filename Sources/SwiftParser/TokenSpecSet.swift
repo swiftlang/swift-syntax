@@ -53,7 +53,6 @@ enum AccessorModifier: TokenSpecSet {
 }
 
 enum CanBeStatementStart: TokenSpecSet {
-  case _forget  // NOTE: support for deprecated _forget
   case `break`
   case `continue`
   case `defer`
@@ -72,7 +71,6 @@ enum CanBeStatementStart: TokenSpecSet {
 
   init?(lexeme: Lexer.Lexeme) {
     switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(._forget): self = ._forget
     case TokenSpec(.break): self = .break
     case TokenSpec(.continue): self = .continue
     case TokenSpec(.defer): self = .defer
@@ -94,7 +92,6 @@ enum CanBeStatementStart: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
-    case ._forget: return TokenSpec(._forget, recoveryPrecedence: .stmtKeyword)
     case .break: return .keyword(.break)
     case .continue: return .keyword(.continue)
     case .defer: return .keyword(.defer)

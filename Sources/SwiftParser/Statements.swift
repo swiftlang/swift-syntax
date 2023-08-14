@@ -93,7 +93,7 @@ extension Parser {
       return label(self.parseContinueStatement(continueHandle: handle), with: optLabel)
     case (.fallthrough, let handle)?:
       return label(self.parseFallThroughStatement(fallthroughHandle: handle), with: optLabel)
-    case (._forget, let handle)?, (.discard, let handle)?:  // NOTE: support for deprecated _forget
+    case (.discard, let handle)?:
       return label(self.parseDiscardStatement(discardHandle: handle), with: optLabel)
     case (.return, let handle)?:
       return label(self.parseReturnStatement(returnHandle: handle), with: optLabel)
@@ -859,7 +859,7 @@ extension Parser.Lookahead {
         // yield statement of some singular expression.
         return !self.peek().isAtStartOfLine
       }
-    case ._forget?, .discard?:  // NOTE: support for deprecated _forget
+    case .discard?:
       let next = peek()
       // The thing to be discarded must be on the same line as `discard`.
       if next.isAtStartOfLine {

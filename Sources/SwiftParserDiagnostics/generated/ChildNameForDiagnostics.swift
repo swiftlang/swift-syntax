@@ -282,10 +282,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "inheritance clause"
   case \ProtocolDeclSyntax.genericWhereClause:
     return "generic where clause"
-  case \QualifiedDeclNameSyntax.baseType:
-    return "base type"
-  case \QualifiedDeclNameSyntax.declName:
-    return "name"
   case \RepeatStmtSyntax.body:
     return "body"
   case \RepeatStmtSyntax.condition:

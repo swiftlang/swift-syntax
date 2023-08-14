@@ -2675,20 +2675,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "memberBlock"
   case \ProtocolDeclSyntax.unexpectedAfterMemberBlock:
     return "unexpectedAfterMemberBlock"
-  case \QualifiedDeclNameSyntax.unexpectedBeforeBaseType:
-    return "unexpectedBeforeBaseType"
-  case \QualifiedDeclNameSyntax.baseType:
-    return "baseType"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenBaseTypeAndPeriod:
-    return "unexpectedBetweenBaseTypeAndPeriod"
-  case \QualifiedDeclNameSyntax.period:
-    return "period"
-  case \QualifiedDeclNameSyntax.unexpectedBetweenPeriodAndDeclName:
-    return "unexpectedBetweenPeriodAndDeclName"
-  case \QualifiedDeclNameSyntax.declName:
-    return "declName"
-  case \QualifiedDeclNameSyntax.unexpectedAfterDeclName:
-    return "unexpectedAfterDeclName"
   case \RegexLiteralExprSyntax.unexpectedBeforeOpeningPounds:
     return "unexpectedBeforeOpeningPounds"
   case \RegexLiteralExprSyntax.openingPounds:

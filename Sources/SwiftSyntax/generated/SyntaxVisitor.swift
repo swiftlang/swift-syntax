@@ -2602,18 +2602,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ProtocolDeclSyntax) {
   }
   
-  /// Visiting ``QualifiedDeclNameSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: QualifiedDeclNameSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-  
-  /// The function called after visiting ``QualifiedDeclNameSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: QualifiedDeclNameSyntax) {
-  }
-  
   /// Visiting ``RegexLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5713,17 +5701,6 @@ open class SyntaxVisitor {
   }
   
   /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplQualifiedDeclNameSyntax(_ data: SyntaxData) {
-    let node = QualifiedDeclNameSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
   private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) {
     let node = RegexLiteralExprSyntax(data)
     let needsChildren = (visit(node) == .visitChildren)
@@ -6829,8 +6806,6 @@ open class SyntaxVisitor {
       visitImplPrimaryAssociatedTypeSyntax(data)
     case .protocolDecl:
       visitImplProtocolDeclSyntax(data)
-    case .qualifiedDeclName:
-      visitImplQualifiedDeclNameSyntax(data)
     case .regexLiteralExpr:
       visitImplRegexLiteralExprSyntax(data)
     case .repeatStmt:

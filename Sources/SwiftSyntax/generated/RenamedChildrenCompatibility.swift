@@ -1703,7 +1703,7 @@ extension DerivativeAttributeArgumentsSyntax {
       _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil,
-      originalDeclName: QualifiedDeclNameSyntax,
+      originalDeclName: some ExprSyntaxProtocol,
       _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax? = nil,
       _ unexpectedBetweenPeriodAndAccessorKind: UnexpectedNodesSyntax? = nil,
@@ -6590,65 +6590,6 @@ extension ProtocolDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
-      )
-  }
-}
-
-extension QualifiedDeclNameSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenBaseTypeAndPeriod")
-  public var unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenBaseTypeAndPeriod
-    }
-    set {
-      unexpectedBetweenBaseTypeAndPeriod = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "period")
-  public var dot: TokenSyntax? {
-    get {
-      return period
-    }
-    set {
-      period = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndDeclName")
-  public var unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? {
-    get {
-      return unexpectedBetweenPeriodAndDeclName
-    }
-    set {
-      unexpectedBetweenPeriodAndDeclName = newValue
-    }
-  }
-  
-  @available(*, deprecated, renamed: "QualifiedDeclNameSyntax(leadingTrivia:_:baseType:_:period:_:declName:_:trailingTrivia:)")
-  @_disfavoredOverload
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-      _ unexpectedBetweenBaseTypeAndDot: UnexpectedNodesSyntax? = nil,
-      dot: TokenSyntax? = nil,
-      _ unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: DeclReferenceExprSyntax,
-      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    self.init(
-        leadingTrivia: leadingTrivia, 
-        unexpectedBeforeBaseType, 
-        baseType: baseType, 
-        unexpectedBetweenBaseTypeAndDot, 
-        period: dot, 
-        unexpectedBetweenDotAndDeclName, 
-        declName: declName, 
-        unexpectedAfterDeclName, 
         trailingTrivia: trailingTrivia
       )
   }

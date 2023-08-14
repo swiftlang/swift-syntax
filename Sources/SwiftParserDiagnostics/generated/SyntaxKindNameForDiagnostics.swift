@@ -321,8 +321,6 @@ extension SyntaxKind {
       return "primary associated type clause"
     case .protocolDecl:
       return "protocol"
-    case .qualifiedDeclName:
-      return "declaration name"
     case .regexLiteralExpr:
       return "regex literal"
     case .repeatStmt:

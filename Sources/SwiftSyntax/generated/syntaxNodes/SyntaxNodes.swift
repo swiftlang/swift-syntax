@@ -5667,7 +5667,7 @@ public struct DeinitializerEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashabl
 /// 
 ///  - `ofLabel`: `'of'`
 ///  - `colon`: `':'`
-///  - `originalDeclName`: ``QualifiedDeclNameSyntax``
+///  - `originalDeclName`: ``ExprSyntax``
 ///  - `period`: `'.'`?
 ///  - `accessorSpecifier`: (`'get'` | `'set'`)?
 ///  - `comma`: `','`?
@@ -5710,7 +5710,7 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       _ unexpectedBetweenOfLabelAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax = .colonToken(),
       _ unexpectedBetweenColonAndOriginalDeclName: UnexpectedNodesSyntax? = nil,
-      originalDeclName: QualifiedDeclNameSyntax,
+      originalDeclName: some ExprSyntaxProtocol,
       _ unexpectedBetweenOriginalDeclNameAndPeriod: UnexpectedNodesSyntax? = nil,
       period: TokenSyntax? = nil,
       _ unexpectedBetweenPeriodAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
@@ -5820,9 +5820,9 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
   }
   
   /// The referenced original declaration name.
-  public var originalDeclName: QualifiedDeclNameSyntax {
+  public var originalDeclName: ExprSyntax {
     get {
-      return QualifiedDeclNameSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
     }
     set(value) {
       self = DerivativeAttributeArgumentsSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -15909,166 +15909,6 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable {
           \Self.unexpectedBetweenNameAndTrailingComma, 
           \Self.trailingComma, 
           \Self.unexpectedAfterTrailingComma
-        ])
-  }
-}
-
-// MARK: - QualifiedDeclNameSyntax
-
-/// An optionally qualified function declaration name (e.g. `+(_:_:)`, `A.B.C.foo(_:_:)`).
-///
-/// ### Children
-/// 
-///  - `baseType`: ``TypeSyntax``?
-///  - `period`: `'.'`?
-///  - `declName`: ``DeclReferenceExprSyntax``
-///
-/// ### Contained in
-/// 
-///  - ``DerivativeAttributeArgumentsSyntax``.``DerivativeAttributeArgumentsSyntax/originalDeclName``
-public struct QualifiedDeclNameSyntax: SyntaxProtocol, SyntaxHashable {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .qualifiedDeclName else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// Creates a ``QualifiedDeclNameSyntax`` node from the given ``SyntaxData``. 
-  ///
-  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    precondition(data.raw.kind == .qualifiedDeclName)
-    self._syntaxNode = Syntax(data)
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - baseType: The base type of the qualified name, optionally specified.
-  ///   - declName: The name of the referenced function.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
-      baseType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-      _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
-      period: TokenSyntax? = nil,
-      _ unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? = nil,
-      declName: DeclReferenceExprSyntax,
-      _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBaseType, 
-            baseType, 
-            unexpectedBetweenBaseTypeAndPeriod, 
-            period, 
-            unexpectedBetweenPeriodAndDeclName, 
-            declName, 
-            unexpectedAfterDeclName
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeBaseType?.raw, 
-          baseType?.raw, 
-          unexpectedBetweenBaseTypeAndPeriod?.raw, 
-          period?.raw, 
-          unexpectedBetweenPeriodAndDeclName?.raw, 
-          declName.raw, 
-          unexpectedAfterDeclName?.raw
-        ]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.qualifiedDeclName,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return SyntaxData.forRoot(raw, rawNodeArena: arena)
-    }
-    self.init(data)
-  }
-  
-  public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The base type of the qualified name, optionally specified.
-  public var baseType: TypeSyntax? {
-    get {
-      return data.child(at: 1, parent: Syntax(self)).map(TypeSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var period: TokenSyntax? {
-    get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  /// The name of the referenced function.
-  public var declName: DeclReferenceExprSyntax {
-    get {
-      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
-    get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = QualifiedDeclNameSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeBaseType, 
-          \Self.baseType, 
-          \Self.unexpectedBetweenBaseTypeAndPeriod, 
-          \Self.period, 
-          \Self.unexpectedBetweenPeriodAndDeclName, 
-          \Self.declName, 
-          \Self.unexpectedAfterDeclName
         ])
   }
 }

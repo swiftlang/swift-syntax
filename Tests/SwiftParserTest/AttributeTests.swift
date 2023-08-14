@@ -231,6 +231,7 @@ final class AttributeTests: ParserTestCase {
       }
       """
     )
+
     assertParse(
       """
       @transpose(of: +)

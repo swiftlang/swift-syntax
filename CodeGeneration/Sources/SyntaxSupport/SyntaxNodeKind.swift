@@ -237,7 +237,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case primaryAssociatedTypeClause
   case primaryAssociatedTypeList
   case protocolDecl
-  case qualifiedDeclName
   case regexLiteralExpr
   case repeatStmt
   case returnClause

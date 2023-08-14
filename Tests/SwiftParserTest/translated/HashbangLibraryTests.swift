@@ -26,6 +26,7 @@ final class HashbangLibraryTests: ParserTestCase {
       class Foo {}
       """,
       substructure: SourceFileSyntax(
+        shebang: .shebang("#!/usr/bin/swift"),
         statements: CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
             item: .decl(
@@ -34,8 +35,7 @@ final class HashbangLibraryTests: ParserTestCase {
                   classKeyword: .keyword(
                     .class,
                     leadingTrivia: [
-                      .shebang("#!/usr/bin/swift"),
-                      .newlines(1),
+                      .newlines(1)
                     ],
                     trailingTrivia: .space
                   ),

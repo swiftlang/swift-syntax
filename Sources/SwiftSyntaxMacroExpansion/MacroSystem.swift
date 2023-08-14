@@ -987,7 +987,7 @@ private extension Trivia {
       switch piece {
       case .spaces, .tabs:
         result.append(piece)
-      case .backslashes, .formfeeds, .pounds, .shebang, .unexpectedText, .verticalTabs:
+      case .backslashes, .formfeeds, .pounds, .unexpectedText, .verticalTabs:
         lineContainedNonWhitespaceNonComment = true
         result.append(piece)
       case .blockComment, .docBlockComment, .docLineComment, .lineComment:

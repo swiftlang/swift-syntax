@@ -81,15 +81,6 @@ public struct TriviaParser {
         }
 
       case UInt8(ascii: "#"):
-        // "#!...": .shebang
-        // NOTE: .shebang appears only if this trivia is at the start of the
-        // file. We don't know if this trivia is at the start of the file, but
-        // we believe that the lexer lexed it accordingly.
-        if position == .leading && pieces.isEmpty && cursor.advance(if: { $0 == "!" }) {
-          cursor.advanceToEndOfLine()
-          pieces.append(.shebang(start.text(upTo: cursor)))
-          continue
-        }
         cursor.advance(while: { $0 == "#" })
         pieces.append(.pounds(start.distance(to: cursor)))
         continue

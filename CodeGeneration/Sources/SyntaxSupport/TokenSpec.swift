@@ -127,6 +127,7 @@ public enum Token: CaseIterable {
   case rightParen
   case rightSquare
   case semicolon
+  case shebang
   case singleQuote
   case stringQuote
   case stringSegment
@@ -223,6 +224,8 @@ public enum Token: CaseIterable {
       return .punctuator(name: "rightSquare", text: "]")
     case .semicolon:
       return .punctuator(name: "semicolon", text: ";")
+    case .shebang:
+      return .other(name: "shebang", nameForDiagnostics: "shebang")
     case .singleQuote:
       return .punctuator(name: "singleQuote", text: "\'")
     case .stringQuote:

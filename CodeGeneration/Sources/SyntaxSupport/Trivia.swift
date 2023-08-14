@@ -160,11 +160,6 @@ public let TRIVIAS: [Trivia] = [
   ),
 
   Trivia(
-    name: "Shebang",
-    comment: #"A script command, starting with '#!'."#
-  ),
-
-  Trivia(
     name: "Space",
     comment: #"A space ' ' character."#,
     characters: [

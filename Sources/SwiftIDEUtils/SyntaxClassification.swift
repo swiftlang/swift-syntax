@@ -180,6 +180,8 @@ extension RawTokenKind {
       return .none
     case .semicolon:
       return .none
+    case .shebang:
+      return .none
     case .singleQuote:
       return .stringLiteral
     case .stringQuote:

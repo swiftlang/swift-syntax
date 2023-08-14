@@ -16361,6 +16361,7 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
+///  - `shebang`: `<shebang>`?
 ///  - `statements`: ``CodeBlockItemListSyntax``
 ///  - `endOfFileToken`: `''`
 public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
@@ -16384,10 +16385,13 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - shebang: A shebang can specify the path of the compiler when using Swift source file as a script.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBeforeShebang: UnexpectedNodesSyntax? = nil,
+      shebang: TokenSyntax? = nil,
+      _ unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
       _ unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax? = nil,
       endOfFileToken: TokenSyntax = .endOfFileToken(),
@@ -16398,14 +16402,18 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeStatements, 
+            unexpectedBeforeShebang, 
+            shebang, 
+            unexpectedBetweenShebangAndStatements, 
             statements, 
             unexpectedBetweenStatementsAndEndOfFileToken, 
             endOfFileToken, 
             unexpectedAfterEndOfFileToken
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeStatements?.raw, 
+          unexpectedBeforeShebang?.raw, 
+          shebang?.raw, 
+          unexpectedBetweenShebangAndStatements?.raw, 
           statements.raw, 
           unexpectedBetweenStatementsAndEndOfFileToken?.raw, 
           endOfFileToken.raw, 
@@ -16424,7 +16432,7 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     self.init(data)
   }
   
-  public var unexpectedBeforeStatements: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeShebang: UnexpectedNodesSyntax? {
     get {
       return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
@@ -16433,12 +16441,31 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
-  public var statements: CodeBlockItemListSyntax {
+  /// A shebang can specify the path of the compiler when using Swift source file as a script.
+  public var shebang: TokenSyntax? {
     get {
-      return CodeBlockItemListSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
     }
     set(value) {
-      self = SourceFileSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+      self = SourceFileSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SourceFileSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var statements: CodeBlockItemListSyntax {
+    get {
+      return CodeBlockItemListSyntax(data.child(at: 3, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SourceFileSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
     }
   }
   
@@ -16453,14 +16480,14 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   public func addStatement(_ element: CodeBlockItemSyntax) -> SourceFileSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[1] {
+    if let col = raw.layoutView!.children[3] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
                                         from: [element.raw], arena: arena)
     }
     let newData = data.replacingChild(
-        at: 1, 
+        at: 3, 
         with: collection, 
         rawNodeArena: arena, 
         allocationArena: arena
@@ -16470,24 +16497,6 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
-    }
-    set(value) {
-      self = SourceFileSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var endOfFileToken: TokenSyntax {
-    get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
-    }
-    set(value) {
-      self = SourceFileSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
-    }
-  }
-  
-  public var unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? {
-    get {
       return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
@@ -16495,9 +16504,29 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
   
+  public var endOfFileToken: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+    }
+    set(value) {
+      self = SourceFileSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = SourceFileSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeStatements, 
+          \Self.unexpectedBeforeShebang, 
+          \Self.shebang, 
+          \Self.unexpectedBetweenShebangAndStatements, 
           \Self.statements, 
           \Self.unexpectedBetweenStatementsAndEndOfFileToken, 
           \Self.endOfFileToken, 

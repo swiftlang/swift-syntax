@@ -187,6 +187,10 @@ extension TokenSpec {
     return TokenSpec(.semicolon)
   }
   
+  static var shebang: TokenSpec {
+    return TokenSpec(.shebang)
+  }
+  
   static var singleQuote: TokenSpec {
     return TokenSpec(.singleQuote)
   }

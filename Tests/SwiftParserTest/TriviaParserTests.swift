@@ -43,21 +43,6 @@ final class TriviaParserTests: ParserTestCase {
       TriviaParser.parseTrivia(
         """
         #!/bin/env swift
-
-
-        """,
-        position: .leading
-      ),
-      [
-        .shebang("#!/bin/env swift"),
-        .newlines(2),
-      ]
-    )
-
-    XCTAssertEqual(
-      TriviaParser.parseTrivia(
-        """
-        #!/bin/env swift
         """,
         position: .trailing
       ),

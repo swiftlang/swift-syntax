@@ -1177,7 +1177,9 @@ extension SourceFileSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
       leadingTrivia: Trivia? = nil, 
-      unexpectedBeforeStatements: UnexpectedNodesSyntax? = nil, 
+      unexpectedBeforeShebang: UnexpectedNodesSyntax? = nil, 
+      shebang: TokenSyntax? = nil, 
+      unexpectedBetweenShebangAndStatements: UnexpectedNodesSyntax? = nil, 
       unexpectedBetweenStatementsAndEndOfFileToken: UnexpectedNodesSyntax? = nil, 
       endOfFileToken: TokenSyntax = .endOfFileToken(), 
       unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? = nil, 
@@ -1186,7 +1188,9 @@ extension SourceFileSyntax {
     ) rethrows {
     try self.init(
         leadingTrivia: leadingTrivia, 
-        unexpectedBeforeStatements, 
+        unexpectedBeforeShebang, 
+        shebang: shebang, 
+        unexpectedBetweenShebangAndStatements, 
         statements: statementsBuilder(), 
         unexpectedBetweenStatementsAndEndOfFileToken, 
         endOfFileToken: endOfFileToken, 

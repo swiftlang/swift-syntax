@@ -905,6 +905,11 @@ extension Lexer.Cursor {
     case UInt8(ascii: "\\"): _ = self.advance(); return Lexer.Result(.backslash)
 
     case UInt8(ascii: "#"):
+      // Try lex shebang.
+      if self.isAtStartOfFile, self.peek(at: 1) == UInt8(ascii: "!") {
+        self.advanceToEndOfLine()
+        return Lexer.Result(.shebang)
+      }
       // Try lex a raw string literal.
       if let delimiterLength = self.advanceIfOpeningRawStringDelimiter() {
         return Lexer.Result(.rawStringPoundDelimiter, stateTransition: .push(newState: .afterRawStringDelimiter(delimiterLength: delimiterLength)))
@@ -1171,12 +1176,6 @@ extension Lexer.Cursor {
         default:
           break
         }
-      case UInt8(ascii: "#"):
-        guard start.isAtStartOfFile, self.advance(if: { $0 == "!" }) else {
-          break
-        }
-        self.advanceToEndOfLine()
-        continue
       case UInt8(ascii: "<"), UInt8(ascii: ">"):
         if self.tryLexConflictMarker(start: start) {
           error = LexingDiagnostic(.sourceConflictMarker, position: start)
@@ -1189,6 +1188,7 @@ extension Lexer.Cursor {
         UInt8(ascii: "}"), UInt8(ascii: "]"), UInt8(ascii: ")"),
         UInt8(ascii: "@"), UInt8(ascii: ","), UInt8(ascii: ";"),
         UInt8(ascii: ":"), UInt8(ascii: "\\"), UInt8(ascii: "$"),
+        UInt8(ascii: "#"),
 
         // Start of integer/hex/float literals.
         UInt8(ascii: "0"), UInt8(ascii: "1"), UInt8(ascii: "2"),

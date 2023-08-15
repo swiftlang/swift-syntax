@@ -80,6 +80,7 @@ public enum Keyword: UInt8, Hashable {
   case before
   case block
   case borrowing
+  case _borrowing
   case `break`
   case canImport
   case `case`
@@ -89,6 +90,7 @@ public enum Keyword: UInt8, Hashable {
   case consume
   case copy
   case consuming
+  case _consuming
   case `continue`
   case convenience
   case convention
@@ -149,6 +151,7 @@ public enum Keyword: UInt8, Hashable {
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
+  case _mutating
   case `nil`
   case noasync
   case noDerivative
@@ -533,6 +536,8 @@ public enum Keyword: UInt8, Hashable {
         self = .`extension`
       case "lowerThan":
         self = .lowerThan
+      case "_mutating":
+        self = ._mutating
       case "obsoleted":
         self = .obsoleted
       case "spiModule":
@@ -556,6 +561,10 @@ public enum Keyword: UInt8, Hashable {
         self = ._semantics
       case "assignment":
         self = .assignment
+      case "_borrowing":
+        self = ._borrowing
+      case "_consuming":
+        self = ._consuming
       case "convention":
         self = .convention
       case "deprecated":
@@ -826,6 +835,7 @@ public enum Keyword: UInt8, Hashable {
       "before", 
       "block", 
       "borrowing", 
+      "_borrowing", 
       "break", 
       "canImport", 
       "case", 
@@ -835,6 +845,7 @@ public enum Keyword: UInt8, Hashable {
       "consume", 
       "copy", 
       "consuming", 
+      "_consuming", 
       "continue", 
       "convenience", 
       "convention", 
@@ -895,6 +906,7 @@ public enum Keyword: UInt8, Hashable {
       "mutableAddressWithNativeOwner", 
       "mutableAddressWithOwner", 
       "mutating", 
+      "_mutating", 
       "nil", 
       "noasync", 
       "noDerivative", 

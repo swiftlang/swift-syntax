@@ -138,7 +138,9 @@ struct Test: ParsableCommand, BuildCommand {
       action: "test",
       packageDir: Paths.packageDir,
       additionalArguments: swiftpmCallArguments,
-      additionalEnvironment: additionalEnvironment
+      additionalEnvironment: additionalEnvironment,
+      captureStdout: false,
+      captureStderr: false
     )
   }
 
@@ -148,7 +150,7 @@ struct Test: ParsableCommand, BuildCommand {
       packageDir: packageDir,
       additionalArguments: ["--show-bin-path"],
       additionalEnvironment: [:]
-    )
+    ).stdout
   }
 
   /// This returns a path to the build examples folder.

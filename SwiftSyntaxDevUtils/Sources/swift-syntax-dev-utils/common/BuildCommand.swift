@@ -37,8 +37,10 @@ extension BuildCommand {
     action: String,
     packageDir: URL,
     additionalArguments: [String],
-    additionalEnvironment: [String: String]
-  ) throws -> String {
+    additionalEnvironment: [String: String],
+    captureStdout: Bool = true,
+    captureStderr: Bool = true
+  ) throws -> ProcessResult {
     var args = [action]
     args += ["--package-path", packageDir.path]
 
@@ -74,9 +76,13 @@ extension BuildCommand {
       additionalEnvironment: additionalEnvironment
     )
 
-    let result = try processRunner.run(verbose: arguments.verbose)
+    let result = try processRunner.run(
+      captureStdout: captureStdout,
+      captureStderr: captureStderr,
+      verbose: arguments.verbose
+    )
 
-    return result.stdout
+    return result
   }
 
   private func build(packageDir: URL, name: String, isProduct: Bool) throws {
@@ -112,7 +118,9 @@ extension BuildCommand {
       action: "build",
       packageDir: packageDir,
       additionalArguments: args,
-      additionalEnvironment: additionalEnvironment
+      additionalEnvironment: additionalEnvironment,
+      captureStdout: false,
+      captureStderr: false
     )
   }
 }

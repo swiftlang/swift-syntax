@@ -680,7 +680,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .memberType, message: "child 'baseType' should not end with 'Type'"),
         ValidationFailure(node: .metatypeType, message: "child 'baseType' should not end with 'Type'"),
         ValidationFailure(node: .optionalType, message: "child 'wrappedType' should not end with 'Type'"),
-        ValidationFailure(node: .qualifiedDeclName, message: "child 'baseType' should not end with 'Type'"),
         ValidationFailure(node: .sameTypeRequirement, message: "child 'leftType' should not end with 'Type'"),
         ValidationFailure(node: .sameTypeRequirement, message: "child 'rightType' should not end with 'Type'"),
         // MARK: Adjective + Expr

@@ -18,7 +18,7 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "pattern",
     children: [
       Child(
-        name: "Expression",
+        name: "expression",
         kind: .node(kind: .expr)
       )
     ]
@@ -30,7 +30,7 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "pattern",
     children: [
       Child(
-        name: "Identifier",
+        name: "identifier",
         kind: .token(choices: [.token(.identifier), .keyword(text: "self"), .keyword(text: "init")])
       )
     ]
@@ -43,11 +43,11 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "'is' pattern",
     children: [
       Child(
-        name: "IsKeyword",
+        name: "isKeyword",
         kind: .token(choices: [.keyword(text: "is")])
       ),
       Child(
-        name: "Type",
+        name: "type",
         kind: .node(kind: .type)
       ),
     ]
@@ -72,24 +72,24 @@ public let PATTERN_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "Label",
-        deprecatedName: "LabelName",
+        name: "label",
+        deprecatedName: "labelName",
         kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label",
         isOptional: true
       ),
       Child(
-        name: "Colon",
-        deprecatedName: "LabelColon",
+        name: "colon",
+        deprecatedName: "labelColon",
         kind: .token(choices: [.token(.colon)]),
         isOptional: true
       ),
       Child(
-        name: "Pattern",
+        name: "pattern",
         kind: .node(kind: .pattern)
       ),
       Child(
-        name: "TrailingComma",
+        name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
@@ -106,15 +106,15 @@ public let PATTERN_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "LeftParen",
+        name: "leftParen",
         kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
-        name: "Elements",
+        name: "elements",
         kind: .collection(kind: .tuplePatternElementList, collectionElementName: "Element")
       ),
       Child(
-        name: "RightParen",
+        name: "rightParen",
         kind: .token(choices: [.token(.rightParen)])
       ),
     ]
@@ -127,11 +127,11 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "type annotation",
     children: [
       Child(
-        name: "Colon",
+        name: "colon",
         kind: .token(choices: [.token(.colon)])
       ),
       Child(
-        name: "Type",
+        name: "type",
         kind: .node(kind: .type)
       ),
     ]
@@ -146,13 +146,13 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "value binding pattern",
     children: [
       Child(
-        name: "BindingSpecifier",
-        deprecatedName: "BindingKeyword",
+        name: "bindingSpecifier",
+        deprecatedName: "bindingKeyword",
         kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
       ),
       Child(
-        name: "Pattern",
-        deprecatedName: "ValuePattern",
+        name: "pattern",
+        deprecatedName: "valuePattern",
         kind: .node(kind: .pattern)
       ),
     ]
@@ -165,11 +165,11 @@ public let PATTERN_NODES: [Node] = [
     nameForDiagnostics: "wildcard pattern",
     children: [
       Child(
-        name: "Wildcard",
+        name: "wildcard",
         kind: .token(choices: [.token(.wildcard)])
       ),
       Child(
-        name: "TypeAnnotation",
+        name: "typeAnnotation",
         kind: .node(kind: .typeAnnotation),
         isOptional: true
       ),

@@ -30,52 +30,52 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "Braced",
     children: [
-      Child(name: "LeftBrace", kind: .token(choices: [.token(.leftBrace)])),
-      Child(name: "RightBrace", kind: .token(choices: [.token(.rightBrace)])),
+      Child(name: "leftBrace", kind: .token(choices: [.token(.leftBrace)])),
+      Child(name: "rightBrace", kind: .token(choices: [.token(.rightBrace)])),
     ]
   ),
   Trait(
     traitName: "DeclGroup",
     children: [
-      Child(name: "Attributes", kind: .node(kind: .attributeList)),
-      Child(name: "Modifiers", kind: .node(kind: .declModifierList)),
-      Child(name: "InheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
+      Child(name: "attributes", kind: .node(kind: .attributeList)),
+      Child(name: "modifiers", kind: .node(kind: .declModifierList)),
+      Child(name: "inheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
       Child(
-        name: "GenericWhereClause",
+        name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
-      Child(name: "MemberBlock", kind: .node(kind: .memberBlock)),
+      Child(name: "memberBlock", kind: .node(kind: .memberBlock)),
     ]
   ),
   Trait(
     traitName: "EffectSpecifiers",
     children: [
-      Child(name: "UnexpectedBeforeAsyncSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
-      Child(name: "AsyncSpecifier", kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]), isOptional: true),
-      Child(name: "UnexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
-      Child(name: "ThrowsSpecifier", kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]), isOptional: true),
-      Child(name: "UnexpectedAfterThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
+      Child(name: "unexpectedBeforeAsyncSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
+      Child(name: "asyncSpecifier", kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]), isOptional: true),
+      Child(name: "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
+      Child(name: "throwsSpecifier", kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]), isOptional: true),
+      Child(name: "unexpectedAfterThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
     ]
   ),
   Trait(
     traitName: "FreestandingMacroExpansion",
     children: [
-      Child(name: "PoundToken", kind: .token(choices: [.token(.pound)])),
-      Child(name: "Macro", kind: .token(choices: [.token(.identifier)])),
-      Child(name: "GenericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
-      Child(name: "LeftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),
-      Child(name: "ArgumentList", kind: .node(kind: .labeledExprList)),
-      Child(name: "RightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
-      Child(name: "TrailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
-      Child(name: "AdditionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList)),
+      Child(name: "poundToken", kind: .token(choices: [.token(.pound)])),
+      Child(name: "macro", kind: .token(choices: [.token(.identifier)])),
+      Child(name: "genericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
+      Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),
+      Child(name: "argumentList", kind: .node(kind: .labeledExprList)),
+      Child(name: "rightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
+      Child(name: "trailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
+      Child(name: "additionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList)),
     ]
   ),
   Trait(
     traitName: "NamedDecl",
     children: [
-      Child(name: "Name", kind: .token(choices: [.token(.identifier)]))
+      Child(name: "name", kind: .token(choices: [.token(.identifier)]))
     ]
   ),
   Trait(
@@ -87,7 +87,7 @@ public let TRAITS: [Trait] = [
       """,
     children: [
       Child(
-        name: "Placeholder",
+        name: "placeholder",
         kind: .token(choices: [.token(.identifier)]),
         documentation: """
           A placeholder, i.e. `<#placeholder#>`, that can be inserted into the source code to represent the missing node.
@@ -98,20 +98,20 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "Parenthesized",
     children: [
-      Child(name: "LeftParen", kind: .token(choices: [.token(.leftParen)])),
-      Child(name: "RightParen", kind: .token(choices: [.token(.rightParen)])),
+      Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)])),
+      Child(name: "rightParen", kind: .token(choices: [.token(.rightParen)])),
     ]
   ),
   Trait(
     traitName: "WithAttributes",
     children: [
-      Child(name: "Attributes", kind: .node(kind: .attributeList))
+      Child(name: "attributes", kind: .node(kind: .attributeList))
     ]
   ),
   Trait(
     traitName: "WithCodeBlock",
     children: [
-      Child(name: "Body", kind: .node(kind: .codeBlock))
+      Child(name: "body", kind: .node(kind: .codeBlock))
     ]
   ),
   Trait(
@@ -124,13 +124,13 @@ public let TRAITS: [Trait] = [
       """,
     children: [
       Child(
-        name: "GenericParameterClause",
+        name: "genericParameterClause",
         kind: .node(kind: .genericParameterClause),
         documentation: "The parameter clause that defines the generic parameters.",
         isOptional: true
       ),
       Child(
-        name: "GenericWhereClause",
+        name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
@@ -140,19 +140,19 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "WithModifiers",
     children: [
-      Child(name: "Modifiers", kind: .node(kind: .declModifierList))
+      Child(name: "modifiers", kind: .node(kind: .declModifierList))
     ]
   ),
   Trait(
     traitName: "WithStatements",
     children: [
-      Child(name: "Statements", kind: .node(kind: .codeBlockItemList))
+      Child(name: "statements", kind: .node(kind: .codeBlockItemList))
     ]
   ),
   Trait(
     traitName: "WithTrailingComma",
     children: [
-      Child(name: "TrailingComma", kind: .token(choices: [.token(.comma)]), isOptional: true)
+      Child(name: "trailingComma", kind: .token(choices: [.token(.comma)]), isOptional: true)
     ]
   ),
 ]

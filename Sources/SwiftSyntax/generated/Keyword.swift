@@ -80,6 +80,7 @@ public enum Keyword: UInt8, Hashable {
   case before
   case block
   case borrowing
+  @_spi(ExperimentalLanguageFeatures)
   case _borrowing
   case `break`
   case canImport
@@ -90,6 +91,7 @@ public enum Keyword: UInt8, Hashable {
   case consume
   case copy
   case consuming
+  @_spi(ExperimentalLanguageFeatures)
   case _consuming
   case `continue`
   case convenience
@@ -151,6 +153,7 @@ public enum Keyword: UInt8, Hashable {
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
+  @_spi(ExperimentalLanguageFeatures)
   case _mutating
   case `nil`
   case noasync

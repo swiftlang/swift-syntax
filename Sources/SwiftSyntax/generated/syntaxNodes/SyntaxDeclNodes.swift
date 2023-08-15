@@ -3267,7 +3267,7 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `importKeyword`: `'import'`
-///  - `importKindSpecifier`: (`'typealias'` | `'struct'` | `'class'` | `'enum'` | `'protocol'` | `'var'` | `'let'` | `'func'` | `'inout'`)?
+///  - `importKindSpecifier`: (`'typealias'` | `'struct'` | `'class'` | `'enum'` | `'protocol'` | `'var'` | `'let'` | `'func'` | `'inout'` | `'_mutating'` | `'_consuming'` | `'_borrowing'`)?
 ///  - `path`: ``ImportPathComponentListSyntax``
 public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -7062,7 +7062,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
-///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
+///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'` | `'_mutating'` | `'_borrowing'` | `'_consuming'`)
 ///  - `bindings`: ``PatternBindingListSyntax``
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

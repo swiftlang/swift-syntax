@@ -573,7 +573,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
+///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'` | `'_mutating'` | `'_borrowing'` | `'_consuming'`)
 ///  - `pattern`: ``PatternSyntax``
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

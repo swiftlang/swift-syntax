@@ -32,15 +32,15 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
     }
 
     class Rewriter: SyntaxRewriter {
-      private let provider: any RefactoringProvider.Type
+      private let provider: any SyntaxRefactoringProvider.Type
 
-      init(provider: any RefactoringProvider.Type) {
+      init(provider: any SyntaxRefactoringProvider.Type) {
         self.provider = provider
         super.init(viewMode: .sourceAccurate)
       }
 
       override func visitAny(_ node: Syntax) -> Syntax? {
-        func withOpenedRefactoringProvider<T: RefactoringProvider>(_ providerType: T.Type) -> Syntax? {
+        func withOpenedRefactoringProvider<T: SyntaxRefactoringProvider>(_ providerType: T.Type) -> Syntax? {
           guard
             let input = node.as(providerType.Input.self),
             providerType.Context.self == Void.self

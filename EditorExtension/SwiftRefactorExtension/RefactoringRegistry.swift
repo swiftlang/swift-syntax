@@ -15,15 +15,15 @@ import SwiftRefactor
 final class RefactoringRegistry {
   public static let shared = RefactoringRegistry()
 
-  public private(set) var providers = [any RefactoringProvider.Type]()
-  private var providersByName = [String: any RefactoringProvider.Type]()
+  public private(set) var providers = [any SyntaxRefactoringProvider.Type]()
+  private var providersByName = [String: any SyntaxRefactoringProvider.Type]()
 
-  func register(_ provider: any RefactoringProvider.Type) {
+  func register(_ provider: any SyntaxRefactoringProvider.Type) {
     self.providers.append(provider)
     self.providersByName[String(describing: provider)] = provider
   }
 
-  subscript(identifier: String) -> (any RefactoringProvider.Type)? {
+  subscript(identifier: String) -> (any SyntaxRefactoringProvider.Type)? {
     _read { yield self.providersByName[identifier] }
   }
 

@@ -16,7 +16,7 @@ import Foundation
 import SwiftRefactor
 
 extension SourceEditorExtension {
-  static func forEachRefactoringProvider(_ action: (any RefactoringProvider.Type) -> Void) {
+  static func forEachRefactoringProvider(_ action: (any SyntaxRefactoringProvider.Type) -> Void) {
     guard let header = _dyld_get_image_header(0) else {
       return
     }
@@ -39,7 +39,7 @@ extension SourceEditorExtension {
         continue
       }
 
-      guard let typeMetadata = context.metadata(), let provider = typeMetadata as? any RefactoringProvider.Type else {
+      guard let typeMetadata = context.metadata(), let provider = typeMetadata as? any SyntaxRefactoringProvider.Type else {
         continue
       }
 

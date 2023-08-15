@@ -195,12 +195,7 @@ enum TokenPrecedence: Comparable {
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
       .rethrows, .throws,
-      // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
-      //
-      // NOTE: We reuse this for inout bindings and choose the higher precedence level of expr keywords
-      // so we do not break anything.
-      .inout,
-      // Consider 'any' and 'inout' like a prefix operator to a type and a type is expression-like.
+      // Consider 'any' a prefix operator to a type and a type is expression-like.
       .Any,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
       .where,
@@ -228,6 +223,7 @@ enum TokenPrecedence: Comparable {
       // Declaration Modifiers
       .__consuming, .final, .required, .optional, .lazy, .dynamic, .infix, .postfix, .prefix, .mutating, .nonmutating, .convenience, .override, .package, .open,
       .__setter_access, .indirect, .nonisolated, .distributed, ._local,
+      .inout, ._mutating, ._borrowing, ._consuming,
       // Misc
       .import:
       self = .declKeyword

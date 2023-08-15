@@ -572,4 +572,30 @@ final class MatchingPatternsTests: ParserTestCase {
     )
   }
 
+  func testIfCaseMatchMutating() {
+    assertParse(
+      """
+      if case _mutating x = y {}
+      guard case _mutating z = y else {}
+      """
+    )
+  }
+
+  func testIfCaseMatchConsuming() {
+    assertParse(
+      """
+      if case _consuming x = y {}
+      guard case _consuming z = y else {}
+      """
+    )
+  }
+
+  func testIfCaseMatchBorrowing() {
+    assertParse(
+      """
+      if case _borrowing x = y {}
+      guard case _borrowing z = y else {}
+      """
+    )
+  }
 }

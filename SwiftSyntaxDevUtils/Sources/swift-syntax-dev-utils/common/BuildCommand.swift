@@ -46,6 +46,10 @@ extension BuildCommand {
       args += ["--scratch-path", buildDir]
     }
 
+    if self.arguments.warningsAsErrors {
+      args += ["-Xswiftc", "-warnings-as-errors"]
+    }
+
     #if !canImport(Darwin)
     args += ["--enable-test-discovery"]
     #endif

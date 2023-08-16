@@ -20,8 +20,6 @@ public struct KeywordSpec {
   public var isExperimental: Bool
 
   public var isLexerClassified: Bool
-  public var requiresLeadingSpace: Bool
-  public var requiresTrailingSpace: Bool
 
   public var escapedName: String {
     if isLexerClassified || name == "Type" || name == "Protocol" {
@@ -40,12 +38,10 @@ public struct KeywordSpec {
 
   /// `isLexerClassified` determines whether the token kind is switched from being an identifier to a keyword in the lexer.
   /// This is true for keywords that used to be considered non-contextual.
-  init(_ name: String, isExperimental: Bool = false, isLexerClassified: Bool = false, requiresLeadingSpace: Bool = false, requiresTrailingSpace: Bool = false) {
+  init(_ name: String, isExperimental: Bool = false, isLexerClassified: Bool = false) {
     self.name = name
     self.isExperimental = isExperimental
     self.isLexerClassified = isLexerClassified
-    self.requiresLeadingSpace = requiresLeadingSpace
-    self.requiresTrailingSpace = requiresTrailingSpace
   }
 }
 
@@ -375,17 +371,17 @@ public enum Keyword: CaseIterable {
     case .any:
       return KeywordSpec("any")
     case .Any:
-      return KeywordSpec("Any", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("Any", isLexerClassified: true)
     case .as:
-      return KeywordSpec("as", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("as", isLexerClassified: true)
     case .assignment:
       return KeywordSpec("assignment")
     case .associatedtype:
-      return KeywordSpec("associatedtype", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("associatedtype", isLexerClassified: true)
     case .associativity:
       return KeywordSpec("associativity")
     case .async:
-      return KeywordSpec("async", requiresTrailingSpace: true)
+      return KeywordSpec("async")
     case .attached:
       return KeywordSpec("attached")
     case .autoclosure:
@@ -395,7 +391,7 @@ public enum Keyword: CaseIterable {
     case .available:
       return KeywordSpec("available")
     case .await:
-      return KeywordSpec("await", requiresTrailingSpace: true)
+      return KeywordSpec("await")
     case .backDeployed:
       return KeywordSpec("backDeployed")
     case .before:
@@ -405,15 +401,15 @@ public enum Keyword: CaseIterable {
     case .borrowing:
       return KeywordSpec("borrowing")
     case .break:
-      return KeywordSpec("break", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("break", isLexerClassified: true)
     case .canImport:
       return KeywordSpec("canImport")
     case .case:
-      return KeywordSpec("case", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("case", isLexerClassified: true)
     case .catch:
-      return KeywordSpec("catch", isLexerClassified: true, requiresLeadingSpace: true)
+      return KeywordSpec("catch", isLexerClassified: true)
     case .class:
-      return KeywordSpec("class", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("class", isLexerClassified: true)
     case .compiler:
       return KeywordSpec("compiler")
     case .consume:
@@ -423,7 +419,7 @@ public enum Keyword: CaseIterable {
     case .consuming:
       return KeywordSpec("consuming")
     case .continue:
-      return KeywordSpec("continue", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("continue", isLexerClassified: true)
     case .convenience:
       return KeywordSpec("convenience")
     case .convention:
@@ -433,7 +429,7 @@ public enum Keyword: CaseIterable {
     case .default:
       return KeywordSpec("default", isLexerClassified: true)
     case .defer:
-      return KeywordSpec("defer", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("defer", isLexerClassified: true)
     case .deinit:
       return KeywordSpec("deinit", isLexerClassified: true)
     case .deprecated:
@@ -453,9 +449,9 @@ public enum Keyword: CaseIterable {
     case .each:
       return KeywordSpec("each")
     case .else:
-      return KeywordSpec("else", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+      return KeywordSpec("else", isLexerClassified: true)
     case .enum:
-      return KeywordSpec("enum", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("enum", isLexerClassified: true)
     case .escaping:
       return KeywordSpec("escaping")
     case .exclusivity:
@@ -463,37 +459,37 @@ public enum Keyword: CaseIterable {
     case .exported:
       return KeywordSpec("exported")
     case .extension:
-      return KeywordSpec("extension", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("extension", isLexerClassified: true)
     case .fallthrough:
-      return KeywordSpec("fallthrough", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("fallthrough", isLexerClassified: true)
     case .false:
       return KeywordSpec("false", isLexerClassified: true)
     case .file:
       return KeywordSpec("file")
     case .fileprivate:
-      return KeywordSpec("fileprivate", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("fileprivate", isLexerClassified: true)
     case .final:
       return KeywordSpec("final")
     case .for:
-      return KeywordSpec("for", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("for", isLexerClassified: true)
     case .discard:
       return KeywordSpec("discard")
     case .forward:
       return KeywordSpec("forward")
     case .func:
-      return KeywordSpec("func", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("func", isLexerClassified: true)
     case .get:
       return KeywordSpec("get")
     case .guard:
-      return KeywordSpec("guard", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("guard", isLexerClassified: true)
     case .higherThan:
       return KeywordSpec("higherThan")
     case .if:
-      return KeywordSpec("if", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("if", isLexerClassified: true)
     case .import:
-      return KeywordSpec("import", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("import", isLexerClassified: true)
     case .in:
-      return KeywordSpec("in", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+      return KeywordSpec("in", isLexerClassified: true)
     case .indirect:
       return KeywordSpec("indirect")
     case .infix:
@@ -505,13 +501,13 @@ public enum Keyword: CaseIterable {
     case .inline:
       return KeywordSpec("inline")
     case .inout:
-      return KeywordSpec("inout", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("inout", isLexerClassified: true)
     case .internal:
-      return KeywordSpec("internal", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("internal", isLexerClassified: true)
     case .introduced:
       return KeywordSpec("introduced")
     case .is:
-      return KeywordSpec("is", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("is", isLexerClassified: true)
     case .isolated:
       return KeywordSpec("isolated")
     case .kind:
@@ -521,7 +517,7 @@ public enum Keyword: CaseIterable {
     case .left:
       return KeywordSpec("left")
     case .let:
-      return KeywordSpec("let", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("let", isLexerClassified: true)
     case .line:
       return KeywordSpec("line")
     case .linear:
@@ -565,7 +561,7 @@ public enum Keyword: CaseIterable {
     case .open:
       return KeywordSpec("open")
     case .operator:
-      return KeywordSpec("operator", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("operator", isLexerClassified: true)
     case .optional:
       return KeywordSpec("optional")
     case .override:
@@ -575,29 +571,29 @@ public enum Keyword: CaseIterable {
     case .postfix:
       return KeywordSpec("postfix")
     case .precedencegroup:
-      return KeywordSpec("precedencegroup", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("precedencegroup", isLexerClassified: true)
     case .prefix:
       return KeywordSpec("prefix")
     case .private:
-      return KeywordSpec("private", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("private", isLexerClassified: true)
     case .Protocol:
       return KeywordSpec("Protocol")
     case .protocol:
-      return KeywordSpec("protocol", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("protocol", isLexerClassified: true)
     case .public:
-      return KeywordSpec("public", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("public", isLexerClassified: true)
     case .reasync:
       return KeywordSpec("reasync")
     case .renamed:
       return KeywordSpec("renamed")
     case .repeat:
-      return KeywordSpec("repeat", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("repeat", isLexerClassified: true)
     case .required:
       return KeywordSpec("required")
     case .rethrows:
-      return KeywordSpec("rethrows", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("rethrows", isLexerClassified: true)
     case .return:
-      return KeywordSpec("return", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("return", isLexerClassified: true)
     case .reverse:
       return KeywordSpec("reverse")
     case .right:
@@ -621,33 +617,33 @@ public enum Keyword: CaseIterable {
     case .spiModule:
       return KeywordSpec("spiModule")
     case .static:
-      return KeywordSpec("static", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("static", isLexerClassified: true)
     case .struct:
-      return KeywordSpec("struct", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("struct", isLexerClassified: true)
     case .subscript:
-      return KeywordSpec("subscript", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("subscript", isLexerClassified: true)
     case .super:
       return KeywordSpec("super", isLexerClassified: true)
     case .swift:
       return KeywordSpec("swift")
     case .switch:
-      return KeywordSpec("switch", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("switch", isLexerClassified: true)
     case .target:
       return KeywordSpec("target")
     case .throw:
-      return KeywordSpec("throw", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("throw", isLexerClassified: true)
     case .throws:
-      return KeywordSpec("throws", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("throws", isLexerClassified: true)
     case .transpose:
       return KeywordSpec("transpose")
     case .true:
       return KeywordSpec("true", isLexerClassified: true)
     case .try:
-      return KeywordSpec("try", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("try", isLexerClassified: true)
     case .Type:
       return KeywordSpec("Type")
     case .typealias:
-      return KeywordSpec("typealias", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("typealias", isLexerClassified: true)
     case .unavailable:
       return KeywordSpec("unavailable")
     case .unchecked:
@@ -661,15 +657,15 @@ public enum Keyword: CaseIterable {
     case .unsafeMutableAddress:
       return KeywordSpec("unsafeMutableAddress")
     case .var:
-      return KeywordSpec("var", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("var", isLexerClassified: true)
     case .visibility:
       return KeywordSpec("visibility")
     case .weak:
       return KeywordSpec("weak")
     case .where:
-      return KeywordSpec("where", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+      return KeywordSpec("where", isLexerClassified: true)
     case .while:
-      return KeywordSpec("while", isLexerClassified: true, requiresTrailingSpace: true)
+      return KeywordSpec("while", isLexerClassified: true)
     case .willSet:
       return KeywordSpec("willSet")
     case .witness_method:

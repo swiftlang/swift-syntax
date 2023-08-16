@@ -2503,15 +2503,4 @@ final class DeclarationTests: ParserTestCase {
       """
     )
   }
-
-  func testImportBorrowingMutatingBorrowing() {
-    assertParse(
-      """
-      import _borrowing Module.x
-      import _mutating Module.y
-      import _consuming Module.z
-      """,
-      experimentalFeatures: .referenceBindings
-    )
-  }
 }

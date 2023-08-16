@@ -1163,9 +1163,6 @@ public let DECL_NODES: [Node] = [
           .keyword(.let),
           .keyword(.func),
           .keyword(.inout),
-          .keyword(._mutating),
-          .keyword(._consuming),
-          .keyword(._borrowing),
         ]),
         documentation: """
           The kind of declaration being imported. 

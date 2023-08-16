@@ -65,6 +65,9 @@ struct BuildArguments: ParsableArguments {
   )
   var enableTestFuzzing: Bool = false
 
+  @Flag(help: "Treat all warnings as errors.")
+  var warningsAsErrors: Bool = false
+
   @Flag(help: "Enable verbose logging.")
   var verbose: Bool = false
 }

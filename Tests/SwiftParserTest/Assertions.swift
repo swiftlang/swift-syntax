@@ -412,6 +412,7 @@ func assertDiagnostic<T: SyntaxProtocol>(
   assertStringsEqualWithDiff(
     diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
     highlight.trimmingTrailingWhitespace(),
+    "Highlighted source code did not match",
     file: spec.file,
     line: spec.line
   )
@@ -703,6 +704,7 @@ extension ParserTestCase {
       assertStringsEqualWithDiff(
         fixedTreeDescription.trimmingTrailingWhitespace(),
         expectedFixedSource.trimmingTrailingWhitespace(),
+        "Applying all Fix-Its didn’t produce the expected fixed source",
         file: file,
         line: line
       )

@@ -12,9 +12,12 @@
 
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
-/// Describes how distinctive a token is for parser recovery. When expecting a
-/// token, tokens with a lower token precedence may be skipped and considered
-/// unexpected.
+/// Describes how distinctive a token is for parser recovery.
+///
+/// When expecting a token, tokens with a lower token precedence may be skipped
+/// and considered unexpected.
+///
+/// - Seealso: <doc:ParserRecovery>
 enum TokenPrecedence: Comparable {
   /// An unknown token. This is known garbage and should always be allowed to be skipped.
   case unknownToken

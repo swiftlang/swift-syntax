@@ -54,10 +54,10 @@ def clone_and_build_swiftformat() -> Path:
             ], cwd=swift_format_dir.parent)
         subprocess.check_call([
             'swift', 'build',
-            '--product', 'swift-format'
+            '--product', 'swift-format', '-c', 'release'
             ], cwd=swift_format_dir)
         bin_dir = subprocess.check_output([
-            'swift', 'build',
+            'swift', 'build', '-c', 'release',
             '--show-bin-path'
         ], encoding='utf-8', cwd=swift_format_dir)
         return Path(bin_dir.rstrip()) / 'swift-format'

@@ -210,7 +210,7 @@ extension Parser {
     // while recovering to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
-    switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
+    CanRecoverToSwitch: switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
     case (.lhs(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.lhs(.class), let handle)?:
@@ -247,44 +247,62 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case (.rhs(_), let handle)?:
-      // Handle all cases of `ValueBindingPatternSyntax.BindingSpecifierOptions` in the same way.
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
-    case nil:
-      if inMemberDeclList {
-        let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
-
-        if isProbablyVarDecl || isProbablyTupleDecl {
-          return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+    case (.rhs(let binding), let handle)?:
+      switch binding {
+      case ._mutating:
+        fallthrough
+      case ._borrowing:
+        fallthrough
+      case ._consuming:
+        guard experimentalFeatures.contains(.referenceBindings) else {
+          break CanRecoverToSwitch
         }
-
-        if self.currentToken.isEditorPlaceholder {
-          let placeholder = self.consumeAnyToken()
-          return RawDeclSyntax(
-            RawEditorPlaceholderDeclSyntax(
-              attributes: attrs.attributes,
-              modifiers: attrs.modifiers,
-              placeholder: placeholder,
-              arena: self.arena
-            )
-          )
-        }
-
-        let isProbablyFuncDecl = self.at(.identifier, .wildcard) || self.at(anyIn: Operator.self) != nil
-
-        if isProbablyFuncDecl {
-          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
-        }
+        fallthrough
+      case .let:
+        fallthrough
+      case .var:
+        fallthrough
+      case .inout:
+        // Handle all cases of `ValueBindingPatternSyntax.BindingSpecifierOptions` in the same way.
+        return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
       }
-      return RawDeclSyntax(
-        RawMissingDeclSyntax(
-          attributes: attrs.attributes,
-          modifiers: attrs.modifiers,
-          arena: self.arena
-        )
-      )
+    case nil:
+      break
     }
+
+    if inMemberDeclList {
+      let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
+      let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
+
+      if isProbablyVarDecl || isProbablyTupleDecl {
+        return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+      }
+
+      if self.currentToken.isEditorPlaceholder {
+        let placeholder = self.consumeAnyToken()
+        return RawDeclSyntax(
+          RawEditorPlaceholderDeclSyntax(
+            attributes: attrs.attributes,
+            modifiers: attrs.modifiers,
+            placeholder: placeholder,
+            arena: self.arena
+          )
+        )
+      }
+
+      let isProbablyFuncDecl = self.at(.identifier, .wildcard) || self.at(anyIn: Operator.self) != nil
+
+      if isProbablyFuncDecl {
+        return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
+      }
+    }
+    return RawDeclSyntax(
+      RawMissingDeclSyntax(
+        attributes: attrs.attributes,
+        modifiers: attrs.modifiers,
+        arena: self.arena
+      )
+    )
   }
 }
 

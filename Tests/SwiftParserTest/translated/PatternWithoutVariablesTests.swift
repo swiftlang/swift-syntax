@@ -14,6 +14,8 @@
 
 import XCTest
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+
 final class PatternWithoutVariablesTests: ParserTestCase {
   func testPatternWithoutVariables1() {
     assertParse(
@@ -23,7 +25,8 @@ final class PatternWithoutVariablesTests: ParserTestCase {
       _mutating _ = 1
       _borrowing _ = 1
       _consuming _ = 1
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -37,7 +40,8 @@ final class PatternWithoutVariablesTests: ParserTestCase {
         _borrowing _ = 1
         _consuming _ = 1
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -55,7 +59,8 @@ final class PatternWithoutVariablesTests: ParserTestCase {
         _borrowing (_, _) = (1, 2)
         _consuming (_, _) = (1, 2)
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 

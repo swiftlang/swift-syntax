@@ -17,5 +17,8 @@ extension Parser {
     public init(rawValue: UInt) {
       self.rawValue = rawValue
     }
+
+    /// Whether to enable the parsing of 'reference bindings'.
+    public static let referenceBindings = Self(rawValue: 1 << 0)
   }
 }

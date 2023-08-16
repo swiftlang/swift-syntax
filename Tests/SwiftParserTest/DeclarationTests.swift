@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) import SwiftSyntax
-@_spi(Testing) @_spi(RawSyntax) import SwiftParser
+@_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntaxBuilder
 import SwiftBasicFormat
 import XCTest
@@ -2510,7 +2510,8 @@ final class DeclarationTests: ParserTestCase {
       import _borrowing Module.x
       import _mutating Module.y
       import _consuming Module.z
-      """
-      )
+      """,
+      experimentalFeatures: .referenceBindings
+    )
   }
 }

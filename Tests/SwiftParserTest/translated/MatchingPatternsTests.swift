@@ -14,6 +14,8 @@
 
 import XCTest
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+
 final class MatchingPatternsTests: ParserTestCase {
   func testMatchingPatterns1() {
     assertParse(
@@ -86,7 +88,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case 1 + (_):
         ()
       }
-      """#
+      """#,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -118,7 +121,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case _borrowing a:
         ()
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -129,7 +133,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case _mutating a:
         ()
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -140,7 +145,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case _consuming a:
         ()
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -411,7 +417,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case .Payload(_consuming x):
         acceptInt(x)
       }
-      """#
+      """#,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -495,7 +502,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case (let (_, _, _)) + 1:
         ()
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -577,7 +585,8 @@ final class MatchingPatternsTests: ParserTestCase {
       """
       if case _mutating x = y {}
       guard case _mutating z = y else {}
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -586,7 +595,8 @@ final class MatchingPatternsTests: ParserTestCase {
       """
       if case _consuming x = y {}
       guard case _consuming z = y else {}
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -595,7 +605,8 @@ final class MatchingPatternsTests: ParserTestCase {
       """
       if case _borrowing x = y {}
       guard case _borrowing z = y else {}
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 }

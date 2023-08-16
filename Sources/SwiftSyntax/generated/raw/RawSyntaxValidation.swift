@@ -1483,10 +1483,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("var"), 
             .keyword("let"), 
             .keyword("func"), 
-            .keyword("inout"), 
-            .keyword("_mutating"), 
-            .keyword("_consuming"), 
-            .keyword("_borrowing")
+            .keyword("inout")
           ]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawImportPathComponentListSyntax.self))

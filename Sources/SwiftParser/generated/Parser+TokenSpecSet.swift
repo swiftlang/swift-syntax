@@ -1677,12 +1677,6 @@ extension ImportDeclSyntax {
     case `let`
     case `func`
     case `inout`
-    @_spi(ExperimentalLanguageFeatures)
-    case _mutating
-    @_spi(ExperimentalLanguageFeatures)
-    case _consuming
-    @_spi(ExperimentalLanguageFeatures)
-    case _borrowing
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1704,12 +1698,6 @@ extension ImportDeclSyntax {
         self = .`func`
       case TokenSpec(.`inout`):
         self = .`inout`
-      case TokenSpec(._mutating):
-        self = ._mutating
-      case TokenSpec(._consuming):
-        self = ._consuming
-      case TokenSpec(._borrowing):
-        self = ._borrowing
       default:
         return nil
       }
@@ -1735,12 +1723,6 @@ extension ImportDeclSyntax {
         return .keyword(.`func`)
       case .`inout`:
         return .keyword(.`inout`)
-      case ._mutating:
-        return .keyword(._mutating)
-      case ._consuming:
-        return .keyword(._consuming)
-      case ._borrowing:
-        return .keyword(._borrowing)
       }
     }
     
@@ -1768,12 +1750,6 @@ extension ImportDeclSyntax {
         return .keyword(.`func`)
       case .`inout`:
         return .keyword(.`inout`)
-      case ._mutating:
-        return .keyword(._mutating)
-      case ._consuming:
-        return .keyword(._consuming)
-      case ._borrowing:
-        return .keyword(._borrowing)
       }
     }
   }

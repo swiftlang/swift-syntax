@@ -10,42 +10,77 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
+
 public class Trivia {
-  public let name: String
-  public let comment: String
+  /// The name of the trivia.
+  public let name: TokenSyntax
+
+  /// The doc comment describing the trivia.
+  public let comment: SwiftSyntax.Trivia
+
+  /// The list of characters that make up the trivia.
+  ///
+  /// Useful for multi-character trivias like `\r\n`.
   public let characters: [Character]
+
+  /// The list of characters as they would appear in Swift code.
+  ///
+  /// This might differ from `characters` due to Swift's character escape requirements.
   public let swiftCharacters: [Character]
+
+  /// Indicates if the trivia represents a comment.
+  ///
+  /// If `true`, the trivia is some form of a comment in the Swift code.
   public let isComment: Bool
 
-  public var lowerName: String { lowercaseFirstWord(name: name) }
+  /// The name of the trivia in lowercase.
+  public var lowerName: TokenSyntax { .identifier(lowercaseFirstWord(name: name.text)) }
 
-  public var enumCaseName: String {
+  /// The name of the trivia when used as an enum case.
+  ///
+  /// This is typically the plural form of the `lowerName`, with exceptions for certain trivias.
+  public var enumCaseName: TokenSyntax {
     if self.isCollection {
-      if lowerName == "backslash" {
+      if lowerName.text == "backslash" {
         return "backslashes"
       } else {
-        return "\(lowerName)s"
+        return .identifier("\(lowerName)s")
       }
     } else {
       return lowerName
     }
   }
 
+  /// The length of the `characters` array.
   public var charactersLen: Int { characters.count }
 
+  /// Indicates if the trivia is a collection of characters.
+  ///
+  /// If `true`, the trivia is made up of multiple characters.
   public var isCollection: Bool { charactersLen > 0 }
 
+  /// Indicates if the trivia contains only whitespace characters.
   public var isBlank: Bool {
     characters.contains { $0.isWhitespace }
   }
 
+  /// Indicates if the trivia contains newline characters.
   public var isNewLine: Bool {
     characters.contains { $0.isNewline }
   }
 
+  /// Initializes a new `Trivia` instance.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the trivia.
+  ///   - comment: A doc comment describing the trivia.
+  ///   - characters: A list of characters that make up the trivia.
+  ///   - swiftCharacters: A list of characters as they would appear in Swift code.
+  ///   - isComment: Indicates if the trivia represents a comment.
   init(
-    name: String,
-    comment: String,
+    name: TokenSyntax,
+    comment: SwiftSyntax.Trivia,
     characters: [Character] = [],
     swiftCharacters: [Character] = [],
     isComment: Bool = false

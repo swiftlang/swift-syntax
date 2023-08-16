@@ -37,6 +37,12 @@ enum Paths {
       .appendingPathComponent("CodeGeneration")
   }
 
+  static var editorExtensionProjectPath: URL {
+    packageDir
+      .appendingPathComponent("EditorExtension")
+      .appendingPathComponent("SwiftRefactorExtension.xcodeproj")
+  }
+
   static var workspaceDir: URL {
     packageDir
       .deletingLastPathComponent()
@@ -61,6 +67,10 @@ enum Paths {
 
   static var diffExec: URL? {
     return lookupExecutable(for: "diff")
+  }
+
+  static var xcodebuildExec: URL? {
+    return lookupExecutable(for: "xcodebuild")
   }
 
   private static var envSearchPaths: [URL] {

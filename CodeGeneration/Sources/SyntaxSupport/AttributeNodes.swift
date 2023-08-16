@@ -179,7 +179,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "availabilityLabel",
         deprecatedName: "label",
-        kind: .token(choices: [.keyword(text: "availability")]),
+        kind: .token(choices: [.keyword(.availability)]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),
@@ -241,7 +241,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "beforeLabel",
-        kind: .token(choices: [.keyword(text: "before")]),
+        kind: .token(choices: [.keyword(.before)]),
         documentation: "The \"before\" label."
       ),
       Child(
@@ -277,7 +277,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "cTypeLabel",
-        kind: .token(choices: [.keyword(text: "cType")]),
+        kind: .token(choices: [.keyword(.cType)]),
         isOptional: true
       ),
       Child(
@@ -302,7 +302,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "witnessMethodLabel",
-        kind: .token(choices: [.keyword(text: "witness_method")])
+        kind: .token(choices: [.keyword(.witness_method)])
       ),
       Child(
         name: "colon",
@@ -330,7 +330,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "ofLabel",
-        kind: .token(choices: [.keyword(text: "of")]),
+        kind: .token(choices: [.keyword(.of)]),
         documentation: "The \"of\" label."
       ),
       Child(
@@ -352,7 +352,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "accessorSpecifier",
         deprecatedName: "accessorKind",
-        kind: .token(choices: [.keyword(text: "get"), .keyword(text: "set")]),
+        kind: .token(choices: [.keyword(.get), .keyword(.set)]),
         documentation: "The accessor name.",
         isOptional: true
       ),
@@ -392,7 +392,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "argument",
         deprecatedName: "parameter",
-        kind: .token(choices: [.token(.identifier), .token(.integerLiteral), .keyword(text: "self")])
+        kind: .token(choices: [.token(.identifier), .token(.integerLiteral), .keyword(.self)])
       ),
       Child(
         name: "trailingComma",
@@ -412,7 +412,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "wrtLabel",
-        kind: .token(choices: [.keyword(text: "wrt")]),
+        kind: .token(choices: [.keyword(.wrt)]),
         documentation: "The \"wrt\" label."
       ),
       Child(
@@ -478,7 +478,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "kindSpecifier",
         deprecatedName: "diffKind",
-        kind: .token(choices: [.keyword(text: "_forward"), .keyword(text: "reverse"), .keyword(text: "_linear")]),
+        kind: .token(choices: [.keyword(._forward), .keyword(.reverse), .keyword(._linear)]),
         isOptional: true
       ),
       Child(
@@ -521,7 +521,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "label",
-        kind: .token(choices: [.keyword(text: "visibility"), .keyword(text: "metadata")]),
+        kind: .token(choices: [.keyword(.visibility), .keyword(.metadata)]),
         nameForDiagnostics: "label"
       ),
       Child(
@@ -535,11 +535,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             name: "token",
             kind: .token(choices: [
               .token(.identifier),
-              .keyword(text: "private"),
-              .keyword(text: "fileprivate"),
-              .keyword(text: "internal"),
-              .keyword(text: "public"),
-              .keyword(text: "open"),
+              .keyword(.private),
+              .keyword(.fileprivate),
+              .keyword(.internal),
+              .keyword(.public),
+              .keyword(.open),
             ])
           ),  // Keywords can be: public, internal, private, fileprivate, open
           Child(
@@ -573,7 +573,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "forLabel",
-        kind: .token(choices: [.keyword(text: "for")], requiresTrailingSpace: false)
+        kind: .token(choices: [.keyword(.for)], requiresTrailingSpace: false)
       ),
       Child(
         name: "colon",
@@ -662,13 +662,13 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "label",
         kind: .token(choices: [
-          .keyword(text: "target"),
-          .keyword(text: "availability"),
-          .keyword(text: "exported"),
-          .keyword(text: "kind"),
-          .keyword(text: "spi"),
-          .keyword(text: "spiModule"),
-          .keyword(text: "available"),
+          .keyword(.target),
+          .keyword(.availability),
+          .keyword(.exported),
+          .keyword(.kind),
+          .keyword(.spi),
+          .keyword(.spiModule),
+          .keyword(.available),
         ]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
@@ -755,7 +755,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "moduleLabel",
-        kind: .token(choices: [.keyword(text: "module")])
+        kind: .token(choices: [.keyword(.module)])
       ),
       Child(
         name: "colon",
@@ -803,7 +803,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "targetLabel",
         deprecatedName: "label",
-        kind: .token(choices: [.keyword(text: "target")]),
+        kind: .token(choices: [.keyword(.target)]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
       ),
@@ -836,7 +836,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "messageLabel",
-        kind: .token(choices: [.keyword(text: "message")])
+        kind: .token(choices: [.keyword(.message)])
       ),
       Child(
         name: "colon",
@@ -857,7 +857,7 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "sourceFileLabel",
-        kind: .token(choices: [.keyword(text: "sourceFile")])
+        kind: .token(choices: [.keyword(.sourceFile)])
       ),
       Child(
         name: "colon",

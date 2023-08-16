@@ -97,19 +97,19 @@ public let DECL_NODES: [Node] = [
         name: "accessorSpecifier",
         deprecatedName: "accessorKind",
         kind: .token(choices: [
-          .keyword(text: "get"),
-          .keyword(text: "set"),
-          .keyword(text: "didSet"),
-          .keyword(text: "willSet"),
-          .keyword(text: "unsafeAddress"),
-          .keyword(text: "addressWithOwner"),
-          .keyword(text: "addressWithNativeOwner"),
-          .keyword(text: "unsafeMutableAddress"),
-          .keyword(text: "mutableAddressWithOwner"),
-          .keyword(text: "mutableAddressWithNativeOwner"),
-          .keyword(text: "_read"),
-          .keyword(text: "_modify"),
-          .keyword(text: "init"),
+          .keyword(.get),
+          .keyword(.set),
+          .keyword(.didSet),
+          .keyword(.willSet),
+          .keyword(.unsafeAddress),
+          .keyword(.addressWithOwner),
+          .keyword(.addressWithNativeOwner),
+          .keyword(.unsafeMutableAddress),
+          .keyword(.mutableAddressWithOwner),
+          .keyword(.mutableAddressWithNativeOwner),
+          .keyword(._read),
+          .keyword(._modify),
+          .keyword(.`init`),
         ])
       ),
       Child(
@@ -195,7 +195,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "actorKeyword",
-        kind: .token(choices: [.keyword(text: "actor")])
+        kind: .token(choices: [.keyword(.actor)])
       ),
       Child(
         name: "name",
@@ -285,7 +285,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "associatedtypeKeyword",
-        kind: .token(choices: [.keyword(text: "associatedtype")]),
+        kind: .token(choices: [.keyword(.associatedtype)]),
         documentation: "The `associatedtype` keyword for this declaration."
       ),
       Child(
@@ -375,7 +375,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "classKeyword",
-        kind: .token(choices: [.keyword(text: "class")]),
+        kind: .token(choices: [.keyword(.class)]),
         documentation: "The `class` keyword for this declaration."
       ),
       Child(
@@ -445,41 +445,41 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "name",
         kind: .token(choices: [
-          .keyword(text: "__consuming"),
-          .keyword(text: "__setter_access"),
-          .keyword(text: "_const"),
-          .keyword(text: "_local"),
-          .keyword(text: "actor"),
-          .keyword(text: "async"),
-          .keyword(text: "borrowing"),
-          .keyword(text: "class"),
-          .keyword(text: "consuming"),
-          .keyword(text: "convenience"),
-          .keyword(text: "distributed"),
-          .keyword(text: "dynamic"),
-          .keyword(text: "fileprivate"),
-          .keyword(text: "final"),
-          .keyword(text: "indirect"),
-          .keyword(text: "infix"),
-          .keyword(text: "internal"),
-          .keyword(text: "isolated"),
-          .keyword(text: "lazy"),
-          .keyword(text: "mutating"),
-          .keyword(text: "nonisolated"),
-          .keyword(text: "nonmutating"),
-          .keyword(text: "open"),
-          .keyword(text: "optional"),
-          .keyword(text: "override"),
-          .keyword(text: "package"),
-          .keyword(text: "postfix"),
-          .keyword(text: "prefix"),
-          .keyword(text: "private"),
-          .keyword(text: "public"),
-          .keyword(text: "reasync"),
-          .keyword(text: "required"),
-          .keyword(text: "static"),
-          .keyword(text: "unowned"),
-          .keyword(text: "weak"),
+          .keyword(.__consuming),
+          .keyword(.__setter_access),
+          .keyword(._const),
+          .keyword(._local),
+          .keyword(.actor),
+          .keyword(.async),
+          .keyword(.borrowing),
+          .keyword(.class),
+          .keyword(.consuming),
+          .keyword(.convenience),
+          .keyword(.distributed),
+          .keyword(.dynamic),
+          .keyword(.fileprivate),
+          .keyword(.final),
+          .keyword(.indirect),
+          .keyword(.infix),
+          .keyword(.internal),
+          .keyword(.isolated),
+          .keyword(.lazy),
+          .keyword(.mutating),
+          .keyword(.nonisolated),
+          .keyword(.nonmutating),
+          .keyword(.open),
+          .keyword(.optional),
+          .keyword(.override),
+          .keyword(.package),
+          .keyword(.postfix),
+          .keyword(.prefix),
+          .keyword(.private),
+          .keyword(.public),
+          .keyword(.reasync),
+          .keyword(.required),
+          .keyword(.static),
+          .keyword(.unowned),
+          .keyword(.weak),
         ])
       ),
       Child(
@@ -523,7 +523,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "deinitKeyword",
-        kind: .token(choices: [.keyword(text: "deinit")]),
+        kind: .token(choices: [.keyword(.deinit)]),
         documentation: "The deinit keyword."
       ),
       Child(
@@ -708,7 +708,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "caseKeyword",
-        kind: .token(choices: [.keyword(text: "case")]),
+        kind: .token(choices: [.keyword(.case)]),
         documentation: "The `case` keyword for this case."
       ),
       Child(
@@ -793,7 +793,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "enumKeyword",
-        kind: .token(choices: [.keyword(text: "enum")]),
+        kind: .token(choices: [.keyword(.enum)]),
         documentation: "The `enum` keyword for this declaration."
       ),
       Child(
@@ -861,7 +861,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "extensionKeyword",
-        kind: .token(choices: [.keyword(text: "extension")])
+        kind: .token(choices: [.keyword(.extension)])
       ),
       Child(
         name: "extendedType",
@@ -910,7 +910,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "funcKeyword",
-        kind: .token(choices: [.keyword(text: "func")])
+        kind: .token(choices: [.keyword(.func)])
       ),
       Child(
         name: "name",
@@ -1147,22 +1147,22 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "importKeyword",
         deprecatedName: "importTok",
-        kind: .token(choices: [.keyword(text: "import")]),
+        kind: .token(choices: [.keyword(.import)]),
         documentation: "The `import` keyword for this declaration."
       ),
       Child(
         name: "importKindSpecifier",
         deprecatedName: "importKind",
         kind: .token(choices: [
-          .keyword(text: "typealias"),
-          .keyword(text: "struct"),
-          .keyword(text: "class"),
-          .keyword(text: "enum"),
-          .keyword(text: "protocol"),
-          .keyword(text: "var"),
-          .keyword(text: "let"),
-          .keyword(text: "func"),
-          .keyword(text: "inout"),
+          .keyword(.typealias),
+          .keyword(.struct),
+          .keyword(.class),
+          .keyword(.enum),
+          .keyword(.protocol),
+          .keyword(.var),
+          .keyword(.let),
+          .keyword(.func),
+          .keyword(.inout),
         ]),
         documentation: """
           The kind of declaration being imported. 
@@ -1260,7 +1260,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "initKeyword",
-        kind: .token(choices: [.keyword(text: "init")]),
+        kind: .token(choices: [.keyword(.`init`)]),
         documentation: "The init keyword"
       ),
       Child(
@@ -1325,7 +1325,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "macroKeyword",
-        kind: .token(choices: [.keyword(text: "macro")])
+        kind: .token(choices: [.keyword(.macro)])
       ),
       Child(
         name: "name",
@@ -1518,13 +1518,13 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "fixitySpecifier",
         deprecatedName: "fixity",
-        kind: .token(choices: [.keyword(text: "prefix"), .keyword(text: "postfix"), .keyword(text: "infix")]),
+        kind: .token(choices: [.keyword(.prefix), .keyword(.postfix), .keyword(.infix)]),
         nameForDiagnostics: "fixity",
         documentation: "The fixity applied to the 'operator' declaration."
       ),
       Child(
         name: "operatorKeyword",
-        kind: .token(choices: [.keyword(text: "operator")])
+        kind: .token(choices: [.keyword(.operator)])
       ),
       Child(
         name: "name",
@@ -1670,7 +1670,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "fileLabel",
         deprecatedName: "fileArgLabel",
-        kind: .token(choices: [.keyword(text: "file")])
+        kind: .token(choices: [.keyword(.file)])
       ),
       Child(
         name: "fileColon",
@@ -1689,7 +1689,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "lineLabel",
         deprecatedName: "lineArgLabel",
-        kind: .token(choices: [.keyword(text: "line")])
+        kind: .token(choices: [.keyword(.line)])
       ),
       Child(
         name: "lineColon",
@@ -1745,7 +1745,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "assignmentLabel",
         deprecatedName: "assignmentKeyword",
-        kind: .token(choices: [.keyword(text: "assignment")])
+        kind: .token(choices: [.keyword(.assignment)])
       ),
       Child(
         name: "colon",
@@ -1754,7 +1754,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "value",
         deprecatedName: "flag",
-        kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")]),
+        kind: .token(choices: [.keyword(.true), .keyword(.false)]),
         documentation:
           "When true, an operator in the corresponding precedence group uses the same grouping rules during optional chaining as the assignment operators from the standard library. Otherwise, operators in the precedence group follows the same optional chaining rules as operators that don't perform assignment."
       ),
@@ -1772,7 +1772,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "associativityLabel",
         deprecatedName: "associativityKeyword",
-        kind: .token(choices: [.keyword(text: "associativity")])
+        kind: .token(choices: [.keyword(.associativity)])
       ),
       Child(
         name: "colon",
@@ -1780,7 +1780,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "value",
-        kind: .token(choices: [.keyword(text: "left"), .keyword(text: "right"), .keyword(text: "none")]),
+        kind: .token(choices: [.keyword(.left), .keyword(.right), .keyword(.none)]),
         documentation:
           "Operators that are `left`-associative group left-to-right. Operators that are `right`-associative group right-to-left. Operators that are specified with an associativity of `none` don't associate at all"
       ),
@@ -1824,7 +1824,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "precedencegroupKeyword",
-        kind: .token(choices: [.keyword(text: "precedencegroup")])
+        kind: .token(choices: [.keyword(.precedencegroup)])
       ),
       Child(
         name: "name",
@@ -1887,7 +1887,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "higherThanOrLowerThanLabel",
         deprecatedName: "higherThanOrLowerThan",
-        kind: .token(choices: [.keyword(text: "higherThan"), .keyword(text: "lowerThan")]),
+        kind: .token(choices: [.keyword(.higherThan), .keyword(.lowerThan)]),
         documentation: "The relation to specified other precedence groups."
       ),
       Child(
@@ -1939,7 +1939,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "protocolKeyword",
-        kind: .token(choices: [.keyword(text: "protocol")]),
+        kind: .token(choices: [.keyword(.protocol)]),
         documentation: "The `protocol` keyword for this declaration."
       ),
       Child(
@@ -2115,7 +2115,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "structKeyword",
-        kind: .token(choices: [.keyword(text: "struct")]),
+        kind: .token(choices: [.keyword(.struct)]),
         documentation: "The `struct` keyword for this declaration."
       ),
       Child(
@@ -2176,7 +2176,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "subscriptKeyword",
-        kind: .token(choices: [.keyword(text: "subscript")])
+        kind: .token(choices: [.keyword(.subscript)])
       ),
       Child(
         name: "genericParameterClause",
@@ -2274,7 +2274,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "typealiasKeyword",
-        kind: .token(choices: [.keyword(text: "typealias")])
+        kind: .token(choices: [.keyword(.typealias)])
       ),
       Child(
         name: "name",
@@ -2330,7 +2330,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")]),
+        kind: .token(choices: [.keyword(.let), .keyword(.var), .keyword(.inout)]),
         documentation: """
           The specifier that defines the type of the variables declared (`let` or `var`).
           """

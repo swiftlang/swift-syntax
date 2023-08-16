@@ -15,7 +15,7 @@ import SwiftSyntax
 /// The kind of token a node can contain. Either a token of a specific kind or a
 /// keyword with the given text.
 public enum TokenChoice: Equatable {
-  case keyword(text: String)
+  case keyword(Keyword)
   case token(Token)
 
   public var isKeyword: Bool {

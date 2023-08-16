@@ -75,12 +75,13 @@ public extension Child {
       return ExprSyntax(".\(token.varOrCaseName)Token()")
     }
     if case .token(let choices, _, _) = kind,
-      case .keyword(var text) = choices.only
+      case .keyword(let keyword) = choices.only
     {
-      if text == "init" {
-        text = "`init`"
+      var name = keyword.spec.name
+      if keyword == .`init` {
+        name = "`init`"
       }
-      return ExprSyntax(".\(token.varOrCaseName)(.\(raw: text))")
+      return ExprSyntax(".\(token.varOrCaseName)(.\(raw: name))")
     }
     return nil
   }
@@ -122,8 +123,8 @@ public extension Child {
         switch $0 {
         case .token(let token):
           return token.spec.text
-        case .keyword(text: let text):
-          return text
+        case .keyword(let keyword):
+          return keyword.spec.name
         }
       }
     } else {

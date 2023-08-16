@@ -166,15 +166,17 @@ class ValidateSyntaxNodes: XCTestCase {
       return nil
     }
     switch choice {
-    case .keyword(text: let keyword):
+    case .keyword(let keyword):
+      let keywordName = keyword.spec.name
+
       if child.isFollowedByColonToken(in: node) {
-        if child.varOrCaseName.description != "\(keyword)Label" {
+        if child.varOrCaseName.description != "\(keywordName)Label" {
           return
-            "child '\(child.varOrCaseName)' has a single keyword as its only token choice and is followed by a colon. It should thus be named '\(keyword)Label'"
+            "child '\(child.varOrCaseName)' has a single keyword as its only token choice and is followed by a colon. It should thus be named '\(keywordName)Label'"
         }
       } else {
-        if child.varOrCaseName.description != "\(keyword)Keyword" {
-          return "child '\(child.varOrCaseName)' has a single keyword as its only token choice and should thus be named '\(keyword)Keyword'"
+        if child.varOrCaseName.description != "\(keywordName)Keyword" {
+          return "child '\(child.varOrCaseName)' has a single keyword as its only token choice and should thus be named '\(keywordName)Keyword'"
         }
       }
 

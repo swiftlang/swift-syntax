@@ -49,219 +49,632 @@ public struct KeywordSpec {
   }
 }
 
-public let KEYWORDS: [KeywordSpec] = [
-  // Please keep these sorted alphabetically
-
-  KeywordSpec("__consuming"),
-  KeywordSpec("__owned"),
-  KeywordSpec("__setter_access"),
-  KeywordSpec("__shared"),
-  KeywordSpec("_alignment"),
-  KeywordSpec("_backDeploy"),
-  KeywordSpec("_borrow"),
-  KeywordSpec("_cdecl"),
-  KeywordSpec("_Class"),
-  KeywordSpec("_compilerInitialized"),
-  KeywordSpec("_const"),
-  KeywordSpec("_documentation"),
-  KeywordSpec("_dynamicReplacement"),
-  KeywordSpec("_effects"),
-  KeywordSpec("_expose"),
-  KeywordSpec("_forward"),
-  KeywordSpec("_implements"),
-  KeywordSpec("_linear"),
-  KeywordSpec("_local"),
-  KeywordSpec("_modify"),
-  KeywordSpec("_move"),
-  KeywordSpec("_NativeClass"),
-  KeywordSpec("_NativeRefCountedObject"),
-  KeywordSpec("_noMetadata"),
-  KeywordSpec("_nonSendable"),
-  KeywordSpec("_objcImplementation"),
-  KeywordSpec("_objcRuntimeName"),
-  KeywordSpec("_opaqueReturnTypeOf"),
-  KeywordSpec("_optimize"),
-  KeywordSpec("_originallyDefinedIn"),
-  KeywordSpec("_PackageDescription"),
-  KeywordSpec("_private"),
-  KeywordSpec("_projectedValueProperty"),
-  KeywordSpec("_read"),
-  KeywordSpec("_RefCountedObject"),
-  KeywordSpec("_semantics"),
-  KeywordSpec("_specialize"),
-  KeywordSpec("_spi"),
-  KeywordSpec("_spi_available"),
-  KeywordSpec("_swift_native_objc_runtime_base"),
-  KeywordSpec("_Trivial"),
-  KeywordSpec("_TrivialAtMost"),
-  KeywordSpec("_typeEraser"),
-  KeywordSpec("_unavailableFromAsync"),
-  KeywordSpec("_underlyingVersion"),
-  KeywordSpec("_UnknownLayout"),
-  KeywordSpec("_version"),
-  KeywordSpec("accesses"),
-  KeywordSpec("actor"),
-  KeywordSpec("addressWithNativeOwner"),
-  KeywordSpec("addressWithOwner"),
-  KeywordSpec("any"),
-  KeywordSpec("Any", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("as", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("assignment"),
-  KeywordSpec("associatedtype", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("associativity"),
-  KeywordSpec("async", requiresTrailingSpace: true),
-  KeywordSpec("attached"),
-  KeywordSpec("autoclosure"),
-  KeywordSpec("availability"),
-  KeywordSpec("available"),
-  KeywordSpec("await", requiresTrailingSpace: true),
-  KeywordSpec("backDeployed"),
-  KeywordSpec("before"),
-  KeywordSpec("block"),
-  KeywordSpec("borrowing"),
-  KeywordSpec("break", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("canImport"),
-  KeywordSpec("case", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("catch", isLexerClassified: true, requiresLeadingSpace: true),
-  KeywordSpec("class", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("compiler"),
-  KeywordSpec("consume"),
-  KeywordSpec("copy"),
-  KeywordSpec("consuming"),
-  KeywordSpec("continue", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("convenience"),
-  KeywordSpec("convention"),
-  KeywordSpec("cType"),
-  KeywordSpec("default", isLexerClassified: true),
-  KeywordSpec("defer", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("deinit", isLexerClassified: true),
-  KeywordSpec("deprecated"),
-  KeywordSpec("derivative"),
-  KeywordSpec("didSet"),
-  KeywordSpec("differentiable"),
-  KeywordSpec("distributed"),
-  KeywordSpec("do", isLexerClassified: true),
-  KeywordSpec("dynamic"),
-  KeywordSpec("each"),
-  KeywordSpec("else", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true),
-  KeywordSpec("enum", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("escaping"),
-  KeywordSpec("exclusivity"),
-  KeywordSpec("exported"),
-  KeywordSpec("extension", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("fallthrough", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("false", isLexerClassified: true),
-  KeywordSpec("file"),
-  KeywordSpec("fileprivate", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("final"),
-  KeywordSpec("for", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("discard"),
-  KeywordSpec("forward"),
-  KeywordSpec("func", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("get"),
-  KeywordSpec("guard", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("higherThan"),
-  KeywordSpec("if", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("import", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("in", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true),
-  KeywordSpec("indirect"),
-  KeywordSpec("infix"),
-  KeywordSpec("init", isLexerClassified: true),
-  KeywordSpec("initializes"),
-  KeywordSpec("inline"),
-  KeywordSpec("inout", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("internal", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("introduced"),
-  KeywordSpec("is", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("isolated"),
-  KeywordSpec("kind"),
-  KeywordSpec("lazy"),
-  KeywordSpec("left"),
-  KeywordSpec("let", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("line"),
-  KeywordSpec("linear"),
-  KeywordSpec("lowerThan"),
-  KeywordSpec("macro"),
-  KeywordSpec("message"),
-  KeywordSpec("metadata"),
-  KeywordSpec("module"),
-  KeywordSpec("mutableAddressWithNativeOwner"),
-  KeywordSpec("mutableAddressWithOwner"),
-  KeywordSpec("mutating"),
-  KeywordSpec("nil", isLexerClassified: true),
-  KeywordSpec("noasync"),
-  KeywordSpec("noDerivative"),
-  KeywordSpec("noescape"),
-  KeywordSpec("none"),
-  KeywordSpec("nonisolated"),
-  KeywordSpec("nonmutating"),
-  KeywordSpec("objc"),
-  KeywordSpec("obsoleted"),
-  KeywordSpec("of"),
-  KeywordSpec("open"),
-  KeywordSpec("operator", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("optional"),
-  KeywordSpec("override"),
-  KeywordSpec("package"),
-  KeywordSpec("postfix"),
-  KeywordSpec("precedencegroup", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("prefix"),
-  KeywordSpec("private", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("Protocol"),
-  KeywordSpec("protocol", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("public", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("reasync"),
-  KeywordSpec("renamed"),
-  KeywordSpec("repeat", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("required"),
-  KeywordSpec("rethrows", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("return", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("reverse"),
-  KeywordSpec("right"),
-  KeywordSpec("safe"),
-  KeywordSpec("self", isLexerClassified: true),
-  KeywordSpec("Self", isLexerClassified: true),
-  KeywordSpec("Sendable"),
-  KeywordSpec("set"),
-  KeywordSpec("some"),
-  KeywordSpec("sourceFile"),
-  KeywordSpec("spi"),
-  KeywordSpec("spiModule"),
-  KeywordSpec("static", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("struct", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("subscript", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("super", isLexerClassified: true),
-  KeywordSpec("swift"),
-  KeywordSpec("switch", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("target"),
-  KeywordSpec("throw", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("throws", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("transpose"),
-  KeywordSpec("true", isLexerClassified: true),
-  KeywordSpec("try", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("Type"),
-  KeywordSpec("typealias", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("unavailable"),
-  KeywordSpec("unchecked"),
-  KeywordSpec("unowned"),
-  KeywordSpec("unsafe"),
-  KeywordSpec("unsafeAddress"),
-  KeywordSpec("unsafeMutableAddress"),
-  KeywordSpec("var", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("visibility"),
-  KeywordSpec("weak"),
-  KeywordSpec("where", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true),
-  KeywordSpec("while", isLexerClassified: true, requiresTrailingSpace: true),
-  KeywordSpec("willSet"),
-  KeywordSpec("witness_method"),
-  KeywordSpec("wrt"),
-  KeywordSpec("yield"),
-]
-
 public func keywordsByLength() -> [(Int, [KeywordSpec])] {
   var result: [Int: [KeywordSpec]] = [:]
-  for keyword in KEYWORDS {
+  for keyword in Keyword.allCases.map(\.spec) {
     result[keyword.name.count, default: []].append(keyword)
   }
   return result.sorted(by: { $0.key < $1.key })
+}
+
+public enum Keyword: CaseIterable {
+  // Please keep these sorted alphabetically
+
+  case __consuming
+  case __owned
+  case __setter_access
+  case __shared
+  case _alignment
+  case _backDeploy
+  case _borrow
+  case _cdecl
+  case _Class
+  case _compilerInitialized
+  case _const
+  case _documentation
+  case _dynamicReplacement
+  case _effects
+  case _expose
+  case _forward
+  case _implements
+  case _linear
+  case _local
+  case _modify
+  case _move
+  case _NativeClass
+  case _NativeRefCountedObject
+  case _noMetadata
+  case _nonSendable
+  case _objcImplementation
+  case _objcRuntimeName
+  case _opaqueReturnTypeOf
+  case _optimize
+  case _originallyDefinedIn
+  case _PackageDescription
+  case _private
+  case _projectedValueProperty
+  case _read
+  case _RefCountedObject
+  case _semantics
+  case _specialize
+  case _spi
+  case _spi_available
+  case _swift_native_objc_runtime_base
+  case _Trivial
+  case _TrivialAtMost
+  case _typeEraser
+  case _unavailableFromAsync
+  case _underlyingVersion
+  case _UnknownLayout
+  case _version
+  case accesses
+  case actor
+  case addressWithNativeOwner
+  case addressWithOwner
+  case any
+  case `Any`
+  case `as`
+  case assignment
+  case `associatedtype`
+  case associativity
+  case async
+  case attached
+  case autoclosure
+  case availability
+  case available
+  case await
+  case backDeployed
+  case before
+  case block
+  case borrowing
+  case `break`
+  case canImport
+  case `case`
+  case `catch`
+  case `class`
+  case compiler
+  case consume
+  case copy
+  case consuming
+  case `continue`
+  case convenience
+  case convention
+  case cType
+  case `default`
+  case `defer`
+  case `deinit`
+  case deprecated
+  case derivative
+  case didSet
+  case differentiable
+  case distributed
+  case `do`
+  case dynamic
+  case each
+  case `else`
+  case `enum`
+  case escaping
+  case exclusivity
+  case exported
+  case `extension`
+  case `fallthrough`
+  case `false`
+  case file
+  case `fileprivate`
+  case final
+  case `for`
+  case discard
+  case forward
+  case `func`
+  case get
+  case `guard`
+  case higherThan
+  case `if`
+  case `import`
+  case `in`
+  case indirect
+  case infix
+  case `init`
+  case initializes
+  case inline
+  case `inout`
+  case `internal`
+  case introduced
+  case `is`
+  case isolated
+  case kind
+  case lazy
+  case left
+  case `let`
+  case line
+  case linear
+  case lowerThan
+  case macro
+  case message
+  case metadata
+  case module
+  case mutableAddressWithNativeOwner
+  case mutableAddressWithOwner
+  case mutating
+  case `nil`
+  case noasync
+  case noDerivative
+  case noescape
+  case none
+  case nonisolated
+  case nonmutating
+  case objc
+  case obsoleted
+  case of
+  case open
+  case `operator`
+  case optional
+  case override
+  case package
+  case postfix
+  case `precedencegroup`
+  case prefix
+  case `private`
+  case `Protocol`
+  case `protocol`
+  case `public`
+  case reasync
+  case renamed
+  case `repeat`
+  case required
+  case `rethrows`
+  case `return`
+  case reverse
+  case right
+  case safe
+  case `self`
+  case `Self`
+  case Sendable
+  case set
+  case some
+  case sourceFile
+  case spi
+  case spiModule
+  case `static`
+  case `struct`
+  case `subscript`
+  case `super`
+  case swift
+  case `switch`
+  case target
+  case `throw`
+  case `throws`
+  case transpose
+  case `true`
+  case `try`
+  case `Type`
+  case `typealias`
+  case unavailable
+  case unchecked
+  case unowned
+  case unsafe
+  case unsafeAddress
+  case unsafeMutableAddress
+  case `var`
+  case visibility
+  case weak
+  case `where`
+  case `while`
+  case willSet
+  case witness_method
+  case wrt
+  case yield
+
+  public var spec: KeywordSpec {
+    switch self {
+    case .__consuming:
+      return KeywordSpec("__consuming")
+    case .__owned:
+      return KeywordSpec("__owned")
+    case .__setter_access:
+      return KeywordSpec("__setter_access")
+    case .__shared:
+      return KeywordSpec("__shared")
+    case ._alignment:
+      return KeywordSpec("_alignment")
+    case ._backDeploy:
+      return KeywordSpec("_backDeploy")
+    case ._borrow:
+      return KeywordSpec("_borrow")
+    case ._cdecl:
+      return KeywordSpec("_cdecl")
+    case ._Class:
+      return KeywordSpec("_Class")
+    case ._compilerInitialized:
+      return KeywordSpec("_compilerInitialized")
+    case ._const:
+      return KeywordSpec("_const")
+    case ._documentation:
+      return KeywordSpec("_documentation")
+    case ._dynamicReplacement:
+      return KeywordSpec("_dynamicReplacement")
+    case ._effects:
+      return KeywordSpec("_effects")
+    case ._expose:
+      return KeywordSpec("_expose")
+    case ._forward:
+      return KeywordSpec("_forward")
+    case ._implements:
+      return KeywordSpec("_implements")
+    case ._linear:
+      return KeywordSpec("_linear")
+    case ._local:
+      return KeywordSpec("_local")
+    case ._modify:
+      return KeywordSpec("_modify")
+    case ._move:
+      return KeywordSpec("_move")
+    case ._NativeClass:
+      return KeywordSpec("_NativeClass")
+    case ._NativeRefCountedObject:
+      return KeywordSpec("_NativeRefCountedObject")
+    case ._noMetadata:
+      return KeywordSpec("_noMetadata")
+    case ._nonSendable:
+      return KeywordSpec("_nonSendable")
+    case ._objcImplementation:
+      return KeywordSpec("_objcImplementation")
+    case ._objcRuntimeName:
+      return KeywordSpec("_objcRuntimeName")
+    case ._opaqueReturnTypeOf:
+      return KeywordSpec("_opaqueReturnTypeOf")
+    case ._optimize:
+      return KeywordSpec("_optimize")
+    case ._originallyDefinedIn:
+      return KeywordSpec("_originallyDefinedIn")
+    case ._PackageDescription:
+      return KeywordSpec("_PackageDescription")
+    case ._private:
+      return KeywordSpec("_private")
+    case ._projectedValueProperty:
+      return KeywordSpec("_projectedValueProperty")
+    case ._read:
+      return KeywordSpec("_read")
+    case ._RefCountedObject:
+      return KeywordSpec("_RefCountedObject")
+    case ._semantics:
+      return KeywordSpec("_semantics")
+    case ._specialize:
+      return KeywordSpec("_specialize")
+    case ._spi:
+      return KeywordSpec("_spi")
+    case ._spi_available:
+      return KeywordSpec("_spi_available")
+    case ._swift_native_objc_runtime_base:
+      return KeywordSpec("_swift_native_objc_runtime_base")
+    case ._Trivial:
+      return KeywordSpec("_Trivial")
+    case ._TrivialAtMost:
+      return KeywordSpec("_TrivialAtMost")
+    case ._typeEraser:
+      return KeywordSpec("_typeEraser")
+    case ._unavailableFromAsync:
+      return KeywordSpec("_unavailableFromAsync")
+    case ._underlyingVersion:
+      return KeywordSpec("_underlyingVersion")
+    case ._UnknownLayout:
+      return KeywordSpec("_UnknownLayout")
+    case ._version:
+      return KeywordSpec("_version")
+    case .accesses:
+      return KeywordSpec("accesses")
+    case .actor:
+      return KeywordSpec("actor")
+    case .addressWithNativeOwner:
+      return KeywordSpec("addressWithNativeOwner")
+    case .addressWithOwner:
+      return KeywordSpec("addressWithOwner")
+    case .any:
+      return KeywordSpec("any")
+    case .Any:
+      return KeywordSpec("Any", isLexerClassified: true, requiresTrailingSpace: true)
+    case .as:
+      return KeywordSpec("as", isLexerClassified: true, requiresTrailingSpace: true)
+    case .assignment:
+      return KeywordSpec("assignment")
+    case .associatedtype:
+      return KeywordSpec("associatedtype", isLexerClassified: true, requiresTrailingSpace: true)
+    case .associativity:
+      return KeywordSpec("associativity")
+    case .async:
+      return KeywordSpec("async", requiresTrailingSpace: true)
+    case .attached:
+      return KeywordSpec("attached")
+    case .autoclosure:
+      return KeywordSpec("autoclosure")
+    case .availability:
+      return KeywordSpec("availability")
+    case .available:
+      return KeywordSpec("available")
+    case .await:
+      return KeywordSpec("await", requiresTrailingSpace: true)
+    case .backDeployed:
+      return KeywordSpec("backDeployed")
+    case .before:
+      return KeywordSpec("before")
+    case .block:
+      return KeywordSpec("block")
+    case .borrowing:
+      return KeywordSpec("borrowing")
+    case .break:
+      return KeywordSpec("break", isLexerClassified: true, requiresTrailingSpace: true)
+    case .canImport:
+      return KeywordSpec("canImport")
+    case .case:
+      return KeywordSpec("case", isLexerClassified: true, requiresTrailingSpace: true)
+    case .catch:
+      return KeywordSpec("catch", isLexerClassified: true, requiresLeadingSpace: true)
+    case .class:
+      return KeywordSpec("class", isLexerClassified: true, requiresTrailingSpace: true)
+    case .compiler:
+      return KeywordSpec("compiler")
+    case .consume:
+      return KeywordSpec("consume")
+    case .copy:
+      return KeywordSpec("copy")
+    case .consuming:
+      return KeywordSpec("consuming")
+    case .continue:
+      return KeywordSpec("continue", isLexerClassified: true, requiresTrailingSpace: true)
+    case .convenience:
+      return KeywordSpec("convenience")
+    case .convention:
+      return KeywordSpec("convention")
+    case .cType:
+      return KeywordSpec("cType")
+    case .default:
+      return KeywordSpec("default", isLexerClassified: true)
+    case .defer:
+      return KeywordSpec("defer", isLexerClassified: true, requiresTrailingSpace: true)
+    case .deinit:
+      return KeywordSpec("deinit", isLexerClassified: true)
+    case .deprecated:
+      return KeywordSpec("deprecated")
+    case .derivative:
+      return KeywordSpec("derivative")
+    case .didSet:
+      return KeywordSpec("didSet")
+    case .differentiable:
+      return KeywordSpec("differentiable")
+    case .distributed:
+      return KeywordSpec("distributed")
+    case .do:
+      return KeywordSpec("do", isLexerClassified: true)
+    case .dynamic:
+      return KeywordSpec("dynamic")
+    case .each:
+      return KeywordSpec("each")
+    case .else:
+      return KeywordSpec("else", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+    case .enum:
+      return KeywordSpec("enum", isLexerClassified: true, requiresTrailingSpace: true)
+    case .escaping:
+      return KeywordSpec("escaping")
+    case .exclusivity:
+      return KeywordSpec("exclusivity")
+    case .exported:
+      return KeywordSpec("exported")
+    case .extension:
+      return KeywordSpec("extension", isLexerClassified: true, requiresTrailingSpace: true)
+    case .fallthrough:
+      return KeywordSpec("fallthrough", isLexerClassified: true, requiresTrailingSpace: true)
+    case .false:
+      return KeywordSpec("false", isLexerClassified: true)
+    case .file:
+      return KeywordSpec("file")
+    case .fileprivate:
+      return KeywordSpec("fileprivate", isLexerClassified: true, requiresTrailingSpace: true)
+    case .final:
+      return KeywordSpec("final")
+    case .for:
+      return KeywordSpec("for", isLexerClassified: true, requiresTrailingSpace: true)
+    case .discard:
+      return KeywordSpec("discard")
+    case .forward:
+      return KeywordSpec("forward")
+    case .func:
+      return KeywordSpec("func", isLexerClassified: true, requiresTrailingSpace: true)
+    case .get:
+      return KeywordSpec("get")
+    case .guard:
+      return KeywordSpec("guard", isLexerClassified: true, requiresTrailingSpace: true)
+    case .higherThan:
+      return KeywordSpec("higherThan")
+    case .if:
+      return KeywordSpec("if", isLexerClassified: true, requiresTrailingSpace: true)
+    case .import:
+      return KeywordSpec("import", isLexerClassified: true, requiresTrailingSpace: true)
+    case .in:
+      return KeywordSpec("in", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+    case .indirect:
+      return KeywordSpec("indirect")
+    case .infix:
+      return KeywordSpec("infix")
+    case .`init`:
+      return KeywordSpec("init", isLexerClassified: true)
+    case .initializes:
+      return KeywordSpec("initializes")
+    case .inline:
+      return KeywordSpec("inline")
+    case .inout:
+      return KeywordSpec("inout", isLexerClassified: true, requiresTrailingSpace: true)
+    case .internal:
+      return KeywordSpec("internal", isLexerClassified: true, requiresTrailingSpace: true)
+    case .introduced:
+      return KeywordSpec("introduced")
+    case .is:
+      return KeywordSpec("is", isLexerClassified: true, requiresTrailingSpace: true)
+    case .isolated:
+      return KeywordSpec("isolated")
+    case .kind:
+      return KeywordSpec("kind")
+    case .lazy:
+      return KeywordSpec("lazy")
+    case .left:
+      return KeywordSpec("left")
+    case .let:
+      return KeywordSpec("let", isLexerClassified: true, requiresTrailingSpace: true)
+    case .line:
+      return KeywordSpec("line")
+    case .linear:
+      return KeywordSpec("linear")
+    case .lowerThan:
+      return KeywordSpec("lowerThan")
+    case .macro:
+      return KeywordSpec("macro")
+    case .message:
+      return KeywordSpec("message")
+    case .metadata:
+      return KeywordSpec("metadata")
+    case .module:
+      return KeywordSpec("module")
+    case .mutableAddressWithNativeOwner:
+      return KeywordSpec("mutableAddressWithNativeOwner")
+    case .mutableAddressWithOwner:
+      return KeywordSpec("mutableAddressWithOwner")
+    case .mutating:
+      return KeywordSpec("mutating")
+    case .nil:
+      return KeywordSpec("nil", isLexerClassified: true)
+    case .noasync:
+      return KeywordSpec("noasync")
+    case .noDerivative:
+      return KeywordSpec("noDerivative")
+    case .noescape:
+      return KeywordSpec("noescape")
+    case .none:
+      return KeywordSpec("none")
+    case .nonisolated:
+      return KeywordSpec("nonisolated")
+    case .nonmutating:
+      return KeywordSpec("nonmutating")
+    case .objc:
+      return KeywordSpec("objc")
+    case .obsoleted:
+      return KeywordSpec("obsoleted")
+    case .of:
+      return KeywordSpec("of")
+    case .open:
+      return KeywordSpec("open")
+    case .operator:
+      return KeywordSpec("operator", isLexerClassified: true, requiresTrailingSpace: true)
+    case .optional:
+      return KeywordSpec("optional")
+    case .override:
+      return KeywordSpec("override")
+    case .package:
+      return KeywordSpec("package")
+    case .postfix:
+      return KeywordSpec("postfix")
+    case .precedencegroup:
+      return KeywordSpec("precedencegroup", isLexerClassified: true, requiresTrailingSpace: true)
+    case .prefix:
+      return KeywordSpec("prefix")
+    case .private:
+      return KeywordSpec("private", isLexerClassified: true, requiresTrailingSpace: true)
+    case .Protocol:
+      return KeywordSpec("Protocol")
+    case .protocol:
+      return KeywordSpec("protocol", isLexerClassified: true, requiresTrailingSpace: true)
+    case .public:
+      return KeywordSpec("public", isLexerClassified: true, requiresTrailingSpace: true)
+    case .reasync:
+      return KeywordSpec("reasync")
+    case .renamed:
+      return KeywordSpec("renamed")
+    case .repeat:
+      return KeywordSpec("repeat", isLexerClassified: true, requiresTrailingSpace: true)
+    case .required:
+      return KeywordSpec("required")
+    case .rethrows:
+      return KeywordSpec("rethrows", isLexerClassified: true, requiresTrailingSpace: true)
+    case .return:
+      return KeywordSpec("return", isLexerClassified: true, requiresTrailingSpace: true)
+    case .reverse:
+      return KeywordSpec("reverse")
+    case .right:
+      return KeywordSpec("right")
+    case .safe:
+      return KeywordSpec("safe")
+    case .self:
+      return KeywordSpec("self", isLexerClassified: true)
+    case .Self:
+      return KeywordSpec("Self", isLexerClassified: true)
+    case .Sendable:
+      return KeywordSpec("Sendable")
+    case .set:
+      return KeywordSpec("set")
+    case .some:
+      return KeywordSpec("some")
+    case .sourceFile:
+      return KeywordSpec("sourceFile")
+    case .spi:
+      return KeywordSpec("spi")
+    case .spiModule:
+      return KeywordSpec("spiModule")
+    case .static:
+      return KeywordSpec("static", isLexerClassified: true, requiresTrailingSpace: true)
+    case .struct:
+      return KeywordSpec("struct", isLexerClassified: true, requiresTrailingSpace: true)
+    case .subscript:
+      return KeywordSpec("subscript", isLexerClassified: true, requiresTrailingSpace: true)
+    case .super:
+      return KeywordSpec("super", isLexerClassified: true)
+    case .swift:
+      return KeywordSpec("swift")
+    case .switch:
+      return KeywordSpec("switch", isLexerClassified: true, requiresTrailingSpace: true)
+    case .target:
+      return KeywordSpec("target")
+    case .throw:
+      return KeywordSpec("throw", isLexerClassified: true, requiresTrailingSpace: true)
+    case .throws:
+      return KeywordSpec("throws", isLexerClassified: true, requiresTrailingSpace: true)
+    case .transpose:
+      return KeywordSpec("transpose")
+    case .true:
+      return KeywordSpec("true", isLexerClassified: true)
+    case .try:
+      return KeywordSpec("try", isLexerClassified: true, requiresTrailingSpace: true)
+    case .Type:
+      return KeywordSpec("Type")
+    case .typealias:
+      return KeywordSpec("typealias", isLexerClassified: true, requiresTrailingSpace: true)
+    case .unavailable:
+      return KeywordSpec("unavailable")
+    case .unchecked:
+      return KeywordSpec("unchecked")
+    case .unowned:
+      return KeywordSpec("unowned")
+    case .unsafe:
+      return KeywordSpec("unsafe")
+    case .unsafeAddress:
+      return KeywordSpec("unsafeAddress")
+    case .unsafeMutableAddress:
+      return KeywordSpec("unsafeMutableAddress")
+    case .var:
+      return KeywordSpec("var", isLexerClassified: true, requiresTrailingSpace: true)
+    case .visibility:
+      return KeywordSpec("visibility")
+    case .weak:
+      return KeywordSpec("weak")
+    case .where:
+      return KeywordSpec("where", isLexerClassified: true, requiresLeadingSpace: true, requiresTrailingSpace: true)
+    case .while:
+      return KeywordSpec("while", isLexerClassified: true, requiresTrailingSpace: true)
+    case .willSet:
+      return KeywordSpec("willSet")
+    case .witness_method:
+      return KeywordSpec("witness_method")
+    case .wrt:
+      return KeywordSpec("wrt")
+    case .yield:
+      return KeywordSpec("yield")
+    }
+  }
 }

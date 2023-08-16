@@ -91,12 +91,12 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "asyncSpecifier",
-        kind: .token(choices: [.keyword(text: "async")]),
+        kind: .token(choices: [.keyword(.async)]),
         isOptional: true
       ),
       Child(
         name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(text: "throws")]),
+        kind: .token(choices: [.keyword(.throws)]),
         isOptional: true
       ),
     ]
@@ -113,12 +113,12 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "asyncSpecifier",
-        kind: .token(choices: [.keyword(text: "async"), .keyword(text: "reasync")]),
+        kind: .token(choices: [.keyword(.async), .keyword(.reasync)]),
         isOptional: true
       ),
       Child(
         name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(text: "throws"), .keyword(text: "rethrows")]),
+        kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
         isOptional: true
       ),
     ]
@@ -133,7 +133,7 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "asyncSpecifier",
-        kind: .token(choices: [.keyword(text: "async")]),
+        kind: .token(choices: [.keyword(.async)]),
         isOptional: true
       )
     ]
@@ -316,12 +316,12 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "asyncSpecifier",
-        kind: .token(choices: [.keyword(text: "async")]),
+        kind: .token(choices: [.keyword(.async)]),
         isOptional: true
       ),
       Child(
         name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(text: "throws")]),
+        kind: .token(choices: [.keyword(.throws)]),
         isOptional: true
       ),
     ]

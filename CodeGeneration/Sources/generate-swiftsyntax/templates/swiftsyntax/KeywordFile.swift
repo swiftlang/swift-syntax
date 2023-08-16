@@ -16,8 +16,8 @@ import SyntaxSupport
 import Utils
 
 let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareToken(trailingTrivia: .newline)) {
-  for keyword in KEYWORDS {
-    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.name)"), trailingComma: .commaToken())
+  for keyword in Keyword.allCases {
+    ArrayElementSyntax(expression: ExprSyntax("\(literal: keyword.spec.name)"), trailingComma: .commaToken())
   }
 }
 
@@ -27,11 +27,11 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     public enum Keyword: UInt8, Hashable
     """
   ) {
-    for (index, keyword) in KEYWORDS.enumerated() {
+    for keyword in Keyword.allCases {
       DeclSyntax(
         """
-        \(keyword.apiAttributes)\
-        case \(raw: keyword.escapedName)
+        \(keyword.spec.apiAttributes)\
+        case \(raw: keyword.spec.escapedName)
         """
       )
     }

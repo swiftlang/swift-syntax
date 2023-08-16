@@ -99,7 +99,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "asKeyword",
         deprecatedName: "asTok",
-        kind: .token(choices: [.keyword(text: "as")])
+        kind: .token(choices: [.keyword(.as)])
       ),
       Child(
         name: "questionOrExclamationMark",
@@ -137,7 +137,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "awaitKeyword",
-        kind: .token(choices: [.keyword(text: "await")])
+        kind: .token(choices: [.keyword(.await)])
       ),
       Child(
         name: "expression",
@@ -170,7 +170,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "literal",
         deprecatedName: "booleanLiteral",
-        kind: .token(choices: [.keyword(text: "true"), .keyword(text: "false")])
+        kind: .token(choices: [.keyword(.true), .keyword(.false)])
       )
     ]
   ),
@@ -183,7 +183,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "borrowKeyword",
-        kind: .token(choices: [.keyword(text: "_borrow")])
+        kind: .token(choices: [.keyword(._borrow)])
       ),
       Child(
         name: "expression",
@@ -200,7 +200,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "canImportKeyword",
-        kind: .token(choices: [.keyword(text: "canImport")])
+        kind: .token(choices: [.keyword(.canImport)])
       ),
       Child(
         name: "leftParen",
@@ -233,7 +233,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "label",
-        kind: .token(choices: [.keyword(text: "_version"), .keyword(text: "_underlyingVersion")])
+        kind: .token(choices: [.keyword(._version), .keyword(._underlyingVersion)])
       ),
       Child(
         name: "colon",
@@ -287,7 +287,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "specifier",
-        kind: .token(choices: [.keyword(text: "weak"), .keyword(text: "unowned")])
+        kind: .token(choices: [.keyword(.weak), .keyword(.unowned)])
       ),
       Child(
         name: "leftParen",
@@ -296,7 +296,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "detail",
-        kind: .token(choices: [.keyword(text: "safe"), .keyword(text: "unsafe")]),
+        kind: .token(choices: [.keyword(.safe), .keyword(.unsafe)]),
         isOptional: true
       ),
       Child(
@@ -561,7 +561,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "inKeyword",
         deprecatedName: "inTok",
-        kind: .token(choices: [.keyword(text: "in")])
+        kind: .token(choices: [.keyword(.in)])
       ),
     ]
   ),
@@ -841,9 +841,9 @@ public let EXPR_NODES: [Node] = [
         deprecatedName: "identifier",
         kind: .token(choices: [
           .token(.identifier),
-          .keyword(text: "self"),
-          .keyword(text: "Self"),
-          .keyword(text: "init"),
+          .keyword(.self),
+          .keyword(.Self),
+          .keyword(.`init`),
           .token(.dollarIdentifier),
           .token(.binaryOperator),
           .token(.integerLiteral),
@@ -873,7 +873,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "ifKeyword",
-        kind: .token(choices: [.keyword(text: "if")])
+        kind: .token(choices: [.keyword(.if)])
       ),
       Child(
         name: "conditions",
@@ -886,7 +886,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "elseKeyword",
-        kind: .token(choices: [.keyword(text: "else")]),
+        kind: .token(choices: [.keyword(.else)]),
         isOptional: true
       ),
       Child(
@@ -995,7 +995,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "isKeyword",
         deprecatedName: "isTok",
-        kind: .token(choices: [.keyword(text: "is")]),
+        kind: .token(choices: [.keyword(.is)]),
         documentation: "The `is` keyword for this expression."
       ),
       Child(
@@ -1215,7 +1215,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "consumeKeyword",
         deprecatedName: "moveKeyword",
-        kind: .token(choices: [.keyword(text: "_move"), .keyword(text: "consume")])
+        kind: .token(choices: [.keyword(._move), .keyword(.consume)])
       ),
       Child(
         name: "expression",
@@ -1231,7 +1231,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "copyKeyword",
-        kind: .token(choices: [.keyword(text: "copy")])
+        kind: .token(choices: [.keyword(.copy)])
       ),
       Child(
         name: "expression",
@@ -1277,7 +1277,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "nilKeyword",
-        kind: .token(choices: [.keyword(text: "nil")])
+        kind: .token(choices: [.keyword(.nil)])
       )
     ]
   ),
@@ -1307,7 +1307,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "eachKeyword",
-        kind: .token(choices: [.keyword(text: "each")])
+        kind: .token(choices: [.keyword(.each)])
       ),
       Child(
         name: "pack",
@@ -1325,7 +1325,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "repeatKeyword",
-        kind: .token(choices: [.keyword(text: "repeat")])
+        kind: .token(choices: [.keyword(.repeat)])
       ),
       Child(
         name: "repetitionPattern",
@@ -1593,7 +1593,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "superKeyword",
-        kind: .token(choices: [.keyword(text: "super")])
+        kind: .token(choices: [.keyword(.super)])
       )
     ]
   ),
@@ -1606,7 +1606,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "caseKeyword",
-        kind: .token(choices: [.keyword(text: "case")])
+        kind: .token(choices: [.keyword(.case)])
       ),
       Child(
         name: "caseItems",
@@ -1672,7 +1672,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "defaultKeyword",
-        kind: .token(choices: [.keyword(text: "default")])
+        kind: .token(choices: [.keyword(.default)])
       ),
       Child(
         name: "colon",
@@ -1696,7 +1696,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "switchKeyword",
-        kind: .token(choices: [.keyword(text: "switch")])
+        kind: .token(choices: [.keyword(.switch)])
       ),
       Child(
         name: "subject",
@@ -1768,7 +1768,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "tryKeyword",
-        kind: .token(choices: [.keyword(text: "try")])
+        kind: .token(choices: [.keyword(.try)])
       ),
       Child(
         name: "questionOrExclamationMark",
@@ -1870,7 +1870,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "asKeyword",
         deprecatedName: "asTok",
-        kind: .token(choices: [.keyword(text: "as")])
+        kind: .token(choices: [.keyword(.as)])
       ),
       Child(
         name: "questionOrExclamationMark",
@@ -1891,7 +1891,7 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "isKeyword",
         deprecatedName: "isTok",
-        kind: .token(choices: [.keyword(text: "is")])
+        kind: .token(choices: [.keyword(.is)])
       )
     ]
   ),

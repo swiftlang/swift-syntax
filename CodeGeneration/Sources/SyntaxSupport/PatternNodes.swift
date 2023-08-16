@@ -31,7 +31,7 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "identifier",
-        kind: .token(choices: [.token(.identifier), .keyword(text: "self"), .keyword(text: "init")])
+        kind: .token(choices: [.token(.identifier), .keyword(.self), .keyword(.`init`)])
       )
     ]
   ),
@@ -44,7 +44,7 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "isKeyword",
-        kind: .token(choices: [.keyword(text: "is")])
+        kind: .token(choices: [.keyword(.is)])
       ),
       Child(
         name: "type",
@@ -148,7 +148,7 @@ public let PATTERN_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(text: "let"), .keyword(text: "var"), .keyword(text: "inout")])
+        kind: .token(choices: [.keyword(.let), .keyword(.var), .keyword(.inout)])
       ),
       Child(
         name: "pattern",

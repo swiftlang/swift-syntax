@@ -18,7 +18,7 @@ import Utils
 let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! ExtensionDeclSyntax("extension TokenSyntax") {
     for tokenSpec in Token.allCases.map(\.spec) {
-      if let text = tokenSpec.text {
+      if tokenSpec.text != nil {
         DeclSyntax(
           """
           public static func \(tokenSpec.varOrCaseName)Token(

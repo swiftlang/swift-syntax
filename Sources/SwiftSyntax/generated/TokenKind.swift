@@ -70,73 +70,73 @@ public enum TokenKind: Hashable {
   public var text: String {
     switch self {
     case .arrow:
-      return #"->"#
+      return "->"
     case .atSign:
-      return #"@"#
+      return "@"
     case .backslash:
       return #"\"#
     case .backtick:
-      return #"`"#
+      return "`"
     case .binaryOperator(let text):
       return text
     case .colon:
-      return #":"#
+      return ":"
     case .comma:
-      return #","#
+      return ","
     case .dollarIdentifier(let text):
       return text
     case .ellipsis:
-      return #"..."#
+      return "..."
     case .endOfFile:
-      return #""#
+      return ""
     case .equal:
-      return #"="#
+      return "="
     case .exclamationMark:
-      return #"!"#
+      return "!"
     case .floatLiteral(let text):
       return text
     case .identifier(let text):
       return text
     case .infixQuestionMark:
-      return #"?"#
+      return "?"
     case .integerLiteral(let text):
       return text
     case .keyword(let assoc):
       return String(syntaxText: assoc.defaultText)
     case .leftAngle:
-      return #"<"#
+      return "<"
     case .leftBrace:
-      return #"{"#
+      return "{"
     case .leftParen:
-      return #"("#
+      return "("
     case .leftSquare:
-      return #"["#
+      return "["
     case .multilineStringQuote:
       return #"""""#
     case .period:
-      return #"."#
+      return "."
     case .postfixOperator(let text):
       return text
     case .postfixQuestionMark:
-      return #"?"#
+      return "?"
     case .pound:
-      return #"#"#
+      return "#"
     case .poundAvailable:
-      return #"#available"#
+      return "#available"
     case .poundElse:
-      return #"#else"#
+      return "#else"
     case .poundElseif:
-      return #"#elseif"#
+      return "#elseif"
     case .poundEndif:
-      return #"#endif"#
+      return "#endif"
     case .poundIf:
-      return #"#if"#
+      return "#if"
     case .poundSourceLocation:
-      return #"#sourceLocation"#
+      return "#sourceLocation"
     case .poundUnavailable:
-      return #"#unavailable"#
+      return "#unavailable"
     case .prefixAmpersand:
-      return #"&"#
+      return "&"
     case .prefixOperator(let text):
       return text
     case .rawStringPoundDelimiter(let text):
@@ -146,21 +146,21 @@ public enum TokenKind: Hashable {
     case .regexPoundDelimiter(let text):
       return text
     case .regexSlash:
-      return #"/"#
+      return "/"
     case .rightAngle:
-      return #">"#
+      return ">"
     case .rightBrace:
-      return #"}"#
+      return "}"
     case .rightParen:
-      return #")"#
+      return ")"
     case .rightSquare:
-      return #"]"#
+      return "]"
     case .semicolon:
-      return #";"#
+      return ";"
     case .shebang(let text):
       return text
     case .singleQuote:
-      return #"'"#
+      return "'"
     case .stringQuote:
       return #"""#
     case .stringSegment(let text):
@@ -168,7 +168,7 @@ public enum TokenKind: Hashable {
     case .unknown(let text):
       return text
     case .wildcard:
-      return #"_"#
+      return "_"
     }
   }
   
@@ -177,79 +177,79 @@ public enum TokenKind: Hashable {
   public var defaultText: SyntaxText? {
     switch self {
     case .arrow:
-      return #"->"#
+      return "->"
     case .atSign:
-      return #"@"#
+      return "@"
     case .backslash:
       return #"\"#
     case .backtick:
-      return #"`"#
+      return "`"
     case .colon:
-      return #":"#
+      return ":"
     case .comma:
-      return #","#
+      return ","
     case .ellipsis:
-      return #"..."#
+      return "..."
     case .endOfFile:
-      return #""#
+      return ""
     case .equal:
-      return #"="#
+      return "="
     case .exclamationMark:
-      return #"!"#
+      return "!"
     case .infixQuestionMark:
-      return #"?"#
+      return "?"
     case .keyword(let assoc):
       return assoc.defaultText
     case .leftAngle:
-      return #"<"#
+      return "<"
     case .leftBrace:
-      return #"{"#
+      return "{"
     case .leftParen:
-      return #"("#
+      return "("
     case .leftSquare:
-      return #"["#
+      return "["
     case .multilineStringQuote:
       return #"""""#
     case .period:
-      return #"."#
+      return "."
     case .postfixQuestionMark:
-      return #"?"#
+      return "?"
     case .pound:
-      return #"#"#
+      return "#"
     case .poundAvailable:
-      return #"#available"#
+      return "#available"
     case .poundElse:
-      return #"#else"#
+      return "#else"
     case .poundElseif:
-      return #"#elseif"#
+      return "#elseif"
     case .poundEndif:
-      return #"#endif"#
+      return "#endif"
     case .poundIf:
-      return #"#if"#
+      return "#if"
     case .poundSourceLocation:
-      return #"#sourceLocation"#
+      return "#sourceLocation"
     case .poundUnavailable:
-      return #"#unavailable"#
+      return "#unavailable"
     case .prefixAmpersand:
-      return #"&"#
+      return "&"
     case .regexSlash:
-      return #"/"#
+      return "/"
     case .rightAngle:
-      return #">"#
+      return ">"
     case .rightBrace:
-      return #"}"#
+      return "}"
     case .rightParen:
-      return #")"#
+      return ")"
     case .rightSquare:
-      return #"]"#
+      return "]"
     case .semicolon:
-      return #";"#
+      return ";"
     case .singleQuote:
-      return #"'"#
+      return "'"
     case .stringQuote:
       return #"""#
     case .wildcard:
-      return #"_"#
+      return "_"
     default:
       return ""
     }
@@ -537,77 +537,77 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   public var defaultText: SyntaxText? {
     switch self {
     case .arrow:
-      return #"->"#
+      return "->"
     case .atSign:
-      return #"@"#
+      return "@"
     case .backslash:
       return #"\"#
     case .backtick:
-      return #"`"#
+      return "`"
     case .colon:
-      return #":"#
+      return ":"
     case .comma:
-      return #","#
+      return ","
     case .ellipsis:
-      return #"..."#
+      return "..."
     case .endOfFile:
-      return #""#
+      return ""
     case .equal:
-      return #"="#
+      return "="
     case .exclamationMark:
-      return #"!"#
+      return "!"
     case .infixQuestionMark:
-      return #"?"#
+      return "?"
     case .leftAngle:
-      return #"<"#
+      return "<"
     case .leftBrace:
-      return #"{"#
+      return "{"
     case .leftParen:
-      return #"("#
+      return "("
     case .leftSquare:
-      return #"["#
+      return "["
     case .multilineStringQuote:
       return #"""""#
     case .period:
-      return #"."#
+      return "."
     case .postfixQuestionMark:
-      return #"?"#
+      return "?"
     case .pound:
-      return #"#"#
+      return "#"
     case .poundAvailable:
-      return #"#available"#
+      return "#available"
     case .poundElse:
-      return #"#else"#
+      return "#else"
     case .poundElseif:
-      return #"#elseif"#
+      return "#elseif"
     case .poundEndif:
-      return #"#endif"#
+      return "#endif"
     case .poundIf:
-      return #"#if"#
+      return "#if"
     case .poundSourceLocation:
-      return #"#sourceLocation"#
+      return "#sourceLocation"
     case .poundUnavailable:
-      return #"#unavailable"#
+      return "#unavailable"
     case .prefixAmpersand:
-      return #"&"#
+      return "&"
     case .regexSlash:
-      return #"/"#
+      return "/"
     case .rightAngle:
-      return #">"#
+      return ">"
     case .rightBrace:
-      return #"}"#
+      return "}"
     case .rightParen:
-      return #")"#
+      return ")"
     case .rightSquare:
-      return #"]"#
+      return "]"
     case .semicolon:
-      return #";"#
+      return ";"
     case .singleQuote:
-      return #"'"#
+      return "'"
     case .stringQuote:
       return #"""#
     case .wildcard:
-      return #"_"#
+      return "_"
     default:
       return nil
     }

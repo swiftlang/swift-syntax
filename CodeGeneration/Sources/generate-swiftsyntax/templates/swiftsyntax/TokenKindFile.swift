@@ -64,7 +64,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           } else if let text = tokenSpec.text {
             SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
-              StmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return \(literal: text)")
             }
           } else {
             SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName)(let text):") {
@@ -90,7 +90,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           } else if let text = tokenSpec.text {
             SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
-              StmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return \(literal: text)")
             }
           }
         }
@@ -173,7 +173,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for tokenSpec in Token.allCases.map(\.spec) {
           if let text = tokenSpec.text {
             SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
-              StmtSyntax("return #\"\(raw: text)\"#")
+              StmtSyntax("return \(literal: text)")
             }
           }
         }

@@ -27,11 +27,11 @@ enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
   case rhs(RHS)
 
   init?(lexeme: Lexer.Lexeme) {
-    if let x = LHS.init(lexeme: lexeme) {
+    if let x = LHS(lexeme: lexeme) {
       self = .lhs(x)
       return
     }
-    if let y = RHS.init(lexeme: lexeme) {
+    if let y = RHS(lexeme: lexeme) {
       self = .rhs(y)
       return
     }

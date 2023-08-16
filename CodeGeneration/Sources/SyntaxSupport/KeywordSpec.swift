@@ -25,14 +25,12 @@ public struct KeywordSpec {
   /// Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
   public let isLexerClassified: Bool
 
-  /// The escaped name of the keyword.
-  ///
-  /// This is useful when the keyword is also an identifier or has special characters that need escaping.
-  public var escapedName: String {
-    if isLexerClassified || name == "Type" || name == "Protocol" {
-      return "`\(name)`"
+  /// The name of this keyword that's suitable to be used for variable or enum case names.
+  public var varOrCaseName: TokenSyntax {
+    if name == "init" {
+      return "`init`"
     } else {
-      return name
+      return TokenSyntax.identifier(name)
     }
   }
 

@@ -229,15 +229,15 @@ public enum Keyword: UInt8, Hashable {
     case 2:
       switch text {
       case "as":
-        self = .`as`
+        self = .as
       case "do":
-        self = .`do`
+        self = .do
       case "if":
-        self = .`if`
+        self = .if
       case "in":
-        self = .`in`
+        self = .in
       case "is":
-        self = .`is`
+        self = .is
       case "of":
         self = .of
       default:
@@ -248,23 +248,23 @@ public enum Keyword: UInt8, Hashable {
       case "any":
         self = .any
       case "Any":
-        self = .`Any`
+        self = .Any
       case "for":
-        self = .`for`
+        self = .for
       case "get":
         self = .get
       case "let":
-        self = .`let`
+        self = .let
       case "nil":
-        self = .`nil`
+        self = .nil
       case "set":
         self = .set
       case "spi":
         self = .spi
       case "try":
-        self = .`try`
+        self = .try
       case "var":
-        self = .`var`
+        self = .var
       case "wrt":
         self = .wrt
       default:
@@ -275,19 +275,19 @@ public enum Keyword: UInt8, Hashable {
       case "_spi":
         self = ._spi
       case "case":
-        self = .`case`
+        self = .case
       case "copy":
         self = .copy
       case "each":
         self = .each
       case "else":
-        self = .`else`
+        self = .else
       case "enum":
-        self = .`enum`
+        self = .enum
       case "file":
         self = .file
       case "func":
-        self = .`func`
+        self = .func
       case "init":
         self = .`init`
       case "kind":
@@ -307,15 +307,15 @@ public enum Keyword: UInt8, Hashable {
       case "safe":
         self = .safe
       case "self":
-        self = .`self`
+        self = .self
       case "Self":
-        self = .`Self`
+        self = .Self
       case "some":
         self = .some
       case "true":
-        self = .`true`
+        self = .true
       case "Type":
-        self = .`Type`
+        self = .Type
       case "weak":
         self = .weak
       default:
@@ -336,39 +336,39 @@ public enum Keyword: UInt8, Hashable {
       case "block":
         self = .block
       case "break":
-        self = .`break`
+        self = .break
       case "catch":
-        self = .`catch`
+        self = .catch
       case "class":
-        self = .`class`
+        self = .class
       case "cType":
         self = .cType
       case "defer":
-        self = .`defer`
+        self = .defer
       case "false":
-        self = .`false`
+        self = .false
       case "final":
         self = .final
       case "guard":
-        self = .`guard`
+        self = .guard
       case "infix":
         self = .infix
       case "inout":
-        self = .`inout`
+        self = .inout
       case "macro":
         self = .macro
       case "right":
         self = .right
       case "super":
-        self = .`super`
+        self = .super
       case "swift":
         self = .swift
       case "throw":
-        self = .`throw`
+        self = .throw
       case "where":
-        self = .`where`
+        self = .where
       case "while":
-        self = .`while`
+        self = .while
       case "yield":
         self = .yield
       default:
@@ -387,11 +387,11 @@ public enum Keyword: UInt8, Hashable {
       case "before":
         self = .before
       case "deinit":
-        self = .`deinit`
+        self = .deinit
       case "didSet":
         self = .didSet
       case "import":
-        self = .`import`
+        self = .import
       case "inline":
         self = .inline
       case "linear":
@@ -401,21 +401,21 @@ public enum Keyword: UInt8, Hashable {
       case "prefix":
         self = .prefix
       case "public":
-        self = .`public`
+        self = .public
       case "repeat":
-        self = .`repeat`
+        self = .repeat
       case "return":
-        self = .`return`
+        self = .return
       case "static":
-        self = .`static`
+        self = .static
       case "struct":
-        self = .`struct`
+        self = .struct
       case "switch":
-        self = .`switch`
+        self = .switch
       case "target":
         self = .target
       case "throws":
-        self = .`throws`
+        self = .throws
       case "unsafe":
         self = .unsafe
       default:
@@ -436,7 +436,7 @@ public enum Keyword: UInt8, Hashable {
       case "consume":
         self = .consume
       case "default":
-        self = .`default`
+        self = .default
       case "dynamic":
         self = .dynamic
       case "discard":
@@ -452,7 +452,7 @@ public enum Keyword: UInt8, Hashable {
       case "postfix":
         self = .postfix
       case "private":
-        self = .`private`
+        self = .private
       case "reasync":
         self = .reasync
       case "renamed":
@@ -487,7 +487,7 @@ public enum Keyword: UInt8, Hashable {
       case "compiler":
         self = .compiler
       case "continue":
-        self = .`continue`
+        self = .continue
       case "escaping":
         self = .escaping
       case "exported":
@@ -495,7 +495,7 @@ public enum Keyword: UInt8, Hashable {
       case "indirect":
         self = .indirect
       case "internal":
-        self = .`internal`
+        self = .internal
       case "isolated":
         self = .isolated
       case "metadata":
@@ -505,19 +505,19 @@ public enum Keyword: UInt8, Hashable {
       case "noescape":
         self = .noescape
       case "operator":
-        self = .`operator`
+        self = .operator
       case "optional":
         self = .optional
       case "override":
         self = .override
       case "Protocol":
-        self = .`Protocol`
+        self = .Protocol
       case "protocol":
-        self = .`protocol`
+        self = .protocol
       case "required":
         self = .required
       case "rethrows":
-        self = .`rethrows`
+        self = .rethrows
       case "Sendable":
         self = .Sendable
       default:
@@ -538,7 +538,7 @@ public enum Keyword: UInt8, Hashable {
       case "consuming":
         self = .consuming
       case "extension":
-        self = .`extension`
+        self = .extension
       case "lowerThan":
         self = .lowerThan
       case "obsoleted":
@@ -546,11 +546,11 @@ public enum Keyword: UInt8, Hashable {
       case "spiModule":
         self = .spiModule
       case "subscript":
-        self = .`subscript`
+        self = .subscript
       case "transpose":
         self = .transpose
       case "typealias":
-        self = .`typealias`
+        self = .typealias
       case "unchecked":
         self = .unchecked
       default:
@@ -608,9 +608,9 @@ public enum Keyword: UInt8, Hashable {
       case "exclusivity":
         self = .exclusivity
       case "fallthrough":
-        self = .`fallthrough`
+        self = .fallthrough
       case "fileprivate":
-        self = .`fileprivate`
+        self = .fileprivate
       case "initializes":
         self = .initializes
       case "nonisolated":
@@ -657,7 +657,7 @@ public enum Keyword: UInt8, Hashable {
       case "_UnknownLayout":
         self = ._UnknownLayout
       case "associatedtype":
-        self = .`associatedtype`
+        self = .associatedtype
       case "differentiable":
         self = .differentiable
       case "witness_method":
@@ -670,7 +670,7 @@ public enum Keyword: UInt8, Hashable {
       case "__setter_access":
         self = .__setter_access
       case "precedencegroup":
-        self = .`precedencegroup`
+        self = .precedencegroup
       default:
         return nil
       }

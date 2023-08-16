@@ -31,7 +31,7 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         \(keyword.spec.apiAttributes)\
-        case \(raw: keyword.spec.escapedName)
+        case \(keyword.spec.varOrCaseName.backtickedIfNeeded)
         """
       )
     }
@@ -42,8 +42,8 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           SwitchCaseSyntax("case \(raw: length):") {
             try! SwitchExprSyntax("switch text") {
               for keyword in keywords {
-                SwitchCaseSyntax(#"case "\#(raw: keyword.name)":"#) {
-                  ExprSyntax("self = .\(raw: keyword.escapedName)")
+                SwitchCaseSyntax("case \(literal: keyword.name):") {
+                  ExprSyntax("self = .\(keyword.varOrCaseName)")
                 }
               }
               SwitchCaseSyntax("default: return nil")

@@ -15,7 +15,7 @@ public extension StringProtocol {
   var withFirstCharacterUppercased: String { prefix(1).uppercased() + dropFirst() }
   var backtickedIfNeeded: String {
     if Keyword.allCases.map(\.spec).contains(where: {
-      $0.name == self && $0.isLexerClassified
+      $0.name == self && ($0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol")
     }) {
       return "`\(self)`"
     } else {

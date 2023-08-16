@@ -34,7 +34,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 DeclSyntax(
                   """
                   \(keyword.spec.apiAttributes)\
-                  case \(raw: keyword.spec.escapedName)
+                  case \(keyword.spec.varOrCaseName.backtickedIfNeeded)
                   """
                 )
               case .token(let token):
@@ -47,8 +47,8 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 for choice in choices {
                   switch choice {
                   case .keyword(let keyword):
-                    let escapedName = keyword.spec.escapedName
-                    SwitchCaseSyntax("case TokenSpec(.\(raw: escapedName)): self = .\(raw: escapedName)")
+                    let caseName = keyword.spec.varOrCaseName
+                    SwitchCaseSyntax("case TokenSpec(.\(caseName)): self = .\(caseName)")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
                     SwitchCaseSyntax("case TokenSpec(.\(caseName)): self = .\(caseName)")
@@ -63,8 +63,8 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 for choice in choices {
                   switch choice {
                   case .keyword(let keyword):
-                    let escapedName = keyword.spec.escapedName
-                    SwitchCaseSyntax("case .\(raw: escapedName): return .keyword(.\(raw: escapedName))")
+                    let caseName = keyword.spec.varOrCaseName
+                    SwitchCaseSyntax("case .\(caseName): return .keyword(.\(caseName))")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
                     SwitchCaseSyntax("case .\(caseName): return .\(caseName)")
@@ -86,8 +86,8 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 for choice in choices {
                   switch choice {
                   case .keyword(let keyword):
-                    let escapedName = keyword.spec.escapedName
-                    SwitchCaseSyntax("case .\(raw: escapedName): return .keyword(.\(raw: escapedName))")
+                    let caseName = keyword.spec.varOrCaseName
+                    SwitchCaseSyntax("case .\(caseName): return .keyword(.\(caseName))")
                   case .token(let token):
                     let caseName = token.spec.varOrCaseName
                     if token.spec.text != nil {

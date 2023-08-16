@@ -69,7 +69,7 @@ public extension Collection {
 public extension TokenSyntax {
   var backtickedIfNeeded: TokenSyntax {
     if Keyword.allCases.map(\.spec).contains(where: {
-      $0.name == self.description && $0.isLexerClassified
+      $0.name == self.description && ($0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol")
     }) {
       return "`\(self)`"
     } else {

@@ -13,14 +13,21 @@
 import SwiftSyntax
 
 public struct KeywordSpec {
-  public var name: String
+  /// The name of the keyword.
+  public let name: String
 
-  /// If `true`, this is for an experimental language feature, and any public
-  /// API generated should be SPI.
-  public var isExperimental: Bool
+  /// Indicates if the keyword is part of an experimental language feature.
+  ///
+  /// If `true`, this keyword is for an experimental language feature, and any public
+  /// API generated should be marked as SPI
+  public let isExperimental: Bool
 
-  public var isLexerClassified: Bool
+  /// Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
+  public let isLexerClassified: Bool
 
+  /// The escaped name of the keyword.
+  ///
+  /// This is useful when the keyword is also an identifier or has special characters that need escaping.
   public var escapedName: String {
     if isLexerClassified || name == "Type" || name == "Protocol" {
       return "`\(name)`"
@@ -29,16 +36,25 @@ public struct KeywordSpec {
     }
   }
 
-  /// Retrieve the attributes that should be printed on any API for the
-  /// generated keyword.
+  /// The attributes that should be printed on any API for the generated keyword.
+  ///
+  /// This is typically used to mark APIs as SPI when the keyword is part of an experimental language feature.
   public var apiAttributes: AttributeListSyntax {
     guard isExperimental else { return "" }
     return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
   }
 
-  /// `isLexerClassified` determines whether the token kind is switched from being an identifier to a keyword in the lexer.
-  /// This is true for keywords that used to be considered non-contextual.
-  init(_ name: String, isExperimental: Bool = false, isLexerClassified: Bool = false) {
+  /// Initializes a new `KeywordSpec` instance.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the keyword.
+  ///   - isExperimental: Indicates if the keyword is part of an experimental language feature.
+  ///   - isLexerClassified: Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
+  init(
+    _ name: String,
+    isExperimental: Bool = false,
+    isLexerClassified: Bool = false
+  ) {
     self.name = name
     self.isExperimental = isExperimental
     self.isLexerClassified = isLexerClassified

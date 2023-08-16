@@ -31,12 +31,12 @@ public class ProcessRunner {
 
   @discardableResult
   public func run(
-    verbose: Bool,
     captureStdout: Bool = true,
-    captureStderr: Bool = true
+    captureStderr: Bool = true,
+    verbose: Bool
   ) throws -> ProcessResult {
     if verbose {
-      logProcessCommand(executableURL: process.executableURL, arguments: process.arguments)
+      print(process.command)
     }
 
     let group = DispatchGroup()
@@ -71,6 +71,7 @@ public class ProcessRunner {
 
     guard process.terminationStatus == 0 else {
       throw NonZeroExitCodeError(
+        process: process,
         stdout: stdoutString,
         stderr: stderrString,
         exitCode: Int(process.terminationStatus)
@@ -110,10 +111,31 @@ public struct ProcessResult {
 }
 
 /// Error thrown if a process terminates with a non-zero exit code.
-struct NonZeroExitCodeError: Error {
+struct NonZeroExitCodeError: Error, CustomStringConvertible {
+  let process: Process
   let stdout: String
   let stderr: String
   let exitCode: Int
+
+  var description: String {
+    var result = """
+      Command failed with non-zero exit code \(exitCode):
+      Command: \(process.command)
+      """
+    if !stdout.isEmpty {
+      result += """
+        Standard output:
+        \(stdout)
+        """
+    }
+    if !stderr.isEmpty {
+      result += """
+        Standard error:
+        \(stderr)
+        """
+    }
+    return result
+  }
 }
 
 /// Error thrown if `stdout` or `stderr` could not be decoded as UTF-8.

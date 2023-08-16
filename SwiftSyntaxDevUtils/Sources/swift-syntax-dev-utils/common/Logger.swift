@@ -16,16 +16,18 @@ func logSection(_ text: String) {
   print("** \(text) **")
 }
 
-func logProcessCommand(executableURL: URL?, arguments: [String]?) {
-  var message = ""
+extension Process {
+  var command: String {
+    var message = ""
 
-  if let executableURL = executableURL {
-    message += executableURL.absoluteString
+    if let executableURL = executableURL {
+      message += executableURL.path
+    }
+
+    if let arguments = arguments {
+      message += " \(arguments.joined(separator: " "))"
+    }
+
+    return message
   }
-
-  if let arguments = arguments {
-    message += " \(arguments.joined(separator: " "))"
-  }
-
-  print(message)
 }

@@ -20,5 +20,13 @@ struct Build: ParsableCommand, BuildCommand {
   func run() throws {
     try buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all")
     try buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all")
+    try buildEditorExtension()
+  }
+
+  private func buildEditorExtension() throws {
+    #if os(macOS)
+    logSection("Building Editor Extension")
+    try invokeXcodeBuild(projectPath: Paths.editorExtensionProjectPath)
+    #endif
   }
 }

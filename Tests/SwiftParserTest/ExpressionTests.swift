@@ -2632,5 +2632,115 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse("_ = { (@_noImplicitCopy _ x: Int) -> () in }")
 
     assertParse("_ = { (@Wrapper x) in }")
+
+    assertParse(
+      """
+      withInvalidOrderings { (comparisonPredicate: @escaping (Int, Int) -> Bool) in
+      }
+      """
+    )
+  }
+
+  func testClosureWithMissingParentheses() {
+    assertParse(
+      """
+      _ = { 1️⃣a: Int, b: Int 2️⃣in
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(' to start parameter clause",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ')' to end parameter clause",
+          fixIts: ["insert ')'"]
+        ),
+      ],
+      fixedSource: """
+        _ = { (a: Int, b: Int) in
+        }
+        """
+    )
+  }
+
+  func testClosureWithReturnArrowAndMissingParentheses() {
+    assertParse(
+      """
+      _ = { 1️⃣a: Int, b: 2️⃣Int 3️⃣-> Int 4️⃣in
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(' to start parameter clause",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '(' to start function type",
+          fixIts: ["insert '('"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' in function type",
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' to end parameter clause",
+          fixIts: ["insert ')'"]
+        ),
+      ],
+      fixedSource: """
+        _ = { (a: Int, b: (Int) -> Int) in
+        }
+        """
+    )
+  }
+
+  func testClosureWithMissingLeftParenthese() {
+    assertParse(
+      """
+      _ = { 1️⃣a: Int, b: Int) in
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(' to start parameter clause",
+          fixIts: ["insert '('"]
+        )
+      ],
+      fixedSource: """
+        _ = { (a: Int, b: Int) in
+        }
+        """
+    )
+  }
+
+  func testClosureWithDollarIdentifier() {
+    assertParse(
+      """
+      let (ids, (actions, tracking)) = state.withCriticalRegion { ($0.valueObservers(for: keyPath), $0.didSet(keyPath: keyPath)) }
+      """
+    )
+
+    assertParse(
+      """
+      let (ids, (actions, tracking)) = state.withCriticalRegion { ($0.valueObservers(for: keyPath), $0.didSet(keyPath: keyPath)) }
+      """
+    )
+
+    assertParse(
+      """
+      state.withCriticalRegion { (1 + 2) }
+      for action in tracking {
+        action()
+      }
+      """
+    )
   }
 }

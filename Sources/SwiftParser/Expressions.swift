@@ -1746,7 +1746,9 @@ extension Parser {
     var effectSpecifiers: RawTypeEffectSpecifiersSyntax?
     var returnClause: RawReturnClauseSyntax? = nil
     if !self.at(.keyword(.in)) {
-      if self.at(.leftParen) {
+      // If the next token is ':', then it looks like the code contained a non-shorthand closure parameter with a type annotation.
+      // These need to be wrapped in parentheses.
+      if self.at(.leftParen) || self.peek(isAt: .colon) {
         // Parse the closure arguments.
         let params = self.parseParameterClause(RawClosureParameterClauseSyntax.self) { parser in
           parser.parseClosureParameter()
@@ -2430,34 +2432,28 @@ extension Parser.Lookahead {
     }
 
     // Parse pattern-tuple func-signature-result? 'in'.
-    if lookahead.consume(if: .leftParen) != nil {  // Consume the ')'.
-
+    if lookahead.at(.leftParen) {  // Consume the '('.
       // While we don't have '->' or ')', eat balanced tokens.
       var skipProgress = LoopProgressCondition()
-      while !lookahead.at(.endOfFile, .rightParen) && lookahead.hasProgressed(&skipProgress) {
+      while !lookahead.at(.endOfFile, .rightBrace, .keyword(.in)) && !lookahead.at(.arrow) && lookahead.hasProgressed(&skipProgress) {
         lookahead.skipSingle()
       }
-
-      // Consume the ')', if it's there.
-      if lookahead.consume(if: .rightParen) != nil {
-        lookahead.consumeEffectsSpecifiers()
-
-        // Parse the func-signature-result, if present.
-        if lookahead.consume(if: .arrow) != nil {
-          guard lookahead.canParseType() else {
-            return false
-          }
-
-          lookahead.consumeEffectsSpecifiers()
-        }
-      }
-      // Okay, we have a closure signature.
     } else if lookahead.at(.identifier) || lookahead.at(.wildcard) {
       // Parse identifier (',' identifier)*
       lookahead.consumeAnyToken()
 
+      /// If the next token is a colon, interpret is as a type annotation and consume a type after it.
+      /// While type annotations aren’t allowed in shorthand closure parameters, we consume them to improve recovery.
+      func consumeOptionalTypeAnnotation() -> Bool {
+        if lookahead.consume(if: .colon) != nil {
+          return lookahead.canParseType()
+        } else {
+          return true
+        }
+      }
+
       var parametersProgress = LoopProgressCondition()
-      while lookahead.consume(if: .comma) != nil && lookahead.hasProgressed(&parametersProgress) {
+      while consumeOptionalTypeAnnotation() && lookahead.consume(if: .comma) != nil && lookahead.hasProgressed(&parametersProgress) {
         if lookahead.at(.identifier) || lookahead.at(.wildcard) {
           lookahead.consumeAnyToken()
           continue
@@ -2465,17 +2461,20 @@ extension Parser.Lookahead {
 
         return false
       }
+    }
+
+    // Consume the ')', if it's there.
+    lookahead.consume(if: .rightParen)
+
+    lookahead.consumeEffectsSpecifiers()
+
+    // Parse the func-signature-result, if present.
+    if lookahead.consume(if: .arrow) != nil {
+      guard lookahead.canParseType() else {
+        return false
+      }
 
       lookahead.consumeEffectsSpecifiers()
-
-      // Parse the func-signature-result, if present.
-      if lookahead.consume(if: .arrow) != nil {
-        guard lookahead.canParseType() else {
-          return false
-        }
-
-        lookahead.consumeEffectsSpecifiers()
-      }
     }
 
     // Parse the 'in' at the end.

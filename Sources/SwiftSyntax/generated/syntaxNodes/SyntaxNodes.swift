@@ -13803,7 +13803,7 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable {
 
 /// ### Children
 /// 
-///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
+///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'` | `'_mutating'` | `'_borrowing'` | `'_consuming'`)
 ///  - `pattern`: ``PatternSyntax``
 ///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 ///  - `initializer`: ``InitializerClauseSyntax``?

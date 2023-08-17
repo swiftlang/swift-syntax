@@ -14,6 +14,8 @@
 
 import XCTest
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+
 final class MatchingPatternsTests: ParserTestCase {
   func testMatchingPatterns1() {
     assertParse(
@@ -67,6 +69,12 @@ final class MatchingPatternsTests: ParserTestCase {
         a = 1
       case inout a:
         a = 1
+      case _mutating a:
+        a = 1
+      case _borrowing a:
+        a = 1
+      case _consuming a:
+        a = 1
       case var var a:
         a += 1
       case var let a:
@@ -80,7 +88,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case 1 + (_):
         ()
       }
-      """#
+      """#,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -102,6 +111,42 @@ final class MatchingPatternsTests: ParserTestCase {
       """
       var e : Any = 0
       """
+    )
+  }
+
+  func testMatchingPatterns7a() {
+    assertParse(
+      """
+      switch (x,x) {
+      case _borrowing a:
+        ()
+      }
+      """,
+      experimentalFeatures: .referenceBindings
+    )
+  }
+
+  func testMatchingPatterns7b() {
+    assertParse(
+      """
+      switch (x,x) {
+      case _mutating a:
+        ()
+      }
+      """,
+      experimentalFeatures: .referenceBindings
+    )
+  }
+
+  func testMatchingPatterns7c() {
+    assertParse(
+      """
+      switch (x,x) {
+      case _consuming a:
+        ()
+      }
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -184,6 +229,9 @@ final class MatchingPatternsTests: ParserTestCase {
       if case let .Naught(value) = n {}
       if case let .Naught(value1, value2, value3) = n {}
       if case inout .Naught(value) = n {}
+      if case _mutating .Naught(value) = n {}
+      if case _borrowing .Naught(value) = n {}
+      if case _consuming .Naught(value) = n {}
       """
     )
   }
@@ -362,8 +410,15 @@ final class MatchingPatternsTests: ParserTestCase {
         acceptString("\(x)")
       case .Payload(inout x):
         acceptInt(x)
+      case .Payload(_mutating x):
+        acceptInt(x)
+      case .Payload(_borrowing x):
+        acceptInt(x)
+      case .Payload(_consuming x):
+        acceptInt(x)
       }
-      """#
+      """#,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -427,6 +482,12 @@ final class MatchingPatternsTests: ParserTestCase {
         a += 1
       case (_, inout a, 3):
         a += 1
+      case (_, _mutating a, 3):
+        a += 1
+      case (_, _borrowing a, 3):
+        a += 1
+      case (_, _consuming a, 3):
+        a += 1
       case var (_, b, 3):
         b += 1
       case var (_, var c, 3):
@@ -441,7 +502,8 @@ final class MatchingPatternsTests: ParserTestCase {
       case (let (_, _, _)) + 1:
         ()
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -518,4 +580,33 @@ final class MatchingPatternsTests: ParserTestCase {
     )
   }
 
+  func testIfCaseMatchMutating() {
+    assertParse(
+      """
+      if case _mutating x = y {}
+      guard case _mutating z = y else {}
+      """,
+      experimentalFeatures: .referenceBindings
+    )
+  }
+
+  func testIfCaseMatchConsuming() {
+    assertParse(
+      """
+      if case _consuming x = y {}
+      guard case _consuming z = y else {}
+      """,
+      experimentalFeatures: .referenceBindings
+    )
+  }
+
+  func testIfCaseMatchBorrowing() {
+    assertParse(
+      """
+      if case _borrowing x = y {}
+      guard case _borrowing z = y else {}
+      """,
+      experimentalFeatures: .referenceBindings
+    )
+  }
 }

@@ -20,10 +20,14 @@ public enum Keyword: UInt8, Hashable {
   case _alignment
   case _backDeploy
   case _borrow
+  @_spi(ExperimentalLanguageFeatures)
+  case _borrowing
   case _cdecl
   case _Class
   case _compilerInitialized
   case _const
+  @_spi(ExperimentalLanguageFeatures)
+  case _consuming
   case _documentation
   case _dynamicReplacement
   case _effects
@@ -34,6 +38,8 @@ public enum Keyword: UInt8, Hashable {
   case _local
   case _modify
   case _move
+  @_spi(ExperimentalLanguageFeatures)
+  case _mutating
   case _NativeClass
   case _NativeRefCountedObject
   case _noMetadata
@@ -519,6 +525,8 @@ public enum Keyword: UInt8, Hashable {
       }
     case 9:
       switch text {
+      case "_mutating":
+        self = ._mutating
       case "_optimize":
         self = ._optimize
       case "available":
@@ -552,6 +560,10 @@ public enum Keyword: UInt8, Hashable {
       switch text {
       case "_alignment":
         self = ._alignment
+      case "_borrowing":
+        self = ._borrowing
+      case "_consuming":
+        self = ._consuming
       case "_semantics":
         self = ._semantics
       case "assignment":
@@ -766,10 +778,12 @@ public enum Keyword: UInt8, Hashable {
       "_alignment", 
       "_backDeploy", 
       "_borrow", 
+      "_borrowing", 
       "_cdecl", 
       "_Class", 
       "_compilerInitialized", 
       "_const", 
+      "_consuming", 
       "_documentation", 
       "_dynamicReplacement", 
       "_effects", 
@@ -780,6 +794,7 @@ public enum Keyword: UInt8, Hashable {
       "_local", 
       "_modify", 
       "_move", 
+      "_mutating", 
       "_NativeClass", 
       "_NativeRefCountedObject", 
       "_noMetadata", 

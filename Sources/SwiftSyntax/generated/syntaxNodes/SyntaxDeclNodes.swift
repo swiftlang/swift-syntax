@@ -7062,7 +7062,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
-///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'`)
+///  - `bindingSpecifier`: (`'let'` | `'var'` | `'inout'` | `'_mutating'` | `'_borrowing'` | `'_consuming'`)
 ///  - `bindings`: ``PatternBindingListSyntax``
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax

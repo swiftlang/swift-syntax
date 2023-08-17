@@ -14,13 +14,19 @@
 
 import XCTest
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+
 final class PatternWithoutVariablesTests: ParserTestCase {
   func testPatternWithoutVariables1() {
     assertParse(
       """
       let _ = 1
       inout _ = 1
-      """
+      _mutating _ = 1
+      _borrowing _ = 1
+      _consuming _ = 1
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -30,8 +36,12 @@ final class PatternWithoutVariablesTests: ParserTestCase {
       func foo() {
         let _ = 1 // OK
         inout _ = 1
+        _mutating _ = 1
+        _borrowing _ = 1
+        _consuming _ = 1
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -45,8 +55,12 @@ final class PatternWithoutVariablesTests: ParserTestCase {
           let _ = 1 // OK
         }
         inout (_, _) = (1, 2)
+        _mutating (_, _) = (1, 2)
+        _borrowing (_, _) = (1, 2)
+        _consuming (_, _) = (1, 2)
       }
-      """
+      """,
+      experimentalFeatures: .referenceBindings
     )
   }
 
@@ -78,6 +92,15 @@ final class PatternWithoutVariablesTests: ParserTestCase {
         if case let _ = "str" {}
         switch a {
         case inout .Bar: break
+        }
+        switch a {
+        case _mutating .Bar: break
+        }
+        switch a {
+        case _borrowing .Bar: break
+        }
+        switch a {
+        case _consuming .Bar: break
         }
       }
       """#

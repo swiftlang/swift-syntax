@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension AccessorDeclSyntax {
   @_spi(Diagnostics)
@@ -2324,6 +2324,12 @@ extension OptionalBindingConditionSyntax {
     case `let`
     case `var`
     case `inout`
+    @_spi(ExperimentalLanguageFeatures)
+    case _mutating
+    @_spi(ExperimentalLanguageFeatures)
+    case _borrowing
+    @_spi(ExperimentalLanguageFeatures)
+    case _consuming
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -2333,6 +2339,12 @@ extension OptionalBindingConditionSyntax {
         self = .`var`
       case TokenSpec(.`inout`):
         self = .`inout`
+      case TokenSpec(._mutating):
+        self = ._mutating
+      case TokenSpec(._borrowing):
+        self = ._borrowing
+      case TokenSpec(._consuming):
+        self = ._consuming
       default:
         return nil
       }
@@ -2346,6 +2358,12 @@ extension OptionalBindingConditionSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
     
@@ -2361,6 +2379,12 @@ extension OptionalBindingConditionSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
   }
@@ -2933,6 +2957,12 @@ extension ValueBindingPatternSyntax {
     case `let`
     case `var`
     case `inout`
+    @_spi(ExperimentalLanguageFeatures)
+    case _mutating
+    @_spi(ExperimentalLanguageFeatures)
+    case _borrowing
+    @_spi(ExperimentalLanguageFeatures)
+    case _consuming
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -2942,6 +2972,12 @@ extension ValueBindingPatternSyntax {
         self = .`var`
       case TokenSpec(.`inout`):
         self = .`inout`
+      case TokenSpec(._mutating):
+        self = ._mutating
+      case TokenSpec(._borrowing):
+        self = ._borrowing
+      case TokenSpec(._consuming):
+        self = ._consuming
       default:
         return nil
       }
@@ -2955,6 +2991,12 @@ extension ValueBindingPatternSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
     
@@ -2970,6 +3012,12 @@ extension ValueBindingPatternSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
   }
@@ -2981,6 +3029,12 @@ extension VariableDeclSyntax {
     case `let`
     case `var`
     case `inout`
+    @_spi(ExperimentalLanguageFeatures)
+    case _mutating
+    @_spi(ExperimentalLanguageFeatures)
+    case _borrowing
+    @_spi(ExperimentalLanguageFeatures)
+    case _consuming
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -2990,6 +3044,12 @@ extension VariableDeclSyntax {
         self = .`var`
       case TokenSpec(.`inout`):
         self = .`inout`
+      case TokenSpec(._mutating):
+        self = ._mutating
+      case TokenSpec(._borrowing):
+        self = ._borrowing
+      case TokenSpec(._consuming):
+        self = ._consuming
       default:
         return nil
       }
@@ -3003,6 +3063,12 @@ extension VariableDeclSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
     
@@ -3018,6 +3084,12 @@ extension VariableDeclSyntax {
         return .keyword(.`var`)
       case .`inout`:
         return .keyword(.`inout`)
+      case ._mutating:
+        return .keyword(._mutating)
+      case ._borrowing:
+        return .keyword(._borrowing)
+      case ._consuming:
+        return .keyword(._consuming)
       }
     }
   }

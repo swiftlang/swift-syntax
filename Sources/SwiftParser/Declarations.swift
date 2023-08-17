@@ -106,7 +106,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationKeyword.self)?.0
     }
     switch declStartKeyword {
-    case .actor:
+    case .lhs(.actor):
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -119,16 +119,16 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
-    case .case:
+    case .lhs(.case):
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
-    case .`init`:
+    case .lhs(.`init`):
       return allowInitDecl
-    case .macro:
+    case .lhs(.macro):
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
-    case .pound:
+    case .lhs(.pound):
       // Force parsing '#<identifier>' after attributes as a macro expansion decl.
       if hasAttribute || hasModifier {
         return true
@@ -210,81 +210,99 @@ extension Parser {
     // while recovering to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
-    switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
-    case (.import, let handle)?:
+    CanRecoverToSwitch: switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
+    case (.lhs(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
-    case (.class, let handle)?:
+    case (.lhs(.class), let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.enum, let handle)?:
+    case (.lhs(.enum), let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.case, let handle)?:
+    case (.lhs(.case), let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
-    case (.struct, let handle)?:
+    case (.lhs(.struct), let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.protocol, let handle)?:
+    case (.lhs(.protocol), let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.associatedtype, let handle)?:
+    case (.lhs(.associatedtype), let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
-    case (.typealias, let handle)?:
+    case (.lhs(.typealias), let handle)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
-    case (.extension, let handle)?:
+    case (.lhs(.extension), let handle)?:
       return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
-    case (.func, let handle)?:
+    case (.lhs(.func), let handle)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
-    case (.subscript, let handle)?:
+    case (.lhs(.subscript), let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
-    case (.let, let handle)?, (.var, let handle)?,
-      (.inout, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
-    case (.`init`, let handle)?:
+    case (.lhs(.`init`), let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
-    case (.deinit, let handle)?:
+    case (.lhs(.deinit), let handle)?:
       return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
-    case (.operator, let handle)?:
+    case (.lhs(.operator), let handle)?:
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
-    case (.precedencegroup, let handle)?:
+    case (.lhs(.precedencegroup), let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.actor, let handle)?:
+    case (.lhs(.actor), let handle)?:
       return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
-    case (.macro, let handle)?:
+    case (.lhs(.macro), let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
-    case (.pound, let handle)?:
+    case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case nil:
-      if inMemberDeclList {
-        let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
-        let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
-
-        if isProbablyVarDecl || isProbablyTupleDecl {
-          return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+    case (.rhs(let binding), let handle)?:
+      switch binding {
+      case ._mutating:
+        fallthrough
+      case ._borrowing:
+        fallthrough
+      case ._consuming:
+        guard experimentalFeatures.contains(.referenceBindings) else {
+          break CanRecoverToSwitch
         }
-
-        if self.currentToken.isEditorPlaceholder {
-          let placeholder = self.consumeAnyToken()
-          return RawDeclSyntax(
-            RawEditorPlaceholderDeclSyntax(
-              attributes: attrs.attributes,
-              modifiers: attrs.modifiers,
-              placeholder: placeholder,
-              arena: self.arena
-            )
-          )
-        }
-
-        let isProbablyFuncDecl = self.at(.identifier, .wildcard) || self.at(anyIn: Operator.self) != nil
-
-        if isProbablyFuncDecl {
-          return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
-        }
+        fallthrough
+      case .let:
+        fallthrough
+      case .var:
+        fallthrough
+      case .inout:
+        // Handle all cases of `ValueBindingPatternSyntax.BindingSpecifierOptions` in the same way.
+        return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
       }
-      return RawDeclSyntax(
-        RawMissingDeclSyntax(
-          attributes: attrs.attributes,
-          modifiers: attrs.modifiers,
-          arena: self.arena
-        )
-      )
+    case nil:
+      break
     }
+
+    if inMemberDeclList {
+      let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
+      let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
+
+      if isProbablyVarDecl || isProbablyTupleDecl {
+        return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+      }
+
+      if self.currentToken.isEditorPlaceholder {
+        let placeholder = self.consumeAnyToken()
+        return RawDeclSyntax(
+          RawEditorPlaceholderDeclSyntax(
+            attributes: attrs.attributes,
+            modifiers: attrs.modifiers,
+            placeholder: placeholder,
+            arena: self.arena
+          )
+        )
+      }
+
+      let isProbablyFuncDecl = self.at(.identifier, .wildcard) || self.at(anyIn: Operator.self) != nil
+
+      if isProbablyFuncDecl {
+        return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
+      }
+    }
+    return RawDeclSyntax(
+      RawMissingDeclSyntax(
+        attributes: attrs.attributes,
+        modifiers: attrs.modifiers,
+        arena: self.arena
+      )
+    )
   }
 }
 

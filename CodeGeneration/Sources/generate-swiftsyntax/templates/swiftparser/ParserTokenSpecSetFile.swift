@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
+  DeclSyntax("@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     for child in layoutNode.children {
@@ -31,7 +31,12 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             for choice in choices {
               switch choice {
               case .keyword(let keyword):
-                DeclSyntax("case \(raw: keyword.spec.escapedName)")
+                DeclSyntax(
+                  """
+                  \(keyword.spec.apiAttributes)\
+                  case \(raw: keyword.spec.escapedName)
+                  """
+                )
               case .token(let token):
                 DeclSyntax("case \(token.spec.varOrCaseName)")
               }

@@ -140,6 +140,9 @@ public let PATTERN_NODES: [Node] = [
   // value-binding-pattern -> 'let' pattern
   //                        | 'var' pattern
   //                        | 'inout' pattern
+  //                        | '_mutating' pattern
+  //                        | '_consuming' pattern
+  //                        | '_borrowing' pattern
   Node(
     kind: .valueBindingPattern,
     base: .pattern,
@@ -148,7 +151,10 @@ public let PATTERN_NODES: [Node] = [
       Child(
         name: "bindingSpecifier",
         deprecatedName: "bindingKeyword",
-        kind: .token(choices: [.keyword(.let), .keyword(.var), .keyword(.inout)])
+        kind: .token(choices: [
+          .keyword(.let), .keyword(.var), .keyword(.inout),
+          .keyword(._mutating), .keyword(._borrowing), .keyword(._consuming),
+        ])
       ),
       Child(
         name: "pattern",

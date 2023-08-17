@@ -21,16 +21,40 @@ public struct TokenSpec {
     case other
   }
 
+  /// The name of the token, suitable for use in variable or enum case names.
   public let varOrCaseName: TokenSyntax
 
-  /// If `true`, this is for an experimental language feature, and any public
-  /// API generated should be SPI.
+  /// Indicates if the token is part of an experimental language feature.
+  ///
+  /// If `true`, this keyword is for an experimental language feature, and any public
+  /// API generated should be marked as SPI
   public let isExperimental: Bool
 
+  /// The name of the token that can be shown in diagnostics.
   public let nameForDiagnostics: String
+
+  /// The actual text of the token, if available.
   public let text: String?
+
+  /// The kind of the token.
   public let kind: Kind
 
+  /// The attributes that should be printed on any API for the generated keyword.
+  ///
+  /// This is typically used to mark APIs as SPI when the keyword is part of an experimental language feature.
+  public var apiAttributes: AttributeListSyntax {
+    guard isExperimental else { return "" }
+    return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
+  }
+
+  /// Initializes a new `TokenSpec` instance.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the token.
+  ///   - isExperimental: Indicates if the token is part of an experimental language feature.
+  ///   - nameForDiagnostics: A name of the token that can be shown in diagnostics.
+  ///   - text: An actual text of the token, if available.
+  ///   - kind: A kind of the token.
   fileprivate init(
     name: String,
     isExperimental: Bool = false,
@@ -45,13 +69,11 @@ public struct TokenSpec {
     self.kind = kind
   }
 
-  /// Retrieve the attributes that should be printed on any API for the
-  /// generated token.
-  public var apiAttributes: AttributeListSyntax {
-    guard isExperimental else { return "" }
-    return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
-  }
-
+  /// Creates a new `TokenSpec` instance representing a punctuation token.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the token.
+  ///   - text: An actual text of the punctuation token.
   static func punctuator(name: String, text: String) -> TokenSpec {
     return TokenSpec(
       name: name,
@@ -61,6 +83,11 @@ public struct TokenSpec {
     )
   }
 
+  /// Creates a new `TokenSpec` instance representing a pound keyword token.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the token.
+  ///   - text: An actual text of the pound keyword token.
   static func poundKeyword(name: String, text: String) -> TokenSpec {
     return TokenSpec(
       name: name,
@@ -70,8 +97,14 @@ public struct TokenSpec {
     )
   }
 
+  /// Creates a new `TokenSpec` instance representing an other token.
+  ///
+  /// - Parameters:
+  ///   - name: A name of the token.
+  ///   - nameForDiagnostics: A name of the token that can be shown in diagnostics.
+  ///   - text: An actual text of the token, if available.
   static func other(name: String, nameForDiagnostics: String, text: String? = nil) -> TokenSpec {
-    TokenSpec(
+    return TokenSpec(
       name: name,
       nameForDiagnostics: nameForDiagnostics,
       text: text,

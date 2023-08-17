@@ -29,6 +29,12 @@ Generated source code is not formatted to make it easier to spot changes when re
 
 If you want to modify the generated files, open the [CodeGeneration](CodeGeneration) package and run the `generate-swift-syntax` executable.
 
+Alternatively, you can generate the files from the command line by running the following command from the swift-syntax directory
+
+```bash
+swift run --package-path CodeGeneration
+```
+
 ## Authoring commits
 
 Prefer to squash the commits of your PR (*pull request*) and avoid adding commits like “Address review comments”. This creates a clearer git history, which doesn’t need to record the history of how the PR evolved.

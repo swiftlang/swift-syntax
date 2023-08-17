@@ -210,7 +210,7 @@ extension Parser {
     // while recovering to the declaration start.
     let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
 
-    CanRecoverToSwitch: switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
+    switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
     case (.lhs(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.lhs(.class), let handle)?:
@@ -249,21 +249,12 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case (.rhs(let binding), let handle)?:
       switch binding {
-      case ._mutating:
-        fallthrough
-      case ._borrowing:
-        fallthrough
-      case ._consuming:
+      case ._mutating, ._borrowing, ._consuming:
         guard experimentalFeatures.contains(.referenceBindings) else {
-          break CanRecoverToSwitch
+          break
         }
         fallthrough
-      case .let:
-        fallthrough
-      case .var:
-        fallthrough
-      case .inout:
-        // Handle all cases of `ValueBindingPatternSyntax.BindingSpecifierOptions` in the same way.
+      case .let, .var, .inout:
         return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
       }
     case nil:

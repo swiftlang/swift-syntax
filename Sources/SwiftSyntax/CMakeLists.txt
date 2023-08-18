@@ -35,7 +35,15 @@ add_swift_host_library(SwiftSyntax
   Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift
 
-  generated/raw/RawSyntaxNodes.swift
+  generated/raw/RawSyntaxNodesAB.swift
+  generated/raw/RawSyntaxNodesC.swift
+  generated/raw/RawSyntaxNodesD.swift
+  generated/raw/RawSyntaxNodesEF.swift
+  generated/raw/RawSyntaxNodesGHI.swift
+  generated/raw/RawSyntaxNodesJKLMN.swift
+  generated/raw/RawSyntaxNodesOP.swift
+  generated/raw/RawSyntaxNodesQRS.swift
+  generated/raw/RawSyntaxNodesTUVWXYZ.swift
   generated/raw/RawSyntaxValidation.swift
 
   generated/ChildNameForKeyPath.swift
@@ -55,10 +63,13 @@ add_swift_host_library(SwiftSyntax
   generated/Tokens.swift
   generated/TriviaPieces.swift
 
-  generated/syntaxNodes/SyntaxDeclNodes.swift
-  generated/syntaxNodes/SyntaxExprNodes.swift
-  generated/syntaxNodes/SyntaxNodes.swift
-  generated/syntaxNodes/SyntaxPatternNodes.swift
-  generated/syntaxNodes/SyntaxStmtNodes.swift
-  generated/syntaxNodes/SyntaxTypeNodes.swift
+  generated/syntaxNodes/SyntaxNodesAB.swift
+  generated/syntaxNodes/SyntaxNodesC.swift
+  generated/syntaxNodes/SyntaxNodesD.swift
+  generated/syntaxNodes/SyntaxNodesEF.swift
+  generated/syntaxNodes/SyntaxNodesGHI.swift
+  generated/syntaxNodes/SyntaxNodesJKLMN.swift
+  generated/syntaxNodes/SyntaxNodesOP.swift
+  generated/syntaxNodes/SyntaxNodesQRS.swift
+  generated/syntaxNodes/SyntaxNodesTUVWXYZ.swift
 )

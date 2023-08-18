@@ -19,9 +19,9 @@ import Utils
 /// files at a manageable file size, it is to be invoked multiple times with the
 /// variable `emitKind` set to a base kind listed in
 /// It then only emits those syntax nodes whose base kind are that specified kind.
-func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
+func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
-    for node in SYNTAX_NODES.compactMap(\.layoutNode) where node.base == emitKind {
+    for node in SYNTAX_NODES.compactMap(\.layoutNode) where nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
       let documentationSections = [
         node.documentation,
         node.grammar,

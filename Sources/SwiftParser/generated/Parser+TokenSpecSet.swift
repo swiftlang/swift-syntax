@@ -186,8 +186,8 @@ extension AttributedTypeSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`inout`):
-        self = .`inout`
+      case TokenSpec(.inout):
+        self = .inout
       case TokenSpec(.__shared):
         self = .__shared
       case TokenSpec(.__owned):
@@ -207,8 +207,8 @@ extension AttributedTypeSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .inout:
+        return .keyword(.inout)
       case .__shared:
         return .keyword(.__shared)
       case .__owned:
@@ -230,8 +230,8 @@ extension AttributedTypeSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .inout:
+        return .keyword(.inout)
       case .__shared:
         return .keyword(.__shared)
       case .__owned:
@@ -360,10 +360,10 @@ extension BooleanLiteralExprSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`true`):
-        self = .`true`
-      case TokenSpec(.`false`):
-        self = .`false`
+      case TokenSpec(.true):
+        self = .true
+      case TokenSpec(.false):
+        self = .false
       default:
         return nil
       }
@@ -371,10 +371,10 @@ extension BooleanLiteralExprSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`true`:
-        return .keyword(.`true`)
-      case .`false`:
-        return .keyword(.`false`)
+      case .true:
+        return .keyword(.true)
+      case .false:
+        return .keyword(.false)
       }
     }
     
@@ -384,10 +384,10 @@ extension BooleanLiteralExprSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`true`:
-        return .keyword(.`true`)
-      case .`false`:
-        return .keyword(.`false`)
+      case .true:
+        return .keyword(.true)
+      case .false:
+        return .keyword(.false)
       }
     }
   }
@@ -735,8 +735,8 @@ extension DeclModifierSyntax {
         self = .async
       case TokenSpec(.borrowing):
         self = .borrowing
-      case TokenSpec(.`class`):
-        self = .`class`
+      case TokenSpec(.class):
+        self = .class
       case TokenSpec(.consuming):
         self = .consuming
       case TokenSpec(.convenience):
@@ -745,16 +745,16 @@ extension DeclModifierSyntax {
         self = .distributed
       case TokenSpec(.dynamic):
         self = .dynamic
-      case TokenSpec(.`fileprivate`):
-        self = .`fileprivate`
+      case TokenSpec(.fileprivate):
+        self = .fileprivate
       case TokenSpec(.final):
         self = .final
       case TokenSpec(.indirect):
         self = .indirect
       case TokenSpec(.infix):
         self = .infix
-      case TokenSpec(.`internal`):
-        self = .`internal`
+      case TokenSpec(.internal):
+        self = .internal
       case TokenSpec(.isolated):
         self = .isolated
       case TokenSpec(.lazy):
@@ -777,16 +777,16 @@ extension DeclModifierSyntax {
         self = .postfix
       case TokenSpec(.prefix):
         self = .prefix
-      case TokenSpec(.`private`):
-        self = .`private`
-      case TokenSpec(.`public`):
-        self = .`public`
+      case TokenSpec(.private):
+        self = .private
+      case TokenSpec(.public):
+        self = .public
       case TokenSpec(.reasync):
         self = .reasync
       case TokenSpec(.required):
         self = .required
-      case TokenSpec(.`static`):
-        self = .`static`
+      case TokenSpec(.static):
+        self = .static
       case TokenSpec(.unowned):
         self = .unowned
       case TokenSpec(.weak):
@@ -812,8 +812,8 @@ extension DeclModifierSyntax {
         return .keyword(.async)
       case .borrowing:
         return .keyword(.borrowing)
-      case .`class`:
-        return .keyword(.`class`)
+      case .class:
+        return .keyword(.class)
       case .consuming:
         return .keyword(.consuming)
       case .convenience:
@@ -822,16 +822,16 @@ extension DeclModifierSyntax {
         return .keyword(.distributed)
       case .dynamic:
         return .keyword(.dynamic)
-      case .`fileprivate`:
-        return .keyword(.`fileprivate`)
+      case .fileprivate:
+        return .keyword(.fileprivate)
       case .final:
         return .keyword(.final)
       case .indirect:
         return .keyword(.indirect)
       case .infix:
         return .keyword(.infix)
-      case .`internal`:
-        return .keyword(.`internal`)
+      case .internal:
+        return .keyword(.internal)
       case .isolated:
         return .keyword(.isolated)
       case .lazy:
@@ -854,16 +854,16 @@ extension DeclModifierSyntax {
         return .keyword(.postfix)
       case .prefix:
         return .keyword(.prefix)
-      case .`private`:
-        return .keyword(.`private`)
-      case .`public`:
-        return .keyword(.`public`)
+      case .private:
+        return .keyword(.private)
+      case .public:
+        return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
       case .required:
         return .keyword(.required)
-      case .`static`:
-        return .keyword(.`static`)
+      case .static:
+        return .keyword(.static)
       case .unowned:
         return .keyword(.unowned)
       case .weak:
@@ -891,8 +891,8 @@ extension DeclModifierSyntax {
         return .keyword(.async)
       case .borrowing:
         return .keyword(.borrowing)
-      case .`class`:
-        return .keyword(.`class`)
+      case .class:
+        return .keyword(.class)
       case .consuming:
         return .keyword(.consuming)
       case .convenience:
@@ -901,16 +901,16 @@ extension DeclModifierSyntax {
         return .keyword(.distributed)
       case .dynamic:
         return .keyword(.dynamic)
-      case .`fileprivate`:
-        return .keyword(.`fileprivate`)
+      case .fileprivate:
+        return .keyword(.fileprivate)
       case .final:
         return .keyword(.final)
       case .indirect:
         return .keyword(.indirect)
       case .infix:
         return .keyword(.infix)
-      case .`internal`:
-        return .keyword(.`internal`)
+      case .internal:
+        return .keyword(.internal)
       case .isolated:
         return .keyword(.isolated)
       case .lazy:
@@ -933,16 +933,16 @@ extension DeclModifierSyntax {
         return .keyword(.postfix)
       case .prefix:
         return .keyword(.prefix)
-      case .`private`:
-        return .keyword(.`private`)
-      case .`public`:
-        return .keyword(.`public`)
+      case .private:
+        return .keyword(.private)
+      case .public:
+        return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
       case .required:
         return .keyword(.required)
-      case .`static`:
-        return .keyword(.`static`)
+      case .static:
+        return .keyword(.static)
       case .unowned:
         return .keyword(.unowned)
       case .weak:
@@ -967,10 +967,10 @@ extension DeclReferenceExprSyntax {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
+      case TokenSpec(.self):
+        self = .self
+      case TokenSpec(.Self):
+        self = .Self
       case TokenSpec(.`init`):
         self = .`init`
       case TokenSpec(.dollarIdentifier):
@@ -988,10 +988,10 @@ extension DeclReferenceExprSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
       case .`init`:
         return .keyword(.`init`)
       case .dollarIdentifier:
@@ -1011,10 +1011,10 @@ extension DeclReferenceExprSyntax {
       switch self {
       case .identifier:
         return .identifier("")
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
       case .`init`:
         return .keyword(.`init`)
       case .dollarIdentifier:
@@ -1082,8 +1082,8 @@ extension DifferentiabilityArgumentSyntax {
         self = .identifier
       case TokenSpec(.integerLiteral):
         self = .integerLiteral
-      case TokenSpec(.`self`):
-        self = .`self`
+      case TokenSpec(.self):
+        self = .self
       default:
         return nil
       }
@@ -1095,8 +1095,8 @@ extension DifferentiabilityArgumentSyntax {
         return .identifier
       case .integerLiteral:
         return .integerLiteral
-      case .`self`:
-        return .keyword(.`self`)
+      case .self:
+        return .keyword(.self)
       }
     }
     
@@ -1110,8 +1110,8 @@ extension DifferentiabilityArgumentSyntax {
         return .identifier("")
       case .integerLiteral:
         return .integerLiteral("")
-      case .`self`:
-        return .keyword(.`self`)
+      case .self:
+        return .keyword(.self)
       }
     }
   }
@@ -1392,10 +1392,10 @@ extension FunctionEffectSpecifiersSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`throws`):
-        self = .`throws`
-      case TokenSpec(.`rethrows`):
-        self = .`rethrows`
+      case TokenSpec(.throws):
+        self = .throws
+      case TokenSpec(.rethrows):
+        self = .rethrows
       default:
         return nil
       }
@@ -1403,10 +1403,10 @@ extension FunctionEffectSpecifiersSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`throws`:
-        return .keyword(.`throws`)
-      case .`rethrows`:
-        return .keyword(.`rethrows`)
+      case .throws:
+        return .keyword(.throws)
+      case .rethrows:
+        return .keyword(.rethrows)
       }
     }
     
@@ -1416,10 +1416,10 @@ extension FunctionEffectSpecifiersSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`throws`:
-        return .keyword(.`throws`)
-      case .`rethrows`:
-        return .keyword(.`rethrows`)
+      case .throws:
+        return .keyword(.throws)
+      case .rethrows:
+        return .keyword(.rethrows)
       }
     }
   }
@@ -1518,8 +1518,8 @@ extension IdentifierPatternSyntax {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
+      case TokenSpec(.self):
+        self = .self
       case TokenSpec(.`init`):
         self = .`init`
       default:
@@ -1531,8 +1531,8 @@ extension IdentifierPatternSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .`self`:
-        return .keyword(.`self`)
+      case .self:
+        return .keyword(.self)
       case .`init`:
         return .keyword(.`init`)
       }
@@ -1546,8 +1546,8 @@ extension IdentifierPatternSyntax {
       switch self {
       case .identifier:
         return .identifier("")
-      case .`self`:
-        return .keyword(.`self`)
+      case .self:
+        return .keyword(.self)
       case .`init`:
         return .keyword(.`init`)
       }
@@ -1568,12 +1568,12 @@ extension IdentifierTypeSyntax {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
-      case TokenSpec(.`Any`):
-        self = .`Any`
+      case TokenSpec(.self):
+        self = .self
+      case TokenSpec(.Self):
+        self = .Self
+      case TokenSpec(.Any):
+        self = .Any
       case TokenSpec(.wildcard):
         self = .wildcard
       default:
@@ -1585,12 +1585,12 @@ extension IdentifierTypeSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`Any`:
-        return .keyword(.`Any`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
+      case .Any:
+        return .keyword(.Any)
       case .wildcard:
         return .wildcard
       }
@@ -1604,12 +1604,12 @@ extension IdentifierTypeSyntax {
       switch self {
       case .identifier:
         return .identifier("")
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
-      case .`Any`:
-        return .keyword(.`Any`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
+      case .Any:
+        return .keyword(.Any)
       case .wildcard:
         return .wildcardToken()
       }
@@ -1680,24 +1680,24 @@ extension ImportDeclSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`typealias`):
-        self = .`typealias`
-      case TokenSpec(.`struct`):
-        self = .`struct`
-      case TokenSpec(.`class`):
-        self = .`class`
-      case TokenSpec(.`enum`):
-        self = .`enum`
-      case TokenSpec(.`protocol`):
-        self = .`protocol`
-      case TokenSpec(.`var`):
-        self = .`var`
-      case TokenSpec(.`let`):
-        self = .`let`
-      case TokenSpec(.`func`):
-        self = .`func`
-      case TokenSpec(.`inout`):
-        self = .`inout`
+      case TokenSpec(.typealias):
+        self = .typealias
+      case TokenSpec(.struct):
+        self = .struct
+      case TokenSpec(.class):
+        self = .class
+      case TokenSpec(.enum):
+        self = .enum
+      case TokenSpec(.protocol):
+        self = .protocol
+      case TokenSpec(.var):
+        self = .var
+      case TokenSpec(.let):
+        self = .let
+      case TokenSpec(.func):
+        self = .func
+      case TokenSpec(.inout):
+        self = .inout
       default:
         return nil
       }
@@ -1705,24 +1705,24 @@ extension ImportDeclSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`typealias`:
-        return .keyword(.`typealias`)
-      case .`struct`:
-        return .keyword(.`struct`)
-      case .`class`:
-        return .keyword(.`class`)
-      case .`enum`:
-        return .keyword(.`enum`)
-      case .`protocol`:
-        return .keyword(.`protocol`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`let`:
-        return .keyword(.`let`)
-      case .`func`:
-        return .keyword(.`func`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .typealias:
+        return .keyword(.typealias)
+      case .struct:
+        return .keyword(.struct)
+      case .class:
+        return .keyword(.class)
+      case .enum:
+        return .keyword(.enum)
+      case .protocol:
+        return .keyword(.protocol)
+      case .var:
+        return .keyword(.var)
+      case .let:
+        return .keyword(.let)
+      case .func:
+        return .keyword(.func)
+      case .inout:
+        return .keyword(.inout)
       }
     }
     
@@ -1732,24 +1732,24 @@ extension ImportDeclSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`typealias`:
-        return .keyword(.`typealias`)
-      case .`struct`:
-        return .keyword(.`struct`)
-      case .`class`:
-        return .keyword(.`class`)
-      case .`enum`:
-        return .keyword(.`enum`)
-      case .`protocol`:
-        return .keyword(.`protocol`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`let`:
-        return .keyword(.`let`)
-      case .`func`:
-        return .keyword(.`func`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .typealias:
+        return .keyword(.typealias)
+      case .struct:
+        return .keyword(.struct)
+      case .class:
+        return .keyword(.class)
+      case .enum:
+        return .keyword(.enum)
+      case .protocol:
+        return .keyword(.protocol)
+      case .var:
+        return .keyword(.var)
+      case .let:
+        return .keyword(.let)
+      case .func:
+        return .keyword(.func)
+      case .inout:
+        return .keyword(.inout)
       }
     }
   }
@@ -2103,10 +2103,10 @@ extension MemberTypeSyntax {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.`self`):
-        self = .`self`
-      case TokenSpec(.`Self`):
-        self = .`Self`
+      case TokenSpec(.self):
+        self = .self
+      case TokenSpec(.Self):
+        self = .Self
       default:
         return nil
       }
@@ -2116,10 +2116,10 @@ extension MemberTypeSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
       }
     }
     
@@ -2131,10 +2131,10 @@ extension MemberTypeSyntax {
       switch self {
       case .identifier:
         return .identifier("")
-      case .`self`:
-        return .keyword(.`self`)
-      case .`Self`:
-        return .keyword(.`Self`)
+      case .self:
+        return .keyword(.self)
+      case .Self:
+        return .keyword(.Self)
       }
     }
   }
@@ -2148,10 +2148,10 @@ extension MetatypeTypeSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`Type`):
-        self = .`Type`
-      case TokenSpec(.`Protocol`):
-        self = .`Protocol`
+      case TokenSpec(.Type):
+        self = .Type
+      case TokenSpec(.Protocol):
+        self = .Protocol
       default:
         return nil
       }
@@ -2159,10 +2159,10 @@ extension MetatypeTypeSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`Type`:
-        return .keyword(.`Type`)
-      case .`Protocol`:
-        return .keyword(.`Protocol`)
+      case .Type:
+        return .keyword(.Type)
+      case .Protocol:
+        return .keyword(.Protocol)
       }
     }
     
@@ -2172,10 +2172,10 @@ extension MetatypeTypeSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`Type`:
-        return .keyword(.`Type`)
-      case .`Protocol`:
-        return .keyword(.`Protocol`)
+      case .Type:
+        return .keyword(.Type)
+      case .Protocol:
+        return .keyword(.Protocol)
       }
     }
   }
@@ -2333,12 +2333,12 @@ extension OptionalBindingConditionSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`let`):
-        self = .`let`
-      case TokenSpec(.`var`):
-        self = .`var`
-      case TokenSpec(.`inout`):
-        self = .`inout`
+      case TokenSpec(.let):
+        self = .let
+      case TokenSpec(.var):
+        self = .var
+      case TokenSpec(.inout):
+        self = .inout
       case TokenSpec(._mutating):
         self = ._mutating
       case TokenSpec(._borrowing):
@@ -2352,12 +2352,12 @@ extension OptionalBindingConditionSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:
@@ -2373,12 +2373,12 @@ extension OptionalBindingConditionSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:
@@ -2398,10 +2398,10 @@ extension PrecedenceGroupAssignmentSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`true`):
-        self = .`true`
-      case TokenSpec(.`false`):
-        self = .`false`
+      case TokenSpec(.true):
+        self = .true
+      case TokenSpec(.false):
+        self = .false
       default:
         return nil
       }
@@ -2409,10 +2409,10 @@ extension PrecedenceGroupAssignmentSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`true`:
-        return .keyword(.`true`)
-      case .`false`:
-        return .keyword(.`false`)
+      case .true:
+        return .keyword(.true)
+      case .false:
+        return .keyword(.false)
       }
     }
     
@@ -2422,10 +2422,10 @@ extension PrecedenceGroupAssignmentSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`true`:
-        return .keyword(.`true`)
-      case .`false`:
-        return .keyword(.`false`)
+      case .true:
+        return .keyword(.true)
+      case .false:
+        return .keyword(.false)
       }
     }
   }
@@ -2966,12 +2966,12 @@ extension ValueBindingPatternSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`let`):
-        self = .`let`
-      case TokenSpec(.`var`):
-        self = .`var`
-      case TokenSpec(.`inout`):
-        self = .`inout`
+      case TokenSpec(.let):
+        self = .let
+      case TokenSpec(.var):
+        self = .var
+      case TokenSpec(.inout):
+        self = .inout
       case TokenSpec(._mutating):
         self = ._mutating
       case TokenSpec(._borrowing):
@@ -2985,12 +2985,12 @@ extension ValueBindingPatternSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:
@@ -3006,12 +3006,12 @@ extension ValueBindingPatternSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:
@@ -3038,12 +3038,12 @@ extension VariableDeclSyntax {
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.`let`):
-        self = .`let`
-      case TokenSpec(.`var`):
-        self = .`var`
-      case TokenSpec(.`inout`):
-        self = .`inout`
+      case TokenSpec(.let):
+        self = .let
+      case TokenSpec(.var):
+        self = .var
+      case TokenSpec(.inout):
+        self = .inout
       case TokenSpec(._mutating):
         self = ._mutating
       case TokenSpec(._borrowing):
@@ -3057,12 +3057,12 @@ extension VariableDeclSyntax {
     
     var spec: TokenSpec {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:
@@ -3078,12 +3078,12 @@ extension VariableDeclSyntax {
     @_spi(Diagnostics)
     public var tokenSyntax: TokenSyntax {
       switch self {
-      case .`let`:
-        return .keyword(.`let`)
-      case .`var`:
-        return .keyword(.`var`)
-      case .`inout`:
-        return .keyword(.`inout`)
+      case .let:
+        return .keyword(.let)
+      case .var:
+        return .keyword(.var)
+      case .inout:
+        return .keyword(.inout)
       case ._mutating:
         return .keyword(._mutating)
       case ._borrowing:

@@ -77,11 +77,7 @@ public extension Child {
     if case .token(let choices, _, _) = kind,
       case .keyword(let keyword) = choices.only
     {
-      var name = keyword.spec.name
-      if keyword == .`init` {
-        name = "`init`"
-      }
-      return ExprSyntax(".\(token.varOrCaseName)(.\(raw: name))")
+      return ExprSyntax(".\(token.varOrCaseName)(.\(keyword.spec.varOrCaseName))")
     }
     return nil
   }

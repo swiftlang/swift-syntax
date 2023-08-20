@@ -63,6 +63,12 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
   }
 
   /// Append a syntax node to the interpolation.
+  ///
+  /// This method accepts a syntax node and appends it to the interpolation.
+  /// If there was a previous indentation value, the method will indent the
+  /// syntax node with that value. If not, it will use the syntax node as-is.
+  ///
+  /// - Parameter node: A syntax node that conforms to `SyntaxProtocol`.
   public mutating func appendInterpolation<Node: SyntaxProtocol>(
     _ node: Node
   ) {
@@ -82,6 +88,20 @@ extension SyntaxStringInterpolation: StringInterpolationProtocol {
       )
     )
     self.lastIndentation = nil
+  }
+
+  /// Append an optional syntax node to the interpolation.
+  ///
+  /// This method accepts an optional syntax node and appends it to the interpolation
+  /// if it exists. If the syntax node is nil, this method does nothing.
+  ///
+  /// - Parameter node: An optional syntax node that conforms to `SyntaxProtocol`.
+  public mutating func appendInterpolation<Node: SyntaxProtocol>(
+    _ node: Node?
+  ) {
+    if let node {
+      appendInterpolation(node)
+    }
   }
 
   public mutating func appendInterpolation<T>(raw value: T) {

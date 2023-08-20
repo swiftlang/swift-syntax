@@ -217,8 +217,9 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             let list = ExprListSyntax {
               ExprSyntax("layout.initialize(repeating: nil)")
               for (index, child) in node.children.enumerated() {
-                let optionalMark = child.isOptional ? "?" : ""
-                ExprSyntax("layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(raw: optionalMark).raw")
+                let optionalMark = child.isOptional ? TokenSyntax.postfixQuestionMarkToken() : nil
+
+                ExprSyntax("layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(optionalMark).raw")
                   .with(\.leadingTrivia, .newline)
               }
             }
@@ -239,12 +240,12 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         for (index, child) in node.children.enumerated() {
           try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(child.buildableType.buildable)") {
-            let iuoMark = child.isOptional ? "" : "!"
+            let exclamationMark = child.isOptional ? nil : TokenSyntax.exclamationMarkToken()
 
             if child.syntaxNodeKind == .syntax {
-              ExprSyntax("layoutView.children[\(raw: index)]\(raw: iuoMark)")
+              ExprSyntax("layoutView.children[\(raw: index)]\(exclamationMark)")
             } else {
-              ExprSyntax("layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.rawType).init(raw:))\(raw: iuoMark)")
+              ExprSyntax("layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.rawType).init(raw:))\(exclamationMark)")
             }
           }
         }

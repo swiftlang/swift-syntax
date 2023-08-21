@@ -172,10 +172,10 @@ let rawSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
 
       if let node = node.collectionNode {
-        let element = node.elementChoices.only != nil ? "\(node.elementChoices.only!.rawType)" : "Element"
+        let element = node.elementChoices.only != nil ? node.elementChoices.only!.rawType : "Element"
         DeclSyntax(
           """
-          public init(elements: [\(raw: element)], arena: __shared SyntaxArena) {
+          public init(elements: [\(element)], arena: __shared SyntaxArena) {
             let raw = RawSyntax.makeLayout(
               kind: .\(node.varOrCaseName), uninitializedCount: elements.count, arena: arena) { layout in
                 guard var ptr = layout.baseAddress else { return }

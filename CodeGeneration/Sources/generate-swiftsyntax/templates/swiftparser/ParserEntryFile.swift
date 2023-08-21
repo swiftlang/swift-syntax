@@ -39,7 +39,7 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             // incremental parse and would then live in a different arena than
             // `parser.arena`.
             defer { withExtendedLifetime(parser) {} }
-            let node = parser.\(raw: parserFunction)()
+            let node = parser.\(parserFunction)()
             let raw = RawSyntax(parser.parseRemainder(into: node))
             return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
           }

@@ -177,10 +177,12 @@ func syntaxNode(emitKind: SyntaxNodeKind) -> SourceFileSyntax {
               }
             }
 
+            let questionMark = child.isOptional ? TokenSyntax.postfixQuestionMarkToken() : nil
+
             AccessorDeclSyntax(
               """
               set(value) {
-                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(raw: child.isOptional ? "?" : "").data, arena: SyntaxArena()))
+                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(questionMark).data, arena: SyntaxArena()))
               }
               """
             )

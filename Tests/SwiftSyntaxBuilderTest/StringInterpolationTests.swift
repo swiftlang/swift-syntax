@@ -72,6 +72,22 @@ final class StringInterpolationTests: XCTestCase {
     )
   }
 
+  func testOptionalInterpolationWithNil() {
+    let tokenSyntax: TokenSyntax? = nil
+
+    let funcSyntax: DeclSyntax = "func foo\(tokenSyntax)()"
+    XCTAssertTrue(funcSyntax.is(FunctionDeclSyntax.self))
+    XCTAssertEqual(funcSyntax.description, "func foo()")
+  }
+
+  func testOptionalInterpolationWithValue() {
+    let tokenSyntax: TokenSyntax? = .identifier("Bar")
+
+    let funcSyntax: DeclSyntax = "func foo\(tokenSyntax)()"
+    XCTAssertTrue(funcSyntax.is(FunctionDeclSyntax.self))
+    XCTAssertEqual(funcSyntax.description, "func fooBar()")
+  }
+
   func testPatternInterpolation() {
     let letPattern: PatternSyntax = "let x"
     XCTAssertTrue(letPattern.is(ValueBindingPatternSyntax.self))

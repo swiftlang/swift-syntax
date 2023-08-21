@@ -30,28 +30,22 @@ final class TypeTests: ParserTestCase {
   }
 
   func testClosureParsing() {
-    assertParse(
-      "(a, b) -> c",
-      { TypeSyntax.parse(from: &$0) }
-    )
+    assertParse("let a: (a, b) -> c")
 
-    assertParse(
-      "@MainActor (a, b) async throws -> c",
-      { TypeSyntax.parse(from: &$0) }
-    )
+    assertParse("let a: @MainActor (a, b) async throws -> c")
 
     assertParse("() -> (\u{feff})")
   }
 
   func testGenericTypeWithTrivia() {
-    // N.B. Whitespace is significant here.
+    // Whitespace is significant here.
     assertParse(
       """
+      let a:
               Foo<Bar<
                   V, Baz<Quux>
               >>
-      """,
-      { TypeSyntax.parse(from: &$0) }
+      """
     )
   }
 
@@ -82,20 +76,17 @@ final class TypeTests: ParserTestCase {
       """
       { ()
       throws -> Void in }
-      """,
-      { ExprSyntax.parse(from: &$0) }
+      """
     )
 
     assertParse(
       """
       { [weak a, unowned(safe) self, b = 3] (a: Int, b: Int, _: Int) -> Int in }
-      """,
-      { ExprSyntax.parse(from: &$0) }
+      """
     )
 
     assertParse(
       "ℹ️{[1️⃣class]in2️⃣",
-      { ExprSyntax.parse(from: &$0) },
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -121,7 +112,6 @@ final class TypeTests: ParserTestCase {
 
     assertParse(
       "{[n1️⃣`]in}",
-      { ExprSyntax.parse(from: &$0) },
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '`' in closure capture clause")
       ]
@@ -129,7 +119,6 @@ final class TypeTests: ParserTestCase {
 
     assertParse(
       "{[weak1️⃣^]in}",
-      { ExprSyntax.parse(from: &$0) },
       diagnostics: [
         DiagnosticSpec(message: "expected identifier in closure capture", fixIts: ["insert identifier"]),
         DiagnosticSpec(message: "unexpected code '^' in closure capture clause"),
@@ -195,28 +184,26 @@ final class TypeTests: ParserTestCase {
 
   func testLowercaseSelf() {
     assertParse(
-      "1️⃣self2️⃣",
-      { TypeSyntax.parse(from: &$0) },
+      "let a: 1️⃣self",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected 'self' keyword before type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected type", fixIts: ["insert type"]),
+        DiagnosticSpec(message: "expected type in type annotation", fixIts: ["insert type"]),
+        DiagnosticSpec(message: "expected '=' in variable", fixIts: ["insert '='"]),
       ],
-      fixedSource: "<#type#>self"
+      fixedSource: "let a: <#type#> = self"
     )
   }
 
   func testUppercaseSelf() {
     assertParse(
-      "Self",
-      { TypeSyntax.parse(from: &$0) },
-      substructure: Syntax(TokenSyntax.keyword(.Self))
+      "let a: 1️⃣Self",
+      substructure: Syntax(TokenSyntax.keyword(.Self)),
+      substructureAfterMarker: "1️⃣"
     )
   }
 
   func testNestedLowercaseSelf() {
     assertParse(
-      "Foo.1️⃣self",
-      { TypeSyntax.parse(from: &$0) },
+      "let a: Foo.1️⃣self",
       substructure: Syntax(TokenSyntax.keyword(.`self`)),
       substructureAfterMarker: "1️⃣"
     )
@@ -224,8 +211,7 @@ final class TypeTests: ParserTestCase {
 
   func testNestedUppercaseSelf() {
     assertParse(
-      "Foo.1️⃣Self",
-      { TypeSyntax.parse(from: &$0) },
+      "let a: Foo.1️⃣Self",
       substructure: Syntax(TokenSyntax.identifier("Self")),
       substructureAfterMarker: "1️⃣"
     )

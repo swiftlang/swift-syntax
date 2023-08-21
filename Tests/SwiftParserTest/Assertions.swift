@@ -529,35 +529,6 @@ public struct AssertParseOptions: OptionSet {
 }
 
 extension ParserTestCase {
-  /// Same as `assertParse` overload with a `(String) -> S` `parse`,
-  /// parsing the resulting `String` as a ``SourceFileSyntax``.
-  func assertParse(
-    _ markedSource: String,
-    substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
-    substructureAfterMarker: String = "START",
-    diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
-    applyFixIts: [String]? = nil,
-    fixedSource expectedFixedSource: String? = nil,
-    options: AssertParseOptions = [],
-    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
-    file: StaticString = #file,
-    line: UInt = #line
-  ) {
-    assertParse(
-      markedSource,
-      { SourceFileSyntax.parse(from: &$0) },
-      substructure: expectedSubstructure,
-      substructureAfterMarker: substructureAfterMarker,
-      diagnostics: expectedDiagnostics,
-      applyFixIts: applyFixIts,
-      fixedSource: expectedFixedSource,
-      options: options,
-      experimentalFeatures: experimentalFeatures,
-      file: file,
-      line: line
-    )
-  }
-
   /// After a test case has been mutated, assert that the mutated source
   /// round-trips and doesn’t hit any assertion failures in the parser.
   fileprivate func assertRoundTrip<S: SyntaxProtocol>(
@@ -615,7 +586,7 @@ extension ParserTestCase {
   ///     `nil` to enable the default set of features provided by the test case.
   func assertParse<S: SyntaxProtocol>(
     _ markedSource: String,
-    _ parse: (inout Parser) -> S,
+    _ parse: (inout Parser) -> S = { SourceFileSyntax.parse(from: &$0) },
     substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
     substructureAfterMarker: String = "START",
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],

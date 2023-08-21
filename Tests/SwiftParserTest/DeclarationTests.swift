@@ -118,10 +118,7 @@ final class DeclarationTests: ParserTestCase {
       """
     )
 
-    assertParse(
-      "<@NSApplicationMain T: AnyObject>",
-      { GenericParameterClauseSyntax.parse(from: &$0) }
-    )
+    assertParse("struct A<@NSApplicationMain T: AnyObject> {}")
 
     assertParse(
       "class T where t1️⃣",

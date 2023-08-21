@@ -55,7 +55,7 @@ public class Node {
 
   /// If the syntax node can be constructed by parsing a string, the parser
   /// function that should be invoked to create this node.
-  public let parserFunction: String?
+  public let parserFunction: TokenSyntax?
 
   /// A name for this node that is suitable to be used as a variables or enum
   /// case's name.
@@ -110,7 +110,7 @@ public class Node {
     isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
-    parserFunction: String? = nil,
+    parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
     children: [Child] = []
   ) {
@@ -229,7 +229,7 @@ public class Node {
     isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
-    parserFunction: String? = nil,
+    parserFunction: TokenSyntax? = nil,
     elementChoices: [SyntaxNodeKind]
   ) {
     self.kind = kind

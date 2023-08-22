@@ -145,6 +145,7 @@ class ClassificationGenerator: SyntaxVisitor {
   }
   
   private func report(range: SyntaxClassifiedRange) {
+    // TODO: we should not report the ranges that have been reported already
     //if classifications.contains(where: { $0.range.contains(range.range)}) {
     //  return
     //}
@@ -165,6 +166,8 @@ class ClassificationGenerator: SyntaxVisitor {
       )
       return
     }
+    
+    // TODO: add targetRange for ClassificationGenerator
     /*
       guard range.offset <= targetRange.endOffset,
             range.endOffset >= targetRange.offset

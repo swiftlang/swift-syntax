@@ -15,6 +15,7 @@ import ArgumentParser
 import Foundation
 import SwiftParser
 import SwiftSyntax
+import SwiftIDEUtils
 
 struct PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(
@@ -66,10 +67,12 @@ struct PerformanceTest: ParsableCommand {
     for _ in 0..<self.iterations {
       for file in files {
         file.withUnsafeBytes { buf in
-          _ = Parser.parseIncrementally(
+          let (tree, _) = Parser.parseIncrementally(
             source: buf.bindMemory(to: UInt8.self),
             parseTransition: fileTransition[file]
           )
+          // TODO: temp test
+          tree.classifications
         }
       }
     }

@@ -26,6 +26,7 @@ struct Build: ParsableCommand, BuildCommand {
   func run() throws {
     try buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all")
     try buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all")
+    try buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli")
     try buildEditorExtension()
   }
 

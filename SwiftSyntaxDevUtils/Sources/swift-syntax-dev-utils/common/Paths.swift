@@ -32,6 +32,11 @@ enum Paths {
       .appendingPathComponent("Examples")
   }
 
+  static var swiftParserCliDir: URL {
+    packageDir
+      .appendingPathComponent("SwiftParserCLI")
+  }
+
   static var codeGenerationDir: URL {
     packageDir
       .appendingPathComponent("CodeGeneration")

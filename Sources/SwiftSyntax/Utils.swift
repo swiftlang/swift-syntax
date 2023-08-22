@@ -35,6 +35,13 @@ public struct ByteSourceRange: Equatable {
     return self.endOffset > other.offset && self.offset < other.endOffset
   }
 
+  public func contains(_ other: ByteSourceRange) -> Bool {
+    return self.endOffset >= other.endOffset && self.offset <= other.offset
+  }
+
+  public static func == (lhs: ByteSourceRange, rhs: ByteSourceRange) -> Bool {
+    return lhs.offset == rhs.offset && lhs.endOffset == rhs.endOffset
+  }
   /// Returns the byte range for the overlapping region between two ranges.
   public func intersected(_ other: ByteSourceRange) -> ByteSourceRange {
     let start = max(self.offset, other.offset)

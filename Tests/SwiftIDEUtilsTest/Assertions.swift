@@ -38,7 +38,7 @@ func assertClassification(
   } else {
     classifications = Array(tree.classifications)
   }
-  classifications = classifications.filter { $0.kind != .none }
+  classifications = classifications.filter { $0.kind != .none }.sorted(by: {$0.offset < $1.offset})
 
   if expected.count != classifications.count {
     XCTFail("Expected \(expected.count) re-used nodes but received \(classifications.count)", file: file, line: line)

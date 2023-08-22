@@ -573,14 +573,21 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       // Expand member attribute members attached to the declaration context.
       // Note that MemberAttribute macros are _not_ applied to generated members
       if let parentDeclGroup, let decl = item.decl.asProtocol(WithAttributesSyntax.self) {
-        var newAttributes = expandAttributesFromMemberAttributeMacros(
-          of: item.decl,
-          parentDecl: parentDeclGroup
+        var newAttributes = AttributeListSyntax(
+          expandAttributesFromMemberAttributeMacros(
+            of: item.decl,
+            parentDecl: parentDeclGroup
+          )
+          .map { visit($0) }
         )
-        .map { visit($0) }
         if !newAttributes.isEmpty {
-          newAttributes.insert(contentsOf: decl.attributes, at: 0)
-          item.decl = decl.with(\.attributes, AttributeListSyntax(newAttributes)).cast(DeclSyntax.self)
+          // Transfer the trailing trivia from the old attributes to the new attributes.
+          // This way, we essentially insert the new attributes right after the last attribute in source
+          // but before its trailing trivia, keeping the trivia that separates the attribute block
+          // from the variable itself.
+          newAttributes.trailingTrivia = newAttributes.trailingTrivia + decl.attributes.trailingTrivia
+          newAttributes.insert(contentsOf: decl.attributes.with(\.trailingTrivia, []), at: newAttributes.startIndex)
+          item.decl = decl.with(\.attributes, newAttributes).cast(DeclSyntax.self)
         }
       }
 

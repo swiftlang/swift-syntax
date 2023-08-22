@@ -1228,6 +1228,198 @@ final class MacroSystemTests: XCTestCase {
     )
   }
 
+  func testMemberAttributeMacroOnPropertyThatAlreadyHasAttribute() {
+    struct TestMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo decl: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return [
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("Wrapper")
+            )
+          )
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          @Wrapper var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) /* x */ var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          @Wrapper /* x */ var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated)
+
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          @Wrapper
+
+          var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) // some comment
+
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          @Wrapper // some comment
+
+          var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testMemberAttributeWithTriviaMacroOnPropertyThatAlreadyHasAttribute() {
+    struct TestMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo decl: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return [
+          AttributeSyntax(
+            leadingTrivia: .blockComment("/* start */"),
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("Wrapper")
+            ),
+            trailingTrivia: .blockComment("/* end */")
+          )
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          /* start */@Wrapper/* end */ var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) /* x */ var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          /* start */@Wrapper/* end */ /* x */ var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated)
+
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          /* start */@Wrapper/* end */
+
+          var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        @available(*, deprecated) // some comment
+
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          @available(*, deprecated)
+          /* start */@Wrapper/* end */ // some comment
+
+          var x: Int
+        }
+        """,
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testTypeWrapperTransform() {
     assertMacroExpansion(
       """

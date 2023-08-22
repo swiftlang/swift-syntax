@@ -4,26 +4,36 @@ Guidance of how to version macros when a new major swift-syntax version is relea
 
 ## Summary
 
-Update the minor version of a macro when updating its swift-syntax version dependency.
+A macro can depend on multiple versions of swift-syntax. If it is affected by source-breaking changes in swift-syntax, it can check the version of swift-syntax it is compiling against using e.g. `#if canImport(SwiftSyntax510)`.
 
 ## Detailed Explanation
 
 All the ideas described in the following apply to all packages that depend on swift-syntax, not only macros.
 
-For simplicity, this article assumes that `509` is the current swift-syntax version and `510` the next, but everything applies to any other major swift-syntax version update, including version jumps to `600`.
+For simplicity, this article assumes that 509 is the current swift-syntax version and 510 the next, but everything applies to any other major swift-syntax version update, including version jumps to e.g. 600.
 
-When starting to write a macro, no special considerations need to be made with regard to versioning. Depending on swift-syntax as with `from: "509.0.0"` will make sure that the macro receives any bug fix updates to swift-syntax 509. For example, a macro depending on swift-syntax 509 might be released as version 1.0, 1.2, 2.0, …
+Any given version macro can depend on multiple major swift-syntax versions at once. For example, if a macro supports both swift-syntax 509 and swift-syntax 510, it may declare its dependency on swift-syntax as 
 
-When swift-syntax releases version 510, the macro should release a new minor release in which it updates the swift-syntax dependency to `from: "510.0.0"`. For the sake of this example, let’s assume that the macro raises its version from 1.2 to 1.3 during this step.
+```
+.package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"..<"511.0.0"),
+```
 
-Any client package that depends on the macro using an `from: "1.0"` and doesn’t have any other transitive dependencies on swift-syntax will automatically receive version `1.3` of the macro when updating the package dependencies using `swift package update` or Xcode’s *Update to Latest Package Versions* command.
+In order to handle breaking API changes, clients can wrap uses of such APIs in conditional compilation clauses that check the version of swift-syntax it is building against. All versions of swift-syntax ≥ 509 will include an empty `SwiftSyntaxVersion509` module, swift-syntax ≥ 510 will include both a `SwiftSyntaxVersion510` and `SwiftSyntaxVersion509` module, and so on for any new releases. This allows clients to write
 
-Should a client depend on another macro, which hasn’t released a new version that depends on swift-syntax 510 yet, then SwiftPM will continue to select version 1.2 for the macro. In order for the client to update to version 1.3 of the macro, all macros need to release a version that is compatible with swift-syntax 510. The macro can continue to deliver updates for those clients by creating patch releases such as 1.2.1.
+```swift
+#if canImport(SwiftSyntax510)
+// code specific to swift-syntax version >= 510
+#elseif canImport(SwiftSyntax509)
+// code to support swift-syntax version 509
+#else
+// code for swift-syntax < 509. Not needed for macros since macros require swift-syntax >= 509.
+#endif
+```
 
-It is possible to mix-and-match swift-syntax and Swift compiler versions, i.e. swift-syntax 509 will also work with a Swift 5.10 compiler and a Swift 5.9 compiler works with swift-syntax 510 because swift-syntax is just an ordinary package dependency.
+The `SwiftSyntax<version>` modules are empty and don’t contain any code. Their only purpose is to serve as targets for the `canImport` checks. 
 
 ## Representation of New Syntax with Old swift-syntax Versions
 
-If a swift-syntax verison is used that is older than the compiler’s version, then swift-syntax will not be able to represent the new syntactic structures (like new statements) in the source file because it doesn’t know about them.
+If a swift-syntax version is used that is older than the compiler’s version, then swift-syntax will not be able to represent the new syntactic structures (like new statements) in the source file because it doesn’t know about them.
 
 In this case, swift-syntax will represent the unknown syntactic constructs as a mixture of unexpected syntax nodes in the `unexpected*` children of the syntax nodes. Depending on the macro’s behavior this might not pose any issues. For example, if the macro adds an completion-handler alternative to an async function, it most likely doesn’t care if some statement in the body couldn’t be parsed, since it is only interested in the signature.

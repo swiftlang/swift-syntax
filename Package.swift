@@ -146,7 +146,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntax",
-      dependencies: [],
+      dependencies: ["SwiftSyntax509"],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
     ),
@@ -154,6 +154,13 @@ let package = Package(
     .testTarget(
       name: "SwiftSyntaxTest",
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntax", "SwiftSyntaxBuilder"]
+    ),
+
+    // MARK: Verison marker modules
+
+    .target(
+      name: "SwiftSyntax509",
+      dependencies: []
     ),
 
     // MARK: SwiftSyntaxBuilder

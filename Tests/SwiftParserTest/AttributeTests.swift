@@ -220,6 +220,24 @@ final class AttributeTests: ParserTestCase {
       ) {}
       """
     )
+
+    assertParse(
+      """
+      @derivative(of: 1️⃣Self.other)
+      func foo() {}
+      """,
+      substructure: Syntax(TokenSyntax.keyword(.Self)),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @derivative(of: Foo.1️⃣Self.other)
+      func foo() {}
+      """,
+      substructure: Syntax(TokenSyntax.identifier("Self")),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testTransposeAttribute() {

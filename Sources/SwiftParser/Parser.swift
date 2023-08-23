@@ -635,6 +635,7 @@ extension Parser {
   ///     currently positioned at a keyword, consume that keyword and remap it
   ///     to and identifier.
   /// - Returns: The consumed token and any unexpected tokens that were skipped.
+  ///   The token is always guaranteed to be of `TokenKind.identifier`
   mutating func expectIdentifier(
     keywordRecovery: Bool = false,
     allowSelfOrCapitalSelfAsIdentifier: Bool = false,

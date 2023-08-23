@@ -138,11 +138,10 @@ final class StatementTests: ParserTestCase {
   }
 
   func testReturn() {
-    assertParse("return actor", { StmtSyntax.parse(from: &$0) })
+    assertParse("return actor")
 
     assertParse(
       "{ 1️⃣return 0 }",
-      { ExprSyntax.parse(from: &$0) },
       substructure: ReturnStmtSyntax(
         returnKeyword: .keyword(.return),
         expression: IntegerLiteralExprSyntax(literal: .integerLiteral("0"))

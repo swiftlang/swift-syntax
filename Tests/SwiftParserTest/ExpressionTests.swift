@@ -1022,7 +1022,6 @@ final class ExpressionTests: ParserTestCase {
   func testParseArrowExpr() {
     assertParse(
       "Foo 1️⃣async ->2️⃣",
-      { ExprSyntax.parse(from: &$0) },
       substructure: TokenSyntax.keyword(.async),
       substructureAfterMarker: "1️⃣",
       diagnostics: [

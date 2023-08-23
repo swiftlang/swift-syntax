@@ -97,7 +97,11 @@ extension Parser {
 
     let type: RawTypeSyntax
 
-    if colon.presence == .missing, let secondName = names.secondName, secondName.tokenText.isStartingWithUppercase {
+    if colon.presence == .missing,
+      let secondName = names.secondName,
+      secondName.tokenKind == .identifier,
+      secondName.tokenText.isStartingWithUppercase
+    {
       // Synthesize the secondName parameter as a type node.
       type = RawTypeSyntax(
         RawIdentifierTypeSyntax(

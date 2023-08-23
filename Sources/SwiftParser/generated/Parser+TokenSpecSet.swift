@@ -1559,7 +1559,6 @@ extension IdentifierTypeSyntax {
   @_spi(Diagnostics)
   public enum NameOptions: TokenSpecSet {
     case identifier
-    case `self`
     case `Self`
     case `Any`
     case wildcard
@@ -1568,8 +1567,6 @@ extension IdentifierTypeSyntax {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.identifier):
         self = .identifier
-      case TokenSpec(.self):
-        self = .self
       case TokenSpec(.Self):
         self = .Self
       case TokenSpec(.Any):
@@ -1585,8 +1582,6 @@ extension IdentifierTypeSyntax {
       switch self {
       case .identifier:
         return .identifier
-      case .self:
-        return .keyword(.self)
       case .Self:
         return .keyword(.Self)
       case .Any:
@@ -1604,8 +1599,6 @@ extension IdentifierTypeSyntax {
       switch self {
       case .identifier:
         return .identifier("")
-      case .self:
-        return .keyword(.self)
       case .Self:
         return .keyword(.Self)
       case .Any:
@@ -2097,7 +2090,6 @@ extension MemberTypeSyntax {
   public enum NameOptions: TokenSpecSet {
     case identifier
     case `self`
-    case `Self`
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -2105,8 +2097,6 @@ extension MemberTypeSyntax {
         self = .identifier
       case TokenSpec(.self):
         self = .self
-      case TokenSpec(.Self):
-        self = .Self
       default:
         return nil
       }
@@ -2118,8 +2108,6 @@ extension MemberTypeSyntax {
         return .identifier
       case .self:
         return .keyword(.self)
-      case .Self:
-        return .keyword(.Self)
       }
     }
     
@@ -2133,8 +2121,6 @@ extension MemberTypeSyntax {
         return .identifier("")
       case .self:
         return .keyword(.self)
-      case .Self:
-        return .keyword(.Self)
       }
     }
   }

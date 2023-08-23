@@ -26,7 +26,7 @@ extension SourceCodeGeneratorCommand {
     var args = [
       "run",
       "--package-path", Paths.codeGenerationDir.relativePath,
-      "generate-swiftsyntax", sourceDir.relativePath,
+      "generate-swift-syntax", sourceDir.relativePath,
     ]
 
     if arguments.verbose {

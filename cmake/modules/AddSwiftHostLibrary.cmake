@@ -89,6 +89,6 @@ function(add_swift_host_library name)
   install(
     DIRECTORY ${module_base}
     DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-    FILES_MATCHING PATTERN "*.swiftinterface"
+    FILES_MATCHING REGEX ".*\.(swiftdoc|swiftinterface)"
   )
 endfunction()

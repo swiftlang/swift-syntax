@@ -3346,3023 +3346,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TokenSyntax) {
   }
   
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorBlockSyntax(_ data: SyntaxData) {
-    let node = AccessorBlockSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorDeclListSyntax(_ data: SyntaxData) {
-    let node = AccessorDeclListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorDeclSyntax(_ data: SyntaxData) {
-    let node = AccessorDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = AccessorEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAccessorParametersSyntax(_ data: SyntaxData) {
-    let node = AccessorParametersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplActorDeclSyntax(_ data: SyntaxData) {
-    let node = ActorDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplArrayElementListSyntax(_ data: SyntaxData) {
-    let node = ArrayElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplArrayElementSyntax(_ data: SyntaxData) {
-    let node = ArrayElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplArrayExprSyntax(_ data: SyntaxData) {
-    let node = ArrayExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplArrayTypeSyntax(_ data: SyntaxData) {
-    let node = ArrayTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplArrowExprSyntax(_ data: SyntaxData) {
-    let node = ArrowExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAsExprSyntax(_ data: SyntaxData) {
-    let node = AsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAssignmentExprSyntax(_ data: SyntaxData) {
-    let node = AssignmentExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAssociatedTypeDeclSyntax(_ data: SyntaxData) {
-    let node = AssociatedTypeDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAttributeListSyntax(_ data: SyntaxData) {
-    let node = AttributeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAttributeSyntax(_ data: SyntaxData) {
-    let node = AttributeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAttributedTypeSyntax(_ data: SyntaxData) {
-    let node = AttributedTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityArgumentListSyntax(_ data: SyntaxData) {
-    let node = AvailabilityArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityArgumentSyntax(_ data: SyntaxData) {
-    let node = AvailabilityArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityConditionSyntax(_ data: SyntaxData) {
-    let node = AvailabilityConditionSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAvailabilityLabeledArgumentSyntax(_ data: SyntaxData) {
-    let node = AvailabilityLabeledArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplAwaitExprSyntax(_ data: SyntaxData) {
-    let node = AwaitExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBackDeployedAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = BackDeployedAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBinaryOperatorExprSyntax(_ data: SyntaxData) {
-    let node = BinaryOperatorExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBooleanLiteralExprSyntax(_ data: SyntaxData) {
-    let node = BooleanLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBorrowExprSyntax(_ data: SyntaxData) {
-    let node = BorrowExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplBreakStmtSyntax(_ data: SyntaxData) {
-    let node = BreakStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCanImportExprSyntax(_ data: SyntaxData) {
-    let node = CanImportExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCanImportVersionInfoSyntax(_ data: SyntaxData) {
-    let node = CanImportVersionInfoSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCatchClauseListSyntax(_ data: SyntaxData) {
-    let node = CatchClauseListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCatchClauseSyntax(_ data: SyntaxData) {
-    let node = CatchClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCatchItemListSyntax(_ data: SyntaxData) {
-    let node = CatchItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCatchItemSyntax(_ data: SyntaxData) {
-    let node = CatchItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClassDeclSyntax(_ data: SyntaxData) {
-    let node = ClassDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClassRestrictionTypeSyntax(_ data: SyntaxData) {
-    let node = ClassRestrictionTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureClauseSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureListSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureSpecifierSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureSpecifierSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureCaptureSyntax(_ data: SyntaxData) {
-    let node = ClosureCaptureSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureExprSyntax(_ data: SyntaxData) {
-    let node = ClosureExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureParameterClauseSyntax(_ data: SyntaxData) {
-    let node = ClosureParameterClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureParameterListSyntax(_ data: SyntaxData) {
-    let node = ClosureParameterListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureParameterSyntax(_ data: SyntaxData) {
-    let node = ClosureParameterSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureShorthandParameterListSyntax(_ data: SyntaxData) {
-    let node = ClosureShorthandParameterListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureShorthandParameterSyntax(_ data: SyntaxData) {
-    let node = ClosureShorthandParameterSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplClosureSignatureSyntax(_ data: SyntaxData) {
-    let node = ClosureSignatureSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCodeBlockItemListSyntax(_ data: SyntaxData) {
-    let node = CodeBlockItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCodeBlockItemSyntax(_ data: SyntaxData) {
-    let node = CodeBlockItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCodeBlockSyntax(_ data: SyntaxData) {
-    let node = CodeBlockSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCompositionTypeElementListSyntax(_ data: SyntaxData) {
-    let node = CompositionTypeElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCompositionTypeElementSyntax(_ data: SyntaxData) {
-    let node = CompositionTypeElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCompositionTypeSyntax(_ data: SyntaxData) {
-    let node = CompositionTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConditionElementListSyntax(_ data: SyntaxData) {
-    let node = ConditionElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConditionElementSyntax(_ data: SyntaxData) {
-    let node = ConditionElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConformanceRequirementSyntax(_ data: SyntaxData) {
-    let node = ConformanceRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConsumeExprSyntax(_ data: SyntaxData) {
-    let node = ConsumeExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplContinueStmtSyntax(_ data: SyntaxData) {
-    let node = ContinueStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConventionAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = ConventionAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplConventionWitnessMethodAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = ConventionWitnessMethodAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplCopyExprSyntax(_ data: SyntaxData) {
-    let node = CopyExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclModifierDetailSyntax(_ data: SyntaxData) {
-    let node = DeclModifierDetailSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclModifierListSyntax(_ data: SyntaxData) {
-    let node = DeclModifierListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclModifierSyntax(_ data: SyntaxData) {
-    let node = DeclModifierSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclNameArgumentListSyntax(_ data: SyntaxData) {
-    let node = DeclNameArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclNameArgumentSyntax(_ data: SyntaxData) {
-    let node = DeclNameArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclNameArgumentsSyntax(_ data: SyntaxData) {
-    let node = DeclNameArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeclReferenceExprSyntax(_ data: SyntaxData) {
-    let node = DeclReferenceExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeferStmtSyntax(_ data: SyntaxData) {
-    let node = DeferStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeinitializerDeclSyntax(_ data: SyntaxData) {
-    let node = DeinitializerDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDeinitializerEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = DeinitializerEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDerivativeAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = DerivativeAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDesignatedTypeListSyntax(_ data: SyntaxData) {
-    let node = DesignatedTypeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDesignatedTypeSyntax(_ data: SyntaxData) {
-    let node = DesignatedTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDictionaryElementListSyntax(_ data: SyntaxData) {
-    let node = DictionaryElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDictionaryElementSyntax(_ data: SyntaxData) {
-    let node = DictionaryElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDictionaryExprSyntax(_ data: SyntaxData) {
-    let node = DictionaryExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDictionaryTypeSyntax(_ data: SyntaxData) {
-    let node = DictionaryTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentListSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityArgumentsSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiabilityWithRespectToArgumentSyntax(_ data: SyntaxData) {
-    let node = DifferentiabilityWithRespectToArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDifferentiableAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = DifferentiableAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDiscardAssignmentExprSyntax(_ data: SyntaxData) {
-    let node = DiscardAssignmentExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDiscardStmtSyntax(_ data: SyntaxData) {
-    let node = DiscardStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDoStmtSyntax(_ data: SyntaxData) {
-    let node = DoStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDocumentationAttributeArgumentListSyntax(_ data: SyntaxData) {
-    let node = DocumentationAttributeArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDocumentationAttributeArgumentSyntax(_ data: SyntaxData) {
-    let node = DocumentationAttributeArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplDynamicReplacementAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = DynamicReplacementAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEditorPlaceholderDeclSyntax(_ data: SyntaxData) {
-    let node = EditorPlaceholderDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEditorPlaceholderExprSyntax(_ data: SyntaxData) {
-    let node = EditorPlaceholderExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEffectsAttributeArgumentListSyntax(_ data: SyntaxData) {
-    let node = EffectsAttributeArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseDeclSyntax(_ data: SyntaxData) {
-    let node = EnumCaseDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseElementListSyntax(_ data: SyntaxData) {
-    let node = EnumCaseElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseElementSyntax(_ data: SyntaxData) {
-    let node = EnumCaseElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseParameterClauseSyntax(_ data: SyntaxData) {
-    let node = EnumCaseParameterClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseParameterListSyntax(_ data: SyntaxData) {
-    let node = EnumCaseParameterListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumCaseParameterSyntax(_ data: SyntaxData) {
-    let node = EnumCaseParameterSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplEnumDeclSyntax(_ data: SyntaxData) {
-    let node = EnumDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExposeAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = ExposeAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExprListSyntax(_ data: SyntaxData) {
-    let node = ExprListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExpressionPatternSyntax(_ data: SyntaxData) {
-    let node = ExpressionPatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExpressionSegmentSyntax(_ data: SyntaxData) {
-    let node = ExpressionSegmentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExpressionStmtSyntax(_ data: SyntaxData) {
-    let node = ExpressionStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplExtensionDeclSyntax(_ data: SyntaxData) {
-    let node = ExtensionDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFallThroughStmtSyntax(_ data: SyntaxData) {
-    let node = FallThroughStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFloatLiteralExprSyntax(_ data: SyntaxData) {
-    let node = FloatLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplForStmtSyntax(_ data: SyntaxData) {
-    let node = ForStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplForceUnwrapExprSyntax(_ data: SyntaxData) {
-    let node = ForceUnwrapExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionCallExprSyntax(_ data: SyntaxData) {
-    let node = FunctionCallExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionDeclSyntax(_ data: SyntaxData) {
-    let node = FunctionDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = FunctionEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionParameterClauseSyntax(_ data: SyntaxData) {
-    let node = FunctionParameterClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionParameterListSyntax(_ data: SyntaxData) {
-    let node = FunctionParameterListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionParameterSyntax(_ data: SyntaxData) {
-    let node = FunctionParameterSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionSignatureSyntax(_ data: SyntaxData) {
-    let node = FunctionSignatureSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplFunctionTypeSyntax(_ data: SyntaxData) {
-    let node = FunctionTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericArgumentClauseSyntax(_ data: SyntaxData) {
-    let node = GenericArgumentClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericArgumentListSyntax(_ data: SyntaxData) {
-    let node = GenericArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericArgumentSyntax(_ data: SyntaxData) {
-    let node = GenericArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericParameterClauseSyntax(_ data: SyntaxData) {
-    let node = GenericParameterClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericParameterListSyntax(_ data: SyntaxData) {
-    let node = GenericParameterListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericParameterSyntax(_ data: SyntaxData) {
-    let node = GenericParameterSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericRequirementListSyntax(_ data: SyntaxData) {
-    let node = GenericRequirementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericRequirementSyntax(_ data: SyntaxData) {
-    let node = GenericRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericSpecializationExprSyntax(_ data: SyntaxData) {
-    let node = GenericSpecializationExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGenericWhereClauseSyntax(_ data: SyntaxData) {
-    let node = GenericWhereClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplGuardStmtSyntax(_ data: SyntaxData) {
-    let node = GuardStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIdentifierPatternSyntax(_ data: SyntaxData) {
-    let node = IdentifierPatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIdentifierTypeSyntax(_ data: SyntaxData) {
-    let node = IdentifierTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIfConfigClauseListSyntax(_ data: SyntaxData) {
-    let node = IfConfigClauseListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIfConfigClauseSyntax(_ data: SyntaxData) {
-    let node = IfConfigClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIfConfigDeclSyntax(_ data: SyntaxData) {
-    let node = IfConfigDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIfExprSyntax(_ data: SyntaxData) {
-    let node = IfExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplImplementsAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = ImplementsAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplImplicitlyUnwrappedOptionalTypeSyntax(_ data: SyntaxData) {
-    let node = ImplicitlyUnwrappedOptionalTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplImportDeclSyntax(_ data: SyntaxData) {
-    let node = ImportDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplImportPathComponentListSyntax(_ data: SyntaxData) {
-    let node = ImportPathComponentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplImportPathComponentSyntax(_ data: SyntaxData) {
-    let node = ImportPathComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInOutExprSyntax(_ data: SyntaxData) {
-    let node = InOutExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInfixOperatorExprSyntax(_ data: SyntaxData) {
-    let node = InfixOperatorExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInheritanceClauseSyntax(_ data: SyntaxData) {
-    let node = InheritanceClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInheritedTypeListSyntax(_ data: SyntaxData) {
-    let node = InheritedTypeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInheritedTypeSyntax(_ data: SyntaxData) {
-    let node = InheritedTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInitializerClauseSyntax(_ data: SyntaxData) {
-    let node = InitializerClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplInitializerDeclSyntax(_ data: SyntaxData) {
-    let node = InitializerDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIntegerLiteralExprSyntax(_ data: SyntaxData) {
-    let node = IntegerLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIsExprSyntax(_ data: SyntaxData) {
-    let node = IsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplIsTypePatternSyntax(_ data: SyntaxData) {
-    let node = IsTypePatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathComponentListSyntax(_ data: SyntaxData) {
-    let node = KeyPathComponentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathComponentSyntax(_ data: SyntaxData) {
-    let node = KeyPathComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathExprSyntax(_ data: SyntaxData) {
-    let node = KeyPathExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathOptionalComponentSyntax(_ data: SyntaxData) {
-    let node = KeyPathOptionalComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathPropertyComponentSyntax(_ data: SyntaxData) {
-    let node = KeyPathPropertyComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplKeyPathSubscriptComponentSyntax(_ data: SyntaxData) {
-    let node = KeyPathSubscriptComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledExprListSyntax(_ data: SyntaxData) {
-    let node = LabeledExprListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledExprSyntax(_ data: SyntaxData) {
-    let node = LabeledExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledSpecializeArgumentSyntax(_ data: SyntaxData) {
-    let node = LabeledSpecializeArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLabeledStmtSyntax(_ data: SyntaxData) {
-    let node = LabeledStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplLayoutRequirementSyntax(_ data: SyntaxData) {
-    let node = LayoutRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMacroDeclSyntax(_ data: SyntaxData) {
-    let node = MacroDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMacroExpansionDeclSyntax(_ data: SyntaxData) {
-    let node = MacroExpansionDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMacroExpansionExprSyntax(_ data: SyntaxData) {
-    let node = MacroExpansionExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMatchingPatternConditionSyntax(_ data: SyntaxData) {
-    let node = MatchingPatternConditionSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberAccessExprSyntax(_ data: SyntaxData) {
-    let node = MemberAccessExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberBlockItemListSyntax(_ data: SyntaxData) {
-    let node = MemberBlockItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberBlockItemSyntax(_ data: SyntaxData) {
-    let node = MemberBlockItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberBlockSyntax(_ data: SyntaxData) {
-    let node = MemberBlockSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMemberTypeSyntax(_ data: SyntaxData) {
-    let node = MemberTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMetatypeTypeSyntax(_ data: SyntaxData) {
-    let node = MetatypeTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingDeclSyntax(_ data: SyntaxData) {
-    let node = MissingDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingExprSyntax(_ data: SyntaxData) {
-    let node = MissingExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingPatternSyntax(_ data: SyntaxData) {
-    let node = MissingPatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingStmtSyntax(_ data: SyntaxData) {
-    let node = MissingStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingSyntax(_ data: SyntaxData) {
-    let node = MissingSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMissingTypeSyntax(_ data: SyntaxData) {
-    let node = MissingTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMultipleTrailingClosureElementListSyntax(_ data: SyntaxData) {
-    let node = MultipleTrailingClosureElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplMultipleTrailingClosureElementSyntax(_ data: SyntaxData) {
-    let node = MultipleTrailingClosureElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplNamedOpaqueReturnTypeSyntax(_ data: SyntaxData) {
-    let node = NamedOpaqueReturnTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplNilLiteralExprSyntax(_ data: SyntaxData) {
-    let node = NilLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjCSelectorPieceListSyntax(_ data: SyntaxData) {
-    let node = ObjCSelectorPieceListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplObjCSelectorPieceSyntax(_ data: SyntaxData) {
-    let node = ObjCSelectorPieceSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = OpaqueReturnTypeOfAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOperatorDeclSyntax(_ data: SyntaxData) {
-    let node = OperatorDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOperatorPrecedenceAndTypesSyntax(_ data: SyntaxData) {
-    let node = OperatorPrecedenceAndTypesSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOptionalBindingConditionSyntax(_ data: SyntaxData) {
-    let node = OptionalBindingConditionSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOptionalChainingExprSyntax(_ data: SyntaxData) {
-    let node = OptionalChainingExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOptionalTypeSyntax(_ data: SyntaxData) {
-    let node = OptionalTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplOriginallyDefinedInAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = OriginallyDefinedInAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPackElementExprSyntax(_ data: SyntaxData) {
-    let node = PackElementExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPackElementTypeSyntax(_ data: SyntaxData) {
-    let node = PackElementTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPackExpansionExprSyntax(_ data: SyntaxData) {
-    let node = PackExpansionExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPackExpansionTypeSyntax(_ data: SyntaxData) {
-    let node = PackExpansionTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPatternBindingListSyntax(_ data: SyntaxData) {
-    let node = PatternBindingListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPatternBindingSyntax(_ data: SyntaxData) {
-    let node = PatternBindingSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPatternExprSyntax(_ data: SyntaxData) {
-    let node = PatternExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPlatformVersionItemListSyntax(_ data: SyntaxData) {
-    let node = PlatformVersionItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPlatformVersionItemSyntax(_ data: SyntaxData) {
-    let node = PlatformVersionItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPlatformVersionSyntax(_ data: SyntaxData) {
-    let node = PlatformVersionSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPostfixIfConfigExprSyntax(_ data: SyntaxData) {
-    let node = PostfixIfConfigExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPostfixOperatorExprSyntax(_ data: SyntaxData) {
-    let node = PostfixOperatorExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundSourceLocationArgumentsSyntax(_ data: SyntaxData) {
-    let node = PoundSourceLocationArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPoundSourceLocationSyntax(_ data: SyntaxData) {
-    let node = PoundSourceLocationSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupAssignmentSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupAssignmentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupAssociativitySyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupAssociativitySyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupAttributeListSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupAttributeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupDeclSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameListSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupNameListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupNameSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupNameSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrecedenceGroupRelationSyntax(_ data: SyntaxData) {
-    let node = PrecedenceGroupRelationSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrefixOperatorExprSyntax(_ data: SyntaxData) {
-    let node = PrefixOperatorExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeClauseSyntax(_ data: SyntaxData) {
-    let node = PrimaryAssociatedTypeClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeListSyntax(_ data: SyntaxData) {
-    let node = PrimaryAssociatedTypeListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplPrimaryAssociatedTypeSyntax(_ data: SyntaxData) {
-    let node = PrimaryAssociatedTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplProtocolDeclSyntax(_ data: SyntaxData) {
-    let node = ProtocolDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplRegexLiteralExprSyntax(_ data: SyntaxData) {
-    let node = RegexLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplRepeatStmtSyntax(_ data: SyntaxData) {
-    let node = RepeatStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplReturnClauseSyntax(_ data: SyntaxData) {
-    let node = ReturnClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplReturnStmtSyntax(_ data: SyntaxData) {
-    let node = ReturnStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSameTypeRequirementSyntax(_ data: SyntaxData) {
-    let node = SameTypeRequirementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSequenceExprSyntax(_ data: SyntaxData) {
-    let node = SequenceExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSimpleStringLiteralExprSyntax(_ data: SyntaxData) {
-    let node = SimpleStringLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSimpleStringLiteralSegmentListSyntax(_ data: SyntaxData) {
-    let node = SimpleStringLiteralSegmentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSomeOrAnyTypeSyntax(_ data: SyntaxData) {
-    let node = SomeOrAnyTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSourceFileSyntax(_ data: SyntaxData) {
-    let node = SourceFileSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeAttributeArgumentListSyntax(_ data: SyntaxData) {
-    let node = SpecializeAttributeArgumentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeAvailabilityArgumentSyntax(_ data: SyntaxData) {
-    let node = SpecializeAvailabilityArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSpecializeTargetFunctionArgumentSyntax(_ data: SyntaxData) {
-    let node = SpecializeTargetFunctionArgumentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplStringLiteralExprSyntax(_ data: SyntaxData) {
-    let node = StringLiteralExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplStringLiteralSegmentListSyntax(_ data: SyntaxData) {
-    let node = StringLiteralSegmentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplStringSegmentSyntax(_ data: SyntaxData) {
-    let node = StringSegmentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplStructDeclSyntax(_ data: SyntaxData) {
-    let node = StructDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSubscriptCallExprSyntax(_ data: SyntaxData) {
-    let node = SubscriptCallExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSubscriptDeclSyntax(_ data: SyntaxData) {
-    let node = SubscriptDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSuperExprSyntax(_ data: SyntaxData) {
-    let node = SuperExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSuppressedTypeSyntax(_ data: SyntaxData) {
-    let node = SuppressedTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseItemListSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseItemListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseItemSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseItemSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseLabelSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseLabelSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseListSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchCaseSyntax(_ data: SyntaxData) {
-    let node = SwitchCaseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchDefaultLabelSyntax(_ data: SyntaxData) {
-    let node = SwitchDefaultLabelSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplSwitchExprSyntax(_ data: SyntaxData) {
-    let node = SwitchExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTernaryExprSyntax(_ data: SyntaxData) {
-    let node = TernaryExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplThrowStmtSyntax(_ data: SyntaxData) {
-    let node = ThrowStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTryExprSyntax(_ data: SyntaxData) {
-    let node = TryExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleExprSyntax(_ data: SyntaxData) {
-    let node = TupleExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTuplePatternElementListSyntax(_ data: SyntaxData) {
-    let node = TuplePatternElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTuplePatternElementSyntax(_ data: SyntaxData) {
-    let node = TuplePatternElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTuplePatternSyntax(_ data: SyntaxData) {
-    let node = TuplePatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleTypeElementListSyntax(_ data: SyntaxData) {
-    let node = TupleTypeElementListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleTypeElementSyntax(_ data: SyntaxData) {
-    let node = TupleTypeElementSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTupleTypeSyntax(_ data: SyntaxData) {
-    let node = TupleTypeSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeAliasDeclSyntax(_ data: SyntaxData) {
-    let node = TypeAliasDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeAnnotationSyntax(_ data: SyntaxData) {
-    let node = TypeAnnotationSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeEffectSpecifiersSyntax(_ data: SyntaxData) {
-    let node = TypeEffectSpecifiersSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeExprSyntax(_ data: SyntaxData) {
-    let node = TypeExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplTypeInitializerClauseSyntax(_ data: SyntaxData) {
-    let node = TypeInitializerClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnavailableFromAsyncAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = UnavailableFromAsyncAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnderscorePrivateAttributeArgumentsSyntax(_ data: SyntaxData) {
-    let node = UnderscorePrivateAttributeArgumentsSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnexpectedNodesSyntax(_ data: SyntaxData) {
-    let node = UnexpectedNodesSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedAsExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedAsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedIsExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedIsExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplUnresolvedTernaryExprSyntax(_ data: SyntaxData) {
-    let node = UnresolvedTernaryExprSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplValueBindingPatternSyntax(_ data: SyntaxData) {
-    let node = ValueBindingPatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplVariableDeclSyntax(_ data: SyntaxData) {
-    let node = VariableDeclSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplVersionComponentListSyntax(_ data: SyntaxData) {
-    let node = VersionComponentListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplVersionComponentSyntax(_ data: SyntaxData) {
-    let node = VersionComponentSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplVersionTupleSyntax(_ data: SyntaxData) {
-    let node = VersionTupleSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplWhereClauseSyntax(_ data: SyntaxData) {
-    let node = WhereClauseSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplWhileStmtSyntax(_ data: SyntaxData) {
-    let node = WhileStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplWildcardPatternSyntax(_ data: SyntaxData) {
-    let node = WildcardPatternSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldStmtSyntax(_ data: SyntaxData) {
-    let node = YieldStmtSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldedExpressionListSyntax(_ data: SyntaxData) {
-    let node = YieldedExpressionListSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldedExpressionSyntax(_ data: SyntaxData) {
-    let node = YieldedExpressionSyntax(data)
-    let needsChildren = (visit(node) == .visitChildren)
-    // Avoid calling into visitChildren if possible.
-    if needsChildren && !node.raw.layoutView!.children.isEmpty {
-      visitChildren(node)
-    }
-    visitPost(node)
-  }
-  
-  /// Implementation detail of doVisit(_:_:). Do not call directly.
-  private func visitImplYieldedExpressionsClauseSyntax(_ data: SyntaxData) {
-    let node = YieldedExpressionsClauseSyntax(data)
+  /// Interpret `data` as a node of type `nodeType`, visit it, calling
+  /// the `visit` and `visitPost` functions during visitation.
+  private func visitImpl<NodeType: SyntaxProtocol>(
+    _ data: SyntaxData,
+    _ nodeType: NodeType.Type,
+    _ visit: (NodeType) -> SyntaxVisitorContinueKind,
+    _ visitPost: (NodeType) -> Void
+    
+  ) {
+    let node = NodeType(Syntax(data))!
     let needsChildren = (visit(node) == .visitChildren)
     // Avoid calling into visitChildren if possible.
     if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -6379,555 +3372,1930 @@ open class SyntaxVisitor {
       // No children to visit.
       visitPost(node)
     case .accessorBlock:
-      visitImplAccessorBlockSyntax(data)
+      visitImpl(
+          data, 
+          AccessorBlockSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .accessorDeclList:
-      visitImplAccessorDeclListSyntax(data)
+      visitImpl(
+          data, 
+          AccessorDeclListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .accessorDecl:
-      visitImplAccessorDeclSyntax(data)
+      visitImpl(
+          data, 
+          AccessorDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .accessorEffectSpecifiers:
-      visitImplAccessorEffectSpecifiersSyntax(data)
+      visitImpl(
+          data, 
+          AccessorEffectSpecifiersSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .accessorParameters:
-      visitImplAccessorParametersSyntax(data)
+      visitImpl(
+          data, 
+          AccessorParametersSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .actorDecl:
-      visitImplActorDeclSyntax(data)
+      visitImpl(
+          data, 
+          ActorDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .arrayElementList:
-      visitImplArrayElementListSyntax(data)
+      visitImpl(
+          data, 
+          ArrayElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .arrayElement:
-      visitImplArrayElementSyntax(data)
+      visitImpl(
+          data, 
+          ArrayElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .arrayExpr:
-      visitImplArrayExprSyntax(data)
+      visitImpl(
+          data, 
+          ArrayExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .arrayType:
-      visitImplArrayTypeSyntax(data)
+      visitImpl(
+          data, 
+          ArrayTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .arrowExpr:
-      visitImplArrowExprSyntax(data)
+      visitImpl(
+          data, 
+          ArrowExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .asExpr:
-      visitImplAsExprSyntax(data)
+      visitImpl(
+          data, 
+          AsExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .assignmentExpr:
-      visitImplAssignmentExprSyntax(data)
+      visitImpl(
+          data, 
+          AssignmentExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .associatedTypeDecl:
-      visitImplAssociatedTypeDeclSyntax(data)
+      visitImpl(
+          data, 
+          AssociatedTypeDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .attributeList:
-      visitImplAttributeListSyntax(data)
+      visitImpl(
+          data, 
+          AttributeListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .attribute:
-      visitImplAttributeSyntax(data)
+      visitImpl(
+          data, 
+          AttributeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .attributedType:
-      visitImplAttributedTypeSyntax(data)
+      visitImpl(
+          data, 
+          AttributedTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .availabilityArgumentList:
-      visitImplAvailabilityArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          AvailabilityArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .availabilityArgument:
-      visitImplAvailabilityArgumentSyntax(data)
+      visitImpl(
+          data, 
+          AvailabilityArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .availabilityCondition:
-      visitImplAvailabilityConditionSyntax(data)
+      visitImpl(
+          data, 
+          AvailabilityConditionSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .availabilityLabeledArgument:
-      visitImplAvailabilityLabeledArgumentSyntax(data)
+      visitImpl(
+          data, 
+          AvailabilityLabeledArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .awaitExpr:
-      visitImplAwaitExprSyntax(data)
+      visitImpl(
+          data, 
+          AwaitExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .backDeployedAttributeArguments:
-      visitImplBackDeployedAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          BackDeployedAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .binaryOperatorExpr:
-      visitImplBinaryOperatorExprSyntax(data)
+      visitImpl(
+          data, 
+          BinaryOperatorExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .booleanLiteralExpr:
-      visitImplBooleanLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          BooleanLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .borrowExpr:
-      visitImplBorrowExprSyntax(data)
+      visitImpl(
+          data, 
+          BorrowExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .breakStmt:
-      visitImplBreakStmtSyntax(data)
+      visitImpl(
+          data, 
+          BreakStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .canImportExpr:
-      visitImplCanImportExprSyntax(data)
+      visitImpl(
+          data, 
+          CanImportExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .canImportVersionInfo:
-      visitImplCanImportVersionInfoSyntax(data)
+      visitImpl(
+          data, 
+          CanImportVersionInfoSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .catchClauseList:
-      visitImplCatchClauseListSyntax(data)
+      visitImpl(
+          data, 
+          CatchClauseListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .catchClause:
-      visitImplCatchClauseSyntax(data)
+      visitImpl(
+          data, 
+          CatchClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .catchItemList:
-      visitImplCatchItemListSyntax(data)
+      visitImpl(
+          data, 
+          CatchItemListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .catchItem:
-      visitImplCatchItemSyntax(data)
+      visitImpl(
+          data, 
+          CatchItemSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .classDecl:
-      visitImplClassDeclSyntax(data)
+      visitImpl(
+          data, 
+          ClassDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .classRestrictionType:
-      visitImplClassRestrictionTypeSyntax(data)
+      visitImpl(
+          data, 
+          ClassRestrictionTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureCaptureClause:
-      visitImplClosureCaptureClauseSyntax(data)
+      visitImpl(
+          data, 
+          ClosureCaptureClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureCaptureList:
-      visitImplClosureCaptureListSyntax(data)
+      visitImpl(
+          data, 
+          ClosureCaptureListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureCaptureSpecifier:
-      visitImplClosureCaptureSpecifierSyntax(data)
+      visitImpl(
+          data, 
+          ClosureCaptureSpecifierSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureCapture:
-      visitImplClosureCaptureSyntax(data)
+      visitImpl(
+          data, 
+          ClosureCaptureSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureExpr:
-      visitImplClosureExprSyntax(data)
+      visitImpl(
+          data, 
+          ClosureExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureParameterClause:
-      visitImplClosureParameterClauseSyntax(data)
+      visitImpl(
+          data, 
+          ClosureParameterClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureParameterList:
-      visitImplClosureParameterListSyntax(data)
+      visitImpl(
+          data, 
+          ClosureParameterListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureParameter:
-      visitImplClosureParameterSyntax(data)
+      visitImpl(
+          data, 
+          ClosureParameterSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureShorthandParameterList:
-      visitImplClosureShorthandParameterListSyntax(data)
+      visitImpl(
+          data, 
+          ClosureShorthandParameterListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureShorthandParameter:
-      visitImplClosureShorthandParameterSyntax(data)
+      visitImpl(
+          data, 
+          ClosureShorthandParameterSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .closureSignature:
-      visitImplClosureSignatureSyntax(data)
+      visitImpl(
+          data, 
+          ClosureSignatureSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .codeBlockItemList:
-      visitImplCodeBlockItemListSyntax(data)
+      visitImpl(
+          data, 
+          CodeBlockItemListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .codeBlockItem:
-      visitImplCodeBlockItemSyntax(data)
+      visitImpl(
+          data, 
+          CodeBlockItemSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .codeBlock:
-      visitImplCodeBlockSyntax(data)
+      visitImpl(
+          data, 
+          CodeBlockSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .compositionTypeElementList:
-      visitImplCompositionTypeElementListSyntax(data)
+      visitImpl(
+          data, 
+          CompositionTypeElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .compositionTypeElement:
-      visitImplCompositionTypeElementSyntax(data)
+      visitImpl(
+          data, 
+          CompositionTypeElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .compositionType:
-      visitImplCompositionTypeSyntax(data)
+      visitImpl(
+          data, 
+          CompositionTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .conditionElementList:
-      visitImplConditionElementListSyntax(data)
+      visitImpl(
+          data, 
+          ConditionElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .conditionElement:
-      visitImplConditionElementSyntax(data)
+      visitImpl(
+          data, 
+          ConditionElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .conformanceRequirement:
-      visitImplConformanceRequirementSyntax(data)
+      visitImpl(
+          data, 
+          ConformanceRequirementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .consumeExpr:
-      visitImplConsumeExprSyntax(data)
+      visitImpl(
+          data, 
+          ConsumeExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .continueStmt:
-      visitImplContinueStmtSyntax(data)
+      visitImpl(
+          data, 
+          ContinueStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .conventionAttributeArguments:
-      visitImplConventionAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          ConventionAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .conventionWitnessMethodAttributeArguments:
-      visitImplConventionWitnessMethodAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          ConventionWitnessMethodAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .copyExpr:
-      visitImplCopyExprSyntax(data)
+      visitImpl(
+          data, 
+          CopyExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declModifierDetail:
-      visitImplDeclModifierDetailSyntax(data)
+      visitImpl(
+          data, 
+          DeclModifierDetailSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declModifierList:
-      visitImplDeclModifierListSyntax(data)
+      visitImpl(
+          data, 
+          DeclModifierListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declModifier:
-      visitImplDeclModifierSyntax(data)
+      visitImpl(
+          data, 
+          DeclModifierSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declNameArgumentList:
-      visitImplDeclNameArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          DeclNameArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declNameArgument:
-      visitImplDeclNameArgumentSyntax(data)
+      visitImpl(
+          data, 
+          DeclNameArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declNameArguments:
-      visitImplDeclNameArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          DeclNameArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .declReferenceExpr:
-      visitImplDeclReferenceExprSyntax(data)
+      visitImpl(
+          data, 
+          DeclReferenceExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .deferStmt:
-      visitImplDeferStmtSyntax(data)
+      visitImpl(
+          data, 
+          DeferStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .deinitializerDecl:
-      visitImplDeinitializerDeclSyntax(data)
+      visitImpl(
+          data, 
+          DeinitializerDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .deinitializerEffectSpecifiers:
-      visitImplDeinitializerEffectSpecifiersSyntax(data)
+      visitImpl(
+          data, 
+          DeinitializerEffectSpecifiersSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .derivativeAttributeArguments:
-      visitImplDerivativeAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          DerivativeAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .designatedTypeList:
-      visitImplDesignatedTypeListSyntax(data)
+      visitImpl(
+          data, 
+          DesignatedTypeListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .designatedType:
-      visitImplDesignatedTypeSyntax(data)
+      visitImpl(
+          data, 
+          DesignatedTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .dictionaryElementList:
-      visitImplDictionaryElementListSyntax(data)
+      visitImpl(
+          data, 
+          DictionaryElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .dictionaryElement:
-      visitImplDictionaryElementSyntax(data)
+      visitImpl(
+          data, 
+          DictionaryElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .dictionaryExpr:
-      visitImplDictionaryExprSyntax(data)
+      visitImpl(
+          data, 
+          DictionaryExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .dictionaryType:
-      visitImplDictionaryTypeSyntax(data)
+      visitImpl(
+          data, 
+          DictionaryTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .differentiabilityArgumentList:
-      visitImplDifferentiabilityArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          DifferentiabilityArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .differentiabilityArgument:
-      visitImplDifferentiabilityArgumentSyntax(data)
+      visitImpl(
+          data, 
+          DifferentiabilityArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .differentiabilityArguments:
-      visitImplDifferentiabilityArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          DifferentiabilityArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .differentiabilityWithRespectToArgument:
-      visitImplDifferentiabilityWithRespectToArgumentSyntax(data)
+      visitImpl(
+          data, 
+          DifferentiabilityWithRespectToArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .differentiableAttributeArguments:
-      visitImplDifferentiableAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          DifferentiableAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .discardAssignmentExpr:
-      visitImplDiscardAssignmentExprSyntax(data)
+      visitImpl(
+          data, 
+          DiscardAssignmentExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .discardStmt:
-      visitImplDiscardStmtSyntax(data)
+      visitImpl(
+          data, 
+          DiscardStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .doStmt:
-      visitImplDoStmtSyntax(data)
+      visitImpl(
+          data, 
+          DoStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .documentationAttributeArgumentList:
-      visitImplDocumentationAttributeArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          DocumentationAttributeArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .documentationAttributeArgument:
-      visitImplDocumentationAttributeArgumentSyntax(data)
+      visitImpl(
+          data, 
+          DocumentationAttributeArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .dynamicReplacementAttributeArguments:
-      visitImplDynamicReplacementAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          DynamicReplacementAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .editorPlaceholderDecl:
-      visitImplEditorPlaceholderDeclSyntax(data)
+      visitImpl(
+          data, 
+          EditorPlaceholderDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .editorPlaceholderExpr:
-      visitImplEditorPlaceholderExprSyntax(data)
+      visitImpl(
+          data, 
+          EditorPlaceholderExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .effectsAttributeArgumentList:
-      visitImplEffectsAttributeArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          EffectsAttributeArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseDecl:
-      visitImplEnumCaseDeclSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseElementList:
-      visitImplEnumCaseElementListSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseElement:
-      visitImplEnumCaseElementSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseParameterClause:
-      visitImplEnumCaseParameterClauseSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseParameterClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseParameterList:
-      visitImplEnumCaseParameterListSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseParameterListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumCaseParameter:
-      visitImplEnumCaseParameterSyntax(data)
+      visitImpl(
+          data, 
+          EnumCaseParameterSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .enumDecl:
-      visitImplEnumDeclSyntax(data)
+      visitImpl(
+          data, 
+          EnumDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .exposeAttributeArguments:
-      visitImplExposeAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          ExposeAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .exprList:
-      visitImplExprListSyntax(data)
+      visitImpl(
+          data, 
+          ExprListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .expressionPattern:
-      visitImplExpressionPatternSyntax(data)
+      visitImpl(
+          data, 
+          ExpressionPatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .expressionSegment:
-      visitImplExpressionSegmentSyntax(data)
+      visitImpl(
+          data, 
+          ExpressionSegmentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .expressionStmt:
-      visitImplExpressionStmtSyntax(data)
+      visitImpl(
+          data, 
+          ExpressionStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .extensionDecl:
-      visitImplExtensionDeclSyntax(data)
+      visitImpl(
+          data, 
+          ExtensionDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .fallThroughStmt:
-      visitImplFallThroughStmtSyntax(data)
+      visitImpl(
+          data, 
+          FallThroughStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .floatLiteralExpr:
-      visitImplFloatLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          FloatLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .forStmt:
-      visitImplForStmtSyntax(data)
+      visitImpl(
+          data, 
+          ForStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .forceUnwrapExpr:
-      visitImplForceUnwrapExprSyntax(data)
+      visitImpl(
+          data, 
+          ForceUnwrapExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionCallExpr:
-      visitImplFunctionCallExprSyntax(data)
+      visitImpl(
+          data, 
+          FunctionCallExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionDecl:
-      visitImplFunctionDeclSyntax(data)
+      visitImpl(
+          data, 
+          FunctionDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionEffectSpecifiers:
-      visitImplFunctionEffectSpecifiersSyntax(data)
+      visitImpl(
+          data, 
+          FunctionEffectSpecifiersSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionParameterClause:
-      visitImplFunctionParameterClauseSyntax(data)
+      visitImpl(
+          data, 
+          FunctionParameterClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionParameterList:
-      visitImplFunctionParameterListSyntax(data)
+      visitImpl(
+          data, 
+          FunctionParameterListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionParameter:
-      visitImplFunctionParameterSyntax(data)
+      visitImpl(
+          data, 
+          FunctionParameterSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionSignature:
-      visitImplFunctionSignatureSyntax(data)
+      visitImpl(
+          data, 
+          FunctionSignatureSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .functionType:
-      visitImplFunctionTypeSyntax(data)
+      visitImpl(
+          data, 
+          FunctionTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericArgumentClause:
-      visitImplGenericArgumentClauseSyntax(data)
+      visitImpl(
+          data, 
+          GenericArgumentClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericArgumentList:
-      visitImplGenericArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          GenericArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericArgument:
-      visitImplGenericArgumentSyntax(data)
+      visitImpl(
+          data, 
+          GenericArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericParameterClause:
-      visitImplGenericParameterClauseSyntax(data)
+      visitImpl(
+          data, 
+          GenericParameterClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericParameterList:
-      visitImplGenericParameterListSyntax(data)
+      visitImpl(
+          data, 
+          GenericParameterListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericParameter:
-      visitImplGenericParameterSyntax(data)
+      visitImpl(
+          data, 
+          GenericParameterSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericRequirementList:
-      visitImplGenericRequirementListSyntax(data)
+      visitImpl(
+          data, 
+          GenericRequirementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericRequirement:
-      visitImplGenericRequirementSyntax(data)
+      visitImpl(
+          data, 
+          GenericRequirementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericSpecializationExpr:
-      visitImplGenericSpecializationExprSyntax(data)
+      visitImpl(
+          data, 
+          GenericSpecializationExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .genericWhereClause:
-      visitImplGenericWhereClauseSyntax(data)
+      visitImpl(
+          data, 
+          GenericWhereClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .guardStmt:
-      visitImplGuardStmtSyntax(data)
+      visitImpl(
+          data, 
+          GuardStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .identifierPattern:
-      visitImplIdentifierPatternSyntax(data)
+      visitImpl(
+          data, 
+          IdentifierPatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .identifierType:
-      visitImplIdentifierTypeSyntax(data)
+      visitImpl(
+          data, 
+          IdentifierTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .ifConfigClauseList:
-      visitImplIfConfigClauseListSyntax(data)
+      visitImpl(
+          data, 
+          IfConfigClauseListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .ifConfigClause:
-      visitImplIfConfigClauseSyntax(data)
+      visitImpl(
+          data, 
+          IfConfigClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .ifConfigDecl:
-      visitImplIfConfigDeclSyntax(data)
+      visitImpl(
+          data, 
+          IfConfigDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .ifExpr:
-      visitImplIfExprSyntax(data)
+      visitImpl(
+          data, 
+          IfExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .implementsAttributeArguments:
-      visitImplImplementsAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          ImplementsAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .implicitlyUnwrappedOptionalType:
-      visitImplImplicitlyUnwrappedOptionalTypeSyntax(data)
+      visitImpl(
+          data, 
+          ImplicitlyUnwrappedOptionalTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .importDecl:
-      visitImplImportDeclSyntax(data)
+      visitImpl(
+          data, 
+          ImportDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .importPathComponentList:
-      visitImplImportPathComponentListSyntax(data)
+      visitImpl(
+          data, 
+          ImportPathComponentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .importPathComponent:
-      visitImplImportPathComponentSyntax(data)
+      visitImpl(
+          data, 
+          ImportPathComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .inOutExpr:
-      visitImplInOutExprSyntax(data)
+      visitImpl(
+          data, 
+          InOutExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .infixOperatorExpr:
-      visitImplInfixOperatorExprSyntax(data)
+      visitImpl(
+          data, 
+          InfixOperatorExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .inheritanceClause:
-      visitImplInheritanceClauseSyntax(data)
+      visitImpl(
+          data, 
+          InheritanceClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .inheritedTypeList:
-      visitImplInheritedTypeListSyntax(data)
+      visitImpl(
+          data, 
+          InheritedTypeListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .inheritedType:
-      visitImplInheritedTypeSyntax(data)
+      visitImpl(
+          data, 
+          InheritedTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .initializerClause:
-      visitImplInitializerClauseSyntax(data)
+      visitImpl(
+          data, 
+          InitializerClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .initializerDecl:
-      visitImplInitializerDeclSyntax(data)
+      visitImpl(
+          data, 
+          InitializerDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .integerLiteralExpr:
-      visitImplIntegerLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          IntegerLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .isExpr:
-      visitImplIsExprSyntax(data)
+      visitImpl(
+          data, 
+          IsExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .isTypePattern:
-      visitImplIsTypePatternSyntax(data)
+      visitImpl(
+          data, 
+          IsTypePatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathComponentList:
-      visitImplKeyPathComponentListSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathComponentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathComponent:
-      visitImplKeyPathComponentSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathExpr:
-      visitImplKeyPathExprSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathOptionalComponent:
-      visitImplKeyPathOptionalComponentSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathOptionalComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathPropertyComponent:
-      visitImplKeyPathPropertyComponentSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathPropertyComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .keyPathSubscriptComponent:
-      visitImplKeyPathSubscriptComponentSyntax(data)
+      visitImpl(
+          data, 
+          KeyPathSubscriptComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .labeledExprList:
-      visitImplLabeledExprListSyntax(data)
+      visitImpl(
+          data, 
+          LabeledExprListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .labeledExpr:
-      visitImplLabeledExprSyntax(data)
+      visitImpl(
+          data, 
+          LabeledExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .labeledSpecializeArgument:
-      visitImplLabeledSpecializeArgumentSyntax(data)
+      visitImpl(
+          data, 
+          LabeledSpecializeArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .labeledStmt:
-      visitImplLabeledStmtSyntax(data)
+      visitImpl(
+          data, 
+          LabeledStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .layoutRequirement:
-      visitImplLayoutRequirementSyntax(data)
+      visitImpl(
+          data, 
+          LayoutRequirementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .macroDecl:
-      visitImplMacroDeclSyntax(data)
+      visitImpl(
+          data, 
+          MacroDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .macroExpansionDecl:
-      visitImplMacroExpansionDeclSyntax(data)
+      visitImpl(
+          data, 
+          MacroExpansionDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .macroExpansionExpr:
-      visitImplMacroExpansionExprSyntax(data)
+      visitImpl(
+          data, 
+          MacroExpansionExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .matchingPatternCondition:
-      visitImplMatchingPatternConditionSyntax(data)
+      visitImpl(
+          data, 
+          MatchingPatternConditionSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .memberAccessExpr:
-      visitImplMemberAccessExprSyntax(data)
+      visitImpl(
+          data, 
+          MemberAccessExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .memberBlockItemList:
-      visitImplMemberBlockItemListSyntax(data)
+      visitImpl(
+          data, 
+          MemberBlockItemListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .memberBlockItem:
-      visitImplMemberBlockItemSyntax(data)
+      visitImpl(
+          data, 
+          MemberBlockItemSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .memberBlock:
-      visitImplMemberBlockSyntax(data)
+      visitImpl(
+          data, 
+          MemberBlockSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .memberType:
-      visitImplMemberTypeSyntax(data)
+      visitImpl(
+          data, 
+          MemberTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .metatypeType:
-      visitImplMetatypeTypeSyntax(data)
+      visitImpl(
+          data, 
+          MetatypeTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missingDecl:
-      visitImplMissingDeclSyntax(data)
+      visitImpl(
+          data, 
+          MissingDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missingExpr:
-      visitImplMissingExprSyntax(data)
+      visitImpl(
+          data, 
+          MissingExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missingPattern:
-      visitImplMissingPatternSyntax(data)
+      visitImpl(
+          data, 
+          MissingPatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missingStmt:
-      visitImplMissingStmtSyntax(data)
+      visitImpl(
+          data, 
+          MissingStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missing:
-      visitImplMissingSyntax(data)
+      visitImpl(
+          data, 
+          MissingSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .missingType:
-      visitImplMissingTypeSyntax(data)
+      visitImpl(
+          data, 
+          MissingTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .multipleTrailingClosureElementList:
-      visitImplMultipleTrailingClosureElementListSyntax(data)
+      visitImpl(
+          data, 
+          MultipleTrailingClosureElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .multipleTrailingClosureElement:
-      visitImplMultipleTrailingClosureElementSyntax(data)
+      visitImpl(
+          data, 
+          MultipleTrailingClosureElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .namedOpaqueReturnType:
-      visitImplNamedOpaqueReturnTypeSyntax(data)
+      visitImpl(
+          data, 
+          NamedOpaqueReturnTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .nilLiteralExpr:
-      visitImplNilLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          NilLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .objCSelectorPieceList:
-      visitImplObjCSelectorPieceListSyntax(data)
+      visitImpl(
+          data, 
+          ObjCSelectorPieceListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .objCSelectorPiece:
-      visitImplObjCSelectorPieceSyntax(data)
+      visitImpl(
+          data, 
+          ObjCSelectorPieceSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .opaqueReturnTypeOfAttributeArguments:
-      visitImplOpaqueReturnTypeOfAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          OpaqueReturnTypeOfAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .operatorDecl:
-      visitImplOperatorDeclSyntax(data)
+      visitImpl(
+          data, 
+          OperatorDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .operatorPrecedenceAndTypes:
-      visitImplOperatorPrecedenceAndTypesSyntax(data)
+      visitImpl(
+          data, 
+          OperatorPrecedenceAndTypesSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .optionalBindingCondition:
-      visitImplOptionalBindingConditionSyntax(data)
+      visitImpl(
+          data, 
+          OptionalBindingConditionSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .optionalChainingExpr:
-      visitImplOptionalChainingExprSyntax(data)
+      visitImpl(
+          data, 
+          OptionalChainingExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .optionalType:
-      visitImplOptionalTypeSyntax(data)
+      visitImpl(
+          data, 
+          OptionalTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .originallyDefinedInAttributeArguments:
-      visitImplOriginallyDefinedInAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          OriginallyDefinedInAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .packElementExpr:
-      visitImplPackElementExprSyntax(data)
+      visitImpl(
+          data, 
+          PackElementExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .packElementType:
-      visitImplPackElementTypeSyntax(data)
+      visitImpl(
+          data, 
+          PackElementTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .packExpansionExpr:
-      visitImplPackExpansionExprSyntax(data)
+      visitImpl(
+          data, 
+          PackExpansionExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .packExpansionType:
-      visitImplPackExpansionTypeSyntax(data)
+      visitImpl(
+          data, 
+          PackExpansionTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .patternBindingList:
-      visitImplPatternBindingListSyntax(data)
+      visitImpl(
+          data, 
+          PatternBindingListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .patternBinding:
-      visitImplPatternBindingSyntax(data)
+      visitImpl(
+          data, 
+          PatternBindingSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .patternExpr:
-      visitImplPatternExprSyntax(data)
+      visitImpl(
+          data, 
+          PatternExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .platformVersionItemList:
-      visitImplPlatformVersionItemListSyntax(data)
+      visitImpl(
+          data, 
+          PlatformVersionItemListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .platformVersionItem:
-      visitImplPlatformVersionItemSyntax(data)
+      visitImpl(
+          data, 
+          PlatformVersionItemSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .platformVersion:
-      visitImplPlatformVersionSyntax(data)
+      visitImpl(
+          data, 
+          PlatformVersionSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .postfixIfConfigExpr:
-      visitImplPostfixIfConfigExprSyntax(data)
+      visitImpl(
+          data, 
+          PostfixIfConfigExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .postfixOperatorExpr:
-      visitImplPostfixOperatorExprSyntax(data)
+      visitImpl(
+          data, 
+          PostfixOperatorExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .poundSourceLocationArguments:
-      visitImplPoundSourceLocationArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          PoundSourceLocationArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .poundSourceLocation:
-      visitImplPoundSourceLocationSyntax(data)
+      visitImpl(
+          data, 
+          PoundSourceLocationSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupAssignment:
-      visitImplPrecedenceGroupAssignmentSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupAssignmentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupAssociativity:
-      visitImplPrecedenceGroupAssociativitySyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupAssociativitySyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupAttributeList:
-      visitImplPrecedenceGroupAttributeListSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupAttributeListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupDecl:
-      visitImplPrecedenceGroupDeclSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupNameList:
-      visitImplPrecedenceGroupNameListSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupNameListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupName:
-      visitImplPrecedenceGroupNameSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupNameSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .precedenceGroupRelation:
-      visitImplPrecedenceGroupRelationSyntax(data)
+      visitImpl(
+          data, 
+          PrecedenceGroupRelationSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .prefixOperatorExpr:
-      visitImplPrefixOperatorExprSyntax(data)
+      visitImpl(
+          data, 
+          PrefixOperatorExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .primaryAssociatedTypeClause:
-      visitImplPrimaryAssociatedTypeClauseSyntax(data)
+      visitImpl(
+          data, 
+          PrimaryAssociatedTypeClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .primaryAssociatedTypeList:
-      visitImplPrimaryAssociatedTypeListSyntax(data)
+      visitImpl(
+          data, 
+          PrimaryAssociatedTypeListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .primaryAssociatedType:
-      visitImplPrimaryAssociatedTypeSyntax(data)
+      visitImpl(
+          data, 
+          PrimaryAssociatedTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .protocolDecl:
-      visitImplProtocolDeclSyntax(data)
+      visitImpl(
+          data, 
+          ProtocolDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .regexLiteralExpr:
-      visitImplRegexLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          RegexLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .repeatStmt:
-      visitImplRepeatStmtSyntax(data)
+      visitImpl(
+          data, 
+          RepeatStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .returnClause:
-      visitImplReturnClauseSyntax(data)
+      visitImpl(
+          data, 
+          ReturnClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .returnStmt:
-      visitImplReturnStmtSyntax(data)
+      visitImpl(
+          data, 
+          ReturnStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .sameTypeRequirement:
-      visitImplSameTypeRequirementSyntax(data)
+      visitImpl(
+          data, 
+          SameTypeRequirementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .sequenceExpr:
-      visitImplSequenceExprSyntax(data)
+      visitImpl(
+          data, 
+          SequenceExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .simpleStringLiteralExpr:
-      visitImplSimpleStringLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          SimpleStringLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .simpleStringLiteralSegmentList:
-      visitImplSimpleStringLiteralSegmentListSyntax(data)
+      visitImpl(
+          data, 
+          SimpleStringLiteralSegmentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .someOrAnyType:
-      visitImplSomeOrAnyTypeSyntax(data)
+      visitImpl(
+          data, 
+          SomeOrAnyTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .sourceFile:
-      visitImplSourceFileSyntax(data)
+      visitImpl(
+          data, 
+          SourceFileSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .specializeAttributeArgumentList:
-      visitImplSpecializeAttributeArgumentListSyntax(data)
+      visitImpl(
+          data, 
+          SpecializeAttributeArgumentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .specializeAvailabilityArgument:
-      visitImplSpecializeAvailabilityArgumentSyntax(data)
+      visitImpl(
+          data, 
+          SpecializeAvailabilityArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .specializeTargetFunctionArgument:
-      visitImplSpecializeTargetFunctionArgumentSyntax(data)
+      visitImpl(
+          data, 
+          SpecializeTargetFunctionArgumentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .stringLiteralExpr:
-      visitImplStringLiteralExprSyntax(data)
+      visitImpl(
+          data, 
+          StringLiteralExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .stringLiteralSegmentList:
-      visitImplStringLiteralSegmentListSyntax(data)
+      visitImpl(
+          data, 
+          StringLiteralSegmentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .stringSegment:
-      visitImplStringSegmentSyntax(data)
+      visitImpl(
+          data, 
+          StringSegmentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .structDecl:
-      visitImplStructDeclSyntax(data)
+      visitImpl(
+          data, 
+          StructDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .subscriptCallExpr:
-      visitImplSubscriptCallExprSyntax(data)
+      visitImpl(
+          data, 
+          SubscriptCallExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .subscriptDecl:
-      visitImplSubscriptDeclSyntax(data)
+      visitImpl(
+          data, 
+          SubscriptDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .superExpr:
-      visitImplSuperExprSyntax(data)
+      visitImpl(
+          data, 
+          SuperExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .suppressedType:
-      visitImplSuppressedTypeSyntax(data)
+      visitImpl(
+          data, 
+          SuppressedTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchCaseItemList:
-      visitImplSwitchCaseItemListSyntax(data)
+      visitImpl(
+          data, 
+          SwitchCaseItemListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchCaseItem:
-      visitImplSwitchCaseItemSyntax(data)
+      visitImpl(
+          data, 
+          SwitchCaseItemSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchCaseLabel:
-      visitImplSwitchCaseLabelSyntax(data)
+      visitImpl(
+          data, 
+          SwitchCaseLabelSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchCaseList:
-      visitImplSwitchCaseListSyntax(data)
+      visitImpl(
+          data, 
+          SwitchCaseListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchCase:
-      visitImplSwitchCaseSyntax(data)
+      visitImpl(
+          data, 
+          SwitchCaseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchDefaultLabel:
-      visitImplSwitchDefaultLabelSyntax(data)
+      visitImpl(
+          data, 
+          SwitchDefaultLabelSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .switchExpr:
-      visitImplSwitchExprSyntax(data)
+      visitImpl(
+          data, 
+          SwitchExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .ternaryExpr:
-      visitImplTernaryExprSyntax(data)
+      visitImpl(
+          data, 
+          TernaryExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .throwStmt:
-      visitImplThrowStmtSyntax(data)
+      visitImpl(
+          data, 
+          ThrowStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tryExpr:
-      visitImplTryExprSyntax(data)
+      visitImpl(
+          data, 
+          TryExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tupleExpr:
-      visitImplTupleExprSyntax(data)
+      visitImpl(
+          data, 
+          TupleExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tuplePatternElementList:
-      visitImplTuplePatternElementListSyntax(data)
+      visitImpl(
+          data, 
+          TuplePatternElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tuplePatternElement:
-      visitImplTuplePatternElementSyntax(data)
+      visitImpl(
+          data, 
+          TuplePatternElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tuplePattern:
-      visitImplTuplePatternSyntax(data)
+      visitImpl(
+          data, 
+          TuplePatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tupleTypeElementList:
-      visitImplTupleTypeElementListSyntax(data)
+      visitImpl(
+          data, 
+          TupleTypeElementListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tupleTypeElement:
-      visitImplTupleTypeElementSyntax(data)
+      visitImpl(
+          data, 
+          TupleTypeElementSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .tupleType:
-      visitImplTupleTypeSyntax(data)
+      visitImpl(
+          data, 
+          TupleTypeSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .typeAliasDecl:
-      visitImplTypeAliasDeclSyntax(data)
+      visitImpl(
+          data, 
+          TypeAliasDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .typeAnnotation:
-      visitImplTypeAnnotationSyntax(data)
+      visitImpl(
+          data, 
+          TypeAnnotationSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .typeEffectSpecifiers:
-      visitImplTypeEffectSpecifiersSyntax(data)
+      visitImpl(
+          data, 
+          TypeEffectSpecifiersSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .typeExpr:
-      visitImplTypeExprSyntax(data)
+      visitImpl(
+          data, 
+          TypeExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .typeInitializerClause:
-      visitImplTypeInitializerClauseSyntax(data)
+      visitImpl(
+          data, 
+          TypeInitializerClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .unavailableFromAsyncAttributeArguments:
-      visitImplUnavailableFromAsyncAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          UnavailableFromAsyncAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .underscorePrivateAttributeArguments:
-      visitImplUnderscorePrivateAttributeArgumentsSyntax(data)
+      visitImpl(
+          data, 
+          UnderscorePrivateAttributeArgumentsSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .unexpectedNodes:
-      visitImplUnexpectedNodesSyntax(data)
+      visitImpl(
+          data, 
+          UnexpectedNodesSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .unresolvedAsExpr:
-      visitImplUnresolvedAsExprSyntax(data)
+      visitImpl(
+          data, 
+          UnresolvedAsExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .unresolvedIsExpr:
-      visitImplUnresolvedIsExprSyntax(data)
+      visitImpl(
+          data, 
+          UnresolvedIsExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .unresolvedTernaryExpr:
-      visitImplUnresolvedTernaryExprSyntax(data)
+      visitImpl(
+          data, 
+          UnresolvedTernaryExprSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .valueBindingPattern:
-      visitImplValueBindingPatternSyntax(data)
+      visitImpl(
+          data, 
+          ValueBindingPatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .variableDecl:
-      visitImplVariableDeclSyntax(data)
+      visitImpl(
+          data, 
+          VariableDeclSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .versionComponentList:
-      visitImplVersionComponentListSyntax(data)
+      visitImpl(
+          data, 
+          VersionComponentListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .versionComponent:
-      visitImplVersionComponentSyntax(data)
+      visitImpl(
+          data, 
+          VersionComponentSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .versionTuple:
-      visitImplVersionTupleSyntax(data)
+      visitImpl(
+          data, 
+          VersionTupleSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .whereClause:
-      visitImplWhereClauseSyntax(data)
+      visitImpl(
+          data, 
+          WhereClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .whileStmt:
-      visitImplWhileStmtSyntax(data)
+      visitImpl(
+          data, 
+          WhileStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .wildcardPattern:
-      visitImplWildcardPatternSyntax(data)
+      visitImpl(
+          data, 
+          WildcardPatternSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .yieldStmt:
-      visitImplYieldStmtSyntax(data)
+      visitImpl(
+          data, 
+          YieldStmtSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .yieldedExpressionList:
-      visitImplYieldedExpressionListSyntax(data)
+      visitImpl(
+          data, 
+          YieldedExpressionListSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .yieldedExpression:
-      visitImplYieldedExpressionSyntax(data)
+      visitImpl(
+          data, 
+          YieldedExpressionSyntax.self, 
+          visit, 
+          visitPost
+        )
     case .yieldedExpressionsClause:
-      visitImplYieldedExpressionsClauseSyntax(data)
+      visitImpl(
+          data, 
+          YieldedExpressionsClauseSyntax.self, 
+          visit, 
+          visitPost
+        )
     }
   }
   

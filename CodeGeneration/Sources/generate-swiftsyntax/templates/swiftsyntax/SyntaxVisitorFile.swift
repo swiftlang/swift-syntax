@@ -92,22 +92,26 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in NON_BASE_SYNTAX_NODES {
-      DeclSyntax(
-        """
-        /// Implementation detail of doVisit(_:_:). Do not call directly.
-        private func visitImpl\(node.kind.syntaxType)(_ data: SyntaxData) {
-          let node = \(node.kind.syntaxType)(data)
-          let needsChildren = (visit(node) == .visitChildren)
-          // Avoid calling into visitChildren if possible.
-          if needsChildren && !node.raw.layoutView!.children.isEmpty {
-            visitChildren(node)
-          }
-          visitPost(node)
+    DeclSyntax(
+      """
+      /// Interpret `data` as a node of type `nodeType`, visit it, calling
+      /// the `visit` and `visitPost` functions during visitation.
+      private func visitImpl<NodeType: SyntaxProtocol>(
+        _ data: SyntaxData,
+        _ nodeType: NodeType.Type,
+        _ visit: (NodeType) -> SyntaxVisitorContinueKind,
+        _ visitPost: (NodeType) -> Void
+      ) {
+        let node = NodeType(Syntax(data))!
+        let needsChildren = (visit(node) == .visitChildren)
+        // Avoid calling into visitChildren if possible.
+        if needsChildren && !node.raw.layoutView!.children.isEmpty {
+          visitChildren(node)
         }
-        """
-      )
-    }
+        visitPost(node)
+      }
+      """
+    )
 
     try FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
       try SwitchExprSyntax("switch data.raw.kind") {
@@ -119,17 +123,13 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             """
             // No children to visit.
             visitPost(node)
-            // The implementation of every generated case goes into its own function. This
-            // circumvents an issue where the compiler allocates stack space for every
-            // case statement next to each other in debug builds, causing it to allocate
-            // ~50KB per call to this function. rdar://55929175
             """
           )
         }
 
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-            ExprSyntax("visitImpl\(node.kind.syntaxType)(data)")
+            ExprSyntax("visitImpl(data, \(node.kind.syntaxType).self, visit, visitPost)")
           }
         }
       }

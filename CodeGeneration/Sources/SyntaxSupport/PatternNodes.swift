@@ -212,7 +212,7 @@ public let PATTERN_NODES: [Node] = [
 
       ### Examples
 
-      ``WildcardPattern`` matches and ignores any value.
+      ``WildcardPatternSyntax`` matches and ignores any value.
       For example `_` in the example:
 
       ```swift

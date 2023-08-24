@@ -26,7 +26,7 @@ struct Build: ParsableCommand, BuildCommand {
   private func buildEditorExtension() throws {
     #if os(macOS)
     logSection("Building Editor Extension")
-    try invokeXcodeBuild(projectPath: Paths.editorExtensionProjectPath)
+    try invokeXcodeBuild(projectPath: Paths.editorExtensionProjectPath, scheme: "SwiftRefactorExtension")
     #endif
   }
 }

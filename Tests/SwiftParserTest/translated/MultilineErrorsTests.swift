@@ -970,4 +970,10 @@ final class MultilineErrorsTests: ParserTestCase {
         """#
     )
   }
+
+  func testNewlineChecking() {
+    XCTAssertEqual("\r\n".first?.isNewline, true)
+    XCTAssertEqual("\r".first?.isNewline, true)
+    XCTAssertEqual("\n".first?.isNewline, true)
+  }
 }

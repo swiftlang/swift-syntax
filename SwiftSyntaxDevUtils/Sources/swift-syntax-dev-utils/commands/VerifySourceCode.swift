@@ -22,8 +22,10 @@ struct VerifySourceCode: ParsableCommand, SourceCodeGeneratorCommand {
   var arguments: SourceCodeGeneratorArguments
 
   func run() throws {
-    let tempDir = FileManager.default.temporaryDirectory
+    try withTemporaryDirectory(verifyCodeGeneratedFiles(tempDir:))
+  }
 
+  private func verifyCodeGeneratedFiles(tempDir: URL) throws {
     try self.runCodeGeneration(sourceDir: tempDir)
 
     logSection("Verifing code generated files")

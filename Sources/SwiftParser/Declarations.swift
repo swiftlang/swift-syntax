@@ -1251,7 +1251,6 @@ extension Parser {
               )
             ),
             .basic,
-            forDirective: false,
             pattern: .none
           )
           initializer = RawInitializerClauseSyntax(

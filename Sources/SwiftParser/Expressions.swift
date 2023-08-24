@@ -65,6 +65,7 @@ extension Parser {
   enum ExprFlavor {
     case basic
     case trailingClosure
+    case poundIfDirective
   }
 
   enum PatternContext {
@@ -115,10 +116,9 @@ extension Parser {
   /// Parse a sequence of expressions.
   mutating func parseSequenceExpression(
     _ flavor: ExprFlavor,
-    forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    if forDirective && self.atStartOfLine {
+    if flavor == .poundIfDirective && self.atStartOfLine {
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     }
 
@@ -132,7 +132,6 @@ extension Parser {
 
     lastElement = self.parseSequenceExpressionElement(
       flavor,
-      forDirective: forDirective,
       pattern: pattern
     )
 
@@ -140,7 +139,7 @@ extension Parser {
     while self.hasProgressed(&loopProgress) {
       guard
         !lastElement.is(RawMissingExprSyntax.self),
-        !(forDirective && self.atStartOfLine)
+        !(flavor == .poundIfDirective && self.atStartOfLine)
       else {
         break
       }
@@ -160,14 +159,13 @@ extension Parser {
       if let rhsExpr {
         // Operator parsing returned the RHS.
         lastElement = rhsExpr
-      } else if forDirective && self.atStartOfLine {
+      } else if flavor == .poundIfDirective && self.atStartOfLine {
         // Don't allow RHS at a newline for `#if` conditions.
         lastElement = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
         break
       } else {
         lastElement = self.parseSequenceExpressionElement(
           flavor,
-          forDirective: forDirective,
           pattern: pattern
         )
       }
@@ -365,7 +363,6 @@ extension Parser {
   /// Parse an expression sequence element.
   mutating func parseSequenceExpressionElement(
     _ flavor: ExprFlavor,
-    forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as an attributed typerepr.
@@ -387,7 +384,6 @@ extension Parser {
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -403,7 +399,6 @@ extension Parser {
 
       let expression = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -418,7 +413,6 @@ extension Parser {
       let moveKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -432,7 +426,6 @@ extension Parser {
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -451,7 +444,6 @@ extension Parser {
       let copyTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -470,7 +462,6 @@ extension Parser {
       let consumeKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -512,13 +503,12 @@ extension Parser {
     case nil:
       break
     }
-    return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+    return self.parseUnaryExpression(flavor, pattern: pattern)
   }
 
   /// Parse an optional prefix operator followed by an expression.
   mutating func parseUnaryExpression(
     _ flavor: ExprFlavor,
-    forDirective: Bool = false,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // First check to see if we have the start of a regex literal `/.../`.
@@ -541,7 +531,7 @@ extension Parser {
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
     case (.prefixAmpersand, let handle)?:
       let amp = self.eat(handle)
-      let expr = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+      let expr = self.parseUnaryExpression(flavor, pattern: pattern)
       return RawExprSyntax(
         RawInOutExprSyntax(
           ampersand: amp,
@@ -551,11 +541,11 @@ extension Parser {
       )
 
     case (.backslash, _)?:
-      return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective, pattern: pattern))
+      return RawExprSyntax(self.parseKeyPathExpression(pattern: pattern))
 
     case (.prefixOperator, let handle)?:
       let op = self.eat(handle)
-      let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+      let postfix = self.parseUnaryExpression(flavor, pattern: pattern)
       return RawExprSyntax(
         RawPrefixOperatorExprSyntax(
           operator: op,
@@ -568,7 +558,6 @@ extension Parser {
       // If the next token is not an operator, just parse this as expr-postfix.
       return self.parsePostfixExpression(
         flavor,
-        forDirective: forDirective,
         pattern: pattern
       )
     }
@@ -577,17 +566,15 @@ extension Parser {
   /// Parse a postfix expression applied to another expression.
   mutating func parsePostfixExpression(
     _ flavor: ExprFlavor,
-    forDirective: Bool,
     pattern: PatternContext
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(pattern: pattern, forDirective: forDirective, flavor: flavor)
+    let head = self.parsePrimaryExpression(pattern: pattern, flavor: flavor)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
     return self.parsePostfixExpressionSuffix(
       head,
       flavor,
-      forDirective: forDirective,
       pattern: pattern
     )
   }
@@ -661,8 +648,7 @@ extension Parser {
 
   mutating func parseIfConfigExpressionSuffix(
     _ start: RawExprSyntax?,
-    _ flavor: ExprFlavor,
-    forDirective: Bool
+    _ flavor: ExprFlavor
   ) -> RawExprSyntax {
     precondition(self.at(.poundIf))
 
@@ -674,7 +660,7 @@ extension Parser {
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
       } else if parser.at(.poundIf) {
-        head = parser.parseIfConfigExpressionSuffix(nil, flavor, forDirective: forDirective)
+        head = parser.parseIfConfigExpressionSuffix(nil, flavor)
       } else {
         // TODO: diagnose and skip.
         return nil
@@ -682,7 +668,6 @@ extension Parser {
       let result = parser.parsePostfixExpressionSuffix(
         head,
         flavor,
-        forDirective: forDirective,
         pattern: .none
       )
 
@@ -709,14 +694,13 @@ extension Parser {
   mutating func parsePostfixExpressionSuffix(
     _ start: RawExprSyntax,
     _ flavor: ExprFlavor,
-    forDirective: Bool,
     pattern: PatternContext
   ) -> RawExprSyntax {
     // Handle suffix expressions.
     var leadingExpr = start
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      if forDirective && self.atStartOfLine {
+      if flavor == .poundIfDirective && self.atStartOfLine {
         return leadingExpr
       }
 
@@ -881,8 +865,7 @@ extension Parser {
 
         leadingExpr = self.parseIfConfigExpressionSuffix(
           leadingExpr,
-          flavor,
-          forDirective: forDirective
+          flavor
         )
         continue
       }
@@ -957,7 +940,7 @@ extension Parser {
   }
 
   /// Parse a keypath expression.
-  mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
+  mutating func parseKeyPathExpression(pattern: PatternContext) -> RawKeyPathExprSyntax {
     // Consume '\'.
     let (unexpectedBeforeBackslash, backslash) = self.expect(.backslash)
 
@@ -1079,12 +1062,9 @@ extension Parser {
   /// Swift expression grammar.
   mutating func parsePrimaryExpression(
     pattern: PatternContext,
-    forDirective: Bool,
     flavor: ExprFlavor
   ) -> RawExprSyntax {
-    if forDirective == true,
-      let directiveExpr = self.parsePrimaryExprForDirective()
-    {
+    if flavor == .poundIfDirective, let directiveExpr = self.parsePrimaryExprForDirective() {
       return RawExprSyntax(directiveExpr)
     }
 

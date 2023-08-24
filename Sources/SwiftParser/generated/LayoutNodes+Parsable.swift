@@ -345,4 +345,8 @@ fileprivate extension Parser {
     }
     return node
   }
+  
+  mutating func parseExpression() -> RawExprSyntax {
+    return self.parseExpression(flavor: .basic, pattern: .none)
+  }
 }

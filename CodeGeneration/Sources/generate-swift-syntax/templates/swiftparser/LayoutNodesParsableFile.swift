@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
+let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
 
   DeclSyntax(
@@ -71,6 +71,14 @@ let parserEntryFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           )
         }
         return node
+      }
+      """
+    )
+
+    DeclSyntax(
+      """
+      mutating func parseExpression() -> RawExprSyntax {
+        return self.parseExpression(flavor: .basic, pattern: .none)
       }
       """
     )

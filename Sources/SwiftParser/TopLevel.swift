@@ -240,7 +240,7 @@ extension Parser {
     } else if self.atStartOfStatement() {
       return self.parseStatementItem()
     } else if self.atStartOfExpression() {
-      return .expr(self.parseExpression())
+      return .expr(self.parseExpression(flavor: .basic, pattern: .none))
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
       return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement(allowRecovery: true) {

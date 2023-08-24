@@ -123,14 +123,7 @@ open class BasicFormat: SyntaxRewriter {
   // MARK: - Helper functions
 
   private func isInsideStringInterpolation(_ token: TokenSyntax) -> Bool {
-    var ancestor: Syntax = Syntax(token)
-    while let parent = ancestor.parent {
-      ancestor = parent
-      if ancestor.is(ExpressionSegmentSyntax.self) {
-        return true
-      }
-    }
-    return false
+    return token.ancestorOrSelf { $0.as(ExpressionSegmentSyntax.self) } != nil
   }
 
   private func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
@@ -220,6 +213,31 @@ open class BasicFormat: SyntaxRewriter {
     }
   }
 
+  /// Returns `true` if `token` is the opening brace of a closure that is being
+  /// parsed in an expression with `ExprFlavor.stmtCondition`.
+  ///
+  /// In these cases, adding a newline changes whether the closure gets parsed
+  /// as a closure or if it gets interpreted as the statements body. We should
+  /// thus be conservative and not add a newline after the `{` in `BasicFormat`.
+  private func isLeftBraceOfClosureInStmtConditionExpr(_ token: TokenSyntax?) -> Bool {
+    guard let token, token.keyPathInParent == \ClosureExprSyntax.leftBrace else {
+      return false
+    }
+    return token.ancestorOrSelf(mapping: {
+      switch $0.keyPathInParent {
+      case \CatchItemSyntax.pattern,
+        \ConditionElementSyntax.condition,
+        \ExpressionPatternSyntax.expression,
+        \ForStmtSyntax.sequence,
+        \ForStmtSyntax.whereClause,
+        \SwitchExprSyntax.subject:
+        return $0
+      default:
+        return nil
+      }
+    }) != nil
+  }
+
   open func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
     // We don't want to add newlines inside string interpolation.
     // When first or second ``TokenSyntax`` is a multiline quote we want special handling
@@ -230,6 +248,8 @@ open class BasicFormat: SyntaxRewriter {
       first.tokenKind != .multilineStringQuote,
       second?.tokenKind != .multilineStringQuote
     {
+      return false
+    } else if isLeftBraceOfClosureInStmtConditionExpr(first) {
       return false
     } else if let second {
       var ancestor: Syntax = Syntax(second)
@@ -605,5 +625,19 @@ fileprivate extension TokenSyntax {
     default:
       return false
     }
+  }
+}
+
+fileprivate extension SyntaxProtocol {
+  /// Returns this node or the first ancestor that satisfies `condition`.
+  func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
+    var walk: Syntax? = Syntax(self)
+    while let unwrappedParent = walk {
+      if let mapped = map(unwrappedParent) {
+        return mapped
+      }
+      walk = unwrappedParent.parent
+    }
+    return nil
   }
 }

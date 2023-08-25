@@ -27,17 +27,19 @@ extension ParserTestCase {
     file: StaticString = #file,
     line: UInt = #line
   ) {
-    // FIXME: We should run `assertParse` with every possible line ending here.
-    assertParse(
-      markedSource,
-      substructure: expectedSubstructure,
-      substructureAfterMarker: substructureAfterMarker,
-      diagnostics: expectedDiagnostics,
-      applyFixIts: applyFixIts,
-      fixedSource: expectedFixedSource,
-      file: file,
-      line: line
-    )
+    for newline in ["\n", "\r", "\r\n"] {
+      assertParse(
+        markedSource.replacingOccurrences(of: "\n", with: newline),
+        substructure: expectedSubstructure,
+        substructureAfterMarker: substructureAfterMarker,
+        diagnostics: expectedDiagnostics,
+        applyFixIts: applyFixIts,
+        fixedSource: expectedFixedSource,
+        options: [.normalizeNewlinesInFixedSource],
+        file: file,
+        line: line
+      )
+    }
   }
 }
 

@@ -14,6 +14,12 @@ import ArgumentParser
 import Foundation
 
 struct Test: ParsableCommand, BuildCommand {
+  static var configuration: CommandConfiguration {
+    return CommandConfiguration(
+      abstract: "Run swift-syntax tests."
+    )
+  }
+
   @OptionGroup
   var arguments: BuildArguments
 

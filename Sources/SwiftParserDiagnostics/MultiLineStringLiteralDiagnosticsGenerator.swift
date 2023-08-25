@@ -131,7 +131,7 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
     }
     switch previousToken.tokenKind {
     case .stringSegment(let stringSegment):
-      return stringSegment.hasSuffix("\r") || stringSegment.hasSuffix("\n")
+      return stringSegment.last?.isNewline ?? false
     default:
       // FIXME: newlines should never be part of trailing trivia
       return previousToken.trailingTrivia.contains(where: { $0.isNewline })

@@ -15,12 +15,12 @@ to
 ```
 That way `CodeGeneration` has its own checkout of swift-syntax that is unaffected by the newly generated files. Be sure to revert the change before committing your changes.
 
-To re-generate the files after changing `CodeGeneration` run the `generate-swiftsyntax` 
+To re-generate the files after changing `CodeGeneration` run the `generate-swift-syntax` 
 target of `CodeGeneration` and pass `path/to/swift-syntax/Sources` as the argument.
 
 On the command line, this would be
 ```bash
-swift run --package-path CodeGeneration generate-swiftsyntax Sources
+swift run --package-path CodeGeneration generate-swift-syntax Sources
 ```
 
 Or if you open the `CodeGeneration` package in Xcode, you can add the 

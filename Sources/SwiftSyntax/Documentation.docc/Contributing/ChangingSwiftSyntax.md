@@ -11,12 +11,12 @@ structures in sync, this project generates code using the Swift package
 
 ## Regenerating Files
 
-To re-generate the files after changing `CodeGeneration` run the `generate-swiftsyntax` 
+To re-generate the files after changing `CodeGeneration` run the `generate-swift-syntax` 
 target of `CodeGeneration`.
 
 On the command line, this would be
 ```bash
-swift run --package-path CodeGeneration generate-swiftsyntax
+swift run --package-path CodeGeneration generate-swift-syntax
 ```
 
 ## Adding and Removing Syntax Nodes

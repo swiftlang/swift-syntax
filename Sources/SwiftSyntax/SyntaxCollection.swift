@@ -105,6 +105,28 @@ extension SyntaxCollection {
     return node.indexInParent
   }
 
+  /// Returns the index of the n-th element in this collection.
+  ///
+  /// The behavior is undefined if `offset` is greater than the number of
+  /// elements in this collection.
+  ///
+  /// - Complexity: O(`offset`) because all previous element need to be iterated
+  ///   to find the byte offset of the `offset`-th node within the source file.
+  ///
+  /// - Note: Because getting the `n`-th element in a ``SyntaxCollection`` is
+  ///   not O(1), ``SyntaxCollection`` doesn’t provide a subscript to retrieve
+  ///   the `n`-th element. Such a subscript would mask the complexity of
+  ///   getting the `n`-th element.
+  public func index(at offset: Int) -> SyntaxChildrenIndex {
+    if offset > self.count / 2 {
+      // If we are closer to the end of the collection, it's more efficient to
+      // calculate the index starting from the back.
+      return self.index(self.endIndex, offsetBy: -(self.count - offset))
+    } else {
+      return self.index(self.startIndex, offsetBy: offset)
+    }
+  }
+
   /// Creates a new collection by appending the provided syntax element
   /// to the children.
   ///

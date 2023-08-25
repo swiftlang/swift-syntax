@@ -23,16 +23,19 @@
 /// function, should also call `visitAny(_)` in its implementation, if calling
 /// `visitAny` is needed:
 ///
-///     struct MyVisitor: SyntaxAnyVisitor {
-///       func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-///         <code>
-///       }
+/// ```swift
+/// struct MyVisitor: SyntaxAnyVisitor {
+///   func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+///     <code>
+///   }
 ///
-///       func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-///         <code>
-///         // Call this to pass tokens to `visitAny(_)` as well if needed
-///         visitAny(token)
-///       }
+///   func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+///     <code>
+///     // Call this to pass tokens to `visitAny(_)` as well if needed
+///     visitAny(token)
+///   }
+/// }
+/// ```
 open class SyntaxAnyVisitor: SyntaxVisitor {
   open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     return .visitChildren

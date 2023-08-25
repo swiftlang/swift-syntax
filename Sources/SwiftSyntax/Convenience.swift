@@ -27,7 +27,7 @@ extension MemberAccessExprSyntax {
   /// that takes a drink.
   ///
   /// Given how common it is to not need the argument names, this initializer is
-  /// provided as a convenience to avoid having to create a ``DeclReferenceExpr``
+  /// provided as a convenience to avoid having to create a ``DeclReferenceExprSyntax``
   /// for the member name.
   public init(
     leadingTrivia: Trivia? = nil,

@@ -163,12 +163,6 @@ of ``SyntaxRewriter``. Like a ``SyntaxVisitor``, a client needs to override
 the corresponding `visit` method accepting the syntax node of interest, and
 return a rewritten syntax node as a result.
 
-To provide a source transformation, use a ``SyntaxTransformVisitor``.
-Types conforming to this protocol are given the chance to transform the nodes of
-a syntax tree into a user-defined result type. This can be anything from new
-syntax nodes in the case of a formatter, to an integer counter in the case of
-a lexical analyzer counting the number of lines in the source code.
-
 ## Modifying the Syntax Tree
 
 The syntax trees provided by the SwiftSyntax library are immutable. All

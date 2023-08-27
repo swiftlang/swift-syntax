@@ -1807,15 +1807,12 @@ extension InitializerDeclSyntax {
   @_spi(Diagnostics)
   public enum OptionalMarkOptions: TokenSpecSet {
     case postfixQuestionMark
-    case infixQuestionMark
     case exclamationMark
     
     init?(lexeme: Lexer.Lexeme) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.postfixQuestionMark):
         self = .postfixQuestionMark
-      case TokenSpec(.infixQuestionMark):
-        self = .infixQuestionMark
       case TokenSpec(.exclamationMark):
         self = .exclamationMark
       default:
@@ -1827,8 +1824,6 @@ extension InitializerDeclSyntax {
       switch self {
       case .postfixQuestionMark:
         return .postfixQuestionMark
-      case .infixQuestionMark:
-        return .infixQuestionMark
       case .exclamationMark:
         return .exclamationMark
       }
@@ -1842,8 +1837,6 @@ extension InitializerDeclSyntax {
       switch self {
       case .postfixQuestionMark:
         return .postfixQuestionMarkToken()
-      case .infixQuestionMark:
-        return .infixQuestionMarkToken()
       case .exclamationMark:
         return .exclamationMarkToken()
       }

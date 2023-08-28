@@ -87,4 +87,28 @@ final class InitializerDeclTests: XCTestCase {
       """
     )
   }
+
+  func testInitializerDeclCreatedByStringInterpolation() throws {
+    let functionPrameterClause = FunctionParameterClauseSyntax {
+      FunctionParameterSyntax(firstName: "_", secondName: "name", type: TypeSyntax("String"))
+      FunctionParameterSyntax(firstName: "description", type: TypeSyntax("String"))
+    }
+    let functionSignature = FunctionSignatureSyntax(
+      parameterClause: functionPrameterClause,
+      effectSpecifiers: .init(asyncSpecifier: .keyword(.async), throwsSpecifier: .keyword(.throws))
+    )
+    let initializerDeclFromString = try InitializerDeclSyntax("init\(functionSignature)") {
+      "self.name = name"
+      "self.description = description"
+    }
+    assertBuildResult(
+      initializerDeclFromString,
+      """
+      init(_ name: String, description: String) async throws {
+          self.name = name
+          self.description = description
+      }
+      """
+    )
+  }
 }

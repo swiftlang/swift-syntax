@@ -41,6 +41,21 @@ internal struct RawSyntaxData {
     case parsedToken(ParsedToken)
     case materializedToken(MaterializedToken)
     case layout(Layout)
+
+    var tokenKind: RawTokenKind? {
+      switch self {
+      case .parsedToken(let dat):
+        return dat.tokenKind
+      case .materializedToken(let dat):
+        return dat.tokenKind
+      case .layout(let dat):
+        guard dat.descendantCount == 1 else {
+          return nil
+        }
+        let singleChild = dat.layout.compactMap({ $0 }).first
+        return singleChild?.payload.tokenKind
+      }
+    }
   }
 
   /// Token with lazy trivia parsing.
@@ -404,8 +419,17 @@ extension RawSyntax {
         }
       }
     case .layout(let dat):
+      var previousChild: RawSyntax?
       for case let child? in dat.layout {
+        if child.payload.tokenKind != .stringSegment,
+          previousChild?.trailingTriviaPieces?.isEmpty == true,
+          previousChild?.payload.tokenKind?.isPunctuation == false,
+          previousChild?.payload.tokenKind == child.payload.tokenKind
+        {
+          try body(SyntaxText(" "))
+        }
         try child.withEachSyntaxText(body: body)
+        previousChild = child
       }
     }
   }

@@ -399,4 +399,30 @@ final class FunctionTests: XCTestCase {
       """
     )
   }
+
+  func testFunctionDeclCreatedByStringInterpolation() throws {
+    let declModifierList = DeclModifierListSyntax {
+      DeclModifierSyntax(name: .keyword(.public))
+      DeclModifierSyntax(name: .keyword(.static))
+    }
+    let identifier = TokenSyntax.identifier("==")
+    let functionParameterClause = FunctionParameterClauseSyntax {
+      FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
+      FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
+    }
+    let returnClause = ReturnClauseSyntax(
+      type: IdentifierTypeSyntax(name: TokenSyntax.identifier("Bool"))
+    )
+    let functionDecl = try FunctionDeclSyntax("\(declModifierList) func \(identifier) \(functionParameterClause) \(returnClause)") {
+      "return lhs < rhs"
+    }
+    assertBuildResult(
+      functionDecl,
+      """
+      public static func == (lhs: String, rhs: String) -> Bool {
+          return lhs < rhs
+      }
+      """
+    )
+  }
 }

@@ -204,6 +204,51 @@ final class MultiRoleMacroTests: XCTestCase {
       macros: ["customTypeWrapper": CustomTypeWrapperMacro.self],
       indentationWidth: indentationWidth
     )
+  }
 
+  func testAttachedMacroOnFreestandingMacro() {
+    struct DeclMacro: DeclarationMacro {
+      static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+        return ["var x: Int"]
+      }
+    }
+
+    struct MyPeerMacro: PeerMacro {
+      static func expansion(of node: AttributeSyntax, providingPeersOf declaration: some DeclSyntaxProtocol, in context: some MacroExpansionContext) throws
+        -> [DeclSyntax]
+      {
+        return ["var peer: Int"]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Peer
+        #decl
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+
+          var peer: Int
+        }
+        """,
+      macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      @Peer
+      #decl
+      """,
+      expandedSource: """
+        var x: Int
+
+        var peer: Int
+        """,
+      macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
+    )
   }
 }

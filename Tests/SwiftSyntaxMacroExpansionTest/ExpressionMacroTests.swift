@@ -200,4 +200,38 @@ final class ExpressionMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testThrowErrorFromExpressionMacro() {
+    struct MyError: Error, CustomStringConvertible {
+      let description: String = "my error"
+    }
+
+    struct TestMacro: ExpressionMacro {
+      public static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> ExprSyntax {
+        throw MyError()
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "#test",
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 1, column: 1)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "1 + #test",
+      expandedSource: "1 + #test",
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 1, column: 5)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+  }
+
 }

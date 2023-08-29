@@ -10,6 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+//==========================================================================//
+// IMPORTANT: The macros defined in this file are intended to test the      //
+// behavior of MacroSystem. Many of them do not serve as good examples of   //
+// how macros should be written. In particular, they often lack error       //
+// handling because it is not needed in the few test cases in which these   //
+// macros are invoked.                                                      //
+//==========================================================================//
+
 import _SwiftSyntaxTestSupport
 import SwiftDiagnostics
 import SwiftParser
@@ -42,17 +50,13 @@ fileprivate struct DeclsFromStringsMacro: DeclarationMacro, MemberMacro {
   private static func decls(from arguments: LabeledExprListSyntax) -> [DeclSyntax] {
     var strings: [String] = []
     for arg in arguments {
-      guard
-        let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue
-      else {
+      guard let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
         continue
       }
       strings.append(value)
     }
 
-    return strings.map {
-      "\(raw: $0)"
-    }
+    return strings.map { "\(raw: $0)" }
   }
 
   static func expansion(
@@ -98,14 +102,7 @@ fileprivate struct WrapAllProperties: MemberAttributeMacro {
       return []
     }
 
-    return [
-      AttributeSyntax(
-        attributeName: IdentifierTypeSyntax(
-          name: .identifier("Wrapper")
-        )
-      )
-      .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-    ]
+    return ["@Wrapper"]
   }
 }
 
@@ -123,7 +120,7 @@ final class MacroSystemTests: XCTestCase {
         var argList = macro.argumentList
         argList[argList.startIndex].label = .identifier("_colorLiteralRed")
         let initSyntax: ExprSyntax = ".init(\(argList))"
-        return initSyntax.with(\.leadingTrivia, macro.leadingTrivia)
+        return initSyntax
       }
     }
 
@@ -209,11 +206,10 @@ final class MacroSystemTests: XCTestCase {
         of macro: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
-        guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
-        else {
+        guard let sourceLoc: AbstractSourceLocation = context.location(of: macro) else {
           throw MacroExpansionErrorMessage("can't find location for macro")
         }
-        return sourceLoc.column.with(\.leadingTrivia, macro.leadingTrivia)
+        return sourceLoc.column
       }
     }
 
@@ -222,11 +218,10 @@ final class MacroSystemTests: XCTestCase {
         of macro: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
-        guard let sourceLoc: AbstractSourceLocation = context.location(of: macro)
-        else {
+        guard let sourceLoc: AbstractSourceLocation = context.location(of: macro) else {
           throw MacroExpansionErrorMessage("can't find location for macro")
         }
-        return sourceLoc.file.with(\.leadingTrivia, macro.leadingTrivia)
+        return sourceLoc.file
       }
     }
 
@@ -348,9 +343,7 @@ final class MacroSystemTests: XCTestCase {
         of node: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
-        guard let firstElement = node.argumentList.first,
-          let stringLiteral = firstElement.expression
-            .as(StringLiteralExprSyntax.self),
+        guard let stringLiteral = node.argumentList.first?.expression.as(StringLiteralExprSyntax.self),
           stringLiteral.segments.count == 1,
           case let .stringSegment(prefix) = stringLiteral.segments.first
         else {
@@ -394,8 +387,7 @@ final class MacroSystemTests: XCTestCase {
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AccessorDeclSyntax] {
-        guard let varDecl = declaration.as(VariableDeclSyntax.self),
-          let binding = varDecl.bindings.first,
+        guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
           let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
           binding.accessorBlock == nil
         else {
@@ -421,8 +413,7 @@ final class MacroSystemTests: XCTestCase {
         providingPeersOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [SwiftSyntax.DeclSyntax] {
-        guard let varDecl = declaration.as(VariableDeclSyntax.self),
-          let binding = varDecl.bindings.first,
+        guard let binding = declaration.as(VariableDeclSyntax.self)?.bindings.first,
           let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,
           let type = binding.typeAnnotation?.type,
           binding.accessorBlock == nil
@@ -431,8 +422,7 @@ final class MacroSystemTests: XCTestCase {
         }
 
         guard case .argumentList(let arguments) = node.arguments,
-          let wrapperTypeNameExpr = arguments.first?.expression,
-          let stringLiteral = wrapperTypeNameExpr.as(StringLiteralExprSyntax.self),
+          let stringLiteral = arguments.first?.expression.as(StringLiteralExprSyntax.self),
           stringLiteral.segments.count == 1,
           case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first
         else {
@@ -715,33 +705,23 @@ final class MacroSystemTests: XCTestCase {
         }
 
         // Form the completion handler parameter.
-        let resultType: TypeSyntax? = funcDecl.signature.returnClause?.type.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+        let resultType: TypeSyntax? = funcDecl.signature.returnClause?.type.trimmed
 
         let completionHandlerParam =
           FunctionParameterSyntax(
             firstName: .identifier("completionHandler"),
             colon: .colonToken(trailingTrivia: .space),
-            type: "(\(resultType ?? "")) -> Void" as TypeSyntax
+            type: TypeSyntax("(\(resultType ?? "")) -> Void")
           )
 
         // Add the completion handler parameter to the parameter list.
         let parameterList = funcDecl.signature.parameterClause.parameters
-        let newParameterList: FunctionParameterListSyntax
-        if let lastParam = parameterList.last {
+        var newParameterList = parameterList
+        if !parameterList.isEmpty {
           // We need to add a trailing comma to the preceding list.
-          let newParameterListElements =
-            parameterList.dropLast()
-            + [
-              lastParam.with(
-                \.trailingComma,
-                .commaToken(trailingTrivia: .space)
-              ),
-              completionHandlerParam,
-            ]
-          newParameterList = FunctionParameterListSyntax(newParameterListElements)
-        } else {
-          newParameterList = parameterList + [completionHandlerParam]
+          newParameterList[newParameterList.index(before: newParameterList.endIndex)].trailingComma = .commaToken(trailingTrivia: .space)
         }
+        newParameterList.append(completionHandlerParam)
 
         let callArguments: [String] = parameterList.map { param in
           let argName = param.secondName ?? param.firstName
@@ -775,34 +755,13 @@ final class MacroSystemTests: XCTestCase {
           return attribute.attributeName.as(IdentifierTypeSyntax.self)?.name == "addCompletionHandler"
         }
 
-        let newFunc =
-          funcDecl
-          .with(
-            \.signature,
-            funcDecl.signature
-              .with(
-                \.effectSpecifiers,
-                funcDecl.signature.effectSpecifiers?.with(\.asyncSpecifier, nil)  // drop async
-              )
-              .with(\.returnClause, nil)  // drop result type
-              .with(
-                \.parameterClause,  // add completion handler parameter
-                funcDecl.signature.parameterClause.with(\.parameters, newParameterList)
-                  .with(\.trailingTrivia, [])
-              )
-          )
-          .with(
-            \.body,
-            CodeBlockSyntax(
-              leftBrace: .leftBraceToken(leadingTrivia: .space),
-              statements: CodeBlockItemListSyntax(
-                [CodeBlockItemSyntax(item: .expr(newBody))]
-              ),
-              rightBrace: .rightBraceToken(leadingTrivia: .newline)
-            )
-          )
-          .with(\.attributes, newAttributeList)
-          .with(\.leadingTrivia, .newlines(2))
+        var newFunc = funcDecl
+        newFunc.signature.effectSpecifiers?.asyncSpecifier = nil  // drop async
+        newFunc.signature.returnClause = nil  // drop result type
+        newFunc.signature.parameterClause.parameters = newParameterList
+        newFunc.signature.parameterClause.trailingTrivia = []
+        newFunc.body = CodeBlockSyntax { newBody }
+        newFunc.attributes = newAttributeList
 
         return [DeclSyntax(newFunc)]
       }
@@ -833,13 +792,8 @@ final class MacroSystemTests: XCTestCase {
         of node: AttributeSyntax,
         providingMembersOf decl: some DeclGroupSyntax,
         in context: some MacroExpansionContext
-      )
-        throws -> [DeclSyntax]
-      {
-        let storage: DeclSyntax = "var _storage: Storage<Self>"
-        return [
-          storage.with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-        ]
+      ) throws -> [DeclSyntax] {
+        return ["var _storage: Storage<Self>"]
       }
     }
 
@@ -963,14 +917,7 @@ final class MacroSystemTests: XCTestCase {
           return []
         }
 
-        return [
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("Wrapper")
-            )
-          )
-          .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-        ]
+        return ["@Wrapper"]
       }
     }
 
@@ -1021,13 +968,7 @@ final class MacroSystemTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return [
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("Wrapper")
-            )
-          )
-        ]
+        return ["@Wrapper"]
       }
     }
 
@@ -1116,15 +1057,7 @@ final class MacroSystemTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return [
-          AttributeSyntax(
-            leadingTrivia: .blockComment("/* start */"),
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("Wrapper")
-            ),
-            trailingTrivia: .blockComment("/* end */")
-          )
-        ]
+        return ["/* start */@Wrapper/* end */"]
       }
     }
 
@@ -1207,13 +1140,10 @@ final class MacroSystemTests: XCTestCase {
 
   func testTypeWrapperTransform() {
     struct CustomTypeWrapperMacro: MemberMacro, MemberAttributeMacro, AccessorMacro {
-      static func expansion<
-        Declaration: DeclGroupSyntax,
-        Context: MacroExpansionContext
-      >(
+      static func expansion(
         of node: AttributeSyntax,
-        providingMembersOf declaration: Declaration,
-        in context: Context
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         return ["var _storage: Wrapper<Self>"]
       }
@@ -1224,14 +1154,7 @@ final class MacroSystemTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return [
-          AttributeSyntax(
-            attributeName: IdentifierTypeSyntax(
-              name: .identifier("customTypeWrapper")
-            )
-          )
-          .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-        ]
+        return ["@customTypeWrapper"]
       }
 
       static func expansion(
@@ -1342,15 +1265,8 @@ final class MacroSystemTests: XCTestCase {
           )
         }
 
-        return identifiers.map { identifier in
-          CodeBlockItemSyntax(
-            item: CodeBlockItemSyntax.Item.stmt(
-              """
-
-              guard let \(raw: identifier.text) else \(elseBlock(identifier))
-              """
-            )
-          )
+        return identifiers.map { (identifier) -> CodeBlockItemSyntax in
+          "guard let \(raw: identifier.text) else \(elseBlock(identifier))"
         }
       }
     }
@@ -1410,17 +1326,13 @@ final class MacroSystemTests: XCTestCase {
       ) throws -> [DeclSyntax] {
         var strings: [String] = []
         for arg in node.argumentList {
-          guard
-            let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue
-          else {
+          guard let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
             continue
           }
           strings.append(value)
         }
 
-        return strings.map {
-          "\(raw: $0)"
-        }
+        return strings.map { "\(raw: $0)" }
       }
     }
 

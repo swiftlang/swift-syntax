@@ -1775,4 +1775,123 @@ final class MacroSystemTests: XCTestCase {
     )
   }
 
+  func testThrowErrorFromExpressionMacro() {
+    struct MyError: Error, CustomStringConvertible {
+      let description: String = "my error"
+    }
+
+    struct TestMacro: ExpressionMacro {
+      public static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> ExprSyntax {
+        throw MyError()
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "#test",
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 1, column: 1)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "1 + #test",
+      expandedSource: "1 + #test",
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 1, column: 5)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+  }
+
+  func testThrowErrorFromDeclMacro() {
+    struct MyError: Error, CustomStringConvertible {
+      let description: String = "my error"
+    }
+
+    struct TestMacro: DeclarationMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        throw MyError()
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "#test",
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 1, column: 1)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        #test
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          #test
+        }
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "my error", line: 2, column: 3)
+      ],
+      macros: ["test": TestMacro.self]
+    )
+  }
+
+  func testAttachedMacroOnFreestandingMacro() {
+    struct DeclMacro: DeclarationMacro {
+      static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+        return ["var x: Int"]
+      }
+    }
+
+    struct MyPeerMacro: PeerMacro {
+      static func expansion(of node: AttributeSyntax, providingPeersOf declaration: some DeclSyntaxProtocol, in context: some MacroExpansionContext) throws
+        -> [DeclSyntax]
+      {
+        return ["var peer: Int"]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Peer
+        #decl
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+
+          var peer: Int
+        }
+        """,
+      macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      @Peer
+      #decl
+      """,
+      expandedSource: """
+        var x: Int
+
+        var peer: Int
+        """,
+      macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
+    )
+  }
 }

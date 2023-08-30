@@ -171,9 +171,9 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
               if child.isOptional {
-                StmtSyntax("return data.child(at: \(raw: index), parent: Syntax(self)).map(\(childType).init)")
+                StmtSyntax("return data.child(at: \(raw: index)).map(\(childType).init)")
               } else {
-                StmtSyntax("return \(childType)(data.child(at: \(raw: index), parent: Syntax(self))!)")
+                StmtSyntax("return \(childType)(data.child(at: \(raw: index))!)")
               }
             }
 

@@ -63,13 +63,26 @@ extension TokenConsumer {
 
 extension Parser {
   enum ExprFlavor {
+    /// Parsing a normal expression, eg. inside a function calls.
     case basic
-    case trailingClosure
+
+    /// Parsing the condition of a `if`/`guard`/`for`/... statement or something
+    /// like the `where` clause after a `catch` clause.
+    ///
+    /// In these cases we need to disambiguate trailing closures from the
+    /// statement's body.
+    case stmtCondition
+
+    /// Parsing the condition of a `#if` directive.
+    ///
+    /// We don't allow allow newlines here.
+    case poundIfDirective
   }
 
   enum PatternContext {
     /// There is no ambient pattern context.
     case none
+
     /// We're parsing a matching pattern that is not introduced via `let` or `var`.
     ///
     /// In this context, identifiers are references to the enclosing scopes, not a variable binding.
@@ -78,6 +91,7 @@ extension Parser {
     /// case x.y <- 'x' must refer to some 'x' defined in another scope, it cannot be e.g. an enum type.
     /// ```
     case matching
+
     /// We're parsing a matching pattern that is introduced via `let`, `var`, or `inout`
     ///
     /// ```
@@ -96,7 +110,7 @@ extension Parser {
   }
 
   /// Parse an expression.
-  mutating func parseExpression(_ flavor: ExprFlavor = .trailingClosure, pattern: PatternContext = .none) -> RawExprSyntax {
+  mutating func parseExpression(flavor: ExprFlavor, pattern: PatternContext) -> RawExprSyntax {
     // If we are parsing a refutable pattern, check to see if this is the start
     // of a let/var/is pattern.  If so, parse it as an UnresolvedPatternExpr and
     // let pattern type checking determine its final form.
@@ -107,18 +121,17 @@ extension Parser {
       let pattern = self.parseMatchingPattern(context: .matching)
       return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
     }
-    return RawExprSyntax(self.parseSequenceExpression(flavor, pattern: pattern))
+    return RawExprSyntax(self.parseSequenceExpression(flavor: flavor, pattern: pattern))
   }
 }
 
 extension Parser {
   /// Parse a sequence of expressions.
   mutating func parseSequenceExpression(
-    _ flavor: ExprFlavor,
-    forDirective: Bool = false,
+    flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    if forDirective && self.atStartOfLine {
+    if flavor == .poundIfDirective && self.atStartOfLine {
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     }
 
@@ -131,8 +144,7 @@ extension Parser {
     var lastElement: RawExprSyntax
 
     lastElement = self.parseSequenceExpressionElement(
-      flavor,
-      forDirective: forDirective,
+      flavor: flavor,
       pattern: pattern
     )
 
@@ -140,7 +152,7 @@ extension Parser {
     while self.hasProgressed(&loopProgress) {
       guard
         !lastElement.is(RawMissingExprSyntax.self),
-        !(forDirective && self.atStartOfLine)
+        !(flavor == .poundIfDirective && self.atStartOfLine)
       else {
         break
       }
@@ -148,7 +160,7 @@ extension Parser {
       // Parse the operator.
       guard
         let (operatorExpr, rhsExpr) =
-          self.parseSequenceExpressionOperator(flavor, pattern: pattern)
+          self.parseSequenceExpressionOperator(flavor: flavor, pattern: pattern)
       else {
         // Not an operator. We're done.
         break
@@ -160,14 +172,13 @@ extension Parser {
       if let rhsExpr {
         // Operator parsing returned the RHS.
         lastElement = rhsExpr
-      } else if forDirective && self.atStartOfLine {
+      } else if flavor == .poundIfDirective && self.atStartOfLine {
         // Don't allow RHS at a newline for `#if` conditions.
         lastElement = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
         break
       } else {
         lastElement = self.parseSequenceExpressionElement(
-          flavor,
-          forDirective: forDirective,
+          flavor: flavor,
           pattern: pattern
         )
       }
@@ -219,7 +230,7 @@ extension Parser {
   /// expression. The right operand is only returned if it is not a common
   /// sequence element.
   mutating func parseSequenceExpressionOperator(
-    _ flavor: ExprFlavor,
+    flavor: ExprFlavor,
     pattern: PatternContext
   ) -> (operator: RawExprSyntax, rhs: RawExprSyntax?)? {
     enum ExpectedTokenKind: TokenSpecSet {
@@ -270,7 +281,7 @@ extension Parser {
     case (.infixQuestionMark, let handle)?:
       // Save the '?'.
       let question = self.eat(handle)
-      let firstChoice = self.parseSequenceExpression(flavor, pattern: pattern)
+      let firstChoice = self.parseSequenceExpression(flavor: flavor, pattern: pattern)
       // Make sure there's a matching ':' after the middle expr.
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
 
@@ -364,8 +375,7 @@ extension Parser {
 
   /// Parse an expression sequence element.
   mutating func parseSequenceExpressionElement(
-    _ flavor: ExprFlavor,
-    forDirective: Bool = false,
+    flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as an attributed typerepr.
@@ -386,8 +396,7 @@ extension Parser {
     case (.await, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -402,8 +411,7 @@ extension Parser {
       let mark = self.consume(if: .exclamationMark, .postfixQuestionMark)
 
       let expression = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -417,8 +425,7 @@ extension Parser {
     case (._move, let handle)?:
       let moveKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -431,8 +438,7 @@ extension Parser {
     case (._borrow, let handle)?:
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -450,8 +456,7 @@ extension Parser {
 
       let copyTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -469,8 +474,7 @@ extension Parser {
 
       let consumeKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
       return RawExprSyntax(
@@ -483,7 +487,7 @@ extension Parser {
 
     case (.repeat, let handle)?:
       // 'repeat' is the start of a pack expansion expression.
-      return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor, pattern: pattern))
+      return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor: flavor, pattern: pattern))
 
     case (.each, let handle)?:
       if !atContextualExpressionModifier() {
@@ -491,7 +495,7 @@ extension Parser {
       }
 
       let each = self.eat(handle)
-      let pack = self.parseSequenceExpressionElement(flavor, pattern: pattern)
+      let pack = self.parseSequenceExpressionElement(flavor: flavor, pattern: pattern)
       return RawExprSyntax(
         RawPackElementExprSyntax(
           eachKeyword: each,
@@ -512,13 +516,12 @@ extension Parser {
     case nil:
       break
     }
-    return self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+    return self.parseUnaryExpression(flavor: flavor, pattern: pattern)
   }
 
   /// Parse an optional prefix operator followed by an expression.
   mutating func parseUnaryExpression(
-    _ flavor: ExprFlavor,
-    forDirective: Bool = false,
+    flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
     // First check to see if we have the start of a regex literal `/.../`.
@@ -541,7 +544,7 @@ extension Parser {
     switch self.at(anyIn: ExpressionPrefixOperator.self) {
     case (.prefixAmpersand, let handle)?:
       let amp = self.eat(handle)
-      let expr = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+      let expr = self.parseUnaryExpression(flavor: flavor, pattern: pattern)
       return RawExprSyntax(
         RawInOutExprSyntax(
           ampersand: amp,
@@ -551,11 +554,11 @@ extension Parser {
       )
 
     case (.backslash, _)?:
-      return RawExprSyntax(self.parseKeyPathExpression(forDirective: forDirective, pattern: pattern))
+      return RawExprSyntax(self.parseKeyPathExpression(pattern: pattern))
 
     case (.prefixOperator, let handle)?:
       let op = self.eat(handle)
-      let postfix = self.parseUnaryExpression(flavor, forDirective: forDirective, pattern: pattern)
+      let postfix = self.parseUnaryExpression(flavor: flavor, pattern: pattern)
       return RawExprSyntax(
         RawPrefixOperatorExprSyntax(
           operator: op,
@@ -567,8 +570,7 @@ extension Parser {
     default:
       // If the next token is not an operator, just parse this as expr-postfix.
       return self.parsePostfixExpression(
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: pattern
       )
     }
@@ -576,18 +578,16 @@ extension Parser {
 
   /// Parse a postfix expression applied to another expression.
   mutating func parsePostfixExpression(
-    _ flavor: ExprFlavor,
-    forDirective: Bool,
+    flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawExprSyntax {
-    let head = self.parsePrimaryExpression(pattern: pattern, forDirective: forDirective, flavor: flavor)
+    let head = self.parsePrimaryExpression(pattern: pattern, flavor: flavor)
     guard !head.is(RawMissingExprSyntax.self) else {
       return head
     }
     return self.parsePostfixExpressionSuffix(
       head,
-      flavor,
-      forDirective: forDirective,
+      flavor: flavor,
       pattern: pattern
     )
   }
@@ -661,8 +661,7 @@ extension Parser {
 
   mutating func parseIfConfigExpressionSuffix(
     _ start: RawExprSyntax?,
-    _ flavor: ExprFlavor,
-    forDirective: Bool
+    flavor: ExprFlavor
   ) -> RawExprSyntax {
     precondition(self.at(.poundIf))
 
@@ -674,15 +673,14 @@ extension Parser {
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
       } else if parser.at(.poundIf) {
-        head = parser.parseIfConfigExpressionSuffix(nil, flavor, forDirective: forDirective)
+        head = parser.parseIfConfigExpressionSuffix(nil, flavor: flavor)
       } else {
         // TODO: diagnose and skip.
         return nil
       }
       let result = parser.parsePostfixExpressionSuffix(
         head,
-        flavor,
-        forDirective: forDirective,
+        flavor: flavor,
         pattern: .none
       )
 
@@ -708,15 +706,14 @@ extension Parser {
   /// Parse the suffix of a postfix expression.
   mutating func parsePostfixExpressionSuffix(
     _ start: RawExprSyntax,
-    _ flavor: ExprFlavor,
-    forDirective: Bool,
+    flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawExprSyntax {
     // Handle suffix expressions.
     var leadingExpr = start
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      if forDirective && self.atStartOfLine {
+      if flavor == .poundIfDirective && self.atStartOfLine {
         return leadingExpr
       }
 
@@ -734,8 +731,8 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
-          (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
+        if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
+          (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
         } else {
           trailingClosure = nil
           additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
@@ -770,8 +767,8 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-        if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
-          (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
+        if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
+          (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
         } else {
           trailingClosure = nil
           additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
@@ -793,11 +790,11 @@ extension Parser {
       }
 
       // Check for a trailing closure, if allowed.
-      if self.at(.leftBrace) && self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
+      if self.at(.leftBrace) && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
         // FIXME: if Result has a trailing closure, break out.
         // Add dummy blank argument list to the call expression syntax.
         let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
-        let (first, rest) = self.parseTrailingClosures(flavor)
+        let (first, rest) = self.parseTrailingClosures(flavor: flavor)
 
         leadingExpr = RawExprSyntax(
           RawFunctionCallExprSyntax(
@@ -881,8 +878,7 @@ extension Parser {
 
         leadingExpr = self.parseIfConfigExpressionSuffix(
           leadingExpr,
-          flavor,
-          forDirective: forDirective
+          flavor: flavor
         )
         continue
       }
@@ -957,7 +953,7 @@ extension Parser {
   }
 
   /// Parse a keypath expression.
-  mutating func parseKeyPathExpression(forDirective: Bool, pattern: PatternContext) -> RawKeyPathExprSyntax {
+  mutating func parseKeyPathExpression(pattern: PatternContext) -> RawKeyPathExprSyntax {
     // Consume '\'.
     let (unexpectedBeforeBackslash, backslash) = self.expect(.backslash)
 
@@ -1079,12 +1075,9 @@ extension Parser {
   /// Swift expression grammar.
   mutating func parsePrimaryExpression(
     pattern: PatternContext,
-    forDirective: Bool,
     flavor: ExprFlavor
   ) -> RawExprSyntax {
-    if forDirective == true,
-      let directiveExpr = self.parsePrimaryExprForDirective()
-    {
+    if flavor == .poundIfDirective, let directiveExpr = self.parsePrimaryExprForDirective() {
       return RawExprSyntax(directiveExpr)
     }
 
@@ -1321,8 +1314,8 @@ extension Parser {
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-    if case .trailingClosure = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor) }) {
-      (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor)
+    if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
+      (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
     } else {
       trailingClosure = nil
       additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)
@@ -1352,11 +1345,11 @@ extension Parser {
   /// Parse a pack expansion as an expression.
   mutating func parsePackExpansionExpr(
     repeatHandle: TokenConsumptionHandle,
-    _ flavor: ExprFlavor,
+    flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawPackExpansionExprSyntax {
     let repeatKeyword = self.eat(repeatHandle)
-    let repetitionPattern = self.parseExpression(flavor, pattern: pattern)
+    let repetitionPattern = self.parseExpression(flavor: flavor, pattern: pattern)
 
     return RawPackExpansionExprSyntax(
       repeatKeyword: repeatKeyword,
@@ -1442,7 +1435,7 @@ extension Parser {
 
   /// Parse an element of an array or dictionary literal.
   mutating func parseCollectionElement(_ existing: CollectionKind?) -> CollectionKind {
-    let key = self.parseExpression()
+    let key = self.parseExpression(flavor: .basic, pattern: .none)
     switch existing {
     case .array(_):
       return .array(key)
@@ -1453,7 +1446,7 @@ extension Parser {
       fallthrough
     case .dictionary:
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
-      let value = self.parseExpression()
+      let value = self.parseExpression(flavor: .basic, pattern: .none)
       return .dictionary(key: key, unexpectedBeforeColon: unexpectedBeforeColon, colon: colon, value: value)
     }
   }
@@ -1611,7 +1604,7 @@ extension Parser {
       (unexpectedBeforeEq, eq) = self.expect(.equal)
     }
 
-    let expr = self.parseExpression()
+    let expr = self.parseExpression(flavor: .basic, pattern: .none)
     return RawInitializerClauseSyntax(
       unexpectedBeforeEq,
       equal: eq,
@@ -1697,7 +1690,7 @@ extension Parser {
             // The name is a new declaration.
             (unexpectedBeforeName, name) = self.expect(.identifier, TokenSpec(.self, remapping: .identifier), default: .identifier)
             (unexpectedBeforeEqual, equal) = self.expect(.equal)
-            expression = self.parseExpression()
+            expression = self.parseExpression(flavor: .basic, pattern: .none)
           } else {
             // This is the simple case - the identifier is both the name and
             // the expression to capture.
@@ -1890,7 +1883,7 @@ extension Parser {
       if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
         expr = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
       } else {
-        expr = self.parseExpression(pattern: pattern)
+        expr = self.parseExpression(flavor: .basic, pattern: pattern)
       }
       keepGoing = self.consume(if: .comma)
       result.append(
@@ -1910,7 +1903,7 @@ extension Parser {
 
 extension Parser {
   /// Parse the trailing closure(s) following a call expression.
-  mutating func parseTrailingClosures(_ flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax) {
+  mutating func parseTrailingClosures(flavor: ExprFlavor) -> (RawClosureExprSyntax, RawMultipleTrailingClosureElementListSyntax) {
     // Parse the closure.
     let closure = self.parseClosureExpression()
 
@@ -1972,7 +1965,7 @@ extension Parser.Lookahead {
   /// where the parser requires an expr-basic (which does not allow them).  We
   /// handle this by doing some lookahead in common situations. And later, Sema
   /// will emit a diagnostic with a fixit to add wrapping parens.
-  mutating func atValidTrailingClosure(_ flavor: Parser.ExprFlavor) -> Bool {
+  mutating func atValidTrailingClosure(flavor: Parser.ExprFlavor) -> Bool {
     precondition(self.at(.leftBrace), "Couldn't be a trailing closure")
 
     // If this is the start of a get/set accessor, then it isn't a trailing
@@ -1993,7 +1986,7 @@ extension Parser.Lookahead {
     //   {...}()
     // by looking ahead for the ()'s, but this has been replaced by do{}, so this
     // probably isn't worthwhile.
-    guard case .basic = flavor else {
+    guard case .stmtCondition = flavor else {
       return true
     }
 
@@ -2121,7 +2114,7 @@ extension Parser {
     if self.at(.leftBrace) {
       subject = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     } else {
-      subject = self.parseExpression(.basic)
+      subject = self.parseExpression(flavor: .stmtCondition, pattern: .none)
     }
 
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
@@ -2340,7 +2333,7 @@ extension Parser {
     // vars in scope.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let condition = self.parseExpression(.trailingClosure)
+      let condition = self.parseExpression(flavor: .basic, pattern: .none)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
         condition: condition,

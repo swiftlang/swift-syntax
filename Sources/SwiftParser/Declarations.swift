@@ -799,7 +799,7 @@ extension Parser {
         // See if there's a raw value expression.
         let rawValue: RawInitializerClauseSyntax?
         if let eq = self.consume(if: .equal) {
-          let value = self.parseExpression()
+          let value = self.parseExpression(flavor: .basic, pattern: .none)
           rawValue = RawInitializerClauseSyntax(
             equal: eq,
             value: value,
@@ -1219,7 +1219,7 @@ extension Parser {
         // Parse an initializer if present.
         let initializer: RawInitializerClauseSyntax?
         if let equal = self.consume(if: .equal) {
-          var value = self.parseExpression()
+          var value = self.parseExpression(flavor: .basic, pattern: .none)
           if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
             value = RawExprSyntax(
               RawTryExprSyntax(
@@ -1250,8 +1250,7 @@ extension Parser {
                 arena: self.arena
               )
             ),
-            .basic,
-            forDirective: false,
+            flavor: .basic,
             pattern: .none
           )
           initializer = RawInitializerClauseSyntax(
@@ -1268,7 +1267,7 @@ extension Parser {
           )
         } else if self.atStartOfExpression(), !self.at(.leftBrace), !self.atStartOfLine {
           let missingEqual = RawTokenSyntax(missing: .equal, arena: self.arena)
-          let expr = self.parseExpression()
+          let expr = self.parseExpression(flavor: .basic, pattern: .none)
           initializer = RawInitializerClauseSyntax(
             equal: missingEqual,
             value: expr,
@@ -1849,7 +1848,7 @@ extension Parser {
     // Initializer, if any.
     let definition: RawInitializerClauseSyntax?
     if let equal = self.consume(if: .equal) {
-      let expr = self.parseExpression()
+      let expr = self.parseExpression(flavor: .basic, pattern: .none)
       definition = RawInitializerClauseSyntax(
         equal: equal,
         value: expr,
@@ -1933,10 +1932,10 @@ extension Parser {
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
     if self.at(.leftBrace),
-      self.withLookahead({ $0.atValidTrailingClosure(.trailingClosure) })
+      self.withLookahead({ $0.atValidTrailingClosure(flavor: .basic) })
     {
       (trailingClosure, additionalTrailingClosures) =
-        self.parseTrailingClosures(.trailingClosure)
+        self.parseTrailingClosures(flavor: .basic)
     } else {
       trailingClosure = nil
       additionalTrailingClosures = self.emptyCollection(RawMultipleTrailingClosureElementListSyntax.self)

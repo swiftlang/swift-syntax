@@ -191,7 +191,7 @@ extension Parser {
       // another clause, so parse it as an expression.  This also avoids
       // lookahead + backtracking on simple if conditions that are obviously
       // boolean conditions.
-      return .expression(self.parseExpression(.basic))
+      return .expression(self.parseExpression(flavor: .stmtCondition, pattern: .none))
     }
 
     // We're parsing a conditional binding.
@@ -237,7 +237,7 @@ extension Parser {
     //  `let newBinding`, which is shorthand for `let newBinding = newBinding`
     let initializer: RawInitializerClauseSyntax?
     if let eq = self.consume(if: .equal) {
-      let value = self.parseExpression(.basic)
+      let value = self.parseExpression(flavor: .stmtCondition, pattern: .none)
       initializer = RawInitializerClauseSyntax(
         equal: eq,
         value: value,
@@ -312,7 +312,7 @@ extension Parser {
   mutating func parseThrowStatement(throwHandle: RecoveryConsumptionHandle) -> RawThrowStmtSyntax {
     let (unexpectedBeforeThrowKeyword, throwKeyword) = self.eat(throwHandle)
     let hasMisplacedTry = unexpectedBeforeThrowKeyword?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
-    var expr = self.parseExpression()
+    var expr = self.parseExpression(flavor: .basic, pattern: .none)
     if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
       expr = RawExprSyntax(
         RawTryExprSyntax(
@@ -338,7 +338,7 @@ extension Parser {
   /// Parse a discard statement.
   mutating func parseDiscardStatement(discardHandle: RecoveryConsumptionHandle) -> RawDiscardStmtSyntax {
     let (unexpectedBeforeDiscardKeyword, discardKeyword) = self.eat(discardHandle)
-    let expr = self.parseExpression()
+    let expr = self.parseExpression(flavor: .basic, pattern: .none)
     return RawDiscardStmtSyntax(
       unexpectedBeforeDiscardKeyword,
       discardKeyword: discardKeyword,
@@ -437,7 +437,7 @@ extension Parser {
     // Parse the optional 'where' guard.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let condition = self.parseExpression(.basic)
+      let condition = self.parseExpression(flavor: .stmtCondition, pattern: .none)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
         condition: condition,
@@ -489,7 +489,7 @@ extension Parser {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
-    let condition = self.parseExpression()
+    let condition = self.parseExpression(flavor: .basic, pattern: .none)
     return RawRepeatStmtSyntax(
       unexpectedBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,
@@ -542,13 +542,13 @@ extension Parser {
     if self.at(.leftBrace) {
       expr = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     } else {
-      expr = self.parseExpression(.basic)
+      expr = self.parseExpression(flavor: .stmtCondition, pattern: .none)
     }
 
     // Parse the 'where' expression if present.
     let whereClause: RawWhereClauseSyntax?
     if let whereKeyword = self.consume(if: .keyword(.where)) {
-      let condition = self.parseExpression(.basic)
+      let condition = self.parseExpression(flavor: .stmtCondition, pattern: .none)
       whereClause = RawWhereClauseSyntax(
         whereKeyword: whereKeyword,
         condition: condition,
@@ -646,7 +646,7 @@ extension Parser {
     // followed by a '}', '', statement or decl start keyword sequence.
     let expr: RawExprSyntax?
     if isStartOfReturnExpr() {
-      let parsedExpr = self.parseExpression()
+      let parsedExpr = self.parseExpression(flavor: .basic, pattern: .none)
       if hasMisplacedTry && !parsedExpr.is(RawTryExprSyntax.self) {
         expr = RawExprSyntax(
           RawTryExprSyntax(
@@ -686,7 +686,7 @@ extension Parser {
         var elementList = [RawYieldedExpressionSyntax]()
         var loopProgress = LoopProgressCondition()
         while !self.at(.endOfFile, .rightParen) && keepGoing && self.hasProgressed(&loopProgress) {
-          let expr = self.parseExpression()
+          let expr = self.parseExpression(flavor: .basic, pattern: .none)
           let comma = self.consume(if: .comma)
           elementList.append(
             RawYieldedExpressionSyntax(
@@ -711,7 +711,7 @@ extension Parser {
         )
       )
     } else {
-      yieldedExpressions = .single(self.parseExpression())
+      yieldedExpressions = .single(self.parseExpression(flavor: .basic, pattern: .none))
     }
 
     return RawYieldStmtSyntax(

@@ -252,7 +252,7 @@ extension Parser {
     // matching-pattern ::= expr
     // Fall back to expression parsing for ambiguous forms. Name lookup will
     // disambiguate.
-    let patternSyntax = self.parseSequenceExpression(.basic, pattern: context)
+    let patternSyntax = self.parseSequenceExpression(flavor: .stmtCondition, pattern: context)
     if let pat = patternSyntax.as(RawPatternExprSyntax.self) {
       // The most common case here is to parse something that was a lexically
       // obvious pattern, which will come back wrapped in an immediate

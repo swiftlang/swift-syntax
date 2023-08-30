@@ -71,10 +71,16 @@ function(add_swift_host_library name)
   )
 
   get_target_property(lib_type ${name} TYPE)
-  if(lib_type STREQUAL SHARED_LIBRARY AND CMAKE_SYSTEM_NAME STREQUAL Darwin)
-    # Allow install_name_tool to update paths (for rdar://109473564)
-    set_property(TARGET ${name} APPEND_STRING PROPERTY
-                 LINK_FLAGS " -Xlinker -headerpad_max_install_names")
+  if(lib_type STREQUAL SHARED_LIBRARY)
+    if (CMAKE_SYSTEM_NAME STREQUAL Darwin)
+      # Allow install_name_tool to update paths (for rdar://109473564)
+      set_property(TARGET ${name} APPEND_STRING PROPERTY
+                   LINK_FLAGS " -Xlinker -headerpad_max_install_names")
+    elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
+      # Make some room to update paths.
+      set_property(TARGET ${name} APPEND PROPERTY
+                   INSTALL_RPATH ":::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+    endif()
   endif()
 
   # Install this target

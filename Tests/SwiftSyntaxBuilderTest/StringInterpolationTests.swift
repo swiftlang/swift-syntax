@@ -94,7 +94,6 @@ final class StringInterpolationTests: XCTestCase {
 
   func testAttributeInterpolation() {
     let attrSyntax: AttributeSyntax = "@discardableResult"
-    XCTAssertTrue(attrSyntax.is(AttributeSyntax.self))
     XCTAssertEqual(attrSyntax.description, "@discardableResult")
   }
 
@@ -382,7 +381,6 @@ final class StringInterpolationTests: XCTestCase {
         _storage = newValue
       }
       """
-    XCTAssertTrue(setter.is(AccessorDeclSyntax.self))
     assertStringsEqualWithDiff(
       setter.description,
       """
@@ -431,7 +429,6 @@ final class StringInterpolationTests: XCTestCase {
       }
       """
 
-    XCTAssertTrue(codeBlockItem.is(CodeBlockItemSyntax.self))
     assertStringsEqualWithDiff(
       codeBlockItem.description,
       """

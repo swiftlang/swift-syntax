@@ -41,7 +41,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         \(documentation)
         \(node.node.apiAttributes())\
-        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable
+        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
         """
       ) {
         for child in node.children {

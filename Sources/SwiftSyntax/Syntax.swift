@@ -196,8 +196,9 @@ extension SyntaxProtocol {
 
 // Casting functions to specialized syntax nodes.
 public extension SyntaxProtocol {
-  /// Converts the given specialized node to this type. Returns `nil` if the
-  /// conversion is not possible or the given node was `nil`.
+  /// Initializes a new instance of the conforming type from a given specialized syntax node.
+  ///
+  /// Returns `nil` if the conversion isn't possible, or if the provided node is `nil`.
   init?<S: SyntaxProtocol>(_ node: S?) {
     guard let node = node else {
       return nil
@@ -205,14 +206,24 @@ public extension SyntaxProtocol {
     self.init(node)
   }
 
+  /// Checks if the current syntax node can be cast to a given specialized syntax type.
+  ///
+  /// - Returns: `true` if the node can be cast, `false` otherwise.
   func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
+  /// Attempts to cast the current syntax node to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
   func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
 
+  /// Force-casts the current syntax node to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized type.
+  /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
   }

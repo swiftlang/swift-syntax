@@ -18,7 +18,6 @@ public class EntryTests: ParserTestCase {
   func testTopLevelStringParse() throws {
     let source = "func test() {}"
     let tree = Parser.parse(source: source)
-    XCTAssert(tree.is(SourceFileSyntax.self))
     XCTAssert(!tree.hasError)
     XCTAssertEqual(tree.description, source)
   }
@@ -27,7 +26,6 @@ public class EntryTests: ParserTestCase {
     var source = "func test() {}"
     source.makeContiguousUTF8()
     let tree = source.withUTF8 { Parser.parse(source: $0) }
-    XCTAssert(tree.is(SourceFileSyntax.self))
     XCTAssert(!tree.hasError)
     XCTAssertEqual(tree.description, source)
   }

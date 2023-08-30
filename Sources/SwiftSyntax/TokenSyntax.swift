@@ -154,6 +154,40 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   public var tokenDiagnostic: TokenDiagnostic? {
     return tokenView.tokenDiagnostic
   }
+
+  /// Checks if the current leaf syntax node can be cast to a different specified type.
+  ///
+  /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always fail.
+  @available(*, deprecated, message: "This cast will always fail")
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return false
+  }
+
+  /// Attempts to cast the current leaf syntax node to a different specified type.
+  ///
+  /// - Returns: `nil` since the leaf node cannot be cast to a different specified type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always fail.
+  @available(*, deprecated, message: "This cast will always fail")
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return nil
+  }
+
+  /// Force-casts the current leaf syntax node to a different specified type.
+  ///
+  /// - Returns: This method will always trigger a runtime crash and never return.
+  ///
+  /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always fail.
+  /// - Warning: Invoking this method will lead to a fatal error.
+  @available(*, deprecated, message: "This cast will always fail")
+  public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    fatalError("\(Self.self) cannot be cast to \(S.self)")
+  }
 }
 
 extension TokenSyntax: CustomReflectable {

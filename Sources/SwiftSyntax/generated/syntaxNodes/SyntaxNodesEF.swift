@@ -21,7 +21,7 @@
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `placeholder`: `<identifier>`
-public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -227,7 +227,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -316,7 +316,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `caseKeyword`: `'case'`
 ///  - `elements`: ``EnumCaseElementListSyntax``
-public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -585,7 +585,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``EnumCaseElementListSyntax``
-public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
+public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -773,7 +773,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/parameterClause``
-public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
+public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -963,7 +963,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``EnumCaseParameterListSyntax``
-public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
+public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1258,7 +1258,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `memberBlock`: ``MemberBlockSyntax``
-public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1612,7 +1612,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
+public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1760,7 +1760,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
-public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1852,7 +1852,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``StringLiteralSegmentListSyntax``
-public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2078,7 +2078,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
-public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2168,7 +2168,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `memberBlock`: ``MemberBlockSyntax``
-public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2474,7 +2474,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `fallthroughKeyword`: `'fallthrough'`
-public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2558,7 +2558,7 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `literal`: `<floatLiteral>`
-public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2651,7 +2651,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `sequence`: ``ExprSyntax``
 ///  - `whereClause`: ``WhereClauseSyntax``?
 ///  - `body`: ``CodeBlockSyntax``
-public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2982,7 +2982,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// 
 ///  - `expression`: ``ExprSyntax``
 ///  - `exclamationMark`: `'!'`
-public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3109,7 +3109,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
-public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3394,7 +3394,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 ///  - `signature`: ``FunctionSignatureSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
-public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3733,7 +3733,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/effectSpecifiers``
-public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
+public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3862,7 +3862,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable {
 /// 
 ///  - ``FunctionSignatureSyntax``.``FunctionSignatureSyntax/parameterClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/parameterClause``
-public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
+public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4048,7 +4048,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``FunctionParameterListSyntax``
-public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
+public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4412,7 +4412,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/signature``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/signature``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/signature``
-public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
+public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4564,7 +4564,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `rightParen`: `')'`
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``
-public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {

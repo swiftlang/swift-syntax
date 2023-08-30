@@ -31,6 +31,84 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
+    DeclSyntax(
+      #"""
+      /// Extension of ``\#(node.kind.protocolType)`` to provide casting methods.
+      ///
+      /// These methods enable casting between syntax node types within the same
+      /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
+      ///
+      /// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+      /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
+      /// appropriate for use on types conforming to a specific base node protocol
+      /// like ``\#(node.kind.protocolType)``. That's because at this level,
+      /// we know that the cast to another base node type (e.g., ``DeclSyntaxProtocol``
+      /// when working with ``ExprSyntaxProtocol``) is guaranteed to fail.
+      ///
+      /// To guide developers toward correct usage, this extension provides overloads
+      /// of these casting methods that are restricted to the same base node type.
+      /// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+      /// deprecated, indicating that they will always fail when used in this context.
+      extension \#(node.kind.protocolType) {
+        /// Checks if the current syntax node can be cast to a given specialized syntax type.
+        ///
+        /// - Returns: `true` if the node can be cast, `false` otherwise.
+        public func `is`<S: \#(node.kind.protocolType)>(_ syntaxType: S.Type) -> Bool {
+          return self.as(syntaxType) != nil
+        }
+
+        /// Attempts to cast the current syntax node to a given specialized syntax type.
+        ///
+        /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+        public func `as`<S: \#(node.kind.protocolType)>(_ syntaxType: S.Type) -> S? {
+          return S.init(self)
+        }
+
+        /// Force-casts the current syntax node to a given specialized syntax type.
+        ///
+        /// - Returns: An instance of the specialized type.
+        /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+        public func cast<S: \#(node.kind.protocolType)>(_ syntaxType: S.Type) -> S {
+          return self.as(S.self)!
+        }
+
+        /// Checks if the current syntax node can be cast to a given node type from the different base node protocol hierarchy than ``\#(node.kind.protocolType)``.
+        ///
+        /// - Returns: `false` since the node can not be cast to the node type from different base node protocol hierarchy than ``\#(node.kind.protocolType)``.
+        ///
+        /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
+        ///         informing the user that the cast will always fail.
+        @available(*, deprecated, message: "This cast will always fail")
+        public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+          return false
+        }
+
+        /// Attempts to cast the current syntax node to a given node type from the different base node protocol hierarchy than ``\#(node.kind.protocolType)``.
+        ///
+        /// - Returns: `nil` since the node can not be cast to the node type from different base node protocol hierarchy than ``\#(node.kind.protocolType)``.
+        ///
+        /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
+        ///         informing the user that the cast will always fail.
+        @available(*, deprecated, message: "This cast will always fail")
+        public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+          return nil
+        }
+
+        /// Force-casts the current syntax node to a given node type from the different base node protocol hierarchy than ``\#(node.kind.protocolType)``.
+        ///
+        /// - Returns: This method will always trigger a runtime crash and never return.
+        ///
+        /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
+        ///         informing the user that the cast will always fail.
+        /// - Warning: Invoking this method will lead to a fatal error.
+        @available(*, deprecated, message: "This cast will always fail")
+        public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+          fatalError("\(Self.self) cannot be cast to \(S.self)")
+        }
+      }
+      """#
+    )
+
     try! ExtensionDeclSyntax("public extension Syntax") {
       DeclSyntax(
         """
@@ -173,30 +251,6 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public func `is`<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> Bool {
-          return self.as(syntaxType) != nil
-        }
-        """
-      )
-
-      DeclSyntax(
-        """
-        public func `as`<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> S? {
-          return S.init(self)
-        }
-        """
-      )
-
-      DeclSyntax(
-        """
-        public func cast<S: \(node.kind.protocolType)>(_ syntaxType: S.Type) -> S {
-          return self.as(S.self)!
-        }
-        """
-      )
-
-      DeclSyntax(
-        """
         /// Syntax nodes always conform to `\(node.kind.protocolType)`. This API is just
         /// added for consistency.
         ///
@@ -232,9 +286,17 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         StmtSyntax("return .choices(\(choices))")
       }
     }
+
+    leafProtocolDecl(type: node.kind.leafProtocolType, inheritedType: node.kind.protocolType)
   }
 
-  try! ExtensionDeclSyntax("extension Syntax") {
+  try! ExtensionDeclSyntax(
+    """
+    // MARK: - Syntax
+
+    extension Syntax
+    """
+  ) {
     try VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
       let choices = ArrayExprSyntax {
         ArrayElementSyntax(
@@ -254,4 +316,54 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
+  leafProtocolDecl(type: "_LeafSyntaxNodeProtocol", inheritedType: "SyntaxProtocol")
+}
+
+private func leafProtocolDecl(type: TypeSyntax, inheritedType: TypeSyntax) -> DeclSyntax {
+  DeclSyntax(
+    #"""
+    /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
+    /// These are syntax nodes that are not considered base nodes for other syntax types.
+    ///
+    /// Syntax nodes conforming to this protocol have their inherited casting methods
+    /// deprecated to prevent incorrect casting.
+    public protocol \#(type): \#(inheritedType) {}
+
+    public extension \#(type) {
+      /// Checks if the current leaf syntax node can be cast to a different specified type.
+      ///
+      /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
+      ///
+      /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
+      ///         informing the user that the cast will always fail.
+      @available(*, deprecated, message: "This cast will always fail")
+      func `is`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> Bool {
+        return false
+      }
+
+      /// Attempts to cast the current leaf syntax node to a different specified type.
+      ///
+      /// - Returns: `nil` since the leaf node cannot be cast to a different specified type.
+      ///
+      /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
+      ///         informing the user that the cast will always fail.
+      @available(*, deprecated, message: "This cast will always fail")
+      func `as`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S? {
+        return nil
+      }
+
+      /// Force-casts the current leaf syntax node to a different specified type.
+      ///
+      /// - Returns: This method will always trigger a runtime crash and never return.
+      ///
+      /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
+      ///         informing the user that the cast will always fail.
+      /// - Warning: Invoking this method will lead to a fatal error.
+      @available(*, deprecated, message: "This cast will always fail")
+      func cast<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S {
+        fatalError("\(Self.self) cannot be cast to \(S.self)")
+      }
+    }
+    """#
+  )
 }

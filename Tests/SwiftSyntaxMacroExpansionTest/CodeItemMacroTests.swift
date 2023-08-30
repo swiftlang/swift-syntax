@@ -56,9 +56,7 @@ final class CodeItemMacroTests: XCTestCase {
         }
         let errorThrower = node.trailingClosure
         let identifiers = try node.arguments.map { argument in
-          guard let tupleElement = argument.as(LabeledExprSyntax.self),
-            let declReferenceExpr = tupleElement.expression.as(DeclReferenceExprSyntax.self)
-          else {
+          guard let declReferenceExpr = argument.expression.as(DeclReferenceExprSyntax.self) else {
             throw MacroExpansionErrorMessage("Arguments must be identifiers")
           }
           return declReferenceExpr.baseName

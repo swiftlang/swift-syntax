@@ -3353,7 +3353,6 @@ open class SyntaxVisitor {
     _ nodeType: NodeType.Type,
     _ visit: (NodeType) -> SyntaxVisitorContinueKind,
     _ visitPost: (NodeType) -> Void
-    
   ) {
     let node = NodeType(Syntax(data))!
     let needsChildren = (visit(node) == .visitChildren)
@@ -3364,6 +3363,1145 @@ open class SyntaxVisitor {
     visitPost(node)
   }
   
+  // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
+  // visitation. In scenarios with reduced stack space (in particular dispatch
+  // queues), this easily results in a stack overflow. To work around this issue,
+  // use a less performant but also less stack-hungry version of SwiftSyntax's
+  // SyntaxVisitor in debug builds.
+  #if DEBUG
+  /// Implementation detail of visit(_:). Do not call directly.
+  ///
+  /// Returns the function that shall be called to visit a specific syntax node.
+  ///
+  /// To determine the correct specific visitation function for a syntax node,
+  /// we need to switch through a huge switch statement that covers all syntax
+  /// types. In debug builds, the cases of this switch statement do not share
+  /// stack space (rdar://55929175). Because of this, the switch statement
+  /// requires about 15KB of stack space. In scenarios with reduced
+  /// stack size (in particular dispatch queues), this often results in a stack
+  /// overflow during syntax tree rewriting.
+  ///
+  /// To circumvent this problem, make calling the specific visitation function
+  /// a two-step process: First determine the function to call in this function
+  /// and return a reference to it, then call it. This way, the stack frame
+  /// that determines the correct visitation function will be popped of the
+  /// stack before the function is being called, making the switch's stack
+  /// space transient instead of having it linger in the call stack.
+  private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Void) {
+    switch data.raw.kind {
+    case .token:
+      return {
+        let node = TokenSyntax($0)
+        _ = self.visit(node)
+        // No children to visit.
+        self.visitPost(node)
+      }
+    case .accessorBlock:
+      return {
+        self.visitImpl($0, AccessorBlockSyntax.self, self.visit, self.visitPost)
+      }
+    case .accessorDeclList:
+      return {
+        self.visitImpl($0, AccessorDeclListSyntax.self, self.visit, self.visitPost)
+      }
+    case .accessorDecl:
+      return {
+        self.visitImpl($0, AccessorDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .accessorEffectSpecifiers:
+      return {
+        self.visitImpl($0, AccessorEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+      }
+    case .accessorParameters:
+      return {
+        self.visitImpl($0, AccessorParametersSyntax.self, self.visit, self.visitPost)
+      }
+    case .actorDecl:
+      return {
+        self.visitImpl($0, ActorDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .arrayElementList:
+      return {
+        self.visitImpl($0, ArrayElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .arrayElement:
+      return {
+        self.visitImpl($0, ArrayElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .arrayExpr:
+      return {
+        self.visitImpl($0, ArrayExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .arrayType:
+      return {
+        self.visitImpl($0, ArrayTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .arrowExpr:
+      return {
+        self.visitImpl($0, ArrowExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .asExpr:
+      return {
+        self.visitImpl($0, AsExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .assignmentExpr:
+      return {
+        self.visitImpl($0, AssignmentExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .associatedTypeDecl:
+      return {
+        self.visitImpl($0, AssociatedTypeDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .attributeList:
+      return {
+        self.visitImpl($0, AttributeListSyntax.self, self.visit, self.visitPost)
+      }
+    case .attribute:
+      return {
+        self.visitImpl($0, AttributeSyntax.self, self.visit, self.visitPost)
+      }
+    case .attributedType:
+      return {
+        self.visitImpl($0, AttributedTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .availabilityArgumentList:
+      return {
+        self.visitImpl($0, AvailabilityArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .availabilityArgument:
+      return {
+        self.visitImpl($0, AvailabilityArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .availabilityCondition:
+      return {
+        self.visitImpl($0, AvailabilityConditionSyntax.self, self.visit, self.visitPost)
+      }
+    case .availabilityLabeledArgument:
+      return {
+        self.visitImpl($0, AvailabilityLabeledArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .awaitExpr:
+      return {
+        self.visitImpl($0, AwaitExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .backDeployedAttributeArguments:
+      return {
+        self.visitImpl($0, BackDeployedAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .binaryOperatorExpr:
+      return {
+        self.visitImpl($0, BinaryOperatorExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .booleanLiteralExpr:
+      return {
+        self.visitImpl($0, BooleanLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .borrowExpr:
+      return {
+        self.visitImpl($0, BorrowExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .breakStmt:
+      return {
+        self.visitImpl($0, BreakStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .canImportExpr:
+      return {
+        self.visitImpl($0, CanImportExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .canImportVersionInfo:
+      return {
+        self.visitImpl($0, CanImportVersionInfoSyntax.self, self.visit, self.visitPost)
+      }
+    case .catchClauseList:
+      return {
+        self.visitImpl($0, CatchClauseListSyntax.self, self.visit, self.visitPost)
+      }
+    case .catchClause:
+      return {
+        self.visitImpl($0, CatchClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .catchItemList:
+      return {
+        self.visitImpl($0, CatchItemListSyntax.self, self.visit, self.visitPost)
+      }
+    case .catchItem:
+      return {
+        self.visitImpl($0, CatchItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .classDecl:
+      return {
+        self.visitImpl($0, ClassDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .classRestrictionType:
+      return {
+        self.visitImpl($0, ClassRestrictionTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureCaptureClause:
+      return {
+        self.visitImpl($0, ClosureCaptureClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureCaptureList:
+      return {
+        self.visitImpl($0, ClosureCaptureListSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureCaptureSpecifier:
+      return {
+        self.visitImpl($0, ClosureCaptureSpecifierSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureCapture:
+      return {
+        self.visitImpl($0, ClosureCaptureSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureExpr:
+      return {
+        self.visitImpl($0, ClosureExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureParameterClause:
+      return {
+        self.visitImpl($0, ClosureParameterClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureParameterList:
+      return {
+        self.visitImpl($0, ClosureParameterListSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureParameter:
+      return {
+        self.visitImpl($0, ClosureParameterSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureShorthandParameterList:
+      return {
+        self.visitImpl($0, ClosureShorthandParameterListSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureShorthandParameter:
+      return {
+        self.visitImpl($0, ClosureShorthandParameterSyntax.self, self.visit, self.visitPost)
+      }
+    case .closureSignature:
+      return {
+        self.visitImpl($0, ClosureSignatureSyntax.self, self.visit, self.visitPost)
+      }
+    case .codeBlockItemList:
+      return {
+        self.visitImpl($0, CodeBlockItemListSyntax.self, self.visit, self.visitPost)
+      }
+    case .codeBlockItem:
+      return {
+        self.visitImpl($0, CodeBlockItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .codeBlock:
+      return {
+        self.visitImpl($0, CodeBlockSyntax.self, self.visit, self.visitPost)
+      }
+    case .compositionTypeElementList:
+      return {
+        self.visitImpl($0, CompositionTypeElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .compositionTypeElement:
+      return {
+        self.visitImpl($0, CompositionTypeElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .compositionType:
+      return {
+        self.visitImpl($0, CompositionTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .conditionElementList:
+      return {
+        self.visitImpl($0, ConditionElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .conditionElement:
+      return {
+        self.visitImpl($0, ConditionElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .conformanceRequirement:
+      return {
+        self.visitImpl($0, ConformanceRequirementSyntax.self, self.visit, self.visitPost)
+      }
+    case .consumeExpr:
+      return {
+        self.visitImpl($0, ConsumeExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .continueStmt:
+      return {
+        self.visitImpl($0, ContinueStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .conventionAttributeArguments:
+      return {
+        self.visitImpl($0, ConventionAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .conventionWitnessMethodAttributeArguments:
+      return {
+        self.visitImpl($0, ConventionWitnessMethodAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .copyExpr:
+      return {
+        self.visitImpl($0, CopyExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .declModifierDetail:
+      return {
+        self.visitImpl($0, DeclModifierDetailSyntax.self, self.visit, self.visitPost)
+      }
+    case .declModifierList:
+      return {
+        self.visitImpl($0, DeclModifierListSyntax.self, self.visit, self.visitPost)
+      }
+    case .declModifier:
+      return {
+        self.visitImpl($0, DeclModifierSyntax.self, self.visit, self.visitPost)
+      }
+    case .declNameArgumentList:
+      return {
+        self.visitImpl($0, DeclNameArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .declNameArgument:
+      return {
+        self.visitImpl($0, DeclNameArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .declNameArguments:
+      return {
+        self.visitImpl($0, DeclNameArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .declReferenceExpr:
+      return {
+        self.visitImpl($0, DeclReferenceExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .deferStmt:
+      return {
+        self.visitImpl($0, DeferStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .deinitializerDecl:
+      return {
+        self.visitImpl($0, DeinitializerDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .deinitializerEffectSpecifiers:
+      return {
+        self.visitImpl($0, DeinitializerEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+      }
+    case .derivativeAttributeArguments:
+      return {
+        self.visitImpl($0, DerivativeAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .designatedTypeList:
+      return {
+        self.visitImpl($0, DesignatedTypeListSyntax.self, self.visit, self.visitPost)
+      }
+    case .designatedType:
+      return {
+        self.visitImpl($0, DesignatedTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .dictionaryElementList:
+      return {
+        self.visitImpl($0, DictionaryElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .dictionaryElement:
+      return {
+        self.visitImpl($0, DictionaryElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .dictionaryExpr:
+      return {
+        self.visitImpl($0, DictionaryExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .dictionaryType:
+      return {
+        self.visitImpl($0, DictionaryTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .differentiabilityArgumentList:
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .differentiabilityArgument:
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .differentiabilityArguments:
+      return {
+        self.visitImpl($0, DifferentiabilityArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .differentiabilityWithRespectToArgument:
+      return {
+        self.visitImpl($0, DifferentiabilityWithRespectToArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .differentiableAttributeArguments:
+      return {
+        self.visitImpl($0, DifferentiableAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .discardAssignmentExpr:
+      return {
+        self.visitImpl($0, DiscardAssignmentExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .discardStmt:
+      return {
+        self.visitImpl($0, DiscardStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .doStmt:
+      return {
+        self.visitImpl($0, DoStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .documentationAttributeArgumentList:
+      return {
+        self.visitImpl($0, DocumentationAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .documentationAttributeArgument:
+      return {
+        self.visitImpl($0, DocumentationAttributeArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .dynamicReplacementAttributeArguments:
+      return {
+        self.visitImpl($0, DynamicReplacementAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .editorPlaceholderDecl:
+      return {
+        self.visitImpl($0, EditorPlaceholderDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .editorPlaceholderExpr:
+      return {
+        self.visitImpl($0, EditorPlaceholderExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .effectsAttributeArgumentList:
+      return {
+        self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseDecl:
+      return {
+        self.visitImpl($0, EnumCaseDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseElementList:
+      return {
+        self.visitImpl($0, EnumCaseElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseElement:
+      return {
+        self.visitImpl($0, EnumCaseElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseParameterClause:
+      return {
+        self.visitImpl($0, EnumCaseParameterClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseParameterList:
+      return {
+        self.visitImpl($0, EnumCaseParameterListSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumCaseParameter:
+      return {
+        self.visitImpl($0, EnumCaseParameterSyntax.self, self.visit, self.visitPost)
+      }
+    case .enumDecl:
+      return {
+        self.visitImpl($0, EnumDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .exposeAttributeArguments:
+      return {
+        self.visitImpl($0, ExposeAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .exprList:
+      return {
+        self.visitImpl($0, ExprListSyntax.self, self.visit, self.visitPost)
+      }
+    case .expressionPattern:
+      return {
+        self.visitImpl($0, ExpressionPatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .expressionSegment:
+      return {
+        self.visitImpl($0, ExpressionSegmentSyntax.self, self.visit, self.visitPost)
+      }
+    case .expressionStmt:
+      return {
+        self.visitImpl($0, ExpressionStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .extensionDecl:
+      return {
+        self.visitImpl($0, ExtensionDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .fallThroughStmt:
+      return {
+        self.visitImpl($0, FallThroughStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .floatLiteralExpr:
+      return {
+        self.visitImpl($0, FloatLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .forStmt:
+      return {
+        self.visitImpl($0, ForStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .forceUnwrapExpr:
+      return {
+        self.visitImpl($0, ForceUnwrapExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionCallExpr:
+      return {
+        self.visitImpl($0, FunctionCallExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionDecl:
+      return {
+        self.visitImpl($0, FunctionDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionEffectSpecifiers:
+      return {
+        self.visitImpl($0, FunctionEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionParameterClause:
+      return {
+        self.visitImpl($0, FunctionParameterClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionParameterList:
+      return {
+        self.visitImpl($0, FunctionParameterListSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionParameter:
+      return {
+        self.visitImpl($0, FunctionParameterSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionSignature:
+      return {
+        self.visitImpl($0, FunctionSignatureSyntax.self, self.visit, self.visitPost)
+      }
+    case .functionType:
+      return {
+        self.visitImpl($0, FunctionTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericArgumentClause:
+      return {
+        self.visitImpl($0, GenericArgumentClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericArgumentList:
+      return {
+        self.visitImpl($0, GenericArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericArgument:
+      return {
+        self.visitImpl($0, GenericArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericParameterClause:
+      return {
+        self.visitImpl($0, GenericParameterClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericParameterList:
+      return {
+        self.visitImpl($0, GenericParameterListSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericParameter:
+      return {
+        self.visitImpl($0, GenericParameterSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericRequirementList:
+      return {
+        self.visitImpl($0, GenericRequirementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericRequirement:
+      return {
+        self.visitImpl($0, GenericRequirementSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericSpecializationExpr:
+      return {
+        self.visitImpl($0, GenericSpecializationExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .genericWhereClause:
+      return {
+        self.visitImpl($0, GenericWhereClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .guardStmt:
+      return {
+        self.visitImpl($0, GuardStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .identifierPattern:
+      return {
+        self.visitImpl($0, IdentifierPatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .identifierType:
+      return {
+        self.visitImpl($0, IdentifierTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .ifConfigClauseList:
+      return {
+        self.visitImpl($0, IfConfigClauseListSyntax.self, self.visit, self.visitPost)
+      }
+    case .ifConfigClause:
+      return {
+        self.visitImpl($0, IfConfigClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .ifConfigDecl:
+      return {
+        self.visitImpl($0, IfConfigDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .ifExpr:
+      return {
+        self.visitImpl($0, IfExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .implementsAttributeArguments:
+      return {
+        self.visitImpl($0, ImplementsAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .implicitlyUnwrappedOptionalType:
+      return {
+        self.visitImpl($0, ImplicitlyUnwrappedOptionalTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .importDecl:
+      return {
+        self.visitImpl($0, ImportDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .importPathComponentList:
+      return {
+        self.visitImpl($0, ImportPathComponentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .importPathComponent:
+      return {
+        self.visitImpl($0, ImportPathComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .inOutExpr:
+      return {
+        self.visitImpl($0, InOutExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .infixOperatorExpr:
+      return {
+        self.visitImpl($0, InfixOperatorExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .inheritanceClause:
+      return {
+        self.visitImpl($0, InheritanceClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .inheritedTypeList:
+      return {
+        self.visitImpl($0, InheritedTypeListSyntax.self, self.visit, self.visitPost)
+      }
+    case .inheritedType:
+      return {
+        self.visitImpl($0, InheritedTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .initializerClause:
+      return {
+        self.visitImpl($0, InitializerClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .initializerDecl:
+      return {
+        self.visitImpl($0, InitializerDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .integerLiteralExpr:
+      return {
+        self.visitImpl($0, IntegerLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .isExpr:
+      return {
+        self.visitImpl($0, IsExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .isTypePattern:
+      return {
+        self.visitImpl($0, IsTypePatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathComponentList:
+      return {
+        self.visitImpl($0, KeyPathComponentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathComponent:
+      return {
+        self.visitImpl($0, KeyPathComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathExpr:
+      return {
+        self.visitImpl($0, KeyPathExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathOptionalComponent:
+      return {
+        self.visitImpl($0, KeyPathOptionalComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathPropertyComponent:
+      return {
+        self.visitImpl($0, KeyPathPropertyComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .keyPathSubscriptComponent:
+      return {
+        self.visitImpl($0, KeyPathSubscriptComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .labeledExprList:
+      return {
+        self.visitImpl($0, LabeledExprListSyntax.self, self.visit, self.visitPost)
+      }
+    case .labeledExpr:
+      return {
+        self.visitImpl($0, LabeledExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .labeledSpecializeArgument:
+      return {
+        self.visitImpl($0, LabeledSpecializeArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .labeledStmt:
+      return {
+        self.visitImpl($0, LabeledStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .layoutRequirement:
+      return {
+        self.visitImpl($0, LayoutRequirementSyntax.self, self.visit, self.visitPost)
+      }
+    case .macroDecl:
+      return {
+        self.visitImpl($0, MacroDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .macroExpansionDecl:
+      return {
+        self.visitImpl($0, MacroExpansionDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .macroExpansionExpr:
+      return {
+        self.visitImpl($0, MacroExpansionExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .matchingPatternCondition:
+      return {
+        self.visitImpl($0, MatchingPatternConditionSyntax.self, self.visit, self.visitPost)
+      }
+    case .memberAccessExpr:
+      return {
+        self.visitImpl($0, MemberAccessExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .memberBlockItemList:
+      return {
+        self.visitImpl($0, MemberBlockItemListSyntax.self, self.visit, self.visitPost)
+      }
+    case .memberBlockItem:
+      return {
+        self.visitImpl($0, MemberBlockItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .memberBlock:
+      return {
+        self.visitImpl($0, MemberBlockSyntax.self, self.visit, self.visitPost)
+      }
+    case .memberType:
+      return {
+        self.visitImpl($0, MemberTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .metatypeType:
+      return {
+        self.visitImpl($0, MetatypeTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .missingDecl:
+      return {
+        self.visitImpl($0, MissingDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .missingExpr:
+      return {
+        self.visitImpl($0, MissingExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .missingPattern:
+      return {
+        self.visitImpl($0, MissingPatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .missingStmt:
+      return {
+        self.visitImpl($0, MissingStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .missing:
+      return {
+        self.visitImpl($0, MissingSyntax.self, self.visit, self.visitPost)
+      }
+    case .missingType:
+      return {
+        self.visitImpl($0, MissingTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .multipleTrailingClosureElementList:
+      return {
+        self.visitImpl($0, MultipleTrailingClosureElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .multipleTrailingClosureElement:
+      return {
+        self.visitImpl($0, MultipleTrailingClosureElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .namedOpaqueReturnType:
+      return {
+        self.visitImpl($0, NamedOpaqueReturnTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .nilLiteralExpr:
+      return {
+        self.visitImpl($0, NilLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .objCSelectorPieceList:
+      return {
+        self.visitImpl($0, ObjCSelectorPieceListSyntax.self, self.visit, self.visitPost)
+      }
+    case .objCSelectorPiece:
+      return {
+        self.visitImpl($0, ObjCSelectorPieceSyntax.self, self.visit, self.visitPost)
+      }
+    case .opaqueReturnTypeOfAttributeArguments:
+      return {
+        self.visitImpl($0, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .operatorDecl:
+      return {
+        self.visitImpl($0, OperatorDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .operatorPrecedenceAndTypes:
+      return {
+        self.visitImpl($0, OperatorPrecedenceAndTypesSyntax.self, self.visit, self.visitPost)
+      }
+    case .optionalBindingCondition:
+      return {
+        self.visitImpl($0, OptionalBindingConditionSyntax.self, self.visit, self.visitPost)
+      }
+    case .optionalChainingExpr:
+      return {
+        self.visitImpl($0, OptionalChainingExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .optionalType:
+      return {
+        self.visitImpl($0, OptionalTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .originallyDefinedInAttributeArguments:
+      return {
+        self.visitImpl($0, OriginallyDefinedInAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .packElementExpr:
+      return {
+        self.visitImpl($0, PackElementExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .packElementType:
+      return {
+        self.visitImpl($0, PackElementTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .packExpansionExpr:
+      return {
+        self.visitImpl($0, PackExpansionExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .packExpansionType:
+      return {
+        self.visitImpl($0, PackExpansionTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .patternBindingList:
+      return {
+        self.visitImpl($0, PatternBindingListSyntax.self, self.visit, self.visitPost)
+      }
+    case .patternBinding:
+      return {
+        self.visitImpl($0, PatternBindingSyntax.self, self.visit, self.visitPost)
+      }
+    case .patternExpr:
+      return {
+        self.visitImpl($0, PatternExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .platformVersionItemList:
+      return {
+        self.visitImpl($0, PlatformVersionItemListSyntax.self, self.visit, self.visitPost)
+      }
+    case .platformVersionItem:
+      return {
+        self.visitImpl($0, PlatformVersionItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .platformVersion:
+      return {
+        self.visitImpl($0, PlatformVersionSyntax.self, self.visit, self.visitPost)
+      }
+    case .postfixIfConfigExpr:
+      return {
+        self.visitImpl($0, PostfixIfConfigExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .postfixOperatorExpr:
+      return {
+        self.visitImpl($0, PostfixOperatorExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .poundSourceLocationArguments:
+      return {
+        self.visitImpl($0, PoundSourceLocationArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .poundSourceLocation:
+      return {
+        self.visitImpl($0, PoundSourceLocationSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupAssignment:
+      return {
+        self.visitImpl($0, PrecedenceGroupAssignmentSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupAssociativity:
+      return {
+        self.visitImpl($0, PrecedenceGroupAssociativitySyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupAttributeList:
+      return {
+        self.visitImpl($0, PrecedenceGroupAttributeListSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupDecl:
+      return {
+        self.visitImpl($0, PrecedenceGroupDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupNameList:
+      return {
+        self.visitImpl($0, PrecedenceGroupNameListSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupName:
+      return {
+        self.visitImpl($0, PrecedenceGroupNameSyntax.self, self.visit, self.visitPost)
+      }
+    case .precedenceGroupRelation:
+      return {
+        self.visitImpl($0, PrecedenceGroupRelationSyntax.self, self.visit, self.visitPost)
+      }
+    case .prefixOperatorExpr:
+      return {
+        self.visitImpl($0, PrefixOperatorExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .primaryAssociatedTypeClause:
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .primaryAssociatedTypeList:
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeListSyntax.self, self.visit, self.visitPost)
+      }
+    case .primaryAssociatedType:
+      return {
+        self.visitImpl($0, PrimaryAssociatedTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .protocolDecl:
+      return {
+        self.visitImpl($0, ProtocolDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .regexLiteralExpr:
+      return {
+        self.visitImpl($0, RegexLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .repeatStmt:
+      return {
+        self.visitImpl($0, RepeatStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .returnClause:
+      return {
+        self.visitImpl($0, ReturnClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .returnStmt:
+      return {
+        self.visitImpl($0, ReturnStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .sameTypeRequirement:
+      return {
+        self.visitImpl($0, SameTypeRequirementSyntax.self, self.visit, self.visitPost)
+      }
+    case .sequenceExpr:
+      return {
+        self.visitImpl($0, SequenceExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .simpleStringLiteralExpr:
+      return {
+        self.visitImpl($0, SimpleStringLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .simpleStringLiteralSegmentList:
+      return {
+        self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .someOrAnyType:
+      return {
+        self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .sourceFile:
+      return {
+        self.visitImpl($0, SourceFileSyntax.self, self.visit, self.visitPost)
+      }
+    case .specializeAttributeArgumentList:
+      return {
+        self.visitImpl($0, SpecializeAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .specializeAvailabilityArgument:
+      return {
+        self.visitImpl($0, SpecializeAvailabilityArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .specializeTargetFunctionArgument:
+      return {
+        self.visitImpl($0, SpecializeTargetFunctionArgumentSyntax.self, self.visit, self.visitPost)
+      }
+    case .stringLiteralExpr:
+      return {
+        self.visitImpl($0, StringLiteralExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .stringLiteralSegmentList:
+      return {
+        self.visitImpl($0, StringLiteralSegmentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .stringSegment:
+      return {
+        self.visitImpl($0, StringSegmentSyntax.self, self.visit, self.visitPost)
+      }
+    case .structDecl:
+      return {
+        self.visitImpl($0, StructDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .subscriptCallExpr:
+      return {
+        self.visitImpl($0, SubscriptCallExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .subscriptDecl:
+      return {
+        self.visitImpl($0, SubscriptDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .superExpr:
+      return {
+        self.visitImpl($0, SuperExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .suppressedType:
+      return {
+        self.visitImpl($0, SuppressedTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchCaseItemList:
+      return {
+        self.visitImpl($0, SwitchCaseItemListSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchCaseItem:
+      return {
+        self.visitImpl($0, SwitchCaseItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchCaseLabel:
+      return {
+        self.visitImpl($0, SwitchCaseLabelSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchCaseList:
+      return {
+        self.visitImpl($0, SwitchCaseListSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchCase:
+      return {
+        self.visitImpl($0, SwitchCaseSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchDefaultLabel:
+      return {
+        self.visitImpl($0, SwitchDefaultLabelSyntax.self, self.visit, self.visitPost)
+      }
+    case .switchExpr:
+      return {
+        self.visitImpl($0, SwitchExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .ternaryExpr:
+      return {
+        self.visitImpl($0, TernaryExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .throwStmt:
+      return {
+        self.visitImpl($0, ThrowStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .tryExpr:
+      return {
+        self.visitImpl($0, TryExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .tupleExpr:
+      return {
+        self.visitImpl($0, TupleExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .tuplePatternElementList:
+      return {
+        self.visitImpl($0, TuplePatternElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .tuplePatternElement:
+      return {
+        self.visitImpl($0, TuplePatternElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .tuplePattern:
+      return {
+        self.visitImpl($0, TuplePatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .tupleTypeElementList:
+      return {
+        self.visitImpl($0, TupleTypeElementListSyntax.self, self.visit, self.visitPost)
+      }
+    case .tupleTypeElement:
+      return {
+        self.visitImpl($0, TupleTypeElementSyntax.self, self.visit, self.visitPost)
+      }
+    case .tupleType:
+      return {
+        self.visitImpl($0, TupleTypeSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeAliasDecl:
+      return {
+        self.visitImpl($0, TypeAliasDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeAnnotation:
+      return {
+        self.visitImpl($0, TypeAnnotationSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeEffectSpecifiers:
+      return {
+        self.visitImpl($0, TypeEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeExpr:
+      return {
+        self.visitImpl($0, TypeExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeInitializerClause:
+      return {
+        self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .unavailableFromAsyncAttributeArguments:
+      return {
+        self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .underscorePrivateAttributeArguments:
+      return {
+        self.visitImpl($0, UnderscorePrivateAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
+    case .unexpectedNodes:
+      return {
+        self.visitImpl($0, UnexpectedNodesSyntax.self, self.visit, self.visitPost)
+      }
+    case .unresolvedAsExpr:
+      return {
+        self.visitImpl($0, UnresolvedAsExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .unresolvedIsExpr:
+      return {
+        self.visitImpl($0, UnresolvedIsExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .unresolvedTernaryExpr:
+      return {
+        self.visitImpl($0, UnresolvedTernaryExprSyntax.self, self.visit, self.visitPost)
+      }
+    case .valueBindingPattern:
+      return {
+        self.visitImpl($0, ValueBindingPatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .variableDecl:
+      return {
+        self.visitImpl($0, VariableDeclSyntax.self, self.visit, self.visitPost)
+      }
+    case .versionComponentList:
+      return {
+        self.visitImpl($0, VersionComponentListSyntax.self, self.visit, self.visitPost)
+      }
+    case .versionComponent:
+      return {
+        self.visitImpl($0, VersionComponentSyntax.self, self.visit, self.visitPost)
+      }
+    case .versionTuple:
+      return {
+        self.visitImpl($0, VersionTupleSyntax.self, self.visit, self.visitPost)
+      }
+    case .whereClause:
+      return {
+        self.visitImpl($0, WhereClauseSyntax.self, self.visit, self.visitPost)
+      }
+    case .whileStmt:
+      return {
+        self.visitImpl($0, WhileStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .wildcardPattern:
+      return {
+        self.visitImpl($0, WildcardPatternSyntax.self, self.visit, self.visitPost)
+      }
+    case .yieldStmt:
+      return {
+        self.visitImpl($0, YieldStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .yieldedExpressionList:
+      return {
+        self.visitImpl($0, YieldedExpressionListSyntax.self, self.visit, self.visitPost)
+      }
+    case .yieldedExpression:
+      return {
+        self.visitImpl($0, YieldedExpressionSyntax.self, self.visit, self.visitPost)
+      }
+    case .yieldedExpressionsClause:
+      return {
+        self.visitImpl($0, YieldedExpressionsClauseSyntax.self, self.visit, self.visitPost)
+      }
+    }
+  }
+  private func visit(_ data: SyntaxData) {
+    return visitationFunc(for: data)(data)
+  }
+  #else
   private func visit(_ data: SyntaxData) {
     switch data.raw.kind {
     case .token:
@@ -3372,1932 +4510,558 @@ open class SyntaxVisitor {
       // No children to visit.
       visitPost(node)
     case .accessorBlock:
-      visitImpl(
-          data, 
-          AccessorBlockSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AccessorBlockSyntax.self, visit, visitPost)
     case .accessorDeclList:
-      visitImpl(
-          data, 
-          AccessorDeclListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AccessorDeclListSyntax.self, visit, visitPost)
     case .accessorDecl:
-      visitImpl(
-          data, 
-          AccessorDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AccessorDeclSyntax.self, visit, visitPost)
     case .accessorEffectSpecifiers:
-      visitImpl(
-          data, 
-          AccessorEffectSpecifiersSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AccessorEffectSpecifiersSyntax.self, visit, visitPost)
     case .accessorParameters:
-      visitImpl(
-          data, 
-          AccessorParametersSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AccessorParametersSyntax.self, visit, visitPost)
     case .actorDecl:
-      visitImpl(
-          data, 
-          ActorDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ActorDeclSyntax.self, visit, visitPost)
     case .arrayElementList:
-      visitImpl(
-          data, 
-          ArrayElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ArrayElementListSyntax.self, visit, visitPost)
     case .arrayElement:
-      visitImpl(
-          data, 
-          ArrayElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ArrayElementSyntax.self, visit, visitPost)
     case .arrayExpr:
-      visitImpl(
-          data, 
-          ArrayExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ArrayExprSyntax.self, visit, visitPost)
     case .arrayType:
-      visitImpl(
-          data, 
-          ArrayTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ArrayTypeSyntax.self, visit, visitPost)
     case .arrowExpr:
-      visitImpl(
-          data, 
-          ArrowExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ArrowExprSyntax.self, visit, visitPost)
     case .asExpr:
-      visitImpl(
-          data, 
-          AsExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AsExprSyntax.self, visit, visitPost)
     case .assignmentExpr:
-      visitImpl(
-          data, 
-          AssignmentExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AssignmentExprSyntax.self, visit, visitPost)
     case .associatedTypeDecl:
-      visitImpl(
-          data, 
-          AssociatedTypeDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AssociatedTypeDeclSyntax.self, visit, visitPost)
     case .attributeList:
-      visitImpl(
-          data, 
-          AttributeListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AttributeListSyntax.self, visit, visitPost)
     case .attribute:
-      visitImpl(
-          data, 
-          AttributeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AttributeSyntax.self, visit, visitPost)
     case .attributedType:
-      visitImpl(
-          data, 
-          AttributedTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AttributedTypeSyntax.self, visit, visitPost)
     case .availabilityArgumentList:
-      visitImpl(
-          data, 
-          AvailabilityArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AvailabilityArgumentListSyntax.self, visit, visitPost)
     case .availabilityArgument:
-      visitImpl(
-          data, 
-          AvailabilityArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AvailabilityArgumentSyntax.self, visit, visitPost)
     case .availabilityCondition:
-      visitImpl(
-          data, 
-          AvailabilityConditionSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AvailabilityConditionSyntax.self, visit, visitPost)
     case .availabilityLabeledArgument:
-      visitImpl(
-          data, 
-          AvailabilityLabeledArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AvailabilityLabeledArgumentSyntax.self, visit, visitPost)
     case .awaitExpr:
-      visitImpl(
-          data, 
-          AwaitExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, AwaitExprSyntax.self, visit, visitPost)
     case .backDeployedAttributeArguments:
-      visitImpl(
-          data, 
-          BackDeployedAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, BackDeployedAttributeArgumentsSyntax.self, visit, visitPost)
     case .binaryOperatorExpr:
-      visitImpl(
-          data, 
-          BinaryOperatorExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, BinaryOperatorExprSyntax.self, visit, visitPost)
     case .booleanLiteralExpr:
-      visitImpl(
-          data, 
-          BooleanLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, BooleanLiteralExprSyntax.self, visit, visitPost)
     case .borrowExpr:
-      visitImpl(
-          data, 
-          BorrowExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, BorrowExprSyntax.self, visit, visitPost)
     case .breakStmt:
-      visitImpl(
-          data, 
-          BreakStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, BreakStmtSyntax.self, visit, visitPost)
     case .canImportExpr:
-      visitImpl(
-          data, 
-          CanImportExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CanImportExprSyntax.self, visit, visitPost)
     case .canImportVersionInfo:
-      visitImpl(
-          data, 
-          CanImportVersionInfoSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CanImportVersionInfoSyntax.self, visit, visitPost)
     case .catchClauseList:
-      visitImpl(
-          data, 
-          CatchClauseListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CatchClauseListSyntax.self, visit, visitPost)
     case .catchClause:
-      visitImpl(
-          data, 
-          CatchClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CatchClauseSyntax.self, visit, visitPost)
     case .catchItemList:
-      visitImpl(
-          data, 
-          CatchItemListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CatchItemListSyntax.self, visit, visitPost)
     case .catchItem:
-      visitImpl(
-          data, 
-          CatchItemSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CatchItemSyntax.self, visit, visitPost)
     case .classDecl:
-      visitImpl(
-          data, 
-          ClassDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClassDeclSyntax.self, visit, visitPost)
     case .classRestrictionType:
-      visitImpl(
-          data, 
-          ClassRestrictionTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClassRestrictionTypeSyntax.self, visit, visitPost)
     case .closureCaptureClause:
-      visitImpl(
-          data, 
-          ClosureCaptureClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureCaptureClauseSyntax.self, visit, visitPost)
     case .closureCaptureList:
-      visitImpl(
-          data, 
-          ClosureCaptureListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureCaptureListSyntax.self, visit, visitPost)
     case .closureCaptureSpecifier:
-      visitImpl(
-          data, 
-          ClosureCaptureSpecifierSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureCaptureSpecifierSyntax.self, visit, visitPost)
     case .closureCapture:
-      visitImpl(
-          data, 
-          ClosureCaptureSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureCaptureSyntax.self, visit, visitPost)
     case .closureExpr:
-      visitImpl(
-          data, 
-          ClosureExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureExprSyntax.self, visit, visitPost)
     case .closureParameterClause:
-      visitImpl(
-          data, 
-          ClosureParameterClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureParameterClauseSyntax.self, visit, visitPost)
     case .closureParameterList:
-      visitImpl(
-          data, 
-          ClosureParameterListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureParameterListSyntax.self, visit, visitPost)
     case .closureParameter:
-      visitImpl(
-          data, 
-          ClosureParameterSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureParameterSyntax.self, visit, visitPost)
     case .closureShorthandParameterList:
-      visitImpl(
-          data, 
-          ClosureShorthandParameterListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureShorthandParameterListSyntax.self, visit, visitPost)
     case .closureShorthandParameter:
-      visitImpl(
-          data, 
-          ClosureShorthandParameterSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureShorthandParameterSyntax.self, visit, visitPost)
     case .closureSignature:
-      visitImpl(
-          data, 
-          ClosureSignatureSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ClosureSignatureSyntax.self, visit, visitPost)
     case .codeBlockItemList:
-      visitImpl(
-          data, 
-          CodeBlockItemListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CodeBlockItemListSyntax.self, visit, visitPost)
     case .codeBlockItem:
-      visitImpl(
-          data, 
-          CodeBlockItemSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CodeBlockItemSyntax.self, visit, visitPost)
     case .codeBlock:
-      visitImpl(
-          data, 
-          CodeBlockSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CodeBlockSyntax.self, visit, visitPost)
     case .compositionTypeElementList:
-      visitImpl(
-          data, 
-          CompositionTypeElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CompositionTypeElementListSyntax.self, visit, visitPost)
     case .compositionTypeElement:
-      visitImpl(
-          data, 
-          CompositionTypeElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CompositionTypeElementSyntax.self, visit, visitPost)
     case .compositionType:
-      visitImpl(
-          data, 
-          CompositionTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CompositionTypeSyntax.self, visit, visitPost)
     case .conditionElementList:
-      visitImpl(
-          data, 
-          ConditionElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConditionElementListSyntax.self, visit, visitPost)
     case .conditionElement:
-      visitImpl(
-          data, 
-          ConditionElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConditionElementSyntax.self, visit, visitPost)
     case .conformanceRequirement:
-      visitImpl(
-          data, 
-          ConformanceRequirementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConformanceRequirementSyntax.self, visit, visitPost)
     case .consumeExpr:
-      visitImpl(
-          data, 
-          ConsumeExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConsumeExprSyntax.self, visit, visitPost)
     case .continueStmt:
-      visitImpl(
-          data, 
-          ContinueStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ContinueStmtSyntax.self, visit, visitPost)
     case .conventionAttributeArguments:
-      visitImpl(
-          data, 
-          ConventionAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConventionAttributeArgumentsSyntax.self, visit, visitPost)
     case .conventionWitnessMethodAttributeArguments:
-      visitImpl(
-          data, 
-          ConventionWitnessMethodAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ConventionWitnessMethodAttributeArgumentsSyntax.self, visit, visitPost)
     case .copyExpr:
-      visitImpl(
-          data, 
-          CopyExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, CopyExprSyntax.self, visit, visitPost)
     case .declModifierDetail:
-      visitImpl(
-          data, 
-          DeclModifierDetailSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclModifierDetailSyntax.self, visit, visitPost)
     case .declModifierList:
-      visitImpl(
-          data, 
-          DeclModifierListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclModifierListSyntax.self, visit, visitPost)
     case .declModifier:
-      visitImpl(
-          data, 
-          DeclModifierSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclModifierSyntax.self, visit, visitPost)
     case .declNameArgumentList:
-      visitImpl(
-          data, 
-          DeclNameArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclNameArgumentListSyntax.self, visit, visitPost)
     case .declNameArgument:
-      visitImpl(
-          data, 
-          DeclNameArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclNameArgumentSyntax.self, visit, visitPost)
     case .declNameArguments:
-      visitImpl(
-          data, 
-          DeclNameArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclNameArgumentsSyntax.self, visit, visitPost)
     case .declReferenceExpr:
-      visitImpl(
-          data, 
-          DeclReferenceExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeclReferenceExprSyntax.self, visit, visitPost)
     case .deferStmt:
-      visitImpl(
-          data, 
-          DeferStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeferStmtSyntax.self, visit, visitPost)
     case .deinitializerDecl:
-      visitImpl(
-          data, 
-          DeinitializerDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeinitializerDeclSyntax.self, visit, visitPost)
     case .deinitializerEffectSpecifiers:
-      visitImpl(
-          data, 
-          DeinitializerEffectSpecifiersSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DeinitializerEffectSpecifiersSyntax.self, visit, visitPost)
     case .derivativeAttributeArguments:
-      visitImpl(
-          data, 
-          DerivativeAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DerivativeAttributeArgumentsSyntax.self, visit, visitPost)
     case .designatedTypeList:
-      visitImpl(
-          data, 
-          DesignatedTypeListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DesignatedTypeListSyntax.self, visit, visitPost)
     case .designatedType:
-      visitImpl(
-          data, 
-          DesignatedTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DesignatedTypeSyntax.self, visit, visitPost)
     case .dictionaryElementList:
-      visitImpl(
-          data, 
-          DictionaryElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DictionaryElementListSyntax.self, visit, visitPost)
     case .dictionaryElement:
-      visitImpl(
-          data, 
-          DictionaryElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DictionaryElementSyntax.self, visit, visitPost)
     case .dictionaryExpr:
-      visitImpl(
-          data, 
-          DictionaryExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DictionaryExprSyntax.self, visit, visitPost)
     case .dictionaryType:
-      visitImpl(
-          data, 
-          DictionaryTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DictionaryTypeSyntax.self, visit, visitPost)
     case .differentiabilityArgumentList:
-      visitImpl(
-          data, 
-          DifferentiabilityArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DifferentiabilityArgumentListSyntax.self, visit, visitPost)
     case .differentiabilityArgument:
-      visitImpl(
-          data, 
-          DifferentiabilityArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DifferentiabilityArgumentSyntax.self, visit, visitPost)
     case .differentiabilityArguments:
-      visitImpl(
-          data, 
-          DifferentiabilityArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DifferentiabilityArgumentsSyntax.self, visit, visitPost)
     case .differentiabilityWithRespectToArgument:
-      visitImpl(
-          data, 
-          DifferentiabilityWithRespectToArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DifferentiabilityWithRespectToArgumentSyntax.self, visit, visitPost)
     case .differentiableAttributeArguments:
-      visitImpl(
-          data, 
-          DifferentiableAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DifferentiableAttributeArgumentsSyntax.self, visit, visitPost)
     case .discardAssignmentExpr:
-      visitImpl(
-          data, 
-          DiscardAssignmentExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DiscardAssignmentExprSyntax.self, visit, visitPost)
     case .discardStmt:
-      visitImpl(
-          data, 
-          DiscardStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DiscardStmtSyntax.self, visit, visitPost)
     case .doStmt:
-      visitImpl(
-          data, 
-          DoStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DoStmtSyntax.self, visit, visitPost)
     case .documentationAttributeArgumentList:
-      visitImpl(
-          data, 
-          DocumentationAttributeArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DocumentationAttributeArgumentListSyntax.self, visit, visitPost)
     case .documentationAttributeArgument:
-      visitImpl(
-          data, 
-          DocumentationAttributeArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DocumentationAttributeArgumentSyntax.self, visit, visitPost)
     case .dynamicReplacementAttributeArguments:
-      visitImpl(
-          data, 
-          DynamicReplacementAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, DynamicReplacementAttributeArgumentsSyntax.self, visit, visitPost)
     case .editorPlaceholderDecl:
-      visitImpl(
-          data, 
-          EditorPlaceholderDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EditorPlaceholderDeclSyntax.self, visit, visitPost)
     case .editorPlaceholderExpr:
-      visitImpl(
-          data, 
-          EditorPlaceholderExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EditorPlaceholderExprSyntax.self, visit, visitPost)
     case .effectsAttributeArgumentList:
-      visitImpl(
-          data, 
-          EffectsAttributeArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EffectsAttributeArgumentListSyntax.self, visit, visitPost)
     case .enumCaseDecl:
-      visitImpl(
-          data, 
-          EnumCaseDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseDeclSyntax.self, visit, visitPost)
     case .enumCaseElementList:
-      visitImpl(
-          data, 
-          EnumCaseElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseElementListSyntax.self, visit, visitPost)
     case .enumCaseElement:
-      visitImpl(
-          data, 
-          EnumCaseElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseElementSyntax.self, visit, visitPost)
     case .enumCaseParameterClause:
-      visitImpl(
-          data, 
-          EnumCaseParameterClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseParameterClauseSyntax.self, visit, visitPost)
     case .enumCaseParameterList:
-      visitImpl(
-          data, 
-          EnumCaseParameterListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseParameterListSyntax.self, visit, visitPost)
     case .enumCaseParameter:
-      visitImpl(
-          data, 
-          EnumCaseParameterSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumCaseParameterSyntax.self, visit, visitPost)
     case .enumDecl:
-      visitImpl(
-          data, 
-          EnumDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, EnumDeclSyntax.self, visit, visitPost)
     case .exposeAttributeArguments:
-      visitImpl(
-          data, 
-          ExposeAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExposeAttributeArgumentsSyntax.self, visit, visitPost)
     case .exprList:
-      visitImpl(
-          data, 
-          ExprListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExprListSyntax.self, visit, visitPost)
     case .expressionPattern:
-      visitImpl(
-          data, 
-          ExpressionPatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExpressionPatternSyntax.self, visit, visitPost)
     case .expressionSegment:
-      visitImpl(
-          data, 
-          ExpressionSegmentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExpressionSegmentSyntax.self, visit, visitPost)
     case .expressionStmt:
-      visitImpl(
-          data, 
-          ExpressionStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExpressionStmtSyntax.self, visit, visitPost)
     case .extensionDecl:
-      visitImpl(
-          data, 
-          ExtensionDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ExtensionDeclSyntax.self, visit, visitPost)
     case .fallThroughStmt:
-      visitImpl(
-          data, 
-          FallThroughStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FallThroughStmtSyntax.self, visit, visitPost)
     case .floatLiteralExpr:
-      visitImpl(
-          data, 
-          FloatLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FloatLiteralExprSyntax.self, visit, visitPost)
     case .forStmt:
-      visitImpl(
-          data, 
-          ForStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ForStmtSyntax.self, visit, visitPost)
     case .forceUnwrapExpr:
-      visitImpl(
-          data, 
-          ForceUnwrapExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ForceUnwrapExprSyntax.self, visit, visitPost)
     case .functionCallExpr:
-      visitImpl(
-          data, 
-          FunctionCallExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionCallExprSyntax.self, visit, visitPost)
     case .functionDecl:
-      visitImpl(
-          data, 
-          FunctionDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionDeclSyntax.self, visit, visitPost)
     case .functionEffectSpecifiers:
-      visitImpl(
-          data, 
-          FunctionEffectSpecifiersSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionEffectSpecifiersSyntax.self, visit, visitPost)
     case .functionParameterClause:
-      visitImpl(
-          data, 
-          FunctionParameterClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionParameterClauseSyntax.self, visit, visitPost)
     case .functionParameterList:
-      visitImpl(
-          data, 
-          FunctionParameterListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionParameterListSyntax.self, visit, visitPost)
     case .functionParameter:
-      visitImpl(
-          data, 
-          FunctionParameterSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionParameterSyntax.self, visit, visitPost)
     case .functionSignature:
-      visitImpl(
-          data, 
-          FunctionSignatureSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionSignatureSyntax.self, visit, visitPost)
     case .functionType:
-      visitImpl(
-          data, 
-          FunctionTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, FunctionTypeSyntax.self, visit, visitPost)
     case .genericArgumentClause:
-      visitImpl(
-          data, 
-          GenericArgumentClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericArgumentClauseSyntax.self, visit, visitPost)
     case .genericArgumentList:
-      visitImpl(
-          data, 
-          GenericArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericArgumentListSyntax.self, visit, visitPost)
     case .genericArgument:
-      visitImpl(
-          data, 
-          GenericArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericArgumentSyntax.self, visit, visitPost)
     case .genericParameterClause:
-      visitImpl(
-          data, 
-          GenericParameterClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericParameterClauseSyntax.self, visit, visitPost)
     case .genericParameterList:
-      visitImpl(
-          data, 
-          GenericParameterListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericParameterListSyntax.self, visit, visitPost)
     case .genericParameter:
-      visitImpl(
-          data, 
-          GenericParameterSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericParameterSyntax.self, visit, visitPost)
     case .genericRequirementList:
-      visitImpl(
-          data, 
-          GenericRequirementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericRequirementListSyntax.self, visit, visitPost)
     case .genericRequirement:
-      visitImpl(
-          data, 
-          GenericRequirementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericRequirementSyntax.self, visit, visitPost)
     case .genericSpecializationExpr:
-      visitImpl(
-          data, 
-          GenericSpecializationExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericSpecializationExprSyntax.self, visit, visitPost)
     case .genericWhereClause:
-      visitImpl(
-          data, 
-          GenericWhereClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GenericWhereClauseSyntax.self, visit, visitPost)
     case .guardStmt:
-      visitImpl(
-          data, 
-          GuardStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, GuardStmtSyntax.self, visit, visitPost)
     case .identifierPattern:
-      visitImpl(
-          data, 
-          IdentifierPatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IdentifierPatternSyntax.self, visit, visitPost)
     case .identifierType:
-      visitImpl(
-          data, 
-          IdentifierTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IdentifierTypeSyntax.self, visit, visitPost)
     case .ifConfigClauseList:
-      visitImpl(
-          data, 
-          IfConfigClauseListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IfConfigClauseListSyntax.self, visit, visitPost)
     case .ifConfigClause:
-      visitImpl(
-          data, 
-          IfConfigClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IfConfigClauseSyntax.self, visit, visitPost)
     case .ifConfigDecl:
-      visitImpl(
-          data, 
-          IfConfigDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IfConfigDeclSyntax.self, visit, visitPost)
     case .ifExpr:
-      visitImpl(
-          data, 
-          IfExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IfExprSyntax.self, visit, visitPost)
     case .implementsAttributeArguments:
-      visitImpl(
-          data, 
-          ImplementsAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ImplementsAttributeArgumentsSyntax.self, visit, visitPost)
     case .implicitlyUnwrappedOptionalType:
-      visitImpl(
-          data, 
-          ImplicitlyUnwrappedOptionalTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ImplicitlyUnwrappedOptionalTypeSyntax.self, visit, visitPost)
     case .importDecl:
-      visitImpl(
-          data, 
-          ImportDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ImportDeclSyntax.self, visit, visitPost)
     case .importPathComponentList:
-      visitImpl(
-          data, 
-          ImportPathComponentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ImportPathComponentListSyntax.self, visit, visitPost)
     case .importPathComponent:
-      visitImpl(
-          data, 
-          ImportPathComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ImportPathComponentSyntax.self, visit, visitPost)
     case .inOutExpr:
-      visitImpl(
-          data, 
-          InOutExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InOutExprSyntax.self, visit, visitPost)
     case .infixOperatorExpr:
-      visitImpl(
-          data, 
-          InfixOperatorExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InfixOperatorExprSyntax.self, visit, visitPost)
     case .inheritanceClause:
-      visitImpl(
-          data, 
-          InheritanceClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InheritanceClauseSyntax.self, visit, visitPost)
     case .inheritedTypeList:
-      visitImpl(
-          data, 
-          InheritedTypeListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InheritedTypeListSyntax.self, visit, visitPost)
     case .inheritedType:
-      visitImpl(
-          data, 
-          InheritedTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InheritedTypeSyntax.self, visit, visitPost)
     case .initializerClause:
-      visitImpl(
-          data, 
-          InitializerClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InitializerClauseSyntax.self, visit, visitPost)
     case .initializerDecl:
-      visitImpl(
-          data, 
-          InitializerDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, InitializerDeclSyntax.self, visit, visitPost)
     case .integerLiteralExpr:
-      visitImpl(
-          data, 
-          IntegerLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IntegerLiteralExprSyntax.self, visit, visitPost)
     case .isExpr:
-      visitImpl(
-          data, 
-          IsExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IsExprSyntax.self, visit, visitPost)
     case .isTypePattern:
-      visitImpl(
-          data, 
-          IsTypePatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, IsTypePatternSyntax.self, visit, visitPost)
     case .keyPathComponentList:
-      visitImpl(
-          data, 
-          KeyPathComponentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathComponentListSyntax.self, visit, visitPost)
     case .keyPathComponent:
-      visitImpl(
-          data, 
-          KeyPathComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathComponentSyntax.self, visit, visitPost)
     case .keyPathExpr:
-      visitImpl(
-          data, 
-          KeyPathExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathExprSyntax.self, visit, visitPost)
     case .keyPathOptionalComponent:
-      visitImpl(
-          data, 
-          KeyPathOptionalComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathOptionalComponentSyntax.self, visit, visitPost)
     case .keyPathPropertyComponent:
-      visitImpl(
-          data, 
-          KeyPathPropertyComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathPropertyComponentSyntax.self, visit, visitPost)
     case .keyPathSubscriptComponent:
-      visitImpl(
-          data, 
-          KeyPathSubscriptComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, KeyPathSubscriptComponentSyntax.self, visit, visitPost)
     case .labeledExprList:
-      visitImpl(
-          data, 
-          LabeledExprListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, LabeledExprListSyntax.self, visit, visitPost)
     case .labeledExpr:
-      visitImpl(
-          data, 
-          LabeledExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, LabeledExprSyntax.self, visit, visitPost)
     case .labeledSpecializeArgument:
-      visitImpl(
-          data, 
-          LabeledSpecializeArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, LabeledSpecializeArgumentSyntax.self, visit, visitPost)
     case .labeledStmt:
-      visitImpl(
-          data, 
-          LabeledStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, LabeledStmtSyntax.self, visit, visitPost)
     case .layoutRequirement:
-      visitImpl(
-          data, 
-          LayoutRequirementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, LayoutRequirementSyntax.self, visit, visitPost)
     case .macroDecl:
-      visitImpl(
-          data, 
-          MacroDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MacroDeclSyntax.self, visit, visitPost)
     case .macroExpansionDecl:
-      visitImpl(
-          data, 
-          MacroExpansionDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MacroExpansionDeclSyntax.self, visit, visitPost)
     case .macroExpansionExpr:
-      visitImpl(
-          data, 
-          MacroExpansionExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MacroExpansionExprSyntax.self, visit, visitPost)
     case .matchingPatternCondition:
-      visitImpl(
-          data, 
-          MatchingPatternConditionSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MatchingPatternConditionSyntax.self, visit, visitPost)
     case .memberAccessExpr:
-      visitImpl(
-          data, 
-          MemberAccessExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MemberAccessExprSyntax.self, visit, visitPost)
     case .memberBlockItemList:
-      visitImpl(
-          data, 
-          MemberBlockItemListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MemberBlockItemListSyntax.self, visit, visitPost)
     case .memberBlockItem:
-      visitImpl(
-          data, 
-          MemberBlockItemSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MemberBlockItemSyntax.self, visit, visitPost)
     case .memberBlock:
-      visitImpl(
-          data, 
-          MemberBlockSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MemberBlockSyntax.self, visit, visitPost)
     case .memberType:
-      visitImpl(
-          data, 
-          MemberTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MemberTypeSyntax.self, visit, visitPost)
     case .metatypeType:
-      visitImpl(
-          data, 
-          MetatypeTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MetatypeTypeSyntax.self, visit, visitPost)
     case .missingDecl:
-      visitImpl(
-          data, 
-          MissingDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingDeclSyntax.self, visit, visitPost)
     case .missingExpr:
-      visitImpl(
-          data, 
-          MissingExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingExprSyntax.self, visit, visitPost)
     case .missingPattern:
-      visitImpl(
-          data, 
-          MissingPatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingPatternSyntax.self, visit, visitPost)
     case .missingStmt:
-      visitImpl(
-          data, 
-          MissingStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingStmtSyntax.self, visit, visitPost)
     case .missing:
-      visitImpl(
-          data, 
-          MissingSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingSyntax.self, visit, visitPost)
     case .missingType:
-      visitImpl(
-          data, 
-          MissingTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MissingTypeSyntax.self, visit, visitPost)
     case .multipleTrailingClosureElementList:
-      visitImpl(
-          data, 
-          MultipleTrailingClosureElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MultipleTrailingClosureElementListSyntax.self, visit, visitPost)
     case .multipleTrailingClosureElement:
-      visitImpl(
-          data, 
-          MultipleTrailingClosureElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, MultipleTrailingClosureElementSyntax.self, visit, visitPost)
     case .namedOpaqueReturnType:
-      visitImpl(
-          data, 
-          NamedOpaqueReturnTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, NamedOpaqueReturnTypeSyntax.self, visit, visitPost)
     case .nilLiteralExpr:
-      visitImpl(
-          data, 
-          NilLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, NilLiteralExprSyntax.self, visit, visitPost)
     case .objCSelectorPieceList:
-      visitImpl(
-          data, 
-          ObjCSelectorPieceListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ObjCSelectorPieceListSyntax.self, visit, visitPost)
     case .objCSelectorPiece:
-      visitImpl(
-          data, 
-          ObjCSelectorPieceSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ObjCSelectorPieceSyntax.self, visit, visitPost)
     case .opaqueReturnTypeOfAttributeArguments:
-      visitImpl(
-          data, 
-          OpaqueReturnTypeOfAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, visit, visitPost)
     case .operatorDecl:
-      visitImpl(
-          data, 
-          OperatorDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OperatorDeclSyntax.self, visit, visitPost)
     case .operatorPrecedenceAndTypes:
-      visitImpl(
-          data, 
-          OperatorPrecedenceAndTypesSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OperatorPrecedenceAndTypesSyntax.self, visit, visitPost)
     case .optionalBindingCondition:
-      visitImpl(
-          data, 
-          OptionalBindingConditionSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OptionalBindingConditionSyntax.self, visit, visitPost)
     case .optionalChainingExpr:
-      visitImpl(
-          data, 
-          OptionalChainingExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OptionalChainingExprSyntax.self, visit, visitPost)
     case .optionalType:
-      visitImpl(
-          data, 
-          OptionalTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OptionalTypeSyntax.self, visit, visitPost)
     case .originallyDefinedInAttributeArguments:
-      visitImpl(
-          data, 
-          OriginallyDefinedInAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, OriginallyDefinedInAttributeArgumentsSyntax.self, visit, visitPost)
     case .packElementExpr:
-      visitImpl(
-          data, 
-          PackElementExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PackElementExprSyntax.self, visit, visitPost)
     case .packElementType:
-      visitImpl(
-          data, 
-          PackElementTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PackElementTypeSyntax.self, visit, visitPost)
     case .packExpansionExpr:
-      visitImpl(
-          data, 
-          PackExpansionExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PackExpansionExprSyntax.self, visit, visitPost)
     case .packExpansionType:
-      visitImpl(
-          data, 
-          PackExpansionTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PackExpansionTypeSyntax.self, visit, visitPost)
     case .patternBindingList:
-      visitImpl(
-          data, 
-          PatternBindingListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PatternBindingListSyntax.self, visit, visitPost)
     case .patternBinding:
-      visitImpl(
-          data, 
-          PatternBindingSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PatternBindingSyntax.self, visit, visitPost)
     case .patternExpr:
-      visitImpl(
-          data, 
-          PatternExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PatternExprSyntax.self, visit, visitPost)
     case .platformVersionItemList:
-      visitImpl(
-          data, 
-          PlatformVersionItemListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PlatformVersionItemListSyntax.self, visit, visitPost)
     case .platformVersionItem:
-      visitImpl(
-          data, 
-          PlatformVersionItemSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PlatformVersionItemSyntax.self, visit, visitPost)
     case .platformVersion:
-      visitImpl(
-          data, 
-          PlatformVersionSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PlatformVersionSyntax.self, visit, visitPost)
     case .postfixIfConfigExpr:
-      visitImpl(
-          data, 
-          PostfixIfConfigExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PostfixIfConfigExprSyntax.self, visit, visitPost)
     case .postfixOperatorExpr:
-      visitImpl(
-          data, 
-          PostfixOperatorExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PostfixOperatorExprSyntax.self, visit, visitPost)
     case .poundSourceLocationArguments:
-      visitImpl(
-          data, 
-          PoundSourceLocationArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PoundSourceLocationArgumentsSyntax.self, visit, visitPost)
     case .poundSourceLocation:
-      visitImpl(
-          data, 
-          PoundSourceLocationSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PoundSourceLocationSyntax.self, visit, visitPost)
     case .precedenceGroupAssignment:
-      visitImpl(
-          data, 
-          PrecedenceGroupAssignmentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupAssignmentSyntax.self, visit, visitPost)
     case .precedenceGroupAssociativity:
-      visitImpl(
-          data, 
-          PrecedenceGroupAssociativitySyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupAssociativitySyntax.self, visit, visitPost)
     case .precedenceGroupAttributeList:
-      visitImpl(
-          data, 
-          PrecedenceGroupAttributeListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupAttributeListSyntax.self, visit, visitPost)
     case .precedenceGroupDecl:
-      visitImpl(
-          data, 
-          PrecedenceGroupDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupDeclSyntax.self, visit, visitPost)
     case .precedenceGroupNameList:
-      visitImpl(
-          data, 
-          PrecedenceGroupNameListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupNameListSyntax.self, visit, visitPost)
     case .precedenceGroupName:
-      visitImpl(
-          data, 
-          PrecedenceGroupNameSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupNameSyntax.self, visit, visitPost)
     case .precedenceGroupRelation:
-      visitImpl(
-          data, 
-          PrecedenceGroupRelationSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrecedenceGroupRelationSyntax.self, visit, visitPost)
     case .prefixOperatorExpr:
-      visitImpl(
-          data, 
-          PrefixOperatorExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrefixOperatorExprSyntax.self, visit, visitPost)
     case .primaryAssociatedTypeClause:
-      visitImpl(
-          data, 
-          PrimaryAssociatedTypeClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrimaryAssociatedTypeClauseSyntax.self, visit, visitPost)
     case .primaryAssociatedTypeList:
-      visitImpl(
-          data, 
-          PrimaryAssociatedTypeListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrimaryAssociatedTypeListSyntax.self, visit, visitPost)
     case .primaryAssociatedType:
-      visitImpl(
-          data, 
-          PrimaryAssociatedTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, PrimaryAssociatedTypeSyntax.self, visit, visitPost)
     case .protocolDecl:
-      visitImpl(
-          data, 
-          ProtocolDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ProtocolDeclSyntax.self, visit, visitPost)
     case .regexLiteralExpr:
-      visitImpl(
-          data, 
-          RegexLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, RegexLiteralExprSyntax.self, visit, visitPost)
     case .repeatStmt:
-      visitImpl(
-          data, 
-          RepeatStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, RepeatStmtSyntax.self, visit, visitPost)
     case .returnClause:
-      visitImpl(
-          data, 
-          ReturnClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ReturnClauseSyntax.self, visit, visitPost)
     case .returnStmt:
-      visitImpl(
-          data, 
-          ReturnStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ReturnStmtSyntax.self, visit, visitPost)
     case .sameTypeRequirement:
-      visitImpl(
-          data, 
-          SameTypeRequirementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SameTypeRequirementSyntax.self, visit, visitPost)
     case .sequenceExpr:
-      visitImpl(
-          data, 
-          SequenceExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SequenceExprSyntax.self, visit, visitPost)
     case .simpleStringLiteralExpr:
-      visitImpl(
-          data, 
-          SimpleStringLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SimpleStringLiteralExprSyntax.self, visit, visitPost)
     case .simpleStringLiteralSegmentList:
-      visitImpl(
-          data, 
-          SimpleStringLiteralSegmentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SimpleStringLiteralSegmentListSyntax.self, visit, visitPost)
     case .someOrAnyType:
-      visitImpl(
-          data, 
-          SomeOrAnyTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SomeOrAnyTypeSyntax.self, visit, visitPost)
     case .sourceFile:
-      visitImpl(
-          data, 
-          SourceFileSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SourceFileSyntax.self, visit, visitPost)
     case .specializeAttributeArgumentList:
-      visitImpl(
-          data, 
-          SpecializeAttributeArgumentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SpecializeAttributeArgumentListSyntax.self, visit, visitPost)
     case .specializeAvailabilityArgument:
-      visitImpl(
-          data, 
-          SpecializeAvailabilityArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SpecializeAvailabilityArgumentSyntax.self, visit, visitPost)
     case .specializeTargetFunctionArgument:
-      visitImpl(
-          data, 
-          SpecializeTargetFunctionArgumentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SpecializeTargetFunctionArgumentSyntax.self, visit, visitPost)
     case .stringLiteralExpr:
-      visitImpl(
-          data, 
-          StringLiteralExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, StringLiteralExprSyntax.self, visit, visitPost)
     case .stringLiteralSegmentList:
-      visitImpl(
-          data, 
-          StringLiteralSegmentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, StringLiteralSegmentListSyntax.self, visit, visitPost)
     case .stringSegment:
-      visitImpl(
-          data, 
-          StringSegmentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, StringSegmentSyntax.self, visit, visitPost)
     case .structDecl:
-      visitImpl(
-          data, 
-          StructDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, StructDeclSyntax.self, visit, visitPost)
     case .subscriptCallExpr:
-      visitImpl(
-          data, 
-          SubscriptCallExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SubscriptCallExprSyntax.self, visit, visitPost)
     case .subscriptDecl:
-      visitImpl(
-          data, 
-          SubscriptDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SubscriptDeclSyntax.self, visit, visitPost)
     case .superExpr:
-      visitImpl(
-          data, 
-          SuperExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SuperExprSyntax.self, visit, visitPost)
     case .suppressedType:
-      visitImpl(
-          data, 
-          SuppressedTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SuppressedTypeSyntax.self, visit, visitPost)
     case .switchCaseItemList:
-      visitImpl(
-          data, 
-          SwitchCaseItemListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchCaseItemListSyntax.self, visit, visitPost)
     case .switchCaseItem:
-      visitImpl(
-          data, 
-          SwitchCaseItemSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchCaseItemSyntax.self, visit, visitPost)
     case .switchCaseLabel:
-      visitImpl(
-          data, 
-          SwitchCaseLabelSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchCaseLabelSyntax.self, visit, visitPost)
     case .switchCaseList:
-      visitImpl(
-          data, 
-          SwitchCaseListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchCaseListSyntax.self, visit, visitPost)
     case .switchCase:
-      visitImpl(
-          data, 
-          SwitchCaseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchCaseSyntax.self, visit, visitPost)
     case .switchDefaultLabel:
-      visitImpl(
-          data, 
-          SwitchDefaultLabelSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchDefaultLabelSyntax.self, visit, visitPost)
     case .switchExpr:
-      visitImpl(
-          data, 
-          SwitchExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, SwitchExprSyntax.self, visit, visitPost)
     case .ternaryExpr:
-      visitImpl(
-          data, 
-          TernaryExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TernaryExprSyntax.self, visit, visitPost)
     case .throwStmt:
-      visitImpl(
-          data, 
-          ThrowStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ThrowStmtSyntax.self, visit, visitPost)
     case .tryExpr:
-      visitImpl(
-          data, 
-          TryExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TryExprSyntax.self, visit, visitPost)
     case .tupleExpr:
-      visitImpl(
-          data, 
-          TupleExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TupleExprSyntax.self, visit, visitPost)
     case .tuplePatternElementList:
-      visitImpl(
-          data, 
-          TuplePatternElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TuplePatternElementListSyntax.self, visit, visitPost)
     case .tuplePatternElement:
-      visitImpl(
-          data, 
-          TuplePatternElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TuplePatternElementSyntax.self, visit, visitPost)
     case .tuplePattern:
-      visitImpl(
-          data, 
-          TuplePatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TuplePatternSyntax.self, visit, visitPost)
     case .tupleTypeElementList:
-      visitImpl(
-          data, 
-          TupleTypeElementListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TupleTypeElementListSyntax.self, visit, visitPost)
     case .tupleTypeElement:
-      visitImpl(
-          data, 
-          TupleTypeElementSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TupleTypeElementSyntax.self, visit, visitPost)
     case .tupleType:
-      visitImpl(
-          data, 
-          TupleTypeSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TupleTypeSyntax.self, visit, visitPost)
     case .typeAliasDecl:
-      visitImpl(
-          data, 
-          TypeAliasDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TypeAliasDeclSyntax.self, visit, visitPost)
     case .typeAnnotation:
-      visitImpl(
-          data, 
-          TypeAnnotationSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TypeAnnotationSyntax.self, visit, visitPost)
     case .typeEffectSpecifiers:
-      visitImpl(
-          data, 
-          TypeEffectSpecifiersSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TypeEffectSpecifiersSyntax.self, visit, visitPost)
     case .typeExpr:
-      visitImpl(
-          data, 
-          TypeExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TypeExprSyntax.self, visit, visitPost)
     case .typeInitializerClause:
-      visitImpl(
-          data, 
-          TypeInitializerClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, TypeInitializerClauseSyntax.self, visit, visitPost)
     case .unavailableFromAsyncAttributeArguments:
-      visitImpl(
-          data, 
-          UnavailableFromAsyncAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit, visitPost)
     case .underscorePrivateAttributeArguments:
-      visitImpl(
-          data, 
-          UnderscorePrivateAttributeArgumentsSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnderscorePrivateAttributeArgumentsSyntax.self, visit, visitPost)
     case .unexpectedNodes:
-      visitImpl(
-          data, 
-          UnexpectedNodesSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnexpectedNodesSyntax.self, visit, visitPost)
     case .unresolvedAsExpr:
-      visitImpl(
-          data, 
-          UnresolvedAsExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnresolvedAsExprSyntax.self, visit, visitPost)
     case .unresolvedIsExpr:
-      visitImpl(
-          data, 
-          UnresolvedIsExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnresolvedIsExprSyntax.self, visit, visitPost)
     case .unresolvedTernaryExpr:
-      visitImpl(
-          data, 
-          UnresolvedTernaryExprSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, UnresolvedTernaryExprSyntax.self, visit, visitPost)
     case .valueBindingPattern:
-      visitImpl(
-          data, 
-          ValueBindingPatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, ValueBindingPatternSyntax.self, visit, visitPost)
     case .variableDecl:
-      visitImpl(
-          data, 
-          VariableDeclSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, VariableDeclSyntax.self, visit, visitPost)
     case .versionComponentList:
-      visitImpl(
-          data, 
-          VersionComponentListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, VersionComponentListSyntax.self, visit, visitPost)
     case .versionComponent:
-      visitImpl(
-          data, 
-          VersionComponentSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, VersionComponentSyntax.self, visit, visitPost)
     case .versionTuple:
-      visitImpl(
-          data, 
-          VersionTupleSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, VersionTupleSyntax.self, visit, visitPost)
     case .whereClause:
-      visitImpl(
-          data, 
-          WhereClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, WhereClauseSyntax.self, visit, visitPost)
     case .whileStmt:
-      visitImpl(
-          data, 
-          WhileStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, WhileStmtSyntax.self, visit, visitPost)
     case .wildcardPattern:
-      visitImpl(
-          data, 
-          WildcardPatternSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, WildcardPatternSyntax.self, visit, visitPost)
     case .yieldStmt:
-      visitImpl(
-          data, 
-          YieldStmtSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, YieldStmtSyntax.self, visit, visitPost)
     case .yieldedExpressionList:
-      visitImpl(
-          data, 
-          YieldedExpressionListSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, YieldedExpressionListSyntax.self, visit, visitPost)
     case .yieldedExpression:
-      visitImpl(
-          data, 
-          YieldedExpressionSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, YieldedExpressionSyntax.self, visit, visitPost)
     case .yieldedExpressionsClause:
-      visitImpl(
-          data, 
-          YieldedExpressionsClauseSyntax.self, 
-          visit, 
-          visitPost
-        )
+      visitImpl(data, YieldedExpressionsClauseSyntax.self, visit, visitPost)
     }
   }
+  #endif
   
   private func visitChildren(_ node: some SyntaxProtocol) {
     let syntaxNode = Syntax(node)

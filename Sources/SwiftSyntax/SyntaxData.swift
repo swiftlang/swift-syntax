@@ -292,10 +292,8 @@ struct SyntaxData {
   ///         data's layout.
   ///
   /// - Parameter index: The index to create and cache.
-  /// - Parameter parent: The parent to associate the child with. This is
-  ///             normally the Syntax node that this `SyntaxData` belongs to.
   /// - Returns: The child's data at the provided index.
-  func child(at index: Int, parent: Syntax) -> SyntaxData? {
+  func child(at index: Int) -> SyntaxData? {
     if raw.layoutView!.children[index] == nil { return nil }
     var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
     for _ in 0..<index { _ = iter.next() }

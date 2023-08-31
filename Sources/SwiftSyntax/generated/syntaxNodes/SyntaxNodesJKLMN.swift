@@ -138,7 +138,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePeriod: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathComponentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -147,7 +147,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var period: TokenSyntax? {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 1).map(TokenSyntax.init)
     }
     set(value) {
       self = KeyPathComponentSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
@@ -156,7 +156,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPeriodAndComponent: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathComponentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -165,7 +165,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var component: Component {
     get {
-      return Component(data.child(at: 3, parent: Syntax(self))!)
+      return Component(data.child(at: 3)!)
     }
     set(value) {
       self = KeyPathComponentSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -174,7 +174,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterComponent: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathComponentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -268,7 +268,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -277,7 +277,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var backslash: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -286,7 +286,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenBackslashAndRoot: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -295,7 +295,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var root: TypeSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(TypeSyntax.init)
+      return data.child(at: 3).map(TypeSyntax.init)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
@@ -304,7 +304,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenRootAndComponents: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -313,7 +313,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var components: KeyPathComponentListSyntax {
     get {
-      return KeyPathComponentListSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return KeyPathComponentListSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -348,7 +348,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterComponents: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -426,7 +426,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathOptionalComponentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -435,7 +435,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var questionOrExclamationMark: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = KeyPathOptionalComponentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -444,7 +444,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathOptionalComponentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -529,7 +529,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeDeclName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -538,7 +538,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var declName: DeclReferenceExprSyntax {
     get {
-      return DeclReferenceExprSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -547,7 +547,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenDeclNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -556,7 +556,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return data.child(at: 3).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
@@ -565,7 +565,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathPropertyComponentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -663,7 +663,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -672,7 +672,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var leftSquare: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -681,7 +681,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLeftSquareAndArguments: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -690,7 +690,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var arguments: LabeledExprListSyntax {
     get {
-      return LabeledExprListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -725,7 +725,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenArgumentsAndRightSquare: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -734,7 +734,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var rightSquare: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -743,7 +743,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = KeyPathSubscriptComponentSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -850,7 +850,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -859,7 +859,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var label: TokenSyntax? {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 1).map(TokenSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
@@ -868,7 +868,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -877,7 +877,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var colon: TokenSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 3).map(TokenSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
@@ -886,7 +886,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenColonAndExpression: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -895,7 +895,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var expression: ExprSyntax {
     get {
-      return ExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return ExprSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -904,7 +904,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -913,7 +913,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var trailingComma: TokenSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 7).map(TokenSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
@@ -922,7 +922,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -1037,7 +1037,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -1047,7 +1047,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// The label of the argument
   public var label: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -1056,7 +1056,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -1066,7 +1066,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// The colon separating the label and the value
   public var colon: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -1075,7 +1075,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -1085,7 +1085,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// The value for this argument
   public var value: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -1094,7 +1094,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenValueAndTrailingComma: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -1104,7 +1104,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   /// A trailing comma if this argument is followed by another one
   public var trailingComma: TokenSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 7).map(TokenSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
@@ -1113,7 +1113,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledSpecializeArgumentSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -1211,7 +1211,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -1220,7 +1220,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var label: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -1229,7 +1229,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -1238,7 +1238,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var colon: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -1247,7 +1247,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenColonAndStatement: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -1256,7 +1256,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var statement: StmtSyntax {
     get {
-      return StmtSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return StmtSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -1265,7 +1265,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterStatement: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LabeledStmtSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -1400,7 +1400,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -1409,7 +1409,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var type: TypeSyntax {
     get {
-      return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TypeSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -1418,7 +1418,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenTypeAndColon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -1427,7 +1427,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var colon: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -1436,7 +1436,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenColonAndLayoutSpecifier: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -1445,7 +1445,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var layoutSpecifier: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -1454,7 +1454,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLayoutSpecifierAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -1463,7 +1463,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var leftParen: TokenSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 7).map(TokenSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
@@ -1472,7 +1472,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLeftParenAndSize: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -1481,7 +1481,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var size: TokenSyntax? {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 9).map(TokenSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
@@ -1490,7 +1490,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenSizeAndComma: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 10).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
@@ -1499,7 +1499,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var comma: TokenSyntax? {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 11).map(TokenSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
@@ -1508,7 +1508,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenCommaAndAlignment: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 12).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
@@ -1517,7 +1517,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var alignment: TokenSyntax? {
     get {
-      return data.child(at: 13, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 13).map(TokenSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
@@ -1526,7 +1526,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 14).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
@@ -1535,7 +1535,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var rightParen: TokenSyntax? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 15).map(TokenSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
@@ -1544,7 +1544,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 16).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = LayoutRequirementSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
@@ -1687,7 +1687,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -1696,7 +1696,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var attributes: AttributeListSyntax {
     get {
-      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return AttributeListSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -1731,7 +1731,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -1740,7 +1740,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var modifiers: DeclModifierListSyntax {
     get {
-      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return DeclModifierListSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -1775,7 +1775,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenModifiersAndMacroKeyword: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -1784,7 +1784,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var macroKeyword: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -1793,7 +1793,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenMacroKeywordAndName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -1802,7 +1802,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var name: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 7)!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
@@ -1811,7 +1811,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -1821,7 +1821,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(GenericParameterClauseSyntax.init)
+      return data.child(at: 9).map(GenericParameterClauseSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
@@ -1830,7 +1830,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenGenericParameterClauseAndSignature: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 10).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
@@ -1839,7 +1839,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var signature: FunctionSignatureSyntax {
     get {
-      return FunctionSignatureSyntax(data.child(at: 11, parent: Syntax(self))!)
+      return FunctionSignatureSyntax(data.child(at: 11)!)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 11, with: value.data, arena: SyntaxArena()))
@@ -1848,7 +1848,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenSignatureAndDefinition: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 12).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
@@ -1857,7 +1857,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var definition: InitializerClauseSyntax? {
     get {
-      return data.child(at: 13, parent: Syntax(self)).map(InitializerClauseSyntax.init)
+      return data.child(at: 13).map(InitializerClauseSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
@@ -1866,7 +1866,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 14).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
@@ -1876,7 +1876,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(GenericWhereClauseSyntax.init)
+      return data.child(at: 15).map(GenericWhereClauseSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
@@ -1885,7 +1885,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 16).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroDeclSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
@@ -2041,7 +2041,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -2050,7 +2050,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var attributes: AttributeListSyntax {
     get {
-      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return AttributeListSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -2085,7 +2085,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -2094,7 +2094,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var modifiers: DeclModifierListSyntax {
     get {
-      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return DeclModifierListSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -2129,7 +2129,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -2139,7 +2139,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// The `#` sign.
   public var pound: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -2148,7 +2148,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -2157,7 +2157,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var macroName: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 7)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
@@ -2166,7 +2166,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -2175,7 +2175,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      return data.child(at: 9, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return data.child(at: 9).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 9, with: value?.data, arena: SyntaxArena()))
@@ -2184,7 +2184,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 10).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
@@ -2193,7 +2193,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var leftParen: TokenSyntax? {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 11).map(TokenSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
@@ -2202,7 +2202,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 12).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
@@ -2211,7 +2211,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var arguments: LabeledExprListSyntax {
     get {
-      return LabeledExprListSyntax(data.child(at: 13, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 13)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 13, with: value.data, arena: SyntaxArena()))
@@ -2246,7 +2246,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 14).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
@@ -2255,7 +2255,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var rightParen: TokenSyntax? {
     get {
-      return data.child(at: 15, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 15).map(TokenSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 15, with: value?.data, arena: SyntaxArena()))
@@ -2264,7 +2264,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 16).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
@@ -2273,7 +2273,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      return data.child(at: 17, parent: Syntax(self)).map(ClosureExprSyntax.init)
+      return data.child(at: 17).map(ClosureExprSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 17, with: value?.data, arena: SyntaxArena()))
@@ -2282,7 +2282,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 18, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 18).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 18, with: value?.data, arena: SyntaxArena()))
@@ -2291,7 +2291,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return MultipleTrailingClosureElementListSyntax(data.child(at: 19, parent: Syntax(self))!)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 19)!)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 19, with: value.data, arena: SyntaxArena()))
@@ -2326,7 +2326,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 20, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 20).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionDeclSyntax(data.replacingChild(at: 20, with: value?.data, arena: SyntaxArena()))
@@ -2472,7 +2472,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePound: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -2482,7 +2482,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// The `#` sign.
   public var pound: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -2491,7 +2491,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -2500,7 +2500,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var macroName: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -2509,7 +2509,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -2518,7 +2518,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return data.child(at: 5).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
@@ -2527,7 +2527,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -2536,7 +2536,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var leftParen: TokenSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 7).map(TokenSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
@@ -2545,7 +2545,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -2554,7 +2554,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var arguments: LabeledExprListSyntax {
     get {
-      return LabeledExprListSyntax(data.child(at: 9, parent: Syntax(self))!)
+      return LabeledExprListSyntax(data.child(at: 9)!)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 9, with: value.data, arena: SyntaxArena()))
@@ -2589,7 +2589,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 10, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 10).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 10, with: value?.data, arena: SyntaxArena()))
@@ -2598,7 +2598,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var rightParen: TokenSyntax? {
     get {
-      return data.child(at: 11, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 11).map(TokenSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 11, with: value?.data, arena: SyntaxArena()))
@@ -2607,7 +2607,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 12, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 12).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 12, with: value?.data, arena: SyntaxArena()))
@@ -2616,7 +2616,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var trailingClosure: ClosureExprSyntax? {
     get {
-      return data.child(at: 13, parent: Syntax(self)).map(ClosureExprSyntax.init)
+      return data.child(at: 13).map(ClosureExprSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 13, with: value?.data, arena: SyntaxArena()))
@@ -2625,7 +2625,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 14, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 14).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 14, with: value?.data, arena: SyntaxArena()))
@@ -2634,7 +2634,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var additionalTrailingClosures: MultipleTrailingClosureElementListSyntax {
     get {
-      return MultipleTrailingClosureElementListSyntax(data.child(at: 15, parent: Syntax(self))!)
+      return MultipleTrailingClosureElementListSyntax(data.child(at: 15)!)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 15, with: value.data, arena: SyntaxArena()))
@@ -2669,7 +2669,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 16, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 16).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MacroExpansionExprSyntax(data.replacingChild(at: 16, with: value?.data, arena: SyntaxArena()))
@@ -2786,7 +2786,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeCaseKeyword: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -2795,7 +2795,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var caseKeyword: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -2804,7 +2804,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -2813,7 +2813,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var pattern: PatternSyntax {
     get {
-      return PatternSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return PatternSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -2822,7 +2822,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPatternAndTypeAnnotation: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -2831,7 +2831,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var typeAnnotation: TypeAnnotationSyntax? {
     get {
-      return data.child(at: 5, parent: Syntax(self)).map(TypeAnnotationSyntax.init)
+      return data.child(at: 5).map(TypeAnnotationSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 5, with: value?.data, arena: SyntaxArena()))
@@ -2840,7 +2840,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -2849,7 +2849,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var initializer: InitializerClauseSyntax {
     get {
-      return InitializerClauseSyntax(data.child(at: 7, parent: Syntax(self))!)
+      return InitializerClauseSyntax(data.child(at: 7)!)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 7, with: value.data, arena: SyntaxArena()))
@@ -2858,7 +2858,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterInitializer: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MatchingPatternConditionSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -2960,7 +2960,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeBase: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -2970,7 +2970,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// The base of the member access, optionally specified.
   public var base: ExprSyntax? {
     get {
-      return data.child(at: 1, parent: Syntax(self)).map(ExprSyntax.init)
+      return data.child(at: 1).map(ExprSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 1, with: value?.data, arena: SyntaxArena()))
@@ -2979,7 +2979,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenBaseAndPeriod: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -2988,7 +2988,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var period: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -2997,7 +2997,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPeriodAndDeclName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3007,7 +3007,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// The name of the referenced function or a property.
   public var declName: DeclReferenceExprSyntax {
     get {
-      return DeclReferenceExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return DeclReferenceExprSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -3016,7 +3016,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterDeclName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberAccessExprSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -3113,7 +3113,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeDecl: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockItemSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3123,7 +3123,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// The declaration of the type member.
   public var decl: DeclSyntax {
     get {
-      return DeclSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return DeclSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MemberBlockItemSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3132,7 +3132,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenDeclAndSemicolon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockItemSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -3142,7 +3142,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   /// An optional trailing semicolon.
   public var semicolon: TokenSyntax? {
     get {
-      return data.child(at: 3, parent: Syntax(self)).map(TokenSyntax.init)
+      return data.child(at: 3).map(TokenSyntax.init)
     }
     set(value) {
       self = MemberBlockItemSyntax(data.replacingChild(at: 3, with: value?.data, arena: SyntaxArena()))
@@ -3151,7 +3151,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterSemicolon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockItemSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3254,7 +3254,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3263,7 +3263,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var leftBrace: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3272,7 +3272,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenLeftBraceAndMembers: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -3281,7 +3281,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var members: MemberBlockItemListSyntax {
     get {
-      return MemberBlockItemListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return MemberBlockItemListSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -3316,7 +3316,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenMembersAndRightBrace: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3325,7 +3325,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var rightBrace: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -3334,7 +3334,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberBlockSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -3437,7 +3437,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3446,7 +3446,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var baseType: TypeSyntax {
     get {
-      return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TypeSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3455,7 +3455,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -3464,7 +3464,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var period: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -3473,7 +3473,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3482,7 +3482,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var name: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -3491,7 +3491,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -3500,7 +3500,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var genericArgumentClause: GenericArgumentClauseSyntax? {
     get {
-      return data.child(at: 7, parent: Syntax(self)).map(GenericArgumentClauseSyntax.init)
+      return data.child(at: 7).map(GenericArgumentClauseSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 7, with: value?.data, arena: SyntaxArena()))
@@ -3509,7 +3509,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 8, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 8).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MemberTypeSyntax(data.replacingChild(at: 8, with: value?.data, arena: SyntaxArena()))
@@ -3607,7 +3607,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeBaseType: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3616,7 +3616,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var baseType: TypeSyntax {
     get {
-      return TypeSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TypeSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3625,7 +3625,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -3634,7 +3634,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var period: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -3643,7 +3643,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenPeriodAndMetatypeSpecifier: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3652,7 +3652,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var metatypeSpecifier: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -3661,7 +3661,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterMetatypeSpecifier: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MetatypeTypeSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -3762,7 +3762,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3772,7 +3772,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
   public var attributes: AttributeListSyntax {
     get {
-      return AttributeListSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return AttributeListSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3807,7 +3807,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -3817,7 +3817,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
   public var modifiers: DeclModifierListSyntax {
     get {
-      return DeclModifierListSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return DeclModifierListSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -3852,7 +3852,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -3864,7 +3864,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -3873,7 +3873,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingDeclSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -3950,7 +3950,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -3962,7 +3962,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -3971,7 +3971,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4040,7 +4040,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingPatternSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4052,7 +4052,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingPatternSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4061,7 +4061,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingPatternSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4130,7 +4130,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingStmtSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4142,7 +4142,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingStmtSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4151,7 +4151,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingStmtSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4220,7 +4220,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4232,7 +4232,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4241,7 +4241,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4310,7 +4310,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4322,7 +4322,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// This token should always have `presence = .missing`.
   public var placeholder: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MissingTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4331,7 +4331,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MissingTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4423,7 +4423,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4432,7 +4432,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var label: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4441,7 +4441,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4450,7 +4450,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var colon: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -4459,7 +4459,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var unexpectedBetweenColonAndClosure: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -4468,7 +4468,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var closure: ClosureExprSyntax {
     get {
-      return ClosureExprSyntax(data.child(at: 5, parent: Syntax(self))!)
+      return ClosureExprSyntax(data.child(at: 5)!)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 5, with: value.data, arena: SyntaxArena()))
@@ -4477,7 +4477,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
   
   public var unexpectedAfterClosure: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 6, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 6).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = MultipleTrailingClosureElementSyntax(data.replacingChild(at: 6, with: value?.data, arena: SyntaxArena()))
@@ -4567,7 +4567,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = NamedOpaqueReturnTypeSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4577,7 +4577,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   /// The parameter clause that defines the generic parameters.
   public var genericParameterClause: GenericParameterClauseSyntax {
     get {
-      return GenericParameterClauseSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return GenericParameterClauseSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = NamedOpaqueReturnTypeSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4586,7 +4586,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBetweenGenericParameterClauseAndType: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = NamedOpaqueReturnTypeSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
@@ -4595,7 +4595,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var type: TypeSyntax {
     get {
-      return TypeSyntax(data.child(at: 3, parent: Syntax(self))!)
+      return TypeSyntax(data.child(at: 3)!)
     }
     set(value) {
       self = NamedOpaqueReturnTypeSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
@@ -4604,7 +4604,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterType: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 4, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = NamedOpaqueReturnTypeSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
@@ -4676,7 +4676,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedBeforeNilKeyword: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 0, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = NilLiteralExprSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
@@ -4685,7 +4685,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var nilKeyword: TokenSyntax {
     get {
-      return TokenSyntax(data.child(at: 1, parent: Syntax(self))!)
+      return TokenSyntax(data.child(at: 1)!)
     }
     set(value) {
       self = NilLiteralExprSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
@@ -4694,7 +4694,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public var unexpectedAfterNilKeyword: UnexpectedNodesSyntax? {
     get {
-      return data.child(at: 2, parent: Syntax(self)).map(UnexpectedNodesSyntax.init)
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
     }
     set(value) {
       self = NilLiteralExprSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))

@@ -127,7 +127,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
-            return Syntax(visitChildren(node)).cast(\(node.kind.syntaxType).self)
+            return visitChildren(node)
           }
           """
         )

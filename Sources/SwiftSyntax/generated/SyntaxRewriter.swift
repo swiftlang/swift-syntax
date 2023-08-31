@@ -84,14 +84,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorBlockSyntax) -> AccessorBlockSyntax {
-    return Syntax(visitChildren(node)).cast(AccessorBlockSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AccessorDeclListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorDeclListSyntax) -> AccessorDeclListSyntax {
-    return Syntax(visitChildren(node)).cast(AccessorDeclListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AccessorDeclSyntax``.
@@ -105,14 +105,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorEffectSpecifiersSyntax) -> AccessorEffectSpecifiersSyntax {
-    return Syntax(visitChildren(node)).cast(AccessorEffectSpecifiersSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AccessorParametersSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AccessorParametersSyntax) -> AccessorParametersSyntax {
-    return Syntax(visitChildren(node)).cast(AccessorParametersSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ActorDeclSyntax``.
@@ -126,14 +126,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayElementListSyntax) -> ArrayElementListSyntax {
-    return Syntax(visitChildren(node)).cast(ArrayElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ArrayElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ArrayElementSyntax) -> ArrayElementSyntax {
-    return Syntax(visitChildren(node)).cast(ArrayElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ArrayExprSyntax``.
@@ -182,14 +182,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
-    return Syntax(visitChildren(node)).cast(AttributeListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AttributeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AttributeSyntax) -> AttributeSyntax {
-    return Syntax(visitChildren(node)).cast(AttributeSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AttributedTypeSyntax``.
@@ -203,28 +203,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityArgumentListSyntax) -> AvailabilityArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(AvailabilityArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AvailabilityArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityArgumentSyntax) -> AvailabilityArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(AvailabilityArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AvailabilityConditionSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityConditionSyntax) -> AvailabilityConditionSyntax {
-    return Syntax(visitChildren(node)).cast(AvailabilityConditionSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AvailabilityLabeledArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(AvailabilityLabeledArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``AwaitExprSyntax``.
@@ -238,7 +238,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: BackDeployedAttributeArgumentsSyntax) -> BackDeployedAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(BackDeployedAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``BinaryOperatorExprSyntax``.
@@ -287,28 +287,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchClauseListSyntax) -> CatchClauseListSyntax {
-    return Syntax(visitChildren(node)).cast(CatchClauseListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CatchClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchClauseSyntax) -> CatchClauseSyntax {
-    return Syntax(visitChildren(node)).cast(CatchClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CatchItemListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchItemListSyntax) -> CatchItemListSyntax {
-    return Syntax(visitChildren(node)).cast(CatchItemListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CatchItemSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchItemSyntax) -> CatchItemSyntax {
-    return Syntax(visitChildren(node)).cast(CatchItemSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClassDeclSyntax``.
@@ -329,28 +329,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureClauseSyntax) -> ClosureCaptureClauseSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureCaptureClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureCaptureListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureListSyntax) -> ClosureCaptureListSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureCaptureListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureCaptureSpecifierSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureSpecifierSyntax) -> ClosureCaptureSpecifierSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureCaptureSpecifierSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureCaptureSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureCaptureSyntax) -> ClosureCaptureSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureCaptureSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureExprSyntax``.
@@ -364,77 +364,77 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureParameterClauseSyntax) -> ClosureParameterClauseSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureParameterClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureParameterListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureParameterListSyntax) -> ClosureParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureParameterListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureParameterSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureParameterSyntax) -> ClosureParameterSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureParameterSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureShorthandParameterListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureShorthandParameterListSyntax) -> ClosureShorthandParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureShorthandParameterListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureShorthandParameterSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureShorthandParameterSyntax) -> ClosureShorthandParameterSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureShorthandParameterSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ClosureSignatureSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
-    return Syntax(visitChildren(node)).cast(ClosureSignatureSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CodeBlockItemListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
-    return Syntax(visitChildren(node)).cast(CodeBlockItemListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CodeBlockItemSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockItemSyntax) -> CodeBlockItemSyntax {
-    return Syntax(visitChildren(node)).cast(CodeBlockItemSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CodeBlockSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CodeBlockSyntax) -> CodeBlockSyntax {
-    return Syntax(visitChildren(node)).cast(CodeBlockSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CompositionTypeElementListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CompositionTypeElementListSyntax) -> CompositionTypeElementListSyntax {
-    return Syntax(visitChildren(node)).cast(CompositionTypeElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CompositionTypeElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: CompositionTypeElementSyntax) -> CompositionTypeElementSyntax {
-    return Syntax(visitChildren(node)).cast(CompositionTypeElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CompositionTypeSyntax``.
@@ -448,21 +448,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConditionElementListSyntax) -> ConditionElementListSyntax {
-    return Syntax(visitChildren(node)).cast(ConditionElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ConditionElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConditionElementSyntax) -> ConditionElementSyntax {
-    return Syntax(visitChildren(node)).cast(ConditionElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ConformanceRequirementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConformanceRequirementSyntax) -> ConformanceRequirementSyntax {
-    return Syntax(visitChildren(node)).cast(ConformanceRequirementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ConsumeExprSyntax``.
@@ -483,14 +483,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConventionAttributeArgumentsSyntax) -> ConventionAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(ConventionAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ConventionWitnessMethodAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``CopyExprSyntax``.
@@ -504,42 +504,42 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclModifierDetailSyntax) -> DeclModifierDetailSyntax {
-    return Syntax(visitChildren(node)).cast(DeclModifierDetailSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclModifierListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclModifierListSyntax) -> DeclModifierListSyntax {
-    return Syntax(visitChildren(node)).cast(DeclModifierListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclModifierSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclModifierSyntax) -> DeclModifierSyntax {
-    return Syntax(visitChildren(node)).cast(DeclModifierSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclNameArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentListSyntax) -> DeclNameArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(DeclNameArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclNameArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentSyntax) -> DeclNameArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(DeclNameArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclNameArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeclNameArgumentsSyntax) -> DeclNameArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(DeclNameArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DeclReferenceExprSyntax``.
@@ -567,42 +567,42 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DeinitializerEffectSpecifiersSyntax) -> DeinitializerEffectSpecifiersSyntax {
-    return Syntax(visitChildren(node)).cast(DeinitializerEffectSpecifiersSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DerivativeAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DerivativeAttributeArgumentsSyntax) -> DerivativeAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(DerivativeAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DesignatedTypeListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DesignatedTypeListSyntax) -> DesignatedTypeListSyntax {
-    return Syntax(visitChildren(node)).cast(DesignatedTypeListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DesignatedTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DesignatedTypeSyntax) -> DesignatedTypeSyntax {
-    return Syntax(visitChildren(node)).cast(DesignatedTypeSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DictionaryElementListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryElementListSyntax) -> DictionaryElementListSyntax {
-    return Syntax(visitChildren(node)).cast(DictionaryElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DictionaryElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DictionaryElementSyntax) -> DictionaryElementSyntax {
-    return Syntax(visitChildren(node)).cast(DictionaryElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DictionaryExprSyntax``.
@@ -623,35 +623,35 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiabilityArgumentListSyntax) -> DifferentiabilityArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiabilityArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DifferentiabilityArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiabilityArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DifferentiabilityArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiabilityArgumentsSyntax) -> DifferentiabilityArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiabilityArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DifferentiabilityWithRespectToArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> DifferentiabilityWithRespectToArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiabilityWithRespectToArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DifferentiableAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DifferentiableAttributeArgumentsSyntax) -> DifferentiableAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(DifferentiableAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DiscardAssignmentExprSyntax``.
@@ -679,21 +679,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DocumentationAttributeArgumentListSyntax) -> DocumentationAttributeArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(DocumentationAttributeArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DocumentationAttributeArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DocumentationAttributeArgumentSyntax) -> DocumentationAttributeArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(DocumentationAttributeArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``DynamicReplacementAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: DynamicReplacementAttributeArgumentsSyntax) -> DynamicReplacementAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(DynamicReplacementAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EditorPlaceholderDeclSyntax``.
@@ -714,7 +714,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EffectsAttributeArgumentListSyntax) -> EffectsAttributeArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(EffectsAttributeArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumCaseDeclSyntax``.
@@ -728,35 +728,35 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseElementListSyntax) -> EnumCaseElementListSyntax {
-    return Syntax(visitChildren(node)).cast(EnumCaseElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumCaseElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseElementSyntax) -> EnumCaseElementSyntax {
-    return Syntax(visitChildren(node)).cast(EnumCaseElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumCaseParameterClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseParameterClauseSyntax) -> EnumCaseParameterClauseSyntax {
-    return Syntax(visitChildren(node)).cast(EnumCaseParameterClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumCaseParameterListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseParameterListSyntax) -> EnumCaseParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(EnumCaseParameterListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumCaseParameterSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumCaseParameterSyntax) -> EnumCaseParameterSyntax {
-    return Syntax(visitChildren(node)).cast(EnumCaseParameterSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``EnumDeclSyntax``.
@@ -770,14 +770,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExposeAttributeArgumentsSyntax) -> ExposeAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(ExposeAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ExprListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExprListSyntax) -> ExprListSyntax {
-    return Syntax(visitChildren(node)).cast(ExprListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ExpressionPatternSyntax``.
@@ -791,7 +791,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ExpressionSegmentSyntax) -> ExpressionSegmentSyntax {
-    return Syntax(visitChildren(node)).cast(ExpressionSegmentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ExpressionStmtSyntax``.
@@ -854,35 +854,35 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionEffectSpecifiersSyntax) -> FunctionEffectSpecifiersSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionEffectSpecifiersSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``FunctionParameterClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionParameterClauseSyntax) -> FunctionParameterClauseSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionParameterClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``FunctionParameterListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionParameterListSyntax) -> FunctionParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionParameterListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``FunctionParameterSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionParameterSyntax) -> FunctionParameterSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionParameterSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``FunctionSignatureSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: FunctionSignatureSyntax) -> FunctionSignatureSyntax {
-    return Syntax(visitChildren(node)).cast(FunctionSignatureSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``FunctionTypeSyntax``.
@@ -896,56 +896,56 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentClauseSyntax) -> GenericArgumentClauseSyntax {
-    return Syntax(visitChildren(node)).cast(GenericArgumentClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentListSyntax) -> GenericArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(GenericArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericArgumentSyntax) -> GenericArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(GenericArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericParameterClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterClauseSyntax) -> GenericParameterClauseSyntax {
-    return Syntax(visitChildren(node)).cast(GenericParameterClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericParameterListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterListSyntax) -> GenericParameterListSyntax {
-    return Syntax(visitChildren(node)).cast(GenericParameterListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericParameterSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericParameterSyntax) -> GenericParameterSyntax {
-    return Syntax(visitChildren(node)).cast(GenericParameterSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericRequirementListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericRequirementListSyntax) -> GenericRequirementListSyntax {
-    return Syntax(visitChildren(node)).cast(GenericRequirementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericRequirementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericRequirementSyntax) -> GenericRequirementSyntax {
-    return Syntax(visitChildren(node)).cast(GenericRequirementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GenericSpecializationExprSyntax``.
@@ -959,7 +959,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: GenericWhereClauseSyntax) -> GenericWhereClauseSyntax {
-    return Syntax(visitChildren(node)).cast(GenericWhereClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``GuardStmtSyntax``.
@@ -987,14 +987,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfConfigClauseListSyntax) -> IfConfigClauseListSyntax {
-    return Syntax(visitChildren(node)).cast(IfConfigClauseListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``IfConfigClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: IfConfigClauseSyntax) -> IfConfigClauseSyntax {
-    return Syntax(visitChildren(node)).cast(IfConfigClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``IfConfigDeclSyntax``.
@@ -1015,7 +1015,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImplementsAttributeArgumentsSyntax) -> ImplementsAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(ImplementsAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ImplicitlyUnwrappedOptionalTypeSyntax``.
@@ -1036,14 +1036,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImportPathComponentListSyntax) -> ImportPathComponentListSyntax {
-    return Syntax(visitChildren(node)).cast(ImportPathComponentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ImportPathComponentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ImportPathComponentSyntax) -> ImportPathComponentSyntax {
-    return Syntax(visitChildren(node)).cast(ImportPathComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``InOutExprSyntax``.
@@ -1064,28 +1064,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InheritanceClauseSyntax) -> InheritanceClauseSyntax {
-    return Syntax(visitChildren(node)).cast(InheritanceClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``InheritedTypeListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InheritedTypeListSyntax) -> InheritedTypeListSyntax {
-    return Syntax(visitChildren(node)).cast(InheritedTypeListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``InheritedTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InheritedTypeSyntax) -> InheritedTypeSyntax {
-    return Syntax(visitChildren(node)).cast(InheritedTypeSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``InitializerClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: InitializerClauseSyntax) -> InitializerClauseSyntax {
-    return Syntax(visitChildren(node)).cast(InitializerClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``InitializerDeclSyntax``.
@@ -1120,14 +1120,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathComponentListSyntax) -> KeyPathComponentListSyntax {
-    return Syntax(visitChildren(node)).cast(KeyPathComponentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``KeyPathComponentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathComponentSyntax) -> KeyPathComponentSyntax {
-    return Syntax(visitChildren(node)).cast(KeyPathComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``KeyPathExprSyntax``.
@@ -1141,42 +1141,42 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathOptionalComponentSyntax) -> KeyPathOptionalComponentSyntax {
-    return Syntax(visitChildren(node)).cast(KeyPathOptionalComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``KeyPathPropertyComponentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathPropertyComponentSyntax) -> KeyPathPropertyComponentSyntax {
-    return Syntax(visitChildren(node)).cast(KeyPathPropertyComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``KeyPathSubscriptComponentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: KeyPathSubscriptComponentSyntax) -> KeyPathSubscriptComponentSyntax {
-    return Syntax(visitChildren(node)).cast(KeyPathSubscriptComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``LabeledExprListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: LabeledExprListSyntax) -> LabeledExprListSyntax {
-    return Syntax(visitChildren(node)).cast(LabeledExprListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``LabeledExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: LabeledExprSyntax) -> LabeledExprSyntax {
-    return Syntax(visitChildren(node)).cast(LabeledExprSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``LabeledSpecializeArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: LabeledSpecializeArgumentSyntax) -> LabeledSpecializeArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(LabeledSpecializeArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``LabeledStmtSyntax``.
@@ -1190,7 +1190,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: LayoutRequirementSyntax) -> LayoutRequirementSyntax {
-    return Syntax(visitChildren(node)).cast(LayoutRequirementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MacroDeclSyntax``.
@@ -1218,7 +1218,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MatchingPatternConditionSyntax) -> MatchingPatternConditionSyntax {
-    return Syntax(visitChildren(node)).cast(MatchingPatternConditionSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MemberAccessExprSyntax``.
@@ -1232,21 +1232,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberBlockItemListSyntax) -> MemberBlockItemListSyntax {
-    return Syntax(visitChildren(node)).cast(MemberBlockItemListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MemberBlockItemSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberBlockItemSyntax) -> MemberBlockItemSyntax {
-    return Syntax(visitChildren(node)).cast(MemberBlockItemSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MemberBlockSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
-    return Syntax(visitChildren(node)).cast(MemberBlockSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MemberTypeSyntax``.
@@ -1309,14 +1309,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> MultipleTrailingClosureElementListSyntax {
-    return Syntax(visitChildren(node)).cast(MultipleTrailingClosureElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``MultipleTrailingClosureElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: MultipleTrailingClosureElementSyntax) -> MultipleTrailingClosureElementSyntax {
-    return Syntax(visitChildren(node)).cast(MultipleTrailingClosureElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``NamedOpaqueReturnTypeSyntax``.
@@ -1337,21 +1337,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjCSelectorPieceListSyntax) -> ObjCSelectorPieceListSyntax {
-    return Syntax(visitChildren(node)).cast(ObjCSelectorPieceListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ObjCSelectorPieceSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ObjCSelectorPieceSyntax) -> ObjCSelectorPieceSyntax {
-    return Syntax(visitChildren(node)).cast(ObjCSelectorPieceSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(OpaqueReturnTypeOfAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``OperatorDeclSyntax``.
@@ -1365,14 +1365,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OperatorPrecedenceAndTypesSyntax) -> OperatorPrecedenceAndTypesSyntax {
-    return Syntax(visitChildren(node)).cast(OperatorPrecedenceAndTypesSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``OptionalBindingConditionSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OptionalBindingConditionSyntax) -> OptionalBindingConditionSyntax {
-    return Syntax(visitChildren(node)).cast(OptionalBindingConditionSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``OptionalChainingExprSyntax``.
@@ -1393,7 +1393,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> OriginallyDefinedInAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(OriginallyDefinedInAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PackElementExprSyntax``.
@@ -1428,14 +1428,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PatternBindingListSyntax) -> PatternBindingListSyntax {
-    return Syntax(visitChildren(node)).cast(PatternBindingListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PatternBindingSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PatternBindingSyntax) -> PatternBindingSyntax {
-    return Syntax(visitChildren(node)).cast(PatternBindingSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PatternExprSyntax``.
@@ -1449,21 +1449,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PlatformVersionItemListSyntax) -> PlatformVersionItemListSyntax {
-    return Syntax(visitChildren(node)).cast(PlatformVersionItemListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PlatformVersionItemSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PlatformVersionItemSyntax) -> PlatformVersionItemSyntax {
-    return Syntax(visitChildren(node)).cast(PlatformVersionItemSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PlatformVersionSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PlatformVersionSyntax) -> PlatformVersionSyntax {
-    return Syntax(visitChildren(node)).cast(PlatformVersionSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PostfixIfConfigExprSyntax``.
@@ -1484,7 +1484,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PoundSourceLocationArgumentsSyntax) -> PoundSourceLocationArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(PoundSourceLocationArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PoundSourceLocationSyntax``.
@@ -1498,21 +1498,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAssignmentSyntax) -> PrecedenceGroupAssignmentSyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupAssignmentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrecedenceGroupAssociativitySyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAssociativitySyntax) -> PrecedenceGroupAssociativitySyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupAssociativitySyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrecedenceGroupAttributeListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupAttributeListSyntax) -> PrecedenceGroupAttributeListSyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupAttributeListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrecedenceGroupDeclSyntax``.
@@ -1526,21 +1526,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupNameListSyntax) -> PrecedenceGroupNameListSyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupNameListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrecedenceGroupNameSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupNameSyntax) -> PrecedenceGroupNameSyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupNameSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrecedenceGroupRelationSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrecedenceGroupRelationSyntax) -> PrecedenceGroupRelationSyntax {
-    return Syntax(visitChildren(node)).cast(PrecedenceGroupRelationSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrefixOperatorExprSyntax``.
@@ -1554,21 +1554,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrimaryAssociatedTypeClauseSyntax) -> PrimaryAssociatedTypeClauseSyntax {
-    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrimaryAssociatedTypeListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrimaryAssociatedTypeListSyntax) -> PrimaryAssociatedTypeListSyntax {
-    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``PrimaryAssociatedTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeSyntax {
-    return Syntax(visitChildren(node)).cast(PrimaryAssociatedTypeSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ProtocolDeclSyntax``.
@@ -1596,7 +1596,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: ReturnClauseSyntax) -> ReturnClauseSyntax {
-    return Syntax(visitChildren(node)).cast(ReturnClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``ReturnStmtSyntax``.
@@ -1610,7 +1610,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SameTypeRequirementSyntax) -> SameTypeRequirementSyntax {
-    return Syntax(visitChildren(node)).cast(SameTypeRequirementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SequenceExprSyntax``.
@@ -1631,7 +1631,7 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SimpleStringLiteralSegmentListSyntax) -> SimpleStringLiteralSegmentListSyntax {
-    return Syntax(visitChildren(node)).cast(SimpleStringLiteralSegmentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SomeOrAnyTypeSyntax``.
@@ -1645,28 +1645,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SourceFileSyntax) -> SourceFileSyntax {
-    return Syntax(visitChildren(node)).cast(SourceFileSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SpecializeAttributeArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SpecializeAttributeArgumentListSyntax) -> SpecializeAttributeArgumentListSyntax {
-    return Syntax(visitChildren(node)).cast(SpecializeAttributeArgumentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SpecializeAvailabilityArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SpecializeAvailabilityArgumentSyntax) -> SpecializeAvailabilityArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(SpecializeAvailabilityArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SpecializeTargetFunctionArgumentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SpecializeTargetFunctionArgumentSyntax) -> SpecializeTargetFunctionArgumentSyntax {
-    return Syntax(visitChildren(node)).cast(SpecializeTargetFunctionArgumentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``StringLiteralExprSyntax``.
@@ -1680,14 +1680,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StringLiteralSegmentListSyntax) -> StringLiteralSegmentListSyntax {
-    return Syntax(visitChildren(node)).cast(StringLiteralSegmentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``StringSegmentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: StringSegmentSyntax) -> StringSegmentSyntax {
-    return Syntax(visitChildren(node)).cast(StringSegmentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``StructDeclSyntax``.
@@ -1729,42 +1729,42 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseItemListSyntax) -> SwitchCaseItemListSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseItemListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchCaseItemSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseItemSyntax) -> SwitchCaseItemSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseItemSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchCaseLabelSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseLabelSyntax) -> SwitchCaseLabelSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseLabelSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchCaseListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchCaseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchCaseSyntax) -> SwitchCaseSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchCaseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchDefaultLabelSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: SwitchDefaultLabelSyntax) -> SwitchDefaultLabelSyntax {
-    return Syntax(visitChildren(node)).cast(SwitchDefaultLabelSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``SwitchExprSyntax``.
@@ -1806,14 +1806,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TuplePatternElementListSyntax) -> TuplePatternElementListSyntax {
-    return Syntax(visitChildren(node)).cast(TuplePatternElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TuplePatternElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TuplePatternElementSyntax) -> TuplePatternElementSyntax {
-    return Syntax(visitChildren(node)).cast(TuplePatternElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TuplePatternSyntax``.
@@ -1827,14 +1827,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleTypeElementListSyntax) -> TupleTypeElementListSyntax {
-    return Syntax(visitChildren(node)).cast(TupleTypeElementListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TupleTypeElementSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TupleTypeElementSyntax) -> TupleTypeElementSyntax {
-    return Syntax(visitChildren(node)).cast(TupleTypeElementSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TupleTypeSyntax``.
@@ -1855,14 +1855,14 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeAnnotationSyntax) -> TypeAnnotationSyntax {
-    return Syntax(visitChildren(node)).cast(TypeAnnotationSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TypeEffectSpecifiersSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeEffectSpecifiersSyntax) -> TypeEffectSpecifiersSyntax {
-    return Syntax(visitChildren(node)).cast(TypeEffectSpecifiersSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``TypeExprSyntax``.
@@ -1876,28 +1876,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
-    return Syntax(visitChildren(node)).cast(TypeInitializerClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``UnavailableFromAsyncAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> UnavailableFromAsyncAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(UnavailableFromAsyncAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``UnderscorePrivateAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
-    return Syntax(visitChildren(node)).cast(UnderscorePrivateAttributeArgumentsSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``UnexpectedNodesSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
-    return Syntax(visitChildren(node)).cast(UnexpectedNodesSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``UnresolvedAsExprSyntax``.
@@ -1939,28 +1939,28 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: VersionComponentListSyntax) -> VersionComponentListSyntax {
-    return Syntax(visitChildren(node)).cast(VersionComponentListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``VersionComponentSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: VersionComponentSyntax) -> VersionComponentSyntax {
-    return Syntax(visitChildren(node)).cast(VersionComponentSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``VersionTupleSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: VersionTupleSyntax) -> VersionTupleSyntax {
-    return Syntax(visitChildren(node)).cast(VersionTupleSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``WhereClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: WhereClauseSyntax) -> WhereClauseSyntax {
-    return Syntax(visitChildren(node)).cast(WhereClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``WhileStmtSyntax``.
@@ -1988,21 +1988,21 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldedExpressionListSyntax) -> YieldedExpressionListSyntax {
-    return Syntax(visitChildren(node)).cast(YieldedExpressionListSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``YieldedExpressionSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldedExpressionSyntax) -> YieldedExpressionSyntax {
-    return Syntax(visitChildren(node)).cast(YieldedExpressionSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit a ``YieldedExpressionsClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldedExpressionsClauseSyntax) -> YieldedExpressionsClauseSyntax {
-    return Syntax(visitChildren(node)).cast(YieldedExpressionsClauseSyntax.self)
+    return visitChildren(node)
   }
   
   /// Visit any DeclSyntax node.

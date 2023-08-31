@@ -125,4 +125,12 @@ public class SyntaxTests: XCTestCase {
     XCTAssertEqual(funcKW.endPosition, AbsolutePosition(utf8Offset: 7))
     XCTAssertEqual(funcKW.trimmedLength, SourceLength(utf8Length: 4))
   }
+
+  public func testEnumCaseParameterSyntaxConvenienceInit() {
+    let noFirstName = EnumCaseParameterSyntax(type: TypeSyntax("MyType"))
+    XCTAssertEqual(noFirstName.formatted().description, "MyType")
+
+    let node = EnumCaseParameterSyntax(firstName: "label", type: TypeSyntax("MyType"))
+    XCTAssertEqual(node.formatted().description, "label: MyType")
+  }
 }

@@ -10,6 +10,37 @@
 //
 //===----------------------------------------------------------------------===//
 
+extension EnumCaseParameterSyntax {
+
+  /// Creates an `EnumCaseParameterSyntax` with a `firstName`, and automatically adds a `colon` to it.
+  ///
+  ///  - SeeAlso: For more information on the arguments, see ``EnumCaseParameterSyntax/init(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultArgument:_:trailingComma:_:trailingTrivia:)``
+  ///
+  public init(
+    leadingTrivia: Trivia? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    firstName: TokenSyntax,
+    secondName: TokenSyntax? = nil,
+    colon: TokenSyntax = TokenSyntax.colonToken(),
+    type: some TypeSyntaxProtocol,
+    defaultValue: InitializerClauseSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      modifiers: modifiers,
+      firstName: firstName as TokenSyntax?,
+      secondName: secondName,
+      colon: colon,
+      type: type,
+      defaultValue: defaultValue,
+      trailingComma: trailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension MemberAccessExprSyntax {
   /// Creates a new ``MemberAccessExprSyntax`` where the accessed member is represented by
   /// an identifier without specifying argument labels.
@@ -45,3 +76,8 @@ extension MemberAccessExprSyntax {
     )
   }
 }
+
+//==========================================================================//
+// IMPORTANT: If you are tempted to add an extension here, please insert    //
+// it in alphabetical order above                                           //
+//==========================================================================//

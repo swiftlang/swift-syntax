@@ -110,10 +110,6 @@ function(add_swift_syntax_library name)
       # Allow install_name_tool to update paths (for rdar://109473564)
       set_property(TARGET ${name} APPEND_STRING PROPERTY
                    LINK_FLAGS " -Xlinker -headerpad_max_install_names")
-    elseif (CMAKE_SYSTEM_NAME STREQUAL Linux)
-      # Make some room to update paths.
-      set_property(TARGET ${name} APPEND PROPERTY
-                   INSTALL_RPATH ":::::::::::::::::::::::::::::::::::::::::::::::::::::::")
     endif()
   endif()
 

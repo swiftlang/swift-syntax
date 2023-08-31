@@ -113,27 +113,108 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    try FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
-      try SwitchExprSyntax("switch data.raw.kind") {
-        SwitchCaseSyntax("case .token:") {
-          DeclSyntax("let node = TokenSyntax(data)")
+    try IfConfigDeclSyntax(
+      leadingTrivia:
+        """
+        // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
+        // visitation. In scenarios with reduced stack space (in particular dispatch
+        // queues), this easily results in a stack overflow. To work around this issue,
+        // use a less performant but also less stack-hungry version of SwiftSyntax's
+        // SyntaxVisitor in debug builds.
 
-          ExprSyntax("_ = visit(node)")
-          ExprSyntax(
-            """
-            // No children to visit.
-            visitPost(node)
-            """
+        """,
+      clauses: IfConfigClauseListSyntax {
+        IfConfigClauseSyntax(
+          poundKeyword: .poundIfToken(),
+          condition: ExprSyntax("DEBUG"),
+          elements: .statements(
+            try CodeBlockItemListSyntax {
+              try FunctionDeclSyntax(
+                """
+                /// Implementation detail of visit(_:). Do not call directly.
+                ///
+                /// Returns the function that shall be called to visit a specific syntax node.
+                ///
+                /// To determine the correct specific visitation function for a syntax node,
+                /// we need to switch through a huge switch statement that covers all syntax
+                /// types. In debug builds, the cases of this switch statement do not share
+                /// stack space (rdar://55929175). Because of this, the switch statement
+                /// requires about 15KB of stack space. In scenarios with reduced
+                /// stack size (in particular dispatch queues), this often results in a stack
+                /// overflow during syntax tree rewriting.
+                ///
+                /// To circumvent this problem, make calling the specific visitation function
+                /// a two-step process: First determine the function to call in this function
+                /// and return a reference to it, then call it. This way, the stack frame
+                /// that determines the correct visitation function will be popped of the
+                /// stack before the function is being called, making the switch's stack
+                /// space transient instead of having it linger in the call stack.
+                private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Void)
+                """
+              ) {
+                try SwitchExprSyntax("switch data.raw.kind") {
+                  SwitchCaseSyntax("case .token:") {
+                    StmtSyntax(
+                      """
+                      return {
+                        let node = TokenSyntax($0)
+                        _ = self.visit(node)
+                        // No children to visit.
+                        self.visitPost(node)
+                      }
+                      """
+                    )
+                  }
+
+                  for node in NON_BASE_SYNTAX_NODES {
+                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                      StmtSyntax("return { self.visitImpl($0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }")
+                    }
+                  }
+                }
+              }
+
+              DeclSyntax(
+                """
+                private func visit(_ data: SyntaxData) {
+                  return visitationFunc(for: data)(data)
+                }
+                """
+              )
+            }
           )
-        }
+        )
+        IfConfigClauseSyntax(
+          poundKeyword: .poundElseToken(),
+          elements: .statements(
+            CodeBlockItemListSyntax {
+              try! FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
+                try SwitchExprSyntax("switch data.raw.kind") {
+                  SwitchCaseSyntax("case .token:") {
+                    DeclSyntax("let node = TokenSyntax(data)")
 
-        for node in NON_BASE_SYNTAX_NODES {
-          SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-            ExprSyntax("visitImpl(data, \(node.kind.syntaxType).self, visit, visitPost)")
-          }
-        }
+                    ExprSyntax("_ = visit(node)")
+                    ExprSyntax(
+                      """
+                      // No children to visit.
+                      visitPost(node)
+                      """
+                    )
+                  }
+
+                  for node in NON_BASE_SYNTAX_NODES {
+                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                      ExprSyntax("visitImpl(data, \(node.kind.syntaxType).self, visit, visitPost)")
+                    }
+                  }
+                }
+              }
+
+            }
+          )
+        )
       }
-    }
+    )
 
     DeclSyntax(
       """

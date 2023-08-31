@@ -9,10 +9,16 @@
 UserInterfaceState.xcuserstate
 xcuserdata/
 
+# Ignore VScode workspace settings and launch configurations
+.vscode
+
 # Ignore bazel symlinks
 /bazel-*
 
-# We always build swiftSyntax of trunk dependencies. Ignore any fixed 
+# Ignore cmake build configuration and output
+build/
+
+# We always build swiftSyntax of trunk dependencies. Ignore any fixed
 # dependency versions.
 Package.resolved
 

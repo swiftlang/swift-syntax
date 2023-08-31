@@ -12,7 +12,7 @@
 
 extension ClosureCaptureSyntax {
 
-  /// Creates a `ClosureCaptureSyntax` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
+  /// Creates a ``ClosureCaptureSyntax`` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
   ///
   /// - SeeAlso: ``ClosureCaptureSyntax/init(leadingTrivia:_:specifier:_:name:_:equal:_:expression:_:trailingComma:_:trailingTrivia:)``.
   ///
@@ -39,7 +39,7 @@ extension ClosureCaptureSyntax {
 
 extension EnumCaseParameterSyntax {
 
-  /// Creates an `EnumCaseParameterSyntax` with a `firstName`, and automatically adds a `colon` to it.
+  /// Creates an ``EnumCaseParameterSyntax`` with a `firstName`, and automatically adds a `colon` to it.
   ///
   ///  - SeeAlso: For more information on the arguments, see ``EnumCaseParameterSyntax/init(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultArgument:_:trailingComma:_:trailingTrivia:)``
   ///

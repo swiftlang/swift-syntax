@@ -116,10 +116,6 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
     
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
-    }
-    
     public init(_ node: AttributeSyntax) {
       self = .attribute(node)
     }
@@ -960,10 +956,6 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       }
     }
     
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
-    }
-    
     public init(_ node: PrecedenceGroupRelationSyntax) {
       self = .precedenceGroupRelation(node)
     }
@@ -1109,10 +1101,6 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
       }
     }
     
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
-    }
-    
     public init(_ node: LabeledSpecializeArgumentSyntax) {
       self = .labeledSpecializeArgument(node)
     }
@@ -1190,10 +1178,6 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       case .expressionSegment(let node):
         return node._syntaxNode
       }
-    }
-    
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
     }
     
     public init(_ node: StringSegmentSyntax) {
@@ -1277,10 +1261,6 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       case .ifConfigDecl(let node):
         return node._syntaxNode
       }
-    }
-    
-    init(_ data: SyntaxData) {
-      self.init(Syntax(data))!
     }
     
     public init(_ node: SwitchCaseSyntax) {

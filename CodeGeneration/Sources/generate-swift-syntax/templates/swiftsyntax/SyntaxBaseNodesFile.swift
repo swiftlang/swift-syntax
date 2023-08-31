@@ -184,7 +184,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
-          self.init(syntax._syntaxNode.data)
+          self = syntax.cast(Self.self)
         }
         """
       )
@@ -205,7 +205,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
-          self.init(syntax._syntaxNode.data)
+          self = syntax.cast(Self.self)
         }
         """
       )
@@ -244,42 +244,6 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
         }
-      }
-
-      try InitializerDeclSyntax(
-        """
-        /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``.
-        ///
-        ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-        ///    If it is not, the behaviour is undefined.
-        internal init(_ data: SyntaxData)
-        """
-      ) {
-        CodeBlockItemListSyntax {
-          try! SwitchExprSyntax("switch data.raw.kind") {
-            SwitchCaseSyntax(
-              label: .case(
-                SwitchCaseLabelSyntax {
-                  for childNode in SYNTAX_NODES where childNode.base == node.kind {
-                    SwitchCaseItemSyntax(
-                      pattern: ExpressionPatternSyntax(
-                        expression: ExprSyntax(".\(childNode.varOrCaseName)")
-                      )
-                    )
-                  }
-                }
-              )
-            ) {
-              BreakStmtSyntax()
-            }
-
-            SwitchCaseSyntax("default:") {
-              ExprSyntax("preconditionFailure(\"Unable to create \(node.kind.syntaxType) from \\(data.raw.kind)\")")
-            }
-          }
-        }
-
-        ExprSyntax("self._syntaxNode = Syntax(data)")
       }
 
       DeclSyntax(

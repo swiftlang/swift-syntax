@@ -33,14 +33,9 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 // MARK: Access underlying data
 
 extension SyntaxProtocol {
-  var data: SyntaxData {
-    return _syntaxNode.data
-  }
-
-  /// Access the raw syntax assuming the node is a Syntax.
   @_spi(RawSyntax)
   public var raw: RawSyntax {
-    return _syntaxNode.data.raw
+    return _syntaxNode.raw
   }
 }
 
@@ -207,12 +202,12 @@ public extension SyntaxProtocol {
 
   /// The index of this node in a ``SyntaxChildren`` collection.
   internal var indexInParent: SyntaxChildrenIndex {
-    return SyntaxChildrenIndex(self.data.absoluteInfo)
+    return SyntaxChildrenIndex(Syntax(self).absoluteInfo)
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.
   var parent: Syntax? {
-    return data.parent.map(Syntax.init(_:))
+    return Syntax(self).parent
   }
 
   /// The root of the tree in which this node resides.
@@ -236,7 +231,7 @@ public extension SyntaxProtocol {
     guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
       return nil
     }
-    return childrenKeyPaths[data.indexInParent]
+    return childrenKeyPaths[Syntax(self).indexInParent]
   }
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
@@ -259,7 +254,7 @@ public extension SyntaxProtocol {
     // In that case `siblings` skips over the missing `self` node and has a `startIndex > 0`.
     if self.indexInParent >= siblings.startIndex {
       for absoluteRaw in siblings[..<self.indexInParent].reversed() {
-        let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
+        let child = Syntax(absoluteRaw, parent: parent)
         if let token = child.lastToken(viewMode: viewMode) {
           return token
         }
@@ -282,7 +277,7 @@ public extension SyntaxProtocol {
     let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
     let nextSiblingIndex = siblings.index(after: self.indexInParent)
     for absoluteRaw in siblings[nextSiblingIndex...] {
-      let child = Syntax(SyntaxData(absoluteRaw, parent: parent))
+      let child = Syntax(absoluteRaw, parent: parent)
       if let token = child.firstToken(viewMode: viewMode) {
         return token
       }
@@ -393,23 +388,23 @@ public extension SyntaxProtocol {
   /// is with leading trivia, the position points to the start of the leading
   /// trivia.
   var position: AbsolutePosition {
-    return data.position
+    return Syntax(self).position
   }
 
   /// The absolute position of the starting point of this node, skipping any
   /// leading trivia attached to the first token syntax.
   var positionAfterSkippingLeadingTrivia: AbsolutePosition {
-    return data.positionAfterSkippingLeadingTrivia
+    return Syntax(self).positionAfterSkippingLeadingTrivia
   }
 
   /// The end position of this node's content, before any trailing trivia.
   var endPositionBeforeTrailingTrivia: AbsolutePosition {
-    return data.endPositionBeforeTrailingTrivia
+    return Syntax(self).endPositionBeforeTrailingTrivia
   }
 
   /// The end position of this node, including its trivia.
   var endPosition: AbsolutePosition {
-    return data.endPosition
+    return Syntax(self).endPosition
   }
 
   /// The length of this node including all of its trivia.
@@ -482,7 +477,7 @@ public extension SyntaxProtocol {
       return raw.formLeadingTrivia()
     }
     set {
-      self = Self(Syntax(data.withLeadingTrivia(newValue, arena: SyntaxArena())))!
+      self = Syntax(self).withLeadingTrivia(newValue, arena: SyntaxArena()).cast(Self.self)
     }
   }
 
@@ -500,7 +495,7 @@ public extension SyntaxProtocol {
       return raw.formTrailingTrivia()
     }
     set {
-      self = Self(Syntax(data.withTrailingTrivia(newValue, arena: SyntaxArena())))!
+      self = Syntax(self).withTrailingTrivia(newValue, arena: SyntaxArena()).cast(Self.self)
     }
   }
 
@@ -526,20 +521,20 @@ public extension SyntaxProtocol {
   /// byte-accurate representation of this node in the presence of
   /// invalid UTF-8.
   var description: String {
-    return data.raw.description
+    return Syntax(self).raw.description
   }
 
   /// Retrieve the syntax text as an array of bytes that models the input
   /// source even in the presence of invalid UTF-8.
   var syntaxTextBytes: [UInt8] {
-    return data.raw.syntaxTextBytes
+    return Syntax(self).raw.syntaxTextBytes
   }
 
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
   func write<Target>(to target: inout Target)
   where Target: TextOutputStream {
-    data.raw.write(to: &target)
+    Syntax(self).raw.write(to: &target)
   }
 
   /// A copy of this node without the leading trivia of the first token in the
@@ -592,7 +587,7 @@ public extension SyntaxProtocol {
 
   /// Returns a value representing the unique identity of the node.
   var id: SyntaxIdentifier {
-    return data.nodeId
+    return Syntax(self).id
   }
 }
 

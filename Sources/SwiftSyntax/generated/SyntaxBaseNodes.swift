@@ -162,7 +162,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
@@ -177,7 +177,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
@@ -195,20 +195,6 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     default:
       return nil
     }
-  }
-  
-  /// Creates a ``DeclSyntax`` node from the given ``SyntaxData``.
-  ///
-  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    switch data.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
-      break
-    default:
-      preconditionFailure("Unable to create DeclSyntax from \(data.raw.kind)")
-    }
-    self._syntaxNode = Syntax(data)
   }
   
   /// Syntax nodes always conform to `DeclSyntaxProtocol`. This API is just
@@ -450,7 +436,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
@@ -465,7 +451,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
@@ -483,20 +469,6 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     default:
       return nil
     }
-  }
-  
-  /// Creates a ``ExprSyntax`` node from the given ``SyntaxData``.
-  ///
-  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    switch data.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
-      break
-    default:
-      preconditionFailure("Unable to create ExprSyntax from \(data.raw.kind)")
-    }
-    self._syntaxNode = Syntax(data)
   }
   
   /// Syntax nodes always conform to `ExprSyntaxProtocol`. This API is just
@@ -766,7 +738,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
@@ -781,7 +753,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
@@ -799,20 +771,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     default:
       return nil
     }
-  }
-  
-  /// Creates a ``PatternSyntax`` node from the given ``SyntaxData``.
-  ///
-  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    switch data.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
-      break
-    default:
-      preconditionFailure("Unable to create PatternSyntax from \(data.raw.kind)")
-    }
-    self._syntaxNode = Syntax(data)
   }
   
   /// Syntax nodes always conform to `PatternSyntaxProtocol`. This API is just
@@ -1037,7 +995,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
@@ -1052,7 +1010,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
@@ -1070,20 +1028,6 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     default:
       return nil
     }
-  }
-  
-  /// Creates a ``StmtSyntax`` node from the given ``SyntaxData``.
-  ///
-  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
-      break
-    default:
-      preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
-    }
-    self._syntaxNode = Syntax(data)
   }
   
   /// Syntax nodes always conform to `StmtSyntaxProtocol`. This API is just
@@ -1318,7 +1262,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
@@ -1333,7 +1277,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self.init(syntax._syntaxNode.data)
+    self = syntax.cast(Self.self)
   }
   
   /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
@@ -1351,20 +1295,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     default:
       return nil
     }
-  }
-  
-  /// Creates a ``TypeSyntax`` node from the given ``SyntaxData``.
-  ///
-  ///  - Warning: This assumes  that the ``SyntaxData`` is of the correct kind.
-  ///    If it is not, the behaviour is undefined.
-  internal init(_ data: SyntaxData) {
-    switch data.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
-      break
-    default:
-      preconditionFailure("Unable to create TypeSyntax from \(data.raw.kind)")
-    }
-    self._syntaxNode = Syntax(data)
   }
   
   /// Syntax nodes always conform to `TypeSyntaxProtocol`. This API is just

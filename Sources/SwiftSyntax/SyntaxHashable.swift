@@ -17,10 +17,10 @@ public protocol SyntaxHashable: Hashable {
 
 public extension SyntaxHashable {
   func hash(into hasher: inout Hasher) {
-    return _syntaxNode.data.nodeId.hash(into: &hasher)
+    return _syntaxNode.id.hash(into: &hasher)
   }
 
   static func == (lhs: Self, rhs: Self) -> Bool {
-    return lhs._syntaxNode.data.nodeId == rhs._syntaxNode.data.nodeId
+    return lhs._syntaxNode.id == rhs._syntaxNode.id
   }
 }

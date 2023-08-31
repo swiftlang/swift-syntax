@@ -275,7 +275,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
   }
 
   init(_ base: Syntax) {
-    self.init(base.data.absoluteRaw)
+    self.init(base.absoluteRaw)
   }
 }
 
@@ -412,7 +412,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
   }
 
   init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
-    self.init(node.data.absoluteRaw, viewMode: viewMode)
+    self.init(node.absoluteRaw, viewMode: viewMode)
   }
 }
 
@@ -450,8 +450,7 @@ public struct SyntaxChildren: BidirectionalCollection {
   /// The syntax node at the given `index`
   public subscript(index: SyntaxChildrenIndex) -> Syntax {
     let child = rawChildren[index]
-    let data = SyntaxData(child, parent: parent)
-    return Syntax(data)
+    return Syntax(child, parent: parent)
   }
 
   internal init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {

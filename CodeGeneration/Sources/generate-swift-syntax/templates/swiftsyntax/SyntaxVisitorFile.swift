@@ -45,7 +45,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
       /// function for every node that is being visited.
       public func walk(_ node: some SyntaxProtocol) {
-        visit(node.data)
+        visit(Syntax(node))
       }
       """
     )
@@ -97,12 +97,12 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Interpret `data` as a node of type `nodeType`, visit it, calling
       /// the `visit` and `visitPost` functions during visitation.
       private func visitImpl<NodeType: SyntaxProtocol>(
-        _ data: SyntaxData,
+        _ node: Syntax,
         _ nodeType: NodeType.Type,
         _ visit: (NodeType) -> SyntaxVisitorContinueKind,
         _ visitPost: (NodeType) -> Void
       ) {
-        let node = NodeType(Syntax(data))!
+        let node = node.cast(NodeType.self)
         let needsChildren = (visit(node) == .visitChildren)
         // Avoid calling into visitChildren if possible.
         if needsChildren && !node.raw.layoutView!.children.isEmpty {
@@ -149,15 +149,15 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Void)
+                private func visitationFunc(for node: Syntax) -> ((Syntax) -> Void)
                 """
               ) {
-                try SwitchExprSyntax("switch data.raw.kind") {
+                try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
                     StmtSyntax(
                       """
                       return {
-                        let node = TokenSyntax($0)
+                        let node = $0.cast(TokenSyntax.self)
                         _ = self.visit(node)
                         // No children to visit.
                         self.visitPost(node)
@@ -176,8 +176,8 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               DeclSyntax(
                 """
-                private func visit(_ data: SyntaxData) {
-                  return visitationFunc(for: data)(data)
+                private func visit(_ node: Syntax) {
+                  return visitationFunc(for: node)(node)
                 }
                 """
               )
@@ -188,11 +188,10 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
-              try! FunctionDeclSyntax("private func visit(_ data: SyntaxData)") {
-                try SwitchExprSyntax("switch data.raw.kind") {
+              try! FunctionDeclSyntax("private func visit(_ node: Syntax)") {
+                try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    DeclSyntax("let node = TokenSyntax(data)")
-
+                    DeclSyntax("let node = node.cast(TokenSyntax.self)")
                     ExprSyntax("_ = visit(node)")
                     ExprSyntax(
                       """
@@ -204,7 +203,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      ExprSyntax("visitImpl(data, \(node.kind.syntaxType).self, visit, visitPost)")
+                      ExprSyntax("visitImpl(node, \(node.kind.syntaxType).self, visit, visitPost)")
                     }
                   }
                 }
@@ -221,8 +220,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       private func visitChildren(_ node: some SyntaxProtocol) {
         let syntaxNode = Syntax(node)
         for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
-          let childData = SyntaxData(childRaw, parent: syntaxNode)
-          visit(childData)
+          visit(Syntax(childRaw, parent: syntaxNode))
         }
       }
       """

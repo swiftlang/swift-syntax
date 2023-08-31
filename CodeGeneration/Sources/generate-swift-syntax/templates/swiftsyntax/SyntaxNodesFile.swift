@@ -65,19 +65,6 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           """
         )
 
-        DeclSyntax(
-          """
-          /// Creates a ``\(node.kind.syntaxType)`` node from the given ``SyntaxData``. 
-          ///
-          ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
-          ///    If it is not, the behaviour is undefined.
-          internal init(_ data: SyntaxData) {
-            precondition(data.raw.kind == .\(node.varOrCaseName))
-            self._syntaxNode = Syntax(data)
-          }
-          """
-        )
-
         try! InitializerDeclSyntax(
           """
           \(node.generateInitializerDocComment())
@@ -136,23 +123,20 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   """
                 )
               }
-              StmtSyntax("return SyntaxData.forRoot(raw, rawNodeArena: arena)")
+              StmtSyntax("return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)")
             }
           )
 
-          VariableDeclSyntax(
+          InfixOperatorExprSyntax(
             leadingTrivia: """
               // Extend the lifetime of all parameters so their arenas don't get destroyed
               // before they can be added as children of the new arena.
 
               """,
-            .let,
-            name: PatternSyntax("data"),
-            type: TypeAnnotationSyntax(type: TypeSyntax("SyntaxData")),
-            initializer: InitializerClauseSyntax(value: initializer)
+            leftOperand: ExprSyntax("self"),
+            operator: ExprSyntax(AssignmentExprSyntax()),
+            rightOperand: initializer
           )
-
-          ExprSyntax("self.init(data)")
         }
 
         for (index, child) in node.children.enumerated() {
@@ -170,19 +154,14 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             """
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-              if child.isOptional {
-                StmtSyntax("return data.child(at: \(raw: index)).map(\(childType).init)")
-              } else {
-                StmtSyntax("return \(childType)(data.child(at: \(raw: index))!)")
-              }
+              let optionalityMarker: TokenSyntax = child.isOptional ? .infixQuestionMarkToken() : .exclamationMarkToken()
+              StmtSyntax("return Syntax(self).child(at: \(raw: index))\(optionalityMarker).cast(\(childType).self)")
             }
-
-            let questionMark = child.isOptional ? TokenSyntax.postfixQuestionMarkToken() : nil
 
             AccessorDeclSyntax(
               """
               set(value) {
-                self = \(node.kind.syntaxType)(data.replacingChild(at: \(raw: index), with: value\(questionMark).data, arena: SyntaxArena()))
+                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), arena: SyntaxArena()).cast(\(node.kind.syntaxType).self)
               }
               """
             )
@@ -218,8 +197,9 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.varOrCaseName),
                                                     from: [element.raw], arena: arena)
                 }
-                let newData = data.replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
-                return \(node.kind.syntaxType)(newData)
+                return Syntax(self)
+                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
+                  .cast(\(node.kind.syntaxType).self)
               }
               """
             )
@@ -261,8 +241,6 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
         }
       }
     }
-
-    DeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
 
     for choice in choices {
       if let choiceNode = SYNTAX_NODE_MAP[choice.syntaxNodeKind], choiceNode.kind.isBase {

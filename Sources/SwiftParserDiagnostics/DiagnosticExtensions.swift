@@ -201,7 +201,7 @@ extension FixIt.MultiNodeChange {
     changes.append(
       .replace(
         oldNode: Syntax(node),
-        newNode: Syntax(presentNode)
+        newNode: presentNode
       )
     )
 

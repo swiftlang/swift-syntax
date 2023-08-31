@@ -61,8 +61,6 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           }
 
-          DeclSyntax("init(_ data: SyntaxData) { self.init(Syntax(data))! }")
-
           for choiceName in node.elementChoices {
             let choiceNode = SYNTAX_NODE_MAP[choiceName]!
             if choiceNode.kind.isBase {

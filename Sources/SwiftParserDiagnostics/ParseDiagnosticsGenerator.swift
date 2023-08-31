@@ -1912,7 +1912,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           .missingColonAndExprInTernaryExpr,
           fixIts: [
             FixIt(
-              message: InsertTokenFixIt(missingNodes: [Syntax(node.colon), Syntax(nextSibling)]),
+              message: InsertTokenFixIt(missingNodes: [Syntax(node.colon), nextSibling]),
               changes: [
                 .makePresent(node.colon),
                 .makePresent(nextSibling),

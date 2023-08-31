@@ -37,7 +37,7 @@
 
     var result: [String: Value] = [:]
     result.merge(RawSyntaxDataMemoryLayouts, uniquingKeysWith: uniq)
-    result.merge(SyntaxDataMemoryLayouts, uniquingKeysWith: uniq)
+    result.merge(SyntaxMemoryLayouts, uniquingKeysWith: uniq)
     return result
   }
 }

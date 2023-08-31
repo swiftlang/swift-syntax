@@ -24,7 +24,6 @@ add_swift_host_library(SwiftSyntax
   SyntaxArena.swift
   SyntaxChildren.swift
   SyntaxCollection.swift
-  SyntaxData.swift
   SyntaxHashable.swift
   SyntaxIdentifier.swift
   SyntaxNodeStructure.swift

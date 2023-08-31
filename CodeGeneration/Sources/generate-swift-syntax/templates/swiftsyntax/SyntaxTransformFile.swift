@@ -115,7 +115,7 @@ let syntaxTransformFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       public func visitChildren(_ node: some SyntaxProtocol) -> [ResultType] {
         let syntaxNode = Syntax(node)
         return NonNilRawSyntaxChildren(syntaxNode, viewMode: .sourceAccurate).map { rawChild in
-          let child = Syntax(SyntaxData(rawChild, parent: syntaxNode))
+          let child = Syntax(rawChild, parent: syntaxNode)
           return visit(child)
         }
       }

@@ -124,7 +124,7 @@ struct IncrementalParseLookup {
 
     while true {
       if nodeAtCursorCanBeReused(prevPosition: prevPosition, kind: kind) {
-        return cursor.asSyntaxNode
+        return cursor.node
       }
       guard cursor.advanceToNextNode(at: prevPosition) else { return nil }
     }
@@ -200,10 +200,6 @@ fileprivate struct SyntaxCursor {
   init(root: Syntax) {
     self.node = root
     self.finished = false
-  }
-
-  var asSyntaxNode: Syntax {
-    return Syntax(node)
   }
 
   /// Returns the next sibling node or the parent's sibling node if this is

@@ -36,8 +36,8 @@ public class SyntaxComparisonTests: XCTestCase {
 
     let diff = try XCTUnwrap(actual.findFirstDifference(baseline: expected))
     XCTAssertEqual(diff.reason, .nodeType)
-    XCTAssertTrue(Syntax(diff.baseline).is(FunctionDeclSyntax.self))
-    XCTAssertTrue(Syntax(diff.node).is(CodeBlockSyntax.self))
+    XCTAssertTrue(diff.baseline.is(FunctionDeclSyntax.self))
+    XCTAssertTrue(diff.node.is(CodeBlockSyntax.self))
   }
 
   public func testDifferentTokenKind() throws {
@@ -46,8 +46,8 @@ public class SyntaxComparisonTests: XCTestCase {
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
-      XCTAssertEqual(Syntax(diff.baseline).as(TokenSyntax.self)?.tokenKind, .binaryOperator("f"))
-      XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .identifier("f"))
+      XCTAssertEqual(diff.baseline.as(TokenSyntax.self)?.tokenKind, .binaryOperator("f"))
+      XCTAssertEqual(diff.node.as(TokenSyntax.self)?.tokenKind, .identifier("f"))
     }
 
     let actual = Syntax(makeFunc(name: .identifier("f")))
@@ -62,8 +62,8 @@ public class SyntaxComparisonTests: XCTestCase {
     func expectations(_ diff: TreeDifference?, file: StaticString = #filePath, line: UInt = #line) throws {
       let diff = try XCTUnwrap(diff, file: file, line: line)
       XCTAssertEqual(diff.reason, .token)
-      XCTAssertEqual(Syntax(diff.baseline).as(TokenSyntax.self)?.tokenKind, .identifier("f"))
-      XCTAssertEqual(Syntax(diff.node).as(TokenSyntax.self)?.tokenKind, .identifier("g"))
+      XCTAssertEqual(diff.baseline.as(TokenSyntax.self)?.tokenKind, .identifier("f"))
+      XCTAssertEqual(diff.node.as(TokenSyntax.self)?.tokenKind, .identifier("g"))
     }
 
     let actual = Syntax(makeFunc(name: .identifier("g")))

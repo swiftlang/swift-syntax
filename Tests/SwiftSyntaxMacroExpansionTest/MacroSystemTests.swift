@@ -660,6 +660,19 @@ public struct DeclsFromStringsMacroNoAttrs: DeclarationMacro {
   }
 }
 
+fileprivate struct NoOpMemberMacro: MemberMacro {
+  public static func expansion<
+    Declaration: DeclGroupSyntax,
+    Context: MacroExpansionContext
+  >(
+    of node: AttributeSyntax,
+    providingMembersOf declaration: Declaration,
+    in context: Context
+  ) throws -> [DeclSyntax] {
+    return []
+  }
+}
+
 // MARK: Tests
 
 /// The set of test macros we use here.
@@ -1894,4 +1907,45 @@ final class MacroSystemTests: XCTestCase {
       macros: ["decl": DeclMacro.self, "Peer": MyPeerMacro.self]
     )
   }
+
+  func testStructVariableDeclWithMultipleBindings() {
+    assertMacroExpansion(
+      """
+      @Test
+      struct S {
+        var x: Int, y: Int
+      }
+      """,
+      expandedSource: """
+      struct S {
+        var x: Int, y: Int
+      }
+      """,
+      macros: ["Test": NoOpMemberMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testNestedStructVariableDeclWithMultipleBindings() {
+    assertMacroExpansion(
+      """
+      @Test
+      struct Q {
+        struct R {
+          var i: Int, j: Int
+        }
+      }
+      """,
+      expandedSource: """
+      struct Q {
+        struct R {
+          var i: Int, j: Int
+        }
+      }
+      """,
+      macros: ["Test": NoOpMemberMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
 }

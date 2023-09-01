@@ -847,7 +847,7 @@ extension MacroApplication {
     expandMacro: (_ macro: Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
   ) -> ExpandedMacroType? {
     guard let node,
-      let macro = macroSystem.lookup(node.macro.text)
+      let macro = macroSystem.lookup(node.macroName.text)
     else {
       return nil
     }

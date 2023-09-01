@@ -51,6 +51,26 @@ public extension DeclGroupSyntax {
 }
 
 public extension FreestandingMacroExpansionSyntax {
+  @available(*, deprecated, renamed: "pound")
+  public var poundToken: TokenSyntax {
+    get {
+      return pound
+    }
+    set {
+      pound = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "macroName")
+  public var macro: TokenSyntax {
+    get {
+      return macroName
+    }
+    set {
+      macroName = newValue
+    }
+  }
+
   @available(*, deprecated, renamed: "genericArgumentClause")
   var genericArguments: GenericArgumentClauseSyntax? {
     get {
@@ -58,6 +78,16 @@ public extension FreestandingMacroExpansionSyntax {
     }
     set {
       genericArgumentClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: LabeledExprListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
     }
   }
 }

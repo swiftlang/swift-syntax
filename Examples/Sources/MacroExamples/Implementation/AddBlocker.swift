@@ -101,6 +101,6 @@ public struct AddBlocker: ExpressionMacro {
       context.diagnose(diag)
     }
 
-    return result.asProtocol(FreestandingMacroExpansionSyntax.self)!.argumentList.first!.expression
+    return result.asProtocol(FreestandingMacroExpansionSyntax.self)!.arguments.first!.expression
   }
 }

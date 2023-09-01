@@ -173,12 +173,12 @@ public extension SyntaxProtocol {
 
 
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
-  var poundToken: TokenSyntax {
+  var pound: TokenSyntax {
     get
     set
   }
   
-  var macro: TokenSyntax {
+  var macroName: TokenSyntax {
     get
     set
   }
@@ -193,7 +193,7 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
   
-  var argumentList: LabeledExprListSyntax {
+  var arguments: LabeledExprListSyntax {
     get
     set
   }

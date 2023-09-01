@@ -11,7 +11,7 @@ struct EchoExpressionMacro: ExpressionMacro {
     of node: Node,
     in context: Context
   ) throws -> ExprSyntax {
-    let expr: ExprSyntax = node.argumentList.first!.expression
+    let expr: ExprSyntax = node.arguments.first!.expression
     return expr.with(\.leadingTrivia, [.blockComment("/* echo */")])
   }
 }
@@ -137,7 +137,7 @@ struct PrintAnyMacro: CodeItemMacro {
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax] {
-    guard let expr = node.argumentList.first?.expression else {
+    guard let expr = node.arguments.first?.expression else {
       return []
     }
     return ["print(\(expr))"]

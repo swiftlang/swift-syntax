@@ -21,7 +21,7 @@ public struct WarningMacro: ExpressionMacro {
     of macro: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
-    guard let firstElement = macro.argumentList.first,
+    guard let firstElement = macro.arguments.first,
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,

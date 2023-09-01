@@ -22,7 +22,7 @@ public struct FontLiteralMacro: ExpressionMacro {
     in context: some MacroExpansionContext
   ) -> ExprSyntax {
     let argList = replaceFirstLabel(
-      of: macro.argumentList,
+      of: macro.arguments,
       with: "fontLiteralName"
     )
     return ".init(\(argList))"

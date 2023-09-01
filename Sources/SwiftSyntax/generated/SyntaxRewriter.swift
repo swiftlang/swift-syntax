@@ -1781,6 +1781,13 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
+  /// Visit a ``ThenStmtSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ThenStmtSyntax) -> StmtSyntax {
+    return StmtSyntax(visitChildren(node))
+  }
+  
   /// Visit a ``ThrowStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3061,6 +3068,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, TernaryExprSyntax.self, self.visit)
       }
+    case .thenStmt:
+      return {
+        self.visitImpl($0, ThenStmtSyntax.self, self.visit)
+      }
     case .throwStmt:
       return {
         self.visitImpl($0, ThrowStmtSyntax.self, self.visit)
@@ -3685,6 +3696,8 @@ open class SyntaxRewriter {
       return visitImpl(data, SwitchExprSyntax.self, visit)
     case .ternaryExpr:
       return visitImpl(data, TernaryExprSyntax.self, visit)
+    case .thenStmt:
+      return visitImpl(data, ThenStmtSyntax.self, visit)
     case .throwStmt:
       return visitImpl(data, ThrowStmtSyntax.self, visit)
     case .tryExpr:

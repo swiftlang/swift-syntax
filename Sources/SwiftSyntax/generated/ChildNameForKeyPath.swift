@@ -3063,6 +3063,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "elseExpression"
   case \TernaryExprSyntax.unexpectedAfterElseExpression:
     return "unexpectedAfterElseExpression"
+  case \ThenStmtSyntax.unexpectedBeforeThenKeyword:
+    return "unexpectedBeforeThenKeyword"
+  case \ThenStmtSyntax.thenKeyword:
+    return "thenKeyword"
+  case \ThenStmtSyntax.unexpectedBetweenThenKeywordAndExpression:
+    return "unexpectedBetweenThenKeywordAndExpression"
+  case \ThenStmtSyntax.expression:
+    return "expression"
+  case \ThenStmtSyntax.unexpectedAfterExpression:
+    return "unexpectedAfterExpression"
   case \ThrowStmtSyntax.unexpectedBeforeThrowKeyword:
     return "unexpectedBeforeThrowKeyword"
   case \ThrowStmtSyntax.throwKeyword:

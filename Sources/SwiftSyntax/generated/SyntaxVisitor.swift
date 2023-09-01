@@ -2950,6 +2950,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TernaryExprSyntax) {
   }
   
+  /// Visiting ``ThenStmtSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``ThenStmtSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ThenStmtSyntax) {
+  }
+  
   /// Visiting ``ThrowStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4368,6 +4380,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, TernaryExprSyntax.self, self.visit, self.visitPost)
       }
+    case .thenStmt:
+      return {
+        self.visitImpl($0, ThenStmtSyntax.self, self.visit, self.visitPost)
+      }
     case .throwStmt:
       return {
         self.visitImpl($0, ThrowStmtSyntax.self, self.visit, self.visitPost)
@@ -4995,6 +5011,8 @@ open class SyntaxVisitor {
       visitImpl(data, SwitchExprSyntax.self, visit, visitPost)
     case .ternaryExpr:
       visitImpl(data, TernaryExprSyntax.self, visit, visitPost)
+    case .thenStmt:
+      visitImpl(data, ThenStmtSyntax.self, visit, visitPost)
     case .throwStmt:
       visitImpl(data, ThrowStmtSyntax.self, visit, visitPost)
     case .tryExpr:

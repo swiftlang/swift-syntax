@@ -512,7 +512,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -525,7 +525,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   ///    If it is not, the behaviour is undefined.
   internal init(_ data: SyntaxData) {
     switch data.raw.kind {
-    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .throwStmt, .whileStmt, .yieldStmt:
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt, .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
       break
     default:
       preconditionFailure("Unable to create StmtSyntax from \(data.raw.kind)")
@@ -576,6 +576,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
           .node(MissingStmtSyntax.self),
           .node(RepeatStmtSyntax.self),
           .node(ReturnStmtSyntax.self),
+          .node(ThenStmtSyntax.self),
           .node(ThrowStmtSyntax.self),
           .node(WhileStmtSyntax.self),
           .node(YieldStmtSyntax.self)
@@ -966,6 +967,7 @@ extension Syntax {
           .node(SwitchDefaultLabelSyntax.self),
           .node(SwitchExprSyntax.self),
           .node(TernaryExprSyntax.self),
+          .node(ThenStmtSyntax.self),
           .node(ThrowStmtSyntax.self),
           .node(TryExprSyntax.self),
           .node(TupleExprSyntax.self),

@@ -258,6 +258,7 @@ public enum SyntaxKind: CaseIterable {
   case switchDefaultLabel
   case switchExpr
   case ternaryExpr
+  case thenStmt
   case throwStmt
   case tryExpr
   case tupleExpr
@@ -905,6 +906,8 @@ public enum SyntaxKind: CaseIterable {
       return SwitchExprSyntax.self
     case .ternaryExpr:
       return TernaryExprSyntax.self
+    case .thenStmt:
+      return ThenStmtSyntax.self
     case .throwStmt:
       return ThrowStmtSyntax.self
     case .tryExpr:

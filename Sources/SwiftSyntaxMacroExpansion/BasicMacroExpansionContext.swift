@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxMacros
 
@@ -76,6 +77,20 @@ extension BasicMacroExpansionContext {
     let detached = node.detached
     detachedNodes[Syntax(detached)] = Syntax(node)
     return detached
+  }
+
+  /// Fold all operators in `node` and associated the ``KnownSourceFile``
+  /// information of `node` with the original new, folded tree.
+  func foldAllOperators(of node: some SyntaxProtocol, with operatorTable: OperatorTable) -> Syntax {
+    let folded = operatorTable.foldAll(node, errorHandler: { _ in /*ignore*/ })
+    if let originalSourceFile = node.root.as(SourceFileSyntax.self),
+      let newSourceFile = folded.root.as(SourceFileSyntax.self)
+    {
+      // Folding operators doesn't change the source file and its associated locations
+      // Record the `KnownSourceFile` information for the folded tree.
+      sourceFiles[newSourceFile] = sourceFiles[originalSourceFile]
+    }
+    return folded
   }
 }
 

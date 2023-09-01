@@ -176,20 +176,24 @@ public struct DiagnosticsFormatter {
     return resultSourceString
   }
 
+  struct PrimaryDiagnostic {
+    var location: SourceLocation
+    var diagnostic: Diagnostic
+  }
+
   /// Print given diagnostics for a given syntax tree on the command line
   ///
   /// - Parameters:
   ///   - suffixTexts: suffix text to be printed at the given absolute
   ///                  locations within the source file.
   func annotatedSource(
-    fileName: String?,
     tree: some SyntaxProtocol,
     diags: [Diagnostic],
     indentString: String,
     suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
-    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: fileName ?? "", tree: tree)
+    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: "<unknown>", tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()
@@ -218,19 +222,8 @@ public struct DiagnosticsFormatter {
       return nil
     }
 
+    // Accumulate the fully annotated source files here.
     var annotatedSource = ""
-
-    // If there was a filename, add it first.
-    if let fileName {
-      let header = colorizeBufferOutline("===")
-      let firstLine =
-        1
-        + (annotatedSourceLines.enumerated().first { (lineIndex, sourceLine) in
-          !sourceLine.isFreeOfAnnotations
-        }?.offset ?? 0)
-
-      annotatedSource.append("\(indentString)\(header) \(fileName):\(firstLine) \(header)\n")
-    }
 
     /// Keep track if a line missing char should be printed
     var hasLineBeenSkipped = false
@@ -318,7 +311,6 @@ public struct DiagnosticsFormatter {
     diags: [Diagnostic]
   ) -> String {
     return annotatedSource(
-      fileName: nil,
       tree: tree,
       diags: diags,
       indentString: "",
@@ -328,7 +320,7 @@ public struct DiagnosticsFormatter {
 
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
   /// property is `true`) and returns the result as a printable string.
-  private func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
+  func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
     switch message.severity {
     case .error:
       let annotation = ANSIAnnotation(color: .red, trait: .bold)

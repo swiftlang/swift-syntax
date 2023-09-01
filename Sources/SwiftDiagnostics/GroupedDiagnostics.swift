@@ -133,6 +133,31 @@ extension GroupedDiagnostics {
     }
   }
 
+  // Find the "primary" diagnostic that will be shown at the top of the diagnostic
+  // message. This is typically the error, warning, or remark.
+  private func findPrimaryDiagnostic(in sourceFile: SourceFile) -> (SourceFile, Diagnostic)? {
+    // If there is a non-note diagnostic, it's the primary diagnostic.
+    if let primaryDiag = sourceFile.diagnostics.first(where: { $0.diagMessage.severity != .note }) {
+      return (sourceFile, primaryDiag)
+    }
+
+    // If one of our child source files has a primary diagnostic, return that.
+    for childID in sourceFile.children {
+      if let foundInChild = findPrimaryDiagnostic(in: sourceFiles[childID.id]) {
+        return foundInChild
+      }
+    }
+
+    // If this is a root note, take the first note.
+    if sourceFile.parent == nil,
+       let note = sourceFile.diagnostics.first {
+      return (sourceFile, note)
+    }
+
+    // There is no primary diagnostic.
+    return nil
+  }
+
   /// Annotate the source for a given source file ID, embedding its child
   /// source files.
   func annotateSource(
@@ -168,7 +193,17 @@ extension GroupedDiagnostics {
     let suffixString: String
 
     if isRoot {
-      prefixString = ""
+      // If there's a primary diagnostic,
+      if let (primaryDiagSourceFile, primaryDiag) = findPrimaryDiagnostic(in: sourceFile) {
+        let primaryDiagSLC = SourceLocationConverter(fileName: primaryDiagSourceFile.displayName, tree: primaryDiagSourceFile.tree)
+        let location = primaryDiag.location(converter: primaryDiagSLC)
+
+        prefixString = "\(location.file):\(location.line):\(location.column): \(formatter.colorizeIfRequested(primaryDiag.diagMessage))\n"
+      } else {
+        let firstLine = sourceFile.diagnostics.first.map { $0.location(converter: slc).line } ?? 0
+        prefixString = "\(sourceFile.displayName): \(firstLine):"
+      }
+
       suffixString = ""
     } else {
       let padding = indentString.dropLast(1)
@@ -190,7 +225,6 @@ extension GroupedDiagnostics {
     // Render the buffer.
     return prefixString
       + formatter.annotatedSource(
-        fileName: isRoot ? sourceFile.displayName : nil,
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
         indentString: colorizeBufferOutline(indentString),

@@ -78,6 +78,55 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           """
         )
 
+        for rule in node.rules {
+          try! InitializerDeclSyntax(
+            """
+            /// A convenience initializer for ``\(node.kind.syntaxType)``
+            /// that takes a non-optional value for `\(raw: rule.nonOptionalChildName)` parameter,
+            /// and adds the following default values:
+            \(node.generateRuleBasedDefaultValuesDocComment(for: rule))
+            \(node.generateInitializerDeclHeader(for: rule))
+            """
+          ) {
+            // Convenience initializer just calls the full initializer
+            // with certain child parameters specified as optional types
+            // and providing the rule-based default value for the affected
+            // parameters.
+            FunctionCallExprSyntax(
+              calledExpression: ExprSyntax("self.init"),
+              leftParen: .leftParenToken(),
+              arguments: LabeledExprListSyntax {
+                LabeledExprSyntax(
+                  label: TokenSyntax("leadingTrivia"),
+                  colon: .colonToken(),
+                  expression: ExprSyntax("leadingTrivia"),
+                  trailingComma: .commaToken()
+                )
+
+                for child in node.nonUnexpectedChildren {
+                  LabeledExprSyntax(
+                    label: child.varOrCaseName,
+                    colon: .colonToken(),
+                    expression: rule.nonOptionalChildName == child.name ? ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded) as \(node.makeChildParamType(for: child, isOptional: true))") : ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)"),
+                    trailingComma: .commaToken()
+                  )
+                }
+
+                LabeledExprSyntax(
+                  label: TokenSyntax("trailingTrivia"),
+                  colon: .colonToken(),
+                  expression: ExprSyntax("trailingTrivia")
+                )
+              },
+              rightParen: .rightParenToken()
+            )
+          }
+        }
+
+        // The main member-wise initializer
+        // generateInitializerDocComment renders DocC comment
+        // generateInitializerDeclHeader renders the actual init declaration
+        // and lists out all it's parameters and their default values
         try! InitializerDeclSyntax(
           """
           \(node.generateInitializerDocComment())
@@ -100,6 +149,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               )
             )
           )
+
           let layoutList = ArrayExprSyntax {
             for child in node.children {
               ArrayElementSyntax(

@@ -2575,6 +2575,33 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     self._syntaxNode = Syntax(data)
   }
   
+  /// A convenience initializer for ``AttributeSyntax``
+  /// that takes a non-optional value for `arguments` parameter,
+  /// and adds the following default values:
+  ///  - `rightParen`: `TokenSyntax.rightParenToken()`
+  ///  - `leftParen`: `TokenSyntax.leftParenToken()`
+  /// 
+  public init(
+      leadingTrivia: Trivia? = nil,
+      atSign: TokenSyntax = .atSignToken(),
+      attributeName: some TypeSyntaxProtocol,
+      leftParen: TokenSyntax? = .leftParenToken(),
+      arguments: Arguments,
+      rightParen: TokenSyntax? = .rightParenToken(),
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        atSign: atSign, 
+        attributeName: attributeName, 
+        leftParen: leftParen, 
+        arguments: arguments as Arguments?, 
+        rightParen: rightParen, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+  
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - atSign: The `@` sign.

@@ -181,6 +181,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       annotated,
       """
       #invertedEqualityCheck:1:7: error: no matching operator '==' for types 'Double' and 'Int'
+      ╰─ main.swift:2:1: note: expanded code originates here
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         │ ╰─ note: in expansion of macro 'myAssert' here

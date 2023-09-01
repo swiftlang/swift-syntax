@@ -332,10 +332,15 @@ public struct DiagnosticsFormatter {
 
       return prefix + colorizeIfRequested(message.message, annotation: color);
     case .note:
-      let color = ANSIAnnotation(color: .default, trait: .bold)
-      let prefix = colorizeIfRequested("note: ", annotation: color)
-      return prefix + message.message
+      return colorizeNoteIfRequested(message.message)
     }
+  }
+
+  /// Annotate a note with an appropriate ANSI color code (if requested).
+  func colorizeNoteIfRequested(_ message: String) -> String {
+    let color = ANSIAnnotation(color: .default, trait: .bold)
+    let prefix = colorizeIfRequested("note: ", annotation: color)
+    return prefix + message
   }
 
   /// Apply the given color and trait to the specified text, when we are

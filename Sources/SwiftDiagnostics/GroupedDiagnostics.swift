@@ -189,16 +189,34 @@ extension GroupedDiagnostics {
 
     // If this is a nested source file, draw a box around it.
     let isRoot = sourceFile.parent == nil
-    let prefixString: String
+    var prefixString: String
     let suffixString: String
 
     if isRoot {
-      // If there's a primary diagnostic,
+      // If there's a primary diagnostic, print it first.
       if let (primaryDiagSourceFile, primaryDiag) = findPrimaryDiagnostic(in: sourceFile) {
         let primaryDiagSLC = SourceLocationConverter(fileName: primaryDiagSourceFile.displayName, tree: primaryDiagSourceFile.tree)
         let location = primaryDiag.location(converter: primaryDiagSLC)
 
+        // Display file/line/column and diagnostic text for the primary diagnostic.
         prefixString = "\(location.file):\(location.line):\(location.column): \(formatter.colorizeIfRequested(primaryDiag.diagMessage))\n"
+
+        // If the primary diagnostic source file is not the same as the root source file, we're pointing into a generated buffer.
+        // Provide a link back to the original source file where this generated buffer occurred, so it's easy to find if
+        // (for example) the generated buffer is no longer available.
+        if sourceFile.id != primaryDiagSourceFile.id,
+           var (rootSourceID, rootPosition) = primaryDiagSourceFile.parent {
+          // Go all the way up to the root to find the absolute position of the outermost generated buffer within the
+          // root source file.
+          while let parent = sourceFiles[rootSourceID.id].parent {
+            (rootSourceID, rootPosition) = parent
+          }
+
+          if rootSourceID == sourceFileID {
+            let bufferLoc = slc.location(for: rootPosition)
+            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(formatter.colorizeNoteIfRequested("expanded code originates here"))\n"
+          }
+        }
       } else {
         let firstLine = sourceFile.diagnostics.first.map { $0.location(converter: slc).line } ?? 0
         prefixString = "\(sourceFile.displayName): \(firstLine):"

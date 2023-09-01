@@ -51,7 +51,7 @@ extension SyntaxParseable {
         """
         Parsing a `\(Self.self)` node from string interpolation produced the following parsing errors.
         Set a breakpoint in `SyntaxParseable.logStringInterpolationParsingError()` to debug the failure.
-        \(formattedDiagnostics)
+        \(formattedDiagnostics, privacy: .private)
         """
       )
     }

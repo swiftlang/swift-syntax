@@ -249,6 +249,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var tryMustBePlacedOnThrownExpr: Self {
     .init("'try' must be placed on the thrown expression")
   }
+  public static var tryMustBePlacedOnThenExpr: Self {
+    .init("'try' must be placed on the produced expression")
+  }
   public static var tryOnInitialValueExpression: Self {
     .init("'try' must be placed on the initial value expression")
   }

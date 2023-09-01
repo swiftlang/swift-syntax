@@ -22,3 +22,8 @@ extension Parser {
     public static let referenceBindings = Self(rawValue: 1 << 0)
   }
 }
+
+extension Parser.ExperimentalFeatures {
+  /// Whether to enable the parsing of 'then' statements.
+  public static let thenStatements = Self(rawValue: 1 << 0)
+}

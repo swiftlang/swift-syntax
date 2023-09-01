@@ -97,6 +97,7 @@ enum CanBeStatementStart: TokenSpecSet {
   case `repeat`
   case `return`
   case `switch`
+  case then
   case `throw`
   case `while`
   case yield
@@ -115,6 +116,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.return): self = .return
     case TokenSpec(.switch): self = .switch
+    case TokenSpec(.then): self = .then
     case TokenSpec(.throw): self = .throw
     case TokenSpec(.while): self = .while
     case TokenSpec(.yield): self = .yield
@@ -136,6 +138,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case .repeat: return .keyword(.repeat)
     case .return: return .keyword(.return)
     case .switch: return .keyword(.switch)
+    case .then: return .keyword(.then)
     case .throw: return .keyword(.throw)
     case .while: return .keyword(.while)
     case .yield: return .keyword(.yield)
@@ -507,48 +510,88 @@ enum Operator: TokenSpecSet {
   }
 }
 
-/// Tokens that can be used in operator declarations
-enum OperatorLike: TokenSpecSet {
-  case `operator`(Operator)
-  case exclamationMark
+/// Tokens that are either binary operators, or can act like binary operators.
+enum BinaryOperatorLike: TokenSpecSet {
+  case binaryOperator
   case infixQuestionMark
-  case postfixQuestionMark
   case equal
   case arrow
 
   init?(lexeme: Lexer.Lexeme) {
-    if let op = Operator(lexeme: lexeme) {
-      self = .operator(op)
-      return
-    }
     switch lexeme.rawTokenKind {
-    case .exclamationMark: self = .exclamationMark
+    case .binaryOperator: self = .binaryOperator
     case .infixQuestionMark: self = .infixQuestionMark
-    case .postfixQuestionMark: self = .postfixQuestionMark
     case .equal: self = .equal
     case .arrow: self = .arrow
     default: return nil
     }
   }
 
-  static var allCases: [OperatorLike] {
-    return Operator.allCases.map(Self.operator) + [
-      .exclamationMark,
-      .infixQuestionMark,
-      .postfixQuestionMark,
-      .equal,
-      .arrow,
-    ]
+  var spec: TokenSpec {
+    switch self {
+    case .binaryOperator: return .binaryOperator
+    case .infixQuestionMark: return TokenSpec(.infixQuestionMark, remapping: .binaryOperator)
+    case .equal: return TokenSpec(.equal, remapping: .binaryOperator)
+    case .arrow: return TokenSpec(.arrow, remapping: .binaryOperator)
+    }
+  }
+}
+
+/// Tokens that are either postfix operators, or can act like postfix operators.
+enum PostfixOperatorLike: TokenSpecSet {
+  case postfixOperator
+  case exclamationMark
+  case postfixQuestionMark
+
+  init?(lexeme: Lexer.Lexeme) {
+    switch lexeme.rawTokenKind {
+    case .postfixOperator: self = .postfixOperator
+    case .exclamationMark: self = .exclamationMark
+    case .postfixQuestionMark: self = .postfixQuestionMark
+    default: return nil
+    }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .operator(let op): return op.spec
+    case .postfixOperator: return .postfixOperator
     case .exclamationMark: return TokenSpec(.exclamationMark, remapping: .postfixOperator)
-    case .infixQuestionMark: return TokenSpec(.infixQuestionMark, remapping: .binaryOperator)
     case .postfixQuestionMark: return TokenSpec(.postfixQuestionMark, remapping: .postfixOperator)
-    case .equal: return TokenSpec(.equal, remapping: .binaryOperator)
-    case .arrow: return TokenSpec(.arrow, remapping: .binaryOperator)
+    }
+  }
+}
+
+/// Tokens that can be used in operator declarations.
+enum OperatorLike: TokenSpecSet {
+  case prefixOperator
+  case binaryOperatorLike(BinaryOperatorLike)
+  case postfixOperatorLike(PostfixOperatorLike)
+
+  init?(lexeme: Lexer.Lexeme) {
+    if case .prefixOperator = lexeme.rawTokenKind {
+      self = .prefixOperator
+      return
+    }
+    if let binOp = BinaryOperatorLike(lexeme: lexeme) {
+      self = .binaryOperatorLike(binOp)
+      return
+    }
+    if let postfixOp = PostfixOperatorLike(lexeme: lexeme) {
+      self = .postfixOperatorLike(postfixOp)
+      return
+    }
+    return nil
+  }
+
+  static var allCases: [OperatorLike] {
+    [.prefixOperator] + BinaryOperatorLike.allCases.map(Self.binaryOperatorLike) + PostfixOperatorLike.allCases.map(Self.postfixOperatorLike)
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .prefixOperator: return .prefixOperator
+    case .binaryOperatorLike(let op): return op.spec
+    case .postfixOperatorLike(let op): return op.spec
     }
   }
 }

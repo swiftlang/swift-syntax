@@ -728,4 +728,171 @@ final class StatementTests: ParserTestCase {
       """
     )
   }
+
+  func testTrailingClosureInIfCondition() {
+    assertParse("if test { $0 } {}")
+
+    assertParse(
+      """
+      if test {
+        $0
+      }1️⃣ {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+      ],
+      fixedSource: """
+        if test {
+          $0
+        }
+        {}
+        """
+    )
+
+    assertParse(
+      """
+      if test { $0
+      } {}
+      """
+    )
+
+    assertParse(
+      """
+      if test { x in
+        x
+      } {}
+      """
+    )
+  }
+
+  func testClosureAtStartOfIfCondition() {
+    assertParse(
+      "if 1️⃣{x}() {}",
+      diagnostics: [
+        DiagnosticSpec(message: "missing condition in 'if' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      if 1️⃣{
+        x
+      }() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "missing condition in 'if' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      if 1️⃣{ x
+      }() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "missing condition in 'if' statement")
+      ]
+    )
+
+    assertParse(
+      """
+      if 1️⃣{ a 2️⃣in
+        x + a
+      }(1) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "missing condition in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in 'if' statement"),
+      ]
+    )
+  }
+
+  func testClosureInsideIfCondition() {
+    assertParse("if true, {x}() {}")
+
+    assertParse(
+      """
+      if true, {
+        x
+      }() {}
+      """
+    )
+
+    assertParse(
+      """
+      if true, { x
+      }() {}
+      """
+    )
+
+    assertParse(
+      """
+      if true, { a in
+        x + a
+      }(1) {}
+      """
+    )
+  }
+
+  func testTrailingClosureInGuard() {
+    assertParse(
+      "guard test 1️⃣{ $0 } 2️⃣else {}",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+      ],
+      fixedSource: "guard test else { $0 } else {}"
+    )
+
+    assertParse(
+      """
+      guard test 1️⃣{
+        $0
+      } 2️⃣else {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+      ],
+      fixedSource:
+        """
+        guard test else {
+          $0
+        } else {}
+        """
+    )
+
+    assertParse(
+      """
+      guard test 1️⃣{ $0
+      } 2️⃣else {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+      ],
+      fixedSource: """
+        guard test else { $0
+        } else {}
+        """
+    )
+
+    assertParse(
+      """
+      guard test 1️⃣{ x 2️⃣in
+        x
+      } 3️⃣else {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code 'else {}' at top level"),
+      ],
+      fixedSource: """
+        guard test else { x in
+          x
+        } else {}
+        """
+    )
+  }
 }

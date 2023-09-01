@@ -685,7 +685,7 @@ extension ParserTestCase {
       XCTFail("A fixed source was provided but the test case produces no diagnostics with Fix-Its", file: file, line: line)
     }
 
-    if expectedDiagnostics.isEmpty {
+    if expectedDiagnostics.isEmpty && diags.isEmpty {
       assertBasicFormat(source: source, parse: parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
     }
 

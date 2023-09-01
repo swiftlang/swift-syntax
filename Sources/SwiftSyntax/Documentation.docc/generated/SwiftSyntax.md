@@ -175,6 +175,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/LabeledStmtSyntax>
 - <doc:SwiftSyntax/RepeatStmtSyntax>
 - <doc:SwiftSyntax/ReturnStmtSyntax>
+- <doc:SwiftSyntax/ThenStmtSyntax>
 - <doc:SwiftSyntax/ThrowStmtSyntax>
 - <doc:SwiftSyntax/WhileStmtSyntax>
 - <doc:SwiftSyntax/YieldStmtSyntax>

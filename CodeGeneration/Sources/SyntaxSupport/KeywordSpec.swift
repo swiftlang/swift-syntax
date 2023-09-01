@@ -255,6 +255,7 @@ public enum Keyword: CaseIterable {
   case swift
   case `switch`
   case target
+  case then
   case `throw`
   case `throws`
   case transpose
@@ -644,6 +645,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("switch", isLexerClassified: true)
     case .target:
       return KeywordSpec("target")
+    case .then:
+      return KeywordSpec("then")
     case .throw:
       return KeywordSpec("throw", isLexerClassified: true)
     case .throws:

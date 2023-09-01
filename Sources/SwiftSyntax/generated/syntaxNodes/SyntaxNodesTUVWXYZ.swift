@@ -216,6 +216,137 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
+// MARK: - ThenStmtSyntax
+
+/// A statement used to indicate the produced value from an if/switch
+/// expression.
+/// 
+///  Written as:
+/// ```swift
+/// then <expr>
+/// ```
+///
+/// ### Children
+/// 
+///  - `thenKeyword`: `'then'`
+///  - `expression`: ``ExprSyntax``
+public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .thenStmt else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// Creates a ``ThenStmtSyntax`` node from the given ``SyntaxData``. 
+  ///
+  ///  - Warning: This assumes that the `SyntaxData` is of the correct kind.
+  ///    If it is not, the behaviour is undefined.
+  internal init(_ data: SyntaxData) {
+    precondition(data.raw.kind == .thenStmt)
+    self._syntaxNode = Syntax(data)
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeThenKeyword: UnexpectedNodesSyntax? = nil,
+      thenKeyword: TokenSyntax = .keyword(.then),
+      _ unexpectedBetweenThenKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+      expression: some ExprSyntaxProtocol,
+      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    let data: SyntaxData = withExtendedLifetime((SyntaxArena(), (
+            unexpectedBeforeThenKeyword, 
+            thenKeyword, 
+            unexpectedBetweenThenKeywordAndExpression, 
+            expression, 
+            unexpectedAfterExpression
+          ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+          unexpectedBeforeThenKeyword?.raw, 
+          thenKeyword.raw, 
+          unexpectedBetweenThenKeywordAndExpression?.raw, 
+          expression.raw, 
+          unexpectedAfterExpression?.raw
+        ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.thenStmt,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return SyntaxData.forRoot(raw, rawNodeArena: arena)
+    }
+    self.init(data)
+  }
+  
+  public var unexpectedBeforeThenKeyword: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 0).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ThenStmtSyntax(data.replacingChild(at: 0, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var thenKeyword: TokenSyntax {
+    get {
+      return TokenSyntax(data.child(at: 1)!)
+    }
+    set(value) {
+      self = ThenStmtSyntax(data.replacingChild(at: 1, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedBetweenThenKeywordAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 2).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ThenStmtSyntax(data.replacingChild(at: 2, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var expression: ExprSyntax {
+    get {
+      return ExprSyntax(data.child(at: 3)!)
+    }
+    set(value) {
+      self = ThenStmtSyntax(data.replacingChild(at: 3, with: value.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
+    get {
+      return data.child(at: 4).map(UnexpectedNodesSyntax.init)
+    }
+    set(value) {
+      self = ThenStmtSyntax(data.replacingChild(at: 4, with: value?.data, arena: SyntaxArena()))
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([
+          \Self.unexpectedBeforeThenKeyword, 
+          \Self.thenKeyword, 
+          \Self.unexpectedBetweenThenKeywordAndExpression, 
+          \Self.expression, 
+          \Self.unexpectedAfterExpression
+        ])
+  }
+}
+
 // MARK: - ThrowStmtSyntax
 
 /// ### Children

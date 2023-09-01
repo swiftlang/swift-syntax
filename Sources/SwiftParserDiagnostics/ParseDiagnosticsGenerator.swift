@@ -1492,6 +1492,21 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  public override func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    exchangeTokens(
+      unexpected: node.unexpectedBeforeThenKeyword,
+      unexpectedTokenCondition: { $0.tokenKind == .keyword(.try) },
+      correctTokens: [node.expression.as(TryExprSyntax.self)?.tryKeyword],
+      message: { _ in .tryMustBePlacedOnThenExpr },
+      moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .keyword(.then)) }
+    )
+    return .visitChildren
+  }
+
   public override func visit(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

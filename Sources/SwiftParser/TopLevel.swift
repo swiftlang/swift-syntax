@@ -237,13 +237,13 @@ extension Parser {
       return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
       return .decl(self.parseDeclaration())
-    } else if self.atStartOfStatement() {
+    } else if self.atStartOfStatement(preferExpr: false) {
       return self.parseStatementItem()
     } else if self.atStartOfExpression() {
       return .expr(self.parseExpression(flavor: .basic, pattern: .none))
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
       return .decl(self.parseDeclaration())
-    } else if self.atStartOfStatement(allowRecovery: true) {
+    } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
       return self.parseStatementItem()
     } else {
       return .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena)))

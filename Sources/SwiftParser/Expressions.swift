@@ -24,7 +24,9 @@ extension TokenConsumer {
       if backtrack.at(anyIn: IfOrSwitch.self) != nil {
         return true
       }
-      if backtrack.atStartOfDeclaration() || backtrack.atStartOfStatement() {
+      // Note we currently pass `preferExpr: false` to prefer diagnosing `try then`
+      // as needing to be `then try`, rather than parsing `then` as an expression.
+      if backtrack.atStartOfDeclaration() || backtrack.atStartOfStatement(preferExpr: false) {
         // If after the 'try' we are at a declaration or statement, it can't be a valid expression.
         // Decide how we want to consume the 'try':
         // If the declaration or statement starts at a new line, the user probably just forgot to write the expression after 'try' -> parse it as a TryExpr
@@ -1545,7 +1547,9 @@ extension Parser {
         // If the next token is at the beginning of a new line and can never start
         // an element, break.
         if self.atStartOfLine
-          && (self.at(.rightBrace, .poundEndif) || self.atStartOfDeclaration() || self.atStartOfStatement())
+          && (self.at(.rightBrace, .poundEndif)
+            || self.atStartOfDeclaration()
+            || self.atStartOfStatement(preferExpr: false))
         {
           break
         }
@@ -2166,7 +2170,10 @@ extension Parser {
             )
           )
         )
-      } else if allowStandaloneStmtRecovery && (self.atStartOfExpression() || self.atStartOfStatement() || self.atStartOfDeclaration()) {
+      } else if allowStandaloneStmtRecovery
+        && (self.atStartOfExpression() || self.atStartOfStatement(preferExpr: false)
+          || self.atStartOfDeclaration())
+      {
         // Synthesize a label for the statement or declaration that isn't covered by a case right now.
         let statements = parseSwitchCaseBody()
         if statements.isEmpty {

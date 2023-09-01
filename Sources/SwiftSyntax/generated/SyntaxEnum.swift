@@ -258,6 +258,7 @@ public enum SyntaxEnum {
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case switchExpr(SwitchExprSyntax)
   case ternaryExpr(TernaryExprSyntax)
+  case thenStmt(ThenStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
   case tryExpr(TryExprSyntax)
   case tupleExpr(TupleExprSyntax)
@@ -784,6 +785,8 @@ public extension Syntax {
       return .switchExpr(SwitchExprSyntax(self)!)
     case .ternaryExpr:
       return .ternaryExpr(TernaryExprSyntax(self)!)
+    case .thenStmt:
+      return .thenStmt(ThenStmtSyntax(self)!)
     case .throwStmt:
       return .throwStmt(ThrowStmtSyntax(self)!)
     case .tryExpr:

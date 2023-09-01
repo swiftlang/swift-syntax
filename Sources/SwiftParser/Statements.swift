@@ -16,16 +16,22 @@ extension TokenConsumer {
   /// Returns `true` if the current token represents the start of a statement
   /// item.
   ///
+  /// - Parameters:
+  ///   - allowRecovery: Whether to attempt to perform recovery.
+  ///   - preferExpr: If either an expression or statement could be
+  ///     parsed and this parameter is `true`, the function returns `false`
+  ///     such that an expression can be parsed.
+  ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  func atStartOfStatement(allowRecovery: Bool = false) -> Bool {
+  func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
     var lookahead = self.lookahead()
     if allowRecovery {
       // Attributes are not allowed on statements. But for recovery, skip over
       // misplaced attributes.
       _ = lookahead.consumeAttributeList()
     }
-    return lookahead.atStartOfStatement(allowRecovery: allowRecovery)
+    return lookahead.atStartOfStatement(allowRecovery: allowRecovery, preferExpr: preferExpr)
   }
 }
 
@@ -105,7 +111,9 @@ extension Parser {
       return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
-    case nil:
+    case (.then, let handle)? where experimentalFeatures.contains(.thenStatements):
+      return label(self.parseThenStatement(handle: handle), with: optLabel)
+    case nil, (.then, _)?:
       let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
       return label(missingStmt, with: optLabel)
     }
@@ -630,7 +638,7 @@ extension Parser {
     if self.at(anyIn: IfOrSwitch.self) != nil {
       return true
     }
-    if self.atStartOfStatement() || self.atStartOfDeclaration() {
+    if self.atStartOfStatement(preferExpr: true) || self.atStartOfDeclaration() {
       return false
     }
     return true
@@ -724,6 +732,36 @@ extension Parser {
 }
 
 extension Parser {
+  /// Parse a `then` statement.
+  mutating func parseThenStatement(handle: RecoveryConsumptionHandle) -> RawStmtSyntax {
+    assert(experimentalFeatures.contains(.thenStatements))
+
+    let (unexpectedBeforeThen, then) = self.eat(handle)
+    let hasMisplacedTry = unexpectedBeforeThen?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
+
+    var expr = self.parseExpression(flavor: .basic, pattern: .none)
+    if hasMisplacedTry && !expr.is(RawTryExprSyntax.self) {
+      expr = RawExprSyntax(
+        RawTryExprSyntax(
+          tryKeyword: missingToken(.try),
+          questionOrExclamationMark: nil,
+          expression: expr,
+          arena: self.arena
+        )
+      )
+    }
+    return RawStmtSyntax(
+      RawThenStmtSyntax(
+        unexpectedBeforeThen,
+        thenKeyword: then,
+        expression: expr,
+        arena: self.arena
+      )
+    )
+  }
+}
+
+extension Parser {
   struct StatementLabel {
     var label: RawTokenSyntax
     var colon: RawTokenSyntax
@@ -791,7 +829,7 @@ extension Parser {
     }
 
     guard
-      self.at(.identifier) && !self.atStartOfStatement() && !self.atStartOfDeclaration()
+      self.at(.identifier) && !self.atStartOfStatement(preferExpr: true) && !self.atStartOfDeclaration()
     else {
       return nil
     }
@@ -806,9 +844,15 @@ extension Parser.Lookahead {
   /// Returns `true` if the current token represents the start of a statement
   /// item.
   ///
+  /// - Parameters:
+  ///   - allowRecovery: Whether to attempt to perform recovery.
+  ///   - preferExpr: If either an expression or statement could be
+  ///     parsed and this parameter is `true`, the function returns `false`
+  ///     such that an expression can be parsed.
+  ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  mutating func atStartOfStatement(allowRecovery: Bool = false) -> Bool {
+  mutating func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
     if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign)) && withLookahead({ $0.atStartOfSwitchCaseItem() }) {
       // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
       return true
@@ -877,9 +921,55 @@ extension Parser.Lookahead {
         // For example, could be the function call "discard()".
         return false
       }
-    case nil:
+
+    case .then where experimentalFeatures.contains(.thenStatements):
+      return atStartOfThenStatement(preferExpr: preferExpr)
+
+    case nil, .then:
       return false
     }
+  }
+
+  /// Whether we're currently at a `then` token that should be parsed as a
+  /// `then` statement.
+  mutating func atStartOfThenStatement(preferExpr: Bool) -> Bool {
+    guard self.at(.keyword(.then)) else {
+      return false
+    }
+
+    // If we prefer an expr and aren't at the start of a newline, then don't
+    // parse a ThenStmt.
+    if preferExpr && !self.atStartOfLine {
+      return false
+    }
+
+    let next = peek()
+
+    // If 'then' is followed by a binary or postfix operator, prefer to parse as
+    // an expr.
+    if BinaryOperatorLike(lexeme: next) != nil || PostfixOperatorLike(lexeme: next) != nil {
+      return false
+    }
+
+    switch PrepareForKeywordMatch(next) {
+    case TokenSpec(.is), TokenSpec(.as):
+      // Treat 'is' and 'as' like the binary operator case, and parse as an
+      // expr.
+      return false
+
+    case .leftBrace:
+      // This is a trailing closure.
+      return false
+
+    case .leftParen, .leftSquare, .period:
+      // These are handled based on whether there is trivia between the 'then'
+      // and the token. If so, it's a 'then' statement. Otherwise it should
+      // be treated as an expression, e.g `then(...)`, `then[...]`, `then.foo`.
+      return !self.currentToken.trailingTriviaText.isEmpty || !next.leadingTriviaText.isEmpty
+    default:
+      break
+    }
+    return true
   }
 
   /// Returns whether the parser's current position is the start of a switch case,

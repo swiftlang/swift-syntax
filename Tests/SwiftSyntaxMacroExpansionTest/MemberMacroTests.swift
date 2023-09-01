@@ -24,6 +24,16 @@ import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
+fileprivate struct NoOpMemberMacro: MemberMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    providingMembersOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    return []
+  }
+}
+
 final class MemberMacroTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
@@ -103,16 +113,6 @@ final class MemberMacroTests: XCTestCase {
   }
 
   func testCommentAroundeAttachedMacro() {
-    struct TestMacro: MemberMacro {
-      static func expansion(
-        of node: AttributeSyntax,
-        providingMembersOf declaration: some DeclGroupSyntax,
-        in context: some MacroExpansionContext
-      ) throws -> [DeclSyntax] {
-        return []
-      }
-    }
-
     assertMacroExpansion(
       """
       /// Some doc comment
@@ -128,7 +128,47 @@ final class MemberMacroTests: XCTestCase {
           var value: Int
         }
         """,
-      macros: ["Test": TestMacro.self],
+      macros: ["Test": NoOpMemberMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testStructVariableDeclWithMultipleBindings() {
+    assertMacroExpansion(
+      """
+      @Test
+      struct S {
+        var x: Int, y: Int
+      }
+      """,
+      expandedSource: """
+        struct S {
+          var x: Int, y: Int
+        }
+        """,
+      macros: ["Test": NoOpMemberMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testNestedStructVariableDeclWithMultipleBindings() {
+    assertMacroExpansion(
+      """
+      @Test
+      struct Q {
+        struct R {
+          var i: Int, j: Int
+        }
+      }
+      """,
+      expandedSource: """
+        struct Q {
+          struct R {
+            var i: Int, j: Int
+          }
+        }
+        """,
+      macros: ["Test": NoOpMemberMacro.self],
       indentationWidth: indentationWidth
     )
   }

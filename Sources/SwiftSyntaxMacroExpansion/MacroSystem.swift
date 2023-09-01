@@ -606,6 +606,10 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   }
 
   override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
+    guard !macroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self).isEmpty else {
+      return super.visit(node).cast(DeclSyntax.self)
+    }
+
     var node = super.visit(node).cast(VariableDeclSyntax.self)
     guard node.bindings.count == 1, let binding = node.bindings.first else {
       context.addDiagnostics(from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings, node: node)

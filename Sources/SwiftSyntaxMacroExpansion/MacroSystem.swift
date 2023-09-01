@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxBuilder
 @_spi(MacroExpansion) import SwiftParser
@@ -55,7 +56,7 @@ private func expandFreestandingMemberDeclList(
     let expanded = try expandFreestandingMacro(
       definition: definition,
       macroRole: inferFreestandingMacroRole(definition: definition),
-      node: node.detach(in: context),
+      node: node.detach(in: context, foldingWith: .standardOperators),
       in: context,
       indentationWidth: indentationWidth
     )
@@ -80,7 +81,7 @@ private func expandFreestandingCodeItemList(
     let expanded = try expandFreestandingMacro(
       definition: definition,
       macroRole: inferFreestandingMacroRole(definition: definition),
-      node: node.detach(in: context),
+      node: node.detach(in: context, foldingWith: .standardOperators),
       in: context,
       indentationWidth: indentationWidth
     )
@@ -108,7 +109,7 @@ private func expandFreestandingExpr(
     let expanded = expandFreestandingMacro(
       definition: definition,
       macroRole: .expression,
-      node: node.detach(in: context),
+      node: node.detach(in: context, foldingWith: .standardOperators),
       in: context,
       indentationWidth: indentationWidth
     )
@@ -134,7 +135,7 @@ private func expandMemberMacro(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .member,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
@@ -163,7 +164,7 @@ private func expandMemberAttributeMacro(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .memberAttribute,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: member.detach(in: context),
       parentDeclNode: declaration.detach(in: context),
       extendedType: nil,
@@ -191,7 +192,7 @@ private func expandPeerMacroMember(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .peer,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
@@ -219,7 +220,7 @@ private func expandPeerMacroCodeItem(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .peer,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
@@ -251,7 +252,7 @@ private func expandAccessorMacroWithoutExistingAccessors(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .accessor,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
@@ -285,7 +286,7 @@ private func expandAccessorMacroWithExistingAccessors(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .accessor,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
@@ -322,7 +323,7 @@ private func expandExtensionMacro(
     let expanded = expandAttachedMacro(
       definition: definition,
       macroRole: .extension,
-      attributeNode: attributeNode.detach(in: context),
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: extendedType.detach(in: context),
@@ -1010,5 +1011,48 @@ private extension SyntaxProtocol {
     }
 
     return self.detached
+  }
+
+  /// Fold operators in this node using the given operator table, detach the
+  /// node and inform the macro expansion context, if it needs to know.
+  func detach(
+    in context: MacroExpansionContext,
+    foldingWith operatorTable: OperatorTable?
+  ) -> Syntax {
+    let folded: Syntax
+    if let operatorTable {
+      if let basicContext = context as? BasicMacroExpansionContext {
+        folded = basicContext.foldAllOperators(of: self, with: operatorTable)
+      } else {
+        folded = operatorTable.foldAll(self, errorHandler: { _ in /*ignore*/ })
+      }
+    } else {
+      folded = Syntax(self)
+    }
+    return folded.detach(in: context)
+  }
+}
+
+private extension FreestandingMacroExpansionSyntax {
+  /// Same as `SyntaxProtocol.detach(in:foldingWith:)` but returns a node of type
+  /// `Self` since we know that operator folding doesn't change the type of any
+  /// `FreestandingMacroExpansionSyntax`.
+  func detach(
+    in context: MacroExpansionContext,
+    foldingWith operatorTable: OperatorTable?
+  ) -> Self {
+    return (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
+  }
+}
+
+private extension AttributeSyntax {
+  /// Same as `SyntaxProtocol.detach(in:foldingWith:)` but returns a node of type
+  /// `Self` since we know that operator folding doesn't change the type of any
+  /// `AttributeSyntax`.
+  func detach(
+    in context: MacroExpansionContext,
+    foldingWith operatorTable: OperatorTable?
+  ) -> Self {
+    return (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
   }
 }

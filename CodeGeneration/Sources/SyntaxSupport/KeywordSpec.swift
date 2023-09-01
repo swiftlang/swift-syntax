@@ -646,7 +646,7 @@ public enum Keyword: CaseIterable {
     case .target:
       return KeywordSpec("target")
     case .then:
-      return KeywordSpec("then", isExperimental: true)
+      return KeywordSpec("then")
     case .throw:
       return KeywordSpec("throw", isLexerClassified: true)
     case .throws:

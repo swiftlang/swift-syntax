@@ -14,7 +14,6 @@ add_swift_host_library(SwiftSyntax
   Convenience.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
-  Trivia.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
@@ -24,10 +23,15 @@ add_swift_host_library(SwiftSyntax
   SyntaxChildren.swift
   SyntaxCollection.swift
   SyntaxData.swift
+  SyntaxHashable.swift
+  SyntaxNodeStructure.swift
+  SyntaxProtocol.swift
   SyntaxText.swift
   SyntaxTreeViewMode.swift
   TokenDiagnostic.swift
+  TokenSequence.swift
   TokenSyntax.swift
+  Trivia.swift
   Utils.swift
 
   Raw/RawSyntax.swift

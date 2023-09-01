@@ -8,6 +8,8 @@
 
 add_swift_host_library(SwiftSyntax
   AbsolutePosition.swift
+  AbsoluteRawSyntax.swift
+  AbsoluteSyntaxInfo.swift
   Assert.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
@@ -24,6 +26,7 @@ add_swift_host_library(SwiftSyntax
   SyntaxCollection.swift
   SyntaxData.swift
   SyntaxHashable.swift
+  SyntaxIdentifier.swift
   SyntaxNodeStructure.swift
   SyntaxProtocol.swift
   SyntaxText.swift

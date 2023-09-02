@@ -150,7 +150,8 @@ extension GroupedDiagnostics {
 
     // If this is a root note, take the first note.
     if sourceFile.parent == nil,
-       let note = sourceFile.diagnostics.first {
+      let note = sourceFile.diagnostics.first
+    {
       return (sourceFile, note)
     }
 
@@ -205,7 +206,8 @@ extension GroupedDiagnostics {
         // Provide a link back to the original source file where this generated buffer occurred, so it's easy to find if
         // (for example) the generated buffer is no longer available.
         if sourceFile.id != primaryDiagSourceFile.id,
-           var (rootSourceID, rootPosition) = primaryDiagSourceFile.parent {
+          var (rootSourceID, rootPosition) = primaryDiagSourceFile.parent
+        {
           // Go all the way up to the root to find the absolute position of the outermost generated buffer within the
           // root source file.
           while let parent = sourceFiles[rootSourceID.id].parent {

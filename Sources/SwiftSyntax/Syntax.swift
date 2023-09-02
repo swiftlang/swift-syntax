@@ -213,11 +213,33 @@ public extension SyntaxProtocol {
     return self.as(syntaxType) != nil
   }
 
+  /// Checks if the current syntax node can be cast to its own type.
+  ///
+  /// - Returns: `true` since the node is already of its own type.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func `is`(_ syntaxType: Self.Type) -> Bool {
+    return true
+  }
+
   /// Attempts to cast the current syntax node to a given specialized syntax type.
   ///
   /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
   func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
+  }
+
+  /// Casts the current syntax node to its own type.
+  ///
+  /// - Returns: The current syntax node.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func `as`(_ syntaxType: Self.Type) -> Self? {
+    return self
   }
 
   /// Force-casts the current syntax node to a given specialized syntax type.
@@ -226,6 +248,17 @@ public extension SyntaxProtocol {
   /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+
+  /// Force-casts the current syntax node to its own type.
+  ///
+  /// - Returns: The current syntax node.
+  ///
+  /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func cast(_ syntaxType: Self.Type) -> Self {
+    return self
   }
 }
 

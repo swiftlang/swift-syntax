@@ -341,6 +341,10 @@ public struct DiagnosticsFormatter {
     case .note:
       severityText = "note"
       severityAnnotation = .noteText
+
+    case .remark:
+      severityText = "remark"
+      severityAnnotation = .remarkText
     }
 
     let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation)
@@ -438,5 +442,9 @@ struct ANSIAnnotation {
 
   static var noteText: ANSIAnnotation {
     ANSIAnnotation(color: .default, trait: .bold)
+  }
+
+  static var remarkText: ANSIAnnotation {
+    ANSIAnnotation(color: .blue, trait: .bold)
   }
 }

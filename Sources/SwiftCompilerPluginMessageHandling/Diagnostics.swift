@@ -53,6 +53,7 @@ extension PluginMessage.Diagnostic.Severity {
     case .error: self = .error
     case .warning: self = .warning
     case .note: self = .note
+    case .remark: self = .remark
     }
   }
 }

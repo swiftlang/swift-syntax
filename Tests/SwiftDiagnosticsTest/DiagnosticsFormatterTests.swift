@@ -101,7 +101,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m var foo = bar +
-        \u{001B}[0;36m│\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: expected expression after operator\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mexpected expression after operator\u{001B}[0;0m
 
       """
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -113,9 +113,9 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m foo.[].[].[]
-        \u{001B}[0;36m│\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: expected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mexpected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mexpected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mexpected name in member access\u{001B}[0;0m
 
       """
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -128,8 +128,8 @@ final class DiagnosticsFormatterTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m│\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: expected ')' to end tuple pattern\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: C-style for statement has been removed in Swift 3\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: \u{001B}[0;0m\u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """
 

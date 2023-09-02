@@ -214,7 +214,8 @@ extension GroupedDiagnostics {
 
           if rootSourceID == sourceFileID {
             let bufferLoc = slc.location(for: rootPosition)
-            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(formatter.colorizeNoteIfRequested("expanded code originates here"))\n"
+            let coloredMessage = formatter.colorizeIfRequested(severity: .note, message: "expanded code originates here")
+            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(coloredMessage)\n"
           }
         }
       } else {

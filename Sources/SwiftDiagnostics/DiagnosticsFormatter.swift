@@ -321,26 +321,31 @@ public struct DiagnosticsFormatter {
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
   /// property is `true`) and returns the result as a printable string.
   func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
-    switch message.severity {
-    case .error:
-      let annotation = ANSIAnnotation(color: .red, trait: .bold)
-      return colorizeIfRequested("error: \(message.message)", annotation: annotation)
-
-    case .warning:
-      let color = ANSIAnnotation(color: .yellow)
-      let prefix = colorizeIfRequested("warning: ", annotation: color.withTrait(.bold))
-
-      return prefix + colorizeIfRequested(message.message, annotation: color);
-    case .note:
-      return colorizeNoteIfRequested(message.message)
-    }
+    colorizeIfRequested(severity: message.severity, message: message.message)
   }
 
-  /// Annotate a note with an appropriate ANSI color code (if requested).
-  func colorizeNoteIfRequested(_ message: String) -> String {
-    let color = ANSIAnnotation(color: .default, trait: .bold)
-    let prefix = colorizeIfRequested("note: ", annotation: color)
-    return prefix + message
+  /// Annotates a diagnostic message with the given severity and text with an appropriate ANSI color code.
+  func colorizeIfRequested(severity: DiagnosticSeverity, message: String) -> String {
+    let severityText: String
+    let severityAnnotation: ANSIAnnotation
+
+    switch severity {
+    case .error:
+      severityText = "error"
+      severityAnnotation = .errorText
+
+    case .warning:
+      severityText = "warning"
+      severityAnnotation = .warningText
+
+    case .note:
+      severityText = "note"
+      severityAnnotation = .noteText
+    }
+
+    let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation)
+
+    return prefix + colorizeIfRequested(message, annotation: .diagnosticText);
   }
 
   /// Apply the given color and trait to the specified text, when we are
@@ -417,5 +422,21 @@ struct ANSIAnnotation {
   /// Annotation used for highlighting source text.
   static var sourceHighlight: ANSIAnnotation {
     ANSIAnnotation(color: .default, trait: .underline)
+  }
+
+  static var diagnosticText: ANSIAnnotation {
+    ANSIAnnotation(color: .default, trait: .bold)
+  }
+
+  static var errorText: ANSIAnnotation {
+    ANSIAnnotation(color: .red, trait: .bold)
+  }
+
+  static var warningText: ANSIAnnotation {
+    ANSIAnnotation(color: .yellow, trait: .bold)
+  }
+
+  static var noteText: ANSIAnnotation {
+    ANSIAnnotation(color: .default, trait: .bold)
   }
 }

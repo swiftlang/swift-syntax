@@ -14,8 +14,8 @@ import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
-import _SwiftSyntaxTestSupport
 import XCTest
+import _SwiftSyntaxTestSupport
 
 final class MacroReplacementTests: XCTestCase {
   func testMacroDefinitionGood() throws {

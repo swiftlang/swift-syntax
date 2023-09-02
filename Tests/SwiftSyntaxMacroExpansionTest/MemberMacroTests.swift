@@ -19,8 +19,8 @@
 //==========================================================================//
 
 import SwiftSyntax
-import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 

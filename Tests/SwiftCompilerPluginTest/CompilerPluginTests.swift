@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxMacros
+import XCTest
 
 /// Dummy macro
 struct DummyMacro: ExpressionMacro {

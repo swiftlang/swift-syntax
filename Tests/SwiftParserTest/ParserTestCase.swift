@@ -10,10 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
-import SwiftSyntax
-
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
+import SwiftSyntax
+import XCTest
 
 /// The base class for all parser test cases.
 public class ParserTestCase: XCTestCase {

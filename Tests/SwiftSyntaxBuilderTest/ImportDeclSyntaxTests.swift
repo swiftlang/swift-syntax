@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import XCTest
 
 final class ImportDeclSyntaxTests: XCTestCase {
   func testImportDeclSyntax() {

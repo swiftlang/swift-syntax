@@ -12,9 +12,9 @@
 
 import ArgumentParser
 import SwiftDiagnostics
-import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
+import SwiftSyntax
 
 struct VerifyRoundTrip: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(

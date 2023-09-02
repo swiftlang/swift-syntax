@@ -1,6 +1,6 @@
-import SwiftSyntax
-import SwiftParser
 import Foundation
+import SwiftParser
+import SwiftSyntax
 
 @main struct ImportFormatter {
   static func main() {

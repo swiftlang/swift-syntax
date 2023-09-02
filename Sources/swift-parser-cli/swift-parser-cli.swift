@@ -10,14 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InstructionCounter
+import ArgumentParser
+import Foundation
 import SwiftDiagnostics
-import SwiftSyntax
+import SwiftOperators
 import SwiftParser
 import SwiftParserDiagnostics
-import SwiftOperators
-import Foundation
-import ArgumentParser
+import SwiftSyntax
+import _InstructionCounter
+
 #if os(Windows)
 import WinSDK
 #endif

@@ -10,12 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
 import Dispatch
-import XCTest
-import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
+import SwiftSyntax
+import XCTest
+import _SwiftSyntaxTestSupport
 
 public class ParserTests: ParserTestCase {
   /// Run a single parse test.

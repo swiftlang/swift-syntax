@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 @_spi(RawSyntax) import SwiftSyntax
+import XCTest
 
 final class SyntaxTextTests: XCTestCase {
   func testLiteral() {

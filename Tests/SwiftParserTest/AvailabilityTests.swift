@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 final class AvailabilityTests: ParserTestCase {

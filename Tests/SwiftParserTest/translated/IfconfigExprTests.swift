@@ -12,8 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/ifconfig_expr.swift
 
-import XCTest
 import SwiftSyntax
+import XCTest
 
 final class IfconfigExprTests: ParserTestCase {
   func testIfconfigExpr1() {

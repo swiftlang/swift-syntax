@@ -12,8 +12,8 @@
 
 // This test file has been translated from swift/test/StringProcessing/Parse/forward-slash-regex.swift
 
-@_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 final class ForwardSlashRegexTests: ParserTestCase {

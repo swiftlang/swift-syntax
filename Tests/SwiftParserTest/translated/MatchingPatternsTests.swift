@@ -12,9 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/matching_patterns.swift
 
-import XCTest
-
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
+import XCTest
 
 final class MatchingPatternsTests: ParserTestCase {
   func testMatchingPatterns1() {

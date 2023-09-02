@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
+import XCTest
 
 fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   let identifierPattern = IdentifierPatternSyntax(

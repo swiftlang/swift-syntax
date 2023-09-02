@@ -10,11 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
-@_spi(RawSyntax) import SwiftSyntax
+import SwiftDiagnostics
 @_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
-import SwiftDiagnostics
+@_spi(RawSyntax) import SwiftSyntax
+import XCTest
 import _SwiftSyntaxTestSupport
 
 // MARK: Lexing Assertions

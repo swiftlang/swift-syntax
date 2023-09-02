@@ -1,6 +1,6 @@
-import SwiftSyntax
-import SwiftParser
 import Foundation
+import SwiftParser
+import SwiftSyntax
 
 /// AddOneToIntegerLiterals will visit each token in the Syntax tree, and
 /// (if it is an integer literal token) add 1 to the integer and return the

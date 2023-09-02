@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
+import XCTest
 
 fileprivate func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)

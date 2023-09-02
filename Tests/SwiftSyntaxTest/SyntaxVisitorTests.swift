@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import XCTest
 import _SwiftSyntaxTestSupport
 
 public class SyntaxVisitorTests: XCTestCase {

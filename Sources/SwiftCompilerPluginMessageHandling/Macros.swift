@@ -14,8 +14,8 @@ import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
-import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
 
 extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.

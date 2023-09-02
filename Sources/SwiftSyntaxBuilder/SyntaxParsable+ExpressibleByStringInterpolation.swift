@@ -11,9 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
+import SwiftSyntax
+
 // Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
 // for the compiler.
 #if canImport(OSLog) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY

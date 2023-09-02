@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import Darwin
-import MachO
 import Foundation
+import MachO
 import SwiftRefactor
 
 extension SourceEditorExtension {

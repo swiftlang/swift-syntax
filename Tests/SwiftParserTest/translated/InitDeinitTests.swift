@@ -13,7 +13,6 @@
 // This test file has been translated from swift/test/Parse/init_deinit.swift
 
 import SwiftSyntax
-
 import XCTest
 
 final class InitDeinitTests: ParserTestCase {

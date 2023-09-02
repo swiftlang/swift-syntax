@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
+import SwiftBasicFormat
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftBasicFormat
+import XCTest
 import _SwiftSyntaxTestSupport
 
 final class FunctionTests: XCTestCase {

@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SyntaxSupport
-
 import XCTest
 
 fileprivate func assertNoFailures(

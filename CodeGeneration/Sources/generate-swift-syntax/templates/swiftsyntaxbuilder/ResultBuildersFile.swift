@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftSyntax
-import SyntaxSupport
 import SwiftSyntaxBuilder
+import SyntaxSupport
 import Utils
 
 let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {

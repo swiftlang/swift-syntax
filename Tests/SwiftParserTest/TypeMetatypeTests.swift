@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 import XCTest
 
 final class TypeMetatypeTests: ParserTestCase {

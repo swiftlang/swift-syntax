@@ -13,9 +13,9 @@
 import ArgumentParser
 import SwiftBasicFormat
 import SwiftDiagnostics
-import SwiftSyntax
 import SwiftParser
 import SwiftParserDiagnostics
+import SwiftSyntax
 
 struct BasicFormat: ParsableCommand, ParseCommand {
   enum Error: Swift.Error, CustomStringConvertible {

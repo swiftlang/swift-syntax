@@ -13,7 +13,6 @@
 // This test file has been translated from swift/test/StringProcessing/Parse/multiline_string.swift
 
 import SwiftSyntax
-
 import XCTest
 
 final class MultilineStringTests: ParserTestCase {

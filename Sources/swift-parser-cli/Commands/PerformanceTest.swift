@@ -10,11 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _InstructionCounter
 import ArgumentParser
 import Foundation
 import SwiftParser
 import SwiftSyntax
+import _InstructionCounter
 
 struct PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(

@@ -13,7 +13,6 @@
 // This test file has been translated from swift/test/Parse/generic_disambiguation.swift
 
 import SwiftSyntax
-
 import XCTest
 
 final class GenericDisambiguationTests: ParserTestCase {

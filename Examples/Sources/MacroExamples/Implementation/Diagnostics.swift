@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftDiagnostics
+import SwiftSyntax
 
 struct SimpleDiagnosticMessage: DiagnosticMessage, Error {
   let message: String

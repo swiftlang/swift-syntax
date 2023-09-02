@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 
 /// ``MigrateToNewIfLetSyntax`` will visit each if expression in the Syntax tree, and
 /// checks if there is an if condition which is of the pre Swift 5.7 "if-let-style"

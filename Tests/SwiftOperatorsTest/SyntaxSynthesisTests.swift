@@ -1,3 +1,5 @@
+import SwiftOperators
+import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,8 +12,6 @@
 //
 //===----------------------------------------------------------------------===//
 import XCTest
-import SwiftSyntax
-import SwiftOperators
 
 public class SyntaxSynthesisTests: XCTestCase {
   func testInfixOperator() {

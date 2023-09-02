@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import XcodeKit
 import SwiftRefactor
+import XcodeKit
 
 final class SourceEditorExtension: NSObject, XCSourceEditorExtension {
   func extensionDidFinishLaunching() {

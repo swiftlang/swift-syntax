@@ -10,11 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
-import XCTest
 import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
+import XCTest
+import _SwiftSyntaxTestSupport
 
 final class DiagnosticsFormatterTests: XCTestCase {
 

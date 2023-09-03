@@ -63,6 +63,42 @@ extension DeclSyntaxProtocol {
   }
   
 
+  /// Checks if the current syntax node can be upcast to its base node type (``DeclSyntax``).
+  ///
+  /// - Returns: `true` since the node can always be upcast to its base node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  public func `is`(_ syntaxType: DeclSyntax.Type) -> Bool {
+    return true
+  }
+  
+
+  /// Attempts to upcast the current syntax node to its base node type (``DeclSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `DeclSyntax.init` for upcasting")
+  public func `as`(_ syntaxType: DeclSyntax.Type) -> DeclSyntax? {
+    return DeclSyntax(self)
+  }
+  
+
+  /// Force-upcast the current syntax node to its base node type (``DeclSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `DeclSyntax.init` for upcasting")
+  public func cast(_ syntaxType: DeclSyntax.Type) -> DeclSyntax {
+    return DeclSyntax(self)
+  }
+  
+
   /// Checks if the current syntax node can be cast to a given node type from the different base node protocol hierarchy than ``DeclSyntaxProtocol``.
   ///
   /// - Returns: `false` since the node can not be cast to the node type from different base node protocol hierarchy than ``DeclSyntaxProtocol``.
@@ -312,6 +348,42 @@ extension ExprSyntaxProtocol {
   /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+  
+
+  /// Checks if the current syntax node can be upcast to its base node type (``ExprSyntax``).
+  ///
+  /// - Returns: `true` since the node can always be upcast to its base node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  public func `is`(_ syntaxType: ExprSyntax.Type) -> Bool {
+    return true
+  }
+  
+
+  /// Attempts to upcast the current syntax node to its base node type (``ExprSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `ExprSyntax.init` for upcasting")
+  public func `as`(_ syntaxType: ExprSyntax.Type) -> ExprSyntax? {
+    return ExprSyntax(self)
+  }
+  
+
+  /// Force-upcast the current syntax node to its base node type (``ExprSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `ExprSyntax.init` for upcasting")
+  public func cast(_ syntaxType: ExprSyntax.Type) -> ExprSyntax {
+    return ExprSyntax(self)
   }
   
 
@@ -595,6 +667,42 @@ extension PatternSyntaxProtocol {
   }
   
 
+  /// Checks if the current syntax node can be upcast to its base node type (``PatternSyntax``).
+  ///
+  /// - Returns: `true` since the node can always be upcast to its base node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  public func `is`(_ syntaxType: PatternSyntax.Type) -> Bool {
+    return true
+  }
+  
+
+  /// Attempts to upcast the current syntax node to its base node type (``PatternSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `PatternSyntax.init` for upcasting")
+  public func `as`(_ syntaxType: PatternSyntax.Type) -> PatternSyntax? {
+    return PatternSyntax(self)
+  }
+  
+
+  /// Force-upcast the current syntax node to its base node type (``PatternSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `PatternSyntax.init` for upcasting")
+  public func cast(_ syntaxType: PatternSyntax.Type) -> PatternSyntax {
+    return PatternSyntax(self)
+  }
+  
+
   /// Checks if the current syntax node can be cast to a given node type from the different base node protocol hierarchy than ``PatternSyntaxProtocol``.
   ///
   /// - Returns: `false` since the node can not be cast to the node type from different base node protocol hierarchy than ``PatternSyntaxProtocol``.
@@ -827,6 +935,42 @@ extension StmtSyntaxProtocol {
   /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+  
+
+  /// Checks if the current syntax node can be upcast to its base node type (``StmtSyntax``).
+  ///
+  /// - Returns: `true` since the node can always be upcast to its base node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  public func `is`(_ syntaxType: StmtSyntax.Type) -> Bool {
+    return true
+  }
+  
+
+  /// Attempts to upcast the current syntax node to its base node type (``StmtSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `StmtSyntax.init` for upcasting")
+  public func `as`(_ syntaxType: StmtSyntax.Type) -> StmtSyntax? {
+    return StmtSyntax(self)
+  }
+  
+
+  /// Force-upcast the current syntax node to its base node type (``StmtSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `StmtSyntax.init` for upcasting")
+  public func cast(_ syntaxType: StmtSyntax.Type) -> StmtSyntax {
+    return StmtSyntax(self)
   }
   
 
@@ -1072,6 +1216,42 @@ extension TypeSyntaxProtocol {
   /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+  
+
+  /// Checks if the current syntax node can be upcast to its base node type (``TypeSyntax``).
+  ///
+  /// - Returns: `true` since the node can always be upcast to its base node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  public func `is`(_ syntaxType: TypeSyntax.Type) -> Bool {
+    return true
+  }
+  
+
+  /// Attempts to upcast the current syntax node to its base node type (``TypeSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `TypeSyntax.init` for upcasting")
+  public func `as`(_ syntaxType: TypeSyntax.Type) -> TypeSyntax? {
+    return TypeSyntax(self)
+  }
+  
+
+  /// Force-upcast the current syntax node to its base node type (``TypeSyntax``).
+  ///
+  /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the target base node's initializer.
+  @available(*, deprecated, message: "Use `TypeSyntax.init` for upcasting")
+  public func cast(_ syntaxType: TypeSyntax.Type) -> TypeSyntax {
+    return TypeSyntax(self)
   }
   
 

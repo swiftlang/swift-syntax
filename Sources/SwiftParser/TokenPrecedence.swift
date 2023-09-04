@@ -192,12 +192,14 @@ enum TokenPrecedence: Comparable {
     case  // Literals
     .Self, .false, .nil, .`self`, .super, .true:
       self = .identifierLike
+
     // MARK: Expr keyword
     case  // Keywords
-    .as, .is, .try,
+    .as, .is, .some, .try,
+      .await, .each, .copy,
       // We don't know much about which contextual keyword it is, be conservative an allow considering it as unexpected.
       // Keywords in function types (we should be allowed to skip them inside parenthesis)
-      .rethrows, .throws,
+      .rethrows, .throws, .reasync, .async,
       // Consider 'any' a prefix operator to a type and a type is expression-like.
       .Any,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
@@ -205,6 +207,7 @@ enum TokenPrecedence: Comparable {
       // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
       .in:
       self = .exprKeyword
+
     case  // Control-flow constructs
     .defer, .do, .for, .guard, .if, .repeat, .switch, .while,
       // Secondary parts of control-flow constructs
@@ -212,9 +215,10 @@ enum TokenPrecedence: Comparable {
       // Return-like statements
       .break, .continue, .fallthrough, .return, .throw, .then, .yield:
       self = .stmtKeyword
+
     // MARK: Decl keywords
     case  // Types
-    .associatedtype, .class, .enum, .extension, .protocol, .struct, .typealias,
+    .associatedtype, .class, .enum, .extension, .protocol, .struct, .typealias, .actor, .macro,
       // Access modifiers
       .fileprivate, .internal, .private, .public, .static,
       // Functions
@@ -225,14 +229,130 @@ enum TokenPrecedence: Comparable {
       .operator, .precedencegroup,
       // Declaration Modifiers
       .__consuming, .final, .required, .optional, .lazy, .dynamic, .infix, .postfix, .prefix, .mutating, .nonmutating, .convenience, .override, .package, .open,
-      .__setter_access, .indirect, .nonisolated, .distributed, ._local,
-      .inout, ._mutating, ._borrowing, ._consuming,
+      .__setter_access, .indirect, .isolated, .nonisolated, .distributed, ._local,
+      .inout, ._mutating, ._borrow, ._borrowing, .borrowing, ._consuming, .consuming, .consume,
       // Misc
       .import:
       self = .declKeyword
-    default:
-      // Treat all keywords that weren't handled above as expression keywords as a fallback option.
-      // FIXME: We should assign a token precedence to all keywords
+
+    case  // Treat all other keywords as expression keywords in the absence of any better information.
+    .__owned,
+      .__shared,
+      ._alignment,
+      ._backDeploy,
+      ._cdecl,
+      ._Class,
+      ._compilerInitialized,
+      ._const,
+      ._documentation,
+      ._dynamicReplacement,
+      ._effects,
+      ._expose,
+      ._forward,
+      ._implements,
+      ._linear,
+      ._modify,
+      ._move,
+      ._NativeClass,
+      ._NativeRefCountedObject,
+      ._noMetadata,
+      ._nonSendable,
+      ._objcImplementation,
+      ._objcRuntimeName,
+      ._opaqueReturnTypeOf,
+      ._optimize,
+      ._originallyDefinedIn,
+      ._PackageDescription,
+      ._private,
+      ._projectedValueProperty,
+      ._read,
+      ._RefCountedObject,
+      ._semantics,
+      ._specialize,
+      ._spi,
+      ._spi_available,
+      ._swift_native_objc_runtime_base,
+      ._Trivial,
+      ._TrivialAtMost,
+      ._typeEraser,
+      ._unavailableFromAsync,
+      ._underlyingVersion,
+      ._UnknownLayout,
+      ._version,
+      .accesses,
+      .addressWithNativeOwner,
+      .addressWithOwner,
+      .any,
+      .assignment,
+      .associativity,
+      .attached,
+      .autoclosure,
+      .availability,
+      .available,
+      .backDeployed,
+      .before,
+      .block,
+      .canImport,
+      .compiler,
+      .convention,
+      .cType,
+      .deprecated,
+      .derivative,
+      .didSet,
+      .differentiable,
+      .escaping,
+      .exclusivity,
+      .exported,
+      .file,
+      .discard,
+      .forward,
+      .get,
+      .higherThan,
+      .initializes,
+      .inline,
+      .introduced,
+      .kind,
+      .left,
+      .line,
+      .linear,
+      .lowerThan,
+      .message,
+      .metadata,
+      .module,
+      .mutableAddressWithNativeOwner,
+      .mutableAddressWithOwner,
+      .noasync,
+      .noDerivative,
+      .noescape,
+      .none,
+      .objc,
+      .obsoleted,
+      .of,
+      .Protocol,
+      .renamed,
+      .reverse,
+      .right,
+      .safe,
+      .Sendable,
+      .set,
+      .sourceFile,
+      .spi,
+      .spiModule,
+      .swift,
+      .target,
+      .transpose,
+      .Type,
+      .unavailable,
+      .unchecked,
+      .unowned,
+      .unsafeAddress,
+      .unsafeMutableAddress,
+      .visibility,
+      .weak,
+      .willSet,
+      .witness_method,
+      .wrt,
+      .unsafe:
       self = .exprKeyword
     }
   }

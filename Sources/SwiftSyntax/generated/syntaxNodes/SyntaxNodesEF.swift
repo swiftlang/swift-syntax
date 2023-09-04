@@ -288,6 +288,84 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
   }
 }
 
+// MARK: - EditorPlaceholderPatternSyntax
+
+/// An editor placeholder, e.g. `<#pattern#>` that is used in a position that expects a pattern.
+///
+/// ### Children
+/// 
+///  - `placeholder`: `<identifier>`
+public struct EditorPlaceholderPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .editorPlaceholderPattern else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - placeholder: The actual editor placeholder that starts with `<#` and ends with `#>`.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforePlaceholder: UnexpectedNodesSyntax? = nil,
+      placeholder: TokenSyntax,
+      _ unexpectedAfterPlaceholder: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.editorPlaceholderPattern,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+        
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+  
+  public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(EditorPlaceholderPatternSyntax.self)
+    }
+  }
+  
+  /// The actual editor placeholder that starts with `<#` and ends with `#>`.
+  public var placeholder: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(EditorPlaceholderPatternSyntax.self)
+    }
+  }
+  
+  public var unexpectedAfterPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(EditorPlaceholderPatternSyntax.self)
+    }
+  }
+  
+  public static var structure: SyntaxNodeStructure {
+    return .layout([\Self.unexpectedBeforePlaceholder, \Self.placeholder, \Self.unexpectedAfterPlaceholder])
+  }
+}
+
 // MARK: - EnumCaseDeclSyntax
 
 /// A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.

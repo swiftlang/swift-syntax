@@ -1077,6 +1077,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "placeholder"
   case \EditorPlaceholderExprSyntax.unexpectedAfterPlaceholder:
     return "unexpectedAfterPlaceholder"
+  case \EditorPlaceholderPatternSyntax.unexpectedBeforePlaceholder:
+    return "unexpectedBeforePlaceholder"
+  case \EditorPlaceholderPatternSyntax.placeholder:
+    return "placeholder"
+  case \EditorPlaceholderPatternSyntax.unexpectedAfterPlaceholder:
+    return "unexpectedAfterPlaceholder"
   case \EnumCaseDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \EnumCaseDeclSyntax.attributes:

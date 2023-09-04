@@ -182,4 +182,22 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
+  Node(
+    kind: .editorPlaceholderPattern,
+    base: .pattern,
+    nameForDiagnostics: "editor placeholder",
+    documentation: """
+      An editor placeholder, e.g. `<#pattern#>` that is used in a position that expects a pattern.
+      """,
+    children: [
+      Child(
+        name: "placeholder",
+        kind: .token(choices: [.token(.identifier)]),
+        documentation: """
+          The actual editor placeholder that starts with `<#` and ends with `#>`.
+          """
+      )
+    ]
+  ),
+
 ]

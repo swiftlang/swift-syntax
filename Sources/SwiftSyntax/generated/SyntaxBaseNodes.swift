@@ -770,7 +770,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .editorPlaceholderPattern, .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -795,6 +795,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .choices([
+          .node(EditorPlaceholderPatternSyntax.self),
           .node(ExpressionPatternSyntax.self),
           .node(IdentifierPatternSyntax.self),
           .node(IsTypePatternSyntax.self),
@@ -1486,6 +1487,7 @@ extension Syntax {
           .node(DynamicReplacementAttributeArgumentsSyntax.self),
           .node(EditorPlaceholderDeclSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
+          .node(EditorPlaceholderPatternSyntax.self),
           .node(EffectsAttributeArgumentListSyntax.self),
           .node(EnumCaseDeclSyntax.self),
           .node(EnumCaseElementListSyntax.self),

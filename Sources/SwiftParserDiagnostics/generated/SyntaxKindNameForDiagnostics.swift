@@ -143,6 +143,8 @@ extension SyntaxKind {
       return "editor placeholder"
     case .editorPlaceholderExpr:
       return "editor placeholder"
+    case .editorPlaceholderPattern:
+      return "editor placeholder"
     case .effectsAttributeArgumentList:
       return "@_effects arguments"
     case .enumCaseDecl:

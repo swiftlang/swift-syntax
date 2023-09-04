@@ -281,9 +281,10 @@ extension Parser {
         )
       }
 
-      let isProbablyFuncDecl = self.at(.identifier, .wildcard) || self.at(anyIn: Operator.self) != nil
-
-      if isProbablyFuncDecl {
+      let isPossibleFuncIdentifier = self.at(.identifier, .wildcard)
+      let isPossibleFuncParen = self.peek(isAt: .leftParen, .binaryOperator)
+      // Treat operators specially because they're likely to be functions.
+      if (isPossibleFuncIdentifier && isPossibleFuncParen) || self.at(anyIn: Operator.self) != nil {
         return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
       }
     }

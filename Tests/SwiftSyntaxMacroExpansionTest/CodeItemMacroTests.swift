@@ -31,7 +31,7 @@ fileprivate struct DeclsFromStringsMacro: DeclarationMacro {
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     var strings: [String] = []
-    for arg in node.argumentList {
+    for arg in node.arguments {
       guard let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
         continue
       }
@@ -51,11 +51,11 @@ final class CodeItemMacroTests: XCTestCase {
         of node: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> [CodeBlockItemSyntax] {
-        guard !node.argumentList.isEmpty else {
+        guard !node.arguments.isEmpty else {
           throw MacroExpansionErrorMessage("'#unwrap' requires arguments")
         }
         let errorThrower = node.trailingClosure
-        let identifiers = try node.argumentList.map { argument in
+        let identifiers = try node.arguments.map { argument in
           guard let tupleElement = argument.as(LabeledExprSyntax.self),
             let declReferenceExpr = tupleElement.expression.as(DeclReferenceExprSyntax.self)
           else {

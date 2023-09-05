@@ -29,7 +29,7 @@ fileprivate struct StringifyMacro: ExpressionMacro {
     of macro: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
-    guard let argument = macro.argumentList.first?.expression else {
+    guard let argument = macro.arguments.first?.expression else {
       throw MacroExpansionErrorMessage("missing argument")
     }
 
@@ -77,7 +77,7 @@ final class ExpressionMacroTests: XCTestCase {
         of macro: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) -> ExprSyntax {
-        var argList = macro.argumentList
+        var argList = macro.arguments
         argList[argList.startIndex].label = .identifier("_colorLiteralRed")
         let initSyntax: ExprSyntax = ".init(\(argList))"
         return initSyntax

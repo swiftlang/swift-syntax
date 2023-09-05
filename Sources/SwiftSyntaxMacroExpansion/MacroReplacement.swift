@@ -278,7 +278,7 @@ extension MacroDeclSyntax {
     replacements: [MacroDefinition.Replacement]
   ) -> ExprSyntax {
     return expand(
-      argumentList: node.argumentList,
+      argumentList: node.arguments,
       definition: definition,
       replacements: replacements
     )

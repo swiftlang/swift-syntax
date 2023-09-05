@@ -31,7 +31,7 @@ fileprivate struct DeclsFromStringsMacro: DeclarationMacro {
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     var strings: [String] = []
-    for arg in node.argumentList {
+    for arg in node.arguments {
       guard let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
         continue
       }

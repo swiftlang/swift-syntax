@@ -62,11 +62,11 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "FreestandingMacroExpansion",
     children: [
-      Child(name: "poundToken", kind: .token(choices: [.token(.pound)])),
-      Child(name: "macro", kind: .token(choices: [.token(.identifier)])),
+      Child(name: "pound", deprecatedName: "poundToken", kind: .token(choices: [.token(.pound)])),
+      Child(name: "macroName", deprecatedName: "macro", kind: .token(choices: [.token(.identifier)])),
       Child(name: "genericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
       Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),
-      Child(name: "argumentList", kind: .node(kind: .labeledExprList)),
+      Child(name: "arguments", deprecatedName: "argumentList", kind: .node(kind: .labeledExprList)),
       Child(name: "rightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
       Child(name: "trailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
       Child(name: "additionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList)),

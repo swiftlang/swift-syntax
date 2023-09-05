@@ -176,11 +176,6 @@ public struct DiagnosticsFormatter {
     return resultSourceString
   }
 
-  struct PrimaryDiagnostic {
-    var location: SourceLocation
-    var diagnostic: Diagnostic
-  }
-
   /// Print given diagnostics for a given syntax tree on the command line
   ///
   /// - Parameters:

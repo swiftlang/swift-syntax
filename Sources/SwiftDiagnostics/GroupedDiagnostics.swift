@@ -133,6 +133,32 @@ extension GroupedDiagnostics {
     }
   }
 
+  // Find the "primary" diagnostic that will be shown at the top of the diagnostic
+  // message. This is typically the error, warning, or remark.
+  private func findPrimaryDiagnostic(in sourceFile: SourceFile) -> (SourceFile, Diagnostic)? {
+    // If there is a non-note diagnostic, it's the primary diagnostic.
+    if let primaryDiag = sourceFile.diagnostics.first(where: { $0.diagMessage.severity != .note }) {
+      return (sourceFile, primaryDiag)
+    }
+
+    // If one of our child source files has a primary diagnostic, return that.
+    for childID in sourceFile.children {
+      if let foundInChild = findPrimaryDiagnostic(in: sourceFiles[childID.id]) {
+        return foundInChild
+      }
+    }
+
+    // If this is a root note, take the first note.
+    if sourceFile.parent == nil,
+      let note = sourceFile.diagnostics.first
+    {
+      return (sourceFile, note)
+    }
+
+    // There is no primary diagnostic.
+    return nil
+  }
+
   /// Annotate the source for a given source file ID, embedding its child
   /// source files.
   func annotateSource(
@@ -164,11 +190,41 @@ extension GroupedDiagnostics {
 
     // If this is a nested source file, draw a box around it.
     let isRoot = sourceFile.parent == nil
-    let prefixString: String
+    var prefixString: String
     let suffixString: String
 
     if isRoot {
-      prefixString = ""
+      // If there's a primary diagnostic, print it first.
+      if let (primaryDiagSourceFile, primaryDiag) = findPrimaryDiagnostic(in: sourceFile) {
+        let primaryDiagSLC = SourceLocationConverter(fileName: primaryDiagSourceFile.displayName, tree: primaryDiagSourceFile.tree)
+        let location = primaryDiag.location(converter: primaryDiagSLC)
+
+        // Display file/line/column and diagnostic text for the primary diagnostic.
+        prefixString = "\(location.file):\(location.line):\(location.column): \(formatter.colorizeIfRequested(primaryDiag.diagMessage))\n"
+
+        // If the primary diagnostic source file is not the same as the root source file, we're pointing into a generated buffer.
+        // Provide a link back to the original source file where this generated buffer occurred, so it's easy to find if
+        // (for example) the generated buffer is no longer available.
+        if sourceFile.id != primaryDiagSourceFile.id,
+          var (rootSourceID, rootPosition) = primaryDiagSourceFile.parent
+        {
+          // Go all the way up to the root to find the absolute position of the outermost generated buffer within the
+          // root source file.
+          while let parent = sourceFiles[rootSourceID.id].parent {
+            (rootSourceID, rootPosition) = parent
+          }
+
+          if rootSourceID == sourceFileID {
+            let bufferLoc = slc.location(for: rootPosition)
+            let coloredMessage = formatter.colorizeIfRequested(severity: .note, message: "expanded code originates here")
+            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(coloredMessage)\n"
+          }
+        }
+      } else {
+        let firstLine = sourceFile.diagnostics.first.map { $0.location(converter: slc).line } ?? 0
+        prefixString = "\(sourceFile.displayName): \(firstLine):"
+      }
+
       suffixString = ""
     } else {
       let padding = indentString.dropLast(1)
@@ -190,7 +246,6 @@ extension GroupedDiagnostics {
     // Render the buffer.
     return prefixString
       + formatter.annotatedSource(
-        fileName: isRoot ? sourceFile.displayName : nil,
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
         indentString: colorizeBufferOutline(indentString),

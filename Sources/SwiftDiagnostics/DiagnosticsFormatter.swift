@@ -182,14 +182,13 @@ public struct DiagnosticsFormatter {
   ///   - suffixTexts: suffix text to be printed at the given absolute
   ///                  locations within the source file.
   func annotatedSource(
-    fileName: String?,
     tree: some SyntaxProtocol,
     diags: [Diagnostic],
     indentString: String,
     suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
-    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: fileName ?? "", tree: tree)
+    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: "<unknown>", tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()
@@ -218,19 +217,8 @@ public struct DiagnosticsFormatter {
       return nil
     }
 
+    // Accumulate the fully annotated source files here.
     var annotatedSource = ""
-
-    // If there was a filename, add it first.
-    if let fileName {
-      let header = colorizeBufferOutline("===")
-      let firstLine =
-        1
-        + (annotatedSourceLines.enumerated().first { (lineIndex, sourceLine) in
-          !sourceLine.isFreeOfAnnotations
-        }?.offset ?? 0)
-
-      annotatedSource.append("\(indentString)\(header) \(fileName):\(firstLine) \(header)\n")
-    }
 
     /// Keep track if a line missing char should be printed
     var hasLineBeenSkipped = false
@@ -318,7 +306,6 @@ public struct DiagnosticsFormatter {
     diags: [Diagnostic]
   ) -> String {
     return annotatedSource(
-      fileName: nil,
       tree: tree,
       diags: diags,
       indentString: "",
@@ -328,22 +315,36 @@ public struct DiagnosticsFormatter {
 
   /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
   /// property is `true`) and returns the result as a printable string.
-  private func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
-    switch message.severity {
+  func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
+    colorizeIfRequested(severity: message.severity, message: message.message)
+  }
+
+  /// Annotates a diagnostic message with the given severity and text with an appropriate ANSI color code.
+  func colorizeIfRequested(severity: DiagnosticSeverity, message: String) -> String {
+    let severityText: String
+    let severityAnnotation: ANSIAnnotation
+
+    switch severity {
     case .error:
-      let annotation = ANSIAnnotation(color: .red, trait: .bold)
-      return colorizeIfRequested("error: \(message.message)", annotation: annotation)
+      severityText = "error"
+      severityAnnotation = .errorText
 
     case .warning:
-      let color = ANSIAnnotation(color: .yellow)
-      let prefix = colorizeIfRequested("warning: ", annotation: color.withTrait(.bold))
+      severityText = "warning"
+      severityAnnotation = .warningText
 
-      return prefix + colorizeIfRequested(message.message, annotation: color);
     case .note:
-      let color = ANSIAnnotation(color: .default, trait: .bold)
-      let prefix = colorizeIfRequested("note: ", annotation: color)
-      return prefix + message.message
+      severityText = "note"
+      severityAnnotation = .noteText
+
+    case .remark:
+      severityText = "remark"
+      severityAnnotation = .remarkText
     }
+
+    let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation)
+
+    return prefix + colorizeIfRequested(message, annotation: .diagnosticText);
   }
 
   /// Apply the given color and trait to the specified text, when we are
@@ -420,5 +421,25 @@ struct ANSIAnnotation {
   /// Annotation used for highlighting source text.
   static var sourceHighlight: ANSIAnnotation {
     ANSIAnnotation(color: .default, trait: .underline)
+  }
+
+  static var diagnosticText: ANSIAnnotation {
+    ANSIAnnotation(color: .default, trait: .bold)
+  }
+
+  static var errorText: ANSIAnnotation {
+    ANSIAnnotation(color: .red, trait: .bold)
+  }
+
+  static var warningText: ANSIAnnotation {
+    ANSIAnnotation(color: .yellow, trait: .bold)
+  }
+
+  static var noteText: ANSIAnnotation {
+    ANSIAnnotation(color: .default, trait: .bold)
+  }
+
+  static var remarkText: ANSIAnnotation {
+    ANSIAnnotation(color: .blue, trait: .bold)
   }
 }

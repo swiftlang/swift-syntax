@@ -112,8 +112,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     assertStringsEqualWithDiff(
       annotated,
       """
-      === main.swift:5 ===
-        ┆
+      main.swift:6:14: error: expected ')' to end function call
       3 │ // test
       4 │ let pi = 3.14159
       5 │ #myAssert(pi == 3)
@@ -141,7 +140,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """
       let pi = 3.14159
       1️⃣#myAssert(pi == 3)
-      print("hello"
+      print("hello")
       """,
       displayName: "main.swift",
       extraDiagnostics: ["1️⃣": ("in expansion of macro 'myAssert' here", .note)]
@@ -181,7 +180,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     assertStringsEqualWithDiff(
       annotated,
       """
-      === main.swift:2 ===
+      #invertedEqualityCheck:1:7: error: no matching operator '==' for types 'Double' and 'Int'
+      ╰─ main.swift:2:1: note: expanded code originates here
       1 │ let pi = 3.14159
       2 │ #myAssert(pi == 3)
         │ ╰─ note: in expansion of macro 'myAssert' here
@@ -197,8 +197,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         │4 │   fatalError("assertion failed: pi != 3")
         │5 │ }
         ╰─────────────────────────────────────────────────────────────────────
-      3 │ print("hello"
-        │              ╰─ error: expected ')' to end function call
+      3 │ print("hello")
 
       """
     )

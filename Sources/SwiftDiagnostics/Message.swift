@@ -30,6 +30,7 @@ public enum DiagnosticSeverity {
   case error
   case warning
   case note
+  case remark
 }
 
 /// Types conforming to this protocol represent diagnostic messages that can be

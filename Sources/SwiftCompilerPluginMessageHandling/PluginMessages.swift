@@ -155,6 +155,7 @@ public enum PluginMessage {
       case error
       case warning
       case note
+      case remark
     }
     public struct Position: Codable {
       public var fileName: String

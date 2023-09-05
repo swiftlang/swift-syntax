@@ -87,7 +87,7 @@ def find_swiftformat(swift_format: str) -> Path:
 def get_files_to_format() -> List[Path]:
     package_dir = Path(__file__).parent
     files_to_format = package_dir.glob('**/*.swift')
-    
+
     def should_exclude(path: Path) -> bool:
         if 'lit_tests' in path.parts:
             return True

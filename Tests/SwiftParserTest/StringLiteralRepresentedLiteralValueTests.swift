@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 import SwiftSyntaxBuilder
+import XCTest
 
 /// Test ``StringLiteralExprSyntax/representedLiteralValue``.
 ///

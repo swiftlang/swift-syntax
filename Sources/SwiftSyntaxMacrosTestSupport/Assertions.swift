@@ -10,15 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
 import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
-import SwiftSyntaxMacros
 import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
 import XCTest
+import _SwiftSyntaxTestSupport
 
 // MARK: - Note
 

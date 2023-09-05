@@ -10,13 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
+import SwiftBasicFormat
+import SwiftParser
 import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxBuilder
-import SwiftParser
-import SwiftBasicFormat
-
 import XCTest
+import _SwiftSyntaxTestSupport
 
 class TwoSpacesFormat: BasicFormat {
   public init() {

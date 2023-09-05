@@ -12,8 +12,8 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-import SwiftSyntaxMacros
 import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
 public struct MetaEnumMacro {
   let parentTypeName: TokenSyntax

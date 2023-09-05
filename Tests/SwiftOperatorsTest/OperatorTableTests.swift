@@ -1,3 +1,6 @@
+@_spi(Testing) import SwiftOperators
+import SwiftParser
+import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,9 +13,6 @@
 //
 //===----------------------------------------------------------------------===//
 import XCTest
-import SwiftSyntax
-import SwiftParser
-@_spi(Testing) import SwiftOperators
 import _SwiftSyntaxTestSupport
 
 /// Visitor that looks for ExprSequenceSyntax nodes.

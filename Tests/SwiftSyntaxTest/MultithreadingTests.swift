@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 @_spi(RawSyntax) import SwiftSyntax
+import XCTest
 
 extension SyntaxProtocol {
   subscript<S: SyntaxProtocol>(as type: S.Type) -> S {

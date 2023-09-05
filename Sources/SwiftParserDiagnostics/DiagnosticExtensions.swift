@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftDiagnostics
 import SwiftBasicFormat
+import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 
 extension FixIt {

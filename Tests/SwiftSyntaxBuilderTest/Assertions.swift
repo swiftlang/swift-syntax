@@ -12,9 +12,8 @@
 
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import _SwiftSyntaxTestSupport
-
 import XCTest
+import _SwiftSyntaxTestSupport
 
 func assertBuildResult<T: SyntaxProtocol>(
   _ buildable: T,

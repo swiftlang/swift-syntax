@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftDiagnostics
 import SwiftParserDiagnostics
+import SwiftSyntax
 
 extension SyntaxProtocol {
   /// If `node` has contains no syntax errors, return `node`, otherwise

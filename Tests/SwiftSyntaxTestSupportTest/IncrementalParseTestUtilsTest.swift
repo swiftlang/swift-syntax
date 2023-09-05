@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
+import XCTest
 import _SwiftSyntaxTestSupport
 
 public class IncrementalParseUtilTest: XCTestCase {

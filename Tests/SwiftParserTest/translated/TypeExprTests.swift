@@ -12,8 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/type_expr.swift
 
-import XCTest
 import SwiftSyntax
+import XCTest
 
 // Types in expression contexts must be followed by a member access or
 // constructor call.

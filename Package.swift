@@ -1,7 +1,7 @@
 // swift-tools-version:5.7
 
-import PackageDescription
 import Foundation
+import PackageDescription
 
 var swiftSyntaxSwiftSettings: [SwiftSetting] = []
 var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] = []

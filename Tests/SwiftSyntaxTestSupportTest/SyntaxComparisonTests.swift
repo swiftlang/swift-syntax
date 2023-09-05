@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 import XCTest
+import _SwiftSyntaxTestSupport
 
 private func parse(source: String) -> Syntax {
   return Syntax(Parser.parse(source: source))

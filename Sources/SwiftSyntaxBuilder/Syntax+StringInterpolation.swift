@@ -12,8 +12,8 @@
 
 import SwiftBasicFormat
 import SwiftDiagnostics
-@_spi(RawSyntax) import SwiftSyntax
 @_spi(RawSyntax) @_spi(Testing) import SwiftParser
+@_spi(RawSyntax) import SwiftSyntax
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {

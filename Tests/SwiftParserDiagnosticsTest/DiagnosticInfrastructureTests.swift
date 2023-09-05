@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftDiagnostics
 import SwiftParserDiagnostics
+import XCTest
 
 public class DiagnosticInfrastructureTests: XCTestCase {
   public func testDiagnosticID() {

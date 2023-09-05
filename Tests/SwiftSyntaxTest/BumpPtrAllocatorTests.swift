@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 @_spi(Testing) import SwiftSyntax
+import XCTest
 
 final class BumpPtrAllocatorTests: XCTestCase {
 

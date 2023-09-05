@@ -12,9 +12,8 @@
 
 import SwiftParser
 import SwiftRefactor
-import SwiftSyntaxBuilder
 import SwiftSyntax
-
+import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 

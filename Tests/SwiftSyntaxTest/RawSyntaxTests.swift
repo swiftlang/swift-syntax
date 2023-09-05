@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 @_spi(RawSyntax) import SwiftSyntax
+import XCTest
 
 fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(

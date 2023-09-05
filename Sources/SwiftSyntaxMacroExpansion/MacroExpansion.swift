@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftBasicFormat
+import SwiftSyntax
 @_spi(MacroExpansion) import SwiftSyntaxMacros
 
 public enum MacroRole {

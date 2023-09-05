@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import XCTest
 
 final class ProtocolDeclTests: XCTestCase {
   func testProtocolDecl() throws {

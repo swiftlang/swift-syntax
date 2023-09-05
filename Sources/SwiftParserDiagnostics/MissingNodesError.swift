@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
-import SwiftBasicFormat
 
 // MARK: - Shared code
 

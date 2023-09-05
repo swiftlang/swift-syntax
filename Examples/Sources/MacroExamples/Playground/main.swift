@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import MacroExamplesInterface
 import Foundation
+import MacroExamplesInterface
 
 let x = 1
 let y = 2

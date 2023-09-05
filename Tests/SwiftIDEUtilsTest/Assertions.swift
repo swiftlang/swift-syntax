@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftIDEUtils
 import SwiftParser
 import SwiftSyntax
+import XCTest
 import _SwiftSyntaxTestSupport
 
 /// Parse `source` and checks its `classifications` is the same as `expected`.

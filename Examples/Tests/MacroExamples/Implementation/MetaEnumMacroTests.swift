@@ -10,12 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
+import MacroExamplesImplementation
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftSyntaxMacros
-import MacroExamplesImplementation
 import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
+import XCTest
 
 final class CaseMacroTests: XCTestCase {
   let testMacros: [String: Macro.Type] = [

@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 import XCTest
 
 /// This function is used to verify the correctness of incremental parsing

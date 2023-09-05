@@ -11,10 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import XcodeKit
 import SwiftParser
 import SwiftRefactor
 import SwiftSyntax
+import XcodeKit
 
 enum ExtensionError: Error {
   case unsupportedContentType

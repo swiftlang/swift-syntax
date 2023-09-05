@@ -10,12 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
-import XCTest
 import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
+import XCTest
+import _SwiftSyntaxTestSupport
 
 struct SimpleDiagnosticMessage: DiagnosticMessage {
   let message: String

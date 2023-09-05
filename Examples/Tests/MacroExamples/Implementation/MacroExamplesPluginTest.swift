@@ -10,11 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+import MacroExamplesImplementation
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftSyntaxMacros
-import MacroExamplesImplementation
 import SwiftSyntaxMacroExpansion
+import SwiftSyntaxMacros
 import XCTest
 
 var testMacros: [String: Macro.Type] = [

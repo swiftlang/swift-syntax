@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import _SwiftSyntaxTestSupport
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
+import _SwiftSyntaxTestSupport
 
 fileprivate func assertPresumedSourceLocation(
   _ source: SourceFileSyntax,

@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import ArgumentParser
-import SwiftSyntax
 import SwiftParser
+import SwiftSyntax
 
 struct PrintTree: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(

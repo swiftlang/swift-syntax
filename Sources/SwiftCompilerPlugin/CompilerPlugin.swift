@@ -12,10 +12,10 @@
 // NOTE: This basic plugin mechanism is mostly copied from
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
-import SwiftSyntaxMacros
-@_implementationOnly import SwiftCompilerPluginMessageHandling
-
 @_implementationOnly import Foundation
+@_implementationOnly import SwiftCompilerPluginMessageHandling
+import SwiftSyntaxMacros
+
 #if os(Windows)
 @_implementationOnly import ucrt
 #endif

@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+@_spi(MacroExpansion) import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-@_spi(MacroExpansion) import SwiftParser
 @_spi(MacroExpansion) import SwiftSyntaxMacros
 
 // MARK: - Public entry function

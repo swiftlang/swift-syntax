@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
 import SwiftParser
 @_spi(SyntaxTransformVisitor) import SwiftSyntax
+import XCTest
 
 final class SyntaxTransformVisitorTest: ParserTestCase {
   public func testFunctionCounter() {

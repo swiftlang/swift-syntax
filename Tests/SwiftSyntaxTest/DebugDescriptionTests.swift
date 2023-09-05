@@ -10,10 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import XCTest
-import SwiftSyntax
-import _SwiftSyntaxTestSupport
 import SwiftParser
+import SwiftSyntax
+import XCTest
+import _SwiftSyntaxTestSupport
 
 private extension String {
   // This implementation is really slow; to use it outside a test it should be optimized.

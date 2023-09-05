@@ -12,9 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/multiline_errors.swift
 
-import XCTest
-
 import SwiftSyntax
+import XCTest
 
 extension ParserTestCase {
   fileprivate func assertParseWithAllNewlineEndings(

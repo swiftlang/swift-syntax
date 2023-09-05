@@ -167,7 +167,7 @@ public extension SyntaxProtocol {
 // MARK: Type information
 
 extension SyntaxProtocol {
-  /// The kind of the syntax node, e.g. if it is a `functionDecl`.
+  /// The kind of the syntax node, e.g. if it is a ``SyntaxKind/functionDecl``.
   ///
   /// If you want to check for a node's kind and cast the node to that type, see
   /// `self.as(FunctionDeclSyntax.self)` or `self.as(SyntaxEnum.self)`.
@@ -189,7 +189,7 @@ extension SyntaxProtocol {
 // MARK: Children / parent
 
 public extension SyntaxProtocol {
-  /// A sequence over the `present` children of this node.
+  /// A sequence over the children of this node.
   func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
     return SyntaxChildren(_syntaxNode, viewMode: viewMode)
   }

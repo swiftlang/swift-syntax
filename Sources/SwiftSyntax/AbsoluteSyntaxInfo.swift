@@ -30,8 +30,8 @@ struct AbsoluteSyntaxPosition {
   }
 }
 
-/// AbsoluteSyntaxInfo represents the information that relates a RawSyntax to a
-/// source file tree, like its absolute source offset.
+/// `AbsoluteSyntaxInfo` represents the information that relates a `RawSyntax`
+/// to a source file tree, like its absolute source offset.
 struct AbsoluteSyntaxInfo {
   let position: AbsoluteSyntaxPosition
   let nodeId: SyntaxIdentifier

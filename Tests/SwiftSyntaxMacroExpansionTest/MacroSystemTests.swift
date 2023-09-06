@@ -1947,4 +1947,145 @@ final class MacroSystemTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testFoldOperatorsOfFreestandingMacro() {
+    struct ForceSubtractMacro: ExpressionMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> ExprSyntax {
+        guard let argument = node.argumentList.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        guard var node = argument.as(InfixOperatorExprSyntax.self) else {
+          return argument
+        }
+        node.operator = ExprSyntax(BinaryOperatorExprSyntax(text: "-"))
+        return ExprSyntax(node)
+      }
+    }
+    assertMacroExpansion(
+      "#test(1 + 2)",
+      expandedSource: "1 - 2",
+      macros: ["test": ForceSubtractMacro.self]
+    )
+  }
+
+  func testDiagnosticFromFoldedOperatorsInFreestandingMacro() {
+    struct MyError: Error {}
+
+    struct DiagnoseFirstArgument: ExpressionMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> ExprSyntax {
+        guard let argument = node.argumentList.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        context.addDiagnostics(from: MyError(), node: argument)
+        return argument
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      /// Test
+      func test() {
+        #test(1 + 2)
+      }
+      """,
+      expandedSource: """
+        /// Test
+        func test() {
+          1 + 2
+        }
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "MyError()", line: 3, column: 9, severity: .error)
+      ],
+      macros: ["test": DiagnoseFirstArgument.self]
+    )
+  }
+
+  func testFoldOperatorsInAttachedMacro() {
+    struct ForceSubtractMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        guard var node = argument.as(InfixOperatorExprSyntax.self) else {
+          return []
+        }
+        node.operator = ExprSyntax(BinaryOperatorExprSyntax(text: "- "))
+        return [
+          DeclSyntax(
+            """
+            var x: Int { \(node.trimmed) }
+            """
+          )
+        ]
+      }
+    }
+    assertMacroExpansion(
+      """
+      /// Test
+      /// And another line
+      @Test(1 + 2)
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        /// Test
+        /// And another line
+        struct Foo {
+
+          var x: Int {
+            1 - 2
+          }
+        }
+        """,
+      macros: ["Test": ForceSubtractMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testDiagnosticFromFoldedOperatorsInAttachedMacro() {
+    struct MyError: Error {}
+
+    struct DiagnoseFirstArgument: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        context.addDiagnostics(from: MyError(), node: argument)
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      /// Test
+      /// And another line
+      @Test(1 + 2)
+      struct Foo {}
+      """,
+      expandedSource: """
+        /// Test
+        /// And another line
+        struct Foo {}
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "MyError()", line: 3, column: 7, severity: .error)
+      ],
+      macros: ["Test": DiagnoseFirstArgument.self]
+    )
+  }
 }

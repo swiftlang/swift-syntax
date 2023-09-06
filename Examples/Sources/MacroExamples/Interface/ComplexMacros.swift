@@ -10,46 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
-/// "Stringify" the provided value and produce a tuple that includes both the
-/// original value as well as the source code that generated it.
-@freestanding(expression) public macro stringify<T>(_ value: T) -> (T, String) = #externalMacro(module: "MacroExamplesImplementation", type: "StringifyMacro")
-
-/// Macro that produces a warning on "+" operators within the expression, and
-/// suggests changing them to "-".
-@freestanding(expression) public macro addBlocker<T>(_ value: T) -> T = #externalMacro(module: "MacroExamplesImplementation", type: "AddBlocker")
-
-/// Macro that produces a warning, as a replacement for the built-in
-/// #warning("...").
-@freestanding(expression) public macro myWarning(_ message: String) = #externalMacro(module: "MacroExamplesImplementation", type: "WarningMacro")
-
-public enum FontWeight {
-  case thin
-  case normal
-  case medium
-  case semiBold
-  case bold
-}
-
-public protocol ExpressibleByFontLiteral {
-  init(fontLiteralName: String, size: Int, weight: FontWeight)
-}
-
-/// Font literal similar to, e.g., #colorLiteral.
-@freestanding(expression) public macro fontLiteral<T>(name: String, size: Int, weight: FontWeight) -> T =
-  #externalMacro(module: "MacroExamplesImplementation", type: "FontLiteralMacro")
-where T: ExpressibleByFontLiteral
-
-/// Check if provided string literal is a valid URL and produce a non-optional
-/// URL value. Emit error otherwise.
-@freestanding(expression) public macro URL(_ stringLiteral: String) -> URL = #externalMacro(module: "MacroExamplesImplementation", type: "URLMacro")
-
-/// Apply the specified attribute to each of the stored properties within the
-/// type or member to which the macro is attached. The string can be
-/// any attribute (without the `@`).
-@attached(memberAttribute)
-public macro wrapStoredProperties(_ attributeName: String) = #externalMacro(module: "MacroExamplesImplementation", type: "WrapStoredPropertiesMacro")
+// MARK: - Dictionary Storage
 
 /// Wrap up the stored properties of the given type in a dictionary,
 /// turning them into computed properties.
@@ -65,6 +26,8 @@ public macro DictionaryStorage() = #externalMacro(module: "MacroExamplesImplemen
 
 @attached(accessor)
 public macro DictionaryStorageProperty() = #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStoragePropertyMacro")
+
+// MARK: - Observable
 
 public protocol Observable {}
 
@@ -108,29 +71,7 @@ public macro Observable() = #externalMacro(module: "MacroExamplesImplementation"
 @attached(accessor)
 public macro ObservableProperty() = #externalMacro(module: "MacroExamplesImplementation", type: "ObservablePropertyMacro")
 
-/// Adds a "completionHandler" variant of an async function, which creates a new
-/// task , calls thh original async function, and delivers its result to the completion
-/// handler.
-@attached(peer, names: overloaded)
-public macro AddCompletionHandler() =
-  #externalMacro(module: "MacroExamplesImplementation", type: "AddCompletionHandlerMacro")
-
-@attached(peer, names: overloaded)
-public macro AddAsync() =
-  #externalMacro(module: "MacroExamplesImplementation", type: "AddAsyncMacro")
-
-/// Add computed properties named `is<Case>` for each case element in the enum.
-@attached(member, names: arbitrary)
-public macro CaseDetection() = #externalMacro(module: "MacroExamplesImplementation", type: "CaseDetectionMacro")
-
-@attached(member, names: named(Meta))
-public macro MetaEnum() = #externalMacro(module: "MacroExamplesImplementation", type: "MetaEnumMacro")
-
-@attached(peer)
-public macro CodableKey(name: String) = #externalMacro(module: "MacroExamplesImplementation", type: "CodableKey")
-
-@attached(member, names: named(CodingKeys))
-public macro CustomCodable() = #externalMacro(module: "MacroExamplesImplementation", type: "CustomCodable")
+// MARK: - Option Set
 
 /// Create an option set from a struct that contains a nested `Options` enum.
 ///

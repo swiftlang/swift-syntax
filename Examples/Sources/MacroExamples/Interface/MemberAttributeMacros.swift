@@ -10,16 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-import SwiftSyntaxMacros
+// MARK: - Wrap Stored Properties
 
-public struct CodableKey: PeerMacro {
-  public static func expansion(
-    of node: AttributeSyntax,
-    providingPeersOf declaration: some DeclSyntaxProtocol,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
-    // Does nothing, used only to decorate members with data
-    return []
-  }
-}
+/// Apply the specified attribute to each of the stored properties within the
+/// type or member to which the macro is attached. The string can be
+/// any attribute (without the `@`).
+@attached(memberAttribute)
+public macro wrapStoredProperties(_ attributeName: String) = #externalMacro(module: "MacroExamplesImplementation", type: "WrapStoredPropertiesMacro")

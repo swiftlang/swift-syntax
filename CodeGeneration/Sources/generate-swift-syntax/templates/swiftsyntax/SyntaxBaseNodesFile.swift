@@ -184,7 +184,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
-          self = syntax.cast(Self.self)
+          self = Syntax(syntax).cast(Self.self)
         }
         """
       )
@@ -205,7 +205,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
-          self = syntax.cast(Self.self)
+          self = Syntax(syntax).cast(Self.self)
         }
         """
       )

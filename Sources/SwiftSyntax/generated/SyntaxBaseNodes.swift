@@ -162,7 +162,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
@@ -177,7 +177,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``DeclSyntax`` node from a specialized optional syntax node.
@@ -436,7 +436,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
@@ -451,7 +451,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
@@ -738,7 +738,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
@@ -753,7 +753,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``PatternSyntax`` node from a specialized optional syntax node.
@@ -995,7 +995,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
@@ -1010,7 +1010,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``StmtSyntax`` node from a specialized optional syntax node.
@@ -1262,7 +1262,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``TypeSyntax`` node from a specialized optional syntax node.
@@ -1277,7 +1277,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
     // maximum performance in release builds.
-    self = syntax.cast(Self.self)
+    self = Syntax(syntax).cast(Self.self)
   }
   
   /// Create a ``TypeSyntax`` node from a specialized optional syntax node.

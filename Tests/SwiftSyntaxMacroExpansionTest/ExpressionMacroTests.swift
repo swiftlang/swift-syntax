@@ -240,7 +240,7 @@ final class ExpressionMacroTests: XCTestCase {
         of node: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
-        guard let argument = node.argumentList.first?.expression else {
+        guard let argument = node.arguments.first?.expression else {
           fatalError("Must receive an argument")
         }
         guard var node = argument.as(InfixOperatorExprSyntax.self) else {
@@ -265,7 +265,7 @@ final class ExpressionMacroTests: XCTestCase {
         of node: some FreestandingMacroExpansionSyntax,
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
-        guard let argument = node.argumentList.first?.expression else {
+        guard let argument = node.arguments.first?.expression else {
           fatalError("Must receive an argument")
         }
         context.addDiagnostics(from: MyError(), node: argument)

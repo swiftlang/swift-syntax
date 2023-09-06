@@ -104,6 +104,14 @@ function(add_swift_syntax_library name)
     BUILD_WITH_INSTALL_RPATH YES
   )
 
+  if(SWIFT_HOST_LIBRARIES_RPATH)
+    # Don't add builder's stdlib RPATH automatically.
+    target_compile_options(${name} PRIVATE -no-toolchain-stdlib-rpath)
+    set_property(TARGET ${name}
+      PROPERTY INSTALL_RPATH "${SWIFT_HOST_LIBRARIES_RPATH}"
+    )
+  endif()
+
   get_target_property(lib_type ${name} TYPE)
   if(lib_type STREQUAL SHARED_LIBRARY)
     if (CMAKE_SYSTEM_NAME STREQUAL Darwin)

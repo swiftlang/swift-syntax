@@ -52,7 +52,7 @@ public extension DeclGroupSyntax {
 
 public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "pound")
-  public var poundToken: TokenSyntax {
+  var poundToken: TokenSyntax {
     get {
       return pound
     }
@@ -62,7 +62,7 @@ public extension FreestandingMacroExpansionSyntax {
   }
 
   @available(*, deprecated, renamed: "macroName")
-  public var macro: TokenSyntax {
+  var macro: TokenSyntax {
     get {
       return macroName
     }
@@ -82,7 +82,7 @@ public extension FreestandingMacroExpansionSyntax {
   }
 
   @available(*, deprecated, renamed: "arguments")
-  public var argumentList: LabeledExprListSyntax {
+  var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }

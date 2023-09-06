@@ -188,6 +188,10 @@ private func expandPeerMacroMember(
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> MemberBlockItemListSyntax? {
+  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
+    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
+  }
+
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -216,6 +220,10 @@ private func expandPeerMacroCodeItem(
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> CodeBlockItemListSyntax? {
+  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
+    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
+  }
+
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -425,6 +433,7 @@ let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
 
 private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
+  case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
 
   var diagnosticID: MessageID {
@@ -436,15 +445,12 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   var message: String {
     switch self {
     case .accessorMacroOnVariableWithMultipleBindings:
-      return """
-        swift-syntax applies macros syntactically and there is no way to represent a variable \
-        declaration with multiple bindings that have accessors syntactically. \
-        While the compiler allows this expansion, swift-syntax cannot represent it and thus \
-        disallows it.
-        """
+      return "accessor macro can only be applied to a single variable"
+    case .peerMacroOnVariableWithMultipleBindings:
+      return "peer macro can only be applied to a single variable"
     case .malformedAccessor:
       return """
-        Macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
+        macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
         """
     }
   }
@@ -619,11 +625,12 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   }
 
   override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
+    var node = super.visit(node).cast(VariableDeclSyntax.self)
+
     guard !macroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self).isEmpty else {
-      return super.visit(node).cast(DeclSyntax.self)
+      return DeclSyntax(node)
     }
 
-    var node = super.visit(node).cast(VariableDeclSyntax.self)
     guard node.bindings.count == 1, let binding = node.bindings.first else {
       context.addDiagnostics(from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings, node: node)
       return DeclSyntax(node)

@@ -229,7 +229,7 @@ final class AccessorMacroTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message:
-            "swift-syntax applies macros syntactically and there is no way to represent a variable declaration with multiple bindings that have accessors syntactically. While the compiler allows this expansion, swift-syntax cannot represent it and thus disallows it.",
+            "accessor macro can only be applied to a single variable",
           line: 1,
           column: 1,
           severity: .error

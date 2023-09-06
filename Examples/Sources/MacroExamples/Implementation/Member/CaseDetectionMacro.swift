@@ -13,25 +13,11 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-extension TokenSyntax {
-  fileprivate var initialUppercased: String {
-    let name = self.text
-    guard let initial = name.first else {
-      return name
-    }
-
-    return "\(initial.uppercased())\(name.dropFirst())"
-  }
-}
-
-public struct CaseDetectionMacro: MemberMacro {
-  public static func expansion<
-    Declaration: DeclGroupSyntax,
-    Context: MacroExpansionContext
-  >(
+public enum CaseDetectionMacro: MemberMacro {
+  public static func expansion(
     of node: AttributeSyntax,
-    providingMembersOf declaration: Declaration,
-    in context: Context
+    providingMembersOf declaration: some DeclGroupSyntax,
+    in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     declaration.memberBlock.members
       .compactMap { $0.decl.as(EnumCaseDeclSyntax.self) }
@@ -48,5 +34,16 @@ public struct CaseDetectionMacro: MemberMacro {
         }
         """
       }
+  }
+}
+
+extension TokenSyntax {
+  fileprivate var initialUppercased: String {
+    let name = self.text
+    guard let initial = name.first else {
+      return name
+    }
+
+    return "\(initial.uppercased())\(name.dropFirst())"
   }
 }

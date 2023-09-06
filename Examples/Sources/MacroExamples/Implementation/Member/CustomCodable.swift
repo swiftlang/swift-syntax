@@ -13,14 +13,12 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-public struct CustomCodable: MemberMacro {
-
+public enum CustomCodable: MemberMacro {
   public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-
     let memberList = declaration.memberBlock.members
 
     let cases = memberList.compactMap({ member -> String? in
@@ -53,8 +51,6 @@ public struct CustomCodable: MemberMacro {
 
       """
 
-    return [
-      codingKeys
-    ]
+    return [codingKeys]
   }
 }

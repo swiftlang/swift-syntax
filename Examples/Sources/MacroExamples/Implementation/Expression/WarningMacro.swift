@@ -16,12 +16,12 @@ import SwiftSyntaxMacros
 
 /// Implementation of the `myWarning` macro, which mimics the behavior of the
 /// built-in `#warning`.
-public struct WarningMacro: ExpressionMacro {
+public enum WarningMacro: ExpressionMacro {
   public static func expansion(
-    of macro: some FreestandingMacroExpansionSyntax,
+    of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
-    guard let firstElement = macro.arguments.first,
+    guard let firstElement = node.arguments.first,
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
@@ -32,10 +32,10 @@ public struct WarningMacro: ExpressionMacro {
 
     context.diagnose(
       Diagnostic(
-        node: Syntax(macro),
+        node: Syntax(node),
         message: SimpleDiagnosticMessage(
           message: messageString.content.description,
-          diagnosticID: MessageID(domain: "test", id: "error"),
+          diagnosticID: MessageID(domain: "test123", id: "error"),
           severity: .warning
         )
       )

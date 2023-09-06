@@ -172,4 +172,87 @@ final class MemberMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testFoldOperators() {
+    struct ForceSubtractMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        guard var node = argument.as(InfixOperatorExprSyntax.self) else {
+          return []
+        }
+        node.operator = ExprSyntax(BinaryOperatorExprSyntax(text: "- "))
+        return [
+          DeclSyntax(
+            """
+            var x: Int { \(node.trimmed) }
+            """
+          )
+        ]
+      }
+    }
+    assertMacroExpansion(
+      """
+      /// Test
+      /// And another line
+      @Test(1 + 2)
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        /// Test
+        /// And another line
+        struct Foo {
+
+          var x: Int {
+            1 - 2
+          }
+        }
+        """,
+      macros: ["Test": ForceSubtractMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testDiagnosticFromFoldedOperators() {
+    struct MyError: Error {}
+
+    struct DiagnoseFirstArgument: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {
+          fatalError("Must receive an argument")
+        }
+        context.addDiagnostics(from: MyError(), node: argument)
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      /// Test
+      /// And another line
+      @Test(1 + 2)
+      struct Foo {}
+      """,
+      expandedSource: """
+        /// Test
+        /// And another line
+        struct Foo {}
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "MyError()", line: 3, column: 7, severity: .error)
+      ],
+      macros: ["Test": DiagnoseFirstArgument.self]
+    )
+  }
+
 }

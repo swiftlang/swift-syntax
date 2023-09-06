@@ -485,10 +485,14 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     // Note that 'MacroExpansionExpr'/'MacroExpansionExprDecl' at code item
     // position are handled by 'visit(_:CodeBlockItemListSyntax)'.
     // Only expression expansions inside other syntax nodes is handled here.
-    if let expanded = expandExpr(node: node) {
+    switch expandExpr(node: node) {
+    case .success(let expanded):
       return Syntax(visit(expanded))
+    case .failure:
+      return Syntax(node)
+    case .notAMacro:
+      break
     }
-
     if let declSyntax = node.as(DeclSyntax.self),
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
@@ -510,15 +514,20 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     var newItems: [CodeBlockItemSyntax] = []
     func addResult(_ node: CodeBlockItemSyntax) {
       // Expand freestanding macro.
-      if let expanded = expandCodeBlockItem(node: node) {
+      switch expandCodeBlockItem(node: node) {
+      case .success(let expanded):
         for item in expanded {
           addResult(item)
         }
         return
+      case .failure:
+        // Expanding the macro threw an error. We don't have an expanded source.
+        // Retain the macro node as-is.
+        newItems.append(node)
+      case .notAMacro:
+        // Recurse on the child node
+        newItems.append(visit(node))
       }
-
-      // Recurse on the child node
-      newItems.append(visit(node))
 
       // Expand any peer macro on this item.
       if case .decl(let decl) = node.item {
@@ -552,15 +561,18 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
     func addResult(_ node: MemberBlockItemSyntax) {
       // Expand freestanding macro.
-      if let expanded = expandMemberDecl(node: node) {
+      switch expandMemberDecl(node: node) {
+      case .success(let expanded):
         for item in expanded {
           addResult(item)
         }
         return
+      case .failure:
+        newItems.append(node)
+      case .notAMacro:
+        // Recurse on the child node.
+        newItems.append(visit(node))
       }
-
-      // Recurse on the child node.
-      newItems.append(visit(node))
 
       // Expand any peer macro on this member.
       for peer in expandMemberDeclPeers(of: node.decl) {
@@ -846,20 +858,36 @@ extension MacroApplication {
 // MARK: Freestanding macro expansion
 
 extension MacroApplication {
+  enum MacroExpansionResult<ResultType> {
+    /// Expansion of the macro succeeded.
+    case success(ResultType)
+
+    /// Macro system found the macro to expand but running the expansion threw
+    /// an error and thus no expansion result exists.
+    case failure
+
+    /// The node that should be expanded was not a macro known to the macro system.
+    case notAMacro
+  }
+
   private func expandFreestandingMacro<ExpandedMacroType: SyntaxProtocol>(
     _ node: (any FreestandingMacroExpansionSyntax)?,
     expandMacro: (_ macro: Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
-  ) -> ExpandedMacroType? {
+  ) -> MacroExpansionResult<ExpandedMacroType> {
     guard let node,
       let macro = macroSystem.lookup(node.macroName.text)
     else {
-      return nil
+      return .notAMacro
     }
     do {
-      return try expandMacro(macro, node)
+      if let expanded = try expandMacro(macro, node) {
+        return .success(expanded)
+      } else {
+        return .failure
+      }
     } catch {
       context.addDiagnostics(from: error, node: node)
-      return nil
+      return .failure
     }
   }
 
@@ -871,7 +899,7 @@ extension MacroApplication {
   ///   #foo
   /// }
   /// ```
-  func expandCodeBlockItem(node: CodeBlockItemSyntax) -> CodeBlockItemListSyntax? {
+  func expandCodeBlockItem(node: CodeBlockItemSyntax) -> MacroExpansionResult<CodeBlockItemListSyntax> {
     return expandFreestandingMacro(node.item.asProtocol(FreestandingMacroExpansionSyntax.self)) { macro, node in
       return try expandFreestandingCodeItemList(
         definition: macro,
@@ -890,7 +918,7 @@ extension MacroApplication {
   ///   #foo
   /// }
   /// ```
-  func expandMemberDecl(node: MemberBlockItemSyntax) -> MemberBlockItemListSyntax? {
+  func expandMemberDecl(node: MemberBlockItemSyntax) -> MacroExpansionResult<MemberBlockItemListSyntax> {
     return expandFreestandingMacro(node.decl.as(MacroExpansionDeclSyntax.self)) { macro, node in
       return try expandFreestandingMemberDeclList(
         definition: macro,
@@ -908,7 +936,7 @@ extension MacroApplication {
   /// ```swift
   /// let a = #foo
   /// ```
-  func expandExpr(node: Syntax) -> ExprSyntax? {
+  func expandExpr(node: Syntax) -> MacroExpansionResult<ExprSyntax> {
     return expandFreestandingMacro(node.as(MacroExpansionExprSyntax.self)) { macro, node in
       return try expandFreestandingExpr(
         definition: macro,

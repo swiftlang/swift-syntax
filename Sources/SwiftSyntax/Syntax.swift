@@ -196,8 +196,9 @@ extension SyntaxProtocol {
 
 // Casting functions to specialized syntax nodes.
 public extension SyntaxProtocol {
-  /// Converts the given specialized node to this type. Returns `nil` if the
-  /// conversion is not possible or the given node was `nil`.
+  /// Initializes a new instance of the conforming type from a given specialized syntax node.
+  ///
+  /// Returns `nil` if the conversion isn't possible, or if the provided node is `nil`.
   init?<S: SyntaxProtocol>(_ node: S?) {
     guard let node = node else {
       return nil
@@ -205,16 +206,92 @@ public extension SyntaxProtocol {
     self.init(node)
   }
 
+  /// Checks if the current syntax node can be cast to a given specialized syntax type.
+  ///
+  /// - Returns: `true` if the node can be cast, `false` otherwise.
   func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
+  /// Checks if the current syntax node can be upcast to ``Syntax`` node.
+  ///
+  /// - Returns: `true` since the node can always be upcast to ``Syntax`` node.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
+  ///         informing the user that the upcast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func `is`(_ syntaxType: Syntax.Type) -> Bool {
+    return true
+  }
+
+  /// Checks if the current syntax node can be cast to its own type.
+  ///
+  /// - Returns: `true` since the node is already of its own type.
+  ///
+  /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func `is`(_ syntaxType: Self.Type) -> Bool {
+    return true
+  }
+
+  /// Attempts to cast the current syntax node to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
   func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
 
+  /// Attempts to upcast the current syntax node to ``Syntax`` node..
+  ///
+  /// - Returns: The ``Syntax`` node created from the current syntax node, as the node can always be upcast to ``Syntax`` node.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the base node's initializer.
+  @available(*, deprecated, message: "Use `Syntax.init` for upcasting.")
+  func `as`(_ syntaxType: Syntax.Type) -> Syntax? {
+    return Syntax(self)
+  }
+
+  /// Casts the current syntax node to its own type.
+  ///
+  /// - Returns: The current syntax node.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func `as`(_ syntaxType: Self.Type) -> Self? {
+    return self
+  }
+
+  /// Force-casts the current syntax node to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized type.
+  /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
   func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
+  }
+
+  /// Force-cast the current syntax node to ``Syntax`` node..
+  ///
+  /// - Returns: The ``Syntax`` node created from the current syntax node, as the node can always be upcast to ``Syntax`` node.
+  ///
+  /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
+  ///         informing the user the upcast should be performed using the base node's initializer.
+  @available(*, deprecated, message: "Use `Syntax.init` for upcasting.")
+  func cast(_ syntaxType: Syntax.Type) -> Syntax {
+    return Syntax(self)
+  }
+
+  /// Force-casts the current syntax node to its own type.
+  ///
+  /// - Returns: The current syntax node.
+  ///
+  /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
+  ///         informing the user that the cast will always succeed.
+  @available(*, deprecated, message: "This cast will always succeed")
+  func cast(_ syntaxType: Self.Type) -> Self {
+    return self
   }
 }
 

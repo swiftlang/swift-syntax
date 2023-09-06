@@ -22,7 +22,7 @@
 /// ### Contained in
 /// 
 ///  - ``KeyPathComponentListSyntax``
-public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Component: SyntaxChildChoices, SyntaxHashable {
     case `property`(KeyPathPropertyComponentSyntax)
     case `subscript`(KeyPathSubscriptComponentSyntax)
@@ -199,7 +199,7 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `backslash`: `'\'`
 ///  - `root`: ``TypeSyntax``?
 ///  - `components`: ``KeyPathComponentListSyntax``
-public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -377,7 +377,7 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
-public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -466,7 +466,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
-public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -594,7 +594,7 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
-public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -775,7 +775,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``LabeledExprListSyntax``
-public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
+public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -958,7 +958,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``SpecializeAttributeArgumentListSyntax``
-public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
+public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1142,7 +1142,7 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `label`: `<identifier>`
 ///  - `colon`: `':'`
 ///  - `statement`: ``StmtSyntax``
-public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1301,7 +1301,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
-public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
+public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1586,7 +1586,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `signature`: ``FunctionSignatureSyntax``
 ///  - `definition`: ``InitializerClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -1929,7 +1929,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
-public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2372,7 +2372,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 ///  - `rightParen`: `')'`?
 ///  - `trailingClosure`: ``ClosureExprSyntax``?
 ///  - `additionalTrailingClosures`: ``MultipleTrailingClosureElementListSyntax``
-public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2711,7 +2711,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``ConditionElementSyntax``.``ConditionElementSyntax/condition``
-public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
+public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -2889,7 +2889,7 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `base`: ``ExprSyntax``?
 ///  - `period`: `'.'`
 ///  - `declName`: ``DeclReferenceExprSyntax``
-public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3048,7 +3048,7 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``MemberBlockItemListSyntax``
-public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
+public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3185,7 +3185,7 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/memberBlock``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/memberBlock``
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/memberBlock``
-public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
+public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3362,7 +3362,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable {
 ///  - `period`: `'.'`
 ///  - `name`: (`<identifier>` | `'self'`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
-public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3538,7 +3538,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 ///  - `baseType`: ``TypeSyntax``
 ///  - `period`: `'.'`
 ///  - `metatypeSpecifier`: (`'Type'` | `'Protocol'`)
-public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3690,7 +3690,7 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `placeholder`: `<identifier>`
-public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
+public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3900,7 +3900,7 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -3990,7 +3990,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
+public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4080,7 +4080,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
+public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4170,7 +4170,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
+public struct MissingSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4260,7 +4260,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `placeholder`: `<identifier>`
-public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4354,7 +4354,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``MultipleTrailingClosureElementListSyntax``
-public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashable {
+public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4503,7 +4503,7 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
 /// 
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``
 ///  - `type`: ``TypeSyntax``
-public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
+public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
@@ -4627,7 +4627,7 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 /// ### Children
 /// 
 ///  - `nilKeyword`: `'nil'`
-public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
+public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {

@@ -400,7 +400,6 @@ struct ANSIAnnotation {
     self.trait = trait
   }
 
-
   func withTrait(_ trait: Trait) -> Self {
     return ANSIAnnotation(color: self.color, trait: trait)
   }

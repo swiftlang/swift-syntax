@@ -399,7 +399,7 @@ public extension Syntax {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    let pos = afterLeadingTrivia ? data.positionAfterSkippingLeadingTrivia : data.position
+    let pos = afterLeadingTrivia ? positionAfterSkippingLeadingTrivia : position
     return converter.location(for: pos)
   }
 
@@ -413,7 +413,7 @@ public extension Syntax {
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    var pos = data.position
+    var pos = position
     pos += raw.leadingTriviaLength
     pos += raw.trimmedLength
     if afterTrailingTrivia {

@@ -8,13 +8,14 @@
 
 add_swift_host_library(SwiftSyntax
   AbsolutePosition.swift
+  AbsoluteRawSyntax.swift
+  AbsoluteSyntaxInfo.swift
   Assert.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
   Convenience.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
-  Trivia.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift
@@ -23,11 +24,16 @@ add_swift_host_library(SwiftSyntax
   SyntaxArena.swift
   SyntaxChildren.swift
   SyntaxCollection.swift
-  SyntaxData.swift
+  SyntaxHashable.swift
+  SyntaxIdentifier.swift
+  SyntaxNodeStructure.swift
+  SyntaxProtocol.swift
   SyntaxText.swift
   SyntaxTreeViewMode.swift
   TokenDiagnostic.swift
+  TokenSequence.swift
   TokenSyntax.swift
+  Trivia.swift
   Utils.swift
 
   Raw/RawSyntax.swift

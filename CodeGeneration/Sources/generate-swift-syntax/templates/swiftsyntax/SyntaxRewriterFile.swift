@@ -44,13 +44,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// Rewrite `node`, keeping its parent unless `detach` is `true`.
       public func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
-        let rewritten = self.visit(node.data)
+        let rewritten = self.dispatchVisit(Syntax(node))
         if detach {
           return rewritten
         }
 
         return withExtendedLifetime(rewritten) {
-          return Syntax(node.data.replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena()))
+          return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena())
         }
       }
       """
@@ -105,7 +105,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///   - Returns: the rewritten node
       @available(*, deprecated, renamed: "rewrite(_:detach:)")
       public func visit(_ node: Syntax) -> Syntax {
-        return visit(node.data)
+        return dispatchVisit(node)
       }
       """
     )
@@ -113,7 +113,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
-        return visit(node.data).cast(T.self)
+        return dispatchVisit(Syntax(node)).cast(T.self)
       }
       """
     )
@@ -155,7 +155,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///   - Returns: the rewritten node
         \(baseNode.apiAttributes())\
         public func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
-          return visit(node.data).cast(\(baseKind.syntaxType).self)
+          return dispatchVisit(Syntax(node)).cast(\(baseKind.syntaxType).self)
         }
         """
       )
@@ -163,23 +163,23 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// Interpret `data` as a node of type `nodeType`, visit it, calling
+      /// Interpret `node` as a node of type `nodeType`, visit it, calling
       /// the `visit` to transform the node.
       private func visitImpl<NodeType: SyntaxProtocol>(
-        _ data: SyntaxData,
+        _ node: Syntax,
         _ nodeType: NodeType.Type,
         _ visit: (NodeType) -> some SyntaxProtocol
       ) -> Syntax {
-        let node = Syntax(data).cast(NodeType.self)
+        let castedNode = node.cast(NodeType.self)
         // Accessing _syntaxNode directly is faster than calling Syntax(node)
-        visitPre(node._syntaxNode)
+        visitPre(node)
         defer {
-          visitPost(node._syntaxNode)
+          visitPost(node)
         }
-        if let newNode = visitAny(node._syntaxNode) {
+        if let newNode = visitAny(node) {
           return newNode
         }
-        return Syntax(visit(node))
+        return Syntax(visit(castedNode))
       }
       """
     )
@@ -220,10 +220,10 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private func visitationFunc(for data: SyntaxData) -> ((SyntaxData) -> Syntax)
+                private func visitationFunc(for node: Syntax) -> ((Syntax) -> Syntax)
                 """
               ) {
-                try SwitchExprSyntax("switch data.raw.kind") {
+                try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
                     StmtSyntax("return { self.visitImpl($0, TokenSyntax.self, self.visit) }")
                   }
@@ -238,8 +238,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               DeclSyntax(
                 """
-                private func visit(_ data: SyntaxData) -> Syntax {
-                  return visitationFunc(for: data)(data)
+                private func dispatchVisit(_ node: Syntax) -> Syntax {
+                  return visitationFunc(for: node)(node)
                 }
                 """
               )
@@ -250,15 +250,15 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
-              try! FunctionDeclSyntax("private func visit(_ data: SyntaxData) -> Syntax") {
-                try SwitchExprSyntax("switch data.raw.kind") {
+              try! FunctionDeclSyntax("private func dispatchVisit(_ node: Syntax) -> Syntax") {
+                try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return visitImpl(data, TokenSyntax.self, visit)")
+                    StmtSyntax("return visitImpl(node, TokenSyntax.self, visit)")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return visitImpl(data, \(node.kind.syntaxType).self, visit)")
+                      StmtSyntax("return visitImpl(node, \(node.kind.syntaxType).self, visit)")
                     }
                   }
                 }
@@ -308,10 +308,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
           // Build the Syntax node to rewrite
           let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-          let data = SyntaxData(absoluteRaw, parent: syntaxNode)
 
-          let rewritten = visit(data)
-          if rewritten.data.nodeId != info.nodeId {
+          let rewritten = dispatchVisit(Syntax(absoluteRaw, parent: syntaxNode))
+          if rewritten.id != info.nodeId {
             // The node was rewritten, let's handle it
             if newLayout == nil {
               // We have not yet collected any previous rewritten nodes. Initialize

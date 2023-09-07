@@ -24,14 +24,7 @@ extension SyntaxCollection {
   }
 
   private var layoutView: RawSyntaxLayoutView {
-    data.raw.layoutView!
-  }
-
-  /// Creates a Syntax node from the provided root and data. This assumes
-  /// that the `SyntaxData` is of the correct kind. If it is not, the behaviour
-  /// is undefined.
-  internal init(_ data: SyntaxData) {
-    self.init(Syntax(data))!
+    raw.layoutView!
   }
 
   /// Initialize the collection from a collection of the same type.
@@ -56,7 +49,7 @@ extension SyntaxCollection {
         arena: arena
       )
     }
-    self.init(SyntaxData.forRoot(raw, rawNodeArena: arena))
+    self = Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
   }
 
   public init(arrayLiteral elements: Element...) {
@@ -77,8 +70,7 @@ extension SyntaxCollection {
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-    let newData = data.replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena)
-    return Syntax(newData).cast(Self.self)
+    return Syntax(self).replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena).cast(Self.self)
   }
 
   /// Return the index of `node` within this collection.
@@ -241,8 +233,7 @@ public struct SyntaxCollectionIterator<E: SyntaxProtocol>: IteratorProtocol {
       return nil
     }
     let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
-    let data = SyntaxData(absoluteRaw, parent: parent)
-    return Syntax(data).cast(Element.self)
+    return Syntax(absoluteRaw, parent: parent).cast(Element.self)
   }
 }
 
@@ -420,7 +411,7 @@ extension SyntaxCollection {
     // We know children in a syntax collection cannot be missing. So we can
     // use the low-level and faster RawSyntaxChildren collection instead of
     // NonNilRawSyntaxChildren.
-    return RawSyntaxChildren(self.data.absoluteRaw)
+    return RawSyntaxChildren(Syntax(self).absoluteRaw)
   }
 
   public var startIndex: SyntaxChildrenIndex {
@@ -447,8 +438,7 @@ extension SyntaxCollection {
     get {
       let (raw, info) = rawChildren[position]
       let absoluteRaw = AbsoluteRawSyntax(raw: raw!, info: info)
-      let data = SyntaxData(absoluteRaw, parent: Syntax(self))
-      return Syntax(data).cast(Element.self)
+      return Syntax(absoluteRaw, parent: Syntax(self)).cast(Element.self)
     }
     set {
       guard let indexToReplace = (position.data?.indexInParent).map(Int.init) else {

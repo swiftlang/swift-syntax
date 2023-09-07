@@ -112,6 +112,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case editorPlaceholderDecl
   case editorPlaceholderExpr
   case editorPlaceholderPattern
+  case editorPlaceholderType
   case effectsAttributeArgumentList
   case enumCaseDecl
   case enumCaseElement

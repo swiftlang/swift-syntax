@@ -530,4 +530,28 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
+  Node(
+    kind: .editorPlaceholderType,
+    base: .type,
+    nameForDiagnostics: "editor placeholder",
+    documentation: """
+      An editor placeholder, e.g. `<#Type#>` that is used in a position that expects a type.
+      """,
+    children: [
+      Child(
+        name: "placeholder",
+        kind: .token(choices: [.token(.identifier)]),
+        documentation: """
+          The actual editor placeholder that starts with `<#` and ends with `#>`.
+          """
+      ),
+      Child(
+        name: "genericArgumentClause",
+        kind: .node(kind: .genericArgumentClause),
+        documentation: "Generic arguments that is attatched to the type.",
+        isOptional: true
+      ),
+    ]
+  ),
+
 ]

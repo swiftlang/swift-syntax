@@ -1126,6 +1126,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: EditorPlaceholderPatternSyntax) {
   }
   
+  /// Visiting ``EditorPlaceholderTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: EditorPlaceholderTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``EditorPlaceholderTypeSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: EditorPlaceholderTypeSyntax) {
+  }
+  
   /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3784,6 +3796,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, EditorPlaceholderPatternSyntax.self, self.visit, self.visitPost)
       }
+    case .editorPlaceholderType:
+      return {
+        self.visitImpl($0, EditorPlaceholderTypeSyntax.self, self.visit, self.visitPost)
+      }
     case .effectsAttributeArgumentList:
       return {
         self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visit, self.visitPost)
@@ -4723,6 +4739,8 @@ open class SyntaxVisitor {
       visitImpl(node, EditorPlaceholderExprSyntax.self, visit, visitPost)
     case .editorPlaceholderPattern:
       visitImpl(node, EditorPlaceholderPatternSyntax.self, visit, visitPost)
+    case .editorPlaceholderType:
+      visitImpl(node, EditorPlaceholderTypeSyntax.self, visit, visitPost)
     case .effectsAttributeArgumentList:
       visitImpl(node, EffectsAttributeArgumentListSyntax.self, visit, visitPost)
     case .enumCaseDecl:

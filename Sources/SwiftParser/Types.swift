@@ -349,14 +349,25 @@ extension Parser {
       generics = nil
     }
 
-    return RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
+    if name.tokenText.isEditorPlaceholder {
+      return RawTypeSyntax(
+        RawEditorPlaceholderTypeSyntax(
+          placeholder: name,
+          genericArgumentClause: generics,
+          arena: self.arena
+        )
       )
-    )
+    } else {
+      return RawTypeSyntax(
+        RawIdentifierTypeSyntax(
+          unexpectedBeforeName,
+          name: name,
+          genericArgumentClause: generics,
+          arena: self.arena
+        )
+      )
+    }
+
   }
 
   /// Parse the existential `Any` type.
@@ -938,7 +949,9 @@ extension Parser {
 
 extension Parser {
   mutating func parseResultType() -> RawTypeSyntax {
-    if self.at(prefix: "<") {
+    if self.at(prefix: "<#") {
+      return self.parseTypeIdentifier()
+    } else if self.at(prefix: "<") {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
       return RawTypeSyntax(

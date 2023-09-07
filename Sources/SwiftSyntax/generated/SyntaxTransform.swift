@@ -475,6 +475,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: EditorPlaceholderPatternSyntax) -> ResultType
   
+  /// Visiting ``EditorPlaceholderTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: EditorPlaceholderTypeSyntax) -> ResultType
+  
   /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -2048,6 +2053,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``EditorPlaceholderTypeSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: EditorPlaceholderTypeSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``EffectsAttributeArgumentListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3535,6 +3547,8 @@ extension SyntaxTransformVisitor {
     case .editorPlaceholderExpr(let derived):
       return visit(derived)
     case .editorPlaceholderPattern(let derived):
+      return visit(derived)
+    case .editorPlaceholderType(let derived):
       return visit(derived)
     case .effectsAttributeArgumentList(let derived):
       return visit(derived)

@@ -151,6 +151,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PatternSyntax>
 - <doc:SwiftSyntax/PatternSyntaxProtocol>
 - <doc:SwiftSyntax/MissingPatternSyntax>
+- <doc:SwiftSyntax/EditorPlaceholderPatternSyntax>
 - <doc:SwiftSyntax/ExpressionPatternSyntax>
 - <doc:SwiftSyntax/IdentifierPatternSyntax>
 - <doc:SwiftSyntax/IsTypePatternSyntax>
@@ -190,6 +191,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/ClassRestrictionTypeSyntax>
 - <doc:SwiftSyntax/CompositionTypeSyntax>
 - <doc:SwiftSyntax/DictionaryTypeSyntax>
+- <doc:SwiftSyntax/EditorPlaceholderTypeSyntax>
 - <doc:SwiftSyntax/FunctionTypeSyntax>
 - <doc:SwiftSyntax/IdentifierTypeSyntax>
 - <doc:SwiftSyntax/ImplicitlyUnwrappedOptionalTypeSyntax>

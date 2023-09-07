@@ -12,6 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/identifiers.swift
 
+import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
 
 final class IdentifiersTests: ParserTestCase {
@@ -230,4 +232,28 @@ final class IdentifiersTests: ParserTestCase {
     )
   }
 
+  func testPatternAsPlaceholderExpr() {
+    assertParse(
+      "let 1️⃣<#name#> = 2️⃣<#value#>",
+      substructure: VariableDeclSyntax(
+        bindingSpecifier: .keyword(.let),
+        bindings: [
+          PatternBindingSyntax(
+            pattern: EditorPlaceholderPatternSyntax(
+              placeholder: .identifier("<#name#>")
+            ),
+            initializer: InitializerClauseSyntax(
+              value: EditorPlaceholderExprSyntax(
+                placeholder: .identifier("<#value#>")
+              )
+            )
+          )
+        ]
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+  }
 }

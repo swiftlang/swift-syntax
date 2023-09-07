@@ -22,6 +22,7 @@
 ///
 /// ### Contained in
 /// 
+///  - ``EditorPlaceholderTypeSyntax``.``EditorPlaceholderTypeSyntax/genericArgumentClause``
 ///  - ``GenericSpecializationExprSyntax``.``GenericSpecializationExprSyntax/genericArgumentClause``
 ///  - ``IdentifierTypeSyntax``.``IdentifierTypeSyntax/genericArgumentClause``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/genericArgumentClause``

@@ -23,17 +23,6 @@ struct Test: ParsableCommand, BuildCommand {
   @OptionGroup
   var arguments: BuildArguments
 
-  @Flag(help: "Don't run lit-based tests")
-  var skipLitTests: Bool = false
-
-  @Option(
-    help: """
-      Path to the FileCheck executable that was built as part of the LLVM repository.
-      If not specified, it will be looked up from PATH.
-      """
-  )
-  var filecheckExec: String?
-
   func run() throws {
     try buildExample(exampleName: "ExamplePlugin")
 
@@ -44,74 +33,6 @@ struct Test: ParsableCommand, BuildCommand {
 
   private func runTests() throws {
     logSection("Running SwiftSyntax Tests")
-
-    if !skipLitTests {
-      try runLitTests()
-    }
-
-    try runXCTests()
-  }
-
-  private func runLitTests() throws {
-    logSection("Running lit-based tests")
-
-    guard FileManager.default.fileExists(atPath: Paths.litExec.path) else {
-      throw ScriptExectutionError(
-        message: """
-          Error: Could not find lit.py.
-          Looking at '\(Paths.litExec.path)'.
-
-          Make sure you have the llvm repo checked out next to the swift-syntax repo.
-          Refer to README.md for more information.
-          """
-      )
-    }
-
-    let examplesBinPath = try findExamplesBinPath()
-
-    var litCall = [
-      Paths.litExec.path,
-      Paths.packageDir.appendingPathComponent("lit_tests").path,
-    ]
-
-    if let filecheckExec {
-      litCall += ["--param", "FILECHECK=" + filecheckExec]
-    }
-
-    litCall += ["--param", "EXAMPLES_BIN_PATH=" + examplesBinPath.path]
-    litCall += ["--param", "TOOLCHAIN=" + arguments.toolchain.path]
-
-    // Print all failures
-    litCall += ["--verbose"]
-    // Don't show all commands if verbose is not enabled
-    if !arguments.verbose {
-      litCall += ["--succinct"]
-    }
-
-    guard let pythonExec = Paths.python3Exec else {
-      throw ScriptExectutionError(message: "Didn't find python3 executable")
-    }
-
-    let process = ProcessRunner(
-      executableURL: pythonExec,
-      arguments: litCall
-    )
-
-    let processOutput = try process.run(verbose: arguments.verbose)
-
-    if !processOutput.stdout.isEmpty {
-      logSection("lit test stdout")
-      print(processOutput.stdout)
-    }
-
-    if !processOutput.stderr.isEmpty {
-      logSection("lit test stderr")
-      print(processOutput.stderr)
-    }
-  }
-
-  private func runXCTests() throws {
-    logSection("Running XCTests")
     var swiftpmCallArguments: [String] = []
 
     if arguments.verbose {

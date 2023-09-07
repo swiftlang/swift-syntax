@@ -238,6 +238,19 @@ enum TokenPrecedence: Comparable {
       .import:
       self = .declKeyword
 
+    case  // `TypeAttribute`
+    ._noMetadata,
+      ._opaqueReturnTypeOf,
+      .autoclosure,
+      .convention,
+      .differentiable,
+      .escaping,
+      .noDerivative,
+      .noescape,
+      .Sendable,
+      .unchecked:
+      self = .exprKeyword
+
     case  // Treat all other keywords as expression keywords in the absence of any better information.
     .__owned,
       .__shared,
@@ -257,11 +270,9 @@ enum TokenPrecedence: Comparable {
       ._move,
       ._NativeClass,
       ._NativeRefCountedObject,
-      ._noMetadata,
       ._nonSendable,
       ._objcImplementation,
       ._objcRuntimeName,
-      ._opaqueReturnTypeOf,
       ._optimize,
       ._originallyDefinedIn,
       ._PackageDescription,
@@ -285,7 +296,6 @@ enum TokenPrecedence: Comparable {
       .assignment,
       .associativity,
       .attached,
-      .autoclosure,
       .availability,
       .available,
       .backDeployed,
@@ -293,12 +303,9 @@ enum TokenPrecedence: Comparable {
       .block,
       .canImport,
       .compiler,
-      .convention,
       .cType,
       .deprecated,
       .derivative,
-      .differentiable,
-      .escaping,
       .exclusivity,
       .exported,
       .file,
@@ -317,8 +324,6 @@ enum TokenPrecedence: Comparable {
       .metadata,
       .module,
       .noasync,
-      .noDerivative,
-      .noescape,
       .none,
       .objc,
       .obsoleted,
@@ -328,7 +333,6 @@ enum TokenPrecedence: Comparable {
       .reverse,
       .right,
       .safe,
-      .Sendable,
       .sourceFile,
       .spi,
       .spiModule,
@@ -337,7 +341,6 @@ enum TokenPrecedence: Comparable {
       .transpose,
       .Type,
       .unavailable,
-      .unchecked,
       .unowned,
       .visibility,
       .weak,

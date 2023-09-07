@@ -342,7 +342,7 @@ public struct DiagnosticsFormatter {
       severityAnnotation = .remarkText
     }
 
-    let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation)
+    let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation, resetAfter: false)
 
     return prefix + colorizeIfRequested(message, annotation: .diagnosticText);
   }
@@ -351,13 +351,14 @@ public struct DiagnosticsFormatter {
   /// supposed to color the output.
   private func colorizeIfRequested(
     _ text: String,
-    annotation: ANSIAnnotation
+    annotation: ANSIAnnotation,
+    resetAfter: Bool = true
   ) -> String {
     guard colorize, !text.isEmpty else {
       return text
     }
 
-    return annotation.applied(to: text)
+    return annotation.applied(to: text, resetAfter: resetAfter)
   }
 
   /// Colorize for the buffer outline and line numbers.
@@ -403,7 +404,11 @@ struct ANSIAnnotation {
     return ANSIAnnotation(color: self.color, trait: trait)
   }
 
-  func applied(to message: String) -> String {
+  func applied(to message: String, resetAfter: Bool = true) -> String {
+    guard resetAfter else {
+      return "\(code)\(message)"
+    }
+
     // Resetting after the message ensures that we don't color unintended lines in the output
     return "\(code)\(message)\(ANSIAnnotation.normal.code)"
   }

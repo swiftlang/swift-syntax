@@ -261,6 +261,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
   func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -272,6 +273,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
   func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///
@@ -563,6 +565,7 @@ public extension _LeafExprSyntaxNodeProtocol {
   func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -574,6 +577,7 @@ public extension _LeafExprSyntaxNodeProtocol {
   func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///
@@ -820,6 +824,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
   func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -831,6 +836,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
   func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///
@@ -1087,6 +1093,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
   func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -1098,6 +1105,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
   func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///
@@ -1355,6 +1363,7 @@ public extension _LeafTypeSyntaxNodeProtocol {
   func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -1366,6 +1375,7 @@ public extension _LeafTypeSyntaxNodeProtocol {
   func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///
@@ -1684,6 +1694,7 @@ public extension _LeafSyntaxNodeProtocol {
   func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
+  
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
   ///
@@ -1695,6 +1706,7 @@ public extension _LeafSyntaxNodeProtocol {
   func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
+  
 
   /// Force-casts the current leaf syntax node to a different specified type.
   ///

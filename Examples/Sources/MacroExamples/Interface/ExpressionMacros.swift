@@ -35,10 +35,11 @@ public protocol ExpressibleByFontLiteral {
 
 /// Font literal similar to, e.g., #colorLiteral.
 @freestanding(expression)
-public macro fontLiteral<T>(name: String, size: Int, weight: FontWeight) -> T = #externalMacro(
-  module: "MacroExamplesImplementation",
-  type: "FontLiteralMacro"
-) where T: ExpressibleByFontLiteral
+public macro fontLiteral<T>(name: String, size: Int, weight: FontWeight) -> T =
+  #externalMacro(
+    module: "MacroExamplesImplementation",
+    type: "FontLiteralMacro"
+  ) where T: ExpressibleByFontLiteral
 
 // MARK: - Stringify Macro
 

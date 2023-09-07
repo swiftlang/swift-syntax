@@ -11,40 +11,29 @@
 //===----------------------------------------------------------------------===//
 
 import MacroExamplesImplementation
-import SwiftSyntax
-import SwiftSyntaxBuilder
-import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
+import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-final class CaseMacroTests: XCTestCase {
-  let testMacros: [String: Macro.Type] = [
-    "MetaEnum": MetaEnumMacro.self
-  ]
+final class MetaEnumMacroTests: XCTestCase {
+  private let macros = ["MetaEnum": MetaEnumMacro.self]
 
-  func testBasic() throws {
-    let sf: SourceFileSyntax = """
+  func testExpansionAddsNestedMetaEnum() {
+    assertMacroExpansion(
+      """
       @MetaEnum enum Cell {
         case integer(Int)
         case text(String)
         case boolean(Bool)
         case null
       }
-      """
-
-    let context = BasicMacroExpansionContext(
-      sourceFiles: [sf: .init(moduleName: "MyModule", fullFilePath: "test.swift")]
-    )
-
-    let transformed = sf.expand(macros: testMacros, in: context)
-    XCTAssertEqual(
-      transformed.description,
-      """
-      enum Cell {
-        case integer(Int)
-        case text(String)
-        case boolean(Bool)
-        case null
+      """,
+      expandedSource: """
+        enum Cell {
+          case integer(Int)
+          case text(String)
+          case boolean(Bool)
+          case null
 
           enum Meta {
                   case integer
@@ -65,32 +54,27 @@ final class CaseMacroTests: XCTestCase {
                       }
                   }
             }
-      }
-      """
+        }
+        """,
+      macros: macros,
+      indentationWidth: .spaces(2)
     )
   }
 
-  func testPublic() throws {
-    let sf: SourceFileSyntax = """
+  func testExpansionAddsPublicNestedMetaEnum() {
+    assertMacroExpansion(
+      """
       @MetaEnum public enum Cell {
         case integer(Int)
         case text(String)
         case boolean(Bool)
       }
-      """
-
-    let context = BasicMacroExpansionContext(
-      sourceFiles: [sf: .init(moduleName: "MyModule", fullFilePath: "test.swift")]
-    )
-
-    let transformed = sf.expand(macros: testMacros, in: context)
-    XCTAssertEqual(
-      transformed.description,
-      """
-      public enum Cell {
-        case integer(Int)
-        case text(String)
-        case boolean(Bool)
+      """,
+      expandedSource: """
+        public enum Cell {
+          case integer(Int)
+          case text(String)
+          case boolean(Bool)
 
           public enum Meta {
                   case integer
@@ -108,39 +92,32 @@ final class CaseMacroTests: XCTestCase {
                       }
                   }
             }
-      }
-      """
+        }
+        """,
+      macros: macros,
+      indentationWidth: .spaces(2)
     )
   }
 
-  func testNonEnum() throws {
-    let sf: SourceFileSyntax = """
+  func testExpansionOnStructEmitsError() {
+    assertMacroExpansion(
+      """
       @MetaEnum struct Cell {
         let integer: Int
         let text: String
         let boolean: Bool
       }
-      """
-
-    let context = BasicMacroExpansionContext(
-      sourceFiles: [sf: .init(moduleName: "MyModule", fullFilePath: "test.swift")]
+      """,
+      expandedSource: """
+        struct Cell {
+          let integer: Int
+          let text: String
+          let boolean: Bool
+        }
+        """,
+      diagnostics: [DiagnosticSpec(message: "'@MetaEnum' can only be attached to an enum, not a struct", line: 1, column: 1, severity: .error)],
+      macros: macros,
+      indentationWidth: .spaces(2)
     )
-
-    let transformed = sf.expand(macros: testMacros, in: context)
-    XCTAssertEqual(
-      transformed.description,
-      """
-      struct Cell {
-        let integer: Int
-        let text: String
-        let boolean: Bool
-      }
-      """
-    )
-
-    XCTAssertEqual(context.diagnostics.count, 1)
-    let diag = try XCTUnwrap(context.diagnostics.first)
-    XCTAssertEqual(diag.message, "'@MetaEnum' can only be attached to an enum, not a struct")
-    XCTAssertEqual(diag.diagMessage.severity, .error)
   }
 }

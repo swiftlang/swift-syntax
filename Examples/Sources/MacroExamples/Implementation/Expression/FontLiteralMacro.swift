@@ -40,7 +40,8 @@ private func replaceFirstLabel(
   }
 
   var tuple = tuple
-  tuple[tuple.startIndex] = firstElement
+  tuple[tuple.startIndex] =
+    firstElement
     .with(\.label, .identifier(newLabel))
     .with(\.colon, .colonToken())
   return tuple

@@ -52,7 +52,9 @@ let package = Package(
     .testTarget(
       name: "MacroExamplesImplementationTests",
       dependencies: [
-        "MacroExamplesImplementation"
+        "MacroExamplesImplementation",
+        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+        .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
       ],
       path: "Tests/MacroExamples/Implementation"
     ),

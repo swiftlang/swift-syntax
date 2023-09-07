@@ -314,6 +314,14 @@ public let EXPR_NODES: [Node] = [
     traits: [
       "WithTrailingComma"
     ],
+    rules: [
+      ConvenienceInitRule(
+        nonOptionalChildName: "name",
+        defaults: [
+          "equal": .equal
+        ]
+      )
+    ],
     children: [
       Child(
         name: "specifier",
@@ -794,6 +802,15 @@ public let EXPR_NODES: [Node] = [
     kind: .functionCallExpr,
     base: .expr,
     nameForDiagnostics: "function call",
+    rules: [
+      ConvenienceInitRule(
+        nonOptionalChildName: "arguments",
+        defaults: [
+          "leftParen": .leftParen,
+          "rightParen": .rightParen
+        ]
+      )
+    ],
     children: [
       Child(
         name: "calledExpression",

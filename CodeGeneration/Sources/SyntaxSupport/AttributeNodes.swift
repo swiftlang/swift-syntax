@@ -50,9 +50,9 @@ public let ATTRIBUTE_NODES: [Node] = [
     documentation: "An `@` attribute.",
     parserFunction: "parseAttribute",
     rules: [
-      NodeInitRule(
+      ConvenienceInitRule(
         nonOptionalChildName: "arguments",
-        childDefaultValues: [
+        defaults: [
           "leftParen": .leftParen,
           "rightParen": .rightParen
         ])

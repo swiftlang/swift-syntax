@@ -65,7 +65,7 @@ public class Node {
 
   /// List of convenience initializer rules for this node. CodeGeneration will
   /// generate a convenience initializer for each rule.
-  public let rules: [NodeInitRule]
+  public let rules: [ConvenienceInitRule]
 
   /// If this is a layout node, return a view of the node that provides access
   /// to the layout-node specific properties.
@@ -116,7 +116,7 @@ public class Node {
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
-    rules: [NodeInitRule] = [],
+    rules: [ConvenienceInitRule] = [],
     children: [Child] = []
   ) {
     precondition(base != .syntaxCollection)
@@ -235,7 +235,7 @@ public class Node {
     isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
-    rules: [NodeInitRule] = [],
+    rules: [ConvenienceInitRule] = [],
     parserFunction: TokenSyntax? = nil,
     elementChoices: [SyntaxNodeKind]
   ) {

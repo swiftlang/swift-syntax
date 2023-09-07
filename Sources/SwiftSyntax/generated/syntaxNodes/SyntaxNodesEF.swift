@@ -982,6 +982,36 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     self._syntaxNode = Syntax(data)
   }
   
+  /// A convenience initializer for ``EnumCaseParameterSyntax``
+  /// that takes a non-optional value for `firstName` parameter,
+  /// and adds the following default values:
+  ///  - `colon`: `TokenSyntax.colonToken()`
+  /// 
+  public init(
+      leadingTrivia: Trivia? = nil,
+      modifiers: DeclModifierListSyntax = [],
+      firstName: TokenSyntax,
+      secondName: TokenSyntax? = nil,
+      colon: TokenSyntax? = .colonToken(),
+      type: some TypeSyntaxProtocol,
+      defaultValue: InitializerClauseSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        modifiers: modifiers, 
+        firstName: firstName as TokenSyntax?, 
+        secondName: secondName, 
+        colon: colon, 
+        type: type, 
+        defaultValue: defaultValue, 
+        trailingComma: trailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+  
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - colon: If the parameter has a label, the colon separating the label from the type.
@@ -3126,6 +3156,35 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
   internal init(_ data: SyntaxData) {
     precondition(data.raw.kind == .functionCallExpr)
     self._syntaxNode = Syntax(data)
+  }
+  
+  /// A convenience initializer for ``FunctionCallExprSyntax``
+  /// that takes a non-optional value for `arguments` parameter,
+  /// and adds the following default values:
+  ///  - `rightParen`: `TokenSyntax.rightParenToken()`
+  ///  - `leftParen`: `TokenSyntax.leftParenToken()`
+  /// 
+  public init(
+      leadingTrivia: Trivia? = nil,
+      calledExpression: some ExprSyntaxProtocol,
+      leftParen: TokenSyntax? = .leftParenToken(),
+      arguments: LabeledExprListSyntax,
+      rightParen: TokenSyntax? = .rightParenToken(),
+      trailingClosure: ClosureExprSyntax? = nil,
+      additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        calledExpression: calledExpression, 
+        leftParen: leftParen, 
+        arguments: arguments as LabeledExprListSyntax?, 
+        rightParen: rightParen, 
+        trailingClosure: trailingClosure, 
+        additionalTrailingClosures: additionalTrailingClosures, 
+        trailingTrivia: trailingTrivia
+      )
   }
   
   /// - Parameters:

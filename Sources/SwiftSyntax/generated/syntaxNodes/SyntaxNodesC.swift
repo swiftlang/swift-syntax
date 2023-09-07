@@ -1585,6 +1585,32 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     self._syntaxNode = Syntax(data)
   }
   
+  /// A convenience initializer for ``ClosureCaptureSyntax``
+  /// that takes a non-optional value for `name` parameter,
+  /// and adds the following default values:
+  ///  - `equal`: `TokenSyntax.equalToken()`
+  /// 
+  public init(
+      leadingTrivia: Trivia? = nil,
+      specifier: ClosureCaptureSpecifierSyntax? = nil,
+      name: TokenSyntax,
+      equal: TokenSyntax? = .equalToken(),
+      expression: some ExprSyntaxProtocol,
+      trailingComma: TokenSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        specifier: specifier, 
+        name: name as TokenSyntax?, 
+        equal: equal, 
+        expression: expression, 
+        trailingComma: trailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+  
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.

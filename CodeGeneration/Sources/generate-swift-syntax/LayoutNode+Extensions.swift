@@ -41,14 +41,14 @@ extension LayoutNode {
   }
 
   /// Generates a convenience memberwise SyntaxNode initializer based on a
-  /// given ``NodeInitRule``.
+  /// given ``ConvenienceInitRule``.
   ///
   /// - parameters:
-  ///  - rule: The ``NodeInitRule`` to use for generating the initializer. Applying a rule will make some children non-optional, and set default values for other children.
+  ///  - rule: The ``ConvenienceInitRule`` to use for generating the initializer. Applying a rule will make some children non-optional, and set default values for other children.
   ///  - useDeprecatedChildName: Whether to use the deprecated child name for the initializer parameter.
   /// - returns:
   ///  - ``SyntaxNodeString``: The generated initializer.
-  func generateInitializerDeclHeader(for rule: NodeInitRule? = nil, useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
+  func generateInitializerDeclHeader(for rule: ConvenienceInitRule? = nil, useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
     if children.isEmpty {
       return "public init()"
     }
@@ -66,13 +66,13 @@ extension LayoutNode {
     }
 
     /// Returns whether a given child should be optional in the initializer,
-    /// based on a provided ``NodeInitRule``.
+    /// based on a provided ``ConvenienceInitRule``.
     ///
     /// If the rule is `nil`, this func will return `nil` as well, which means
     /// that you should fall back to whether child is optional in the ``Node``
     /// definition.
     ///
-    func ruleBasedChildIsOptional(for child: Child, with rule: NodeInitRule?) -> Bool {
+    func ruleBasedChildIsOptional(for child: Child, with rule: ConvenienceInitRule?) -> Bool {
       if let rule = rule {
         if rule.nonOptionalChildName == child.name {
           return false
@@ -85,13 +85,13 @@ extension LayoutNode {
     }
 
     /// Returns a default value for a given child, based on a provided
-    /// ``NodeInitRule``.
+    /// ``ConvenienceInitRule``.
     ///
     /// If the rule should not affect this child, the
     /// `child.defualtInitialization` will be returned.
-    func ruleBasedChildDefaultValue(for child: Child, with rule: NodeInitRule?) -> InitializerClauseSyntax? {
+    func ruleBasedChildDefaultValue(for child: Child, with rule: ConvenienceInitRule?) -> InitializerClauseSyntax? {
       if ruleBasedShouldOverrideDefault(for: child, with: rule) {
-        if let rule, let defaultValue = rule.childDefaultValues[child.name] {
+        if let rule, let defaultValue = rule.defaults[child.name] {
           return InitializerClauseSyntax(
             equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
             value: ExprSyntax(".\(defaultValue.spec.varOrCaseName)Token()")
@@ -111,10 +111,10 @@ extension LayoutNode {
     /// Returns `true` if there is a default value in the rule, or if the rule
     /// requires this parameter to be non-optional.
     /// If the rule is `nil`, it will return false.
-    func ruleBasedShouldOverrideDefault(for child: Child, with rule: NodeInitRule?) -> Bool {
+    func ruleBasedShouldOverrideDefault(for child: Child, with rule: ConvenienceInitRule?) -> Bool {
       if let rule {
         // If the rule provides a default for this child, override it and set the rule-based default.
-        if rule.childDefaultValues[child.name] != nil {
+        if rule.defaults[child.name] != nil {
           return true
         }
 
@@ -182,9 +182,9 @@ extension LayoutNode {
   /// Returns a DccC comment for the parameters that get a default value,
   /// with their corresponding default values, for a rule-based convenience initializer
   /// for a node.
-  func generateRuleBasedInitParamsDocComment(for rule: NodeInitRule) -> SwiftSyntax.Trivia {
+  func generateRuleBasedInitParamsDocComment(for rule: ConvenienceInitRule) -> SwiftSyntax.Trivia {
     var params = ""
-    for (childName, defaultValue) in rule.childDefaultValues {
+    for (childName, defaultValue) in rule.defaults {
       params += " - `\(childName)`: `TokenSyntax.\(defaultValue.spec.varOrCaseName)Token()`\n"
     }
     return docCommentTrivia(from: params)

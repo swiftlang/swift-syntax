@@ -10,64 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension ClosureCaptureSyntax {
-
-  /// Creates a ``ClosureCaptureSyntax`` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
-  ///
-  /// - SeeAlso: ``ClosureCaptureSyntax/init(leadingTrivia:_:specifier:_:name:_:equal:_:expression:_:trailingComma:_:trailingTrivia:)``.
-  ///
-  public init(
-    leadingTrivia: Trivia? = nil,
-    specifier: ClosureCaptureSpecifierSyntax? = nil,
-    name: TokenSyntax,
-    equal: TokenSyntax = TokenSyntax.equalToken(),
-    expression: some ExprSyntaxProtocol,
-    trailingComma: TokenSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      specifier: specifier,
-      name: name as TokenSyntax?,
-      equal: equal,
-      expression: expression,
-      trailingComma: trailingComma,
-      trailingTrivia: trailingTrivia
-    )
-  }
-}
-
-extension EnumCaseParameterSyntax {
-
-  /// Creates an ``EnumCaseParameterSyntax`` with a `firstName`, and automatically adds a `colon` to it.
-  ///
-  ///  - SeeAlso: For more information on the arguments, see ``EnumCaseParameterSyntax/init(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultArgument:_:trailingComma:_:trailingTrivia:)``
-  ///
-  public init(
-    leadingTrivia: Trivia? = nil,
-    modifiers: DeclModifierListSyntax = [],
-    firstName: TokenSyntax,
-    secondName: TokenSyntax? = nil,
-    colon: TokenSyntax = TokenSyntax.colonToken(),
-    type: some TypeSyntaxProtocol,
-    defaultValue: InitializerClauseSyntax? = nil,
-    trailingComma: TokenSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      modifiers: modifiers,
-      firstName: firstName as TokenSyntax?,
-      secondName: secondName,
-      colon: colon,
-      type: type,
-      defaultValue: defaultValue,
-      trailingComma: trailingComma,
-      trailingTrivia: trailingTrivia
-    )
-  }
-}
-
 extension MemberAccessExprSyntax {
   /// Creates a new ``MemberAccessExprSyntax`` where the accessed member is represented by
   /// an identifier without specifying argument labels.

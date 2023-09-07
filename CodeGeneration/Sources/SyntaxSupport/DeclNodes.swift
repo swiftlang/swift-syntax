@@ -639,6 +639,14 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "parameter",
     parserFunction: "parseEnumCaseParameter",
     traits: ["WithTrailingComma", "WithModifiers"],
+    rules: [
+      ConvenienceInitRule(
+        nonOptionalChildName: "firstName",
+        defaults: [
+          "colon": .colon
+        ]
+      )
+    ],
     children: [
       Child(
         name: "modifiers",

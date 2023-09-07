@@ -20,18 +20,18 @@ import SwiftSyntax
 ///
 /// The convenience initializer will take a non-optional parameter
 /// `nonOptionalChildName`, and when a non-optional value is passed, it'll call
-/// the full memberwise initializer with the provided `childDefaultValues`.
+/// the full memberwise initializer with the provided `defaults`.
 ///
 /// For example, when initializing an `EnumCaseParameterSyntax`, the convenience
 /// initializer will take a non-optional `firstName` parameter, and when it's
 /// passed, it'll call the full memberwise initializer with
 /// `colon = .colonToken()`.
-public struct NodeInitRule {
+public struct ConvenienceInitRule {
   /// The name of the parameter that is required to be present for
   /// this conveniece initializer rule to apply.
   public let nonOptionalChildName: String
 
   /// A dicrionary of parameter names to their respective default values
   /// to apply when the `nonOptionalChildName` is passed as concrete value.
-  public let childDefaultValues: [String: Token]
+  public let defaults: [String: Token]
 }

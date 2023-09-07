@@ -2578,8 +2578,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
   /// A convenience initializer for ``AttributeSyntax``
   /// that takes a non-optional value for `arguments` parameter,
   /// and adds the following default values:
-  ///  - `rightParen`: `TokenSyntax.rightParenToken()`
   ///  - `leftParen`: `TokenSyntax.leftParenToken()`
+  ///  - `rightParen`: `TokenSyntax.rightParenToken()`
   /// 
   public init(
       leadingTrivia: Trivia? = nil,

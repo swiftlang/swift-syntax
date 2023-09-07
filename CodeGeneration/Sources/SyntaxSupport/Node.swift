@@ -63,6 +63,10 @@ public class Node {
     return kind.varOrCaseName
   }
 
+  /// List of convenience initializer rules for this node. CodeGeneration will
+  /// generate a convenience initializer for each rule.
+  public let rules: [NodeInitRule]
+
   /// If this is a layout node, return a view of the node that provides access
   /// to the layout-node specific properties.
   public var layoutNode: LayoutNode? {
@@ -112,6 +116,7 @@ public class Node {
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
+    rules: [NodeInitRule] = [],
     children: [Child] = []
   ) {
     precondition(base != .syntaxCollection)
@@ -123,6 +128,7 @@ public class Node {
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
+    self.rules = rules
 
     let childrenWithUnexpected: [Child]
     if children.isEmpty {
@@ -229,6 +235,7 @@ public class Node {
     isExperimental: Bool = false,
     nameForDiagnostics: String?,
     documentation: String? = nil,
+    rules: [NodeInitRule] = [],
     parserFunction: TokenSyntax? = nil,
     elementChoices: [SyntaxNodeKind]
   ) {
@@ -239,6 +246,7 @@ public class Node {
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
+    self.rules = rules
 
     assert(!elementChoices.isEmpty)
     self.data = .collection(choices: elementChoices)

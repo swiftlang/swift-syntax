@@ -49,6 +49,14 @@ public let ATTRIBUTE_NODES: [Node] = [
     nameForDiagnostics: "attribute",
     documentation: "An `@` attribute.",
     parserFunction: "parseAttribute",
+    rules: [
+      NodeInitRule(
+        nonOptionalChildName: "arguments",
+        childDefaultValues: [
+          "leftParen": .leftParen,
+          "rightParen": .rightParen
+        ])
+    ],
     children: [
       Child(
         name: "atSign",

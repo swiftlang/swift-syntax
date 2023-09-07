@@ -63,7 +63,8 @@ public class Node {
     return kind.varOrCaseName
   }
 
-  /// List of convenience initializer rules for this node.
+  /// List of convenience initializer rules for this node. CodeGeneration will
+  /// generate a convenience initializer for each rule.
   public let rules: [NodeInitRule]
 
   /// If this is a layout node, return a view of the node that provides access
@@ -127,10 +128,6 @@ public class Node {
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
-
-
-    // FIXME: We should validate rules and check that all referenced children
-    // elements in fact exist on that node.
     self.rules = rules
 
     let childrenWithUnexpected: [Child]
@@ -390,9 +387,4 @@ fileprivate extension Child {
 
 fileprivate extension Node {
 
-}
-
-public struct NodeInitRule {
-  public let nonOptionalChildName: String
-  public let childDefaultValues: [String: Token]
 }

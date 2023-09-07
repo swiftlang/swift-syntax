@@ -17,7 +17,8 @@ import Utils
 
 extension LayoutNode {
 
-  func makeChildParamType(for child: Child, isOptional: Bool = false) -> TypeSyntax {
+  /// Returns Child parameter type as a ``TypeSyntax``.
+  func generateChildParameterType(for child: Child, isOptional: Bool = false) -> TypeSyntax {
     var paramType: TypeSyntax
 
     if !child.kind.isNodeChoicesEmpty {
@@ -39,17 +40,21 @@ extension LayoutNode {
     return paramType
   }
 
-  /// Generates a memberwise SyntaxNode initializer `SyntaxNodeString`.
+  /// Generates a convenience memberwise SyntaxNode initializer based on a
+  /// given ``NodeInitRule``.
   ///
   /// - parameters:
   ///  - rule: The ``NodeInitRule`` to use for generating the initializer. Applying a rule will make some children non-optional, and set default values for other children.
   ///  - useDeprecatedChildName: Whether to use the deprecated child name for the initializer parameter.
+  /// - returns:
+  ///  - ``SyntaxNodeString``: The generated initializer.
   func generateInitializerDeclHeader(for rule: NodeInitRule? = nil, useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
     if children.isEmpty {
       return "public init()"
     }
 
-    func childParameterName(for child: Child) -> TokenSyntax {
+    /// Returns the child paramter name.
+    func generateChildParameterName(for child: Child) -> TokenSyntax {
       let parameterName: TokenSyntax
 
       if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
@@ -60,7 +65,14 @@ extension LayoutNode {
       return parameterName
     }
 
-    func ruleBasedChildIsOptional(for child: Child, with rule: NodeInitRule?) -> Bool? {
+    /// Returns whether a given child should be optional in the initializer,
+    /// based on a provided ``NodeInitRule``.
+    ///
+    /// If the rule is `nil`, this func will return `nil` as well, which means
+    /// that you should fall back to whether child is optional in the ``Node``
+    /// definition.
+    ///
+    func ruleBasedChildIsOptional(for child: Child, with rule: NodeInitRule?) -> Bool {
       if let rule = rule {
         if rule.nonOptionalChildName == child.name {
           return false
@@ -68,21 +80,37 @@ extension LayoutNode {
           return child.isOptional
         }
       } else {
-        return nil
+        return child.isOptional
       }
     }
 
+    /// Returns a default value for a given child, based on a provided
+    /// ``NodeInitRule``.
+    ///
+    /// If the rule should not affect this child, the
+    /// `child.defualtInitialization` will be returned.
     func ruleBasedChildDefaultValue(for child: Child, with rule: NodeInitRule?) -> InitializerClauseSyntax? {
-      if let rule, let defaultValue = rule.childDefaultValues[child.name] {
-        return InitializerClauseSyntax(
-          equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
-          value: ExprSyntax(".\(defaultValue.spec.varOrCaseName)Token()")
-        )
+      if ruleBasedShouldOverrideDefault(for: child, with: rule) {
+        if let rule, let defaultValue = rule.childDefaultValues[child.name] {
+          return InitializerClauseSyntax(
+            equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
+            value: ExprSyntax(".\(defaultValue.spec.varOrCaseName)Token()")
+          )
+        } else {
+          return nil
+        }
       } else {
-        return nil
+        return child.defaultInitialization
       }
+
     }
 
+    /// Should the convenience initializer override the default value of a given
+    /// child?
+    ///
+    /// Returns `true` if there is a default value in the rule, or if the rule
+    /// requires this parameter to be non-optional.
+    /// If the rule is `nil`, it will return false.
     func ruleBasedShouldOverrideDefault(for child: Child, with rule: NodeInitRule?) -> Bool {
       if let rule {
         // If the rule provides a default for this child, override it and set the rule-based default.
@@ -97,33 +125,47 @@ extension LayoutNode {
       }
     }
 
-    func createFunctionParameterSyntax(for child: Child, overrideOptional: Bool? = nil, shouldOverrideDefault: Bool = false, overrideDefaultValue: InitializerClauseSyntax? = nil) -> FunctionParameterSyntax {
 
-      let parameterName = childParameterName(for: child)
+    /// Generates a ``FunctionParameterSyntax`` for a given ``Child`` of this node.
+    ///
+    /// - parameters:
+    ///   - child: The ``Child`` to generate the parameter for.
+    ///   - isOptional: Is the parameter optional?
+    ///
+    func generateInitFunctionParameterSyntax(
+      for child: Child,
+      isOptional: Bool,
+      defaultValue: InitializerClauseSyntax? = nil
+    ) -> FunctionParameterSyntax {
+      let parameterName = generateChildParameterName(for: child)
 
       return FunctionParameterSyntax(
         leadingTrivia: .newline,
         firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : parameterName,
         secondName: child.isUnexpectedNodes ? parameterName : nil,
         colon: .colonToken(),
-        type: makeChildParamType(for: child, isOptional: overrideOptional ?? child.isOptional),
-        defaultValue: shouldOverrideDefault ? overrideDefaultValue : child.defaultInitialization
+        type: generateChildParameterType(for: child, isOptional: isOptional),
+        defaultValue: defaultValue
       )
     }
 
+    // Iterate over all children including unexpected, or only over expected children of the Node.
+    //
     // For convenience initializers, we don't need unexpected tokens in the arguments list
     // because convenience initializers are meant to be used bo developers manually
-    // hence there should be no unexpected tokens
+    // hence there should be no unexpected tokens.
     let childrenToIterate = rule != nil ? nonUnexpectedChildren : children
 
+    // Iterate over the selected children, and make FunctionParameterSyntax for each of them.
     let params = FunctionParameterListSyntax {
       FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
 
       for child in childrenToIterate {
-        createFunctionParameterSyntax(for: child,
-                                      overrideOptional: ruleBasedChildIsOptional(for: child, with: rule),
-                                      shouldOverrideDefault: ruleBasedShouldOverrideDefault(for: child, with: rule),
-                                      overrideDefaultValue: ruleBasedChildDefaultValue(for: child, with: rule))
+        generateInitFunctionParameterSyntax(
+          for: child,
+          isOptional: ruleBasedChildIsOptional(for: child, with: rule),
+          defaultValue: ruleBasedChildDefaultValue(for: child, with: rule)
+        )
       }
 
       FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
@@ -137,7 +179,10 @@ extension LayoutNode {
       """
   }
 
-  func generateRuleBasedDefaultValuesDocComment(for rule: NodeInitRule) -> SwiftSyntax.Trivia {
+  /// Returns a DccC comment for the parameters that get a default value,
+  /// with their corresponding default values, for a rule-based convenience initializer
+  /// for a node.
+  func generateRuleBasedInitParamsDocComment(for rule: NodeInitRule) -> SwiftSyntax.Trivia {
     var params = ""
     for (childName, defaultValue) in rule.childDefaultValues {
       params += " - `\(childName)`: `TokenSyntax.\(defaultValue.spec.varOrCaseName)Token()`\n"
@@ -145,6 +190,7 @@ extension LayoutNode {
     return docCommentTrivia(from: params)
   }
 
+  /// Returns a DocC comment for the full memberwise initializer for this node.
   func generateInitializerDocComment() -> SwiftSyntax.Trivia {
     func generateParamDocComment(for child: Child) -> String? {
       if child.documentationAbstract.isEmpty {

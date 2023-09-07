@@ -84,7 +84,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             /// A convenience initializer for ``\(node.kind.syntaxType)``
             /// that takes a non-optional value for `\(raw: rule.nonOptionalChildName)` parameter,
             /// and adds the following default values:
-            \(node.generateRuleBasedDefaultValuesDocComment(for: rule))
+            \(node.generateRuleBasedInitParamsDocComment(for: rule))
             \(node.generateInitializerDeclHeader(for: rule))
             """
           ) {
@@ -107,7 +107,9 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   LabeledExprSyntax(
                     label: child.varOrCaseName,
                     colon: .colonToken(),
-                    expression: rule.nonOptionalChildName == child.name ? ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded) as \(node.makeChildParamType(for: child, isOptional: true))") : ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)"),
+                    expression: rule.nonOptionalChildName == child.name ?
+                      ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded) as \(node.generateChildParameterType(for: child, isOptional: true))") :
+                      ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)"),
                     trailingComma: .commaToken()
                   )
                 }

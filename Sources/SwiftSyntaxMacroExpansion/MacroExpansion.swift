@@ -238,19 +238,12 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         throw MacroExpansionError.declarationNotDeclGroup
       }
 
-      // Local function to expand a member macro once we've opened up
-      // the existential.
-      func expandMemberMacro(
-        _ node: some DeclGroupSyntax
-      ) throws -> [DeclSyntax] {
-        return try attachedMacro.expansion(
-          of: attributeNode,
-          providingMembersOf: node,
-          in: context
-        )
-      }
-
-      let members = try _openExistential(declGroup, do: expandMemberMacro)
+      let members = try attachedMacro.expansion(
+        of: attributeNode,
+        providingMembersOf: declGroup,
+        conformingTo: conformanceList?.map(\.typeName) ?? [],
+        in: context
+      )
 
       // Form a buffer of member declarations to return to the caller.
       return members.map { $0.formattedExpansion(definition.formatMode) }

@@ -81,16 +81,14 @@ public struct DictionaryStoragePropertyMacro: AccessorMacro {
 
     return [
       """
-
-        get {
-          _storage[\(literal: identifier.text), default: \(defaultValue)] as! \(type)
-        }
+      get {
+        _storage[\(literal: identifier.text), default: \(defaultValue)] as! \(type)
+      }
       """,
       """
-
-        set {
-            _storage[\(literal: identifier.text)] = newValue
-        }
+      set {
+        _storage[\(literal: identifier.text)] = newValue
+      }
       """,
     ]
   }

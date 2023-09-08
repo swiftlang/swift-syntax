@@ -36,24 +36,23 @@ final class MetaEnumMacroTests: XCTestCase {
           case null
 
           enum Meta {
-                  case integer
-                  case text
-                  case boolean
-                  case null
-
-                  init(_ __macro_local_6parentfMu_: Cell) {
-                      switch __macro_local_6parentfMu_ {
-                      case .integer:
-                          self = .integer
-                      case .text:
-                          self = .text
-                      case .boolean:
-                          self = .boolean
-                      case .null:
-                          self = .null
-                      }
-                  }
+            case integer
+            case text
+            case boolean
+            case null
+            init(_ __macro_local_6parentfMu_: Cell) {
+              switch __macro_local_6parentfMu_ {
+              case .integer:
+                self = .integer
+              case .text:
+                self = .text
+              case .boolean:
+                self = .boolean
+              case .null:
+                self = .null
+              }
             }
+          }
         }
         """,
       macros: macros,
@@ -77,21 +76,20 @@ final class MetaEnumMacroTests: XCTestCase {
           case boolean(Bool)
 
           public enum Meta {
-                  case integer
-                  case text
-                  case boolean
-
-                  public init(_ __macro_local_6parentfMu_: Cell) {
-                      switch __macro_local_6parentfMu_ {
-                      case .integer:
-                          self = .integer
-                      case .text:
-                          self = .text
-                      case .boolean:
-                          self = .boolean
-                      }
-                  }
+            case integer
+            case text
+            case boolean
+            public init(_ __macro_local_6parentfMu_: Cell) {
+              switch __macro_local_6parentfMu_ {
+              case .integer:
+                self = .integer
+              case .text:
+                self = .text
+              case .boolean:
+                self = .boolean
+              }
             }
+          }
         }
         """,
       macros: macros,

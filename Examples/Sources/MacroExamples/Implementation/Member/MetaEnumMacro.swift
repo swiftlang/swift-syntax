@@ -41,36 +41,39 @@ public struct MetaEnumMacro {
 
   func makeMetaEnum() -> DeclSyntax {
     // FIXME: Why does this need to be a string to make trailing trivia work properly?
-    let caseDecls = childCases.map { childCase in
-      "    case \(childCase.name)"
-    }.joined(separator: "\n")
+    let caseDecls =
+      childCases
+      .map { childCase in
+        "  case \(childCase.name)"
+      }
+      .joined(separator: "\n")
 
     return """
-
-        \(access)enum Meta {
+      \(access)enum Meta {
       \(raw: caseDecls)
       \(makeMetaInit())
-        }
-
+      }
       """
   }
 
   func makeMetaInit() -> DeclSyntax {
     // FIXME: Why does this need to be a string to make trailing trivia work properly?
-    let caseStatements = childCases.map { childCase in
-      """
-            case .\(childCase.name):
-              self = .\(childCase.name)
-      """
-    }.joined(separator: "\n")
+    let caseStatements =
+      childCases
+      .map { childCase in
+        """
+          case .\(childCase.name):
+            self = .\(childCase.name)
+        """
+      }
+      .joined(separator: "\n")
 
     return """
-
-          \(access)init(_ \(parentParamName): \(parentTypeName)) {
-            switch \(parentParamName) {
+      \(access)init(_ \(parentParamName): \(parentTypeName)) {
+        switch \(parentParamName) {
       \(raw: caseStatements)
-            }
-          }
+        }
+      }
       """
   }
 }

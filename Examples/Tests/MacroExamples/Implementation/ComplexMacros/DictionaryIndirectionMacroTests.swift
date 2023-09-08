@@ -34,19 +34,19 @@ final class DictionaryStorageMacroTests: XCTestCase {
         struct Point {
           var x: Int = 1 {
             get {
-                    _storage["x", default: 1] as! Int
-              }
+              _storage["x", default: 1] as! Int
+            }
             set {
-                        _storage["x"] = newValue
-              }
+              _storage["x"] = newValue
+            }
           }
           var y: Int = 2 {
             get {
-                    _storage["y", default: 2] as! Int
-              }
+              _storage["y", default: 2] as! Int
+            }
             set {
-                        _storage["y"] = newValue
-              }
+              _storage["y"] = newValue
+            }
           }
 
           var _storage: [String: Any] = [:]

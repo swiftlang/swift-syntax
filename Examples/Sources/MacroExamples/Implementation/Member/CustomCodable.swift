@@ -44,11 +44,9 @@ public enum CustomCodable: MemberMacro {
     })
 
     let codingKeys: DeclSyntax = """
-
-        enum CodingKeys: String, CodingKey {
-          \(raw: cases.joined(separator: "\n"))
-        }
-
+      enum CodingKeys: String, CodingKey {
+        \(raw: cases.joined(separator: "\n"))
+      }
       """
 
     return [codingKeys]

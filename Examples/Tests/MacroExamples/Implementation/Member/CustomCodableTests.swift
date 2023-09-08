@@ -33,9 +33,9 @@ final class CustomCodableTests: XCTestCase {
           let age: Int
 
           enum CodingKeys: String, CodingKey {
-                  case name
-              case age
-            }
+            case name
+            case age
+          }
         }
         """,
       macros: macros,
@@ -62,9 +62,9 @@ final class CustomCodableTests: XCTestCase {
           func randomFunction() {}
 
           enum CodingKeys: String, CodingKey {
-                  case name
-              case age = "user_age"
-            }
+            case name
+            case age = "user_age"
+          }
         }
         """,
       macros: macros,

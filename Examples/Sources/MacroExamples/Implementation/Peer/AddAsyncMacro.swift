@@ -101,12 +101,12 @@ public struct AddAsyncMacro: PeerMacro {
 
     let switchBody: ExprSyntax =
       """
-        switch returnValue {
-        case .success(let value):
-            continuation.resume(returning: value)
-        case .failure(let error):
-            continuation.resume(throwing: error)
-        }
+            switch returnValue {
+            case .success(let value):
+              continuation.resume(returning: value)
+            case .failure(let error):
+              continuation.resume(throwing: error)
+            }
       """
 
     let newBody: ExprSyntax =
@@ -115,8 +115,7 @@ public struct AddAsyncMacro: PeerMacro {
         \(raw: isResultReturn ? "try await withCheckedThrowingContinuation { continuation in" : "await withCheckedContinuation { continuation in")
           \(raw: funcDecl.name)(\(raw: callArguments.joined(separator: ", "))) { \(raw: returnType != nil ? "returnValue in" : "")
 
-          \(raw: isResultReturn ? switchBody : "continuation.resume(returning: \(raw: returnType != nil ? "returnValue" : "()"))")
-
+      \(raw: isResultReturn ? switchBody : "continuation.resume(returning: \(raw: returnType != nil ? "returnValue" : "()"))")
           }
         }
 

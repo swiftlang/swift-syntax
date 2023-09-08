@@ -45,7 +45,7 @@ func runExpressionMacrosPlayground() {
   // malformed an error is emitted. Otherwise a non-optional URL is expanded.
   print(#URL("https://swift.org/"))
 
-  let domain = "domain.com"
+  //  let domain = "domain.com"
   //print(#URL("https://\(domain)/api/path")) // error: #URL requires a static string literal
   //print(#URL("https://not a url.com")) // error: Malformed url
 

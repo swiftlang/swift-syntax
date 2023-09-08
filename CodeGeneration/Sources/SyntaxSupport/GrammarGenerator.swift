@@ -14,18 +14,27 @@ import SwiftSyntax
 
 /// Generates grammar doc comments for syntax nodes.
 struct GrammarGenerator {
-  private func grammar(for tokenChoice: TokenChoice) -> String {
+
+  /// Returns grammar for a ``TokenChoice``.
+  ///
+  /// - parameters:
+  ///   - tokenChoice: ``TokenChoice`` to describe
+  ///   - backticks: Whether to wrap the token choice in backticks
+  private func grammar(for tokenChoice: TokenChoice, backticked: Bool = true) -> String {
+    var description: String
     switch tokenChoice {
     case .keyword(let keyword):
-      return "`'\(keyword.spec.name)'`"
+      description = "'\(keyword.spec.name)'"
     case .token(let token):
       let tokenSpec = token.spec
       if let tokenText = tokenSpec.text {
-        return "`'\(tokenText)'`"
+        description = "'\(tokenText)'"
       } else {
-        return "`<\(tokenSpec.varOrCaseName)>`"
+        description = "<\(tokenSpec.varOrCaseName)>"
       }
     }
+
+    return backticked ? "`\(description)`" : description
   }
 
   private func grammar(for child: Child) -> String {
@@ -59,5 +68,21 @@ struct GrammarGenerator {
       .filter { !$0.isUnexpectedNodes }
       .map { " - `\($0.varOrCaseName)`: \(generator.grammar(for: $0))" }
       .joined(separator: "\n")
+  }
+
+  /// Generates the list of possible token kinds for this particular ``Child``.
+  /// The child must be of kind ``ChildKind/token``. Otherwise, an empty string will be returned.
+  static func childTokenChoices(for child: Child) -> String {
+    let generator = GrammarGenerator()
+
+    if case .token(let choices, _, _) = child.kind {
+      if choices.count == 1 {
+        return " \(generator.grammar(for: choices.first!, backticked: false))"
+      } else {
+        return choices.map { " - \(generator.grammar(for: $0, backticked: false))" }.joined(separator: "\n")
+      }
+    } else {
+      return ""
+    }
   }
 }

@@ -20,21 +20,18 @@ struct GrammarGenerator {
   /// - parameters:
   ///   - tokenChoice: ``TokenChoice`` to describe
   ///   - backticks: Whether to wrap the token choice in backticks
-  private func grammar(for tokenChoice: TokenChoice, backticked: Bool = true) -> String {
-    var description: String
+  private func grammar(for tokenChoice: TokenChoice) -> String {
     switch tokenChoice {
     case .keyword(let keyword):
-      description = "'\(keyword.spec.name)'"
+      return "`'\(keyword.spec.name)'`"
     case .token(let token):
       let tokenSpec = token.spec
       if let tokenText = tokenSpec.text {
-        description = "'\(tokenText)'"
+        return "`'\(tokenText)'`"
       } else {
-        description = "<\(tokenSpec.varOrCaseName)>"
+        return "`<\(tokenSpec.varOrCaseName)>`"
       }
     }
-
-    return backticked ? "`\(description)`" : description
   }
 
   private func grammar(for child: Child) -> String {
@@ -77,9 +74,9 @@ struct GrammarGenerator {
 
     if case .token(let choices, _, _) = child.kind {
       if choices.count == 1 {
-        return " \(generator.grammar(for: choices.first!, backticked: false))"
+        return " \(generator.grammar(for: choices.first!))"
       } else {
-        return choices.map { " - \(generator.grammar(for: $0, backticked: false))" }.joined(separator: "\n")
+        return choices.map { " - \(generator.grammar(for: $0))" }.joined(separator: "\n")
       }
     } else {
       return ""

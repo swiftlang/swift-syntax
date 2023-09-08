@@ -31,4 +31,18 @@ struct SwiftSyntaxDevUtils: ParsableCommand {
       VerifySourceCode.self,
     ]
   )
+
+  public static func main() {
+    SigIntListener.registerSigIntSubprocessTerminationHandler()
+    do {
+      var command = try parseAsRoot(nil)
+      try command.run()
+    } catch {
+      if !SigIntListener.hasReceivedSigInt {
+        // No point printing an error message if the user requested the termination
+        // of the script.
+        exit(withError: error)
+      }
+    }
+  }
 }

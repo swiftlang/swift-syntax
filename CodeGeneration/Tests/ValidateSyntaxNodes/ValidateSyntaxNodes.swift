@@ -80,7 +80,7 @@ fileprivate extension ChildKind {
 
 fileprivate extension Child {
   func hasSameType(as other: Child) -> Bool {
-    return varOrCaseName.description == other.varOrCaseName.description && kind.hasSameType(as: other.kind) && isOptional == other.isOptional
+    varOrCaseName.description == other.varOrCaseName.description && kind.hasSameType(as: other.kind) && isOptional == other.isOptional
   }
 
   func isFollowedByColonToken(in node: LayoutNode) -> Bool {

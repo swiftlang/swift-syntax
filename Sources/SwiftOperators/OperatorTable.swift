@@ -86,19 +86,19 @@ extension OperatorTable {
   /// Returns the ``Operator`` corresponding to the given infix operator, or
   /// `nil` if it is not defined in the operator table.
   public func infixOperator(named operatorName: OperatorName) -> Operator? {
-    return infixOperators[operatorName]
+    infixOperators[operatorName]
   }
 
   /// Returns the ``Operator`` corresponding to the given prefix operator, or
   /// `nil` if it is not defined in the operator table.
   public func prefixOperator(named operatorName: OperatorName) -> Operator? {
-    return prefixOperators[operatorName]
+    prefixOperators[operatorName]
   }
 
   /// Returns the ``Operator`` corresponding to the given prefix operator, or
   /// `nil` if it is not defined in the operator table.
   public func postfixOperator(named operatorName: OperatorName) -> Operator? {
-    return postfixOperators[operatorName]
+    postfixOperators[operatorName]
   }
 
   /// Look for the precedence group corresponding to the given operator.

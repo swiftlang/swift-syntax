@@ -103,7 +103,7 @@ enum TokenPrecedence: Comparable {
   /// When expecting a token with `stmtKeyword` precedence or higher, newlines may be skipped to find that token.
   /// For lower precedence groups, we consider newlines the end of the lookahead scope.
   var shouldSkipOverNewlines: Bool {
-    return self >= .stmtKeyword
+    self >= .stmtKeyword
   }
 
   init(_ lexeme: Lexer.Lexeme) {

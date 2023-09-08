@@ -34,7 +34,7 @@ open class BasicFormat: SyntaxRewriter {
   /// The trivia by which tokens should currently be indented.
   public var currentIndentationLevel: Trivia {
     // `decreaseIndentationLevel` guarantees that there is always one item on the stack.
-    return indentationStack.last!.indentation
+    indentationStack.last!.indentation
   }
 
   /// For every token that is being put on a new line but did not have
@@ -53,7 +53,7 @@ open class BasicFormat: SyntaxRewriter {
 
   /// Whether we are currently visiting the subtree of a `StringLiteralExprSyntax`.
   private var isInsideStringLiteral: Bool {
-    return stringLiteralNestingLevel > 0
+    stringLiteralNestingLevel > 0
   }
 
   public init(
@@ -90,7 +90,7 @@ open class BasicFormat: SyntaxRewriter {
   open override func visit(_ node: UnexpectedNodesSyntax) -> UnexpectedNodesSyntax {
     // Do not perform any formatting on unexpected nodes, the result won't make any
     // sense as we rely on layout nodes to know what formatting to perform.
-    return node
+    node
   }
 
   open override func visitPre(_ node: Syntax) {
@@ -123,7 +123,7 @@ open class BasicFormat: SyntaxRewriter {
   // MARK: - Helper functions
 
   private func isInsideStringInterpolation(_ token: TokenSyntax) -> Bool {
-    return token.ancestorOrSelf { $0.as(ExpressionSegmentSyntax.self) } != nil
+    token.ancestorOrSelf { $0.as(ExpressionSegmentSyntax.self) } != nil
   }
 
   private func childrenSeparatedByNewline(_ node: Syntax) -> Bool {
@@ -383,7 +383,7 @@ open class BasicFormat: SyntaxRewriter {
   /// will be mutated. Thus, if two tokens need to be separated by a space, it
   /// will not be assumed that the space is added to an immutable previous node.
   open func isMutable(_ token: TokenSyntax) -> Bool {
-    return true
+    true
   }
 
   /// Change the text of a token during formatting.
@@ -393,7 +393,7 @@ open class BasicFormat: SyntaxRewriter {
   /// - Parameter token: The token whose text should be changed
   /// - Returns: The new text or `nil` if the text should not be changed
   open func transformTokenText(_ token: TokenSyntax) -> String? {
-    return nil
+    nil
   }
 
   /// Change the presence of a token during formatting.
@@ -403,7 +403,7 @@ open class BasicFormat: SyntaxRewriter {
   /// - Parameter token: The token whose presence should be changed
   /// - Returns: The new presence or `nil` if the presence should not be changed
   open func transformTokenPresence(_ token: TokenSyntax) -> SourcePresence? {
-    return nil
+    nil
   }
 
   // MARK: - Formatting a token

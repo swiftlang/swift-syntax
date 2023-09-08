@@ -17,7 +17,7 @@ import XCTest
 public class VisitorPerformanceTests: XCTestCase {
 
   var inputFile: URL {
-    return URL(fileURLWithPath: #file)
+    URL(fileURLWithPath: #file)
       .deletingLastPathComponent()
       .appendingPathComponent("Inputs")
       .appendingPathComponent("MinimalCollections.swift.input")

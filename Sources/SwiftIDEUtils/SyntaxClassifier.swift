@@ -89,9 +89,9 @@ public struct SyntaxClassifiedRange: Equatable {
   public var kind: SyntaxClassification
   public var range: ByteSourceRange
 
-  public var offset: Int { return range.offset }
-  public var length: Int { return range.length }
-  public var endOffset: Int { return range.endOffset }
+  public var offset: Int { range.offset }
+  public var length: Int { range.length }
+  public var endOffset: Int { range.endOffset }
 }
 
 private struct ClassificationVisitor {

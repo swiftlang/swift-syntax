@@ -148,13 +148,13 @@ extension Unicode.Scalar {
   var isPrintableASCII: Bool {
     // Exclude non-printables before the space character U+20, and anything
     // including and above the DEL character U+7F.
-    return self.value >= 0x20 && self.value < 0x7F
+    self.value >= 0x20 && self.value < 0x7F
   }
 
   var isStartOfUTF8Character: Bool {
     // RFC 2279: The octet values FE and FF never appear.
     // RFC 3629: The octet values C0, C1, F5 to FF never appear.
-    return self.value <= 0x80 || (self.value >= 0xC2 && self.value < 0xF5)
+    self.value <= 0x80 || (self.value >= 0xC2 && self.value < 0xF5)
   }
 }
 

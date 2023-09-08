@@ -134,7 +134,7 @@ print("password: description=\(password) hashValue=\(password.hashValue)")
 struct MyStruct {
   @AddCompletionHandler
   func f(a: Int, for b: String, _ value: Double) async -> String {
-    return b
+    b
   }
 
   @AddAsync

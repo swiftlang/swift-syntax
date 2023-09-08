@@ -101,7 +101,7 @@ public class SyntaxArena {
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
   func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
-    return allocator.allocate(RawSyntax?.self, count: count)
+    allocator.allocate(RawSyntax?.self, count: count)
   }
 
   /// Allocates a buffer of ``RawTriviaPiece`` with the given count, then returns
@@ -109,13 +109,13 @@ public class SyntaxArena {
   func allocateRawTriviaPieceBuffer(
     count: Int
   ) -> UnsafeMutableBufferPointer<RawTriviaPiece> {
-    return allocator.allocate(RawTriviaPiece.self, count: count)
+    allocator.allocate(RawTriviaPiece.self, count: count)
   }
 
   /// Allocates a buffer of `UInt8` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<UInt8>`.
   func allocateTextBuffer(count: Int) -> UnsafeMutableBufferPointer<UInt8> {
-    return allocator.allocate(UInt8.self, count: count)
+    allocator.allocate(UInt8.self, count: count)
   }
 
   /// Copies the contents of a ``SyntaxText`` to the memory this arena manages,
@@ -192,7 +192,7 @@ public class SyntaxArena {
   /// "managed" means it's empty, a part of "source buffer", or in the memory
   /// allocated by the underlying arena.
   func contains(text: SyntaxText) -> Bool {
-    return (text.isEmpty || allocator.contains(address: text.baseAddress!))
+    (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
 }
 
@@ -254,7 +254,7 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
   @_spi(RawSyntax)
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
-    return self.parseTriviaFunction(source, position)
+    self.parseTriviaFunction(source, position)
   }
 }
 
@@ -289,6 +289,6 @@ struct SyntaxArenaRef: Hashable {
   }
 
   static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
-    return lhs._value.toOpaque() == rhs._value.toOpaque()
+    lhs._value.toOpaque() == rhs._value.toOpaque()
   }
 }

@@ -333,7 +333,7 @@ public struct Parser {
   }
 
   mutating func missingToken(_ keyword: Keyword) -> RawTokenSyntax {
-    return missingToken(.keyword, text: keyword.defaultText)
+    missingToken(.keyword, text: keyword.defaultText)
   }
 
   /// Consumes the current token and advances the lexer to the next token.
@@ -399,7 +399,7 @@ public struct Parser {
 extension Parser {
   /// Retrieves the token following the current token without consuming it.
   func peek() -> Lexer.Lexeme {
-    return self.lexemes.peek()
+    self.lexemes.peek()
   }
 }
 
@@ -549,7 +549,7 @@ extension Parser {
   mutating func expect(
     _ spec: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    return expectImpl(
+    expectImpl(
       consume: { $0.consume(if: spec) },
       canRecoverTo: { $0.canRecoverTo(spec) },
       makeMissing: { $0.missingToken(spec) }
@@ -569,7 +569,7 @@ extension Parser {
     _ spec2: TokenSpec,
     default defaultKind: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    return expectImpl(
+    expectImpl(
       consume: { $0.consume(if: spec1, spec2) },
       canRecoverTo: { $0.canRecoverTo(spec1, spec2) },
       makeMissing: { $0.missingToken(defaultKind) }
@@ -590,7 +590,7 @@ extension Parser {
     _ spec3: TokenSpec,
     default defaultKind: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    return expectImpl(
+    expectImpl(
       consume: { $0.consume(if: spec1, spec2, spec3) },
       canRecoverTo: { $0.canRecoverTo(spec1, spec2, spec3) },
       makeMissing: { $0.missingToken(defaultKind) }
@@ -602,7 +602,7 @@ extension Parser {
     anyIn specSet: SpecSet.Type,
     default defaultKind: SpecSet
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    return expectImpl(
+    expectImpl(
       consume: { $0.consume(ifAnyIn: specSet) },
       canRecoverTo: { $0.canRecoverTo(anyIn: specSet)?.1 },
       makeMissing: { $0.missingToken(defaultKind.spec) }

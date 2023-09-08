@@ -32,7 +32,7 @@ public struct SourceLength: Comparable {
 
   /// Returns `true` if `lhs` is shorter than `rhs`.
   public static func < (lhs: SourceLength, rhs: SourceLength) -> Bool {
-    return lhs.utf8Length < rhs.utf8Length
+    lhs.utf8Length < rhs.utf8Length
   }
 
   /// Combine the length of two source length.

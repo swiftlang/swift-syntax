@@ -235,14 +235,14 @@ public final class SourceLocationConverter {
     self.fileName = file
     self.source = Array(source.utf8)
     (self.lines, endOfFile) = self.source.withUnsafeBufferPointer { buf in
-      return computeLines(SyntaxText(buffer: buf))
+      computeLines(SyntaxText(buffer: buf))
     }
     precondition(source.utf8.count == endOfFile.utf8Offset)
   }
 
   /// Execute the body with an array that contains each source line.
   func withSourceLines<T>(_ body: ([SyntaxText]) throws -> T) rethrows -> T {
-    return try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
+    try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
       var result: [SyntaxText] = []
       var previousLoc = AbsolutePosition.startOfFile
       precondition(lines.first == AbsolutePosition.startOfFile)
@@ -262,7 +262,7 @@ public final class SourceLocationConverter {
   /// Return the source lines of the file as `String`s.
   /// Because `String` cannot model invalid UTF-8, the concatenation of these source lines might not be source-accurate in case there are Unicode errors in the source file, but for most practical purposes, this should not pose an issue.
   public var sourceLines: [String] {
-    return withSourceLines { syntaxTextLines in
+    withSourceLines { syntaxTextLines in
       return syntaxTextLines.map { String(syntaxText: $0) }
     }
   }
@@ -365,7 +365,7 @@ public final class SourceLocationConverter {
 
   /// Returns false if the `position` is out-of-bounds for the file.
   public func isValid(position pos: AbsolutePosition) -> Bool {
-    return pos >= .startOfFile && pos <= self.endOfFile
+    pos >= .startOfFile && pos <= self.endOfFile
   }
 
   /// Returns false if the `line`/`column` pair is out-of-bounds for the file or
@@ -458,7 +458,7 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterLeadingTrivia: Bool = true
   ) -> SourceLocation {
-    return _syntaxNode.startLocation(
+    _syntaxNode.startLocation(
       converter: converter,
       afterLeadingTrivia: afterLeadingTrivia
     )
@@ -474,7 +474,7 @@ public extension SyntaxProtocol {
     converter: SourceLocationConverter,
     afterTrailingTrivia: Bool = false
   ) -> SourceLocation {
-    return _syntaxNode.endLocation(
+    _syntaxNode.endLocation(
       converter: converter,
       afterTrailingTrivia: afterTrailingTrivia
     )
@@ -493,7 +493,7 @@ public extension SyntaxProtocol {
     afterLeadingTrivia: Bool = true,
     afterTrailingTrivia: Bool = false
   ) -> SourceRange {
-    return _syntaxNode.sourceRange(
+    _syntaxNode.sourceRange(
       converter: converter,
       afterLeadingTrivia: afterLeadingTrivia,
       afterTrailingTrivia: afterTrailingTrivia
@@ -580,7 +580,7 @@ fileprivate extension SyntaxText {
   }
 
   func containsSwiftNewline() -> Bool {
-    return self.contains { $0 == 10 || $0 == 13 }
+    self.contains { $0 == 10 || $0 == 13 }
   }
 }
 

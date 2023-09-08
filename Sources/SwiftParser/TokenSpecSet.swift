@@ -49,7 +49,7 @@ enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
   }
 
   static var allCases: [EitherTokenSpecSet] {
-    return LHS.allCases.map(Self.lhs) + RHS.allCases.map(Self.rhs)
+    LHS.allCases.map(Self.lhs) + RHS.allCases.map(Self.rhs)
   }
 }
 
@@ -476,7 +476,7 @@ enum DeclarationStart: TokenSpecSet {
   }
 
   static var allCases: [DeclarationStart] {
-    return DeclarationModifier.allCases.map(Self.declarationModifier) + DeclarationKeyword.allCases.map(Self.declarationKeyword)
+    DeclarationModifier.allCases.map(Self.declarationModifier) + DeclarationKeyword.allCases.map(Self.declarationKeyword)
   }
 
   var spec: TokenSpec {
@@ -961,7 +961,7 @@ enum ExpressionStart: TokenSpecSet {
   }
 
   static var allCases: [ExpressionStart] {
-    return ExpressionModifierKeyword.allCases.map(Self.awaitTryMove)
+    ExpressionModifierKeyword.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
       + IfOrSwitch.allCases.map(Self.ifOrSwitch)

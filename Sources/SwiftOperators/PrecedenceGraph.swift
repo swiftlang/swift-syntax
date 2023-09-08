@@ -62,7 +62,7 @@ struct PrecedenceGraph {
   /// Look for the precedence group with the given name, or return nil if
   /// no such group is known.
   func lookupGroup(_ groupName: PrecedenceGroupName) -> PrecedenceGroup? {
-    return precedenceGroups[groupName]
+    precedenceGroups[groupName]
   }
 
   /// Search the precedence-group relationships, starting at the given

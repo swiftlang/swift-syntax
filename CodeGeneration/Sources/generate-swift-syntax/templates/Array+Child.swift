@@ -14,6 +14,6 @@ import SyntaxSupport
 
 extension Array where Element == Child {
   var hasDeprecatedChild: Bool {
-    return self.contains(where: { $0.hasDeprecatedName })
+    self.contains(where: { $0.hasDeprecatedName })
   }
 }

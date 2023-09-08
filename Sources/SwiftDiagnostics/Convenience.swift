@@ -40,7 +40,7 @@ extension FixIt {
     oldNode: some SyntaxProtocol,
     newNode: some SyntaxProtocol
   ) -> Self {
-    return FixIt(
+    FixIt(
       message: message,
       changes: [
         .replace(oldNode: Syntax(oldNode), newNode: Syntax(newNode))

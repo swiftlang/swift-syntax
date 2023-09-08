@@ -22,7 +22,7 @@ struct RecoveryConsumptionHandle {
   var tokenConsumptionHandle: TokenConsumptionHandle
 
   static func constant(_ spec: TokenSpec) -> RecoveryConsumptionHandle {
-    return RecoveryConsumptionHandle(
+    RecoveryConsumptionHandle(
       unexpectedTokens: 0,
       tokenConsumptionHandle: TokenConsumptionHandle(spec: spec)
     )
@@ -31,7 +31,7 @@ struct RecoveryConsumptionHandle {
   /// A `RecoveryConsumptionHandle` that will not eat any tokens but instead
   /// synthesize a missing token of kind `token`.
   static func missing(_ spec: TokenSpec) -> RecoveryConsumptionHandle {
-    return RecoveryConsumptionHandle(
+    RecoveryConsumptionHandle(
       unexpectedTokens: 0,
       tokenConsumptionHandle: TokenConsumptionHandle(spec: spec, tokenIsMissing: true)
     )
@@ -43,7 +43,7 @@ extension Parser.Lookahead {
   mutating func canRecoverTo(
     _ spec: TokenSpec
   ) -> RecoveryConsumptionHandle? {
-    return canRecoverTo(spec, spec, spec)
+    canRecoverTo(spec, spec, spec)
   }
 
   /// See `canRecoverTo` that takes 3 specs.
@@ -51,7 +51,7 @@ extension Parser.Lookahead {
     _ spec1: TokenSpec,
     _ spec2: TokenSpec
   ) -> RecoveryConsumptionHandle? {
-    return canRecoverTo(spec1, spec2, spec1)
+    canRecoverTo(spec1, spec2, spec1)
   }
 
   /// Tries eating tokens until it finds a token that matches `spec1`, `spec2` or `spec3`

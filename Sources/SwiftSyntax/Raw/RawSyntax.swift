@@ -16,7 +16,7 @@ typealias RawTriviaPieceBuffer = UnsafeBufferPointer<RawTriviaPiece>
 fileprivate extension SyntaxKind {
   /// Whether this node kind should be considered as `hasError` for purposes of `RecursiveRawSyntaxFlags`.
   var hasError: Bool {
-    return self == .unexpectedNodes || self.isMissing
+    self == .unexpectedNodes || self.isMissing
   }
 }
 
@@ -940,7 +940,7 @@ extension RawSyntax: Identifiable {
   }
 
   public var id: ID {
-    return ID(self)
+    ID(self)
   }
 }
 

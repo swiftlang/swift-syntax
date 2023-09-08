@@ -61,7 +61,7 @@ extension MacroExpansionContext {
   public func location(
     of node: some SyntaxProtocol
   ) -> AbstractSourceLocation? {
-    return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
+    location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
   }
 }
 

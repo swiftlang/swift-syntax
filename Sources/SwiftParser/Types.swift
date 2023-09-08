@@ -931,11 +931,11 @@ extension Parser {
 
     case .convention:
       return parseAttribute(argumentMode: .required) { parser in
-        return parser.parseConventionArguments()
+        parser.parseConventionArguments()
       }
     case ._opaqueReturnTypeOf:
       return parseAttribute(argumentMode: .required) { parser in
-        return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
+        .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
       }
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in

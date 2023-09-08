@@ -40,7 +40,7 @@ public extension SyntaxProtocol {
   ///   - in: The relative byte range to pull ``SyntaxClassifiedRange``s from.
   /// - Returns: Sequence of ``SyntaxClassifiedRange``s.
   func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
-    return SyntaxClassifications(_syntaxNode, in: range)
+    SyntaxClassifications(_syntaxNode, in: range)
   }
 
   /// The ``SyntaxClassifiedRange`` for a relative byte offset.

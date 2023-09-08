@@ -22,11 +22,11 @@ struct AbsoluteSyntaxPosition {
   }
 
   func advancedToFirstChild() -> AbsoluteSyntaxPosition {
-    return .init(offset: self.offset, indexInParent: 0)
+    .init(offset: self.offset, indexInParent: 0)
   }
 
   static var forRoot: AbsoluteSyntaxPosition {
-    return .init(offset: 0, indexInParent: 0)
+    .init(offset: 0, indexInParent: 0)
   }
 }
 
@@ -37,8 +37,8 @@ struct AbsoluteSyntaxInfo {
   let nodeId: SyntaxIdentifier
 
   /// The UTF-8 offset of the syntax node in the source file
-  var offset: UInt32 { return position.offset }
-  var indexInParent: UInt32 { return position.indexInParent }
+  var offset: UInt32 { position.offset }
+  var indexInParent: UInt32 { position.indexInParent }
 
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
     let newPosition = position.advancedBySibling(raw)
@@ -53,6 +53,6 @@ struct AbsoluteSyntaxInfo {
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    return .init(position: .forRoot, nodeId: .forRoot(raw))
+    .init(position: .forRoot, nodeId: .forRoot(raw))
   }
 }

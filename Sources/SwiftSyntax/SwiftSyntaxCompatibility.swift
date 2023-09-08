@@ -34,7 +34,7 @@ extension ClosureSignatureSyntax {
 extension ClosureSignatureSyntax.ParameterClause {
   @available(*, deprecated, renamed: "parameterClause")
   public static func input(_ parameterClause: ClosureParameterClauseSyntax) -> Self {
-    return .parameterClause(parameterClause)
+    .parameterClause(parameterClause)
   }
 }
 
@@ -42,7 +42,7 @@ public extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
   var members: MemberDeclBlockSyntax {
     get {
-      return memberBlock
+      memberBlock
     }
     set(value) {
       memberBlock = value
@@ -54,7 +54,7 @@ public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "pound")
   var poundToken: TokenSyntax {
     get {
-      return pound
+      pound
     }
     set {
       pound = newValue
@@ -64,7 +64,7 @@ public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "macroName")
   var macro: TokenSyntax {
     get {
-      return macroName
+      macroName
     }
     set {
       macroName = newValue
@@ -74,7 +74,7 @@ public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "genericArgumentClause")
   var genericArguments: GenericArgumentClauseSyntax? {
     get {
-      return genericArgumentClause
+      genericArgumentClause
     }
     set {
       genericArgumentClause = newValue
@@ -84,7 +84,7 @@ public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "arguments")
   var argumentList: LabeledExprListSyntax {
     get {
-      return arguments
+      arguments
     }
     set {
       arguments = newValue
@@ -104,7 +104,7 @@ extension KeyPathPropertyComponentSyntax {
   @available(*, deprecated, renamed: "declName.baseName")
   public var identifier: TokenSyntax {
     get {
-      return declName.baseName
+      declName.baseName
     }
     set {
       declName.baseName = newValue
@@ -114,7 +114,7 @@ extension KeyPathPropertyComponentSyntax {
   @available(*, deprecated, renamed: "declName.argumentNames")
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
-      return declName.argumentNames
+      declName.argumentNames
     }
     set {
       declName.argumentNames = newValue
@@ -126,7 +126,7 @@ extension NamedDeclSyntax {
   @available(*, deprecated, renamed: "name")
   public var identifier: TokenSyntax {
     get {
-      return self.name
+      self.name
     }
     set {
       self.name = newValue
@@ -138,7 +138,7 @@ extension MemberAccessExprSyntax {
   @available(*, deprecated, renamed: "declName.baseName")
   public var name: TokenSyntax {
     get {
-      return declName.baseName
+      declName.baseName
     }
     set {
       declName.baseName = newValue
@@ -148,7 +148,7 @@ extension MemberAccessExprSyntax {
   @available(*, deprecated, renamed: "declName.argumentNames")
   public var declNameArguments: DeclNameArgumentsSyntax? {
     get {
-      return declName.argumentNames
+      declName.argumentNames
     }
     set {
       declName.argumentNames = newValue
@@ -192,69 +192,69 @@ extension MemberAccessExprSyntax {
 public extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   func detach() -> Self {
-    return detached
+    detached
   }
 }
 
 public extension TokenKind {
   @available(*, deprecated, renamed: "regexPoundDelimiter")
   static func extendedRegexDelimiter(_ text: String) -> TokenKind {
-    return .regexPoundDelimiter(text)
+    .regexPoundDelimiter(text)
   }
 
   @available(*, deprecated, renamed: "floatLiteral")
   static func floatingLiteral(_ text: String) -> TokenKind {
-    return .floatLiteral(text)
+    .floatLiteral(text)
   }
 
   @available(*, deprecated, renamed: "leftSquare")
   static var leftSquareBracket: TokenKind {
-    return .leftSquare
+    .leftSquare
   }
 
   @available(*, deprecated, renamed: "poundAvailable")
   static var poundAvailableKeyword: TokenKind {
-    return .poundAvailable
+    .poundAvailable
   }
 
   @available(*, deprecated, renamed: "poundElse")
   static var poundElseKeyword: TokenKind {
-    return .poundElse
+    .poundElse
   }
 
   @available(*, deprecated, renamed: "poundElseif")
   static var poundElseifKeyword: TokenKind {
-    return .poundElseif
+    .poundElseif
   }
 
   @available(*, deprecated, renamed: "poundEndif")
   static var poundEndifKeyword: TokenKind {
-    return .poundEndif
+    .poundEndif
   }
 
   @available(*, deprecated, renamed: "poundIf")
   static var poundIfKeyword: TokenKind {
-    return .poundIf
+    .poundIf
   }
 
   @available(*, deprecated, renamed: "poundSourceLocation")
   static var poundSourceLocationKeyword: TokenKind {
-    return .poundSourceLocation
+    .poundSourceLocation
   }
 
   @available(*, deprecated, renamed: "poundUnavailable")
   static var poundUnavailableKeyword: TokenKind {
-    return .poundUnavailable
+    .poundUnavailable
   }
 
   @available(*, deprecated, renamed: "rawStringPoundDelimiter")
   static func rawStringDelimiter(_ text: String) -> TokenKind {
-    return .rawStringPoundDelimiter(text)
+    .rawStringPoundDelimiter(text)
   }
 
   @available(*, deprecated, renamed: "rightSquare")
   static var rightSquareBracket: TokenKind {
-    return .rightSquare
+    .rightSquare
   }
 
   @available(*, deprecated, renamed: "endOfFile")
@@ -269,7 +269,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return regexPoundDelimiter(
+    regexPoundDelimiter(
       text,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
@@ -284,7 +284,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return floatLiteral(
+    floatLiteral(
       text,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
@@ -298,7 +298,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return .leftSquareToken(
+    .leftSquareToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -311,7 +311,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundAvailableToken(
+    poundAvailableToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -324,7 +324,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundElseToken(
+    poundElseToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -337,7 +337,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundElseifToken(
+    poundElseifToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -350,7 +350,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundEndifToken(
+    poundEndifToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -363,7 +363,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundIfToken(
+    poundIfToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -376,7 +376,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundSourceLocationToken(
+    poundSourceLocationToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -389,7 +389,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return poundUnavailableToken(
+    poundUnavailableToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -403,7 +403,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return rawStringPoundDelimiter(
+    rawStringPoundDelimiter(
       text,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
@@ -417,7 +417,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return .rightSquareToken(
+    .rightSquareToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
@@ -430,7 +430,7 @@ public extension TokenSyntax {
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
   ) -> TokenSyntax {
-    return .endOfFileToken(
+    .endOfFileToken(
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

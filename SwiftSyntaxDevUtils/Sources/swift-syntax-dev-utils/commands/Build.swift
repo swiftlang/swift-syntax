@@ -15,7 +15,7 @@ import Foundation
 
 struct Build: ParsableCommand, BuildCommand {
   static var configuration: CommandConfiguration {
-    return CommandConfiguration(
+    CommandConfiguration(
       abstract: "Build swift-syntax."
     )
   }

@@ -121,7 +121,7 @@ final class RawSyntaxTests: XCTestCase {
     // Dummy trivia parsing function.
     func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
       // Emit a single `unexpectedText` trivia of the whole trivia text.
-      return [.unexpectedText(source)]
+      [.unexpectedText(source)]
     }
 
     withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in

@@ -17,7 +17,7 @@ import XCTest
 final class ThenStatementTests: ParserTestCase {
   // Enable then statements by default.
   override var experimentalFeatures: Parser.ExperimentalFeatures {
-    return .thenStatements
+    .thenStatements
   }
 
   func testThenStmt1() {

@@ -133,7 +133,7 @@ public struct SyntaxBuildableType: Hashable {
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
   public var syntax: TypeSyntax {
-    return optionalWrapped(type: syntaxBaseName)
+    optionalWrapped(type: syntaxBaseName)
   }
 
   /// The type that is used for parameters in SwiftSyntaxBuilder that take this
@@ -147,7 +147,7 @@ public struct SyntaxBuildableType: Hashable {
   }
 
   public var parameterType: TypeSyntax {
-    return optionalWrapped(type: parameterBaseType)
+    optionalWrapped(type: parameterBaseType)
   }
 
   /// Assuming that this is a collection type, the non-optional type of the result builder

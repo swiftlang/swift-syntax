@@ -309,7 +309,7 @@ fileprivate enum Linkage: Comparable, Hashable {
   }
 
   func hasPrefix(_ prefix: String) -> Bool {
-    return self.linkage.hasPrefix(prefix)
+    self.linkage.hasPrefix(prefix)
   }
 }
 
@@ -321,15 +321,15 @@ extension Linkage {
     var line: UInt
 
     func matches(_ linkage: Linkage) -> Bool {
-      return self.linkage == linkage
+      self.linkage == linkage
     }
 
     static func library(_ linkage: String, condition: Condition? = nil, file: StaticString = #file, line: UInt = #line) -> Assertion {
-      return Linkage.Assertion(linkage: .library(linkage), condition: condition, file: file, line: line)
+      Linkage.Assertion(linkage: .library(linkage), condition: condition, file: file, line: line)
     }
 
     static func framework(_ linkage: String, condition: Condition? = nil, file: StaticString = #file, line: UInt = #line) -> Assertion {
-      return Linkage.Assertion(linkage: .framework(linkage), condition: condition, file: file, line: line)
+      Linkage.Assertion(linkage: .framework(linkage), condition: condition, file: file, line: line)
     }
   }
 }
@@ -358,19 +358,19 @@ extension Linkage.Assertion {
     }
 
     fileprivate static func when(swiftVersionAtLeast version: SwiftVersion) -> Condition {
-      return .swiftVersionAtLeast(versionBound: version)
+      .swiftVersionAtLeast(versionBound: version)
     }
 
     fileprivate static func when(configuration: ProductConfiguration) -> Condition {
-      return .configuration(configuration)
+      .configuration(configuration)
     }
 
     fileprivate static func when(compilationCondition: CompilationCondition) -> Condition {
-      return .compilationCondition(compilationCondition)
+      .compilationCondition(compilationCondition)
     }
 
     fileprivate static func mayBeAbsent(_ reason: StaticString) -> Condition {
-      return .flaky
+      .flaky
     }
 
     fileprivate func evaluate() -> Bool {

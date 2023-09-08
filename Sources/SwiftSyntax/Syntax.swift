@@ -81,12 +81,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   /// The position of the start of this node's content, skipping its trivia
   public var positionAfterSkippingLeadingTrivia: AbsolutePosition {
-    return position + raw.leadingTriviaLength
+    position + raw.leadingTriviaLength
   }
 
   /// The end position of this node's content, before any trailing trivia.
   public var endPositionBeforeTrailingTrivia: AbsolutePosition {
-    return endPosition - raw.trailingTriviaLength
+    endPosition - raw.trailingTriviaLength
   }
 
   /// The end position of this node, including its trivia.
@@ -191,8 +191,8 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// that ensures that the arena of`newChild` doesn’t get de-allocated before
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
-    return withExtendedLifetime(newChild) {
-      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
+    withExtendedLifetime(newChild) {
+      replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
     }
   }
 
@@ -224,7 +224,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///
   /// Needed for the conformance to ``SyntaxProtocol``. Just returns `self`.
   public var _syntaxNode: Syntax {
-    return self
+    self
   }
 
   @_spi(RawSyntax)
@@ -253,18 +253,18 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// Note that this will incur an existential conversion.
   @available(*, deprecated, message: "Expression always evaluates to true")
   public func isProtocol(_: SyntaxProtocol.Protocol) -> Bool {
-    return true
+    true
   }
 
   /// Return the non-type erased version of this syntax node.
   /// Note that this will incur an existential conversion.
   public func asProtocol(_: SyntaxProtocol.Protocol) -> SyntaxProtocol {
-    return self.raw.kind.syntaxNodeType.init(self)!
+    self.raw.kind.syntaxNodeType.init(self)!
   }
 
   /// Add the hash value of this node’s ID to `hasher`.
   public func hash(into hasher: inout Hasher) {
-    return id.hash(into: &hasher)
+    id.hash(into: &hasher)
   }
 
   /// Returns `true` if `rhs` and `lhs` have the same ID.
@@ -272,7 +272,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// Note `lhs` and `rhs` might have the same contents even if their IDs are
   /// different. See documentation on ``SyntaxIdentifier``.
   public static func == (lhs: Syntax, rhs: Syntax) -> Bool {
-    return lhs.id == rhs.id
+    lhs.id == rhs.id
   }
 }
 
@@ -299,7 +299,7 @@ extension Syntax {
   /// Retrieve the syntax text as an array of bytes that models the input
   /// source even in the presence of invalid UTF-8.
   public var syntaxTextBytes: [UInt8] {
-    return raw.syntaxTextBytes
+    raw.syntaxTextBytes
   }
 }
 

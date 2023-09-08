@@ -30,7 +30,7 @@ fileprivate struct NoOpMemberMacro: MemberMacro {
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-    return []
+    []
   }
 }
 
@@ -89,7 +89,7 @@ final class MemberMacroTests: XCTestCase {
         providingMembersOf decl: some DeclGroupSyntax,
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
-        return ["var _storage: Storage<Self>"]
+        ["var _storage: Storage<Self>"]
       }
     }
 

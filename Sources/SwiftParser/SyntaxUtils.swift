@@ -17,7 +17,7 @@
 extension RawUnexpectedNodesSyntax {
   /// Returns `true` if this contains a token that satisfies `condition`.
   func containsToken(where condition: (RawTokenSyntax) -> Bool) -> Bool {
-    return self.elements.contains(where: { node in
+    self.elements.contains(where: { node in
       if let token = node.as(RawTokenSyntax.self) {
         return condition(token)
       } else {
@@ -66,7 +66,7 @@ extension Optional: UnexpectedNodesCombinable where Wrapped: UnexpectedNodesComb
 
 extension RawTokenSyntax: UnexpectedNodesCombinable {
   var elements: [RawSyntax] {
-    return [RawSyntax(self)]
+    [RawSyntax(self)]
   }
 }
 
@@ -101,7 +101,7 @@ extension RawUnexpectedNodesSyntax {
 
 extension SyntaxText {
   var isEditorPlaceholder: Bool {
-    return self.starts(with: SyntaxText("<#")) && self.hasSuffix(SyntaxText("#>"))
+    self.starts(with: SyntaxText("<#")) && self.hasSuffix(SyntaxText("#>"))
   }
 
   var isStartingWithUppercase: Bool {

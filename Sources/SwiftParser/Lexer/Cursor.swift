@@ -166,7 +166,7 @@ extension Lexer.Cursor {
     private var stateStack: UnsafeBufferPointer<State>? = nil
 
     var currentState: State {
-      return topState ?? .normal
+      topState ?? .normal
     }
 
     mutating func perform(stateTransition: Lexer.StateTransition, stateAllocator: BumpPtrAllocator) {
@@ -220,7 +220,7 @@ extension Lexer.Cursor {
     }
 
     func tokenDiagnostic(tokenStart: Lexer.Cursor) -> TokenDiagnostic {
-      return TokenDiagnostic(kind, byteOffset: tokenStart.position.distance(to: position))
+      TokenDiagnostic(kind, byteOffset: tokenStart.position.distance(to: position))
     }
   }
 }
@@ -268,7 +268,7 @@ extension Lexer {
     }
 
     func starts(with possiblePrefix: some Sequence<UInt8>) -> Bool {
-      return self.input.starts(with: possiblePrefix)
+      self.input.starts(with: possiblePrefix)
     }
 
     var pointer: UnsafePointer<UInt8> {
@@ -288,7 +288,7 @@ extension Lexer {
 
     /// Debug function to print the remaining source text to be lexed.
     var debugRemainingText: SyntaxText {
-      return SyntaxText(baseAddress: input.baseAddress, count: input.count)
+      SyntaxText(baseAddress: input.baseAddress, count: input.count)
     }
   }
 
@@ -806,7 +806,7 @@ extension Lexer.Cursor {
   ///    that case bytes are consumed until we reach the next start of a UTF-8
   ///    character.
   mutating func advanceValidatingUTF8Character() -> Unicode.Scalar? {
-    return Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
+    Unicode.Scalar.lexing(advance: { self.advance() }, peek: { self.peek(at: 0) })
   }
 }
 

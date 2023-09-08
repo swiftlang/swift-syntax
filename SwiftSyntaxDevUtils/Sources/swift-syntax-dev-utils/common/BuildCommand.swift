@@ -91,7 +91,7 @@ extension BuildCommand {
 
   @discardableResult
   func invokeXcodeBuild(projectPath: URL, scheme: String) throws -> ProcessResult {
-    return try withTemporaryDirectory { tempDir in
+    try withTemporaryDirectory { tempDir in
       guard let xcodebuildExec = Paths.xcodebuildExec else {
         throw ScriptExectutionError(
           message: """

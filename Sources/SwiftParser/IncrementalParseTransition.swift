@@ -85,11 +85,11 @@ struct IncrementalParseLookup {
   }
 
   fileprivate var edits: ConcurrentEdits {
-    return transition.edits
+    transition.edits
   }
 
   fileprivate var reusedCallback: ReusedNodeCallback? {
-    return transition.reusedNodeCallback
+    transition.reusedNodeCallback
   }
 
   /// Does a lookup to see if the current source `offset` should be associated
@@ -382,12 +382,12 @@ public struct ConcurrentEdits {
 
   /// **Public for testing purposes only**
   public static func _isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
-    return isValidConcurrentEditArray(edits)
+    isValidConcurrentEditArray(edits)
   }
 }
 
 fileprivate extension Sequence where Element: Comparable {
   var isSorted: Bool {
-    return zip(self, self.dropFirst()).allSatisfy({ $0.0 < $0.1 })
+    zip(self, self.dropFirst()).allSatisfy({ $0.0 < $0.1 })
   }
 }

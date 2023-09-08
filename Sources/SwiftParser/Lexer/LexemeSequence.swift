@@ -53,7 +53,7 @@ extension Lexer {
 
     @_spi(Testing)
     public mutating func next() -> Lexer.Lexeme? {
-      return self.advance()
+      self.advance()
     }
 
     /// Record the offset of the end of `nextToken` as the furthest offset in ``LookaheadTracker``
@@ -71,7 +71,7 @@ extension Lexer {
 
     /// Get the offset of the leading trivia start of `token` relative to `sourceBufferStart`.
     func offsetToStart(_ token: Lexer.Lexeme) -> Int {
-      return self.sourceBufferStart.distance(to: token.cursor)
+      self.sourceBufferStart.distance(to: token.cursor)
     }
 
     /// Advance the the cursor by `offset` and reset `currentToken`

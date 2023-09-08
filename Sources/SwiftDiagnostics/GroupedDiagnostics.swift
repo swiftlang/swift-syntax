@@ -258,7 +258,7 @@ extension GroupedDiagnostics {
 extension DiagnosticsFormatter {
   /// Annotate all of the source files in the given set of grouped diagnostics.
   public func annotateSources(in group: GroupedDiagnostics) -> String {
-    return group.rootSourceFiles.map { rootSourceFileID in
+    group.rootSourceFiles.map { rootSourceFileID in
       group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
     }.joined(separator: "\n")
   }

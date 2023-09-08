@@ -115,7 +115,7 @@ extension SyntaxProtocol {
   /// - Warning: This is only designed for use in the debugger. Do not call it outside of the debugger.
   @available(*, deprecated, message: "For use in debugger only")
   public func debugInitCall(includeTrivia: Bool = true) -> String {
-    return self.debugInitCallExpr(includeTrivia: includeTrivia).formatted(using: InitializerExprFormat()).description
+    self.debugInitCallExpr(includeTrivia: includeTrivia).formatted(using: InitializerExprFormat()).description
   }
 
   private func debugInitCallExpr(includeTrivia: Bool) -> ExprSyntax {

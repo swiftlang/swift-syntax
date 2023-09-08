@@ -97,6 +97,6 @@ extension Trivia {
 extension SyntaxProtocol {
   /// This syntax node with all indentation removed.
   var withIndentationRemoved: Self {
-    return IndentationStripper().rewrite(self).cast(Self.self)
+    IndentationStripper().rewrite(self).cast(Self.self)
   }
 }

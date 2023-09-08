@@ -27,7 +27,7 @@ private class ExprSequenceSearcher: SyntaxAnyVisitor {
   }
 
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    return foundSequenceExpr ? .skipChildren : .visitChildren
+    foundSequenceExpr ? .skipChildren : .visitChildren
   }
 }
 

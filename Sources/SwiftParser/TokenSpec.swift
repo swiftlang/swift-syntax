@@ -128,7 +128,7 @@ public struct TokenSpec {
 
   @inline(__always)
   static func ~= (kind: TokenSpec, lexeme: Lexer.Lexeme) -> Bool {
-    return kind.matches(
+    kind.matches(
       rawTokenKind: lexeme.rawTokenKind,
       keyword: Keyword(lexeme.tokenText),
       atStartOfLine: lexeme.isAtStartOfLine
@@ -137,7 +137,7 @@ public struct TokenSpec {
 
   @inline(__always)
   static func ~= (kind: TokenSpec, token: TokenSyntax) -> Bool {
-    return kind.matches(
+    kind.matches(
       rawTokenKind: token.tokenView.rawKind,
       keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTrivia.contains(where: { $0.isNewline })
@@ -146,7 +146,7 @@ public struct TokenSpec {
 
   @inline(__always)
   static func ~= (kind: TokenSpec, token: RawTokenSyntax) -> Bool {
-    return kind.matches(
+    kind.matches(
       rawTokenKind: token.tokenKind,
       keyword: Keyword(token.tokenView.rawText),
       atStartOfLine: token.leadingTriviaPieces.contains(where: \.isNewline)
@@ -155,7 +155,7 @@ public struct TokenSpec {
 
   @inline(__always)
   static func ~= (kind: TokenSpec, lexeme: PrepareForKeywordMatch) -> Bool {
-    return kind.matches(
+    kind.matches(
       rawTokenKind: lexeme.rawTokenKind,
       keyword: lexeme.keyword,
       atStartOfLine: lexeme.isAtStartOfLine
@@ -191,7 +191,7 @@ extension TokenConsumer {
   /// Generates a missing token that has the expected kind of `spec`.
   @inline(__always)
   mutating func missingToken(_ spec: TokenSpec) -> Token {
-    return missingToken(spec.remapping ?? spec.rawTokenKind, text: spec.keyword?.defaultText ?? spec.rawTokenKind.defaultText)
+    missingToken(spec.remapping ?? spec.rawTokenKind, text: spec.keyword?.defaultText ?? spec.rawTokenKind.defaultText)
   }
 
   /// Asserts that the current token matches `spec` and consumes it, performing

@@ -39,11 +39,11 @@ public class Indenter: SyntaxRewriter {
     _ node: SyntaxType,
     indentation: Trivia
   ) -> SyntaxType {
-    return Indenter(indentation: indentation).rewrite(node).as(SyntaxType.self)!
+    Indenter(indentation: indentation).rewrite(node).as(SyntaxType.self)!
   }
 
   public override func visit(_ token: TokenSyntax) -> TokenSyntax {
-    return TokenSyntax(
+    TokenSyntax(
       token.tokenKind,
       leadingTrivia: token.leadingTrivia.indented(indentation: indentation),
       trailingTrivia: token.trailingTrivia.indented(indentation: indentation),

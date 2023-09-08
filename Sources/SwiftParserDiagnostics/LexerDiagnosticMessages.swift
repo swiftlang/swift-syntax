@@ -23,15 +23,15 @@ public protocol TokenError: DiagnosticMessage {
 
 public extension TokenError {
   static var diagnosticID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
   var diagnosticID: MessageID {
-    return Self.diagnosticID
+    Self.diagnosticID
   }
 
   var severity: DiagnosticSeverity {
-    return .error
+    .error
   }
 }
 
@@ -178,7 +178,7 @@ public extension SwiftSyntax.TokenDiagnostic {
   }
 
   func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
-    return self.diagnosticMessage(wholeTextBytes: token.syntaxTextBytes)
+    self.diagnosticMessage(wholeTextBytes: token.syntaxTextBytes)
   }
 
   func fixIts(in token: TokenSyntax) -> [FixIt] {

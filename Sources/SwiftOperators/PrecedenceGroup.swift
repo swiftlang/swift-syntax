@@ -68,7 +68,7 @@ public struct PrecedenceRelation {
     _ groupName: PrecedenceGroupName,
     syntax: PrecedenceGroupNameSyntax? = nil
   ) -> PrecedenceRelation {
-    return .init(kind: .higherThan, groupName: groupName, syntax: syntax)
+    .init(kind: .higherThan, groupName: groupName, syntax: syntax)
   }
 
   /// Return a lower-than precedence relation.
@@ -76,7 +76,7 @@ public struct PrecedenceRelation {
     _ groupName: PrecedenceGroupName,
     syntax: PrecedenceGroupNameSyntax? = nil
   ) -> PrecedenceRelation {
-    return .init(kind: .lowerThan, groupName: groupName, syntax: syntax)
+    .init(kind: .lowerThan, groupName: groupName, syntax: syntax)
   }
 }
 

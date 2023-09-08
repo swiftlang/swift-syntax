@@ -120,13 +120,13 @@ public struct RawSyntaxTokenView {
   /// Returns the leading ``Trivia`` length.
   @_spi(RawSyntax)
   public var leadingTriviaLength: SourceLength {
-    return SourceLength(utf8Length: leadingTriviaByteLength)
+    SourceLength(utf8Length: leadingTriviaByteLength)
   }
 
   /// Returns the trailing ``Trivia`` length.
   @_spi(RawSyntax)
   public var trailingTriviaLength: SourceLength {
-    return SourceLength(utf8Length: trailingTriviaByteLength)
+    SourceLength(utf8Length: trailingTriviaByteLength)
   }
 
   /// Run `body` with text of the leading trivia and return its result.
@@ -160,14 +160,14 @@ public struct RawSyntaxTokenView {
   /// Returns the leading ``Trivia``.
   @_spi(RawSyntax)
   public func formLeadingTrivia() -> Trivia {
-    return Trivia(pieces: leadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
+    Trivia(pieces: leadingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
   /// Returns the trailing ``Trivia``.
   /// - Returns: nil if called on a layout node.
   @_spi(RawSyntax)
   public func formTrailingTrivia() -> Trivia {
-    return Trivia(pieces: trailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
+    Trivia(pieces: trailingRawTriviaPieces.map({ TriviaPiece(raw: $0) }))
   }
 
   /// Returns a ``RawSyntax`` node with the same source text but with the token

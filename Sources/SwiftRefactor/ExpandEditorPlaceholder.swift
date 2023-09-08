@@ -71,15 +71,15 @@ import SwiftSyntaxBuilder
 /// ```
 public struct ExpandEditorPlaceholder: EditRefactoringProvider {
   public static func isPlaceholder(_ str: String) -> Bool {
-    return str.hasPrefix(placeholderStart) && str.hasSuffix(placeholderEnd)
+    str.hasPrefix(placeholderStart) && str.hasSuffix(placeholderEnd)
   }
 
   public static func wrapInPlaceholder(_ str: String) -> String {
-    return placeholderStart + str + placeholderEnd
+    placeholderStart + str + placeholderEnd
   }
 
   public static func wrapInTypePlaceholder(_ str: String, type: String) -> String {
-    return Self.wrapInPlaceholder("T##" + str + "##" + type)
+    Self.wrapInPlaceholder("T##" + str + "##" + type)
   }
 
   public static func textRefactor(syntax token: TokenSyntax, in context: Void) -> [SourceEdit] {

@@ -333,7 +333,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// A name for this node that is suitable to be used as a variables or enum
   /// case's name.
   public var varOrCaseName: TokenSyntax {
-    return .identifier(rawValue)
+    .identifier(rawValue)
   }
 
   /// The type name of this node in the SwiftSyntax module.
@@ -351,12 +351,12 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// For base nodes, the name of the corresponding protocol to which all the
   /// concrete nodes that have this base kind, conform.
   public var protocolType: TypeSyntax {
-    return "\(syntaxType)Protocol"
+    "\(syntaxType)Protocol"
   }
 
   /// The name of this node at the `RawSyntax` level.
   public var rawType: TypeSyntax {
-    return "Raw\(syntaxType)"
+    "Raw\(syntaxType)"
   }
 
   /// For base nodes, the name of the corresponding raw protocol to which all the

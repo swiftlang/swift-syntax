@@ -30,7 +30,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// properties of the token.
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView {
-    return raw.tokenView!
+    raw.tokenView!
   }
 
   /// If `node` is a token, return the ``TokenSyntax`` that represents it.
@@ -63,7 +63,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// Whether the token is present or missing.
   public var presence: SourcePresence {
     get {
-      return tokenView.presence
+      tokenView.presence
     }
     set {
       self = Syntax(self).withPresence(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
@@ -72,13 +72,13 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
 
   /// The text of the token as written in the source code, without any trivia.
   public var text: String {
-    return tokenKind.text
+    tokenKind.text
   }
 
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {
-      return tokenView.formLeadingTrivia()
+      tokenView.formLeadingTrivia()
     }
     set {
       self = Syntax(self).withLeadingTrivia(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
@@ -88,7 +88,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The trailing trivia (spaces, newlines, etc.) associated with this token.
   public var trailingTrivia: Trivia {
     get {
-      return tokenView.formTrailingTrivia()
+      tokenView.formTrailingTrivia()
     }
     set {
       self = Syntax(self).withTrailingTrivia(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
@@ -98,7 +98,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The kind of token this node represents.
   public var tokenKind: TokenKind {
     get {
-      return tokenView.formKind()
+      tokenView.formKind()
     }
     set {
       guard raw.kind == .token else {
@@ -113,22 +113,22 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   public var trimmedLength: SourceLength {
-    return tokenView.trimmedLength
+    tokenView.trimmedLength
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
   public var leadingTriviaLength: SourceLength {
-    return tokenView.leadingTriviaLength
+    tokenView.leadingTriviaLength
   }
 
   /// The length this node's trailing trivia takes up spelled out in source.
   public var trailingTriviaLength: SourceLength {
-    return tokenView.trailingTriviaLength
+    tokenView.trailingTriviaLength
   }
 
   /// The length of this node including all of its trivia.
   public var totalLength: SourceLength {
-    return raw.totalLength
+    raw.totalLength
   }
 
   /// A token by itself has no structure, so we represent its structure by an
@@ -138,12 +138,12 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   /// ``SyntaxNodeStructure/SyntaxChoice/token(_:)`` case for the token and those
   /// choices represent the token kinds the token might have.
   public static var structure: SyntaxNodeStructure {
-    return .layout([])
+    .layout([])
   }
 
   /// If the token has a lexical error, the type of the error.
   public var tokenDiagnostic: TokenDiagnostic? {
-    return tokenView.tokenDiagnostic
+    tokenView.tokenDiagnostic
   }
 
   /// Checks if the current leaf syntax node can be cast to a different specified type.
@@ -154,7 +154,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
   public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
-    return false
+    false
   }
 
   /// Attempts to cast the current leaf syntax node to a different specified type.
@@ -165,7 +165,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
   public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
-    return nil
+    nil
   }
 
   /// Force-casts the current leaf syntax node to a different specified type.
@@ -185,7 +185,7 @@ extension TokenSyntax: CustomReflectable {
   /// A custom mirror that shows the token properties in a simpler form, making
   /// the debug output of the token easier to read.
   public var customMirror: Mirror {
-    return Mirror(
+    Mirror(
       self,
       children: [
         "text": text,

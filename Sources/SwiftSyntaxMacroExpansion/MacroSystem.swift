@@ -376,7 +376,7 @@ struct MacroSystem {
 
   /// Look for a macro with the given name.
   func lookup(_ macroName: String) -> Macro.Type? {
-    return macros[macroName]
+    macros[macroName]
   }
 }
 
@@ -437,10 +437,10 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   case malformedAccessor
 
   var diagnosticID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var severity: DiagnosticSeverity { return .error }
+  var severity: DiagnosticSeverity { .error }
 
   var message: String {
     switch self {
@@ -679,7 +679,7 @@ extension MacroApplication {
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type
   ) -> [(attributeNode: AttributeSyntax, definition: MacroType)] {
-    return macroAttributes(attachedTo: decl)
+    macroAttributes(attachedTo: decl)
       .compactMap { (attributeNode: AttributeSyntax, definition: Macro.Type) in
         if let macroType = definition as? MacroType {
           return (attributeNode, macroType)
@@ -722,8 +722,8 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandMemberDeclPeers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
-      return try expandPeerMacroMember(
+    expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
+      try expandPeerMacroMember(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
@@ -742,8 +742,8 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandCodeBlockPeers(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
-      return try expandPeerMacroCodeItem(
+    expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
+      try expandPeerMacroCodeItem(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
@@ -757,8 +757,8 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized extensions
   private func expandExtensions(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: ExtensionMacro.Type.self) { attributeNode, definition in
-      return try expandExtensionMacro(
+    expandMacros(attachedTo: decl, ofType: ExtensionMacro.Type.self) { attributeNode, definition in
+      try expandExtensionMacro(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
@@ -770,8 +770,8 @@ extension MacroApplication {
 
   /// Expand all 'member' macros attached to `decl`.
   private func expandMembers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: MemberMacro.Type.self) { attributeNode, definition in
-      return try expandMemberMacro(
+    expandMacros(attachedTo: decl, ofType: MemberMacro.Type.self) { attributeNode, definition in
+      try expandMemberMacro(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
@@ -790,8 +790,8 @@ extension MacroApplication {
     of decl: DeclSyntax,
     parentDecl: DeclSyntax
   ) -> [AttributeListSyntax.Element] {
-    return expandMacros(attachedTo: parentDecl, ofType: MemberAttributeMacro.Type.self) { attributeNode, definition in
-      return try expandMemberAttributeMacro(
+    expandMacros(attachedTo: parentDecl, ofType: MemberAttributeMacro.Type.self) { attributeNode, definition in
+      try expandMemberAttributeMacro(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: parentDecl,
@@ -908,8 +908,8 @@ extension MacroApplication {
   /// }
   /// ```
   func expandCodeBlockItem(node: CodeBlockItemSyntax) -> MacroExpansionResult<CodeBlockItemListSyntax> {
-    return expandFreestandingMacro(node.item.asProtocol(FreestandingMacroExpansionSyntax.self)) { macro, node in
-      return try expandFreestandingCodeItemList(
+    expandFreestandingMacro(node.item.asProtocol(FreestandingMacroExpansionSyntax.self)) { macro, node in
+      try expandFreestandingCodeItemList(
         definition: macro,
         node: node,
         in: context,
@@ -927,8 +927,8 @@ extension MacroApplication {
   /// }
   /// ```
   func expandMemberDecl(node: MemberBlockItemSyntax) -> MacroExpansionResult<MemberBlockItemListSyntax> {
-    return expandFreestandingMacro(node.decl.as(MacroExpansionDeclSyntax.self)) { macro, node in
-      return try expandFreestandingMemberDeclList(
+    expandFreestandingMacro(node.decl.as(MacroExpansionDeclSyntax.self)) { macro, node in
+      try expandFreestandingMemberDeclList(
         definition: macro,
         node: node,
         in: context,
@@ -945,8 +945,8 @@ extension MacroApplication {
   /// let a = #foo
   /// ```
   func expandExpr(node: Syntax) -> MacroExpansionResult<ExprSyntax> {
-    return expandFreestandingMacro(node.as(MacroExpansionExprSyntax.self)) { macro, node in
-      return try expandFreestandingExpr(
+    expandFreestandingMacro(node.as(MacroExpansionExprSyntax.self)) { macro, node in
+      try expandFreestandingExpr(
         definition: macro,
         node: node,
         in: context,
@@ -1003,7 +1003,7 @@ private extension String {
   func wrappingInTrivia(from node: some SyntaxProtocol) -> String {
     // We need to remove the indentation from the last line because the macro
     // expansion buffer already contains the indentation.
-    return node.leadingTrivia.removingIndentationOnLastLine.description
+    node.leadingTrivia.removingIndentationOnLastLine.description
       + self
       + node.trailingTrivia.description
   }
@@ -1048,7 +1048,7 @@ private extension FreestandingMacroExpansionSyntax {
     in context: MacroExpansionContext,
     foldingWith operatorTable: OperatorTable?
   ) -> Self {
-    return (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
+    (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
   }
 }
 
@@ -1060,6 +1060,6 @@ private extension AttributeSyntax {
     in context: MacroExpansionContext,
     foldingWith operatorTable: OperatorTable?
   ) -> Self {
-    return (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
+    (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
   }
 }

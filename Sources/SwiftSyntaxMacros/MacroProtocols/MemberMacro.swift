@@ -61,7 +61,7 @@ public extension MemberMacro {
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-    return try expansion(of: node, providingMembersOf: declaration, conformingTo: [], in: context)
+    try expansion(of: node, providingMembersOf: declaration, conformingTo: [], in: context)
   }
 
   /// Default implementation that ignores the unhandled conformances.
@@ -71,6 +71,6 @@ public extension MemberMacro {
     conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-    return try expansion(of: node, providingMembersOf: declaration, in: context)
+    try expansion(of: node, providingMembersOf: declaration, in: context)
   }
 }

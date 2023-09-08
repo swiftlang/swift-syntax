@@ -14,39 +14,39 @@ import SwiftSyntax
 
 extension CodeBlockItemListBuilder {
   public static func buildExpression(_ expression: some ExprSyntaxProtocol) -> Component {
-    return buildExpression(CodeBlockItemSyntax(item: .expr(ExprSyntax(expression))))
+    buildExpression(CodeBlockItemSyntax(item: .expr(ExprSyntax(expression))))
   }
 
   public static func buildExpression(_ expression: some StmtSyntaxProtocol) -> Component {
-    return buildExpression(CodeBlockItemSyntax(item: .stmt(StmtSyntax(expression))))
+    buildExpression(CodeBlockItemSyntax(item: .stmt(StmtSyntax(expression))))
   }
 
   public static func buildExpression(_ expression: some DeclSyntaxProtocol) -> Component {
-    return buildExpression(CodeBlockItemSyntax(item: .decl(DeclSyntax(expression))))
+    buildExpression(CodeBlockItemSyntax(item: .decl(DeclSyntax(expression))))
   }
 }
 
 extension ConditionElementListBuilder {
   public static func buildExpression(_ expression: some ExprSyntaxProtocol) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .expression(ExprSyntax(expression))))
+    buildExpression(ConditionElementSyntax(condition: .expression(ExprSyntax(expression))))
   }
 
   public static func buildExpression(_ expression: AvailabilityConditionSyntax) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .availability(expression)))
+    buildExpression(ConditionElementSyntax(condition: .availability(expression)))
   }
 
   public static func buildExpression(_ expression: MatchingPatternConditionSyntax) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .matchingPattern(expression)))
+    buildExpression(ConditionElementSyntax(condition: .matchingPattern(expression)))
   }
 
   public static func buildExpression(_ expression: OptionalBindingConditionSyntax) -> Component {
-    return buildExpression(ConditionElementSyntax(condition: .optionalBinding(expression)))
+    buildExpression(ConditionElementSyntax(condition: .optionalBinding(expression)))
   }
 }
 
 extension MemberBlockItemListBuilder {
   public static func buildExpression(_ expression: some DeclSyntaxProtocol) -> Component {
-    return buildExpression(MemberBlockItemSyntax(decl: expression))
+    buildExpression(MemberBlockItemSyntax(decl: expression))
   }
 }
 

@@ -534,7 +534,7 @@ extension OperatorTable {
     _ node: some SyntaxProtocol,
     errorHandler: OperatorErrorHandler = { throw $0 }
   ) rethrows -> Syntax {
-    return try withoutActuallyEscaping(errorHandler) { errorHandler in
+    try withoutActuallyEscaping(errorHandler) { errorHandler in
       let folder = SequenceFolder(
         opPrecedence: self,
         errorHandler: errorHandler

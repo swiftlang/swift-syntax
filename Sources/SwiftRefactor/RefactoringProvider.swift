@@ -39,7 +39,7 @@ extension EditRefactoringProvider where Context == Void {
   ///   - syntax: The syntax to transform.
   /// - Returns: Textual edits describing the refactoring to perform.
   public static func textRefactor(syntax: Input) -> [SourceEdit] {
-    return self.textRefactor(syntax: syntax, in: ())
+    self.textRefactor(syntax: syntax, in: ())
   }
 }
 
@@ -94,7 +94,7 @@ extension SyntaxRefactoringProvider where Context == Void {
   /// - Returns: The result of applying the refactoring action, or `nil` if the
   ///            action could not be performed.
   public static func refactor(syntax: Input) -> Output? {
-    return self.refactor(syntax: syntax, in: ())
+    self.refactor(syntax: syntax, in: ())
   }
 }
 
@@ -121,7 +121,7 @@ public struct SourceEdit: Equatable {
   /// Length of the original source range that this edit applies to. Zero if
   /// this is an addition.
   public var length: SourceLength {
-    return SourceLength(utf8Length: range.lowerBound.utf8Offset - range.upperBound.utf8Offset)
+    SourceLength(utf8Length: range.lowerBound.utf8Offset - range.upperBound.utf8Offset)
   }
 
   /// Create an edit to replace `range` in the original source with
@@ -134,25 +134,25 @@ public struct SourceEdit: Equatable {
   /// Convenience function to create a textual addition after the given node
   /// and its trivia.
   public static func insert(_ newText: String, after node: some SyntaxProtocol) -> SourceEdit {
-    return SourceEdit(range: node.endPosition..<node.endPosition, replacement: newText)
+    SourceEdit(range: node.endPosition..<node.endPosition, replacement: newText)
   }
 
   /// Convenience function to create a textual addition before the given node
   /// and its trivia.
   public static func insert(_ newText: String, before node: some SyntaxProtocol) -> SourceEdit {
-    return SourceEdit(range: node.position..<node.position, replacement: newText)
+    SourceEdit(range: node.position..<node.position, replacement: newText)
   }
 
   /// Convenience function to create a textual replacement of the given node,
   /// including its trivia.
   public static func replace(_ node: some SyntaxProtocol, with replacement: String) -> SourceEdit {
-    return SourceEdit(range: node.position..<node.endPosition, replacement: replacement)
+    SourceEdit(range: node.position..<node.endPosition, replacement: replacement)
   }
 
   /// Convenience function to create a textual deletion the given node and its
   /// trivia.
   public static func remove(_ node: some SyntaxProtocol) -> SourceEdit {
-    return SourceEdit(range: node.position..<node.endPosition, replacement: "")
+    SourceEdit(range: node.position..<node.endPosition, replacement: "")
   }
 }
 

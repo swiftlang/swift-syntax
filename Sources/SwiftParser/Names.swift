@@ -304,13 +304,13 @@ extension Lexer.Lexeme {
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return Operator(lexeme: self) != nil && self.tokenText == name
+    Operator(lexeme: self) != nil && self.tokenText == name
   }
 
   var isLexerClassifiedKeyword: Bool {
     // Only lexer-classified lexemes have ``RawTokenKind`` of `keyword.
     // Contextual keywords will only be made keywords when a ``RawTokenSyntax`` is
     // constructed from them.
-    return self.rawTokenKind == .keyword
+    self.rawTokenKind == .keyword
   }
 }

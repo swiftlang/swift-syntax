@@ -53,18 +53,18 @@ public struct Diagnostic: CustomDebugStringConvertible {
 
   /// The message that should be displayed to the user.
   public var message: String {
-    return diagMessage.message
+    diagMessage.message
   }
 
   /// An ID that identifies the diagnostic's message.
   /// See ``MessageID``.
   public var diagnosticID: MessageID {
-    return diagMessage.diagnosticID
+    diagMessage.diagnosticID
   }
 
   /// The location at which the diagnostic should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
-    return converter.location(for: position)
+    converter.location(for: position)
   }
 
   public var debugDescription: String {

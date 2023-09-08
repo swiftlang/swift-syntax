@@ -54,10 +54,10 @@ fileprivate extension SyntaxCollection {
 
 extension AccessorDeclListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    return parse(from: &parser) { parser in
-      return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
+    parse(from: &parser) { parser in
+      parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
     } makeMissing: { remainingTokens, arena in
-      return RawAccessorDeclSyntax(
+      RawAccessorDeclSyntax(
         attributes: RawAttributeListSyntax(elements: [], arena: arena),
         modifier: nil,
         accessorSpecifier: RawTokenSyntax(missing: .keyword, text: "get", arena: arena),
@@ -72,10 +72,10 @@ extension AccessorDeclListSyntax: SyntaxParseable {
 
 extension AttributeListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    return parse(from: &parser) { parser in
-      return RawSyntax(parser.parseAttributeList())
+    parse(from: &parser) { parser in
+      RawSyntax(parser.parseAttributeList())
     } makeMissing: { remainingTokens, arena in
-      return RawAttributeSyntax(
+      RawAttributeSyntax(
         atSign: RawTokenSyntax(missing: .atSign, arena: arena),
         attributeName: RawTypeSyntax(RawMissingTypeSyntax(arena: arena)),
         leftParen: nil,
@@ -89,7 +89,7 @@ extension AttributeListSyntax: SyntaxParseable {
 
 extension CodeBlockItemListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    return parse(from: &parser) { parser in
+    parse(from: &parser) { parser in
       let node = parser.parseCodeBlockItemList(until: { _ in false })
       return RawSyntax(node)
     } makeMissing: { remainingTokens, arena in
@@ -101,8 +101,8 @@ extension CodeBlockItemListSyntax: SyntaxParseable {
 
 extension MemberBlockItemListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    return parse(from: &parser) { parser in
-      return RawSyntax(parser.parseMemberDeclList())
+    parse(from: &parser) { parser in
+      RawSyntax(parser.parseMemberDeclList())
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
         attributes: RawAttributeListSyntax(elements: [], arena: arena),

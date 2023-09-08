@@ -286,7 +286,7 @@ class FixItApplier: SyntaxRewriter {
       diagnostics
       .flatMap { $0.fixIts }
       .filter {
-        return messages.contains($0.message.message)
+        messages.contains($0.message.message)
       }
       .flatMap { $0.changes }
 
@@ -734,7 +734,7 @@ class TriviaRemover: SyntaxRewriter {
   }
 
   override func visit(_ token: TokenSyntax) -> TokenSyntax {
-    return token.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+    token.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
   }
 }
 

@@ -66,7 +66,7 @@ public struct DiagnosticsFormatter {
 
     /// Whether this line is free of annotations.
     var isFreeOfAnnotations: Bool {
-      return diagnostics.isEmpty && suffixText.isEmpty
+      diagnostics.isEmpty && suffixText.isEmpty
     }
   }
 
@@ -305,7 +305,7 @@ public struct DiagnosticsFormatter {
     tree: some SyntaxProtocol,
     diags: [Diagnostic]
   ) -> String {
-    return annotatedSource(
+    annotatedSource(
       tree: tree,
       diags: diags,
       indentString: "",
@@ -401,7 +401,7 @@ struct ANSIAnnotation {
   }
 
   func withTrait(_ trait: Trait) -> Self {
-    return ANSIAnnotation(color: self.color, trait: trait)
+    ANSIAnnotation(color: self.color, trait: trait)
   }
 
   func applied(to message: String, resetAfter: Bool = true) -> String {

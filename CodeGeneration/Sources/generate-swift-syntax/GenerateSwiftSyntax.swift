@@ -39,7 +39,7 @@ struct GeneratedFileSpec {
   let pathComponents: [String]
   private let contentsGenerator: () -> String
   var contents: String {
-    return self.contentsGenerator()
+    self.contentsGenerator()
   }
 
   init(_ pathComponents: [String], _ contents: @escaping @autoclosure () -> String) {
@@ -55,7 +55,7 @@ struct GeneratedFileSpec {
 struct TemplateSpec {
   let sourceFileGenerator: () -> SourceFileSyntax
   var sourceFile: SourceFileSyntax {
-    return self.sourceFileGenerator()
+    self.sourceFileGenerator()
   }
   let module: String
   let filename: String

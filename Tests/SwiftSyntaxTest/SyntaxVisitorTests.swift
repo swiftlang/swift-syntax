@@ -152,7 +152,7 @@ public class SyntaxVisitorTests: XCTestCase {
     class ClosureRewriter: SyntaxRewriter {
       override func visit(_ node: ClosureExprSyntax) -> ExprSyntax {
         // Perform a no-op transform that requires rebuilding the node.
-        return ExprSyntax(node.with(\.statements, node.statements))
+        ExprSyntax(node.with(\.statements, node.statements))
       }
     }
     let closure = ClosureExprSyntax(
@@ -219,7 +219,7 @@ public class SyntaxVisitorTests: XCTestCase {
   public func testRewriteTrivia() {
     class TriviaRemover: SyntaxRewriter {
       override func visit(_ token: TokenSyntax) -> TokenSyntax {
-        return token.with(\.trailingTrivia, [])
+        token.with(\.trailingTrivia, [])
       }
     }
 

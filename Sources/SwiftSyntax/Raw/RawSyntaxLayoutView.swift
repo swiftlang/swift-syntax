@@ -50,7 +50,7 @@ public struct RawSyntaxLayoutView {
   }
 
   var recursiveFlags: RecursiveRawSyntaxFlags {
-    return layoutData.recursiveFlags
+    layoutData.recursiveFlags
   }
 
   /// Creates a new node of the same kind but with children replaced by `elements`.
@@ -61,7 +61,7 @@ public struct RawSyntaxLayoutView {
     with elements: some Collection<RawSyntax?>,
     arena: SyntaxArena
   ) -> RawSyntax {
-    return .makeLayout(
+    .makeLayout(
       kind: raw.kind,
       uninitializedCount: elements.count,
       arena: arena

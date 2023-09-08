@@ -166,7 +166,7 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
   case diagnostics([Diagnostic], tree: Syntax)
 
   static func producedInvalidNodeType<S: SyntaxProtocol>(expectedType: SyntaxProtocol.Type, actualNode: S) -> Self {
-    return .producedInvalidNodeType(expectedType: expectedType, actualType: type(of: actualNode))
+    .producedInvalidNodeType(expectedType: expectedType, actualType: type(of: actualNode))
   }
 
   var description: String {

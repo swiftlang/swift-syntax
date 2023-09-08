@@ -65,11 +65,11 @@ extension Lexer {
     var cursor: Lexer.Cursor
 
     var isAtStartOfLine: Bool {
-      return self.flags.contains(.isAtStartOfLine)
+      self.flags.contains(.isAtStartOfLine)
     }
 
     var isEditorPlaceholder: Bool {
-      return self.rawTokenKind == .identifier && self.tokenText.isEditorPlaceholder
+      self.rawTokenKind == .identifier && self.tokenText.isEditorPlaceholder
     }
 
     init(
@@ -132,7 +132,7 @@ extension Lexer {
 
     @_spi(Testing)
     public var debugDescription: String {
-      return String(syntaxText: SyntaxText(baseAddress: start, count: byteLength))
+      String(syntaxText: SyntaxText(baseAddress: start, count: byteLength))
     }
   }
 }

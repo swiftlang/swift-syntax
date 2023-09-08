@@ -54,7 +54,7 @@ public extension Child {
   }
 
   var parameterType: TypeSyntax {
-    return self.buildableType.optionalWrapped(type: parameterBaseType)
+    self.buildableType.optionalWrapped(type: parameterBaseType)
   }
 
   var defaultValue: ExprSyntax? {

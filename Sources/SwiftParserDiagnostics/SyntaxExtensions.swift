@@ -15,11 +15,11 @@
 
 extension UnexpectedNodesSyntax {
   func presentTokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
-    return self.children(viewMode: .sourceAccurate).compactMap({ $0.as(TokenSyntax.self) }).filter(isIncluded)
+    self.children(viewMode: .sourceAccurate).compactMap({ $0.as(TokenSyntax.self) }).filter(isIncluded)
   }
 
   func presentTokens(withKind kind: TokenKind) -> [TokenSyntax] {
-    return self.presentTokens(satisfying: { $0.tokenKind == kind })
+    self.presentTokens(satisfying: { $0.tokenKind == kind })
   }
 
   /// If this only contains a single item, which is a present token satisfying `condition`, return that token, otherwise return `nil`.
@@ -185,10 +185,10 @@ public extension TriviaPiece {
 
 extension TokenSyntax {
   var isMissing: Bool {
-    return presence == .missing
+    presence == .missing
   }
 
   var isPresent: Bool {
-    return presence == .present
+    presence == .present
   }
 }

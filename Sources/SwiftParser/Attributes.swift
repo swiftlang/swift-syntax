@@ -216,9 +216,9 @@ extension Parser {
     if self.at(.poundIf) {
       return .ifConfigDecl(
         self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
-          return parser.parseAttribute()
+          parser.parseAttribute()
         } syntax: { parser, attributes in
-          return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+          .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
         }
       )
     }
@@ -226,39 +226,39 @@ extension Parser {
     switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
-        return .availability(parser.parseAvailabilityArgumentSpecList())
+        .availability(parser.parseAvailabilityArgumentSpecList())
       }
     case .backDeployed, ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
-        return .backDeployedArguments(parser.parseBackDeployedAttributeArguments())
+        .backDeployedArguments(parser.parseBackDeployedAttributeArguments())
       }
     case .differentiable:
       return parseAttribute(argumentMode: .required) { parser in
-        return .differentiableArguments(parser.parseDifferentiableAttributeArguments())
+        .differentiableArguments(parser.parseDifferentiableAttributeArguments())
       }
     case .derivative, .transpose:
       return parseAttribute(argumentMode: .required) { parser in
-        return .derivativeRegistrationArguments(parser.parseDerivativeAttributeArguments())
+        .derivativeRegistrationArguments(parser.parseDerivativeAttributeArguments())
       }
     case .objc:
       return parseAttribute(argumentMode: .optional) { parser in
-        return .objCName(parser.parseObjectiveCSelector())
+        .objCName(parser.parseObjectiveCSelector())
       }
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
-        return .specializeArguments(parser.parseSpecializeAttributeArgumentList())
+        .specializeArguments(parser.parseSpecializeAttributeArgumentList())
       }
     case ._private:
       return parseAttribute(argumentMode: .required) { parser in
-        return .underscorePrivateAttributeArguments(parser.parseUnderscorePrivateAttributeArguments())
+        .underscorePrivateAttributeArguments(parser.parseUnderscorePrivateAttributeArguments())
       }
     case ._dynamicReplacement:
       return parseAttribute(argumentMode: .required) { parser in
-        return .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments())
+        .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments())
       }
     case ._documentation:
       return parseAttribute(argumentMode: .required) { parser in
-        return .documentationArguments(parser.parseDocumentationAttributeArguments())
+        .documentationArguments(parser.parseDocumentationAttributeArguments())
       }
     case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._optimize, .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
@@ -294,27 +294,27 @@ extension Parser {
       }
     case ._cdecl:
       return parseAttribute(argumentMode: .required) { parser in
-        return .string(parser.parseStringLiteral())
+        .string(parser.parseStringLiteral())
       }
     case ._implements:
       return parseAttribute(argumentMode: .required) { parser in
-        return .implementsArguments(parser.parseImplementsAttributeArguments())
+        .implementsArguments(parser.parseImplementsAttributeArguments())
       }
     case ._semantics:
       return parseAttribute(argumentMode: .required) { parser in
-        return .string(parser.parseStringLiteral())
+        .string(parser.parseStringLiteral())
       }
     case ._expose:
       return parseAttribute(argumentMode: .required) { parser in
-        return .exposeAttributeArguments(parser.parseExposeArguments())
+        .exposeAttributeArguments(parser.parseExposeArguments())
       }
     case ._originallyDefinedIn:
       return parseAttribute(argumentMode: .required) { parser in
-        return .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments())
+        .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments())
       }
     case ._unavailableFromAsync:
       return parseAttribute(argumentMode: .optional) { parser in
-        return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncAttributeArguments())
+        .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncAttributeArguments())
       }
     case .attached:
       return parseAttribute(argumentMode: .customAttribute) { parser in

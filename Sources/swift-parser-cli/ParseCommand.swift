@@ -34,7 +34,7 @@ extension ParseCommand {
   /// This is not necessarily a file path if the file contents are read from
   /// stdin or the command line arguments.
   var sourceFileName: String {
-    return arguments.sourceFile ?? "stdin"
+    arguments.sourceFile ?? "stdin"
   }
 
   /// The contents of the source that should be parsed in UTF-8 bytes.

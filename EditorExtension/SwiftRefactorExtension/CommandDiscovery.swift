@@ -82,7 +82,7 @@ struct Context: Hashable {
     var rawValue: UInt32
 
     var kind: Context.Kind? {
-      return Context.Kind(rawValue: UInt8(self.rawValue & 0x1F))
+      Context.Kind(rawValue: UInt8(self.rawValue & 0x1F))
     }
   }
 
@@ -156,7 +156,7 @@ struct ModuleContext {
 
 extension ModuleContext {
   var isSwiftRefactorModule: Bool {
-    return self.name == "SwiftRefactor"
+    self.name == "SwiftRefactor"
   }
 }
 
@@ -164,7 +164,7 @@ struct RelativeDirectPointer<Pointee> {
   var offset: Int32
 
   func address(from pointer: UnsafeRawPointer) -> UnsafeRawPointer {
-    return pointer + UnsafeRawPointer.Stride(self.offset)
+    pointer + UnsafeRawPointer.Stride(self.offset)
   }
 }
 

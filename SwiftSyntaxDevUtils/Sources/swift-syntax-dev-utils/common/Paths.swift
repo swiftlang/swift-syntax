@@ -62,15 +62,15 @@ enum Paths {
   }
 
   static var python3Exec: URL? {
-    return lookupExecutable(for: "python3")
+    lookupExecutable(for: "python3")
   }
 
   static var diffExec: URL? {
-    return lookupExecutable(for: "diff")
+    lookupExecutable(for: "diff")
   }
 
   static var xcodebuildExec: URL? {
-    return lookupExecutable(for: "xcodebuild")
+    lookupExecutable(for: "xcodebuild")
   }
 
   private static var envSearchPaths: [URL] {
@@ -99,14 +99,14 @@ enum Paths {
   }
 
   private static func lookupExecutable(for filename: String) -> URL? {
-    return envSearchPaths.map { $0.appendingPathComponent(filename) }
+    envSearchPaths.map { $0.appendingPathComponent(filename) }
       .first(where: { $0.isExecutableFile })
   }
 }
 
 fileprivate extension URL {
   var isExecutableFile: Bool {
-    return (self.isFile(path) || self.isSymlink(path)) && FileManager.default.isExecutableFile(atPath: path)
+    (self.isFile(path) || self.isSymlink(path)) && FileManager.default.isExecutableFile(atPath: path)
   }
 
   private func isFile(_ path: String) -> Bool {

@@ -259,7 +259,7 @@ fileprivate extension Unicode.Scalar {
   var isPrintableASCII: Bool {
     // Exclude non-printables before the space character U+20, and anything
     // including and above the DEL character U+7F.
-    return self.value >= 0x20 && self.value < 0x7F
+    self.value >= 0x20 && self.value < 0x7F
   }
 }
 

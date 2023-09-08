@@ -20,19 +20,19 @@ public struct ByteSourceRange: Equatable {
   }
 
   public var endOffset: Int {
-    return offset + length
+    offset + length
   }
 
   public var isEmpty: Bool {
-    return length == 0
+    length == 0
   }
 
   public func intersectsOrTouches(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset >= other.offset && self.offset <= other.endOffset
+    self.endOffset >= other.offset && self.offset <= other.endOffset
   }
 
   public func intersects(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset > other.offset && self.offset < other.endOffset
+    self.endOffset > other.offset && self.offset < other.endOffset
   }
 
   /// Returns the byte range for the overlapping region between two ranges.
@@ -53,15 +53,15 @@ public struct IncrementalEdit: Equatable {
   /// The length of the edit replacement in UTF8 bytes.
   public let replacementLength: Int
 
-  public var offset: Int { return range.offset }
+  public var offset: Int { range.offset }
 
-  public var length: Int { return range.length }
+  public var length: Int { range.length }
 
-  public var endOffset: Int { return range.endOffset }
+  public var endOffset: Int { range.endOffset }
 
   /// After the edit has been applied the range of the replacement text.
   public var replacementRange: ByteSourceRange {
-    return ByteSourceRange(offset: offset, length: replacementLength)
+    ByteSourceRange(offset: offset, length: replacementLength)
   }
 
   public init(range: ByteSourceRange, replacementLength: Int) {
@@ -75,11 +75,11 @@ public struct IncrementalEdit: Equatable {
   }
 
   public func intersectsOrTouchesRange(_ other: ByteSourceRange) -> Bool {
-    return self.range.intersectsOrTouches(other)
+    self.range.intersectsOrTouches(other)
   }
 
   public func intersectsRange(_ other: ByteSourceRange) -> Bool {
-    return self.range.intersects(other)
+    self.range.intersects(other)
   }
 }
 

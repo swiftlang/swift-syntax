@@ -121,7 +121,7 @@ extension TokenConsumer {
   /// Returns whether the current token is an operator with the given `name`.
   @inline(__always)
   mutating func atContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return self.currentToken.isContextualPunctuator(name)
+    self.currentToken.isContextualPunctuator(name)
   }
 
   /// Checks whether the parser is currently positioned at any token in `Subset`.
@@ -147,13 +147,13 @@ extension TokenConsumer {
   /// Whether the current token’s text starts with the given prefix.
   @inline(__always)
   mutating func at(prefix: SyntaxText) -> Bool {
-    return self.currentToken.tokenText.hasPrefix(prefix)
+    self.currentToken.tokenText.hasPrefix(prefix)
   }
 
   /// Whether the current token is at the start of a line.
   @inline(__always)
   var atStartOfLine: Bool {
-    return self.currentToken.isAtStartOfLine
+    self.currentToken.isAtStartOfLine
   }
 
   /// Eat a token that we know we are currently positioned at, based on `at(anyIn:)`.
@@ -362,6 +362,6 @@ extension TokenConsumer {
 
   /// Whether the current token can be a function argument label.
   func atArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
-    return self.currentToken.isArgumentLabel(allowDollarIdentifier: allowDollarIdentifier)
+    self.currentToken.isArgumentLabel(allowDollarIdentifier: allowDollarIdentifier)
   }
 }

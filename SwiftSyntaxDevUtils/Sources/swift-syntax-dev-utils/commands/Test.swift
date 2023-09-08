@@ -15,7 +15,7 @@ import Foundation
 
 struct Test: ParsableCommand, BuildCommand {
   static var configuration: CommandConfiguration {
-    return CommandConfiguration(
+    CommandConfiguration(
       abstract: "Run swift-syntax tests."
     )
   }
@@ -72,7 +72,7 @@ struct Test: ParsableCommand, BuildCommand {
   }
 
   private func findSwiftpmBinPath(packageDir: URL) throws -> String {
-    return try invokeSwiftPM(
+    try invokeSwiftPM(
       action: "build",
       packageDir: packageDir,
       additionalArguments: ["--show-bin-path"],

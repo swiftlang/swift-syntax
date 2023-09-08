@@ -137,7 +137,7 @@ final class PeerMacroTests: XCTestCase {
         providingPeersOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
-        return ["var baz: Int = 0"]
+        ["var baz: Int = 0"]
       }
     }
 

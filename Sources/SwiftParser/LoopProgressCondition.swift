@@ -56,7 +56,7 @@ extension Parser {
   /// progress, thus aborting the loop.
   @inline(__always)
   func hasProgressed(_ loopProgress: inout LoopProgressCondition) -> Bool {
-    return loopProgress.evaluate(self.currentToken)
+    loopProgress.evaluate(self.currentToken)
   }
 }
 
@@ -71,6 +71,6 @@ extension Parser.Lookahead {
   /// progress, thus aborting the loop.
   @inline(__always)
   func hasProgressed(_ loopProgress: inout LoopProgressCondition) -> Bool {
-    return loopProgress.evaluate(self.currentToken)
+    loopProgress.evaluate(self.currentToken)
   }
 }

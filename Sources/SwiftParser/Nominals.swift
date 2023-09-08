@@ -62,7 +62,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawPrimaryAssociatedTypeClauseSyntax? {
-    return parser.parsePrimaryAssociatedTypes()
+    parser.parsePrimaryAssociatedTypes()
   }
 }
 
@@ -96,7 +96,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
-    return parser.parseGenericParameters()
+    parser.parseGenericParameters()
   }
 }
 
@@ -130,7 +130,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
-    return parser.parseGenericParameters()
+    parser.parseGenericParameters()
   }
 }
 
@@ -164,7 +164,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
-    return parser.parseGenericParameters()
+    parser.parseGenericParameters()
   }
 }
 
@@ -198,7 +198,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
   }
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> RawGenericParameterClauseSyntax? {
-    return parser.parseGenericParameters()
+    parser.parseGenericParameters()
   }
 }
 

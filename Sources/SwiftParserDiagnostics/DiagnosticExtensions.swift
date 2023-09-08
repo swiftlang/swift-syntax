@@ -51,7 +51,7 @@ extension FixIt.MultiNodeChange {
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ token: TokenSyntax, transferTrivia: Bool = true) -> Self {
-    return makeMissing([token], transferTrivia: transferTrivia)
+    makeMissing([token], transferTrivia: transferTrivia)
   }
 
   /// Replace present tokens with missing tokens.
@@ -115,7 +115,7 @@ class PresentMakingFormatter: BasicFormat {
 
   override func isMutable(_ token: TokenSyntax) -> Bool {
     // Assume that all missing nodes will be made present by the Fix-It.
-    return token.isMissing
+    token.isMissing
   }
 
   /// Change the text of all missing tokens to a placeholder with their

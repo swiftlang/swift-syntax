@@ -120,24 +120,24 @@ extension OperatorTable {
       override func visit(
         _ node: SourceFileSyntax
       ) -> SyntaxVisitorContinueKind {
-        return .visitChildren
+        .visitChildren
       }
 
       override func visit(
         _ node: CodeBlockItemListSyntax
       ) -> SyntaxVisitorContinueKind {
-        return .visitChildren
+        .visitChildren
       }
 
       override func visit(
         _ node: CodeBlockItemSyntax
       ) -> SyntaxVisitorContinueKind {
-        return .visitChildren
+        .visitChildren
       }
 
       // Everything else stops the visitation.
       override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-        return .skipChildren
+        .skipChildren
       }
     }
 

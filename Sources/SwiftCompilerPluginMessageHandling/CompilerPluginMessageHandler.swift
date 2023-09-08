@@ -172,7 +172,7 @@ struct UnimplementedError: Error, CustomStringConvertible {
 public extension PluginProvider {
   var features: [PluginFeature] {
     // No optional features by default.
-    return []
+    []
   }
 
   func loadPluginLibrary(libraryPath: String, moduleName: String) throws {

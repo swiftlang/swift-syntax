@@ -36,7 +36,7 @@ public extension RawSyntaxNodeProtocol {
   }
 
   func cast<S: RawSyntaxNodeProtocol>(_ syntaxType: S.Type) -> S {
-    return self.as(S.self)!
+    self.as(S.self)!
   }
 
   var description: String {
@@ -48,7 +48,7 @@ public extension RawSyntaxNodeProtocol {
   }
 
   var isEmpty: Bool {
-    return raw.byteLength == 0
+    raw.byteLength == 0
   }
 
   /// Whether the tree contained by this layout has any
@@ -56,7 +56,7 @@ public extension RawSyntaxNodeProtocol {
   ///  - unexpected nodes or
   ///  - tokens with a ``TokenDiagnostic`` of severity `error`
   var hasError: Bool {
-    return raw.recursiveFlags.contains(.hasError)
+    raw.recursiveFlags.contains(.hasError)
   }
 }
 
@@ -64,7 +64,7 @@ public extension RawSyntaxNodeProtocol {
 extension RawSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return true
+    true
   }
 
   @_spi(RawSyntax)
@@ -104,12 +104,12 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var tokenView: RawSyntaxTokenView {
-    return raw.tokenView!
+    raw.tokenView!
   }
 
   @_spi(RawSyntax)
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .token
+    raw.kind == .token
   }
 
   @_spi(RawSyntax)
@@ -132,17 +132,17 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var tokenKind: RawTokenKind {
-    return tokenView.rawKind
+    tokenView.rawKind
   }
 
   @_spi(RawSyntax)
   public var tokenText: SyntaxText {
-    return tokenView.rawText
+    tokenView.rawText
   }
 
   @_spi(RawSyntax)
   public var byteLength: Int {
-    return raw.byteLength
+    raw.byteLength
   }
 
   @_spi(RawSyntax)
@@ -157,7 +157,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var leadingTriviaByteLength: Int {
-    return tokenView.leadingTriviaByteLength
+    tokenView.leadingTriviaByteLength
   }
 
   @_spi(RawSyntax)
@@ -167,7 +167,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
 
   @_spi(RawSyntax)
   public var trailingTriviaByteLength: Int {
-    return tokenView.trailingTriviaByteLength
+    tokenView.trailingTriviaByteLength
   }
 
   @_spi(RawSyntax)

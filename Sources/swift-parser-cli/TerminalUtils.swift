@@ -28,12 +28,12 @@ typealias FILEPointer = UnsafeMutablePointer<FILE>
 
 enum TerminalHelper {
   static var isConnectedToTerminal: Bool {
-    return isTTY(stderr)
+    isTTY(stderr)
   }
 
   /// Checks if passed file pointer is a tty.
   static func isTTY(_ filePointer: FILEPointer) -> Bool {
-    return terminalType(filePointer) == .tty
+    terminalType(filePointer) == .tty
   }
 
   /// The type of terminal.

@@ -44,13 +44,13 @@ public struct Trivia {
 
   /// The length of all the pieces in this ``Trivia``.
   public var sourceLength: SourceLength {
-    return pieces.map({ $0.sourceLength }).reduce(.zero, +)
+    pieces.map({ $0.sourceLength }).reduce(.zero, +)
   }
 
   /// Get the number of bytes this trivia needs to be represented as UTF-8.
   @available(*, deprecated, renamed: "sourceLength.utf8Length")
   public var byteSize: Int {
-    return sourceLength.utf8Length
+    sourceLength.utf8Length
   }
 
   /// Creates a new ``Trivia`` by appending the provided ``TriviaPiece`` to the end.
@@ -96,7 +96,7 @@ public struct Trivia {
 
   /// Concatenates two collections of ``Trivia`` into one collection.
   public static func + (lhs: Trivia, rhs: Trivia) -> Trivia {
-    return lhs.appending(rhs)
+    lhs.appending(rhs)
   }
 
   /// Concatenates two collections of ``Trivia`` into the left-hand side.
@@ -110,22 +110,22 @@ extension Trivia: Equatable {}
 extension Trivia: Collection {
   /// The index of the first ``TriviaPiece`` within this trivia.
   public var startIndex: Int {
-    return pieces.startIndex
+    pieces.startIndex
   }
 
   /// The index one after the last ``TriviaPiece`` within this trivia.
   public var endIndex: Int {
-    return pieces.endIndex
+    pieces.endIndex
   }
 
   /// The index of the trivia piece after the piece at `index`.
   public func index(after index: Int) -> Int {
-    return pieces.index(after: index)
+    pieces.index(after: index)
   }
 
   /// The ``TriviaPiece`` at `index`.
   public subscript(_ index: Int) -> TriviaPiece {
-    return pieces[index]
+    pieces[index]
   }
 }
 

@@ -71,7 +71,7 @@ struct MemberDeprecatedMacro: MemberAttributeMacro {
     providingAttributesFor member: some SwiftSyntax.DeclSyntaxProtocol,
     in context: some SwiftSyntaxMacros.MacroExpansionContext
   ) throws -> [SwiftSyntax.AttributeSyntax] {
-    return ["@available(*, deprecated)"]
+    ["@available(*, deprecated)"]
   }
 }
 

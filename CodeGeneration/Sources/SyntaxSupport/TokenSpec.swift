@@ -75,7 +75,7 @@ public struct TokenSpec {
   ///   - name: A name of the token.
   ///   - text: An actual text of the punctuation token.
   static func punctuator(name: String, text: String) -> TokenSpec {
-    return TokenSpec(
+    TokenSpec(
       name: name,
       nameForDiagnostics: text,
       text: text,
@@ -89,7 +89,7 @@ public struct TokenSpec {
   ///   - name: A name of the token.
   ///   - text: An actual text of the pound keyword token.
   static func poundKeyword(name: String, text: String) -> TokenSpec {
-    return TokenSpec(
+    TokenSpec(
       name: name,
       nameForDiagnostics: text,
       text: text,
@@ -104,7 +104,7 @@ public struct TokenSpec {
   ///   - nameForDiagnostics: A name of the token that can be shown in diagnostics.
   ///   - text: An actual text of the token, if available.
   static func other(name: String, nameForDiagnostics: String, text: String? = nil) -> TokenSpec {
-    return TokenSpec(
+    TokenSpec(
       name: name,
       nameForDiagnostics: nameForDiagnostics,
       text: text,

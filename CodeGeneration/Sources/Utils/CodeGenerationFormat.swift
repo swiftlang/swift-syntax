@@ -99,7 +99,7 @@ public class CodeGenerationFormat: BasicFormat {
   private func shouldBeSeparatedByTwoNewlines(node: CodeBlockItemSyntax) -> Bool {
     // First item in the ``CodeBlockItemListSyntax`` don't need a newline or indentation if the parent is a ``SourceFileSyntax``.
     // We want to group imports so newline between them should be omitted
-    return node.parent?.as(CodeBlockItemListSyntax.self)?.first == node || node.item.is(ImportDeclSyntax.self)
+    node.parent?.as(CodeBlockItemListSyntax.self)?.first == node || node.item.is(ImportDeclSyntax.self)
   }
 
   private func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {

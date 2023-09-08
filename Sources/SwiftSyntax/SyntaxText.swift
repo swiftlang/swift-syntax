@@ -107,7 +107,7 @@ public struct SyntaxText {
 
   /// Returns `true` if `other` is a substring of this ``SyntaxText``.
   public func contains(_ other: SyntaxText) -> Bool {
-    return firstRange(of: other) != nil
+    firstRange(of: other) != nil
   }
 
   /// Finds and returns the range of the first occurrence of `other` within this
@@ -166,7 +166,7 @@ extension SyntaxText: RandomAccessCollection {
 
   /// Access the byte at `index`.
   public subscript(index: Index) -> Element {
-    get { return buffer[index] }
+    get { buffer[index] }
   }
 }
 

@@ -478,7 +478,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return handleEffectSpecifiers(node)
+    handleEffectSpecifiers(node)
   }
 
   public override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
@@ -749,7 +749,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: FunctionEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return handleEffectSpecifiers(node)
+    handleEffectSpecifiers(node)
   }
 
   public override func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
@@ -1313,27 +1313,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   public override func visit(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
-    return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
+    handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
   override open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
@@ -1782,7 +1782,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: TypeEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
-    return handleEffectSpecifiers(node)
+    handleEffectSpecifiers(node)
   }
 
   public override func visit(_ node: InheritanceClauseSyntax) -> SyntaxVisitorContinueKind {

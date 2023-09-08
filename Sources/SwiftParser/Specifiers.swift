@@ -118,7 +118,7 @@ public enum EffectSpecifier: TokenSpecSet {
 
   @_spi(Diagnostics)
   public static var allCases: [EffectSpecifier] {
-    return AsyncEffectSpecifier.allCases.map(Self.asyncSpecifier)
+    AsyncEffectSpecifier.allCases.map(Self.asyncSpecifier)
       + ThrowsEffectSpecifier.allCases.map(Self.throwsSpecifier)
   }
 
@@ -195,7 +195,7 @@ extension RawEffectSpecifiersTrait {
   }
 
   func withMisplaced(async misplacedAsyncKeyword: RawTokenSyntax?, throws misplacedThrowsKeyword: RawTokenSyntax?, arena: __shared SyntaxArena) -> Self {
-    return Self.init(
+    Self.init(
       self.unexpectedBeforeAsyncSpecifier,
       asyncSpecifier: self.asyncSpecifier ?? misplacedAsyncKeyword,
       self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier,
@@ -651,15 +651,15 @@ extension Parser {
   }
 
   mutating func parseTypeEffectSpecifiers() -> RawTypeEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self)
+    parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self)
   }
 
   mutating func parseFunctionEffectSpecifiers() -> RawFunctionEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
+    parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
   }
 
   mutating func parseAccessorEffectSpecifiers() -> RawAccessorEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
+    parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
   }
 
   mutating func parseDeinitEffectSpecifiers() -> RawDeinitializerEffectSpecifiersSyntax? {

@@ -28,7 +28,7 @@ extension Character {
 
 extension Unicode.Scalar {
   var isASCII: Bool {
-    return self.value <= 127
+    self.value <= 127
   }
 
   /// A Boolean value indicating whether this scalar is one which is recommended

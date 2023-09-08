@@ -15,7 +15,7 @@ import Foundation
 
 struct GenerateSourceCode: ParsableCommand, SourceCodeGeneratorCommand {
   static var configuration: CommandConfiguration {
-    return CommandConfiguration(
+    CommandConfiguration(
       abstract: "Generate swift-syntax sources."
     )
   }

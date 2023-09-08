@@ -16,7 +16,7 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 private func parse(source: String) -> Syntax {
-  return Syntax(Parser.parse(source: source))
+  Syntax(Parser.parse(source: source))
 }
 
 public class SyntaxComparisonTests: XCTestCase {

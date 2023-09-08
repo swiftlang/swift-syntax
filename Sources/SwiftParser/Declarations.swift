@@ -318,7 +318,7 @@ extension Parser {
   }
 
   mutating func parseImportKind() -> RawTokenSyntax? {
-    return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindSpecifierOptions.self)
+    self.consume(ifAnyIn: ImportDeclSyntax.ImportKindSpecifierOptions.self)
   }
 
   mutating func parseImportPath() -> RawImportPathComponentListSyntax {

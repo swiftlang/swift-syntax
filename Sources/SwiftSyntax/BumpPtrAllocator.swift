@@ -61,7 +61,7 @@ public class BumpPtrAllocator {
   /// Calculate the size of the slab at the index.
   private func slabSize(at index: Int) -> Int {
     // Double the slab size every 'GROWTH_DELAY' slabs.
-    return self.slabSize * (1 << min(30, index / Self.GROWTH_DELAY))
+    self.slabSize * (1 << min(30, index / Self.GROWTH_DELAY))
   }
 
   private func startNewSlab() {

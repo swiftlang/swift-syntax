@@ -42,7 +42,7 @@ public struct SyntaxIndexInTree: Comparable, Hashable {
 
   /// Returns `true` if `lhs` occurs before `rhs` in the tree.
   public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
-    return lhs.indexInTree < rhs.indexInTree
+    lhs.indexInTree < rhs.indexInTree
   }
 }
 
@@ -81,7 +81,7 @@ public struct SyntaxIdentifier: Hashable {
   }
 
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
-    return .init(
+    .init(
       rootId: UInt(bitPattern: raw.pointer),
       indexInTree: .zero
     )

@@ -16,12 +16,12 @@
 public extension TokenSpec {
   @available(*, deprecated, renamed: "leftSquare")
   static var leftSquareBracket: TokenSpec {
-    return .leftSquare
+    .leftSquare
   }
 
   @available(*, deprecated, renamed: "rightSquare")
   static var rightSquareBracket: TokenSpec {
-    return .rightSquare
+    .rightSquare
   }
 }
 

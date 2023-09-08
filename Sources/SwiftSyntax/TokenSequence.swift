@@ -51,19 +51,19 @@ public struct TokenSequence: Sequence {
 
   /// Create an iterator that iterates over all the tokens in the sequence.
   public func makeIterator() -> Iterator {
-    return Iterator(node.firstToken(viewMode: viewMode), endToken: node.lastToken(viewMode: viewMode), viewMode: viewMode)
+    Iterator(node.firstToken(viewMode: viewMode), endToken: node.lastToken(viewMode: viewMode), viewMode: viewMode)
   }
 
   /// Iterate the tokens in reverse order.
   public func reversed() -> ReversedTokenSequence {
-    return ReversedTokenSequence(node, viewMode: viewMode)
+    ReversedTokenSequence(node, viewMode: viewMode)
   }
 }
 
 extension TokenSequence: CustomReflectable {
   /// A custom mirror for ``TokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map { $0 })
+    Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }
 
@@ -108,18 +108,18 @@ public struct ReversedTokenSequence: Sequence {
 
   /// Create an iterator that iterates over all the tokens in the sequence.
   public func makeIterator() -> Iterator {
-    return Iterator(node.lastToken(viewMode: viewMode), startPosition: node.position, viewMode: viewMode)
+    Iterator(node.lastToken(viewMode: viewMode), startPosition: node.position, viewMode: viewMode)
   }
 
   /// Iterate over the tokens in source order.
   public func reversed() -> TokenSequence {
-    return TokenSequence(node, viewMode: viewMode)
+    TokenSequence(node, viewMode: viewMode)
   }
 }
 
 extension ReversedTokenSequence: CustomReflectable {
   /// A custom mirror for ``ReversedTokenSequence`` that shows all elements in the sequence.
   public var customMirror: Mirror {
-    return Mirror(self, unlabeledChildren: self.map { $0 })
+    Mirror(self, unlabeledChildren: self.map { $0 })
   }
 }

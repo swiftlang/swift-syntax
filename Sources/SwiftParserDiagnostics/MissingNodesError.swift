@@ -18,14 +18,14 @@ import SwiftDiagnostics
 
 /// Returns the bottommost node that is an ancestor of all nodes in `nodes`.
 fileprivate func findCommonAncestor(_ nodes: [Syntax]) -> Syntax? {
-  return findCommonAncestorOrSelf(nodes.compactMap({ $0.parent }))
+  findCommonAncestorOrSelf(nodes.compactMap({ $0.parent }))
 }
 
 class NoNewlinesFormat: BasicFormat {
   override var inferInitialTokenIndentation: Bool { false }
 
   override func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {
-    return false
+    false
   }
 }
 
@@ -128,7 +128,7 @@ fileprivate enum NodesDescriptionPart {
 /// If `commonParent` is not `nil`, `missingNodes` are expected to all be children of `commonParent`.
 /// If `format` is `true`, `BasicFormat` will be used to format the tokens prior to printing. This is useful if the nodes have been synthesized.
 func nodesDescription(_ nodes: [some SyntaxProtocol], format: Bool) -> String {
-  return nodesDescriptionAndCommonParent(nodes, format: format).description
+  nodesDescriptionAndCommonParent(nodes, format: format).description
 }
 
 /// Same as `nodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
@@ -184,7 +184,7 @@ fileprivate extension TokenKind {
   }
 
   var isEndMarker: Bool {
-    return matchingStartMarkerKind != nil
+    matchingStartMarkerKind != nil
   }
 
   var matchingStartMarkerKind: TokenKind? {

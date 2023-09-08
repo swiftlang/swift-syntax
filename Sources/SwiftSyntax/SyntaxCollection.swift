@@ -20,7 +20,7 @@ where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
 
 extension SyntaxCollection {
   public static var structure: SyntaxNodeStructure {
-    return .collection(Element.self)
+    .collection(Element.self)
   }
 
   private var layoutView: RawSyntaxLayoutView {
@@ -58,7 +58,7 @@ extension SyntaxCollection {
 
   /// The number of elements, `present` or `missing`, in this collection.
   public var count: Int {
-    return layoutView.children.count
+    layoutView.children.count
   }
 
   /// Creates a new collection by replacing the underlying layout with a
@@ -139,7 +139,7 @@ extension SyntaxCollection {
   ///            beginning.
   @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func prepending(_ syntax: Element) -> Self {
-    return inserting(syntax, at: 0)
+    inserting(syntax, at: 0)
   }
 
   /// Creates a new collection by inserting the provided syntax element
@@ -404,34 +404,34 @@ extension SyntaxCollection {
 /// Conformance to `BidirectionalCollection`.
 extension SyntaxCollection {
   public func makeIterator() -> SyntaxCollectionIterator<Element> {
-    return SyntaxCollectionIterator<Element>(parent: Syntax(self), rawChildren: rawChildren)
+    SyntaxCollectionIterator<Element>(parent: Syntax(self), rawChildren: rawChildren)
   }
 
   private var rawChildren: RawSyntaxChildren {
     // We know children in a syntax collection cannot be missing. So we can
     // use the low-level and faster RawSyntaxChildren collection instead of
     // NonNilRawSyntaxChildren.
-    return RawSyntaxChildren(Syntax(self).absoluteRaw)
+    RawSyntaxChildren(Syntax(self).absoluteRaw)
   }
 
   public var startIndex: SyntaxChildrenIndex {
-    return rawChildren.startIndex
+    rawChildren.startIndex
   }
 
   public var endIndex: SyntaxChildrenIndex {
-    return rawChildren.endIndex
+    rawChildren.endIndex
   }
 
   public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    return rawChildren.index(after: index)
+    rawChildren.index(after: index)
   }
 
   public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    return rawChildren.index(before: index)
+    rawChildren.index(before: index)
   }
 
   public func distance(from start: SyntaxChildrenIndex, to end: SyntaxChildrenIndex) -> Int {
-    return rawChildren.distance(from: start, to: end)
+    rawChildren.distance(from: start, to: end)
   }
 
   public subscript(position: SyntaxChildrenIndex) -> Element {

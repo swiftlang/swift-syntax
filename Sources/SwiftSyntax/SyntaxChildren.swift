@@ -29,7 +29,7 @@ struct SyntaxChildrenIndexData: Hashable, Comparable {
     lhs: SyntaxChildrenIndexData,
     rhs: SyntaxChildrenIndexData
   ) -> Bool {
-    return lhs.indexInParent < rhs.indexInParent
+    lhs.indexInParent < rhs.indexInParent
   }
 
   fileprivate init(
@@ -148,7 +148,7 @@ struct RawSyntaxChildren: BidirectionalCollection {
   private let parent: RawSyntax
 
   private var parentLayoutView: RawSyntaxLayoutView {
-    return parent.layoutView!
+    parent.layoutView!
   }
 
   /// The rootId of the tree the child nodes belong to
@@ -160,11 +160,11 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
   let startIndex: SyntaxChildrenIndex
   var endIndex: SyntaxChildrenIndex {
-    return nil
+    nil
   }
 
   func makeIterator() -> Iterator {
-    return Iterator(collection: self)
+    Iterator(collection: self)
   }
 
   /// Advance the given index by the given ``RawSyntax`` node.
@@ -316,11 +316,11 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
 
   let startIndex: SyntaxChildrenIndex
   var endIndex: SyntaxChildrenIndex {
-    return allChildren.endIndex
+    allChildren.endIndex
   }
 
   func makeIterator() -> Iterator {
-    return Iterator(allChildren: allChildren, viewMode: viewMode)
+    Iterator(allChildren: allChildren, viewMode: viewMode)
   }
 
   /// Advances the index to the next present node in the given collection. If
@@ -386,7 +386,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     // contract of the index(before:) function we are not called on the start
     // index. The start index points to the first present node. Hence there is
     // a present node before us.
-    return Self.presentIndex(
+    Self.presentIndex(
       before: allChildren.index(before: index),
       in: allChildren,
       viewMode: viewMode
@@ -432,19 +432,19 @@ public struct SyntaxChildren: BidirectionalCollection {
   private let parent: Syntax
 
   /// The index of the first child in this collection.
-  public var startIndex: SyntaxChildrenIndex { return rawChildren.startIndex }
+  public var startIndex: SyntaxChildrenIndex { rawChildren.startIndex }
 
   /// The index that’s one after the last element in the collection.
-  public var endIndex: SyntaxChildrenIndex { return rawChildren.endIndex }
+  public var endIndex: SyntaxChildrenIndex { rawChildren.endIndex }
 
   /// The index for the child that’s after the child at `index`.
   public func index(after index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    return rawChildren.index(after: index)
+    rawChildren.index(after: index)
   }
 
   /// The index for the child that’s before the child at `index`.
   public func index(before index: SyntaxChildrenIndex) -> SyntaxChildrenIndex {
-    return rawChildren.index(before: index)
+    rawChildren.index(before: index)
   }
 
   /// The syntax node at the given `index`
@@ -462,7 +462,7 @@ public struct SyntaxChildren: BidirectionalCollection {
   ///
   /// If `node` is not part of this collection, returns `nil`.
   public func index(of node: some SyntaxProtocol) -> SyntaxChildrenIndex? {
-    return index(of: Syntax(node))
+    index(of: Syntax(node))
   }
 
   /// Return the index of `node` within this collection.

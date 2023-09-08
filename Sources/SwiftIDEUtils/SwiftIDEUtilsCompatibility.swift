@@ -17,32 +17,32 @@ public extension SyntaxClassification {
   /// A `#` keyword like `#warning`.
   @available(*, deprecated, renamed: "ifConfigDirective")
   static var poundDirective: SyntaxClassification {
-    return .ifConfigDirective
+    .ifConfigDirective
   }
 
   @available(*, deprecated, renamed: "ifConfigDirective")
   static var buildConfigId: SyntaxClassification {
-    return .ifConfigDirective
+    .ifConfigDirective
   }
 
   @available(*, deprecated, message: "String interpolation anchors are now classified as .none")
   static var stringInterpolationAnchor: SyntaxClassification {
-    return .none
+    .none
   }
 
   @available(*, deprecated, renamed: "type")
   static var typeIdentifier: SyntaxClassification {
-    return .type
+    .type
   }
 
   @available(*, deprecated, renamed: "operator")
   static var operatorIdentifier: SyntaxClassification {
-    return .operator
+    .operator
   }
 
   @available(*, deprecated, renamed: "floatLiteral")
   static var floatingLiteral: SyntaxClassification {
-    return .floatLiteral
+    .floatLiteral
   }
 }
 

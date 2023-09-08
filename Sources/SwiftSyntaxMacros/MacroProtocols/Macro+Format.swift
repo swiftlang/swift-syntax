@@ -24,6 +24,6 @@ public enum FormatMode {
 
 public extension Macro {
   static var formatMode: FormatMode {
-    return .auto
+    .auto
   }
 }

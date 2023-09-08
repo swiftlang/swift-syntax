@@ -52,7 +52,7 @@ extension Parser {
     /// Initiates a lookahead session from the current point in this
     /// lookahead session.
     func lookahead() -> Lookahead {
-      return Lookahead(
+      Lookahead(
         lexemes: self.lexemes,
         currentToken: self.currentToken,
         experimentalFeatures: self.experimentalFeatures
@@ -62,7 +62,7 @@ extension Parser {
 
   /// Initiates a lookahead session from the current point in this parse.
   func lookahead() -> Lookahead {
-    return Lookahead(cloning: self)
+    Lookahead(cloning: self)
   }
 
   func withLookahead<T>(_ body: (_: inout Lookahead) -> T) -> T {
@@ -80,7 +80,7 @@ extension Parser.Lookahead: TokenConsumer {
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
   mutating func eat(_ spec: TokenSpec) -> Token {
-    return self.consume(if: spec)!
+    self.consume(if: spec)!
   }
 
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
@@ -92,7 +92,7 @@ extension Parser.Lookahead: TokenConsumer {
 
 extension Parser.Lookahead {
   func peek() -> Lexer.Lexeme {
-    return self.lexemes.peek()
+    self.lexemes.peek()
   }
 }
 
@@ -305,7 +305,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func skipUntil(_ t1: TokenSpec, _ t2: TokenSpec) {
-    return skip(initialState: .skipUntil(t1, t2))
+    skip(initialState: .skipUntil(t1, t2))
   }
 
   mutating func skipUntilEndOfLine() {
@@ -315,7 +315,7 @@ extension Parser.Lookahead {
   }
 
   mutating func skipSingle() {
-    return skip(initialState: .skipSingle)
+    skip(initialState: .skipSingle)
   }
 
   // Note: We don't need to treat string quotes as bracketed tokens because:

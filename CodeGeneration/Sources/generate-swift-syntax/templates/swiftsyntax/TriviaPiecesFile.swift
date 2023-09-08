@@ -271,7 +271,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 }
 
 fileprivate func generateIsHelpers(for pieceName: TokenSyntax) throws -> ExtensionDeclSyntax {
-  return try ExtensionDeclSyntax("extension \(pieceName)") {
+  try ExtensionDeclSyntax("extension \(pieceName)") {
     DeclSyntax(
       """
       /// Returns `true` if this piece is a newline, space or tab.

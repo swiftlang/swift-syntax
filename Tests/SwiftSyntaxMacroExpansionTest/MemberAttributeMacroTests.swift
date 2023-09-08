@@ -184,7 +184,7 @@ final class MemberAttributeMacroTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return ["@Wrapper"]
+        ["@Wrapper"]
       }
     }
 
@@ -273,7 +273,7 @@ final class MemberAttributeMacroTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return ["/* start */@Wrapper/* end */"]
+        ["/* start */@Wrapper/* end */"]
       }
     }
 

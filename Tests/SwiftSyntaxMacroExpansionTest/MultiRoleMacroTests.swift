@@ -128,7 +128,7 @@ final class MultiRoleMacroTests: XCTestCase {
         providingMembersOf declaration: some DeclGroupSyntax,
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
-        return ["var _storage: Wrapper<Self>"]
+        ["var _storage: Wrapper<Self>"]
       }
 
       static func expansion(
@@ -137,7 +137,7 @@ final class MultiRoleMacroTests: XCTestCase {
         providingAttributesFor member: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AttributeSyntax] {
-        return ["@customTypeWrapper"]
+        ["@customTypeWrapper"]
       }
 
       static func expansion(
@@ -209,7 +209,7 @@ final class MultiRoleMacroTests: XCTestCase {
   func testAttachedMacroOnFreestandingMacro() {
     struct DeclMacro: DeclarationMacro {
       static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
-        return ["var x: Int"]
+        ["var x: Int"]
       }
     }
 
@@ -217,7 +217,7 @@ final class MultiRoleMacroTests: XCTestCase {
       static func expansion(of node: AttributeSyntax, providingPeersOf declaration: some DeclSyntaxProtocol, in context: some MacroExpansionContext) throws
         -> [DeclSyntax]
       {
-        return ["var peer: Int"]
+        ["var peer: Int"]
       }
     }
 

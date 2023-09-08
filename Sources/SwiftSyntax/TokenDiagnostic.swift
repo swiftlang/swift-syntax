@@ -153,6 +153,6 @@ public struct TokenDiagnostic: Hashable {
 
   /// The severity of the diagnostic, i.e. whether it’s a warning or error.
   public var severity: Severity {
-    return kind.severity
+    kind.severity
   }
 }

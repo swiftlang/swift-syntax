@@ -84,7 +84,7 @@ extension Parser {
 
   /// Parse the top level items in a source file.
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
-    return parseCodeBlockItemList(isAtTopLevel: true, until: { _ in false })
+    parseCodeBlockItemList(isAtTopLevel: true, until: { _ in false })
   }
 
   /// The optional form of `parseCodeBlock` that checks to see if the parser has

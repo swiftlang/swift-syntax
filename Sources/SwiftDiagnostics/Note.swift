@@ -47,12 +47,12 @@ public struct Note: CustomDebugStringConvertible {
 
   /// The message that should be displayed to the user.
   public var message: String {
-    return noteMessage.message
+    noteMessage.message
   }
 
   /// The location at which the note should be displayed.
   public func location(converter: SourceLocationConverter) -> SourceLocation {
-    return converter.location(for: position)
+    converter.location(for: position)
   }
 
   public var debugDescription: String {

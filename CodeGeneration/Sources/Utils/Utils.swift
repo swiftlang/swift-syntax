@@ -21,8 +21,8 @@ extension String {
 
   /// Removes all empty lines from a multi-line string.
   public var removingEmptyLines: String {
-    return
-      self
+
+    self
       .split(whereSeparator: \.isNewline)
       .filter { !$0.allSatisfy(\.isWhitespace) }
       .joined(separator: "\n")

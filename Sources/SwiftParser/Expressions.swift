@@ -368,7 +368,7 @@ extension Parser {
   /// identifier or keyword on the same line. We do this to ensure that we do
   /// not break any copy functions defined by users.
   private mutating func atContextualExpressionModifier() -> Bool {
-    return self.peek(
+    self.peek(
       isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
       TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
       TokenSpec(.self, allowAtStartOfLine: false)

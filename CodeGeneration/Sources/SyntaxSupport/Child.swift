@@ -108,7 +108,7 @@ public class Child {
 
   /// A name of this child that's suitable to be used for variable or enum case names.
   public var varOrCaseName: TokenSyntax {
-    return .identifier(lowercaseFirstWord(name: name))
+    .identifier(lowercaseFirstWord(name: name))
   }
 
   /// If this child has node choices, the type that the nested `SyntaxChildChoices` type should get.
@@ -137,7 +137,7 @@ public class Child {
 
   /// Determines if this child has a deprecated name
   public var hasDeprecatedName: Bool {
-    return deprecatedName != nil
+    deprecatedName != nil
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.

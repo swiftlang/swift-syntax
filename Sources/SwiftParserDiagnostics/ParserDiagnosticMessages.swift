@@ -23,15 +23,15 @@ public protocol ParserError: DiagnosticMessage {
 
 public extension ParserError {
   static var diagnosticID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
   var diagnosticID: MessageID {
-    return Self.diagnosticID
+    Self.diagnosticID
   }
 
   var severity: DiagnosticSeverity {
-    return .error
+    .error
   }
 }
 
@@ -41,11 +41,11 @@ public protocol ParserNote: NoteMessage {
 
 public extension ParserNote {
   static var fixItID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
   var fixItID: MessageID {
-    return Self.fixItID
+    Self.fixItID
   }
 }
 
@@ -55,11 +55,11 @@ public protocol ParserFixIt: FixItMessage {
 
 public extension ParserFixIt {
   static var fixItID: MessageID {
-    return MessageID(domain: diagnosticDomain, id: "\(self)")
+    MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
   var fixItID: MessageID {
-    return Self.fixItID
+    Self.fixItID
   }
 }
 
@@ -169,7 +169,7 @@ extension DiagnosticMessage where Self == StaticParserError {
     .init("argument cannot be an extended escaping string literal")
   }
   public static var forbiddenInterpolatedString: Self {
-    return .init("argument cannot be an interpolated string literal")
+    .init("argument cannot be an interpolated string literal")
   }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
@@ -276,7 +276,7 @@ public struct AsyncMustPrecedeThrows: ParserError {
   public let throwsKeyword: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription(asyncKeywords, format: false)) must precede \(nodesDescription([throwsKeyword], format: false))"
+    "\(nodesDescription(asyncKeywords, format: false)) must precede \(nodesDescription([throwsKeyword], format: false))"
   }
 }
 
@@ -285,7 +285,7 @@ public struct AvailabilityConditionAsExpression: ParserError {
   public let negatedAvailabilityToken: TokenSyntax
 
   public var message: String {
-    return "\(availabilityToken) cannot be used as an expression, did you mean to use '\(negatedAvailabilityToken)'?"
+    "\(availabilityToken) cannot be used as an expression, did you mean to use '\(negatedAvailabilityToken)'?"
   }
 }
 
@@ -293,7 +293,7 @@ public struct AvailabilityConditionInExpression: ParserError {
   public let availabilityCondition: AvailabilityConditionSyntax
 
   public var message: String {
-    return "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
+    "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
   }
 }
 
@@ -301,7 +301,7 @@ public struct CannotParseVersionTuple: ParserError {
   public let versionTuple: UnexpectedNodesSyntax
 
   public var message: String {
-    return "cannot parse version component \(versionTuple.shortSingleLineContentDescription)"
+    "cannot parse version component \(versionTuple.shortSingleLineContentDescription)"
   }
 }
 
@@ -330,7 +330,7 @@ public struct ExtraneousCodeAtTopLevel: ParserError {
   public let extraneousCode: UnexpectedNodesSyntax
 
   public var message: String {
-    return "extraneous \(extraneousCode.shortSingleLineContentDescription) at top level"
+    "extraneous \(extraneousCode.shortSingleLineContentDescription) at top level"
   }
 }
 
@@ -338,7 +338,7 @@ public struct ExtraneousWhitespace: ParserError {
   public let tokenWithWhitespace: TokenSyntax
 
   public var message: String {
-    return "extraneous whitespace after '\(tokenWithWhitespace.text)' is not permitted"
+    "extraneous whitespace after '\(tokenWithWhitespace.text)' is not permitted"
   }
 }
 
@@ -346,7 +346,7 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
   public let identifier: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
+    "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
   }
 }
 
@@ -354,7 +354,7 @@ public struct InvalidFloatLiteralMissingLeadingZero: ParserError {
   public let decimalDigits: TokenSyntax
 
   public var message: String {
-    return "'.\(decimalDigits.text)' is not a valid floating point literal; it must be written '0.\(decimalDigits.text)'"
+    "'.\(decimalDigits.text)' is not a valid floating point literal; it must be written '0.\(decimalDigits.text)'"
   }
 }
 
@@ -411,7 +411,7 @@ public struct MissingAttributeArgument: ParserError {
   public let attributeName: TypeSyntax
 
   public var message: String {
-    return "expected argument for '@\(attributeName)' attribute"
+    "expected argument for '@\(attributeName)' attribute"
   }
 }
 
@@ -419,7 +419,7 @@ public struct MissingBothStringQuotesOfStringSegments: ParserError {
   public let stringSegments: StringLiteralSegmentListSyntax
 
   public var message: String {
-    return #"expected \#(stringSegments.shortSingleLineContentDescription) to be surrounded by '"'"#
+    #"expected \#(stringSegments.shortSingleLineContentDescription) to be surrounded by '"'"#
   }
 }
 
@@ -452,8 +452,8 @@ public struct NegatedAvailabilityCondition: ParserError {
   public let negatedAvailabilityKeyword: TokenSyntax
 
   public var message: String {
-    return
-      "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
+
+    "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression; did you mean \(nodesDescription([negatedAvailabilityKeyword], format: false))?"
   }
 }
 
@@ -476,7 +476,7 @@ public struct SpecifierOnParameterName: ParserError {
   public let misplacedSpecifiers: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
+    "\(nodesDescription(misplacedSpecifiers, format: false)) before a parameter name is not allowed"
   }
 }
 
@@ -484,7 +484,7 @@ public struct TokensNotAllowedInOperatorName: ParserError {
   public let tokens: [TokenSyntax]
 
   public var message: String {
-    return "\(nodesDescription(tokens, format: false)) is not allowed in operator names"
+    "\(nodesDescription(tokens, format: false)) is not allowed in operator names"
   }
 }
 
@@ -493,7 +493,7 @@ public struct TrailingVersionAreIgnored: ParserError {
   public let components: VersionComponentListSyntax
 
   public var message: String {
-    return "trailing components of version \(major)\(components) are ignored"
+    "trailing components of version \(major)\(components) are ignored"
   }
 
   public var severity: DiagnosticSeverity = .warning
@@ -503,7 +503,7 @@ public struct TryCannotBeUsed: ParserError {
   public let nextToken: TokenSyntax
 
   public var message: String {
-    return "'try' cannot be used with '\(nextToken.text)'"
+    "'try' cannot be used with '\(nextToken.text)'"
   }
 }
 
@@ -529,7 +529,7 @@ public struct UnknownDirectiveError: ParserError {
   public let unexpected: UnexpectedNodesSyntax
 
   public var message: String {
-    return "use of unknown directive \(nodesDescription([unexpected], format: false))"
+    "use of unknown directive \(nodesDescription([unexpected], format: false))"
   }
 }
 
@@ -556,7 +556,7 @@ public struct EffectSpecifierDeclaredHere: ParserNote {
   let specifier: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription([specifier], format: false)) declared here"
+    "\(nodesDescription([specifier], format: false)) declared here"
   }
 }
 

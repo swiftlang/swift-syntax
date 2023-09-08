@@ -29,7 +29,7 @@ fileprivate struct ConstantOneGetter: AccessorMacro {
     providingAccessorsOf declaration: some DeclSyntaxProtocol,
     in context: some MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
-    return [
+    [
       """
       get {
         return 1

@@ -60,7 +60,7 @@ public class Node {
   /// A name for this node that is suitable to be used as a variables or enum
   /// case's name.
   public var varOrCaseName: TokenSyntax {
-    return kind.varOrCaseName
+    kind.varOrCaseName
   }
 
   /// If this is a layout node, return a view of the node that provides access
@@ -264,7 +264,7 @@ public struct LayoutNode {
 
   /// Allow transparent accesss to the properties of the underlying `Node`.
   public subscript<T>(dynamicMember keyPath: KeyPath<Node, T>) -> T {
-    return node[keyPath: keyPath]
+    node[keyPath: keyPath]
   }
 
   /// The children of the layout node.
@@ -281,7 +281,7 @@ public struct LayoutNode {
 
   /// All children in the node that are not unexpected.
   public var nonUnexpectedChildren: [Child] {
-    return children.filter { !$0.isUnexpectedNodes }
+    children.filter { !$0.isUnexpectedNodes }
   }
 
   /// Traits that the node conforms to.
@@ -328,7 +328,7 @@ public struct CollectionNode {
 
   /// Allow transparent access to the properties of the underlying `Node`.
   public subscript<T>(dynamicMember keyPath: KeyPath<Node, T>) -> T {
-    return node[keyPath: keyPath]
+    node[keyPath: keyPath]
   }
 
   /// The kinds the elements can have.

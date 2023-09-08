@@ -24,48 +24,47 @@ struct Test: ParsableCommand, BuildCommand {
   var arguments: BuildArguments
 
   func run() throws {
-    try buildExample(exampleName: "ExamplePlugin")
-
     try runTests()
+    try runCodeGenerationTests()
 
     logSection("All tests passed")
   }
 
   private func runTests() throws {
     logSection("Running SwiftSyntax Tests")
-    var swiftpmCallArguments: [String] = []
+    var swiftpmCallArguments = [
+      "--test-product", "swift-syntaxPackageTests",
+    ]
 
     if arguments.verbose {
       swiftpmCallArguments += ["--verbose"]
     }
 
-    swiftpmCallArguments += ["--test-product", "swift-syntaxPackageTests"]
-
-    var additionalEnvironment: [String: String] = [:]
-    additionalEnvironment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
-
-    if arguments.enableRawSyntaxValidation {
-      additionalEnvironment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
-    }
-
-    if arguments.enableTestFuzzing {
-      additionalEnvironment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
-    }
-
-    // Tell other projects in the unified build to use local dependencies
-    additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"
-    additionalEnvironment["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] =
-      arguments.toolchain
-      .appendingPathComponent("lib")
-      .appendingPathComponent("swift")
-      .appendingPathComponent("macosx")
-      .path
-
     try invokeSwiftPM(
       action: "test",
       packageDir: Paths.packageDir,
       additionalArguments: swiftpmCallArguments,
-      additionalEnvironment: additionalEnvironment,
+      additionalEnvironment: swiftPMEnvironmentVariables,
+      captureStdout: false,
+      captureStderr: false
+    )
+  }
+
+  private func runCodeGenerationTests() throws {
+    logSection("Running CodeGeneration Tests")
+    var swiftpmCallArguments = [
+      "--test-product", "CodeGenerationPackageTests",
+    ]
+
+    if arguments.verbose {
+      swiftpmCallArguments += ["--verbose"]
+    }
+
+    try invokeSwiftPM(
+      action: "test",
+      packageDir: Paths.codeGenerationDir,
+      additionalArguments: swiftpmCallArguments,
+      additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
     )

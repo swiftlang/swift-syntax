@@ -27,11 +27,6 @@ extension BuildCommand {
     try build(packageDir: packageDir, name: targetName, isProduct: false)
   }
 
-  func buildExample(exampleName: String) throws {
-    logSection("Building example " + exampleName)
-    try build(packageDir: Paths.examplesDir, name: exampleName, isProduct: true)
-  }
-
   @discardableResult
   func invokeSwiftPM(
     action: String,
@@ -116,15 +111,9 @@ extension BuildCommand {
     }
   }
 
-  private func build(packageDir: URL, name: String, isProduct: Bool) throws {
-    let args: [String]
-
-    if isProduct {
-      args = ["--product", name]
-    } else {
-      args = ["--target", name]
-    }
-
+  /// Environment variables that should be set when invoking `swift build` or
+  /// `swift test`.
+  var swiftPMEnvironmentVariables: [String: String] {
     var additionalEnvironment: [String: String] = [:]
     additionalEnvironment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
 
@@ -138,18 +127,24 @@ extension BuildCommand {
 
     // Tell other projects in the unified build to use local dependencies
     additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"
-    additionalEnvironment["SWIFT_SYNTAX_PARSER_LIB_SEARCH_PATH"] =
-      arguments.toolchain
-      .appendingPathComponent("lib")
-      .appendingPathComponent("swift")
-      .appendingPathComponent("macos")
-      .path
+
+    return additionalEnvironment
+  }
+
+  private func build(packageDir: URL, name: String, isProduct: Bool) throws {
+    let args: [String]
+
+    if isProduct {
+      args = ["--product", name]
+    } else {
+      args = ["--target", name]
+    }
 
     try invokeSwiftPM(
       action: "build",
       packageDir: packageDir,
       additionalArguments: args,
-      additionalEnvironment: additionalEnvironment,
+      additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
     )

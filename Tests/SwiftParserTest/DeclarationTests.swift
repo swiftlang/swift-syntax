@@ -91,7 +91,7 @@ final class DeclarationTests: ParserTestCase {
         type: IdentifierTypeSyntax(name: .identifier("Int"))
       )
     )
-      
+
     assertParse(
       """
       class MyClass {
@@ -106,12 +106,12 @@ final class DeclarationTests: ParserTestCase {
         )
       ],
       fixedSource: """
-      class MyClass {
-        func foo()
-      }
-      """
+        class MyClass {
+          func foo()
+        }
+        """
     )
-    
+
     assertParse(
       """
       class MyClass {
@@ -127,12 +127,12 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
       ],
       fixedSource: """
-      class MyClass {
-        func foo<Int>()
-      }
-      """
+        class MyClass {
+          func foo<Int>()
+        }
+        """
     )
-      
+
     assertParse(
       """
       class MyClass {

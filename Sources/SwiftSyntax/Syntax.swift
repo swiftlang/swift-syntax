@@ -308,7 +308,6 @@ extension Syntax {
 @available(*, unavailable, message: "use 'Syntax' instead")
 public struct SyntaxNode {}
 
-#if DEBUG
 /// See `SyntaxMemoryLayout`.
 var SyntaxMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "Syntax": .init(Syntax.self),
@@ -316,4 +315,3 @@ var SyntaxMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "Syntax.Info.Root": .init(Syntax.Info.Root.self),
   "Syntax.Info.NonRoot": .init(Syntax.Info.NonRoot.self),
 ]
-#endif

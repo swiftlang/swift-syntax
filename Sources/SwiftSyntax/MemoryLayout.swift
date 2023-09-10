@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if DEBUG
 // See `MemoryLayoutTest.swift`.
 @_spi(Testing) public enum SyntaxMemoryLayout {
   public struct Value: Equatable {
@@ -41,4 +40,3 @@
     return result
   }
 }
-#endif

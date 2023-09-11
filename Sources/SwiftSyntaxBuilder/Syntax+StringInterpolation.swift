@@ -161,7 +161,10 @@ where Self.StringInterpolation == SyntaxStringInterpolation {
   init(stringInterpolation: SyntaxStringInterpolation)
 }
 
-enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
+// Used in `MacroExpansionContext` to make a nicer error message when a
+// macro expansion fails with SwiftSyntaxBuilder making a syntax node
+// with string interpolation.
+@_spi(Diagnostics) public enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
   case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
   case diagnostics([Diagnostic], tree: Syntax)
 
@@ -169,7 +172,7 @@ enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
     return .producedInvalidNodeType(expectedType: expectedType, actualType: type(of: actualNode))
   }
 
-  var description: String {
+  public var description: String {
     switch self {
     case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
       return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"

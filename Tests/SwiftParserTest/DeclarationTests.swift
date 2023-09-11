@@ -91,6 +91,61 @@ final class DeclarationTests: ParserTestCase {
         type: IdentifierTypeSyntax(name: .identifier("Int"))
       )
     )
+
+    assertParse(
+      """
+      class MyClass {
+        1️⃣foo()
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'func' in function",
+          fixIts: ["insert 'func'"]
+        )
+      ],
+      fixedSource: """
+        class MyClass {
+          func foo()
+        }
+        """
+    )
+
+    assertParse(
+      """
+      class MyClass {
+        1️⃣foo<Int>2️⃣
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'func' in function",
+          fixIts: ["insert 'func'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+      ],
+      fixedSource: """
+        class MyClass {
+          func foo<Int>()
+        }
+        """
+    )
+
+    assertParse(
+      """
+      class MyClass {
+        1️⃣foo
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code 'foo' in class"
+        )
+      ]
+    )
   }
 
   func testFuncAfterUnbalancedClosingBrace() {
@@ -1822,19 +1877,17 @@ final class DeclarationTests: ParserTestCase {
       """
       struct Foo {
         #1️⃣
-        2️⃣myMacroName3️⃣
+        2️⃣myMacroName
       }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'myMacroName' in struct"),
       ],
       fixedSource: """
         struct Foo {
           #<#identifier#>
-          func
-          myMacroName()
+          myMacroName
         }
         """
     )
@@ -2360,18 +2413,15 @@ final class DeclarationTests: ParserTestCase {
       class A ℹ️{
         1️⃣^
       }
-      unowned 2️⃣B 3️⃣{
-      }4️⃣
+      unowned 2️⃣B {
+      }
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before modifier"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
         DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "expected '}' to end class",
-          notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
+          locationMarker: "2️⃣",
+          message: "expected declaration and '}' after 'unowned' modifier",
+          fixIts: ["insert declaration and '}'"]
         ),
       ],
       fixedSource:
@@ -2379,8 +2429,8 @@ final class DeclarationTests: ParserTestCase {
         class A {
           ^
         }
-        unowned func B() {
-        }
+        unowned <#declaration#>
+        }B {
         }
         """
     )

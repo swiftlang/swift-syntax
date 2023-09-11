@@ -944,7 +944,6 @@ extension RawSyntax: Identifiable {
   }
 }
 
-#if DEBUG
 /// See `SyntaxMemoryLayout`.
 var RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData": .init(RawSyntaxData.self),
@@ -953,4 +952,3 @@ var RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData.MaterializedToken": .init(RawSyntaxData.MaterializedToken.self),
   "RawSyntax?": .init(RawSyntax?.self),
 ]
-#endif

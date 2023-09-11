@@ -13,7 +13,6 @@
 @_spi(Testing) import SwiftSyntax
 import XCTest
 
-#if DEBUG
 final class MemoryLayoutTest: XCTestCase {
 
   func testMemoryLayouts() throws {
@@ -46,6 +45,4 @@ final class MemoryLayoutTest: XCTestCase {
       XCTAssertEqual(actualValue, exp.value, "Matching '\(exp.key)' values")
     }
   }
-
 }
-#endif

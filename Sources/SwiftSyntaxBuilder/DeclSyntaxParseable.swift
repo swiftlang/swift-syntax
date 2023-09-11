@@ -31,7 +31,7 @@ public extension DeclSyntaxParseable {
     if let castedDecl = node.as(Self.self) {
       self = castedDecl
     } else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: node)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: node)
     }
   }
 }

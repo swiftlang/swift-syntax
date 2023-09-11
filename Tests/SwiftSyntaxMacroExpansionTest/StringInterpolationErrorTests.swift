@@ -12,7 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-@_spi(Diagnostics) import SwiftSyntaxBuilder
+import SwiftSyntaxBuilder
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
@@ -40,26 +40,28 @@ private struct DummyMacro: ExtensionMacro {
   }
 }
 
-final class MacroExpansionContextTests: XCTestCase {
+final class StringInterpolationErrorTests: XCTestCase {
 
-  func testMacroExpansionContextAddDiagnosticsAddsSwiftSyntaxInterpolationErrorsWithWrappingMessage() {
+  func testMacroExpansionContextAddDiagnosticsAddsSwiftSyntaxInterpolationErrorsWithWrappingMessage() throws {
     let context = BasicMacroExpansionContext()
-    let error = SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: DeclSyntax.self, actualType: ExprSyntax.self)
-    // Since we only care about the error switch inside of addDagnostics, we don't care about the particular node we're passing in.
-    context.addDiagnostics(from: error, node: ExprSyntax("1"))
+    let error = SyntaxStringInterpolationInvalidNodeTypeError(expectedType: DeclSyntax.self, actualNode: ExprSyntax("test"))
 
+    // Since we only care about the error switch inside of addDagnostics, we don't care about the particular node we're passing in
+    context.addDiagnostics(from: error, node: ExprSyntax("1"))
     XCTAssertEqual(context.diagnostics.count, 1)
-    XCTAssertTrue(context.diagnostics.first!.message.starts(with: "Internal macro error:"))
+    let diagnostic = try XCTUnwrap(context.diagnostics.first)
+    XCTAssertTrue(diagnostic.message.starts(with: "Internal macro error:"))
   }
 
   // Verify that any other error messages do not get "Internal macro error:" prefix.
-  func testMacroExpansionContextAddDiagnosticsUsesErrorDescriptionForDiagMessage() {
+  func testMacroExpansionContextAddDiagnosticsUsesErrorDescriptionForDiagMessage() throws {
     let context = BasicMacroExpansionContext()
     let error = DummyError.diagnosticTestError
 
     context.addDiagnostics(from: error, node: ExprSyntax("1"))
     XCTAssertEqual(context.diagnostics.count, 1)
-    XCTAssertEqual(context.diagnostics.first!.message, String(describing: error))
+    let diagnostic = try XCTUnwrap(context.diagnostics.first)
+    XCTAssertEqual(diagnostic.message, String(describing: error))
   }
 
   func testMacroExpansionSyntaxInterpolationErrorGetsPrefixed() {

@@ -12,7 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-@_spi(Diagnostics) import SwiftSyntaxBuilder
+import SwiftSyntaxBuilder
 
 /// Interface to extract information about the context in which a given
 /// macro is expanded.
@@ -86,7 +86,7 @@ extension MacroExpansionContext {
       diagnostics = diagnosticsError.diagnostics
     } else if let message = error as? DiagnosticMessage {
       diagnostics = [Diagnostic(node: Syntax(node), message: message)]
-    } else if let error = error as? SyntaxStringInterpolationError {
+    } else if let error = error as? SyntaxStringInterpolationInvalidNodeTypeError {
       let diagnostic = Diagnostic(node: Syntax(node), message: ThrownErrorDiagnostic(message: "Internal macro error: \(error.description)"))
       diagnostics = [diagnostic]
     } else {

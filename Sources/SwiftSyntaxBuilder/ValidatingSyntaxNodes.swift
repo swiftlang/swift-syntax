@@ -25,7 +25,7 @@ extension SyntaxProtocol {
     if node.hasError {
       let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: node)
       precondition(!diagnostics.isEmpty)
-      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(node))
+      throw SyntaxStringInterpolationDiagnosticError(diagnostics: diagnostics, tree: Syntax(node))
     }
     self = node
   }
@@ -52,7 +52,7 @@ extension Trivia {
         }
         offset += piece.sourceLength.utf8Length
       }
-      throw SyntaxStringInterpolationError.diagnostics(diagnostics, tree: Syntax(tree))
+      throw SyntaxStringInterpolationDiagnosticError(diagnostics: diagnostics, tree: Syntax(tree))
     }
   }
 }

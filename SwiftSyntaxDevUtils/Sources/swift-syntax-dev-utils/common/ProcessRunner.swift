@@ -12,6 +12,29 @@
 
 import Foundation
 
+/// Keeps track of subprocesses spawned by this script and forwards SIGINT
+/// signals to them.
+class SigIntListener {
+  /// The subprocesses spawned by this script that are currently running.
+  static var runningSubprocesses: Set<Process> = []
+
+  /// Whether a `SIGINT` signal has been received by this script.
+  static var hasReceivedSigInt: Bool = false
+
+  /// Registers a `SIGINT` signal handler that forwards `SIGINT` to all
+  /// subprocesses that are registered in `runningSubprocesses`
+  static func registerSigIntSubprocessTerminationHandler() {
+    #if canImport(Darwin) || canImport(Glibc)
+    signal(SIGINT) { _ in
+      SigIntListener.hasReceivedSigInt = true
+      for process in SigIntListener.runningSubprocesses {
+        process.interrupt()
+      }
+    }
+    #endif
+  }
+}
+
 /// Provides convenience APIs for launching and gathering output from a subprocess
 public class ProcessRunner {
   private static let serialQueue = DispatchQueue(label: "\(ProcessRunner.self)")
@@ -56,7 +79,9 @@ public class ProcessRunner {
     }
 
     try process.run()
+    SigIntListener.runningSubprocesses.insert(process)
     process.waitUntilExit()
+    SigIntListener.runningSubprocesses.remove(process)
     if captureStdout || captureStderr {
       // Make sure we've received all stdout/stderr
       group.wait()

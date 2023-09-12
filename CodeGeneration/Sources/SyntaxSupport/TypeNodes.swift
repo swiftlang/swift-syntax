@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let TYPE_NODES: [Node] = [
-  // array-type -> '[' type ']'
   Node(
     kind: .arrayType,
     base: .type,
@@ -35,8 +34,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // attributed-type -> type-specifier? attribute-list? type
-  // type-specifier -> 'inout' | 'borrowing' | 'consuming' | '__owned' | '__shared'
   Node(
     kind: .attributedType,
     base: .type,
@@ -68,7 +65,7 @@ public let TYPE_NODES: [Node] = [
       ),
     ]
   ),
-  // class-restriction-type -> 'class'
+
   Node(
     kind: .classRestrictionType,
     base: .type,
@@ -81,8 +78,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // composition-typeelement-list -> composition-type-element
-  //   composition-type-element-list?
   Node(
     kind: .compositionTypeElementList,
     base: .syntaxCollection,
@@ -90,7 +85,6 @@ public let TYPE_NODES: [Node] = [
     elementChoices: [.compositionTypeElement]
   ),
 
-  // composition-type-element -> type '&'
   Node(
     kind: .compositionTypeElement,
     base: .syntax,
@@ -108,7 +102,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // composition-type -> composition-type-element-list
   Node(
     kind: .compositionType,
     base: .type,
@@ -121,7 +114,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // constrained-sugar-type -> ('some'|'any') type
   Node(
     kind: .someOrAnyType,
     base: .type,
@@ -139,7 +131,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // dictionary-type -> '[' type ':' type ']'
   Node(
     kind: .dictionaryType,
     base: .type,
@@ -174,9 +165,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // throwing-specifier -> 'throws' | 'rethrows'
-  // function-type -> attribute-list '(' function-type-argument-list ')'
-  //   type-effect-specifiers? return-clause
   Node(
     kind: .functionType,
     base: .type,
@@ -211,7 +199,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // generic-argument-clause -> '<' generic-argument-list '>'
   Node(
     kind: .genericArgumentClause,
     base: .syntax,
@@ -234,7 +221,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // generic-argument-list -> generic-argument generic-argument-list?
   Node(
     kind: .genericArgumentList,
     base: .syntaxCollection,
@@ -242,9 +228,6 @@ public let TYPE_NODES: [Node] = [
     elementChoices: [.genericArgument]
   ),
 
-  // A generic argument.
-  // Dictionary<Int, String>
-  //            ^~~~ ^~~~~~
   Node(
     kind: .genericArgument,
     base: .syntax,
@@ -266,7 +249,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // implicitly-unwrapped-optional-type -> type '!'
   Node(
     kind: .implicitlyUnwrappedOptionalType,
     base: .type,
@@ -283,7 +265,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // member-type-identifier -> type '.' identifier generic-argument-clause?
   Node(
     kind: .memberType,
     base: .type,
@@ -310,8 +291,7 @@ public let TYPE_NODES: [Node] = [
       ),
     ]
   ),
-  // metatype-type -> type '.' 'Type'
-  //                | type '.' 'Protocol
+
   Node(
     kind: .metatypeType,
     base: .type,
@@ -334,7 +314,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // named-opaque-return-type -> generic-argument-clause type
   Node(
     kind: .namedOpaqueReturnType,
     base: .type,
@@ -354,7 +333,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // optional-type -> type '?'
   Node(
     kind: .optionalType,
     base: .type,
@@ -371,7 +349,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // suppressed-type -> '~' type
   Node(
     kind: .suppressedType,
     base: .type,
@@ -389,7 +366,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // pack-expansion-type -> type '...'
   Node(
     kind: .packExpansionType,
     base: .type,
@@ -407,7 +383,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // pack-reference-type -> 'each' type
   Node(
     kind: .packElementType,
     base: .type,
@@ -425,7 +400,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // simple-type-identifier -> identifier generic-argument-clause?
   Node(
     kind: .identifierType,
     base: .type,
@@ -448,7 +422,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // tuple-type-element-list -> tuple-type-element tuple-type-element-list?
   Node(
     kind: .tupleTypeElementList,
     base: .syntaxCollection,
@@ -456,7 +429,6 @@ public let TYPE_NODES: [Node] = [
     elementChoices: [.tupleTypeElement]
   ),
 
-  // tuple-type-element -> identifier? ':'? type-annotation ','?
   Node(
     kind: .tupleTypeElement,
     base: .syntax,
@@ -506,7 +478,6 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
-  // tuple-type -> '(' tuple-type-element-list ')'
   Node(
     kind: .tupleType,
     base: .type,

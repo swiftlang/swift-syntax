@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let STMT_NODES: [Node] = [
-  // availability-condition -> '#available' '(' availability-spec ')'
   Node(
     kind: .availabilityCondition,
     base: .syntax,
@@ -37,7 +36,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // break-stmt -> 'break' identifier? ';'?
   Node(
     kind: .breakStmt,
     base: .stmt,
@@ -56,7 +54,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // case-item-list -> case-item case-item-list?
   Node(
     kind: .switchCaseItemList,
     base: .syntaxCollection,
@@ -64,7 +61,6 @@ public let STMT_NODES: [Node] = [
     elementChoices: [.switchCaseItem]
   ),
 
-  // catch-clause-list -> catch-clause catch-clause-list?
   Node(
     kind: .catchClauseList,
     base: .syntaxCollection,
@@ -72,7 +68,6 @@ public let STMT_NODES: [Node] = [
     elementChoices: [.catchClause]
   ),
 
-  // catch-clause 'catch' case-item-list? code-block
   Node(
     kind: .catchClause,
     base: .syntax,
@@ -95,7 +90,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // catch-item-list -> catch-item catch-item-list?
   Node(
     kind: .catchItemList,
     base: .syntaxCollection,
@@ -103,7 +97,6 @@ public let STMT_NODES: [Node] = [
     elementChoices: [.catchItem]
   ),
 
-  // catch-item -> pattern? where-clause? ','?
   Node(
     kind: .catchItem,
     base: .syntax,
@@ -130,8 +123,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // condition-list -> condition
-  //                 | condition ','? condition-list
   Node(
     kind: .conditionElementList,
     base: .syntaxCollection,
@@ -139,10 +130,6 @@ public let STMT_NODES: [Node] = [
     elementChoices: [.conditionElement]
   ),
 
-  // condition -> expression
-  //            | availability-condition
-  //            | case-condition
-  //            | optional-binding-condition
   Node(
     kind: .conditionElement,
     base: .syntax,
@@ -180,7 +167,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // continue-stmt -> 'continue' label? ';'?
   Node(
     kind: .continueStmt,
     base: .stmt,
@@ -199,7 +185,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // defer-stmt -> 'defer' code-block ';'?
   Node(
     kind: .deferStmt,
     base: .stmt,
@@ -219,7 +204,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // do-stmt -> identifier? ':'? 'do' code-block catch-clause-list ';'?
   Node(
     kind: .doStmt,
     base: .stmt,
@@ -244,7 +228,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // expr-stmt -> expression ';'?
   Node(
     kind: .expressionStmt,
     base: .stmt,
@@ -257,7 +240,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // fallthrough-stmt -> 'fallthrough' ';'?
   Node(
     kind: .fallThroughStmt,
     base: .stmt,
@@ -270,9 +252,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // for-in-stmt -> label? ':'?
-  //   'for' 'try'? 'await'? 'case'? pattern 'in' expr 'where'?
-  //   expr code-block ';'?
   Node(
     kind: .forStmt,
     base: .stmt,
@@ -331,7 +310,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // discard-stmt -> 'discard' expr ';'?
   Node(
     kind: .discardStmt,
     base: .stmt,
@@ -348,7 +326,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // guard-stmt -> 'guard' condition-list 'else' code-block ';'?
   Node(
     kind: .guardStmt,
     base: .stmt,
@@ -378,7 +355,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // labeled-stmt -> label ':' stmt
   Node(
     kind: .labeledStmt,
     base: .stmt,
@@ -457,7 +433,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // repeat-while-stmt -> label? ':'? 'repeat' code-block 'while' expr ';'?
   Node(
     kind: .repeatStmt,
     base: .stmt,
@@ -487,7 +462,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // return-stmt -> 'return' expr? ';'?
   Node(
     kind: .returnStmt,
     base: .stmt,
@@ -505,7 +479,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // throw-stmt -> 'throw' expr ';'?
   Node(
     kind: .throwStmt,
     base: .stmt,
@@ -539,7 +512,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // while-stmt -> label? ':'? 'while' condition-list code-block ';'?
   Node(
     kind: .whileStmt,
     base: .stmt,
@@ -584,7 +556,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // yield-stmt -> 'yield' '('? expr-list? ')'?
   Node(
     kind: .yieldStmt,
     base: .stmt,
@@ -613,7 +584,6 @@ public let STMT_NODES: [Node] = [
     ]
   ),
 
-  // then-stmt -> 'then' expr ';'?
   Node(
     kind: .thenStmt,
     base: .stmt,

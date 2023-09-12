@@ -1522,6 +1522,8 @@ public struct DesignatedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 
 // MARK: - DictionaryElementSyntax
 
+/// An element inside a dictionary literal.
+///
 /// ### Children
 /// 
 ///  - `key`: ``ExprSyntax``
@@ -1693,6 +1695,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 
 // MARK: - DictionaryExprSyntax
 
+/// A dictionary literal
+///
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
@@ -2755,6 +2759,19 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
 
 // MARK: - DiscardAssignmentExprSyntax
 
+/// A `_` that discards a value inside an assignment.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// _ = 42
+/// ``` 
+/// 
+/// 
+/// ```swift
+/// if case .foo(_) = myValue
+/// ```
+///
 /// ### Children
 /// 
 ///  - `wildcard`: `'_'`

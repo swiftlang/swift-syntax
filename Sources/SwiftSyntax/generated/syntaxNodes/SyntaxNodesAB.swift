@@ -1043,6 +1043,8 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
 
 // MARK: - ArrayElementSyntax
 
+/// An element inside an array literal.
+///
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
@@ -1160,6 +1162,8 @@ public struct ArrayElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 
 // MARK: - ArrayExprSyntax
 
+/// An array literal.
+///
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
@@ -1467,6 +1471,16 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 
 // MARK: - ArrowExprSyntax
 
+/// The arrow when a type is used at a position that syntactically expectes an expression.
+/// 
+/// ### Examples
+/// 
+/// This represents the arrow in
+/// 
+/// ```swift
+/// let array = [(Int) -> Int]()
+/// ```
+///
 /// ### Children
 /// 
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
@@ -1580,6 +1594,21 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 
 // MARK: - AsExprSyntax
 
+/// The cast of an expressison to a different type.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// dog as Animal
+/// ``` 
+/// 
+/// ```swift
+/// myPet as? Dog`
+/// ```
+/// 
+/// - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+///   Beforehand, the parser does not know the precedences of operators and thus represents `is` by an ``UnresolvedAsExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `expression`: ``ExprSyntax``
@@ -3653,6 +3682,12 @@ public struct BackDeployedAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashab
 
 // MARK: - BinaryOperatorExprSyntax
 
+/// An operator like `+` or `-`.
+/// 
+/// This node represents the binary operator itself. It can occur inside a ``SequenceExprSyntax`` 
+/// after parsing and will be the `operator` child of an ``InfixOperatorExprSyntax`` 
+/// after folding operator using the `SwiftOperators` library.
+///
 /// ### Children
 /// 
 ///  - `operator`: `<binaryOperator>`

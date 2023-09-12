@@ -752,6 +752,14 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 
 // MARK: - SequenceExprSyntax
 
+/// A flat list of expressions before operator folding using the `SwiftOperators` library.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// 1 + 2 + 3
+/// ```
+///
 /// ### Children
 /// 
 ///  - `elements`: ``ExprListSyntax``
@@ -1700,6 +1708,14 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
 
 // MARK: - StringLiteralExprSyntax
 
+/// A string literal.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// "Hello \(userName())!"
+/// ```
+///
 /// ### Children
 /// 
 ///  - `openingPounds`: `<rawStringPoundDelimiter>`?
@@ -1932,6 +1948,10 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 
 // MARK: - StringSegmentSyntax
 
+/// A literal segment inside a string segment.
+/// 
+/// - SeeAlso: ``ExpressionSegmentSyntax``
+///
 /// ### Children
 /// 
 ///  - `content`: `<stringSegment>`

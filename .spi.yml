@@ -21,3 +21,4 @@ builder:
       - SwiftSyntaxMacros
       - SwiftSyntaxMacroExpansion
       - SwiftSyntaxMacrosTestSupport
+      custom_documentation_parameters: [--experimental-skip-synthesized-symbols]

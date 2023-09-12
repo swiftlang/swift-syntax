@@ -114,14 +114,7 @@ public class Child {
           """
       )
 
-      let separator = SwiftSyntax.Trivia(pieces: [TriviaPiece.newlines(1), TriviaPiece.docLineComment("///"), TriviaPiece.newlines(1)])
-
-      // Grab the documentation secions, filter out empty ones, and join them
-      // with an empty documentation line inbetween.
-      return [documentationSummary, tokenChoicesTrivia]
-        .filter { !$0.isEmpty }
-        .joined(separator: separator)
-        .reduce(SwiftSyntax.Trivia(), { $0.appending($1) })
+      return SwiftSyntax.Trivia(joining: [documentationSummary, tokenChoicesTrivia])
     }
 
     // If this child is not a token kind, return documentation summary without the choices list.

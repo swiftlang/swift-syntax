@@ -92,7 +92,7 @@ extension LayoutNode {
       If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
       """.removingEmptyLines
 
-    return docCommentTrivia(from: formattedParams)
+    return SwiftSyntax.Trivia.docCommentTrivia(from: formattedParams)
   }
 
   /// Create a builder-based convenience initializer, if needed.

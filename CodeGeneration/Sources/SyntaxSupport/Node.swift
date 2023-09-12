@@ -121,7 +121,7 @@ public class Node {
     self.base = base
     self.isExperimental = isExperimental
     self.nameForDiagnostics = nameForDiagnostics
-    self.documentation = docCommentTrivia(from: documentation)
+    self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
     let childrenWithUnexpected: [Child]
@@ -211,7 +211,7 @@ public class Node {
       }
       .joined(separator: "\n")
 
-    return docCommentTrivia(
+    return .docCommentTrivia(
       from: """
         ### Contained in
 
@@ -237,7 +237,7 @@ public class Node {
     self.base = base
     self.isExperimental = isExperimental
     self.nameForDiagnostics = nameForDiagnostics
-    self.documentation = docCommentTrivia(from: documentation)
+    self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
     assert(!elementChoices.isEmpty)
@@ -299,7 +299,7 @@ public struct LayoutNode {
       return []
     }
 
-    return docCommentTrivia(
+    return .docCommentTrivia(
       from: """
         ### Children
 
@@ -352,7 +352,7 @@ public struct CollectionNode {
       grammar = "(\(elementChoices.map { "``\($0.syntaxType)``" }.joined(separator: " | "))) `*`"
     }
 
-    return docCommentTrivia(
+    return .docCommentTrivia(
       from: """
         ### Children
 

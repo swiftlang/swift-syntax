@@ -106,7 +106,7 @@ public class Child {
         \(choices.map { " - \(grammar.grammar(for: $0))" }.joined(separator: "\n"))
         """
 
-      let tokenChoicesTrivia = docCommentTrivia(
+      let tokenChoicesTrivia = SwiftSyntax.Trivia.docCommentTrivia(
         from: """
           ### Tokens
 
@@ -258,7 +258,7 @@ public class Child {
     self.deprecatedName = deprecatedName
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    self.documentationSummary = docCommentTrivia(from: documentation)
+    self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
   }

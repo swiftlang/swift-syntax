@@ -21,7 +21,7 @@ public class Trait {
   init(traitName: String, documentation: String? = nil, children: [Child]) {
     self.traitName = traitName
     self.protocolName = .identifier("\(traitName)Syntax")
-    self.documentation = docCommentTrivia(from: documentation)
+    self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.children = children
   }
 }

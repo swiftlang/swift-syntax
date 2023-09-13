@@ -2088,4 +2088,230 @@ final class MacroSystemTests: XCTestCase {
       macros: ["Test": DiagnoseFirstArgument.self]
     )
   }
+
+  func testEmptyAccessorMacro() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return []
+      }
+    }
+
+    // The compiler will reject this with
+    // 'Expansion of macro 'Test()' did not produce a non-observing accessor'
+    // We consider this a semantic error because swift-syntax doesn't have
+    // knowledge about which accessors are observing and which ones aren't.
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testEmitErrorFromAccessorMacro() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        context.diagnose(Diagnostic(node: node, message: MacroExpansionErrorMessage("test")))
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      diagnostics: [
+        DiagnosticSpec(message: "test", line: 1, column: 1)
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      diagnostics: [DiagnosticSpec(message: "test", line: 1, column: 1)],
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testEmptyCodeItemMacro() {
+    struct TestMacro: CodeItemMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [CodeBlockItemSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "",
+      macros: [
+        "test": TestMacro.self
+      ]
+    )
+  }
+
+  func testEmptyDeclarationMacro() {
+    struct TestMacro: DeclarationMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "",
+      macros: [
+        "test": TestMacro.self
+      ]
+    )
+  }
+
+  func testEmptyExtensionMacro() {
+    struct TestMacro: ExtensionMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [ExtensionDeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test struct Foo {}",
+      expandedSource: "struct Foo {}",
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
+
+  func testEmptyMemberAttributeMacro() {
+    struct TestMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
+
+  func testEmptyMemberMacro() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
+
+  func testEmptyPeerMacro() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

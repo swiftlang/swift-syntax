@@ -259,7 +259,8 @@ private func expandAccessorMacroWithoutExistingAccessors(
       conformanceList: nil,
       in: context,
       indentationWidth: indentationWidth
-    )
+    ),
+    !expanded.isEmpty
   else {
     return nil
   }

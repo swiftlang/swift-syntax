@@ -117,4 +117,7 @@ final class PatternWithoutVariablesTests: ParserTestCase {
     )
   }
 
+  func testMutatingNotADeclarationStartIfNotEnabled() {
+    assertParse("_mutating = 2")
+  }
 }

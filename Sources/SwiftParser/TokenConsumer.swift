@@ -17,6 +17,10 @@ protocol TokenConsumer {
   associatedtype Token
   /// The current token syntax being examined by the consumer
   var currentToken: Lexer.Lexeme { get }
+
+  /// The experimental features that have been enabled.
+  var experimentalFeatures: Parser.ExperimentalFeatures { get }
+
   /// Whether the current token matches the given kind.
   mutating func consumeAnyToken() -> Token
 

@@ -389,4 +389,22 @@ final class DeclarationMacroTests: XCTestCase {
     )
   }
 
+  func testEmpty() {
+    struct TestMacro: DeclarationMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "",
+      macros: [
+        "test": TestMacro.self
+      ]
+    )
+  }
 }

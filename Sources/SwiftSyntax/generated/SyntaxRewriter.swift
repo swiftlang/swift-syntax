@@ -710,20 +710,6 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``EditorPlaceholderPatternSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: EditorPlaceholderPatternSyntax) -> PatternSyntax {
-    return PatternSyntax(visitChildren(node))
-  }
-  
-  /// Visit a ``EditorPlaceholderTypeSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: EditorPlaceholderTypeSyntax) -> TypeSyntax {
-    return TypeSyntax(visitChildren(node))
-  }
-  
   /// Visit a ``EffectsAttributeArgumentListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2470,14 +2456,6 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, EditorPlaceholderExprSyntax.self, self.visit)
       }
-    case .editorPlaceholderPattern:
-      return {
-        self.visitImpl($0, EditorPlaceholderPatternSyntax.self, self.visit)
-      }
-    case .editorPlaceholderType:
-      return {
-        self.visitImpl($0, EditorPlaceholderTypeSyntax.self, self.visit)
-      }
     case .effectsAttributeArgumentList:
       return {
         self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visit)
@@ -3412,10 +3390,6 @@ open class SyntaxRewriter {
       return visitImpl(node, EditorPlaceholderDeclSyntax.self, visit)
     case .editorPlaceholderExpr:
       return visitImpl(node, EditorPlaceholderExprSyntax.self, visit)
-    case .editorPlaceholderPattern:
-      return visitImpl(node, EditorPlaceholderPatternSyntax.self, visit)
-    case .editorPlaceholderType:
-      return visitImpl(node, EditorPlaceholderTypeSyntax.self, visit)
     case .effectsAttributeArgumentList:
       return visitImpl(node, EffectsAttributeArgumentListSyntax.self, visit)
     case .enumCaseDecl:

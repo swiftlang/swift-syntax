@@ -846,16 +846,6 @@ public class LexerTests: ParserTestCase {
         LexemeSpec(.identifier, text: "<##>", trailing: "", diagnostic: "editor placeholder in source file")
       ]
     )
-
-    assertLexemes(
-      "let 1️⃣<#name#> = 2️⃣<#value#>",
-      lexemes: [
-        LexemeSpec(.keyword, text: "let", trailing: " "),
-        LexemeSpec(.identifier, text: "<#name#>", trailing: " ", errorLocationMarker: "1️⃣", diagnostic: "editor placeholder in source file"),
-        LexemeSpec(.equal, text: "=", trailing: " "),
-        LexemeSpec(.identifier, text: "<#value#>", errorLocationMarker: "2️⃣", diagnostic: "editor placeholder in source file"),
-      ]
-    )
   }
 
   func testCommentAttribution() {

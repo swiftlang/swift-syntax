@@ -105,8 +105,6 @@ public enum SyntaxKind: CaseIterable {
   case dynamicReplacementAttributeArguments
   case editorPlaceholderDecl
   case editorPlaceholderExpr
-  case editorPlaceholderPattern
-  case editorPlaceholderType
   case effectsAttributeArgumentList
   case enumCaseDecl
   case enumCaseElementList
@@ -602,10 +600,6 @@ public enum SyntaxKind: CaseIterable {
       return EditorPlaceholderDeclSyntax.self
     case .editorPlaceholderExpr:
       return EditorPlaceholderExprSyntax.self
-    case .editorPlaceholderPattern:
-      return EditorPlaceholderPatternSyntax.self
-    case .editorPlaceholderType:
-      return EditorPlaceholderTypeSyntax.self
     case .effectsAttributeArgumentList:
       return EffectsAttributeArgumentListSyntax.self
     case .enumCaseDecl:

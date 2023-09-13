@@ -133,4 +133,23 @@ final class CodeItemMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testEmpty() {
+    struct TestMacro: CodeItemMacro {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [CodeBlockItemSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "#test",
+      expandedSource: "",
+      macros: [
+        "test": TestMacro.self
+      ]
+    )
+  }
 }

@@ -18,7 +18,9 @@
 // macros are invoked.                                                      //
 //==========================================================================//
 
+import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
@@ -259,6 +261,63 @@ final class AccessorMacroTests: XCTestCase {
         """,
       macros: ["constantOne": ConstantOneGetter.self],
       indentationWidth: indentationWidth
+    )
+  }
+
+  func testEmpty() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return []
+      }
+    }
+
+    // The compiler will reject this with
+    // 'Expansion of macro 'Test()' did not produce a non-observing accessor'
+    // We consider this a semantic error because swift-syntax doesn't have
+    // knowledge about which accessors are observing and which ones aren't.
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testEmitErrorFromMacro() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        context.diagnose(Diagnostic(node: node, message: MacroExpansionErrorMessage("test")))
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      diagnostics: [
+        DiagnosticSpec(message: "test", line: 1, column: 1)
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      diagnostics: [DiagnosticSpec(message: "test", line: 1, column: 1)],
+      macros: ["Test": TestMacro.self]
     )
   }
 }

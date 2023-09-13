@@ -70,21 +70,12 @@ extension Parser {
       )
     case (.lhs(.identifier), let handle)?:
       let identifier = self.eat(handle)
-      if identifier.tokenText.isEditorPlaceholder {
-        return RawPatternSyntax(
-          RawEditorPlaceholderPatternSyntax(
-            placeholder: identifier,
-            arena: self.arena
-          )
+      return RawPatternSyntax(
+        RawIdentifierPatternSyntax(
+          identifier: identifier,
+          arena: self.arena
         )
-      } else {
-        return RawPatternSyntax(
-          RawIdentifierPatternSyntax(
-            identifier: identifier,
-            arena: self.arena
-          )
-        )
-      }
+      )
     case (.lhs(.dollarIdentifier), let handle)?:
       let dollarIdent = self.eat(handle)
       let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena)

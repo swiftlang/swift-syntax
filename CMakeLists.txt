@@ -97,10 +97,4 @@ if (SWIFTSYNTAX_ENABLE_ASSERTIONS)
 endif()
 
 add_subdirectory(Sources)
-
-if(PROJECT_IS_TOP_LEVEL)
-  export(EXPORT SwiftSyntaxTargets
-         FILE "${CMAKE_CURRENT_BINARY_DIR}/cmake/SwiftSyntaxTargets.cmake"
-         NAMESPACE SwiftSyntax::
-  )
-endif()
+add_subdirectory(cmake/modules)

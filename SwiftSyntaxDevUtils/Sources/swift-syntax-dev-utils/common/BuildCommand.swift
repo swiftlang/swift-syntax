@@ -42,6 +42,9 @@ extension BuildCommand {
     captureStderr: Bool = true
   ) throws -> ProcessResult {
     var args = [action]
+    if action == "test" {
+      args += ["--disable-testable-imports"]
+    }
     args += ["--package-path", packageDir.path]
 
     if let buildDir = arguments.buildDir?.path {

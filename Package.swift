@@ -14,8 +14,6 @@ func hasEnvironmentVariable(_ name: String) -> Bool {
 /// Modifies the build in the following ways
 ///  - Enables assertions even in release builds
 ///  - Removes the dependency of swift-syntax on os_log
-///  - Enables raw syntax validation (ie. implies `SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION`)
-///  - Enables alternate token introspection (ie. implies `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION`)
 let buildScriptEnvironment = hasEnvironmentVariable("SWIFT_BUILD_SCRIPT_ENVIRONMENT")
 
 /// Check that the layout of the syntax tree is correct.

@@ -39,9 +39,6 @@ struct BuildArguments: ParsableArguments {
   )
   var multirootDataFile: URL?
 
-  @Flag(help: "Disable sandboxes when building with SwiftPM")
-  var disableSandbox: Bool = false
-
   @Flag(help: "Build in release mode.")
   var release: Bool = false
 

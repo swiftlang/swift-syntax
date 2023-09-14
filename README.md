@@ -47,3 +47,4 @@ build time. Please tag any [issues](https://github.com/swiftlang/swift-syntax/is
 ## License
 
 Please see [LICENSE](LICENSE.txt) for more information.
+

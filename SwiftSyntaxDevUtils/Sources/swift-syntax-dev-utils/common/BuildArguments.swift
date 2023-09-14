@@ -39,31 +39,8 @@ struct BuildArguments: ParsableArguments {
   )
   var multirootDataFile: URL?
 
-  @Flag(help: "Disable sandboxes when building with SwiftPM")
-  var disableSandbox: Bool = false
-
   @Flag(help: "Build in release mode.")
   var release: Bool = false
-
-  @Flag(
-    name: .customLong("enable-rawsyntax-validation"),
-    help:
-      """
-      When constructing RawSyntax nodes validate that their layout matches that
-      defined in `CodeGeneration` and that TokenSyntax nodes have a `tokenKind`
-      matching the ones specified in `CodeGeneration`.
-      """
-  )
-  var enableRawSyntaxValidation: Bool = false
-
-  @Flag(
-    help: """
-      For each `assertParse` test, perform mutations of the test case based on
-      alternate token choices that the parser checks, validating that there are
-      no round-trip or assertion failures.
-      """
-  )
-  var enableTestFuzzing: Bool = false
 
   @Flag(help: "Treat all warnings as errors.")
   var warningsAsErrors: Bool = false

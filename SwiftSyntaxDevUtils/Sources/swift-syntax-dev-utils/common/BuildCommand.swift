@@ -59,10 +59,6 @@ extension BuildCommand {
       args += ["--multiroot-data-file", multirootDataFile]
     }
 
-    if arguments.disableSandbox {
-      args += ["--disable-sandbox"]
-    }
-
     if arguments.verbose {
       args += ["--verbose"]
     }
@@ -116,14 +112,6 @@ extension BuildCommand {
   var swiftPMEnvironmentVariables: [String: String] {
     var additionalEnvironment: [String: String] = [:]
     additionalEnvironment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
-
-    if arguments.enableRawSyntaxValidation {
-      additionalEnvironment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
-    }
-
-    if arguments.enableTestFuzzing {
-      additionalEnvironment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
-    }
 
     // Tell other projects in the unified build to use local dependencies
     additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"

@@ -3,35 +3,63 @@
 import Foundation
 import PackageDescription
 
+// MARK: - Parse build arguments
+
+func hasEnvironmentVariable(_ name: String) -> Bool {
+  return ProcessInfo.processInfo.environment[name] != nil
+}
+
+/// Set when building swift-syntax using swift-syntax-dev-utils or in Swift CI in general.
+///
+/// Modifies the build in the following ways
+///  - Enables assertions even in release builds
+///  - Removes the dependency of swift-syntax on os_log
+///  - Enables raw syntax validation (ie. implies `SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION`)
+///  - Enables alternate token introspection (ie. implies `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION`)
+let buildScriptEnvironment = hasEnvironmentVariable("SWIFT_BUILD_SCRIPT_ENVIRONMENT")
+
+/// Check that the layout of the syntax tree is correct.
+///
+/// See CONTRIBUTING.md for more information
+let rawSyntaxValidation = hasEnvironmentVariable("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
+
+/// Mutate the input of `assertParse` test cases.
+///
+/// See CONTRIBUTING.md for more information
+let alternateTokenIntrospection = hasEnvironmentVariable("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
+
+/// Assume that swift-argument-parser is checked out next to swift-syntax and use that instead of fetching a remote dependency.
+let useLocalDependencies = hasEnvironmentVariable("SWIFTCI_USE_LOCAL_DEPS")
+
+// MARK: - Compute custom build settings
+
+// These build settings apply to the target and the corresponding test target.
 var swiftSyntaxSwiftSettings: [SwiftSetting] = []
 var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] = []
 var swiftParserSwiftSettings: [SwiftSetting] = []
 
-/// If we are in a controlled CI environment, we can use internal compiler flags
-/// to speed up the build or improve it.
-if ProcessInfo.processInfo.environment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] != nil {
+if buildScriptEnvironment {
   swiftSyntaxSwiftSettings += [
     .define("SWIFTSYNTAX_ENABLE_ASSERTIONS")
   ]
   swiftSyntaxBuilderSwiftSettings += [
     .define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")
   ]
-  swiftParserSwiftSettings += [
-    .define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")
-  ]
 }
 
-if ProcessInfo.processInfo.environment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] != nil {
+if rawSyntaxValidation || buildScriptEnvironment {
   swiftSyntaxSwiftSettings += [
     .define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
   ]
 }
 
-if ProcessInfo.processInfo.environment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] != nil {
+if alternateTokenIntrospection || buildScriptEnvironment {
   swiftParserSwiftSettings += [
     .define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
   ]
 }
+
+// MARK: - Build the package
 
 let package = Package(
   name: "swift-syntax",
@@ -153,10 +181,11 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntax", "SwiftSyntaxBuilder"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntax", "SwiftSyntaxBuilder"],
+      swiftSettings: swiftSyntaxSwiftSettings
     ),
 
-    // MARK: Verison marker modules
+    // MARK: Version marker modules
 
     .target(
       name: "SwiftSyntax509",
@@ -174,7 +203,8 @@ let package = Package(
 
     .testTarget(
       name: "SwiftSyntaxBuilderTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftSyntaxBuilder"],
+      swiftSettings: swiftSyntaxBuilderSwiftSettings
     ),
 
     // MARK: SwiftSyntaxMacros
@@ -303,7 +333,7 @@ package.targets.append(
   )
 )
 
-if ProcessInfo.processInfo.environment["SWIFTCI_USE_LOCAL_DEPS"] == nil {
+if useLocalDependencies {
   // Building standalone.
   package.dependencies += [
     .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2")

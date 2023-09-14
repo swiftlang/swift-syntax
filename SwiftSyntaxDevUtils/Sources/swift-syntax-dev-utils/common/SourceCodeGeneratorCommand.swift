@@ -32,15 +32,10 @@ extension SourceCodeGeneratorCommand {
       args += ["--verbose"]
     }
 
-    let additionalEnvironment = [
-      "SWIFT_BUILD_SCRIPT_ENVIRONMENT": "1",
-      "SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION": "1",
-    ]
-
     let process = ProcessRunner(
       executableURL: arguments.toolchain.appendingPathComponent("bin").appendingPathComponent("swift"),
       arguments: args,
-      additionalEnvironment: additionalEnvironment
+      additionalEnvironment: ["SWIFT_BUILD_SCRIPT_ENVIRONMENT": "1"]
     )
 
     try process.run(verbose: arguments.verbose)

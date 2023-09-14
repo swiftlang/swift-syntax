@@ -32,18 +32,11 @@ struct Test: ParsableCommand, BuildCommand {
 
   private func runTests() throws {
     logSection("Running SwiftSyntax Tests")
-    var swiftpmCallArguments = [
-      "--test-product", "swift-syntaxPackageTests",
-    ]
-
-    if arguments.verbose {
-      swiftpmCallArguments += ["--verbose"]
-    }
 
     try invokeSwiftPM(
       action: "test",
       packageDir: Paths.packageDir,
-      additionalArguments: swiftpmCallArguments,
+      additionalArguments: ["--test-product", "swift-syntaxPackageTests"],
       additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
@@ -52,18 +45,10 @@ struct Test: ParsableCommand, BuildCommand {
 
   private func runCodeGenerationTests() throws {
     logSection("Running CodeGeneration Tests")
-    var swiftpmCallArguments = [
-      "--test-product", "CodeGenerationPackageTests",
-    ]
-
-    if arguments.verbose {
-      swiftpmCallArguments += ["--verbose"]
-    }
-
     try invokeSwiftPM(
       action: "test",
       packageDir: Paths.codeGenerationDir,
-      additionalArguments: swiftpmCallArguments,
+      additionalArguments: ["--test-product", "CodeGenerationPackageTests"],
       additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false

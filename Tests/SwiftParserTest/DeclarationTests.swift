@@ -2550,4 +2550,61 @@ final class DeclarationTests: ParserTestCase {
       """
     )
   }
+
+  func testFunctionDeclarationWithPlaceholder() {
+    assertParse(
+      """
+      func 1️⃣<#name#>(2️⃣<#parameters#>3️⃣) -> 4️⃣<#return type#> {
+          5️⃣<#function body#>
+      }
+      """,
+      substructure: FunctionDeclSyntax(
+        funcKeyword: .keyword(.func),
+        name: .identifier("<#name#>"),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(
+            parameters: FunctionParameterListSyntax([
+              FunctionParameterSyntax(
+                firstName: .identifier("<#parameters#>"),
+                colon: .colonToken(presence: .missing),
+                type: MissingTypeSyntax(
+                  placeholder: .identifier("<#type#>", presence: .missing)
+                )
+              )
+            ])
+          ),
+          returnClause: ReturnClauseSyntax(
+            type: IdentifierTypeSyntax(
+              name: .identifier("<#return type#>")
+            )
+          )
+        ),
+        body: CodeBlockSyntax(
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .expr(
+                ExprSyntax(
+                  EditorPlaceholderExprSyntax(
+                    placeholder: .identifier("<#function body#>")
+                  )
+                )
+              )
+            )
+          ])
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "editor placeholder in source file"),
+      ],
+      fixedSource: """
+        func <#name#>(<#parameters#>: <#type#>) -> <#return type#> {
+            <#function body#>
+        }
+        """
+    )
+  }
 }

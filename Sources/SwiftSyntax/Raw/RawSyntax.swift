@@ -771,7 +771,27 @@ extension RawSyntax {
     let layoutBuffer = arena.allocateRawSyntaxBuffer(count: count)
     initializer(layoutBuffer)
 
-    // Calculate the "byte width".
+    return self.makeLayout(
+      kind: kind,
+      isMaximumNestingLevelOverflow: isMaximumNestingLevelOverflow,
+      layoutBuffer: layoutBuffer,
+      arena: arena
+    )
+  }
+
+  /// Factory method to create a layout node.
+  ///
+  /// - Parameters:
+  ///   - arena: SyntaxArena to the result node data resides.
+  ///   - kind: Syntax kind.
+  ///   - count: Number of children.
+  ///   - initializer: A closure that initializes elements.
+  public static func makeLayout(
+    kind: SyntaxKind,
+    isMaximumNestingLevelOverflow: Bool = false,
+    layoutBuffer: UnsafeMutableBufferPointer<RawSyntax?>,
+    arena: __shared SyntaxArena
+  ) -> RawSyntax {  // Calculate the "byte width".
     var byteLength = 0
     var descendantCount = 0
     var recursiveFlags = RecursiveRawSyntaxFlags()

@@ -103,7 +103,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax {
-              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
+              LabeledExprSyntax(expression: ExprSyntax("(arena, (\(parameters)))"))
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {

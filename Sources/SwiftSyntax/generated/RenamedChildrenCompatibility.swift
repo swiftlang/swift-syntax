@@ -80,7 +80,8 @@ extension AccessorDeclSyntax {
       _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax? = nil,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -98,7 +99,8 @@ extension AccessorDeclSyntax {
         unexpectedBetweenEffectSpecifiersAndBody, 
         body: body, 
         unexpectedAfterBody, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -155,7 +157,8 @@ extension ActorDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -177,7 +180,8 @@ extension ActorDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -254,7 +258,8 @@ extension ArrayExprSyntax {
       _ unexpectedBetweenElementsAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
       rightSquareBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -266,7 +271,8 @@ extension ArrayExprSyntax {
         unexpectedBetweenElementsAndRightSquareBracket, 
         rightSquare: rightSquareBracket, 
         unexpectedAfterRightSquareBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -353,7 +359,8 @@ extension ArrayTypeSyntax {
       _ unexpectedBetweenElementTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
       rightSquareBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -365,7 +372,8 @@ extension ArrayTypeSyntax {
         unexpectedBetweenElementTypeAndRightSquareBracket, 
         rightSquare: rightSquareBracket, 
         unexpectedAfterRightSquareBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -410,7 +418,8 @@ extension ArrowExprSyntax {
       _ unexpectedBetweenEffectSpecifiersAndArrowToken: UnexpectedNodesSyntax? = nil,
       arrowToken: TokenSyntax = .arrowToken(),
       _ unexpectedAfterArrowToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -420,7 +429,8 @@ extension ArrowExprSyntax {
         unexpectedBetweenEffectSpecifiersAndArrowToken, 
         arrow: arrowToken, 
         unexpectedAfterArrowToken, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -499,7 +509,8 @@ extension AsExprSyntax {
       _ unexpectedBetweenQuestionOrExclamationMarkAndTypeName: UnexpectedNodesSyntax? = nil,
       typeName: some TypeSyntaxProtocol,
       _ unexpectedAfterTypeName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -513,7 +524,8 @@ extension AsExprSyntax {
         unexpectedBetweenQuestionOrExclamationMarkAndTypeName, 
         type: typeName, 
         unexpectedAfterTypeName, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -556,7 +568,8 @@ extension AssignmentExprSyntax {
       _ unexpectedBeforeAssignToken: UnexpectedNodesSyntax? = nil,
       assignToken: TokenSyntax = .equalToken(),
       _ unexpectedAfterAssignToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -564,7 +577,8 @@ extension AssignmentExprSyntax {
         unexpectedBeforeAssignToken, 
         equal: assignToken, 
         unexpectedAfterAssignToken, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -619,7 +633,8 @@ extension AssociatedTypeDeclSyntax {
       _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -639,7 +654,8 @@ extension AssociatedTypeDeclSyntax {
         unexpectedBetweenInitializerAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedAfterGenericWhereClause, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -720,7 +736,8 @@ extension AttributeSyntax {
       _ unexpectedBetweenArgumentAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -736,7 +753,8 @@ extension AttributeSyntax {
         unexpectedBetweenArgumentAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -781,7 +799,8 @@ extension AvailabilityArgumentSyntax {
       _ unexpectedBetweenEntryAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -791,7 +810,8 @@ extension AvailabilityArgumentSyntax {
         unexpectedBetweenEntryAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -840,7 +860,8 @@ extension AvailabilityConditionSyntax {
       _ unexpectedBetweenAvailabilitySpecAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -854,7 +875,8 @@ extension AvailabilityConditionSyntax {
         unexpectedBetweenAvailabilitySpecAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -906,7 +928,8 @@ extension BackDeployedAttributeArgumentsSyntax {
       _ unexpectedBetweenColonAndVersionList: UnexpectedNodesSyntax? = nil,
       versionList: PlatformVersionItemListSyntax,
       _ unexpectedAfterVersionList: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -918,7 +941,8 @@ extension BackDeployedAttributeArgumentsSyntax {
         unexpectedBetweenColonAndVersionList, 
         platforms: versionList, 
         unexpectedAfterVersionList, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -961,7 +985,8 @@ extension BinaryOperatorExprSyntax {
       _ unexpectedBeforeOperatorToken: UnexpectedNodesSyntax? = nil,
       operatorToken: TokenSyntax,
       _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -969,7 +994,8 @@ extension BinaryOperatorExprSyntax {
         unexpectedBeforeOperatorToken, 
         operator: operatorToken, 
         unexpectedAfterOperatorToken, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1012,7 +1038,8 @@ extension BooleanLiteralExprSyntax {
       _ unexpectedBeforeBooleanLiteral: UnexpectedNodesSyntax? = nil,
       booleanLiteral: TokenSyntax,
       _ unexpectedAfterBooleanLiteral: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1020,7 +1047,8 @@ extension BooleanLiteralExprSyntax {
         unexpectedBeforeBooleanLiteral, 
         literal: booleanLiteral, 
         unexpectedAfterBooleanLiteral, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1069,7 +1097,8 @@ extension CanImportVersionInfoSyntax {
       _ unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? = nil,
       versionTuple: VersionTupleSyntax,
       _ unexpectedAfterVersionTuple: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1083,7 +1112,8 @@ extension CanImportVersionInfoSyntax {
         unexpectedBetweenColonAndVersionTuple, 
         version: versionTuple, 
         unexpectedAfterVersionTuple, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1140,7 +1170,8 @@ extension ClassDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1162,7 +1193,8 @@ extension ClassDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1213,7 +1245,8 @@ extension ClosureCaptureSyntax {
       _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1229,7 +1262,8 @@ extension ClosureCaptureSyntax {
         unexpectedBetweenExpressionAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1276,7 +1310,8 @@ extension ClosureParameterClauseSyntax {
       _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1288,7 +1323,8 @@ extension ClosureParameterClauseSyntax {
         unexpectedBetweenParameterListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1391,7 +1427,8 @@ extension ClosureSignatureSyntax {
       _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil,
       inTok: TokenSyntax = .keyword(.in),
       _ unexpectedAfterInTok: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1409,7 +1446,8 @@ extension ClosureSignatureSyntax {
         unexpectedBetweenOutputAndInTok, 
         inKeyword: inTok, 
         unexpectedAfterInTok, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1486,7 +1524,8 @@ extension ConformanceRequirementSyntax {
       _ unexpectedBetweenColonAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       rightTypeIdentifier: some TypeSyntaxProtocol,
       _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1498,7 +1537,8 @@ extension ConformanceRequirementSyntax {
         unexpectedBetweenColonAndRightTypeIdentifier, 
         rightType: rightTypeIdentifier, 
         unexpectedAfterRightTypeIdentifier, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1543,7 +1583,8 @@ extension ConsumeExprSyntax {
       _ unexpectedBetweenMoveKeywordAndExpression: UnexpectedNodesSyntax? = nil,
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1553,7 +1594,8 @@ extension ConsumeExprSyntax {
         unexpectedBetweenMoveKeywordAndExpression, 
         expression: expression, 
         unexpectedAfterExpression, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1618,7 +1660,8 @@ extension DeclReferenceExprSyntax {
       _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
       declNameArguments: DeclNameArgumentsSyntax? = nil,
       _ unexpectedAfterDeclNameArguments: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1628,7 +1671,8 @@ extension DeclReferenceExprSyntax {
         unexpectedBetweenIdentifierAndDeclNameArguments, 
         argumentNames: declNameArguments, 
         unexpectedAfterDeclNameArguments, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1713,7 +1757,8 @@ extension DerivativeAttributeArgumentsSyntax {
       _ unexpectedBetweenCommaAndDiffParams: UnexpectedNodesSyntax? = nil,
       diffParams: DifferentiabilityWithRespectToArgumentSyntax? = nil,
       _ unexpectedAfterDiffParams: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1733,7 +1778,8 @@ extension DerivativeAttributeArgumentsSyntax {
         unexpectedBetweenCommaAndDiffParams, 
         arguments: diffParams, 
         unexpectedAfterDiffParams, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1812,7 +1858,8 @@ extension DictionaryElementSyntax {
       _ unexpectedBetweenValueExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1826,7 +1873,8 @@ extension DictionaryElementSyntax {
         unexpectedBetweenValueExpressionAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -1947,7 +1995,8 @@ extension DictionaryTypeSyntax {
       _ unexpectedBetweenValueTypeAndRightSquareBracket: UnexpectedNodesSyntax? = nil,
       rightSquareBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquareBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -1963,7 +2012,8 @@ extension DictionaryTypeSyntax {
         unexpectedBetweenValueTypeAndRightSquareBracket, 
         rightSquare: rightSquareBracket, 
         unexpectedAfterRightSquareBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2008,7 +2058,8 @@ extension DifferentiabilityArgumentSyntax {
       _ unexpectedBetweenParameterAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2018,7 +2069,8 @@ extension DifferentiabilityArgumentSyntax {
         unexpectedBetweenParameterAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2065,7 +2117,8 @@ extension DifferentiabilityArgumentsSyntax {
       _ unexpectedBetweenDifferentiabilityParametersAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2077,7 +2130,8 @@ extension DifferentiabilityArgumentsSyntax {
         unexpectedBetweenDifferentiabilityParametersAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2124,7 +2178,8 @@ extension DifferentiabilityWithRespectToArgumentSyntax {
       _ unexpectedBetweenColonAndParameters: UnexpectedNodesSyntax? = nil,
       parameters: Arguments,
       _ unexpectedAfterParameters: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2136,7 +2191,8 @@ extension DifferentiabilityWithRespectToArgumentSyntax {
         unexpectedBetweenColonAndParameters, 
         arguments: parameters, 
         unexpectedAfterParameters, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2267,7 +2323,8 @@ extension DifferentiableAttributeArgumentsSyntax {
       _ unexpectedBetweenDiffParamsCommaAndWhereClause: UnexpectedNodesSyntax? = nil,
       whereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedAfterWhereClause: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2283,7 +2340,8 @@ extension DifferentiableAttributeArgumentsSyntax {
         unexpectedBetweenDiffParamsCommaAndWhereClause, 
         genericWhereClause: whereClause, 
         unexpectedAfterWhereClause, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2330,7 +2388,8 @@ extension DynamicReplacementAttributeArgumentsSyntax {
       _ unexpectedBetweenColonAndDeclname: UnexpectedNodesSyntax? = nil,
       declname: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2342,7 +2401,8 @@ extension DynamicReplacementAttributeArgumentsSyntax {
         unexpectedBetweenColonAndDeclname, 
         declName: declname, 
         unexpectedAfterDeclname, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2389,7 +2449,8 @@ extension EditorPlaceholderDeclSyntax {
       _ unexpectedBetweenModifiersAndIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2401,7 +2462,8 @@ extension EditorPlaceholderDeclSyntax {
         unexpectedBetweenModifiersAndIdentifier, 
         placeholder: identifier, 
         unexpectedAfterIdentifier, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2444,7 +2506,8 @@ extension EditorPlaceholderExprSyntax {
       _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
       identifier: TokenSyntax,
       _ unexpectedAfterIdentifier: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2452,7 +2515,8 @@ extension EditorPlaceholderExprSyntax {
         unexpectedBeforeIdentifier, 
         placeholder: identifier, 
         unexpectedAfterIdentifier, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2521,7 +2585,8 @@ extension EnumCaseElementSyntax {
       _ unexpectedBetweenRawValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2535,7 +2600,8 @@ extension EnumCaseElementSyntax {
         unexpectedBetweenRawValueAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2582,7 +2648,8 @@ extension EnumCaseParameterClauseSyntax {
       _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2594,7 +2661,8 @@ extension EnumCaseParameterClauseSyntax {
         unexpectedBetweenParameterListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2649,7 +2717,8 @@ extension EnumCaseParameterSyntax {
       _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2669,7 +2738,8 @@ extension EnumCaseParameterSyntax {
         unexpectedBetweenDefaultArgumentAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2746,7 +2816,8 @@ extension EnumDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2768,7 +2839,8 @@ extension EnumDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2819,7 +2891,8 @@ extension ExpressionSegmentSyntax {
       _ unexpectedBetweenExpressionsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2835,7 +2908,8 @@ extension ExpressionSegmentSyntax {
         unexpectedBetweenExpressionsAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2878,7 +2952,8 @@ extension FloatLiteralExprSyntax {
       _ unexpectedBeforeFloatingDigits: UnexpectedNodesSyntax? = nil,
       floatingDigits: TokenSyntax,
       _ unexpectedAfterFloatingDigits: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2886,7 +2961,8 @@ extension FloatLiteralExprSyntax {
         unexpectedBeforeFloatingDigits, 
         literal: floatingDigits, 
         unexpectedAfterFloatingDigits, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -2947,7 +3023,8 @@ extension ForStmtSyntax {
       _ unexpectedBetweenWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -2973,7 +3050,8 @@ extension ForStmtSyntax {
         unexpectedBetweenWhereClauseAndBody, 
         body: body, 
         unexpectedAfterBody, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3026,7 +3104,8 @@ extension FunctionCallExprSyntax {
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3044,7 +3123,8 @@ extension FunctionCallExprSyntax {
         unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
         additionalTrailingClosures: additionalTrailingClosures, 
         unexpectedAfterAdditionalTrailingClosures, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3101,7 +3181,8 @@ extension FunctionDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax? = nil,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3123,7 +3204,8 @@ extension FunctionDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndBody, 
         body: body, 
         unexpectedAfterBody, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3170,7 +3252,8 @@ extension FunctionParameterClauseSyntax {
       _ unexpectedBetweenParameterListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3182,7 +3265,8 @@ extension FunctionParameterClauseSyntax {
         unexpectedBetweenParameterListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3241,7 +3325,8 @@ extension FunctionParameterSyntax {
       _ unexpectedBetweenDefaultArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3265,7 +3350,8 @@ extension FunctionParameterSyntax {
         unexpectedBetweenDefaultArgumentAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3342,7 +3428,8 @@ extension FunctionSignatureSyntax {
       _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
       output: ReturnClauseSyntax? = nil,
       _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3354,7 +3441,8 @@ extension FunctionSignatureSyntax {
         unexpectedBetweenEffectSpecifiersAndOutput, 
         returnClause: output, 
         unexpectedAfterOutput, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3440,7 +3528,8 @@ extension FunctionTypeSyntax {
       _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
       output: ReturnClauseSyntax,
       _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3456,7 +3545,8 @@ extension FunctionTypeSyntax {
         unexpectedBetweenEffectSpecifiersAndOutput, 
         returnClause: output, 
         unexpectedAfterOutput, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3533,7 +3623,8 @@ extension GenericArgumentClauseSyntax {
       _ unexpectedBetweenArgumentsAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
       rightAngleBracket: TokenSyntax = .rightAngleToken(),
       _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3545,7 +3636,8 @@ extension GenericArgumentClauseSyntax {
         unexpectedBetweenArgumentsAndRightAngleBracket, 
         rightAngle: rightAngleBracket, 
         unexpectedAfterRightAngleBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3590,7 +3682,8 @@ extension GenericArgumentSyntax {
       _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3600,7 +3693,8 @@ extension GenericArgumentSyntax {
         unexpectedBetweenArgumentTypeAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3704,7 +3798,8 @@ extension GenericParameterClauseSyntax {
       _ unexpectedBetweenGenericWhereClauseAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
       rightAngleBracket: TokenSyntax = .rightAngleToken(),
       _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3718,7 +3813,8 @@ extension GenericParameterClauseSyntax {
         unexpectedBetweenGenericWhereClauseAndRightAngleBracket, 
         rightAngle: rightAngleBracket, 
         unexpectedAfterRightAngleBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3771,7 +3867,8 @@ extension GenericParameterSyntax {
       _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3789,7 +3886,8 @@ extension GenericParameterSyntax {
         unexpectedBetweenInheritedTypeAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3834,7 +3932,8 @@ extension GenericRequirementSyntax {
       _ unexpectedBetweenBodyAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3844,7 +3943,8 @@ extension GenericRequirementSyntax {
         unexpectedBetweenBodyAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3889,7 +3989,8 @@ extension GenericWhereClauseSyntax {
       _ unexpectedBetweenWhereKeywordAndRequirementList: UnexpectedNodesSyntax? = nil,
       requirementList: GenericRequirementListSyntax,
       _ unexpectedAfterRequirementList: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3899,7 +4000,8 @@ extension GenericWhereClauseSyntax {
         unexpectedBetweenWhereKeywordAndRequirementList, 
         requirements: requirementList, 
         unexpectedAfterRequirementList, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -3946,7 +4048,8 @@ extension ImplementsAttributeArgumentsSyntax {
       _ unexpectedBetweenCommaAndDeclname: UnexpectedNodesSyntax? = nil,
       declname: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclname: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -3958,7 +4061,8 @@ extension ImplementsAttributeArgumentsSyntax {
         unexpectedBetweenCommaAndDeclname, 
         declName: declname, 
         unexpectedAfterDeclname, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4029,7 +4133,8 @@ extension ImportDeclSyntax {
       _ unexpectedBetweenImportKindAndPath: UnexpectedNodesSyntax? = nil,
       path: ImportPathComponentListSyntax,
       _ unexpectedAfterPath: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4045,7 +4150,8 @@ extension ImportDeclSyntax {
         unexpectedBetweenImportKindAndPath, 
         path: path, 
         unexpectedAfterPath, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4090,7 +4196,8 @@ extension ImportPathComponentSyntax {
       _ unexpectedBetweenNameAndTrailingDot: UnexpectedNodesSyntax? = nil,
       trailingDot: TokenSyntax? = nil,
       _ unexpectedAfterTrailingDot: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4100,7 +4207,8 @@ extension ImportPathComponentSyntax {
         unexpectedBetweenNameAndTrailingDot, 
         trailingPeriod: trailingDot, 
         unexpectedAfterTrailingDot, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4147,7 +4255,8 @@ extension InfixOperatorExprSyntax {
       _ unexpectedBetweenOperatorOperandAndRightOperand: UnexpectedNodesSyntax? = nil,
       rightOperand: some ExprSyntaxProtocol,
       _ unexpectedAfterRightOperand: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4159,7 +4268,8 @@ extension InfixOperatorExprSyntax {
         unexpectedBetweenOperatorOperandAndRightOperand, 
         rightOperand: rightOperand, 
         unexpectedAfterRightOperand, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4204,7 +4314,8 @@ extension InheritanceClauseSyntax {
       _ unexpectedBetweenColonAndInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
       inheritedTypeCollection: InheritedTypeListSyntax,
       _ unexpectedAfterInheritedTypeCollection: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4214,7 +4325,8 @@ extension InheritanceClauseSyntax {
         unexpectedBetweenColonAndInheritedTypeCollection, 
         inheritedTypes: inheritedTypeCollection, 
         unexpectedAfterInheritedTypeCollection, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4259,7 +4371,8 @@ extension InheritedTypeSyntax {
       _ unexpectedBetweenTypeNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4269,7 +4382,8 @@ extension InheritedTypeSyntax {
         unexpectedBetweenTypeNameAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4312,7 +4426,8 @@ extension IntegerLiteralExprSyntax {
       _ unexpectedBeforeDigits: UnexpectedNodesSyntax? = nil,
       digits: TokenSyntax,
       _ unexpectedAfterDigits: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4320,7 +4435,8 @@ extension IntegerLiteralExprSyntax {
         unexpectedBeforeDigits, 
         literal: digits, 
         unexpectedAfterDigits, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4387,7 +4503,8 @@ extension IsExprSyntax {
       _ unexpectedBetweenIsTokAndTypeName: UnexpectedNodesSyntax? = nil,
       typeName: some TypeSyntaxProtocol,
       _ unexpectedAfterTypeName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4399,7 +4516,8 @@ extension IsExprSyntax {
         unexpectedBetweenIsTokAndTypeName, 
         type: typeName, 
         unexpectedAfterTypeName, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4486,7 +4604,8 @@ extension KeyPathSubscriptComponentSyntax {
       _ unexpectedBetweenArgumentListAndRightBracket: UnexpectedNodesSyntax? = nil,
       rightBracket: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4498,7 +4617,8 @@ extension KeyPathSubscriptComponentSyntax {
         unexpectedBetweenArgumentListAndRightBracket, 
         rightSquare: rightBracket, 
         unexpectedAfterRightBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4565,7 +4685,8 @@ extension LabeledStmtSyntax {
       _ unexpectedBetweenLabelColonAndStatement: UnexpectedNodesSyntax? = nil,
       statement: some StmtSyntaxProtocol,
       _ unexpectedAfterStatement: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4577,7 +4698,8 @@ extension LabeledStmtSyntax {
         unexpectedBetweenLabelColonAndStatement, 
         statement: statement, 
         unexpectedAfterStatement, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4664,7 +4786,8 @@ extension LayoutRequirementSyntax {
       _ unexpectedBetweenAlignmentAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4686,7 +4809,8 @@ extension LayoutRequirementSyntax {
         unexpectedBetweenAlignmentAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4743,7 +4867,8 @@ extension MacroDeclSyntax {
       _ unexpectedBetweenDefinitionAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4765,7 +4890,8 @@ extension MacroDeclSyntax {
         unexpectedBetweenDefinitionAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedAfterGenericWhereClause, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -4896,7 +5022,8 @@ extension MacroExpansionDeclSyntax {
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -4922,7 +5049,8 @@ extension MacroExpansionDeclSyntax {
         unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
         additionalTrailingClosures: additionalTrailingClosures, 
         unexpectedAfterAdditionalTrailingClosures, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5049,7 +5177,8 @@ extension MacroExpansionExprSyntax {
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5071,7 +5200,8 @@ extension MacroExpansionExprSyntax {
         unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
         additionalTrailingClosures: additionalTrailingClosures, 
         unexpectedAfterAdditionalTrailingClosures, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5118,7 +5248,8 @@ extension MemberAccessExprSyntax {
       _ unexpectedBetweenDotAndDeclName: UnexpectedNodesSyntax? = nil,
       declName: DeclReferenceExprSyntax,
       _ unexpectedAfterDeclName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5130,7 +5261,8 @@ extension MemberAccessExprSyntax {
         unexpectedBetweenDotAndDeclName, 
         declName: declName, 
         unexpectedAfterDeclName, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5177,7 +5309,8 @@ extension MetatypeTypeSyntax {
       _ unexpectedBetweenPeriodAndTypeOrProtocol: UnexpectedNodesSyntax? = nil,
       typeOrProtocol: TokenSyntax,
       _ unexpectedAfterTypeOrProtocol: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5189,7 +5322,8 @@ extension MetatypeTypeSyntax {
         unexpectedBetweenPeriodAndTypeOrProtocol, 
         metatypeSpecifier: typeOrProtocol, 
         unexpectedAfterTypeOrProtocol, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5254,7 +5388,8 @@ extension NamedOpaqueReturnTypeSyntax {
       _ unexpectedBetweenGenericParametersAndBaseType: UnexpectedNodesSyntax? = nil,
       baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5264,7 +5399,8 @@ extension NamedOpaqueReturnTypeSyntax {
         unexpectedBetweenGenericParametersAndBaseType, 
         type: baseType, 
         unexpectedAfterBaseType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5343,7 +5479,8 @@ extension OperatorDeclSyntax {
       _ unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
       operatorPrecedenceAndTypes: OperatorPrecedenceAndTypesSyntax? = nil,
       _ unexpectedAfterOperatorPrecedenceAndTypes: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5357,7 +5494,8 @@ extension OperatorDeclSyntax {
         unexpectedBetweenIdentifierAndOperatorPrecedenceAndTypes, 
         operatorPrecedenceAndTypes: operatorPrecedenceAndTypes, 
         unexpectedAfterOperatorPrecedenceAndTypes, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5406,7 +5544,8 @@ extension OptionalBindingConditionSyntax {
       _ unexpectedBetweenTypeAnnotationAndInitializer: UnexpectedNodesSyntax? = nil,
       initializer: InitializerClauseSyntax? = nil,
       _ unexpectedAfterInitializer: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5420,7 +5559,8 @@ extension OptionalBindingConditionSyntax {
         unexpectedBetweenTypeAnnotationAndInitializer, 
         initializer: initializer, 
         unexpectedAfterInitializer, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5465,7 +5605,8 @@ extension PackElementExprSyntax {
       _ unexpectedBetweenEachKeywordAndPackRefExpr: UnexpectedNodesSyntax? = nil,
       packRefExpr: some ExprSyntaxProtocol,
       _ unexpectedAfterPackRefExpr: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5475,7 +5616,8 @@ extension PackElementExprSyntax {
         unexpectedBetweenEachKeywordAndPackRefExpr, 
         pack: packRefExpr, 
         unexpectedAfterPackRefExpr, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5520,7 +5662,8 @@ extension PackElementTypeSyntax {
       _ unexpectedBetweenEachKeywordAndPackType: UnexpectedNodesSyntax? = nil,
       packType: some TypeSyntaxProtocol,
       _ unexpectedAfterPackType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5530,7 +5673,8 @@ extension PackElementTypeSyntax {
         unexpectedBetweenEachKeywordAndPackType, 
         pack: packType, 
         unexpectedAfterPackType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5575,7 +5719,8 @@ extension PackExpansionExprSyntax {
       _ unexpectedBetweenRepeatKeywordAndPatternExpr: UnexpectedNodesSyntax? = nil,
       patternExpr: some ExprSyntaxProtocol,
       _ unexpectedAfterPatternExpr: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5585,7 +5730,8 @@ extension PackExpansionExprSyntax {
         unexpectedBetweenRepeatKeywordAndPatternExpr, 
         repetitionPattern: patternExpr, 
         unexpectedAfterPatternExpr, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5630,7 +5776,8 @@ extension PackExpansionTypeSyntax {
       _ unexpectedBetweenRepeatKeywordAndPatternType: UnexpectedNodesSyntax? = nil,
       patternType: some TypeSyntaxProtocol,
       _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5640,7 +5787,8 @@ extension PackExpansionTypeSyntax {
         unexpectedBetweenRepeatKeywordAndPatternType, 
         repetitionPattern: patternType, 
         unexpectedAfterPatternType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5691,7 +5839,8 @@ extension PatternBindingSyntax {
       _ unexpectedBetweenAccessorAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5707,7 +5856,8 @@ extension PatternBindingSyntax {
         unexpectedBetweenAccessorAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5752,7 +5902,8 @@ extension PlatformVersionItemSyntax {
       _ unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5762,7 +5913,8 @@ extension PlatformVersionItemSyntax {
         unexpectedBetweenAvailabilityVersionRestrictionAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5807,7 +5959,8 @@ extension PostfixOperatorExprSyntax {
       _ unexpectedBetweenExpressionAndOperatorToken: UnexpectedNodesSyntax? = nil,
       operatorToken: TokenSyntax,
       _ unexpectedAfterOperatorToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5817,7 +5970,8 @@ extension PostfixOperatorExprSyntax {
         unexpectedBetweenExpressionAndOperatorToken, 
         operator: operatorToken, 
         unexpectedAfterOperatorToken, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -5942,7 +6096,8 @@ extension PoundSourceLocationArgumentsSyntax {
       _ unexpectedBetweenLineArgColonAndLineNumber: UnexpectedNodesSyntax? = nil,
       lineNumber: TokenSyntax,
       _ unexpectedAfterLineNumber: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -5962,7 +6117,8 @@ extension PoundSourceLocationArgumentsSyntax {
         unexpectedBetweenLineArgColonAndLineNumber, 
         lineNumber: lineNumber, 
         unexpectedAfterLineNumber, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6011,7 +6167,8 @@ extension PoundSourceLocationSyntax {
       _ unexpectedBetweenArgsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6025,7 +6182,8 @@ extension PoundSourceLocationSyntax {
         unexpectedBetweenArgsAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6102,7 +6260,8 @@ extension PrecedenceGroupAssignmentSyntax {
       _ unexpectedBetweenColonAndFlag: UnexpectedNodesSyntax? = nil,
       flag: TokenSyntax,
       _ unexpectedAfterFlag: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6114,7 +6273,8 @@ extension PrecedenceGroupAssignmentSyntax {
         unexpectedBetweenColonAndFlag, 
         value: flag, 
         unexpectedAfterFlag, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6161,7 +6321,8 @@ extension PrecedenceGroupAssociativitySyntax {
       _ unexpectedBetweenColonAndValue: UnexpectedNodesSyntax? = nil,
       value: TokenSyntax,
       _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6173,7 +6334,8 @@ extension PrecedenceGroupAssociativitySyntax {
         unexpectedBetweenColonAndValue, 
         value: value, 
         unexpectedAfterValue, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6228,7 +6390,8 @@ extension PrecedenceGroupDeclSyntax {
       _ unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? = nil,
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6248,7 +6411,8 @@ extension PrecedenceGroupDeclSyntax {
         unexpectedBetweenGroupAttributesAndRightBrace, 
         rightBrace: rightBrace, 
         unexpectedAfterRightBrace, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6325,7 +6489,8 @@ extension PrecedenceGroupRelationSyntax {
       _ unexpectedBetweenColonAndOtherNames: UnexpectedNodesSyntax? = nil,
       otherNames: PrecedenceGroupNameListSyntax,
       _ unexpectedAfterOtherNames: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6337,7 +6502,8 @@ extension PrecedenceGroupRelationSyntax {
         unexpectedBetweenColonAndOtherNames, 
         precedenceGroups: otherNames, 
         unexpectedAfterOtherNames, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6402,7 +6568,8 @@ extension PrefixOperatorExprSyntax {
       _ unexpectedBetweenOperatorTokenAndPostfixExpression: UnexpectedNodesSyntax? = nil,
       postfixExpression: some ExprSyntaxProtocol,
       _ unexpectedAfterPostfixExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6412,7 +6579,8 @@ extension PrefixOperatorExprSyntax {
         unexpectedBetweenOperatorTokenAndPostfixExpression, 
         expression: postfixExpression, 
         unexpectedAfterPostfixExpression, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6499,7 +6667,8 @@ extension PrimaryAssociatedTypeClauseSyntax {
       _ unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket: UnexpectedNodesSyntax? = nil,
       rightAngleBracket: TokenSyntax = .rightAngleToken(),
       _ unexpectedAfterRightAngleBracket: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6511,7 +6680,8 @@ extension PrimaryAssociatedTypeClauseSyntax {
         unexpectedBetweenPrimaryAssociatedTypeListAndRightAngleBracket, 
         rightAngle: rightAngleBracket, 
         unexpectedAfterRightAngleBracket, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6568,7 +6738,8 @@ extension ProtocolDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6590,7 +6761,8 @@ extension ProtocolDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6681,7 +6853,8 @@ extension RegexLiteralExprSyntax {
       _ unexpectedBetweenCloseSlashAndClosingPounds: UnexpectedNodesSyntax? = nil,
       closingPounds: TokenSyntax? = nil,
       _ unexpectedAfterClosingPounds: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6697,7 +6870,8 @@ extension RegexLiteralExprSyntax {
         unexpectedBetweenCloseSlashAndClosingPounds, 
         closingPounds: closingPounds, 
         unexpectedAfterClosingPounds, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6742,7 +6916,8 @@ extension ReturnClauseSyntax {
       _ unexpectedBetweenArrowAndReturnType: UnexpectedNodesSyntax? = nil,
       returnType: some TypeSyntaxProtocol,
       _ unexpectedAfterReturnType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6752,7 +6927,8 @@ extension ReturnClauseSyntax {
         unexpectedBetweenArrowAndReturnType, 
         type: returnType, 
         unexpectedAfterReturnType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6839,7 +7015,8 @@ extension SameTypeRequirementSyntax {
       _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
       rightTypeIdentifier: some TypeSyntaxProtocol,
       _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6851,7 +7028,8 @@ extension SameTypeRequirementSyntax {
         unexpectedBetweenEqualityTokenAndRightTypeIdentifier, 
         rightType: rightTypeIdentifier, 
         unexpectedAfterRightTypeIdentifier, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6896,7 +7074,8 @@ extension SomeOrAnyTypeSyntax {
       _ unexpectedBetweenSomeOrAnySpecifierAndBaseType: UnexpectedNodesSyntax? = nil,
       baseType: some TypeSyntaxProtocol,
       _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6906,7 +7085,8 @@ extension SomeOrAnyTypeSyntax {
         unexpectedBetweenSomeOrAnySpecifierAndBaseType, 
         constraint: baseType, 
         unexpectedAfterBaseType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -6953,7 +7133,8 @@ extension SourceFileSyntax {
       _ unexpectedBetweenStatementsAndEofToken: UnexpectedNodesSyntax? = nil,
       eofToken: TokenSyntax = .endOfFileToken(),
       _ unexpectedAfterEofToken: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -6965,7 +7146,8 @@ extension SourceFileSyntax {
         unexpectedBetweenStatementsAndEofToken, 
         endOfFileToken: eofToken, 
         unexpectedAfterEofToken, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7049,7 +7231,8 @@ extension SpecializeAvailabilityArgumentSyntax {
       _ unexpectedBetweenAvailabilityListAndSemicolon: UnexpectedNodesSyntax? = nil,
       semicolon: TokenSyntax = .semicolonToken(),
       _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7063,7 +7246,8 @@ extension SpecializeAvailabilityArgumentSyntax {
         unexpectedBetweenAvailabilityListAndSemicolon, 
         semicolon: semicolon, 
         unexpectedAfterSemicolon, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7142,7 +7326,8 @@ extension SpecializeTargetFunctionArgumentSyntax {
       _ unexpectedBetweenDeclnameAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7156,7 +7341,8 @@ extension SpecializeTargetFunctionArgumentSyntax {
         unexpectedBetweenDeclnameAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7277,7 +7463,8 @@ extension StringLiteralExprSyntax {
       _ unexpectedBetweenCloseQuoteAndCloseDelimiter: UnexpectedNodesSyntax? = nil,
       closeDelimiter: TokenSyntax? = nil,
       _ unexpectedAfterCloseDelimiter: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7293,7 +7480,8 @@ extension StringLiteralExprSyntax {
         unexpectedBetweenCloseQuoteAndCloseDelimiter, 
         closingPounds: closeDelimiter, 
         unexpectedAfterCloseDelimiter, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7350,7 +7538,8 @@ extension StructDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7372,7 +7561,8 @@ extension StructDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndMemberBlock, 
         memberBlock: memberBlock, 
         unexpectedAfterMemberBlock, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7465,7 +7655,8 @@ extension SubscriptCallExprSyntax {
       _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
       additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
       _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7483,7 +7674,8 @@ extension SubscriptCallExprSyntax {
         unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
         additionalTrailingClosures: additionalTrailingClosures, 
         unexpectedAfterAdditionalTrailingClosures, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7590,7 +7782,8 @@ extension SubscriptDeclSyntax {
       _ unexpectedBetweenGenericWhereClauseAndAccessor: UnexpectedNodesSyntax? = nil,
       accessor: AccessorBlockSyntax? = nil,
       _ unexpectedAfterAccessor: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7612,7 +7805,8 @@ extension SubscriptDeclSyntax {
         unexpectedBetweenGenericWhereClauseAndAccessor, 
         accessorBlock: accessor, 
         unexpectedAfterAccessor, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7657,7 +7851,8 @@ extension SuppressedTypeSyntax {
       _ unexpectedBetweenWithoutTildeAndPatternType: UnexpectedNodesSyntax? = nil,
       patternType: some TypeSyntaxProtocol,
       _ unexpectedAfterPatternType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7667,7 +7862,8 @@ extension SuppressedTypeSyntax {
         unexpectedBetweenWithoutTildeAndPatternType, 
         type: patternType, 
         unexpectedAfterPatternType, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7714,7 +7910,8 @@ extension SwitchCaseSyntax {
       _ unexpectedBetweenLabelAndStatements: UnexpectedNodesSyntax? = nil,
       statements: CodeBlockItemListSyntax,
       _ unexpectedAfterStatements: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7726,7 +7923,8 @@ extension SwitchCaseSyntax {
         unexpectedBetweenLabelAndStatements, 
         statements: statements, 
         unexpectedAfterStatements, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7777,7 +7975,8 @@ extension SwitchExprSyntax {
       _ unexpectedBetweenCasesAndRightBrace: UnexpectedNodesSyntax? = nil,
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7793,7 +7992,8 @@ extension SwitchExprSyntax {
         unexpectedBetweenCasesAndRightBrace, 
         rightBrace: rightBrace, 
         unexpectedAfterRightBrace, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7914,7 +8114,8 @@ extension TernaryExprSyntax {
       _ unexpectedBetweenColonMarkAndSecondChoice: UnexpectedNodesSyntax? = nil,
       secondChoice: some ExprSyntaxProtocol,
       _ unexpectedAfterSecondChoice: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7930,7 +8131,8 @@ extension TernaryExprSyntax {
         unexpectedBetweenColonMarkAndSecondChoice, 
         elseExpression: secondChoice, 
         unexpectedAfterSecondChoice, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -7977,7 +8179,8 @@ extension TupleExprSyntax {
       _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -7989,7 +8192,8 @@ extension TupleExprSyntax {
         unexpectedBetweenElementListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8058,7 +8262,8 @@ extension TuplePatternElementSyntax {
       _ unexpectedBetweenPatternAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8072,7 +8277,8 @@ extension TuplePatternElementSyntax {
         unexpectedBetweenPatternAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8147,7 +8353,8 @@ extension TupleTypeElementSyntax {
       _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8167,7 +8374,8 @@ extension TupleTypeElementSyntax {
         unexpectedBetweenEllipsisAndTrailingComma, 
         trailingComma: trailingComma, 
         unexpectedAfterTrailingComma, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8222,7 +8430,8 @@ extension TypeAliasDeclSyntax {
       _ unexpectedBetweenInitializerAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
       genericWhereClause: GenericWhereClauseSyntax? = nil,
       _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8242,7 +8451,8 @@ extension TypeAliasDeclSyntax {
         unexpectedBetweenInitializerAndGenericWhereClause, 
         genericWhereClause: genericWhereClause, 
         unexpectedAfterGenericWhereClause, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8287,7 +8497,8 @@ extension UnresolvedAsExprSyntax {
       _ unexpectedBetweenAsTokAndQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
       questionOrExclamationMark: TokenSyntax? = nil,
       _ unexpectedAfterQuestionOrExclamationMark: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8297,7 +8508,8 @@ extension UnresolvedAsExprSyntax {
         unexpectedBetweenAsTokAndQuestionOrExclamationMark, 
         questionOrExclamationMark: questionOrExclamationMark, 
         unexpectedAfterQuestionOrExclamationMark, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8340,7 +8552,8 @@ extension UnresolvedIsExprSyntax {
       _ unexpectedBeforeIsTok: UnexpectedNodesSyntax? = nil,
       isTok: TokenSyntax = .keyword(.is),
       _ unexpectedAfterIsTok: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8348,7 +8561,8 @@ extension UnresolvedIsExprSyntax {
         unexpectedBeforeIsTok, 
         isKeyword: isTok, 
         unexpectedAfterIsTok, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8415,7 +8629,8 @@ extension UnresolvedTernaryExprSyntax {
       _ unexpectedBetweenFirstChoiceAndColonMark: UnexpectedNodesSyntax? = nil,
       colonMark: TokenSyntax = .colonToken(),
       _ unexpectedAfterColonMark: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8427,7 +8642,8 @@ extension UnresolvedTernaryExprSyntax {
         unexpectedBetweenFirstChoiceAndColonMark, 
         colon: colonMark, 
         unexpectedAfterColonMark, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8492,7 +8708,8 @@ extension ValueBindingPatternSyntax {
       _ unexpectedBetweenBindingKeywordAndValuePattern: UnexpectedNodesSyntax? = nil,
       valuePattern: some PatternSyntaxProtocol,
       _ unexpectedAfterValuePattern: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8502,7 +8719,8 @@ extension ValueBindingPatternSyntax {
         unexpectedBetweenBindingKeywordAndValuePattern, 
         pattern: valuePattern, 
         unexpectedAfterValuePattern, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8551,7 +8769,8 @@ extension VariableDeclSyntax {
       _ unexpectedBetweenBindingKeywordAndBindings: UnexpectedNodesSyntax? = nil,
       bindings: PatternBindingListSyntax,
       _ unexpectedAfterBindings: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8565,7 +8784,8 @@ extension VariableDeclSyntax {
         unexpectedBetweenBindingKeywordAndBindings, 
         bindings: bindings, 
         unexpectedAfterBindings, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8610,7 +8830,8 @@ extension WhereClauseSyntax {
       _ unexpectedBetweenWhereKeywordAndGuardResult: UnexpectedNodesSyntax? = nil,
       guardResult: some ExprSyntaxProtocol,
       _ unexpectedAfterGuardResult: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8620,7 +8841,8 @@ extension WhereClauseSyntax {
         unexpectedBetweenWhereKeywordAndGuardResult, 
         condition: guardResult, 
         unexpectedAfterGuardResult, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8665,7 +8887,8 @@ extension YieldStmtSyntax {
       _ unexpectedBetweenYieldKeywordAndYields: UnexpectedNodesSyntax? = nil,
       yields: YieldedExpressions,
       _ unexpectedAfterYields: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8675,7 +8898,8 @@ extension YieldStmtSyntax {
         unexpectedBetweenYieldKeywordAndYields, 
         yieldedExpressions: yields, 
         unexpectedAfterYields, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }
@@ -8722,7 +8946,8 @@ extension YieldedExpressionsClauseSyntax {
       _ unexpectedBetweenElementListAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+      trailingTrivia: Trivia? = nil,
+      arena: __shared SyntaxArena = SyntaxArena()
     
   ) {
     self.init(
@@ -8734,7 +8959,8 @@ extension YieldedExpressionsClauseSyntax {
         unexpectedBetweenElementListAndRightParen, 
         rightParen: rightParen, 
         unexpectedAfterRightParen, 
-        trailingTrivia: trailingTrivia
+        trailingTrivia: trailingTrivia, 
+        arena: arena
       )
   }
 }

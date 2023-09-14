@@ -66,6 +66,9 @@ extension LayoutNode {
 
       FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
         .with(\.leadingTrivia, .newline)
+
+      FunctionParameterSyntax("arena: __shared SyntaxArena = SyntaxArena()")
+        .with(\.leadingTrivia, .newline)
     }
 
     return """

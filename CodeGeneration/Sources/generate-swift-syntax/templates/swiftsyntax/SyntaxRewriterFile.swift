@@ -31,11 +31,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     DeclSyntax("public let viewMode: SyntaxTreeViewMode")
+    DeclSyntax("private let arena: SyntaxArena")
 
     DeclSyntax(
       """
-      public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
+      public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: __shared SyntaxArena = SyntaxArena()) {
         self.viewMode = viewMode
+        self.arena = arena
       }
       """
     )
@@ -50,7 +52,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         return withExtendedLifetime(rewritten) {
-          return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena())
+          return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: self.arena)
         }
       }
       """
@@ -283,11 +285,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         // newLayout is nil until the first child node is rewritten and rewritten
         // nodes are being collected.
-        var newLayout: ContiguousArray<RawSyntax?>?
-
-        // Rewritten children just to keep their 'SyntaxArena' alive until they are
-        // wrapped with 'Syntax'
-        var rewrittens: ContiguousArray<Syntax> = []
+        var newLayout: UnsafeMutableBufferPointer<RawSyntax?>?
 
         let syntaxNode = node._syntaxNode
 
@@ -301,7 +299,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             // rewritten nodes, we need to collect this one as well, otherwise we
             // can ignore it.
             if newLayout != nil {
-              newLayout!.append(raw)
+              newLayout!.initializeElement(at: childIndex, to: raw)
             }
             continue
           }
@@ -319,22 +317,23 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               // The below implementation is based on Collection.map but directly
               // reserves enough capacity for the entire layout.
-              newLayout = ContiguousArray<RawSyntax?>()
-              newLayout!.reserveCapacity(node.raw.layoutView!.children.count)
-              for j in 0..<childIndex {
-                newLayout!.append(node.raw.layoutView!.children[j])
+              newLayout = arena.allocateRawSyntaxBuffer(count: node.raw.layoutView!.children.count)
+              for j in 0 ..< childIndex {
+                newLayout!.initializeElement(at: j, to: node.raw.layoutView!.children[j])
               }
             }
 
             // Now that we know we have a new layout in which we collect rewritten
             // nodes, add it.
-            rewrittens.append(rewritten)
-            newLayout!.append(rewritten.raw)
+            withExtendedLifetime(rewritten) {
+              arena.addChild(rewritten.raw.arenaReference)
+            }
+            newLayout!.initializeElement(at: childIndex, to: rewritten.raw)
           } else {
             // The node was not changed by the rewriter. Only store it if a previous
             // node has been rewritten and we are collecting a rewritten layout.
             if newLayout != nil {
-              newLayout!.append(raw)
+              newLayout!.initializeElement(at: childIndex, to: raw)
             }
           }
         }
@@ -345,12 +344,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           // Sanity check, ensure the new children are the same length.
           precondition(newLayout.count == node.raw.layoutView!.children.count)
 
-          let arena = SyntaxArena()
-          let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
-          // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
-          return withExtendedLifetime(rewrittens) {
-            Syntax(raw: newRaw, rawNodeArena: arena).cast(SyntaxType.self)
-          }
+          let newRaw = RawSyntax.makeLayout(kind: node.raw.kind, layoutBuffer: newLayout, arena: arena)
+          return Syntax(raw: newRaw, rawNodeArena: arena).cast(SyntaxType.self)
         } else {
           // No child node was rewritten. So no need to change this node as well.
           return node

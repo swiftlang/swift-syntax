@@ -93,6 +93,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
             }
           }
           LabeledExprSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
+          LabeledExprSyntax(label: "arena", expression: ExprSyntax("arena"))
         }
       }
     }

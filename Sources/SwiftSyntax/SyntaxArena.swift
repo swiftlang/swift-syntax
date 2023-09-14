@@ -163,12 +163,12 @@ public class SyntaxArena {
   func addChild(_ otherRef: SyntaxArenaRef) {
     if SyntaxArenaRef(self) == otherRef { return }
 
-    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-    precondition(
-      !self.hasParent,
-      "an arena can't have a new child once it's owned by other arenas"
-    )
-    #endif
+        #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
+        precondition(
+          !self.hasParent,
+          "an arena can't have a new child once it's owned by other arenas"
+        )
+        #endif
 
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()

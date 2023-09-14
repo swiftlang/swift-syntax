@@ -112,6 +112,11 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
             StmtSyntax("return .choices(\(choices))")
           }
+
+          for choiceNodeName in node.elementChoices {
+            let choiceNode = SYNTAX_NODE_MAP[choiceNodeName]!
+            choiceNodeCastingMethods(for: choiceNode.kind)
+          }
         }
       }
 

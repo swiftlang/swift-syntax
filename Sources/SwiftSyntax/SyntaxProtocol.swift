@@ -698,3 +698,38 @@ public extension SyntaxProtocol {
 /// Protocol for the enums nested inside ``Syntax`` nodes that enumerate all the
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
+
+public extension SyntaxChildChoices {
+
+  /// Checks if the current ``SyntaxChildChoices`` instance can be cast to a given specialized syntax type.
+  ///
+  /// - Returns: `true` if the node can be cast, `false` otherwise.
+  ///
+  /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
+  @available(*, deprecated, message: "This cast will always fail")
+  func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    return self.as(syntaxType) != nil
+  }
+
+  /// Attempts to cast the current ``SyntaxChildChoices`` instance to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized syntax type, or `nil` if the cast fails.
+  ///
+  /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
+  @available(*, deprecated, message: "This cast will always fail")
+  func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+    return S.init(self)
+  }
+
+  /// Force-casts the current ``SyntaxChildChoices`` instance to a given specialized syntax type.
+  ///
+  /// - Returns: An instance of the specialized syntax type.
+  ///
+  /// - Warning: This function will crash if the cast is not possible. Use `as` for a safe attempt.
+  ///
+  /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
+  @available(*, deprecated, message: "This cast will always fail")
+  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+    return self.as(S.self)!
+  }
+}

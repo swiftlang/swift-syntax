@@ -2551,7 +2551,7 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
-  func testFunctionDeclarationWithPlaceholder() {
+  func testDeclarationsWithPlaceholders() {
     assertParse(
       """
       func 1️⃣<#name#>(2️⃣<#parameters#>3️⃣) -> 4️⃣<#return type#> {
@@ -2605,6 +2605,111 @@ final class DeclarationTests: ParserTestCase {
             <#function body#>
         }
         """
+    )
+
+    assertParse(
+      """
+      func test1️⃣<#name#>() {
+          2️⃣<#function body#>
+      }
+      """,
+      substructure: FunctionDeclSyntax(
+        funcKeyword: .keyword(.func),
+        name: .identifier("test"),
+        UnexpectedNodesSyntax([
+          TokenSyntax.identifier("<#name#>")
+        ]),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(
+            parameters: FunctionParameterListSyntax([])
+          )
+        ),
+        body: CodeBlockSyntax(
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .expr(
+                ExprSyntax(
+                  EditorPlaceholderExprSyntax(
+                    placeholder: .identifier("<#function body#>")
+                  )
+                )
+              )
+            )
+          ])
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '<#name#>' in function"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      """
+      class 1️⃣<#name#>: 2️⃣<#super class#> {
+          3️⃣<#code#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      """
+      enum 1️⃣<#name#> {
+          case 2️⃣<#code#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      """
+      struct 1️⃣<#name#> {
+          2️⃣<#code#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      """
+      protocol 1️⃣<#name#> {
+          2️⃣<#code#>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+
+    assertParse(
+      """
+      import 1️⃣<#name#>
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file")
+      ]
+    )
+
+    assertParse(
+      """
+      typealias 1️⃣<#name#> = 2️⃣<#code#>
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
     )
   }
 }

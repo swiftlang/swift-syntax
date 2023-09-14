@@ -106,4 +106,26 @@ final class ExtensionMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testEmpty() {
+    struct TestMacro: ExtensionMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [ExtensionDeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test struct Foo {}",
+      expandedSource: "struct Foo {}",
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

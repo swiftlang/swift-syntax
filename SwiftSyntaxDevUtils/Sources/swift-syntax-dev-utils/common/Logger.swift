@@ -20,6 +20,10 @@ extension Process {
   var command: String {
     var message = ""
 
+    for (key, value) in environment?.sorted(by: { $0.key < $1.key }) ?? [] {
+      message += "\(key)='\(value)' "
+    }
+
     if let executableURL = executableURL {
       message += executableURL.path
     }

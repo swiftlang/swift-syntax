@@ -43,6 +43,7 @@ swift_syntax_library(
 swift_syntax_library(
     name = "SwiftSyntaxMacroExpansion",
     deps = [
+        ":SwiftOperators",
         ":SwiftSyntax",
         ":SwiftSyntaxMacros",
     ],

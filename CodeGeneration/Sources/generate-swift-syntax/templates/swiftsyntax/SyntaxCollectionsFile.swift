@@ -17,18 +17,11 @@ import Utils
 
 let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
-    let documentationSections = [
+    let documentation = SwiftSyntax.Trivia(joining: [
       node.documentation,
       node.grammar,
       node.containedIn,
-    ]
-
-    let documentation =
-      documentationSections
-      .filter { !$0.isEmpty }
-      .map { [$0] }
-      .joined(separator: [Trivia.newline, Trivia.docLineComment("///"), Trivia.newline])
-      .reduce(Trivia(), +)
+    ])
 
     try! StructDeclSyntax(
       """

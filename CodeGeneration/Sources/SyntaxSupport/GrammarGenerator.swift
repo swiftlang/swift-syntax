@@ -70,7 +70,7 @@ struct GrammarGenerator {
   /// token.
   static func childTokenChoices(for choices: [TokenChoice]) -> String {
     let grammar = GrammarGenerator()
-    
+
     if choices.count == 1 {
       return """
         ### Tokens

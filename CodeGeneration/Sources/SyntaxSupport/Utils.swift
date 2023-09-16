@@ -58,15 +58,16 @@ extension SwiftSyntax.Trivia {
     return SwiftSyntax.Trivia(pieces: pieces)
   }
 
-
   /// Make a new trivia by joining together ``SwiftSyntax/TriviaPiece``s from `joining`,
   /// and gluing them together with pieces from `separator`.
   public init(
     joining items: [SwiftSyntax.Trivia],
-    separator: SwiftSyntax.Trivia = SwiftSyntax.Trivia(pieces: [TriviaPiece.newlines(1), TriviaPiece.docLineComment("///"), TriviaPiece.newlines(1)])) {
+    separator: SwiftSyntax.Trivia = SwiftSyntax.Trivia(pieces: [TriviaPiece.newlines(1), TriviaPiece.docLineComment("///"), TriviaPiece.newlines(1)])
+  ) {
 
     self.init(
-      pieces: items
+      pieces:
+        items
         .filter { !$0.isEmpty }
         .joined(separator: separator)
     )

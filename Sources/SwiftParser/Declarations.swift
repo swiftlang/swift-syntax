@@ -206,11 +206,24 @@ extension Parser {
       modifiers: self.parseDeclModifierList()
     )
 
-    // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
-    // while recovering to the declaration start.
-    let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+    let recoveryResult: (match: DeclarationKeyword, handle: RecoveryConsumptionHandle)?
+    if let atResult = self.at(anyIn: DeclarationKeyword.self) {
+      // We are at a keyword that starts a declaration. Parse that declaration.
+      recoveryResult = (atResult.spec, .noRecovery(atResult.handle))
+    } else if atFunctionDeclarationWithoutFuncKeyword() {
+      // We aren't at a declaration keyword and it looks like we are at a function
+      // declaration. Parse a function declaration.
+      recoveryResult = (.lhs(.func), .missing(.keyword(.func)))
+    } else {
+      // In all other cases, use standard token recovery to find the declaration
+      // to parse.
+      // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
+      // while recovering to the declaration start.
+      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+      recoveryResult = self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence)
+    }
 
-    switch self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence) {
+    switch recoveryResult {
     case (.lhs(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.lhs(.class), let handle)?:
@@ -273,10 +286,7 @@ extension Parser {
         )
       }
 
-      let isPossibleFuncIdentifier = self.at(.identifier, .wildcard)
-      let isPossibleFuncParen = self.peek(isAt: .leftParen, .binaryOperator)
-      // Treat operators specially because they're likely to be functions.
-      if (isPossibleFuncIdentifier && isPossibleFuncParen) || self.at(anyIn: Operator.self) != nil {
+      if atFunctionDeclarationWithoutFuncKeyword() {
         return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
       }
     }
@@ -287,6 +297,24 @@ extension Parser {
         arena: self.arena
       )
     )
+  }
+
+  /// Returns `true` if it looks like the parser is positioned at a function declaration that’s missing the `func` keyword.
+  fileprivate mutating func atFunctionDeclarationWithoutFuncKeyword() -> Bool {
+    var nextTokenIsLeftParenOrLeftAngle: Bool {
+      self.peek(isAt: .leftParen) || self.peek().tokenText.hasPrefix("<")
+    }
+
+    if self.at(.identifier) {
+      return nextTokenIsLeftParenOrLeftAngle
+    } else if self.at(anyIn: Operator.self) != nil {
+      if self.currentToken.tokenText.hasSuffix("<") && self.peek(isAt: .identifier) {
+        return true
+      }
+      return nextTokenIsLeftParenOrLeftAngle
+    } else {
+      return false
+    }
   }
 }
 
@@ -1044,7 +1072,7 @@ extension Parser {
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(.exclamationMark, .prefixAmpersand) {
       var name = self.currentToken.tokenText
-      if !currentToken.isEditorPlaceholder && name.count > 1 && name.hasSuffix("<") && self.peek(isAt: .identifier) {
+      if !currentToken.isEditorPlaceholder && name.hasSuffix("<") && self.peek(isAt: .identifier) {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil

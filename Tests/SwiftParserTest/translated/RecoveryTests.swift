@@ -2107,13 +2107,7 @@ final class RecoveryTests: ParserTestCase {
     )
   }
 
-  func testRecovery120() {
-    assertParse(
-      """
-      //===--- Recovery for wrong decl introducer keyword.
-      """
-    )
-  }
+  // MARK: - Recovery for wrong decl introducer keyword.
 
   func testRecovery121() {
     assertParse(
@@ -2125,19 +2119,35 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected 'func' keyword in instance method declaration
-        DiagnosticSpec(message: "unexpected code 'notAKeyword() {}' before function")
-      ]
+        DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])
+      ],
+      fixedSource: """
+        class WrongDeclIntroducerKeyword1 {
+          func notAKeyword() {}
+          func foo() {}
+          class func bar() {}
+        }
+        """
+    )
+
+    assertParse(
+      """
+      class WrongDeclIntroducerKeyword1 {
+        1️⃣notAKeyword() {}
+        var x: Int
+      }
+      """,
+      diagnostics: [DiagnosticSpec(message: "expected 'func' in function", fixIts: ["insert 'func'"])],
+      fixedSource: """
+        class WrongDeclIntroducerKeyword1 {
+          func notAKeyword() {}
+          var x: Int
+        }
+        """
     )
   }
 
-  func testRecovery122() {
-    assertParse(
-      """
-      //===--- Recovery for wrong inheritance clause.
-      """
-    )
-  }
+  // MARK: - Recovery for wrong inheritance clause.
 
   func testRecovery123() {
     assertParse(

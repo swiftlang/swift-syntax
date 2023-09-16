@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let ATTRIBUTE_NODES: [Node] = [
-  // attribute-list -> attribute attribute-list?
   Node(
     kind: .attributeList,
     base: .syntaxCollection,
@@ -33,16 +32,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [.attribute, .ifConfigDecl]
   ),
 
-  // attribute -> '@' identifier '('?
-  //              ( identifier
-  //                | string-literal
-  //                | integer-literal
-  //                | availability-spec-list
-  //                | specialize-attr-spec-list
-  //                | implements-attr-arguments
-  //                | named-attribute-string-argument
-  //                | back-deploy-attr-spec-list
-  //              )? ')'?
   Node(
     kind: .attribute,
     base: .syntax,
@@ -200,7 +189,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // back-deploy-version-entry -> availability-version-restriction ','?
   Node(
     kind: .platformVersionItem,
     base: .syntax,
@@ -222,8 +210,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // back-deploy-version-list ->
-  //   back-deploy-version-entry back-deploy-version-list?
   Node(
     kind: .platformVersionItemList,
     base: .syntaxCollection,
@@ -231,8 +217,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [.platformVersionItem]
   ),
 
-  // The arguments of '@backDeployed(...)'
-  // back-deployed-attr-spec-list -> 'before' ':' back-deployed-version-list
   Node(
     kind: .backDeployedAttributeArguments,
     base: .syntax,
@@ -258,7 +242,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // convention-attribute-arguments -> token ',' 'cType'? ':' string-literal
   Node(
     kind: .conventionAttributeArguments,
     base: .syntax,
@@ -293,7 +276,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // convention-attribute-arguments -> 'witness_method' ':' identifier
   Node(
     kind: .conventionWitnessMethodAttributeArguments,
     base: .syntax,
@@ -315,12 +297,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // The argument of the derivative registration attribute
-  // '@derivative(of: ...)' and the transpose registration attribute
-  // '@transpose(of: ...)'.
-  //
-  // derivative-registration-attr-arguments ->
-  //     'of' ':' func-decl-name ','? differentiability-params-clause?
   Node(
     kind: .derivativeAttributeArguments,
     base: .syntax,
@@ -370,8 +346,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // differentiability-param-list ->
-  //     differentiability-param differentiability-param-list?
   Node(
     kind: .differentiabilityArgumentList,
     base: .syntaxCollection,
@@ -379,7 +353,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [.differentiabilityArgument]
   ),
 
-  // differentiability-param -> ('self' | identifier | integer-literal) ','?
   Node(
     kind: .differentiabilityArgument,
     base: .syntax,
@@ -402,8 +375,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // differentiability-params-clause ->
-  //     'wrt' ':' (differentiability-param | differentiability-params)
   Node(
     kind: .differentiabilityWithRespectToArgument,
     base: .syntax,
@@ -440,7 +411,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // differentiability-params -> '(' differentiability-param-list ')'
   Node(
     kind: .differentiabilityArguments,
     base: .syntax,
@@ -464,10 +434,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // The argument of '@differentiable(...)'.
-  // differentiable-attr-arguments ->
-  //     differentiability-kind? '.'? differentiability-params-clause? ','?
-  //     generic-where-clause?
   Node(
     kind: .differentiableAttributeArguments,
     base: .syntax,
@@ -541,7 +507,7 @@ public let ATTRIBUTE_NODES: [Node] = [
               .keyword(.public),
               .keyword(.open),
             ])
-          ),  // Keywords can be: public, internal, private, fileprivate, open
+          ),
           Child(
             name: "string",
             kind: .node(kind: .stringLiteralExpr)
@@ -618,9 +584,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // The argument of '@_implements(...)'
-  // implements-attr-arguments -> simple-type-identifier ','
-  //                              (identifier | operator) decl-name-arguments
   Node(
     kind: .implementsAttributeArguments,
     base: .syntax,
@@ -648,8 +611,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // Representation of e.g. 'exported: true,'
-  // labeled-specialize-entry -> identifier ':' token ','?
   Node(
     kind: .labeledSpecializeArgument,
     base: .syntax,
@@ -693,7 +654,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // objc-selector-piece -> identifier? ':'?
   Node(
     kind: .objCSelectorPiece,
     base: .syntax,
@@ -715,7 +675,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // objc-selector -> objc-selector-piece objc-selector?
   Node(
     kind: .objCSelectorPieceList,
     base: .syntaxCollection,
@@ -723,7 +682,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [.objCSelectorPiece]
   ),
 
-  // opaque-return-type-of-arguments -> string-literal ',' integer-literal
   Node(
     kind: .opaqueReturnTypeOfAttributeArguments,
     base: .syntax,
@@ -776,11 +734,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     ]
   ),
 
-  // The argument of '@_specialize(...)'
-  // specialize-attr-spec-list -> labeled-specialize-entry
-  //                                  specialize-spec-attr-list?
-  //                            | generic-where-clause
-  //                                  specialize-spec-attr-list?
   Node(
     kind: .specializeAttributeArgumentList,
     base: .syntaxCollection,
@@ -789,8 +742,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [.labeledSpecializeArgument, .specializeAvailabilityArgument, .specializeTargetFunctionArgument, .genericWhereClause]
   ),
 
-  // Representation of e.g. 'exported: true,'
-  // labeled-specialize-entry -> identifier ':' token ','?
   Node(
     kind: .specializeTargetFunctionArgument,
     base: .syntax,

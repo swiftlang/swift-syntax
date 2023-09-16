@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let COMMON_NODES: [Node] = [
-  // code-block-item-list -> code-block-item code-block-item-list?
   Node(
     kind: .codeBlockItemList,
     base: .syntaxCollection,
@@ -19,7 +18,6 @@ public let COMMON_NODES: [Node] = [
     elementChoices: [.codeBlockItem]
   ),
 
-  // code-block-item = (decl | stmt | expr) ';'?
   Node(
     kind: .codeBlockItem,
     base: .syntax,
@@ -54,7 +52,6 @@ public let COMMON_NODES: [Node] = [
     ]
   ),
 
-  // code-block -> '{' stmt-list '}'
   Node(
     kind: .codeBlock,
     base: .syntax,
@@ -80,7 +77,6 @@ public let COMMON_NODES: [Node] = [
     ]
   ),
 
-  // accessor-effect-specifiers -> (async)? (throws)?
   Node(
     kind: .accessorEffectSpecifiers,
     base: .syntax,
@@ -102,7 +98,6 @@ public let COMMON_NODES: [Node] = [
     ]
   ),
 
-  // funtion-effect-specifiers -> (async | reasync)? (throws | rethrows)?
   Node(
     kind: .functionEffectSpecifiers,
     base: .syntax,
@@ -124,7 +119,6 @@ public let COMMON_NODES: [Node] = [
     ]
   ),
 
-  // deinit-effect-specifiers -> async?
   Node(
     kind: .deinitializerEffectSpecifiers,
     base: .syntax,
@@ -305,7 +299,6 @@ public let COMMON_NODES: [Node] = [
     parserFunction: "parseStatement"
   ),
 
-  // type-effect-specifiers -> async? throws?
   Node(
     kind: .typeEffectSpecifiers,
     base: .syntax,

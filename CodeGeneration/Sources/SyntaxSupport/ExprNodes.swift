@@ -18,11 +18,11 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.arrayElement]
   ),
 
-  // element inside an array expression: expression ','?
   Node(
     kind: .arrayElement,
     base: .syntax,
     nameForDiagnostics: "array element",
+    documentation: "An element inside an array literal.",
     traits: [
       "WithTrailingComma"
     ],
@@ -40,11 +40,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // Array literal, e.g. [1, 2, 3]
   Node(
     kind: .arrayExpr,
     base: .expr,
     nameForDiagnostics: "array",
+    documentation: "An array literal.",
     children: [
       Child(
         name: "leftSquare",
@@ -63,12 +63,21 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // arrow-expr -> 'async'? 'throws'? '->'
-  // NOTE: This appears only in SequenceExpr.
   Node(
     kind: .arrowExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: """
+      The arrow when a type is used at a position that syntactically expectes an expression.
+
+      ### Examples
+
+      This represents the arrow in
+
+      ```swift
+      let array = [(Int) -> Int]()
+      ```
+      """,
     children: [
       Child(
         name: "effectSpecifiers",
@@ -83,14 +92,26 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // expression as TypeName
-  // NOTE: This won't come directly out of the parser. Rather, it is the
-  // result of "folding" a SequenceExpr based on knowing the precedence
-  // relationships amongst the different infix operators.
   Node(
     kind: .asExpr,
     base: .expr,
     nameForDiagnostics: "'as'",
+    documentation: """
+      The cast of an expressison to a different type.
+
+      ### Examples
+
+      ```swift
+      dog as Animal
+      ``` 
+
+      ```swift
+      myPet as? Dog`
+      ```
+
+      - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+        Beforehand, the parser does not know the precedences of operators and thus represents `is` by an ``UnresolvedAsExprSyntax``.
+      """,
     children: [
       Child(
         name: "expression",
@@ -114,7 +135,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An = expression.
   Node(
     kind: .assignmentExpr,
     base: .expr,
@@ -128,8 +148,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // The await operator.
-  // await foo()
   Node(
     kind: .awaitExpr,
     base: .expr,
@@ -146,12 +164,17 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An operator like + or -.
-  // NOTE: This appears only in SequenceExpr.
   Node(
     kind: .binaryOperatorExpr,
     base: .expr,
     nameForDiagnostics: "operator",
+    documentation: """
+      An operator like `+` or `-`.
+
+      This node represents the binary operator itself. It can occur inside a ``SequenceExprSyntax`` 
+      after parsing and will be the `operator` child of an ``InfixOperatorExprSyntax`` 
+      after folding operator using the `SwiftOperators` library.
+      """,
     children: [
       Child(
         name: "operator",
@@ -161,7 +184,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // true or false
   Node(
     kind: .booleanLiteralExpr,
     base: .expr,
@@ -175,7 +197,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // The borrow expr
   Node(
     kind: .borrowExpr,
     base: .expr,
@@ -192,7 +213,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // the canImport expr in if config expression
   Node(
     kind: .canImportExpr,
     base: .expr,
@@ -247,7 +267,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // case-item -> pattern where-clause? ','?
   Node(
     kind: .switchCaseItem,
     base: .syntax,
@@ -484,11 +503,24 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // a, b, c
   Node(
     kind: .closureShorthandParameterList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
+    documentation: """
+      A list of closure parameters that are not parenthesized and don't have type annotations.
+
+      If the closure parameters are parenthesized, they can also carry type annotations. 
+      In that case, the closure parameters are represented by ``ClosureParameterListSyntax``.
+
+      ### Examples
+
+      ```
+      let closure = { a, b in
+        return a + b
+      }
+      ```
+      """,
     elementChoices: [.closureShorthandParameter]
   ),
 
@@ -573,9 +605,6 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.declNameArgument]
   ),
 
-  // declname-arguments -> '(' declname-argument-list ')'
-  // declname-argument-list -> declname-argument*
-  // declname-argument -> identifier ':'
   Node(
     kind: .declNameArgument,
     base: .syntax,
@@ -622,11 +651,11 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.dictionaryElement]
   ),
 
-  // element inside an array expression: expression ','?
   Node(
     kind: .dictionaryElement,
     base: .syntax,
     nameForDiagnostics: "dictionary element",
+    documentation: "An element inside a dictionary literal.",
     traits: [
       "WithTrailingComma"
     ],
@@ -655,11 +684,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // Dictionary literal, e.g. [1:1, 2:2, 3:3]
   Node(
     kind: .dictionaryExpr,
     base: .expr,
     nameForDiagnostics: "dictionary",
+    documentation: "A dictionary literal",
     children: [
       Child(
         name: "leftSquare",
@@ -685,11 +714,24 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A _ expression.
   Node(
     kind: .discardAssignmentExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: """
+      A `_` that discards a value inside an assignment.
+
+      ### Examples
+
+      ```swift
+      _ = 42
+      ``` 
+
+
+      ```swift
+      if case .foo(_) = myValue
+      ```
+      """,
     children: [
       Child(
         name: "wildcard",
@@ -698,7 +740,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // <#content#>
   Node(
     kind: .editorPlaceholderExpr,
     base: .expr,
@@ -720,11 +761,15 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.expr]
   ),
 
-  // expression segment in a string interpolation expression.
   Node(
     kind: .expressionSegment,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      An interpolated expression inside a string literal.
+
+      - SeeAlso: ``StringSegmentSyntax``
+      """,
     traits: [
       "Parenthesized"
     ],
@@ -754,10 +799,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A floating-point literal
-  // 4.0
-  // -3.9
-  // +4e20
   Node(
     kind: .floatLiteralExpr,
     base: .expr,
@@ -771,7 +812,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // forced-value-expr -> expr '!'
   Node(
     kind: .forceUnwrapExpr,
     base: .expr,
@@ -788,8 +828,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // call-expr -> expr '(' call-argument-list ')' closure-expr?
-  //            | expr closure-expr
   Node(
     kind: .functionCallExpr,
     base: .expr,
@@ -830,7 +868,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An identifier expression.
   Node(
     kind: .declReferenceExpr,
     base: .expr,
@@ -858,11 +895,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // if-expr -> identifier? ':'? 'if' condition-list code-block
-  //   else-clause ';'?
-  //
-  // This node represents both an 'if' expression, as well as an 'if' statement
-  // when wrapped in an ExpressionStmt node.
   Node(
     kind: .ifExpr,
     base: .expr,
@@ -907,12 +939,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An inout expression.
-  // &x
   Node(
     kind: .inOutExpr,
     base: .expr,
     nameForDiagnostics: "inout expression",
+    documentation: "An expression prefixed with `&` to pass an argument to an `inout` parameter.",
     children: [
       Child(
         name: "ampersand",
@@ -925,14 +956,17 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An infix binary expression like x + y.
-  // NOTE: This won't come directly out of the parser. Rather, it is the
-  // result of "folding" a SequenceExpr based on knowing the precedence
-  // relationships amongst the different infix operators.
   Node(
     kind: .infixOperatorExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: """
+      An infix operator call like `1 + 2`.
+
+      - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+        Beforehand, the parser does not know the precedences of operators and thus the operator is just
+        a ``BinaryOperatorExprSyntax`` in a ``SequenceExprSyntax``.
+      """,
     children: [
       Child(
         name: "leftOperand",
@@ -950,10 +984,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An integer literal.
-  // 3
-  // +3_400
-  // +0x4f
   Node(
     kind: .integerLiteralExpr,
     base: .expr,
@@ -967,10 +997,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // expression is TypeName
-  // NOTE: This won't come directly out of the parser. Rather, it is the
-  // result of "folding" a SequenceExpr based on knowing the precedence
-  // relationships amongst the different infix operators.
   Node(
     kind: .isExpr,
     base: .expr,
@@ -984,7 +1010,8 @@ public let EXPR_NODES: [Node] = [
       value is Double
       ```
 
-      This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
+      - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+        Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
       """,
     children: [
       Child(
@@ -1007,19 +1034,19 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // The components of a key path
   Node(
     kind: .keyPathComponentList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
+    documentation: "The components of a key path",
     elementChoices: [.keyPathComponent]
   ),
 
-  // A single key path component.
   Node(
     kind: .keyPathComponent,
     base: .syntax,
     nameForDiagnostics: "key path component",
+    documentation: "A single key path component",
     children: [
       Child(
         name: "period",
@@ -1046,11 +1073,19 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // e.g. "\a.b[2].a"
   Node(
     kind: .keyPathExpr,
     base: .expr,
     nameForDiagnostics: "key path",
+    documentation: #"""
+      A key path.
+
+      ### Examples
+
+      ```swift
+      \a.b[2].a
+      ```
+      """#,
     children: [
       Child(
         name: "backslash",
@@ -1069,11 +1104,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A key path component like '?' or '!'.
   Node(
     kind: .keyPathOptionalComponent,
     base: .syntax,
     nameForDiagnostics: "key path optional component",
+    documentation: "A key path component like `?` or `!`.",
     children: [
       Child(
         name: "questionOrExclamationMark",
@@ -1082,11 +1117,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A key path component like .property or .1.
   Node(
     kind: .keyPathPropertyComponent,
     base: .syntax,
     nameForDiagnostics: "key path property component",
+    documentation: "A key path component like `.property` or `.1`.",
     children: [
       Child(
         name: "declName",
@@ -1100,11 +1135,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A key path component like .[17]
   Node(
     kind: .keyPathSubscriptComponent,
     base: .syntax,
     nameForDiagnostics: "key path subscript component",
+    documentation: "A key path component like `.[17]`",
     children: [
       Child(
         name: "leftSquare",
@@ -1125,11 +1160,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // e.g., "#embed("filename.txt")"
   Node(
     kind: .macroExpansionExpr,
     base: .expr,
     nameForDiagnostics: "macro expansion",
+    documentation: "The expansion of a freestanding macro in a position that expects an expression.",
     traits: [
       "FreestandingMacroExpansion"
     ],
@@ -1178,7 +1213,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // expr?.name
   Node(
     kind: .memberAccessExpr,
     base: .expr,
@@ -1206,7 +1240,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // The move expr
   Node(
     kind: .consumeExpr,
     base: .expr,
@@ -1247,7 +1280,6 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.multipleTrailingClosureElement]
   ),
 
-  // trailing-closure-element -> identifier ':' closure-expression
   Node(
     kind: .multipleTrailingClosureElement,
     base: .syntax,
@@ -1269,7 +1301,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A nil expression.
   Node(
     kind: .nilLiteralExpr,
     base: .expr,
@@ -1282,7 +1313,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // optional-chaining-expr -> expr '?'
   Node(
     kind: .optionalChainingExpr,
     base: .expr,
@@ -1299,11 +1329,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A pack element expr spelled with 'each'.
   Node(
     kind: .packElementExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: "A pack element expression spelled with `each`.",
     children: [
       Child(
         name: "eachKeyword",
@@ -1317,11 +1347,11 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A pack expansion expr spelled with 'repeat'.
   Node(
     kind: .packExpansionExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: "A pack expansion expression spelled with `repeat`.",
     children: [
       Child(
         name: "repeatKeyword",
@@ -1335,7 +1365,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // postfix '#if' expression
   Node(
     kind: .postfixIfConfigExpr,
     base: .expr,
@@ -1353,7 +1382,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // postfix-unary-expr -> expr postfix-operator
   Node(
     kind: .postfixOperatorExpr,
     base: .expr,
@@ -1371,13 +1399,23 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A prefix operator expression.
-  // -x
-  // !true
   Node(
     kind: .prefixOperatorExpr,
     base: .expr,
     nameForDiagnostics: "operator",
+    documentation: """
+      A prefix operator applied to a value.
+
+      ### Examples
+
+      ```swift
+      -x
+      ```
+
+      ```swift
+      !true
+      ```
+      """,
     children: [
       Child(
         name: "operator",
@@ -1392,8 +1430,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // e.g '(a|c)*', the contents of the literal is opaque to the C++ Swift
-  // parser though.
   Node(
     kind: .regexLiteralExpr,
     base: .expr,
@@ -1427,11 +1463,19 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // A flat list of expressions before sequence folding, e.g. 1 + 2 + 3.
   Node(
     kind: .sequenceExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: """
+      A flat list of expressions before operator folding using the `SwiftOperators` library.
+
+      ### Examples
+
+      ```swift
+      1 + 2 + 3
+      ```
+      """,
     children: [
       Child(
         name: "elements",
@@ -1440,7 +1484,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // specialize-expr -> expr generic-argument-clause?
   Node(
     kind: .genericSpecializationExpr,
     base: .expr,
@@ -1457,11 +1500,19 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // e.g. "abc \(foo()) def"
   Node(
     kind: .stringLiteralExpr,
     base: .expr,
     nameForDiagnostics: "string literal",
+    documentation: #"""
+      A string literal.
+
+      ### Examples
+
+      ```swift
+      "Hello \(userName())!"
+      ```
+      """#,
     children: [
       Child(
         name: "openingPounds",
@@ -1531,11 +1582,15 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.stringSegment]
   ),
 
-  // string literal segment in a string interpolation expression.
   Node(
     kind: .stringSegment,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      A literal segment inside a string segment.
+
+      - SeeAlso: ``ExpressionSegmentSyntax``
+      """,
     children: [
       Child(
         name: "content",
@@ -1544,7 +1599,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // subscript-expr -> expr '[' call-argument-list ']' closure-expr?
   Node(
     kind: .subscriptCallExpr,
     base: .expr,
@@ -1585,7 +1639,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // An 'super' expression.
   Node(
     kind: .superExpr,
     base: .expr,
@@ -1598,7 +1651,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // switch-case-label -> 'case' case-item-list ':'
   Node(
     kind: .switchCaseLabel,
     base: .syntax,
@@ -1619,7 +1671,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // switch-case-list -> switch-case switch-case-list?
   Node(
     kind: .switchCaseList,
     base: .syntaxCollection,
@@ -1627,8 +1678,6 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.switchCase, .ifConfigDecl]
   ),
 
-  // switch-case -> unknown-attr? switch-case-label stmt-list
-  //              | unknown-attr? switch-default-label stmt-list
   Node(
     kind: .switchCase,
     base: .syntax,
@@ -1664,7 +1713,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // switch-default-label -> 'default' ':'
   Node(
     kind: .switchDefaultLabel,
     base: .syntax,
@@ -1681,11 +1729,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // switch-expr -> identifier? ':'? 'switch' expr '{'
-  //   switch-case-list '}' ';'?
-  //
-  // This node represents both a 'switch' expression, as well as a 'switch'
-  // statement when wrapped in an ExpressionStmt node.
   Node(
     kind: .switchExpr,
     base: .expr,
@@ -1718,14 +1761,22 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // a ? 1 : 0
-  // NOTE: This won't come directly out of the parser. Rather, it is the
-  // result of "folding" a SequenceExpr based on knowing the precedence
-  // relationships amongst the different infix operators.
   Node(
     kind: .ternaryExpr,
     base: .expr,
     nameForDiagnostics: "ternay expression",
+    documentation: """
+      The ternary operator with operator precedences resolved.
+
+      ### Examples 
+
+      ```swift
+      a ? 1 : 0
+      ```
+
+      - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+        Beforehand, the parser does not know the precedences of operators and thus represents the `?` and `:` by an ``UnresolvedTernaryExprSyntax``.
+      """,
     children: [
       Child(
         name: "condition",
@@ -1757,14 +1808,27 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // The try operator.
-  // try foo()
-  // try? foo()
-  // try! foo()
   Node(
     kind: .tryExpr,
     base: .expr,
     nameForDiagnostics: "'try' expression",
+    documentation: """
+      An expression prefixed with `try`.
+
+      ### Examples
+
+      ```swift
+      try foo()
+      ```
+
+      ```swift
+      try? foo()
+      ```
+
+      ```swift
+      try! foo()
+      ```
+      """,
     children: [
       Child(
         name: "tryKeyword",
@@ -1789,11 +1853,17 @@ public let EXPR_NODES: [Node] = [
     elementChoices: [.labeledExpr]
   ),
 
-  // An element inside a tuple element list
   Node(
     kind: .labeledExpr,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      An expression that is prefixed by a label.
+
+      For example, labeled expressions occur in
+      - Function calls, where the label is the parameter label.
+      - Tuples, where the label is the name of the tuple element.
+      """,
     traits: [
       "WithTrailingComma"
     ],
@@ -1846,7 +1916,6 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // Type
   Node(
     kind: .typeExpr,
     base: .expr,
@@ -1859,13 +1928,16 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // 'as' ('?'|'!')
-  // "as" type casting operator without operands.
-  // NOTE: This appears only in SequenceExpr.
   Node(
     kind: .unresolvedAsExpr,
     base: .expr,
     nameForDiagnostics: "'as'",
+    documentation: """
+      The `as` keyword without any operands.
+
+      - Note: The parser does not know the precedences of operators and thus represents `as` by an ``UnresolvedAsExprSyntax``.
+        After operator folding using the `SwiftOperators` library, this gets translated to an ``AsExprSyntax``.
+      """,
     children: [
       Child(
         name: "asKeyword",
@@ -1880,13 +1952,16 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // 'is'
-  // "is" type casting operator without operands.
-  // NOTE: This appears only in SequenceExpr.
   Node(
     kind: .unresolvedIsExpr,
     base: .expr,
     nameForDiagnostics: "'is'",
+    documentation: """
+      The `is` keyword without any operands.
+
+      - Note: The parser does not know the precedences of operators and thus represents `is` by an ``UnresolvedIsExprSyntax``.
+        After operator folding using the `SwiftOperators` library, this gets translated to an ``IsExprSyntax``.
+      """,
     children: [
       Child(
         name: "isKeyword",
@@ -1895,7 +1970,7 @@ public let EXPR_NODES: [Node] = [
       )
     ]
   ),
-  // unresolved-pattern-expr -> pattern
+
   Node(
     kind: .patternExpr,
     base: .expr,
@@ -1908,13 +1983,17 @@ public let EXPR_NODES: [Node] = [
     ]
   ),
 
-  // ? expr :
-  // Ternary expression without the condition and the second choice.
-  // NOTE: This appears only in SequenceExpr.
   Node(
     kind: .unresolvedTernaryExpr,
     base: .expr,
     nameForDiagnostics: "ternary operator",
+    documentation: """
+      The middle section of a ternary operator between `?` and `:`.
+
+      - Note: The parser does not know the precedences of operators and thus represents the 
+        middle section of a ternary operator by an ``UnresolvedTernaryExprSyntax``.
+        After operator folding using the `SwiftOperators` library, this gets translated to an ``TernaryExprSyntax``.
+      """,
     children: [
       Child(
         name: "questionMark",

@@ -1760,6 +1760,10 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 
 // MARK: - ExpressionSegmentSyntax
 
+/// An interpolated expression inside a string literal.
+/// 
+/// - SeeAlso: ``StringSegmentSyntax``
+///
 /// ### Children
 /// 
 ///  - `backslash`: `'\'`

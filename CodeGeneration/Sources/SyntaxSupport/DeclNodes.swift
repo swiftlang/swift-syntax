@@ -139,7 +139,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.accessorDecl]
   ),
 
-  // (value)
   Node(
     kind: .accessorParameters,
     base: .syntax,
@@ -164,13 +163,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // actor-declaration -> attributes? access-level-modifier?
-  //                      'actor' actor-name
-  //                      generic-parameter-clause?
-  //                      type-inheritance-clause?
-  //                      generic-where-clause?
-  //                     '{' actor-members '}'
-  // actor-name -> identifier
   Node(
     kind: .actorDecl,
     base: .decl,
@@ -229,11 +221,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // associatedtype-declaration -> attributes? access-level-modifier?
-  //                                 'associatedtype' associatedtype-name
-  //                                 inheritance-clause? type-assignment?
-  //                                 generic-where-clause?
-  // associatedtype-name -> identifier
   Node(
     kind: .associatedTypeDecl,
     base: .decl,
@@ -317,13 +304,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // class-declaration -> attributes? access-level-modifier?
-  //                      'class' class-name
-  //                      generic-parameter-clause?
-  //                      type-inheritance-clause?
-  //                      generic-where-clause?
-  //                     '{' class-members '}'
-  // class-name -> identifier
   Node(
     kind: .classDecl,
     base: .decl,
@@ -556,7 +536,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // designated-type-list -> (',' identifier)*
   Node(
     kind: .designatedTypeList,
     base: .syntaxCollection,
@@ -564,7 +543,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.designatedType]
   ),
 
-  // <#content#>
   Node(
     kind: .editorPlaceholderDecl,
     base: .decl,
@@ -833,12 +811,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // extension-declaration -> attributes? access-level-modifier?
-  //                            'extension' extended-type
-  //                              type-inheritance-clause?
-  //                            generic-where-clause?
-  //                            '{' extension-members '}'
-  // extension-name -> identifier
   Node(
     kind: .extensionDecl,
     base: .decl,
@@ -956,9 +928,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.functionParameter]
   ),
 
-  // parameter ->
-  // external-parameter-name? local-parameter-name ':'
-  //   type '...'? '='? expression? ','?
   Node(
     kind: .functionParameter,
     base: .syntax,
@@ -980,8 +949,6 @@ public let DECL_NODES: [Node] = [
         name: "firstName",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)])
       ),
-      // One of these two names needs be optional, we choose the second
-      // name to avoid backtracking.
       Child(
         name: "secondName",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)], requiresLeadingSpace: true),
@@ -1017,8 +984,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // function-signature ->
-  //   '(' parameter-list? ')' function-effect-specifiers? return-clause?
   Node(
     kind: .functionSignature,
     base: .syntax,
@@ -1050,8 +1015,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.ifConfigClause]
   ),
 
-  // if-config-clause ->
-  //    ('#if' | '#elseif' | '#else') expr? (stmt-list | switch-case-list)
   Node(
     kind: .ifConfigClause,
     base: .syntax,
@@ -1096,8 +1059,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // if-config-decl -> '#if' expr stmt-list else-if-directive-clause-list
-  //   else-clause? '#endif'
   Node(
     kind: .ifConfigDecl,
     base: .decl,
@@ -1207,7 +1168,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // initializer -> '=' expr
   Node(
     kind: .initializerClause,
     base: .syntax,
@@ -1359,11 +1319,11 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // e.g., "#embed("filename.txt")"
   Node(
     kind: .macroExpansionDecl,
     base: .decl,
     nameForDiagnostics: "macro expansion",
+    documentation: "The expansion of a freestanding macro in a position that expects a declaration.",
     traits: [
       "FreestandingMacroExpansion",
       "WithAttributes",
@@ -1446,7 +1406,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // member-decl = decl ';'?
   Node(
     kind: .memberBlockItem,
     base: .syntax,
@@ -1467,7 +1426,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // member-decl-list = member-decl member-decl-list?
   Node(
     kind: .memberBlockItemList,
     base: .syntaxCollection,
@@ -1475,28 +1433,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.memberBlockItem]
   ),
 
-  // declaration-modifier -> access-level-modifier
-  //                       | mutation-modifier
-  //                       | 'class'
-  //                       | 'convenience'
-  //                       | 'distributed'
-  //                       | 'dynamic'
-  //                       | 'final'
-  //                       | 'infix'
-  //                       | 'isolated'
-  //                       | 'lazy'
-  //                       | 'nonisolated'
-  //                       | 'optional'
-  //                       | 'override'
-  //                       | 'postfix'
-  //                       | 'prefix'
-  //                       | 'required'
-  //                       | 'static'
-  //                       | 'unowned'
-  //                       | 'unowned(safe)'
-  //                       | 'unowned(unsafe)'
-  //                       | 'weak'
-  // mutation-modifier -> 'mutating' | 'nonmutating'
   Node(
     kind: .declModifierList,
     base: .syntaxCollection,
@@ -1504,7 +1440,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.declModifier]
   ),
 
-  // operator-decl -> attribute? modifiers? 'operator' operator
   Node(
     kind: .operatorDecl,
     base: .decl,
@@ -1539,7 +1474,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // infix-operator-group -> ':' identifier designated-type-list?
   Node(
     kind: .operatorPrecedenceAndTypes,
     base: .syntax,
@@ -1596,7 +1530,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.patternBinding]
   ),
 
-  // Pattern: Type = Value { get {} },
   Node(
     kind: .patternBinding,
     base: .syntax,
@@ -1733,8 +1666,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // precedence-group-assignment ->
-  //     'assignment' ':' ('true' | 'false')
   Node(
     kind: .precedenceGroupAssignment,
     base: .syntax,
@@ -1760,8 +1691,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // precedence-group-associativity ->
-  //     'associativity' ':' ('left' | 'right' | 'none')
   Node(
     kind: .precedenceGroupAssociativity,
     base: .syntax,
@@ -1785,9 +1714,6 @@ public let DECL_NODES: [Node] = [
       ),
     ]
   ),
-  // precedence-group-attribute-list ->
-  //     (precedence-group-relation | precedence-group-assignment |
-  //      precedence-group-associativity )*
   Node(
     kind: .precedenceGroupAttributeList,
     base: .syntaxCollection,
@@ -1795,9 +1721,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.precedenceGroupRelation, .precedenceGroupAssignment, .precedenceGroupAssociativity]
   ),
 
-  // precedence-group-decl -> attributes? modifiers? 'precedencegroup'
-  //                            identifier '{' precedence-group-attribute-list
-  //                            '}'
   Node(
     kind: .precedenceGroupDecl,
     base: .decl,
@@ -1866,8 +1789,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // precedence-group-name-list ->
-  //    identifier (',' identifier)*
   Node(
     kind: .precedenceGroupNameList,
     base: .syntaxCollection,
@@ -1875,8 +1796,6 @@ public let DECL_NODES: [Node] = [
     elementChoices: [.precedenceGroupName]
   ),
 
-  // precedence-group-relation ->
-  //     ('higherThan' | 'lowerThan') ':' precedence-group-name-list
   Node(
     kind: .precedenceGroupRelation,
     base: .syntax,
@@ -1976,8 +1895,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // return-clause ->
-  //   '->' type
   Node(
     kind: .returnClause,
     base: .syntax,
@@ -1996,7 +1913,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // source-file = code-block-item-list endOfFile
   Node(
     kind: .sourceFile,
     base: .syntax,
@@ -2022,13 +1938,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // struct-declaration -> attributes? access-level-modifier?
-  //                         'struct' struct-name
-  //                         generic-parameter-clause?
-  //                           type-inheritance-clause?
-  //                         generic-where-clause?
-  //                         '{' struct-members '}'
-  // struct-name -> identifier
   Node(
     kind: .structDecl,
     base: .decl,
@@ -2210,7 +2119,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // type-inheritance-clause -> ':' type
   Node(
     kind: .inheritanceClause,
     base: .syntax,
@@ -2228,7 +2136,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // type-assignment -> '=' type
   Node(
     kind: .typeInitializerClause,
     base: .syntax,
@@ -2246,10 +2153,6 @@ public let DECL_NODES: [Node] = [
     ]
   ),
 
-  // typealias-declaration -> attributes? access-level-modifier? 'typealias'
-  //                            typealias-name generic-parameter-clause?
-  //                            type-assignment
-  // typealias-name -> identifier
   Node(
     kind: .typeAliasDecl,
     base: .decl,

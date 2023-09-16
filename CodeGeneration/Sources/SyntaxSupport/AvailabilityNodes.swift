@@ -11,11 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let AVAILABILITY_NODES: [Node] = [
-  // Wrapper for all the different entries that may occur inside @available
-  // availability-entry -> '*' ','?
-  //                     | identifier ','?
-  //                     | availability-version-restriction ','?
-  //                     | availability-versioned-argument ','?
   Node(
     kind: .availabilityArgument,
     base: .syntax,
@@ -55,8 +50,6 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // Representation of 'deprecated: 2.3', 'message: "Hello world"' etc.
-  // availability-versioned-argument -> identifier ':' version-tuple
   Node(
     kind: .availabilityLabeledArgument,
     base: .syntax,
@@ -98,7 +91,6 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // availability-spec-list -> availability-entry availability-spec-list?
   Node(
     kind: .availabilityArgumentList,
     base: .syntaxCollection,
@@ -106,8 +98,6 @@ public let AVAILABILITY_NODES: [Node] = [
     elementChoices: [.availabilityArgument]
   ),
 
-  // Representation for 'iOS 10', 'swift 3.4' etc.
-  // availability-version-restriction -> identifier version-tuple
   Node(
     kind: .platformVersion,
     base: .syntax,
@@ -137,7 +127,6 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // version-tuple-element -> '.' integer-literal
   Node(
     kind: .versionComponent,
     base: .syntax,
@@ -157,7 +146,6 @@ public let AVAILABILITY_NODES: [Node] = [
     ]
   ),
 
-  // version-list -> version-tuple-element version-list?
   Node(
     kind: .versionComponentList,
     base: .syntaxCollection,
@@ -165,7 +153,6 @@ public let AVAILABILITY_NODES: [Node] = [
     elementChoices: [.versionComponent]
   ),
 
-  // version-tuple -> integer-literal version-list?
   Node(
     kind: .versionTuple,
     base: .syntax,

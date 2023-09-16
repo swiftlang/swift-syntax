@@ -14,6 +14,17 @@
 
 // MARK: - TernaryExprSyntax
 
+/// The ternary operator with operator precedences resolved.
+/// 
+/// ### Examples 
+/// 
+/// ```swift
+/// a ? 1 : 0
+/// ```
+/// 
+/// - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+///   Beforehand, the parser does not know the precedences of operators and thus represents the `?` and `:` by an ``UnresolvedTernaryExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `condition`: ``ExprSyntax``
@@ -442,6 +453,22 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 
 // MARK: - TryExprSyntax
 
+/// An expression prefixed with `try`.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// try foo()
+/// ```
+/// 
+/// ```swift
+/// try? foo()
+/// ```
+/// 
+/// ```swift
+/// try! foo()
+/// ```
+///
 /// ### Children
 /// 
 ///  - `tryKeyword`: `'try'`
@@ -2536,6 +2563,11 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 
 // MARK: - UnresolvedAsExprSyntax
 
+/// The `as` keyword without any operands.
+/// 
+/// - Note: The parser does not know the precedences of operators and thus represents `as` by an ``UnresolvedAsExprSyntax``.
+///   After operator folding using the `SwiftOperators` library, this gets translated to an ``AsExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `asKeyword`: `'as'`
@@ -2649,6 +2681,11 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 
 // MARK: - UnresolvedIsExprSyntax
 
+/// The `is` keyword without any operands.
+/// 
+/// - Note: The parser does not know the precedences of operators and thus represents `is` by an ``UnresolvedIsExprSyntax``.
+///   After operator folding using the `SwiftOperators` library, this gets translated to an ``IsExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `isKeyword`: `'is'`
@@ -2723,6 +2760,12 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 
 // MARK: - UnresolvedTernaryExprSyntax
 
+/// The middle section of a ternary operator between `?` and `:`.
+/// 
+/// - Note: The parser does not know the precedences of operators and thus represents the 
+///   middle section of a ternary operator by an ``UnresolvedTernaryExprSyntax``.
+///   After operator folding using the `SwiftOperators` library, this gets translated to an ``TernaryExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `questionMark`: `'?'`

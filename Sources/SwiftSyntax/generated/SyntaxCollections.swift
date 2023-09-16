@@ -267,6 +267,19 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.closureParameterList
 }
 
+/// A list of closure parameters that are not parenthesized and don't have type annotations.
+/// 
+/// If the closure parameters are parenthesized, they can also carry type annotations. 
+/// In that case, the closure parameters are represented by ``ClosureParameterListSyntax``.
+/// 
+/// ### Examples
+/// 
+/// ```
+/// let closure = { a, b in
+///   return a + b
+/// }
+/// ```
+///
 /// ### Children
 /// 
 /// ``ClosureShorthandParameterSyntax`` `*`
@@ -766,6 +779,8 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.inheritedTypeList
 }
 
+/// The components of a key path
+///
 /// ### Children
 /// 
 /// ``KeyPathComponentSyntax`` `*`

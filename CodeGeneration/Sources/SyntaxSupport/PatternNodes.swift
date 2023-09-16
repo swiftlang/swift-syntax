@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let PATTERN_NODES: [Node] = [
-  // expr-pattern -> expr
   Node(
     kind: .expressionPattern,
     base: .pattern,
@@ -23,7 +22,7 @@ public let PATTERN_NODES: [Node] = [
       )
     ]
   ),
-  // identifier-pattern -> identifier
+
   Node(
     kind: .identifierPattern,
     base: .pattern,
@@ -36,7 +35,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // is-type-pattern -> 'is' type
   Node(
     kind: .isTypePattern,
     base: .pattern,
@@ -53,8 +51,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // tuple-pattern-element-list -> tuple-pattern-element
-  //  tuple-pattern-element-list?
   Node(
     kind: .tuplePatternElementList,
     base: .syntaxCollection,
@@ -62,7 +58,6 @@ public let PATTERN_NODES: [Node] = [
     elementChoices: [.tuplePatternElement]
   ),
 
-  // tuple-pattern-element -> identifier? ':' pattern ','?
   Node(
     kind: .tuplePatternElement,
     base: .syntax,
@@ -96,7 +91,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // tuple-pattern -> '(' tuple-pattern-element-list ')'
   Node(
     kind: .tuplePattern,
     base: .pattern,
@@ -120,7 +114,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // type-annotation -> ':' type
   Node(
     kind: .typeAnnotation,
     base: .syntax,
@@ -137,12 +130,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // value-binding-pattern -> 'let' pattern
-  //                        | 'var' pattern
-  //                        | 'inout' pattern
-  //                        | '_mutating' pattern
-  //                        | '_consuming' pattern
-  //                        | '_borrowing' pattern
   Node(
     kind: .valueBindingPattern,
     base: .pattern,
@@ -164,7 +151,6 @@ public let PATTERN_NODES: [Node] = [
     ]
   ),
 
-  // wildcard-pattern -> '_' type-annotation?
   Node(
     kind: .wildcardPattern,
     base: .pattern,

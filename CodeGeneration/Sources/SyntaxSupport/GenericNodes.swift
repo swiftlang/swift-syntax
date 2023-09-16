@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 public let GENERIC_NODES: [Node] = [
-  // conformance-requirement -> type-identifier : type-identifier
   Node(
     kind: .conformanceRequirement,
     base: .syntax,
@@ -34,7 +33,6 @@ public let GENERIC_NODES: [Node] = [
     ]
   ),
 
-  // generic-parameter-clause -> '<' generic-parameter-list generic-where-clause? '>'
   Node(
     kind: .genericParameterClause,
     base: .syntax,
@@ -76,9 +74,6 @@ public let GENERIC_NODES: [Node] = [
     elementChoices: [.genericParameter]
   ),
 
-  // generic-parameter -> type-name
-  //                    | type-name : type-identifier
-  //                    | type-name : protocol-composition-type
   Node(
     kind: .genericParameter,
     base: .syntax,
@@ -130,8 +125,6 @@ public let GENERIC_NODES: [Node] = [
     elementChoices: [.genericRequirement]
   ),
 
-  // generic-requirement ->
-  //     (same-type-requirement|conformance-requirement|layout-requirement) ','?
   Node(
     kind: .genericRequirement,
     base: .syntax,
@@ -166,7 +159,6 @@ public let GENERIC_NODES: [Node] = [
     ]
   ),
 
-  // generic-where-clause -> 'where' requirement-list
   Node(
     kind: .genericWhereClause,
     base: .syntax,
@@ -187,8 +179,6 @@ public let GENERIC_NODES: [Node] = [
     ]
   ),
 
-  // layout-requirement -> type-name : layout-constraint
-  // layout-constraint -> identifier '('? integer-literal? ','? integer-literal? ')'?
   Node(
     kind: .layoutRequirement,
     base: .syntax,
@@ -247,7 +237,6 @@ public let GENERIC_NODES: [Node] = [
     ]
   ),
 
-  // primary-associated-type-clause -> '<' primary-associated-type-list '>'
   Node(
     kind: .primaryAssociatedTypeClause,
     base: .syntax,
@@ -278,7 +267,6 @@ public let GENERIC_NODES: [Node] = [
     elementChoices: [.primaryAssociatedType]
   ),
 
-  // primary-associated-type -> type-name ','?
   Node(
     kind: .primaryAssociatedType,
     base: .syntax,
@@ -300,7 +288,6 @@ public let GENERIC_NODES: [Node] = [
     ]
   ),
 
-  // same-type-requirement -> type-identifier == type
   Node(
     kind: .sameTypeRequirement,
     base: .syntax,

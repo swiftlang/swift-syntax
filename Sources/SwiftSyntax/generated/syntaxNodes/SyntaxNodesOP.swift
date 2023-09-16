@@ -1257,6 +1257,8 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
 
 // MARK: - PackElementExprSyntax
 
+/// A pack element expression spelled with `each`.
+///
 /// ### Children
 /// 
 ///  - `eachKeyword`: `'each'`
@@ -1483,6 +1485,8 @@ public struct PackElementTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
 
 // MARK: - PackExpansionExprSyntax
 
+/// A pack expansion expression spelled with `repeat`.
+///
 /// ### Children
 /// 
 ///  - `repeatKeyword`: `'repeat'`
@@ -3826,6 +3830,18 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable, _Le
 
 // MARK: - PrefixOperatorExprSyntax
 
+/// A prefix operator applied to a value.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// -x
+/// ```
+/// 
+/// ```swift
+/// !true
+/// ```
+///
 /// ### Children
 /// 
 ///  - `operator`: `<prefixOperator>`

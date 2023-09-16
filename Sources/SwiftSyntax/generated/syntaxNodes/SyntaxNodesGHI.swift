@@ -2907,6 +2907,8 @@ public struct ImportPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 
 // MARK: - InOutExprSyntax
 
+/// An expression prefixed with `&` to pass an argument to an `inout` parameter.
+///
 /// ### Children
 /// 
 ///  - `ampersand`: `'&'`
@@ -3020,6 +3022,12 @@ public struct InOutExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 
 // MARK: - InfixOperatorExprSyntax
 
+/// An infix operator call like `1 + 2`.
+/// 
+/// - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+///   Beforehand, the parser does not know the precedences of operators and thus the operator is just
+///   a ``BinaryOperatorExprSyntax`` in a ``SequenceExprSyntax``.
+///
 /// ### Children
 /// 
 ///  - `leftOperand`: ``ExprSyntax``
@@ -3988,7 +3996,8 @@ public struct IntegerLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
 /// value is Double
 /// ```
 /// 
-/// This node is only generated after operators are folded using the `SwiftOperators` library. Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
+/// - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
+///   Beforehand, the parser does not know the precedences of operators and thus represents `is` by an `UnresolvedIsExpr`.
 ///
 /// ### Children
 /// 

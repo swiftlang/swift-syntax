@@ -14,6 +14,8 @@
 
 // MARK: - KeyPathComponentSyntax
 
+/// A single key path component
+///
 /// ### Children
 /// 
 ///  - `period`: `'.'`?
@@ -180,6 +182,14 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 
 // MARK: - KeyPathExprSyntax
 
+/// A key path.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// \a.b[2].a
+/// ```
+///
 /// ### Children
 /// 
 ///  - `backslash`: `'\'`
@@ -347,6 +357,8 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 
 // MARK: - KeyPathOptionalComponentSyntax
 
+/// A key path component like `?` or `!`.
+///
 /// ### Children
 /// 
 ///  - `questionOrExclamationMark`: (`'?'` | `'!'`)
@@ -425,6 +437,8 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable, _L
 
 // MARK: - KeyPathPropertyComponentSyntax
 
+/// A key path component like `.property` or `.1`.
+///
 /// ### Children
 /// 
 ///  - `declName`: ``DeclReferenceExprSyntax``
@@ -542,6 +556,8 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable, _L
 
 // MARK: - KeyPathSubscriptComponentSyntax
 
+/// A key path component like `.[17]`
+///
 /// ### Children
 /// 
 ///  - `leftSquare`: `'['`
@@ -713,6 +729,12 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 
 // MARK: - LabeledExprSyntax
 
+/// An expression that is prefixed by a label.
+/// 
+/// For example, labeled expressions occur in
+/// - Function calls, where the label is the parameter label.
+/// - Tuples, where the label is the name of the tuple element.
+///
 /// ### Children
 /// 
 ///  - `label`: (`<identifier>` | `'_'`)?
@@ -1817,6 +1839,8 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
 
 // MARK: - MacroExpansionDeclSyntax
 
+/// The expansion of a freestanding macro in a position that expects a declaration.
+///
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
@@ -2256,6 +2280,8 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
 
 // MARK: - MacroExpansionExprSyntax
 
+/// The expansion of a freestanding macro in a position that expects an expression.
+///
 /// ### Children
 /// 
 ///  - `pound`: `'#'`

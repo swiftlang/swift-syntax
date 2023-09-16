@@ -788,40 +788,36 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if let unexpected = node.unexpectedBetweenDeinitKeywordAndEffectSpecifiers,
-      let name = unexpected.presentTokens(satisfying: { $0.tokenKind.isIdentifier == true }).only
-    {
+
+    let name: TokenSyntax? = node
+      .unexpectedBetweenDeinitKeywordAndEffectSpecifiers?
+      .presentTokens(satisfying: \.tokenKind.isIdentifier)
+      .only
+
+    let params: FunctionParameterClauseSyntax? = node
+      .unexpectedBetweenDeinitKeywordAndEffectSpecifiers?
+      .compactMap({ $0.as(FunctionParameterClauseSyntax.self) })
+      .only
+
+    let returnType: ReturnClauseSyntax? = node
+      .unexpectedBetweenEffectSpecifiersAndBody?
+      .compactMap({ $0.as(ReturnClauseSyntax.self) })
+      .only
+
+    let nodes = [Syntax(name), Syntax(params), Syntax(returnType)].compactMap { $0 }
+
+    if let firstNode = nodes.first {
       addDiagnostic(
-        name,
-        .deinitCannotHaveName,
+        firstNode,
+        DeinitializerSignatureError(name: name, params: params, returnClause: returnType),
+        highlights: nodes,
         fixIts: [
-          FixIt(message: RemoveNodesFixIt(name), changes: .makeMissing(name))
+          FixIt(
+            message: RemoveNodesFixIt(nodes),
+            changes: nodes.map { .makeMissing($0) }
+          )
         ],
-        handledNodes: [name.id]
-      )
-    }
-    if let unexpected = node.unexpectedBetweenDeinitKeywordAndEffectSpecifiers,
-      let params = unexpected.compactMap({ $0.as(FunctionParameterClauseSyntax.self) }).only
-    {
-      addDiagnostic(
-        params,
-        .deinitCannotHaveParameters,
-        fixIts: [
-          FixIt(message: RemoveNodesFixIt(params), changes: .makeMissing(params))
-        ],
-        handledNodes: [params.id]
-      )
-    }
-    if let unexpected = node.unexpectedBetweenEffectSpecifiersAndBody,
-      let returnType = unexpected.compactMap({ $0.as(ReturnClauseSyntax.self) }).only
-    {
-      addDiagnostic(
-        returnType,
-        .deinitCannotHaveReturnType,
-        fixIts: [
-          FixIt(message: RemoveNodesFixIt(returnType), changes: .makeMissing(returnType))
-        ],
-        handledNodes: [returnType.id]
+        handledNodes: nodes.map { $0.id }
       )
     }
 

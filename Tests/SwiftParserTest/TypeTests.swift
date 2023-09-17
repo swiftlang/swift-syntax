@@ -304,4 +304,16 @@ final class TypeTests: ParserTestCase {
       ]
     )
   }
+
+  func testTypedThrows() {
+    assertParse(
+      """
+      { () throws(PosixError) -> Void in }
+      """
+    )
+
+    assertParse("typealias T = () throws(PosixError) -> Void")
+
+    assertParse("[() throws(PosixError) -> Void]()")
+  }
 }

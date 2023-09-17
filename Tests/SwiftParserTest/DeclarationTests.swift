@@ -891,6 +891,20 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testTypedThrows() {
+    assertParse(
+      "func test() throws(any Error) -> Int { }"
+    )
+
+    assertParse(
+      """
+      struct X {
+        init() throws(any Error) { }
+      }
+      """
+    )
+  }
+
   func testExtraneousRightBraceRecovery() {
     assertParse(
       """

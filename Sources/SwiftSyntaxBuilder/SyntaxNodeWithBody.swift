@@ -71,7 +71,7 @@ public extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
   init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     let stmt = StmtSyntax("\(header) {}")
     guard let castedStmt = stmt.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: stmt)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: stmt)
     }
     self = castedStmt
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
@@ -121,7 +121,7 @@ public extension HasTrailingOptionalCodeBlock where Self: DeclSyntaxProtocol {
   init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
@@ -166,7 +166,7 @@ public extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
   init(_ header: SyntaxNodeString, @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
     self.memberBlock = try MemberBlockSyntax(members: membersBuilder())
@@ -209,7 +209,7 @@ public extension IfExprSyntax {
   ) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
     }
     self = ifExpr
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
@@ -254,7 +254,7 @@ public extension IfExprSyntax {
   init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
     }
     self = ifExpr
     self.body = CodeBlockSyntax(statements: try bodyBuilder())
@@ -321,7 +321,7 @@ public extension SwitchExprSyntax {
   init(_ header: SyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let switchExpr = expr.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: expr)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
     }
     self = switchExpr
     self.cases = try casesBuilder()
@@ -355,7 +355,7 @@ public extension VariableDeclSyntax {
   init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder accessor: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
-      throw SyntaxStringInterpolationError.producedInvalidNodeType(expectedType: Self.self, actualNode: decl)
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
     precondition(self.bindings.count == 1)

@@ -161,23 +161,31 @@ where Self.StringInterpolation == SyntaxStringInterpolation {
   init(stringInterpolation: SyntaxStringInterpolation)
 }
 
-enum SyntaxStringInterpolationError: Error, CustomStringConvertible {
-  case producedInvalidNodeType(expectedType: SyntaxProtocol.Type, actualType: SyntaxProtocol.Type)
-  case diagnostics([Diagnostic], tree: Syntax)
+/// Describes an error when building a syntax node with string interpolation resulted in an unexpected node type.
+public struct SyntaxStringInterpolationInvalidNodeTypeError: Error, CustomStringConvertible {
+  let expectedType: SyntaxProtocol.Type
+  let actualType: SyntaxProtocol.Type
 
-  static func producedInvalidNodeType<S: SyntaxProtocol>(expectedType: SyntaxProtocol.Type, actualNode: S) -> Self {
-    return .producedInvalidNodeType(expectedType: expectedType, actualType: type(of: actualNode))
+  /// Initialize the invalid node type error providing an expected type, and the actual node that resulted.
+  public init<S: SyntaxProtocol>(expectedType: SyntaxProtocol.Type, actualNode: S) {
+    self.expectedType = expectedType
+    self.actualType = type(of: actualNode)
   }
 
+  public var description: String {
+    return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
+  }
+}
+
+/// A string interpolation error based on a ``SwiftDiagnostics/Diagnostic``.
+struct SyntaxStringInterpolationDiagnosticError: Error, CustomStringConvertible {
+  let diagnostics: [Diagnostic]
+  let tree: Syntax
+
   var description: String {
-    switch self {
-    case .producedInvalidNodeType(expectedType: let expectedType, actualType: let actualType):
-      return "Parsing the code snippet was expected to produce a \(expectedType) but produced a \(actualType)"
-    case .diagnostics(let diagnostics, let tree):
-      // Start the diagnostic on a new line so it isn't prefixed with the file, which messes up the
-      // column-aligned message from ``DiagnosticsFormatter``.
-      return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
-    }
+    // Start the diagnostic on a new line so it isn't prefixed with the file, which messes up the
+    // column-aligned message from ``DiagnosticsFormatter``.
+    return "\n" + DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics)
   }
 }
 

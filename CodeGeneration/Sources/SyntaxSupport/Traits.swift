@@ -56,7 +56,13 @@ public let TRAITS: [Trait] = [
       Child(name: "asyncSpecifier", kind: .token(choices: [.keyword(.async), .keyword(.reasync)]), isOptional: true),
       Child(name: "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
       Child(name: "throwsSpecifier", kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]), isOptional: true),
-      Child(name: "unexpectedAfterThrowsSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
+      Child(name: "unexpectedBetweenThrowsSpecifierAndThrownType", kind: .node(kind: .unexpectedNodes), isOptional: true),
+      Child(
+        name: "thrownType",
+        kind: .node(kind: .thrownType),
+        isOptional: true
+      ),
+      Child(name: "unexpectedAfterThrownType", kind: .node(kind: .unexpectedNodes), isOptional: true),
     ]
   ),
   Trait(

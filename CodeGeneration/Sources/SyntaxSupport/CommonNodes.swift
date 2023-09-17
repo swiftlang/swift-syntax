@@ -80,6 +80,27 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
+    kind: .thrownType,
+    base: .syntax,
+    nameForDiagnostics: "thrown type",
+    children: [
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "type",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "type"
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
+      ),
+    ]
+  ),
+
+  Node(
     kind: .accessorEffectSpecifiers,
     base: .syntax,
     nameForDiagnostics: "accessor specifiers",
@@ -97,6 +118,11 @@ public let COMMON_NODES: [Node] = [
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws)]),
         documentation: "The `throws` keyword.",
+        isOptional: true
+      ),
+      Child(
+        name: "thrownType",
+        kind: .node(kind: .thrownType),
         isOptional: true
       ),
     ]
@@ -120,6 +146,11 @@ public let COMMON_NODES: [Node] = [
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
         documentation: "The `throws` or `rethrows` keyword.",
+        isOptional: true
+      ),
+      Child(
+        name: "thrownType",
+        kind: .node(kind: .thrownType),
         isOptional: true
       ),
     ]
@@ -322,6 +353,11 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws)]),
+        isOptional: true
+      ),
+      Child(
+        name: "thrownType",
+        kind: .node(kind: .thrownType),
         isOptional: true
       ),
     ]

@@ -40,9 +40,9 @@ public class Node {
   /// The kind of node’s supertype. This kind must have `isBase == true`
   public let base: SyntaxNodeKind
 
-  /// If `true`, this is for an experimental language feature, and any public
-  /// API generated should be SPI.
-  public let isExperimental: Bool
+  /// The experimental feature the node is part of, or `nil` if this isn't
+  /// for an experimental feature.
+  public let experimentalFeature: ExperimentalFeature?
 
   /// When the node name is printed for diagnostics, this name is used.
   /// If `nil`, `nameForDiagnostics` will print the parent node’s name.
@@ -56,6 +56,10 @@ public class Node {
   /// If the syntax node can be constructed by parsing a string, the parser
   /// function that should be invoked to create this node.
   public let parserFunction: TokenSyntax?
+
+  /// If `true`, this is for an experimental language feature, and any public
+  /// API generated should be SPI.
+  public var isExperimental: Bool { experimentalFeature != nil }
 
   /// A name for this node that is suitable to be used as a variables or enum
   /// case's name.
@@ -107,7 +111,7 @@ public class Node {
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
-    isExperimental: Bool = false,
+    experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
@@ -119,7 +123,7 @@ public class Node {
 
     self.kind = kind
     self.base = base
-    self.isExperimental = isExperimental
+    self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
@@ -226,7 +230,7 @@ public class Node {
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
-    isExperimental: Bool = false,
+    experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
@@ -235,7 +239,7 @@ public class Node {
     self.kind = kind
     precondition(base == .syntaxCollection)
     self.base = base
-    self.isExperimental = isExperimental
+    self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction

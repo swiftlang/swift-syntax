@@ -24,11 +24,9 @@ public struct TokenSpec {
   /// The name of the token, suitable for use in variable or enum case names.
   public let varOrCaseName: TokenSyntax
 
-  /// Indicates if the token is part of an experimental language feature.
-  ///
-  /// If `true`, this keyword is for an experimental language feature, and any public
-  /// API generated should be marked as SPI
-  public let isExperimental: Bool
+  /// The experimental feature the token is part of, or `nil` if this isn't
+  /// for an experimental feature.
+  public let experimentalFeature: ExperimentalFeature?
 
   /// The name of the token that can be shown in diagnostics.
   public let nameForDiagnostics: String
@@ -38,6 +36,12 @@ public struct TokenSpec {
 
   /// The kind of the token.
   public let kind: Kind
+
+  /// Indicates if the token is part of an experimental language feature.
+  ///
+  /// If `true`, this keyword is for an experimental language feature, and any public
+  /// API generated should be marked as SPI
+  public var isExperimental: Bool { experimentalFeature != nil }
 
   /// The attributes that should be printed on any API for the generated keyword.
   ///
@@ -51,19 +55,19 @@ public struct TokenSpec {
   ///
   /// - Parameters:
   ///   - name: A name of the token.
-  ///   - isExperimental: Indicates if the token is part of an experimental language feature.
+  ///   - experimentalFeature: The experimental feature the token is part of, or `nil` if this isn't for an experimental feature.
   ///   - nameForDiagnostics: A name of the token that can be shown in diagnostics.
   ///   - text: An actual text of the token, if available.
   ///   - kind: A kind of the token.
   fileprivate init(
     name: String,
-    isExperimental: Bool = false,
+    experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String,
     text: String? = nil,
     kind: Kind
   ) {
     self.varOrCaseName = .identifier(name)
-    self.isExperimental = isExperimental
+    self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.text = text
     self.kind = kind

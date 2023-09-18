@@ -304,7 +304,9 @@ extension Lexer.Lexeme {
   }
 
   func isContextualPunctuator(_ name: SyntaxText) -> Bool {
-    return Operator(lexeme: self) != nil && self.tokenText == name
+    // Currently we can ignore experimental features since a new kind of
+    // non-prefix/infix/postfix operator seems unlikely.
+    return Operator(lexeme: self, experimentalFeatures: []) != nil && self.tokenText == name
   }
 
   var isLexerClassifiedKeyword: Bool {

@@ -15,6 +15,14 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
+func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFeature?) -> SwitchCaseSyntax {
+  let whereClause =
+    experimentalFeature.map {
+      "where experimentalFeatures.contains(.\($0.token))"
+    } ?? ""
+  return "case TokenSpec(.\(caseName))\(raw: whereClause): self = .\(caseName)"
+}
+
 let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax("@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
 
@@ -42,16 +50,20 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               }
             }
 
-            try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme)") {
+            try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures)") {
               try SwitchExprSyntax("switch PrepareForKeywordMatch(lexeme)") {
                 for choice in choices {
                   switch choice {
                   case .keyword(let keyword):
-                    let caseName = keyword.spec.varOrCaseName
-                    SwitchCaseSyntax("case TokenSpec(.\(caseName)): self = .\(caseName)")
+                    tokenCaseMatch(
+                      keyword.spec.varOrCaseName,
+                      experimentalFeature: keyword.spec.experimentalFeature
+                    )
                   case .token(let token):
-                    let caseName = token.spec.varOrCaseName
-                    SwitchCaseSyntax("case TokenSpec(.\(caseName)): self = .\(caseName)")
+                    tokenCaseMatch(
+                      token.spec.varOrCaseName,
+                      experimentalFeature: token.spec.experimentalFeature
+                    )
                   }
                 }
                 SwitchCaseSyntax("default: return nil")

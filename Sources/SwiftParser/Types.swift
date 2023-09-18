@@ -203,7 +203,7 @@ extension Parser {
       case leftSquare
       case wildcard
 
-      init?(lexeme: Lexer.Lexeme) {
+      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
         switch PrepareForKeywordMatch(lexeme) {
         case .keyword(.Self): self = .Self
         case .keyword(.Any): self = .Any

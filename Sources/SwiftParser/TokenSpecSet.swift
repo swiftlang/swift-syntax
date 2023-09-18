@@ -17,8 +17,9 @@
 protocol TokenSpecSet: CaseIterable {
   var spec: TokenSpec { get }
 
-  /// Creates an instance if `lexeme` satisfy the condition of this subset.
-  init?(lexeme: Lexer.Lexeme)
+  /// Creates an instance if `lexeme` satisfies the condition of this subset,
+  /// taking into account any `experimentalFeatures` active.
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures)
 }
 
 /// A way to combine two token spec sets into an aggregate token spec set.
@@ -26,12 +27,12 @@ enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
   case lhs(LHS)
   case rhs(RHS)
 
-  init?(lexeme: Lexer.Lexeme) {
-    if let x = LHS(lexeme: lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    if let x = LHS(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .lhs(x)
       return
     }
-    if let y = RHS(lexeme: lexeme) {
+    if let y = RHS(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .rhs(y)
       return
     }
@@ -62,7 +63,7 @@ enum AccessorModifier: TokenSpecSet {
   case mutating
   case nonmutating
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.__consuming): self = .__consuming
     case TokenSpec(.consuming): self = .consuming
@@ -102,7 +103,7 @@ enum CanBeStatementStart: TokenSpecSet {
   case `while`
   case yield
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.break): self = .break
     case TokenSpec(.continue): self = .continue
@@ -151,7 +152,7 @@ enum CompilationCondition: TokenSpecSet {
   case compiler
   case canImport
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.swift): self = .swift
     case TokenSpec(.compiler): self = .compiler
@@ -198,7 +199,7 @@ enum ContextualDeclKeyword: TokenSpecSet {
   case unowned
   case weak
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.__consuming): self = .__consuming
     case TokenSpec(._compilerInitialized): self = ._compilerInitialized
@@ -286,7 +287,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
   case `typealias`
   case pound
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.actor): self = .actor
     case TokenSpec(.macro): self = .macro
@@ -376,7 +377,7 @@ enum DeclarationModifier: TokenSpecSet {
   case unowned
   case weak
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.__consuming): self = .__consuming
     case TokenSpec(.__setter_access): self = .__setter_access
@@ -465,10 +466,10 @@ enum DeclarationStart: TokenSpecSet {
   case declarationModifier(DeclarationModifier)
   case declarationKeyword(DeclarationKeyword)
 
-  init?(lexeme: Lexer.Lexeme) {
-    if let subset = DeclarationModifier(lexeme: lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    if let subset = DeclarationModifier(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .declarationModifier(subset)
-    } else if let subset = DeclarationKeyword(lexeme: lexeme) {
+    } else if let subset = DeclarationKeyword(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .declarationKeyword(subset)
     } else {
       return nil
@@ -492,7 +493,9 @@ enum Operator: TokenSpecSet {
   case postfixOperator
   case prefixOperator
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    // NOTE: If you ever add any experimental features here,
+    // `isContextualPunctuator` will need updating to handle that.
     switch lexeme.rawTokenKind {
     case .binaryOperator: self = .binaryOperator
     case .postfixOperator: self = .postfixOperator
@@ -517,7 +520,7 @@ enum BinaryOperatorLike: TokenSpecSet {
   case equal
   case arrow
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch lexeme.rawTokenKind {
     case .binaryOperator: self = .binaryOperator
     case .infixQuestionMark: self = .infixQuestionMark
@@ -543,7 +546,7 @@ enum PostfixOperatorLike: TokenSpecSet {
   case exclamationMark
   case postfixQuestionMark
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch lexeme.rawTokenKind {
     case .postfixOperator: self = .postfixOperator
     case .exclamationMark: self = .exclamationMark
@@ -567,16 +570,16 @@ enum OperatorLike: TokenSpecSet {
   case binaryOperatorLike(BinaryOperatorLike)
   case postfixOperatorLike(PostfixOperatorLike)
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     if case .prefixOperator = lexeme.rawTokenKind {
       self = .prefixOperator
       return
     }
-    if let binOp = BinaryOperatorLike(lexeme: lexeme) {
+    if let binOp = BinaryOperatorLike(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .binaryOperatorLike(binOp)
       return
     }
-    if let postfixOp = PostfixOperatorLike(lexeme: lexeme) {
+    if let postfixOp = PostfixOperatorLike(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .postfixOperatorLike(postfixOp)
       return
     }
@@ -600,7 +603,7 @@ enum SwitchCaseStart: TokenSpecSet {
   case `case`
   case `default`
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.case): self = .case
     case TokenSpec(.default): self = .default
@@ -630,7 +633,7 @@ enum TypeAttribute: TokenSpecSet {
   case Sendable
   case unchecked
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(._local): self = ._local
     case TokenSpec(._noMetadata): self = ._noMetadata
@@ -674,7 +677,7 @@ public enum TypeSpecifier: TokenSpecSet {
   case borrowing
   case consuming
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.inout): self = .inout
     case TokenSpec(.__owned): self = .owned
@@ -721,7 +724,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case each
   case any
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.await): self = .await
     case TokenSpec(._move): self = ._move
@@ -755,7 +758,7 @@ enum IfOrSwitch: TokenSpecSet {
   case `if`
   case `switch`
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.if): self = .if
     case TokenSpec(.switch): self = .switch
@@ -776,7 +779,7 @@ enum ExpressionPrefixOperator: TokenSpecSet {
   case prefixAmpersand
   case prefixOperator
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch lexeme.rawTokenKind {
     case .backslash: self = .backslash
     case .prefixAmpersand: self = .prefixAmpersand
@@ -801,7 +804,7 @@ enum ExpressionPrefixOperator: TokenSpecSet {
 enum PureMatchingPatternStart: TokenSpecSet {
   case `is`
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.is): self = .is
     default: return nil
@@ -824,7 +827,7 @@ enum ParameterModifier: TokenSpecSet {
   case _const
   case isolated
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(._const): self = ._const
     case TokenSpec(.isolated): self = .isolated
@@ -869,7 +872,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case multilineStringQuote
   case singleQuote
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.Any): self = .Any
     case TokenSpec(.atSign): self = .atSign
@@ -946,14 +949,14 @@ enum ExpressionStart: TokenSpecSet {
   case primaryExpressionStart(PrimaryExpressionStart)
   case ifOrSwitch(IfOrSwitch)
 
-  init?(lexeme: Lexer.Lexeme) {
-    if let subset = ExpressionModifierKeyword(lexeme: lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    if let subset = ExpressionModifierKeyword(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .awaitTryMove(subset)
-    } else if let subset = ExpressionPrefixOperator(lexeme: lexeme) {
+    } else if let subset = ExpressionPrefixOperator(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .expressionPrefixOperator(subset)
-    } else if let subset = PrimaryExpressionStart(lexeme: lexeme) {
+    } else if let subset = PrimaryExpressionStart(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .primaryExpressionStart(subset)
-    } else if let subset = IfOrSwitch(lexeme: lexeme) {
+    } else if let subset = IfOrSwitch(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .ifOrSwitch(subset)
     } else {
       return nil
@@ -986,7 +989,7 @@ enum EffectSpecifiers: TokenSpecSet {
   case `throws`
   case `try`
 
-  init?(lexeme: Lexer.Lexeme) {
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.async): self = .async
     case TokenSpec(.await, allowAtStartOfLine: false): self = .await

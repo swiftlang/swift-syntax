@@ -601,7 +601,7 @@ extension Parser {
       case poundElseif
       case endOfFile
 
-      init?(lexeme: Lexer.Lexeme) {
+      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.rightBrace): self = .rightBrace
         case TokenSpec(.case): self = .case

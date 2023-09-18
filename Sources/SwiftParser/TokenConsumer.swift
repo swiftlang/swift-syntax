@@ -138,7 +138,7 @@ extension TokenConsumer {
       recordAlternativeTokenChoice(for: self.currentToken, choices: specSet.allCases.map(\.spec))
     }
     #endif
-    if let matchedKind = SpecSet(lexeme: self.currentToken) {
+    if let matchedKind = SpecSet(lexeme: self.currentToken, experimentalFeatures: self.experimentalFeatures) {
       precondition(matchedKind.spec ~= self.currentToken)
       return (
         matchedKind,
@@ -152,7 +152,7 @@ extension TokenConsumer {
   /// If this is the case, return the corresponding `SpecSet` case.
   @inline(__always)
   func peek<SpecSet: TokenSpecSet>(isAtAnyIn specSet: SpecSet.Type) -> SpecSet? {
-    guard let matchedKind = SpecSet(lexeme: self.peek()) else {
+    guard let matchedKind = SpecSet(lexeme: self.peek(), experimentalFeatures: self.experimentalFeatures) else {
       return nil
     }
     precondition(matchedKind.spec ~= self.peek())

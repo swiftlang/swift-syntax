@@ -244,7 +244,7 @@ extension Parser {
       case arrow
       case `throws`
 
-      init?(lexeme: Lexer.Lexeme) {
+      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.binaryOperator): self = .binaryOperator
         case TokenSpec(.infixQuestionMark): self = .infixQuestionMark

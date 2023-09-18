@@ -60,7 +60,7 @@ extension Parser {
     case star
     case identifier
 
-    init?(lexeme: Lexer.Lexeme) {
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(.message): self = .message
       case TokenSpec(.renamed): self = .renamed

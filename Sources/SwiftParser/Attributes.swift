@@ -64,7 +64,7 @@ extension Parser {
     case objc
     case transpose
 
-    init?(lexeme: Lexer.Lexeme) {
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(._alignment): self = ._alignment
       case TokenSpec(._backDeploy): self = ._backDeploy
@@ -1043,7 +1043,7 @@ extension Parser {
             }
           }
 
-          init?(lexeme: Lexer.Lexeme) {
+          init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
             switch PrepareForKeywordMatch(lexeme) {
             case TokenSpec(.private): self = .private
             case TokenSpec(.fileprivate): self = .fileprivate

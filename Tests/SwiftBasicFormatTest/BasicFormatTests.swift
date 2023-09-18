@@ -190,6 +190,34 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testSelfCall1() {
+    assertFormatted(
+      source: "self(0)",
+      expected: "self(0)"
+    )
+  }
+
+  func testSelfCall2() {
+    assertFormatted(
+      source: "Self(0)",
+      expected: "Self(0)"
+    )
+  }
+
+  func testSelfSubscript1() {
+    assertFormatted(
+      source: "self[0]",
+      expected: "self[0]"
+    )
+  }
+
+  func testSelfSubscript2() {
+    assertFormatted(
+      source: "Self[0]",
+      expected: "Self[0]"
+    )
+  }
+
   func testCustomIndentationInBlockThatDoesntHaveNewline() {
     assertFormatted(
       source: """

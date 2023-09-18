@@ -307,7 +307,11 @@ open class BasicFormat: SyntaxRewriter {
       (.keyword(.`init`), .leftAngle),  // init<T>()
       (.keyword(.`init`), .leftParen),  // init()
       (.keyword(.self), .period),  // self.someProperty
-      (.keyword(.Self), .period),  // self.someProperty
+      (.keyword(.self), .leftParen),  // self()
+      (.keyword(.self), .leftSquare),  // self[]
+      (.keyword(.Self), .period),  // Self.someProperty
+      (.keyword(.Self), .leftParen),  // Self()
+      (.keyword(.Self), .leftSquare),  // Self[]
       (.keyword(.set), .leftParen),  // var mVar: Int { set(value) {} }
       (.keyword(.subscript), .leftParen),  // subscript(x: Int)
       (.keyword(.super), .period),  // super.someProperty

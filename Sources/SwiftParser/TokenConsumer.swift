@@ -148,6 +148,17 @@ extension TokenConsumer {
     return nil
   }
 
+  /// Checks whether the parser's next token is any token in `SpecSet`.
+  /// If this is the case, return the corresponding `SpecSet` case.
+  @inline(__always)
+  func peek<SpecSet: TokenSpecSet>(isAtAnyIn specSet: SpecSet.Type) -> SpecSet? {
+    guard let matchedKind = SpecSet(lexeme: self.peek()) else {
+      return nil
+    }
+    precondition(matchedKind.spec ~= self.peek())
+    return matchedKind
+  }
+
   /// Whether the current token’s text starts with the given prefix.
   @inline(__always)
   mutating func at(prefix: SyntaxText) -> Bool {

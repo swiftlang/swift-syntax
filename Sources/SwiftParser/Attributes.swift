@@ -223,7 +223,7 @@ extension Parser {
       )
     }
 
-    switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
+    switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())

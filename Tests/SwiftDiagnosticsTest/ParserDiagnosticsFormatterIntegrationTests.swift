@@ -16,7 +16,8 @@ import SwiftParserDiagnostics
 import XCTest
 import _SwiftSyntaxTestSupport
 
-final class DiagnosticsFormatterTests: XCTestCase {
+
+final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
   func annotate(source: String, colorize: Bool = false) -> String {
     let tree = Parser.parse(source: source)

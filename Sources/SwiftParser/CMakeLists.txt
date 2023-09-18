@@ -13,7 +13,6 @@ add_swift_host_library(SwiftParser
   CollectionNodes+Parsable.swift
   Declarations.swift
   Directives.swift
-  ExperimentalFeatures.swift
   Expressions.swift
   IncrementalParseTransition.swift
   Lookahead.swift
@@ -39,6 +38,7 @@ add_swift_host_library(SwiftParser
   TriviaParser.swift
   Types.swift
 
+  generated/ExperimentalFeatures.swift
   generated/IsLexerClassified.swift
   generated/LayoutNodes+Parsable.swift
   generated/Parser+TokenSpecSet.swift

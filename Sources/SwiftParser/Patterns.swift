@@ -86,24 +86,16 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.rhs(let binding), let handle)?:
-      switch binding {
-      case ._mutating, ._borrowing, ._consuming:
-        guard experimentalFeatures.contains(.referenceBindings) else {
-          break
-        }
-        fallthrough
-      case .let, .var, .inout:
-        let bindingSpecifier = self.eat(handle)
-        let value = self.parsePattern()
-        return RawPatternSyntax(
-          RawValueBindingPatternSyntax(
-            bindingSpecifier: bindingSpecifier,
-            pattern: value,
-            arena: self.arena
-          )
+    case (.rhs, let handle)?:
+      let bindingSpecifier = self.eat(handle)
+      let value = self.parsePattern()
+      return RawPatternSyntax(
+        RawValueBindingPatternSyntax(
+          bindingSpecifier: bindingSpecifier,
+          pattern: value,
+          arena: self.arena
         )
-      }
+      )
     case nil:
       break
     }
@@ -227,24 +219,16 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.rhs(let binding), let handle)?:
-      switch binding {
-      case ._mutating, ._borrowing, ._consuming:
-        guard experimentalFeatures.contains(.referenceBindings) else {
-          break
-        }
-        fallthrough
-      case .let, .var, .inout:
-        let bindingSpecifier = self.eat(handle)
-        let value = self.parseMatchingPattern(context: .bindingIntroducer)
-        return RawPatternSyntax(
-          RawValueBindingPatternSyntax(
-            bindingSpecifier: bindingSpecifier,
-            pattern: value,
-            arena: self.arena
-          )
+    case (.rhs, let handle)?:
+      let bindingSpecifier = self.eat(handle)
+      let value = self.parseMatchingPattern(context: .bindingIntroducer)
+      return RawPatternSyntax(
+        RawValueBindingPatternSyntax(
+          bindingSpecifier: bindingSpecifier,
+          pattern: value,
+          arena: self.arena
         )
-      }
+      )
     case nil:
       break
     }
@@ -311,17 +295,9 @@ extension Parser.Lookahead {
       return true
     case (.lhs(.leftParen), _)?:
       return self.canParsePatternTuple()
-    case (.rhs(let binding), let handle)?:
-      switch binding {
-      case ._mutating, ._borrowing, ._consuming:
-        guard experimentalFeatures.contains(.referenceBindings) else {
-          return false
-        }
-        fallthrough
-      case .let, .var, .inout:
-        self.eat(handle)
-        return self.canParsePattern()
-      }
+    case (.rhs, let handle)?:
+      self.eat(handle)
+      return self.canParsePattern()
     case nil:
       return false
     }

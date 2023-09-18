@@ -87,8 +87,25 @@ public class Child {
   /// This is used to e.g. describe the child if all of its tokens are missing in the source file.
   public let nameForDiagnostics: String?
 
-  /// A doc comment describing the child.
-  public let documentation: SwiftSyntax.Trivia
+  /// A summary of a doc comment describing the child. Full docc comment for the
+  /// child is available in ``Child/documentation``, and includes detailed list
+  /// of possible choices for the child if it's a token kind.
+  public let documentationSummary: SwiftSyntax.Trivia
+
+  /// A docc comment describing the child, including the trivia provided when
+  /// initializing the ``Child``, and the list of possible token choices inferred automatically.
+  public var documentation: SwiftSyntax.Trivia {
+    if case .token(let choices, _, _) = kind {
+      let tokenChoicesTrivia = SwiftSyntax.Trivia.docCommentTrivia(
+        from: GrammarGenerator.childTokenChoices(for: choices)
+      )
+
+      return SwiftSyntax.Trivia(joining: [documentationSummary, tokenChoicesTrivia])
+    }
+
+    // If this child is not a token kind, return documentation summary without the choices list.
+    return documentationSummary
+  }
 
   /// The first line of the child's documentation
   public let documentationAbstract: String
@@ -220,7 +237,7 @@ public class Child {
     self.deprecatedName = deprecatedName
     self.kind = kind
     self.nameForDiagnostics = nameForDiagnostics
-    self.documentation = docCommentTrivia(from: documentation)
+    self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
   }

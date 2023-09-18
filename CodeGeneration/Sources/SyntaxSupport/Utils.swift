@@ -38,21 +38,40 @@ public func lowercaseFirstWord(name: String) -> String {
   return name.prefix(wordIndex).lowercased() + name[name.index(name.startIndex, offsetBy: wordIndex)..<name.endIndex]
 }
 
-/// Give a (possibly multi-line) string, prepends `///` to each line and creates
-/// a `.docLineComment` trivia piece for each line.
-public func docCommentTrivia(from string: String?) -> SwiftSyntax.Trivia {
-  guard let string else {
-    return []
-  }
-  let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
-  let pieces = lines.enumerated().map { (index, line) in
-    var line = line
-    if index != lines.count - 1 {
-      line = "\(line)\n"
+// Helpers to create trivia pieces
+extension SwiftSyntax.Trivia {
+  /// Make a new trivia from a (possibly multi-line) string, prepending `///`
+  /// to each line and creating a `.docLineComment` trivia piece for each line.
+  public static func docCommentTrivia(from string: String?) -> SwiftSyntax.Trivia {
+    guard let string else {
+      return []
     }
-    return SwiftSyntax.TriviaPiece.docLineComment("/// \(line)")
+
+    let lines = string.split(separator: "\n", omittingEmptySubsequences: false)
+    let pieces = lines.enumerated().map { (index, line) in
+      var line = line
+      if index != lines.count - 1 {
+        line = "\(line)\n"
+      }
+      return SwiftSyntax.TriviaPiece.docLineComment("/// \(line)")
+    }
+    return SwiftSyntax.Trivia(pieces: pieces)
   }
-  return SwiftSyntax.Trivia(pieces: pieces)
+
+  /// Make a new trivia by joining together ``SwiftSyntax/TriviaPiece``s from `joining`,
+  /// and gluing them together with pieces from `separator`.
+  public init(
+    joining items: [SwiftSyntax.Trivia],
+    separator: SwiftSyntax.Trivia = SwiftSyntax.Trivia(pieces: [TriviaPiece.newlines(1), TriviaPiece.docLineComment("///"), TriviaPiece.newlines(1)])
+  ) {
+
+    self.init(
+      pieces:
+        items
+        .filter { !$0.isEmpty }
+        .joined(separator: separator)
+    )
+  }
 }
 
 public extension Collection {

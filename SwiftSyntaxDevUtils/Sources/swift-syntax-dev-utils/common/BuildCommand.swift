@@ -62,10 +62,6 @@ extension BuildCommand {
       args += ["--multiroot-data-file", multirootDataFile]
     }
 
-    if arguments.disableSandbox {
-      args += ["--disable-sandbox"]
-    }
-
     if arguments.verbose {
       args += ["--verbose"]
     }

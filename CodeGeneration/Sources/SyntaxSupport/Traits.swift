@@ -73,6 +73,12 @@ public let TRAITS: [Trait] = [
     ]
   ),
   Trait(
+    traitName: "HasDeclModifierList",
+    children: [
+      Child(name: "modifers", kind: .node(kind: .declModifierList), isOptional: false),
+    ]
+  ),
+  Trait(
     traitName: "NamedDecl",
     children: [
       Child(name: "name", kind: .token(choices: [.token(.identifier)]))

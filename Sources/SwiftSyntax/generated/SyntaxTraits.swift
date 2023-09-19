@@ -269,6 +269,43 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - HasDeclModifierListSyntax
+
+
+public protocol HasDeclModifierListSyntax: SyntaxProtocol {
+  var modifers: DeclModifierListSyntax {
+    get
+    set
+  }
+}
+
+public extension HasDeclModifierListSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<HasDeclModifierListSyntax, T>, _ newChild: T) -> HasDeclModifierListSyntax {
+    var copy: HasDeclModifierListSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `HasDeclModifierListSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: HasDeclModifierListSyntax.Protocol) -> Bool {
+    return self.asProtocol(HasDeclModifierListSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `HasDeclModifierListSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: HasDeclModifierListSyntax.Protocol) -> HasDeclModifierListSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? HasDeclModifierListSyntax
+  }
+}
+
 // MARK: - NamedDeclSyntax
 
 

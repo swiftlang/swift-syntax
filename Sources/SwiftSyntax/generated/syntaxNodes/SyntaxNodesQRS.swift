@@ -3723,6 +3723,50 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SwitchDefaultLabelSyntax.self), .node(SwitchCaseLabelSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``SwitchDefaultLabelSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SwitchDefaultLabelSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SwitchDefaultLabelSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchDefaultLabelSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SwitchDefaultLabelSyntax.Type) -> SwitchDefaultLabelSyntax? {
+      return SwitchDefaultLabelSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SwitchDefaultLabelSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchDefaultLabelSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SwitchDefaultLabelSyntax.Type) -> SwitchDefaultLabelSyntax {
+      return self.as(SwitchDefaultLabelSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SwitchCaseLabelSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SwitchCaseLabelSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SwitchCaseLabelSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseLabelSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SwitchCaseLabelSyntax.Type) -> SwitchCaseLabelSyntax? {
+      return SwitchCaseLabelSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SwitchCaseLabelSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseLabelSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SwitchCaseLabelSyntax.Type) -> SwitchCaseLabelSyntax {
+      return self.as(SwitchCaseLabelSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax

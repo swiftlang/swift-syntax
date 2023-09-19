@@ -2684,6 +2684,50 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(ClosureShorthandParameterListSyntax.self), .node(ClosureParameterClauseSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``ClosureShorthandParameterListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ClosureShorthandParameterListSyntax``.
+    ///
+    /// - Returns: An instance of ``ClosureShorthandParameterListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> ClosureShorthandParameterListSyntax? {
+      return ClosureShorthandParameterListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ClosureShorthandParameterListSyntax``.
+    ///
+    /// - Returns: An instance of ``ClosureShorthandParameterListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> ClosureShorthandParameterListSyntax {
+      return self.as(ClosureShorthandParameterListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ClosureParameterClauseSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ClosureParameterClauseSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ClosureParameterClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``ClosureParameterClauseSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ClosureParameterClauseSyntax.Type) -> ClosureParameterClauseSyntax? {
+      return ClosureParameterClauseSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ClosureParameterClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``ClosureParameterClauseSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ClosureParameterClauseSyntax.Type) -> ClosureParameterClauseSyntax {
+      return self.as(ClosureParameterClauseSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -2985,6 +3029,72 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(DeclSyntax.self), .node(StmtSyntax.self), .node(ExprSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``DeclSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``DeclSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``DeclSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``StmtSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``StmtSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``StmtSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
     }
   }
   
@@ -3582,6 +3692,94 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
             .node(MatchingPatternConditionSyntax.self), 
             .node(OptionalBindingConditionSyntax.self)
           ])
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``AvailabilityConditionSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AvailabilityConditionSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AvailabilityConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityConditionSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AvailabilityConditionSyntax.Type) -> AvailabilityConditionSyntax? {
+      return AvailabilityConditionSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AvailabilityConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityConditionSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AvailabilityConditionSyntax.Type) -> AvailabilityConditionSyntax {
+      return self.as(AvailabilityConditionSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``MatchingPatternConditionSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: MatchingPatternConditionSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``MatchingPatternConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``MatchingPatternConditionSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: MatchingPatternConditionSyntax.Type) -> MatchingPatternConditionSyntax? {
+      return MatchingPatternConditionSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``MatchingPatternConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``MatchingPatternConditionSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: MatchingPatternConditionSyntax.Type) -> MatchingPatternConditionSyntax {
+      return self.as(MatchingPatternConditionSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``OptionalBindingConditionSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: OptionalBindingConditionSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``OptionalBindingConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``OptionalBindingConditionSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: OptionalBindingConditionSyntax.Type) -> OptionalBindingConditionSyntax? {
+      return OptionalBindingConditionSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``OptionalBindingConditionSyntax``.
+    ///
+    /// - Returns: An instance of ``OptionalBindingConditionSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: OptionalBindingConditionSyntax.Type) -> OptionalBindingConditionSyntax {
+      return self.as(OptionalBindingConditionSyntax.self)!
     }
   }
   

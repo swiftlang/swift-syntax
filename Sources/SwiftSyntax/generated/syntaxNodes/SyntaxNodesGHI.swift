@@ -861,6 +861,72 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SameTypeRequirementSyntax.self), .node(ConformanceRequirementSyntax.self), .node(LayoutRequirementSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``SameTypeRequirementSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SameTypeRequirementSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SameTypeRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``SameTypeRequirementSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SameTypeRequirementSyntax.Type) -> SameTypeRequirementSyntax? {
+      return SameTypeRequirementSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SameTypeRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``SameTypeRequirementSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SameTypeRequirementSyntax.Type) -> SameTypeRequirementSyntax {
+      return self.as(SameTypeRequirementSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ConformanceRequirementSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ConformanceRequirementSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ConformanceRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``ConformanceRequirementSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ConformanceRequirementSyntax.Type) -> ConformanceRequirementSyntax? {
+      return ConformanceRequirementSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ConformanceRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``ConformanceRequirementSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ConformanceRequirementSyntax.Type) -> ConformanceRequirementSyntax {
+      return self.as(ConformanceRequirementSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``LayoutRequirementSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: LayoutRequirementSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``LayoutRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``LayoutRequirementSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: LayoutRequirementSyntax.Type) -> LayoutRequirementSyntax? {
+      return LayoutRequirementSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``LayoutRequirementSyntax``.
+    ///
+    /// - Returns: An instance of ``LayoutRequirementSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: LayoutRequirementSyntax.Type) -> LayoutRequirementSyntax {
+      return self.as(LayoutRequirementSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -1740,6 +1806,116 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
             .node(AttributeListSyntax.self)
           ])
     }
+    
+    /// Checks if the current syntax node can be cast to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: CodeBlockItemListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockItemListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: CodeBlockItemListSyntax.Type) -> CodeBlockItemListSyntax? {
+      return CodeBlockItemListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockItemListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: CodeBlockItemListSyntax.Type) -> CodeBlockItemListSyntax {
+      return self.as(CodeBlockItemListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SwitchCaseListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SwitchCaseListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SwitchCaseListSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SwitchCaseListSyntax.Type) -> SwitchCaseListSyntax? {
+      return SwitchCaseListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SwitchCaseListSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SwitchCaseListSyntax.Type) -> SwitchCaseListSyntax {
+      return self.as(SwitchCaseListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``MemberBlockItemListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: MemberBlockItemListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``MemberBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``MemberBlockItemListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: MemberBlockItemListSyntax.Type) -> MemberBlockItemListSyntax? {
+      return MemberBlockItemListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``MemberBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``MemberBlockItemListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: MemberBlockItemListSyntax.Type) -> MemberBlockItemListSyntax {
+      return self.as(MemberBlockItemListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``AttributeListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AttributeListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AttributeListSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AttributeListSyntax.Type) -> AttributeListSyntax? {
+      return AttributeListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AttributeListSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AttributeListSyntax.Type) -> AttributeListSyntax {
+      return self.as(AttributeListSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -2078,6 +2254,50 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(IfExprSyntax.self), .node(CodeBlockSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``IfExprSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: IfExprSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``IfExprSyntax``.
+    ///
+    /// - Returns: An instance of ``IfExprSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: IfExprSyntax.Type) -> IfExprSyntax? {
+      return IfExprSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``IfExprSyntax``.
+    ///
+    /// - Returns: An instance of ``IfExprSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: IfExprSyntax.Type) -> IfExprSyntax {
+      return self.as(IfExprSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``CodeBlockSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: CodeBlockSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``CodeBlockSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: CodeBlockSyntax.Type) -> CodeBlockSyntax? {
+      return CodeBlockSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``CodeBlockSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: CodeBlockSyntax.Type) -> CodeBlockSyntax {
+      return self.as(CodeBlockSyntax.self)!
     }
   }
   

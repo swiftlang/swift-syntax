@@ -1845,6 +1845,50 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TokenSyntax.self), .node(DictionaryElementListSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DictionaryElementListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DictionaryElementListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DictionaryElementListSyntax``.
+    ///
+    /// - Returns: An instance of ``DictionaryElementListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DictionaryElementListSyntax.Type) -> DictionaryElementListSyntax? {
+      return DictionaryElementListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DictionaryElementListSyntax``.
+    ///
+    /// - Returns: An instance of ``DictionaryElementListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DictionaryElementListSyntax.Type) -> DictionaryElementListSyntax {
+      return self.as(DictionaryElementListSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -2548,6 +2592,50 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
     
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(DifferentiabilityArgumentSyntax.self), .node(DifferentiabilityArgumentsSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DifferentiabilityArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DifferentiabilityArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DifferentiabilityArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiabilityArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DifferentiabilityArgumentSyntax.Type) -> DifferentiabilityArgumentSyntax? {
+      return DifferentiabilityArgumentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DifferentiabilityArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiabilityArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DifferentiabilityArgumentSyntax.Type) -> DifferentiabilityArgumentSyntax {
+      return self.as(DifferentiabilityArgumentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DifferentiabilityArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DifferentiabilityArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DifferentiabilityArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiabilityArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DifferentiabilityArgumentsSyntax.Type) -> DifferentiabilityArgumentsSyntax? {
+      return DifferentiabilityArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DifferentiabilityArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiabilityArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DifferentiabilityArgumentsSyntax.Type) -> DifferentiabilityArgumentsSyntax {
+      return self.as(DifferentiabilityArgumentsSyntax.self)!
     }
   }
   
@@ -3339,6 +3427,50 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
     
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TokenSyntax.self), .node(StringLiteralExprSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: StringLiteralExprSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``StringLiteralExprSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax? {
+      return StringLiteralExprSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``StringLiteralExprSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax {
+      return self.as(StringLiteralExprSyntax.self)!
     }
   }
   

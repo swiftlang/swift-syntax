@@ -61,6 +61,50 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(AccessorDeclListSyntax.self), .node(CodeBlockItemListSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``AccessorDeclListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AccessorDeclListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AccessorDeclListSyntax``.
+    ///
+    /// - Returns: An instance of ``AccessorDeclListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AccessorDeclListSyntax.Type) -> AccessorDeclListSyntax? {
+      return AccessorDeclListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AccessorDeclListSyntax``.
+    ///
+    /// - Returns: An instance of ``AccessorDeclListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AccessorDeclListSyntax.Type) -> AccessorDeclListSyntax {
+      return self.as(AccessorDeclListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: CodeBlockItemListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockItemListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: CodeBlockItemListSyntax.Type) -> CodeBlockItemListSyntax? {
+      return CodeBlockItemListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``CodeBlockItemListSyntax``.
+    ///
+    /// - Returns: An instance of ``CodeBlockItemListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: CodeBlockItemListSyntax.Type) -> CodeBlockItemListSyntax {
+      return self.as(CodeBlockItemListSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -2542,6 +2586,446 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
             .node(DocumentationAttributeArgumentListSyntax.self)
           ])
     }
+    
+    /// Checks if the current syntax node can be cast to ``LabeledExprListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: LabeledExprListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``LabeledExprListSyntax``.
+    ///
+    /// - Returns: An instance of ``LabeledExprListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: LabeledExprListSyntax.Type) -> LabeledExprListSyntax? {
+      return LabeledExprListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``LabeledExprListSyntax``.
+    ///
+    /// - Returns: An instance of ``LabeledExprListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: LabeledExprListSyntax.Type) -> LabeledExprListSyntax {
+      return self.as(LabeledExprListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: StringLiteralExprSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``StringLiteralExprSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax? {
+      return StringLiteralExprSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``StringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``StringLiteralExprSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax {
+      return self.as(StringLiteralExprSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``AvailabilityArgumentListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AvailabilityArgumentListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AvailabilityArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityArgumentListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AvailabilityArgumentListSyntax.Type) -> AvailabilityArgumentListSyntax? {
+      return AvailabilityArgumentListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AvailabilityArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityArgumentListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AvailabilityArgumentListSyntax.Type) -> AvailabilityArgumentListSyntax {
+      return self.as(AvailabilityArgumentListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SpecializeAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SpecializeAttributeArgumentListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SpecializeAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeAttributeArgumentListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SpecializeAttributeArgumentListSyntax.Type) -> SpecializeAttributeArgumentListSyntax? {
+      return SpecializeAttributeArgumentListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SpecializeAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeAttributeArgumentListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SpecializeAttributeArgumentListSyntax.Type) -> SpecializeAttributeArgumentListSyntax {
+      return self.as(SpecializeAttributeArgumentListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ObjCSelectorPieceListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ObjCSelectorPieceListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ObjCSelectorPieceListSyntax``.
+    ///
+    /// - Returns: An instance of ``ObjCSelectorPieceListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ObjCSelectorPieceListSyntax.Type) -> ObjCSelectorPieceListSyntax? {
+      return ObjCSelectorPieceListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ObjCSelectorPieceListSyntax``.
+    ///
+    /// - Returns: An instance of ``ObjCSelectorPieceListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ObjCSelectorPieceListSyntax.Type) -> ObjCSelectorPieceListSyntax {
+      return self.as(ObjCSelectorPieceListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ImplementsAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ImplementsAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ImplementsAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ImplementsAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ImplementsAttributeArgumentsSyntax.Type) -> ImplementsAttributeArgumentsSyntax? {
+      return ImplementsAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ImplementsAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ImplementsAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ImplementsAttributeArgumentsSyntax.Type) -> ImplementsAttributeArgumentsSyntax {
+      return self.as(ImplementsAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DifferentiableAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DifferentiableAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DifferentiableAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiableAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DifferentiableAttributeArgumentsSyntax.Type) -> DifferentiableAttributeArgumentsSyntax? {
+      return DifferentiableAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DifferentiableAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DifferentiableAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DifferentiableAttributeArgumentsSyntax.Type) -> DifferentiableAttributeArgumentsSyntax {
+      return self.as(DifferentiableAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DerivativeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DerivativeAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DerivativeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DerivativeAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DerivativeAttributeArgumentsSyntax.Type) -> DerivativeAttributeArgumentsSyntax? {
+      return DerivativeAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DerivativeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DerivativeAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DerivativeAttributeArgumentsSyntax.Type) -> DerivativeAttributeArgumentsSyntax {
+      return self.as(DerivativeAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``BackDeployedAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: BackDeployedAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``BackDeployedAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``BackDeployedAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: BackDeployedAttributeArgumentsSyntax.Type) -> BackDeployedAttributeArgumentsSyntax? {
+      return BackDeployedAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``BackDeployedAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``BackDeployedAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: BackDeployedAttributeArgumentsSyntax.Type) -> BackDeployedAttributeArgumentsSyntax {
+      return self.as(BackDeployedAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ConventionAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ConventionAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ConventionAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> ConventionAttributeArgumentsSyntax? {
+      return ConventionAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ConventionAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ConventionAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> ConventionAttributeArgumentsSyntax {
+      return self.as(ConventionAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ConventionWitnessMethodAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> ConventionWitnessMethodAttributeArgumentsSyntax? {
+      return ConventionWitnessMethodAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ConventionWitnessMethodAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> ConventionWitnessMethodAttributeArgumentsSyntax {
+      return self.as(ConventionWitnessMethodAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``OpaqueReturnTypeOfAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> OpaqueReturnTypeOfAttributeArgumentsSyntax? {
+      return OpaqueReturnTypeOfAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
+      return self.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ExposeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ExposeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ExposeAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> ExposeAttributeArgumentsSyntax? {
+      return ExposeAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ExposeAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``ExposeAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> ExposeAttributeArgumentsSyntax {
+      return self.as(ExposeAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``OriginallyDefinedInAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: OriginallyDefinedInAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``OriginallyDefinedInAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``OriginallyDefinedInAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: OriginallyDefinedInAttributeArgumentsSyntax.Type) -> OriginallyDefinedInAttributeArgumentsSyntax? {
+      return OriginallyDefinedInAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``OriginallyDefinedInAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``OriginallyDefinedInAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: OriginallyDefinedInAttributeArgumentsSyntax.Type) -> OriginallyDefinedInAttributeArgumentsSyntax {
+      return self.as(OriginallyDefinedInAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``UnderscorePrivateAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``UnderscorePrivateAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``UnderscorePrivateAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> UnderscorePrivateAttributeArgumentsSyntax? {
+      return UnderscorePrivateAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``UnderscorePrivateAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``UnderscorePrivateAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> UnderscorePrivateAttributeArgumentsSyntax {
+      return self.as(UnderscorePrivateAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DynamicReplacementAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DynamicReplacementAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DynamicReplacementAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DynamicReplacementAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DynamicReplacementAttributeArgumentsSyntax.Type) -> DynamicReplacementAttributeArgumentsSyntax? {
+      return DynamicReplacementAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DynamicReplacementAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``DynamicReplacementAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DynamicReplacementAttributeArgumentsSyntax.Type) -> DynamicReplacementAttributeArgumentsSyntax {
+      return self.as(DynamicReplacementAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``UnavailableFromAsyncAttributeArgumentsSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> UnavailableFromAsyncAttributeArgumentsSyntax? {
+      return UnavailableFromAsyncAttributeArgumentsSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
+    ///
+    /// - Returns: An instance of ``UnavailableFromAsyncAttributeArgumentsSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> UnavailableFromAsyncAttributeArgumentsSyntax {
+      return self.as(UnavailableFromAsyncAttributeArgumentsSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``EffectsAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: EffectsAttributeArgumentListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``EffectsAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``EffectsAttributeArgumentListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: EffectsAttributeArgumentListSyntax.Type) -> EffectsAttributeArgumentListSyntax? {
+      return EffectsAttributeArgumentListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``EffectsAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``EffectsAttributeArgumentListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: EffectsAttributeArgumentListSyntax.Type) -> EffectsAttributeArgumentListSyntax {
+      return self.as(EffectsAttributeArgumentListSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``DocumentationAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DocumentationAttributeArgumentListSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``DocumentationAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``DocumentationAttributeArgumentListSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DocumentationAttributeArgumentListSyntax.Type) -> DocumentationAttributeArgumentListSyntax? {
+      return DocumentationAttributeArgumentListSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``DocumentationAttributeArgumentListSyntax``.
+    ///
+    /// - Returns: An instance of ``DocumentationAttributeArgumentListSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DocumentationAttributeArgumentListSyntax.Type) -> DocumentationAttributeArgumentListSyntax {
+      return self.as(DocumentationAttributeArgumentListSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -2990,6 +3474,72 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(TokenSyntax.self), .node(PlatformVersionSyntax.self), .node(AvailabilityLabeledArgumentSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
+      return TokenSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``TokenSyntax``.
+    ///
+    /// - Returns: An instance of ``TokenSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
+      return self.as(TokenSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``PlatformVersionSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: PlatformVersionSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``PlatformVersionSyntax``.
+    ///
+    /// - Returns: An instance of ``PlatformVersionSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: PlatformVersionSyntax.Type) -> PlatformVersionSyntax? {
+      return PlatformVersionSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``PlatformVersionSyntax``.
+    ///
+    /// - Returns: An instance of ``PlatformVersionSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: PlatformVersionSyntax.Type) -> PlatformVersionSyntax {
+      return self.as(PlatformVersionSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``AvailabilityLabeledArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AvailabilityLabeledArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AvailabilityLabeledArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityLabeledArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AvailabilityLabeledArgumentSyntax.Type) -> AvailabilityLabeledArgumentSyntax? {
+      return AvailabilityLabeledArgumentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AvailabilityLabeledArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``AvailabilityLabeledArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AvailabilityLabeledArgumentSyntax.Type) -> AvailabilityLabeledArgumentSyntax {
+      return self.as(AvailabilityLabeledArgumentSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -3364,6 +3914,50 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable,
     
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(SimpleStringLiteralExprSyntax.self), .node(VersionTupleSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SimpleStringLiteralExprSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SimpleStringLiteralExprSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SimpleStringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``SimpleStringLiteralExprSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SimpleStringLiteralExprSyntax.Type) -> SimpleStringLiteralExprSyntax? {
+      return SimpleStringLiteralExprSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SimpleStringLiteralExprSyntax``.
+    ///
+    /// - Returns: An instance of ``SimpleStringLiteralExprSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SimpleStringLiteralExprSyntax.Type) -> SimpleStringLiteralExprSyntax {
+      return self.as(SimpleStringLiteralExprSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``VersionTupleSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: VersionTupleSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``VersionTupleSyntax``.
+    ///
+    /// - Returns: An instance of ``VersionTupleSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: VersionTupleSyntax.Type) -> VersionTupleSyntax? {
+      return VersionTupleSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``VersionTupleSyntax``.
+    ///
+    /// - Returns: An instance of ``VersionTupleSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: VersionTupleSyntax.Type) -> VersionTupleSyntax {
+      return self.as(VersionTupleSyntax.self)!
     }
   }
   

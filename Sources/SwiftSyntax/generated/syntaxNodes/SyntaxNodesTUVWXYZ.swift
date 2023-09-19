@@ -4157,6 +4157,50 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(YieldedExpressionsClauseSyntax.self), .node(ExprSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``YieldedExpressionsClauseSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: YieldedExpressionsClauseSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``YieldedExpressionsClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``YieldedExpressionsClauseSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: YieldedExpressionsClauseSyntax.Type) -> YieldedExpressionsClauseSyntax? {
+      return YieldedExpressionsClauseSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``YieldedExpressionsClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``YieldedExpressionsClauseSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: YieldedExpressionsClauseSyntax.Type) -> YieldedExpressionsClauseSyntax {
+      return self.as(YieldedExpressionsClauseSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+    
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
   }
   
   public let _syntaxNode: Syntax

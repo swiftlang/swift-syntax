@@ -141,6 +141,50 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
           .node(AttributeSyntax.self),
           .node(IfConfigDeclSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``AttributeSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AttributeSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``AttributeSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AttributeSyntax.Type) -> AttributeSyntax? {
+      return AttributeSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``AttributeSyntax``.
+    ///
+    /// - Returns: An instance of ``AttributeSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AttributeSyntax.Type) -> AttributeSyntax {
+      return self.as(AttributeSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: IfConfigDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``IfConfigDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: IfConfigDeclSyntax.Type) -> IfConfigDeclSyntax? {
+      return IfConfigDeclSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``IfConfigDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: IfConfigDeclSyntax.Type) -> IfConfigDeclSyntax {
+      return self.as(IfConfigDeclSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -1005,6 +1049,72 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
           .node(PrecedenceGroupAssignmentSyntax.self),
           .node(PrecedenceGroupAssociativitySyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``PrecedenceGroupRelationSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: PrecedenceGroupRelationSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``PrecedenceGroupRelationSyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupRelationSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: PrecedenceGroupRelationSyntax.Type) -> PrecedenceGroupRelationSyntax? {
+      return PrecedenceGroupRelationSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``PrecedenceGroupRelationSyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupRelationSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: PrecedenceGroupRelationSyntax.Type) -> PrecedenceGroupRelationSyntax {
+      return self.as(PrecedenceGroupRelationSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``PrecedenceGroupAssignmentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: PrecedenceGroupAssignmentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``PrecedenceGroupAssignmentSyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupAssignmentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: PrecedenceGroupAssignmentSyntax.Type) -> PrecedenceGroupAssignmentSyntax? {
+      return PrecedenceGroupAssignmentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``PrecedenceGroupAssignmentSyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupAssignmentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: PrecedenceGroupAssignmentSyntax.Type) -> PrecedenceGroupAssignmentSyntax {
+      return self.as(PrecedenceGroupAssignmentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``PrecedenceGroupAssociativitySyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: PrecedenceGroupAssociativitySyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``PrecedenceGroupAssociativitySyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupAssociativitySyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: PrecedenceGroupAssociativitySyntax.Type) -> PrecedenceGroupAssociativitySyntax? {
+      return PrecedenceGroupAssociativitySyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``PrecedenceGroupAssociativitySyntax``.
+    ///
+    /// - Returns: An instance of ``PrecedenceGroupAssociativitySyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: PrecedenceGroupAssociativitySyntax.Type) -> PrecedenceGroupAssociativitySyntax {
+      return self.as(PrecedenceGroupAssociativitySyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -1160,6 +1270,94 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
             .node(GenericWhereClauseSyntax.self)
           ])
     }
+    
+    /// Checks if the current syntax node can be cast to ``LabeledSpecializeArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: LabeledSpecializeArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``LabeledSpecializeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``LabeledSpecializeArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: LabeledSpecializeArgumentSyntax.Type) -> LabeledSpecializeArgumentSyntax? {
+      return LabeledSpecializeArgumentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``LabeledSpecializeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``LabeledSpecializeArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: LabeledSpecializeArgumentSyntax.Type) -> LabeledSpecializeArgumentSyntax {
+      return self.as(LabeledSpecializeArgumentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SpecializeAvailabilityArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SpecializeAvailabilityArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SpecializeAvailabilityArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeAvailabilityArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SpecializeAvailabilityArgumentSyntax.Type) -> SpecializeAvailabilityArgumentSyntax? {
+      return SpecializeAvailabilityArgumentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SpecializeAvailabilityArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeAvailabilityArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SpecializeAvailabilityArgumentSyntax.Type) -> SpecializeAvailabilityArgumentSyntax {
+      return self.as(SpecializeAvailabilityArgumentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SpecializeTargetFunctionArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SpecializeTargetFunctionArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SpecializeTargetFunctionArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeTargetFunctionArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SpecializeTargetFunctionArgumentSyntax.Type) -> SpecializeTargetFunctionArgumentSyntax? {
+      return SpecializeTargetFunctionArgumentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SpecializeTargetFunctionArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializeTargetFunctionArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SpecializeTargetFunctionArgumentSyntax.Type) -> SpecializeTargetFunctionArgumentSyntax {
+      return self.as(SpecializeTargetFunctionArgumentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``GenericWhereClauseSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: GenericWhereClauseSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``GenericWhereClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``GenericWhereClauseSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: GenericWhereClauseSyntax.Type) -> GenericWhereClauseSyntax? {
+      return GenericWhereClauseSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``GenericWhereClauseSyntax``.
+    ///
+    /// - Returns: An instance of ``GenericWhereClauseSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: GenericWhereClauseSyntax.Type) -> GenericWhereClauseSyntax {
+      return self.as(GenericWhereClauseSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax
@@ -1219,6 +1417,50 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       return .choices([
           .node(StringSegmentSyntax.self),
           .node(ExpressionSegmentSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``StringSegmentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: StringSegmentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``StringSegmentSyntax``.
+    ///
+    /// - Returns: An instance of ``StringSegmentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: StringSegmentSyntax.Type) -> StringSegmentSyntax? {
+      return StringSegmentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``StringSegmentSyntax``.
+    ///
+    /// - Returns: An instance of ``StringSegmentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: StringSegmentSyntax.Type) -> StringSegmentSyntax {
+      return self.as(StringSegmentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``ExpressionSegmentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: ExpressionSegmentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``ExpressionSegmentSyntax``.
+    ///
+    /// - Returns: An instance of ``ExpressionSegmentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: ExpressionSegmentSyntax.Type) -> ExpressionSegmentSyntax? {
+      return ExpressionSegmentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``ExpressionSegmentSyntax``.
+    ///
+    /// - Returns: An instance of ``ExpressionSegmentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: ExpressionSegmentSyntax.Type) -> ExpressionSegmentSyntax {
+      return self.as(ExpressionSegmentSyntax.self)!
     }
   }
   
@@ -1302,6 +1544,50 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       return .choices([
           .node(SwitchCaseSyntax.self),
           .node(IfConfigDeclSyntax.self)])
+    }
+    
+    /// Checks if the current syntax node can be cast to ``SwitchCaseSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SwitchCaseSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``SwitchCaseSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SwitchCaseSyntax.Type) -> SwitchCaseSyntax? {
+      return SwitchCaseSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``SwitchCaseSyntax``.
+    ///
+    /// - Returns: An instance of ``SwitchCaseSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SwitchCaseSyntax.Type) -> SwitchCaseSyntax {
+      return self.as(SwitchCaseSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: IfConfigDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``IfConfigDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: IfConfigDeclSyntax.Type) -> IfConfigDeclSyntax? {
+      return IfConfigDeclSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``IfConfigDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``IfConfigDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: IfConfigDeclSyntax.Type) -> IfConfigDeclSyntax {
+      return self.as(IfConfigDeclSyntax.self)!
     }
   }
   

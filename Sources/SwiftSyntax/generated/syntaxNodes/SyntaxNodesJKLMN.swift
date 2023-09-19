@@ -72,6 +72,72 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(KeyPathPropertyComponentSyntax.self), .node(KeyPathSubscriptComponentSyntax.self), .node(KeyPathOptionalComponentSyntax.self)])
     }
+    
+    /// Checks if the current syntax node can be cast to ``KeyPathPropertyComponentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: KeyPathPropertyComponentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``KeyPathPropertyComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathPropertyComponentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: KeyPathPropertyComponentSyntax.Type) -> KeyPathPropertyComponentSyntax? {
+      return KeyPathPropertyComponentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``KeyPathPropertyComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathPropertyComponentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: KeyPathPropertyComponentSyntax.Type) -> KeyPathPropertyComponentSyntax {
+      return self.as(KeyPathPropertyComponentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``KeyPathSubscriptComponentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: KeyPathSubscriptComponentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``KeyPathSubscriptComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathSubscriptComponentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: KeyPathSubscriptComponentSyntax.Type) -> KeyPathSubscriptComponentSyntax? {
+      return KeyPathSubscriptComponentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``KeyPathSubscriptComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathSubscriptComponentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: KeyPathSubscriptComponentSyntax.Type) -> KeyPathSubscriptComponentSyntax {
+      return self.as(KeyPathSubscriptComponentSyntax.self)!
+    }
+    
+    /// Checks if the current syntax node can be cast to ``KeyPathOptionalComponentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: KeyPathOptionalComponentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+    
+    /// Attempts to cast the current syntax node to ``KeyPathOptionalComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathOptionalComponentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: KeyPathOptionalComponentSyntax.Type) -> KeyPathOptionalComponentSyntax? {
+      return KeyPathOptionalComponentSyntax.init(self)
+    }
+    
+    /// Force-casts the current syntax node to ``KeyPathOptionalComponentSyntax``.
+    ///
+    /// - Returns: An instance of ``KeyPathOptionalComponentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: KeyPathOptionalComponentSyntax.Type) -> KeyPathOptionalComponentSyntax {
+      return self.as(KeyPathOptionalComponentSyntax.self)!
+    }
   }
   
   public let _syntaxNode: Syntax

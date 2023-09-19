@@ -277,5 +277,9 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
 
       StmtSyntax("return .choices(\(choices))")
     }
+
+    for choiceNode in choices {
+      choiceNodeCastingMethods(for: choiceNode.syntaxNodeKind)
+    }
   }
 }

@@ -601,7 +601,7 @@ extension Parser {
       case poundElseif
       case endOfFile
 
-      init?(lexeme: Lexer.Lexeme) {
+      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.rightBrace): self = .rightBrace
         case TokenSpec(.case): self = .case
@@ -943,15 +943,13 @@ extension Parser.Lookahead {
       return false
     }
 
-    let next = peek()
-
     // If 'then' is followed by a binary or postfix operator, prefer to parse as
     // an expr.
-    if BinaryOperatorLike(lexeme: next) != nil || PostfixOperatorLike(lexeme: next) != nil {
+    if peek(isAtAnyIn: BinaryOperatorLike.self) != nil || peek(isAtAnyIn: PostfixOperatorLike.self) != nil {
       return false
     }
 
-    switch PrepareForKeywordMatch(next) {
+    switch PrepareForKeywordMatch(peek()) {
     case TokenSpec(.is), TokenSpec(.as):
       // Treat 'is' and 'as' like the binary operator case, and parse as an
       // expr.
@@ -965,7 +963,7 @@ extension Parser.Lookahead {
       // These are handled based on whether there is trivia between the 'then'
       // and the token. If so, it's a 'then' statement. Otherwise it should
       // be treated as an expression, e.g `then(...)`, `then[...]`, `then.foo`.
-      return !self.currentToken.trailingTriviaText.isEmpty || !next.leadingTriviaText.isEmpty
+      return !self.currentToken.trailingTriviaText.isEmpty || !peek().leadingTriviaText.isEmpty
     default:
       break
     }

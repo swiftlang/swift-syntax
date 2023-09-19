@@ -10,20 +10,24 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension Parser {
-  @_spi(ExperimentalLanguageFeatures)
-  public struct ExperimentalFeatures: OptionSet {
-    public let rawValue: UInt
-    public init(rawValue: UInt) {
-      self.rawValue = rawValue
+import SwiftSyntax
+
+public enum ExperimentalFeature: String, CaseIterable {
+  case referenceBindings
+  case thenStatements
+
+  /// The name of the feature, which is used in the doc comment.
+  public var featureName: String {
+    switch self {
+    case .referenceBindings:
+      return "reference bindings"
+    case .thenStatements:
+      return "'then' statements"
     }
   }
-}
 
-extension Parser.ExperimentalFeatures {
-  /// Whether to enable the parsing of 'reference bindings'.
-  public static let referenceBindings = Self(rawValue: 1 << 0)
-
-  /// Whether to enable the parsing of 'then' statements.
-  public static let thenStatements = Self(rawValue: 1 << 1)
+  /// The token that represents the experimental feature case name.
+  public var token: TokenSyntax {
+    .identifier(rawValue)
+  }
 }

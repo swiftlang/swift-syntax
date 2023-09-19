@@ -138,8 +138,6 @@ extension TokenConsumer {
       // FIXME: C++ parser returns true if this is a top-level non-"script" files.
       // But we don't have "is library" flag.
       return false
-    case .rhs(._borrowing), .rhs(._consuming), .rhs(._mutating):
-      return experimentalFeatures.contains(.referenceBindings)
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
       return true
@@ -249,16 +247,8 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case (.rhs(let binding), let handle)?:
-      switch binding {
-      case ._mutating, ._borrowing, ._consuming:
-        guard experimentalFeatures.contains(.referenceBindings) else {
-          break
-        }
-        fallthrough
-      case .let, .var, .inout:
-        return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
-      }
+    case (.rhs, let handle)?:
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case nil:
       break
     }
@@ -521,7 +511,7 @@ extension Parser {
           case postfixOperator
           case prefixOperator
 
-          init?(lexeme: Lexer.Lexeme) {
+          init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
             switch (lexeme.rawTokenKind, lexeme.tokenText) {
             case (.colon, _): self = .colon
             case (.binaryOperator, "=="): self = .binaryOperator
@@ -1719,7 +1709,7 @@ extension Parser {
       case higherThan
       case lowerThan
 
-      init?(lexeme: Lexer.Lexeme) {
+      init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
         switch PrepareForKeywordMatch(lexeme) {
         case TokenSpec(.associativity): self = .associativity
         case TokenSpec(.assignment): self = .assignment

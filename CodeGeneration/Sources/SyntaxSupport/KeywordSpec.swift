@@ -16,14 +16,18 @@ public struct KeywordSpec {
   /// The name of the keyword.
   public let name: String
 
+  /// The experimental feature the keyword is part of, or `nil` if this isn't
+  /// for an experimental feature.
+  public let experimentalFeature: ExperimentalFeature?
+
+  /// Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
+  public let isLexerClassified: Bool
+
   /// Indicates if the keyword is part of an experimental language feature.
   ///
   /// If `true`, this keyword is for an experimental language feature, and any public
   /// API generated should be marked as SPI
-  public let isExperimental: Bool
-
-  /// Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
-  public let isLexerClassified: Bool
+  public var isExperimental: Bool { experimentalFeature != nil }
 
   /// The name of this keyword that's suitable to be used for variable or enum case names.
   public var varOrCaseName: TokenSyntax {
@@ -46,15 +50,15 @@ public struct KeywordSpec {
   ///
   /// - Parameters:
   ///   - name: A name of the keyword.
-  ///   - isExperimental: Indicates if the keyword is part of an experimental language feature.
+  ///   - experimentalFeature: The experimental feature the keyword is part of, or `nil` if this isn't for an experimental feature.
   ///   - isLexerClassified: Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
   init(
     _ name: String,
-    isExperimental: Bool = false,
+    experimentalFeature: ExperimentalFeature? = nil,
     isLexerClassified: Bool = false
   ) {
     self.name = name
-    self.isExperimental = isExperimental
+    self.experimentalFeature = experimentalFeature
     self.isLexerClassified = isLexerClassified
   }
 }
@@ -692,11 +696,11 @@ public enum Keyword: CaseIterable {
     case .yield:
       return KeywordSpec("yield")
     case ._borrowing:
-      return KeywordSpec("_borrowing", isExperimental: true)
+      return KeywordSpec("_borrowing", experimentalFeature: .referenceBindings)
     case ._consuming:
-      return KeywordSpec("_consuming", isExperimental: true)
+      return KeywordSpec("_consuming", experimentalFeature: .referenceBindings)
     case ._mutating:
-      return KeywordSpec("_mutating", isExperimental: true)
+      return KeywordSpec("_mutating", experimentalFeature: .referenceBindings)
     }
   }
 }

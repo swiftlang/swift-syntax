@@ -64,7 +64,7 @@ extension Parser {
     case objc
     case transpose
 
-    init?(lexeme: Lexer.Lexeme) {
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
       case TokenSpec(._alignment): self = ._alignment
       case TokenSpec(._backDeploy): self = ._backDeploy
@@ -223,7 +223,7 @@ extension Parser {
       )
     }
 
-    switch DeclarationAttributeWithSpecialSyntax(lexeme: self.peek()) {
+    switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())
@@ -1043,7 +1043,7 @@ extension Parser {
             }
           }
 
-          init?(lexeme: Lexer.Lexeme) {
+          init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
             switch PrepareForKeywordMatch(lexeme) {
             case TokenSpec(.private): self = .private
             case TokenSpec(.fileprivate): self = .fileprivate

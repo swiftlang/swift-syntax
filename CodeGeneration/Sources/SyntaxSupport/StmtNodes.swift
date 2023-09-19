@@ -588,7 +588,7 @@ public let STMT_NODES: [Node] = [
     kind: .thenStmt,
     base: .stmt,
     // FIXME: This should be marked experimental.
-    isExperimental: false,
+    experimentalFeature: nil,
     nameForDiagnostics: "'then' statement",
     documentation: """
       A statement used to indicate the produced value from an if/switch

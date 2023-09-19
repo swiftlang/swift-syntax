@@ -333,7 +333,7 @@ extension Parser.Lookahead {
     case poundElse
     case poundElseif
 
-    init?(lexeme: Lexer.Lexeme) {
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch lexeme.rawTokenKind {
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace

@@ -161,15 +161,27 @@ func nodesDescriptionAndCommonParent(_ nodes: [some SyntaxProtocol], format: Boo
   }
 
   let partDescriptions = NodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({ $0.description(format: format) ?? "syntax" })
-  switch partDescriptions.count {
+
+  return (nil, formatDescriptions(partDescriptions))
+}
+
+/// Formats an array of descriptions into a single string.
+///
+/// This function takes an array of descriptions and formats them into a single string. Depending on the number
+/// of descriptions in the array, it returns different formatted strings.
+///
+/// - Parameter descriptions: An array of descriptions to be formatted.
+/// - Returns: A formatted string representing the descriptions.
+func formatDescriptions(_ descriptions: [String]) -> String {
+  switch descriptions.count {
   case 0:
-    return (nil, "syntax")
+    return "syntax"
   case 1:
-    return (nil, "\(partDescriptions.first!)")
+    return descriptions.first!
   case 2:
-    return (nil, "\(partDescriptions.first!) and \(partDescriptions.last!)")
+    return "\(descriptions.first!) and \(descriptions.last!)"
   default:
-    return (nil, "\(partDescriptions[0..<partDescriptions.count - 1].joined(separator: ", ")), and \(partDescriptions.last!)")
+    return "\(descriptions[0..<descriptions.count - 1].joined(separator: ", ")), and \(descriptions.last!)"
   }
 }
 

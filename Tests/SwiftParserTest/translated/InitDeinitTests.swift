@@ -143,12 +143,15 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       struct FooStructDeinitializerA {
-        deinit 1️⃣x2️⃣()
+        deinit 1️⃣x()
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
+        DiagnosticSpec(
+          message: "deinitializers cannot have a name and parameters",
+          highlight: "x()",
+          fixIts: ["remove 'x' and parameter clause"]
+        )
       ],
       fixedSource: """
         struct FooStructDeinitializerA {
@@ -210,12 +213,15 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerC {
-        deinit 1️⃣x 2️⃣(a : Int) {}
+        deinit 1️⃣x (a : Int) {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
+        DiagnosticSpec(
+          message: "deinitializers cannot have a name and parameters",
+          highlight: "x (a : Int)",
+          fixIts: ["remove 'x' and parameter clause"]
+        )
       ],
       fixedSource: """
         class FooClassDeinitializerC {
@@ -456,7 +462,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -474,7 +480,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'reasync' with 'async'"])
+        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'reasync' with 'async'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -492,7 +498,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
+        DiagnosticSpec(message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -510,7 +516,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'rethrows'"])
+        DiagnosticSpec(message: "deinitializers cannot throw", fixIts: ["remove 'rethrows'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -529,7 +535,6 @@ final class InitDeinitTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "1️⃣",
           message: "'async' has already been specified",
           notes: [NoteSpec(message: "'async' declared here")],
           fixIts: ["remove redundant 'async'"]
@@ -552,7 +557,6 @@ final class InitDeinitTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "1️⃣",
           message: "'await' conflicts with 'async'",
           notes: [NoteSpec(message: "'async' declared here")],
           fixIts: ["remove redundant 'await'"]
@@ -575,7 +579,6 @@ final class InitDeinitTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "1️⃣",
           message: "'await' conflicts with 'async'",
           notes: [NoteSpec(message: "'async' declared here")],
           fixIts: ["remove redundant 'await'"]
@@ -597,7 +600,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
+        DiagnosticSpec(message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -615,7 +618,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
+        DiagnosticSpec(message: "deinitializers cannot throw", fixIts: ["remove 'throws'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -633,7 +636,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws' and 'rethrows'"])
+        DiagnosticSpec(message: "deinitializers cannot throw", fixIts: ["remove 'throws' and 'rethrows'"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -747,13 +750,21 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerA {
-        deinit 1️⃣x2️⃣() 3️⃣throws async {}
+        deinit 1️⃣x() 2️⃣throws async {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "deinitializers cannot have a name and parameters",
+          highlight: "x()",
+          fixIts: ["remove 'x' and parameter clause"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "deinitializers cannot throw",
+          fixIts: ["remove 'throws'"]
+        ),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -767,14 +778,26 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerA {
-        deinit 1️⃣x2️⃣() 3️⃣await 4️⃣throws {}
+        deinit 1️⃣x() 2️⃣await 3️⃣throws {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "deinitializers cannot have a name and parameters",
+          highlight: "x()",
+          fixIts: ["remove 'x' and parameter clause"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'await' with 'async'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "deinitializers cannot throw",
+          fixIts: ["remove 'throws'"]
+        ),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -792,7 +815,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->' and return type"])
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->' and return type"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -806,12 +829,15 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerA {
-        deinit 1️⃣x 2️⃣-> Void {}
+        deinit 1️⃣x -> Void {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->' and return type"]),
+        DiagnosticSpec(
+          message: "deinitializers cannot have a name and return clause",
+          highlight: "x -> Void",
+          fixIts: ["remove 'x', '->', and return type"]
+        )
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -825,12 +851,15 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerA {
-        deinit1️⃣() 2️⃣-> Void {}
+        deinit1️⃣() -> Void {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->' and return type"]),
+        DiagnosticSpec(
+          message: "deinitializers cannot have parameters and return clause",
+          highlight: "() -> Void",
+          fixIts: ["remove parameter clause, '->', and return type"]
+        )
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -844,13 +873,15 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       class FooClassDeinitializerA {
-        deinit 1️⃣x2️⃣() 3️⃣-> Void {}
+        deinit 1️⃣x() -> Void {}
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have a name", fixIts: ["remove 'x'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have parameters", fixIts: ["remove parameter clause"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->' and return type"]),
+        DiagnosticSpec(
+          message: "deinitializers cannot have a name, parameters, and return clause",
+          highlight: "x() -> Void",
+          fixIts: ["remove 'x', parameter clause, '->', and return type"]
+        )
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -868,8 +899,8 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'async', and return type"]),
+        DiagnosticSpec(message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'async', and return type"]),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -887,7 +918,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'async', and return type"])
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'async', and return type"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -906,7 +937,7 @@ final class InitDeinitTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'async', and return type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'async', and return type"]),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -924,7 +955,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'await', and return type"])
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'await', and return type"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -942,7 +973,7 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'throws', and return type"])
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'throws', and return type"])
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -961,7 +992,7 @@ final class InitDeinitTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot throw", fixIts: ["remove 'throws'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'throws', and return type"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'throws', and return type"]),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -979,8 +1010,8 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'async throws', and return type"]),
+        DiagnosticSpec(message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'async throws', and return type"]),
       ],
       fixedSource: """
         class FooClassDeinitializerA {
@@ -998,8 +1029,8 @@ final class InitDeinitTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "deinitializers cannot have return type", fixIts: ["remove '->', 'throws async', and return type"]),
+        DiagnosticSpec(message: "expected 'async' in effect specifiers", fixIts: ["insert 'async'"]),
+        DiagnosticSpec(message: "deinitializers cannot have a return clause", fixIts: ["remove '->', 'throws async', and return type"]),
       ],
       fixedSource: """
         class FooClassDeinitializerA {

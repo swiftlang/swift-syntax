@@ -120,17 +120,8 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var defaultOutsideOfSwitch: Self {
     .init("'default' label can only appear inside a 'switch' statement")
   }
-  public static var deinitCannotHaveName: Self {
-    .init("deinitializers cannot have a name")
-  }
-  public static var deinitCannotHaveParameters: Self {
-    .init("deinitializers cannot have parameters")
-  }
   public static var deinitCannotThrow: Self {
     .init("deinitializers cannot throw")
-  }
-  public static var deinitCannotHaveReturnType: Self {
-    .init("deinitializers cannot have return type")
   }
   public static var editorPlaceholderInSourceFile: Self {
     .init("editor placeholder in source file")
@@ -302,6 +293,36 @@ public struct CannotParseVersionTuple: ParserError {
 
   public var message: String {
     return "cannot parse version component \(versionTuple.shortSingleLineContentDescription)"
+  }
+}
+
+public struct DeinitializerSignatureError: ParserError {
+  public let name: TokenSyntax?
+  public let params: FunctionParameterClauseSyntax?
+  public let returnClause: ReturnClauseSyntax?
+
+  public var message: String {
+    var descriptions: [String] = []
+
+    if name != nil {
+      descriptions.append("a name")
+    }
+
+    if params != nil {
+      descriptions.append("parameters")
+    }
+
+    if returnClause != nil {
+      var message = "return clause"
+
+      if descriptions.isEmpty {
+        message = "a " + message
+      }
+
+      descriptions.append(message)
+    }
+
+    return "deinitializers cannot have \(formatDescriptions(descriptions))"
   }
 }
 

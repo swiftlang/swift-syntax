@@ -36,6 +36,7 @@ struct MyPlugin: CompilerPlugin {
     NewTypeMacro.self,
     URLMacro.self,
     FuncUniqueMacro.self,
+    PeerValueWithSuffixNameMacro.self,
   ]
 }
 #endif

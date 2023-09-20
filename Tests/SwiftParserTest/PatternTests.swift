@@ -168,4 +168,29 @@ final class PatternTests: ParserTestCase {
       substructure: subscriptWithBindingPattern
     )
   }
+
+  func testPatternAsPlaceholderExpr() {
+    assertParse(
+      "let 1️⃣<#name#> = 2️⃣<#value#>",
+      substructure: VariableDeclSyntax(
+        bindingSpecifier: .keyword(.let),
+        bindings: [
+          PatternBindingSyntax(
+            pattern: IdentifierPatternSyntax(
+              identifier: .identifier("<#name#>")
+            ),
+            initializer: InitializerClauseSyntax(
+              value: EditorPlaceholderExprSyntax(
+                placeholder: .identifier("<#value#>")
+              )
+            )
+          )
+        ]
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
+      ]
+    )
+  }
 }

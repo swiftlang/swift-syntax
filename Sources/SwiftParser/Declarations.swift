@@ -1040,16 +1040,25 @@ extension Parser {
   ) -> RawFunctionDeclSyntax {
     let (unexpectedBeforeFuncKeyword, funcKeyword) = self.eat(handle)
     let unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?
+    let unexpectedAfterIdentifier: RawUnexpectedNodesSyntax?
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(.exclamationMark, .prefixAmpersand) {
       var name = self.currentToken.tokenText
-      if name.count > 1 && name.hasSuffix("<") && self.peek(isAt: .identifier) {
+      if !currentToken.isEditorPlaceholder && name.count > 1 && name.hasSuffix("<") && self.peek(isAt: .identifier) {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil
       identifier = self.consumePrefix(name, as: .binaryOperator)
+      unexpectedAfterIdentifier = nil
     } else {
       (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
+
+      if currentToken.isEditorPlaceholder {
+        let editorPlaceholder = self.parseAnyIdentifier()
+        unexpectedAfterIdentifier = RawUnexpectedNodesSyntax([editorPlaceholder], arena: self.arena)
+      } else {
+        unexpectedAfterIdentifier = nil
+      }
     }
 
     let genericParams: RawGenericParameterClauseSyntax?
@@ -1076,6 +1085,7 @@ extension Parser {
       funcKeyword: funcKeyword,
       unexpectedBeforeIdentifier,
       name: identifier,
+      unexpectedAfterIdentifier,
       genericParameterClause: genericParams,
       signature: signature,
       genericWhereClause: generics,

@@ -388,6 +388,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         ]
       )
     } else if let firstToken = node.first?.as(TokenSyntax.self),
+      !firstToken.isEditorPlaceholder,
       firstToken.tokenKind.isIdentifier == true,
       firstToken.presence == .present,
       let previousToken = node.previousToken(viewMode: .sourceAccurate),

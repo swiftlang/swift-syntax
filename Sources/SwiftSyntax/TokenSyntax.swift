@@ -131,6 +131,16 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return raw.totalLength
   }
 
+  /// Whether the token text is an editor placeholder or not.
+  public var isEditorPlaceholder: Bool {
+    switch self.tokenKind {
+    case .identifier(let text):
+      return text.hasPrefix("<#") && text.hasSuffix("#>")
+    default:
+      return false
+    }
+  }
+
   /// A token by itself has no structure, so we represent its structure by an
   /// empty layout node.
   ///

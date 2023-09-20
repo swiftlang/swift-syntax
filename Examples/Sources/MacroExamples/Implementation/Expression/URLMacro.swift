@@ -16,12 +16,11 @@ import SwiftSyntaxMacros
 
 /// Creates a non-optional URL from a static string. The string is checked to
 /// be valid during compile time.
-public struct URLMacro: ExpressionMacro {
+public enum URLMacro: ExpressionMacro {
   public static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
-
     guard let argument = node.arguments.first?.expression,
       let segments = argument.as(StringLiteralExprSyntax.self)?.segments,
       segments.count == 1,

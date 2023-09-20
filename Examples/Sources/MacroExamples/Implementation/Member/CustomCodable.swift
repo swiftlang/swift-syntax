@@ -13,14 +13,12 @@
 import SwiftSyntax
 import SwiftSyntaxMacros
 
-public struct CustomCodable: MemberMacro {
-
+public enum CustomCodable: MemberMacro {
   public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-
     let memberList = declaration.memberBlock.members
 
     let cases = memberList.compactMap({ member -> String? in
@@ -46,15 +44,22 @@ public struct CustomCodable: MemberMacro {
     })
 
     let codingKeys: DeclSyntax = """
-
-        enum CodingKeys: String, CodingKey {
-          \(raw: cases.joined(separator: "\n"))
-        }
-
+      enum CodingKeys: String, CodingKey {
+        \(raw: cases.joined(separator: "\n"))
+      }
       """
 
-    return [
-      codingKeys
-    ]
+    return [codingKeys]
+  }
+}
+
+public struct CodableKey: PeerMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingPeersOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [DeclSyntax] {
+    // Does nothing, used only to decorate members with data
+    return []
   }
 }

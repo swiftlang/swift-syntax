@@ -13,197 +13,35 @@
 import Foundation
 import MacroExamplesInterface
 
-let x = 1
-let y = 2
-let z = 3
+// MARK: - Accessor Macros
 
-// "Stringify" macro turns the expression into a string.
-print(#stringify(x + y))
+// TODO: Add example of an accessor macro
 
-// "AddBlocker" complains about addition operations. We emit a warning
-// so it doesn't block compilation.
-print(#addBlocker(x * y + z))
+// MARK: - Complex Macros
 
-#myWarning("remember to pass a string literal here")
+runDictionaryStorageMacroPlayground()
+runObservableMacroPlayground()
 
-// Uncomment to get an error out of the macro.
-// let text = "oops"
-// #myWarning(text)
+// MARK: - Declaration Macros
 
-struct Font: ExpressibleByFontLiteral {
-  init(fontLiteralName: String, size: Int, weight: MacroExamplesInterface.FontWeight) {
-  }
-}
+// TODO: Add example of declaration macro
 
-let _: Font = #fontLiteral(name: "Comic Sans", size: 14, weight: .thin)
+// MARK: - Expression Macros
 
-// "#URL" macro provides compile time checked URL construction. If the URL is
-// malformed an error is emitted. Otherwise a non-optional URL is expanded.
-print(#URL("https://swift.org/"))
+runExpressionMacrosPlayground()
 
-let domain = "domain.com"
-//print(#URL("https://\(domain)/api/path")) // error: #URL requires a static string literal
-//print(#URL("https://not a url.com")) // error: Malformed url
+// MARK: - Extension Macros
 
-// Use the "wrapStoredProperties" macro to deprecate all of the stored
-// properties.
-@wrapStoredProperties(#"available(*, deprecated, message: "hands off my data")"#)
-struct OldStorage {
-  var x: Int
-}
+// TODO: Add example of extension macro
 
-// The deprecation warning below comes from the deprecation attribute
-// introduced by @wrapStoredProperties on OldStorage.
-_ = OldStorage(x: 5).x
+// MARK: - Member Attribute Macros
 
-// Move the storage from each of the stored properties into a dictionary
-// called `_storage`, turning the stored properties into computed properties.
-@DictionaryStorage
-struct Point {
-  var x: Int = 1
-  var y: Int = 2
-}
+runMemberAttributeMacrosPlayground()
 
-@CaseDetection
-enum Pet {
-  case dog
-  case cat(curious: Bool)
-  case parrot
-  case snake
-}
+// MARK: - Member Macros
 
-let pet: Pet = .cat(curious: true)
-print("Pet is dog: \(pet.isDog)")
-print("Pet is cat: \(pet.isCat)")
+runMemberMacrosPlayground()
 
-var point = Point()
-print("Point storage begins as an empty dictionary: \(point)")
-print("Default value for point.x: \(point.x)")
-point.y = 17
-print("Point storage contains only the value we set:  \(point)")
+// MARK: - Peer Macros
 
-// MARK: - ObservableMacro
-
-struct Treat {}
-
-@Observable
-final class Dog {
-  var name: String?
-  var treat: Treat?
-
-  var isHappy: Bool = true
-
-  init() {}
-
-  func bark() {
-    print("bork bork")
-  }
-}
-
-let dog = Dog()
-print(dog.name ?? "")
-dog.name = "George"
-dog.treat = Treat()
-print(dog.name ?? "")
-dog.bark()
-
-// MARK: NewType
-
-@NewType(String.self)
-struct Hostname:
-  NewTypeProtocol,
-  Hashable,
-  CustomStringConvertible
-{}
-
-@NewType(String.self)
-struct Password:
-  NewTypeProtocol,
-  Hashable,
-  CustomStringConvertible
-{
-  var description: String { "(redacted)" }
-}
-
-let hostname = Hostname("localhost")
-print("hostname: description=\(hostname) hashValue=\(hostname.hashValue)")
-
-let password = Password("squeamish ossifrage")
-print("password: description=\(password) hashValue=\(password.hashValue)")
-
-struct MyStruct {
-  @AddCompletionHandler
-  func f(a: Int, for b: String, _ value: Double) async -> String {
-    return b
-  }
-
-  @AddAsync
-  func c(a: Int, for b: String, _ value: Double, completionBlock: @escaping (Result<String, Error>) -> Void) -> Void {
-    completionBlock(.success("a: \(a), b: \(b), value: \(value)"))
-  }
-
-  @AddAsync
-  func d(a: Int, for b: String, _ value: Double, completionBlock: @escaping (Bool) -> Void) -> Void {
-    completionBlock(true)
-  }
-}
-
-@CustomCodable
-struct CustomCodableString: Codable {
-
-  @CodableKey(name: "OtherName")
-  var propertyWithOtherName: String
-
-  var propertyWithSameName: Bool
-
-  func randomFunction() {
-
-  }
-}
-
-Task {
-  let myStruct = MyStruct()
-  _ = try? await myStruct.c(a: 5, for: "Test", 20)
-
-  _ = await myStruct.d(a: 10, for: "value", 40)
-}
-
-MyStruct().f(a: 1, for: "hello", 3.14159) { result in
-  print("Eventually received \(result + "!")")
-}
-
-let json = """
-  {
-    "OtherName": "Name",
-    "propertyWithSameName": true
-  }
-
-  """.data(using: .utf8)!
-
-let jsonDecoder = JSONDecoder()
-let product = try jsonDecoder.decode(CustomCodableString.self, from: json)
-print(product.propertyWithOtherName)
-
-@MyOptionSet<UInt8>
-struct ShippingOptions {
-  private enum Options: Int {
-    case nextDay
-    case secondDay
-    case priority
-    case standard
-  }
-
-  static let express: ShippingOptions = [.nextDay, .secondDay]
-  static let all: ShippingOptions = [.express, .priority, .standard]
-}
-
-// `@MetaEnum` adds a nested enum called `Meta` with the same cases, but no
-// associated values/payloads. Handy for e.g. describing a schema.
-@MetaEnum enum Value {
-  case integer(Int)
-  case text(String)
-  case boolean(Bool)
-  case null
-}
-
-print(Value.Meta(.integer(42)) == .integer)
+runPeerMacrosPlayground()

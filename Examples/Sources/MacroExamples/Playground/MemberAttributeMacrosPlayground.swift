@@ -10,16 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
-import SwiftSyntaxMacros
+import MacroExamplesInterface
 
-public struct CodableKey: PeerMacro {
-  public static func expansion(
-    of node: AttributeSyntax,
-    providingPeersOf declaration: some DeclSyntaxProtocol,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
-    // Does nothing, used only to decorate members with data
-    return []
+func runMemberAttributeMacrosPlayground() {
+  // MARK: - Wrap Stored Properties
+
+  // Use the "wrapStoredProperties" macro to deprecate all of the stored
+  // properties.b
+  @wrapStoredProperties(#"available(*, deprecated, message: "hands off my data")"#)
+  struct OldStorage {
+    var x: Int
   }
+
+  // The deprecation warning below comes from the deprecation attribute
+  // introduced by @wrapStoredProperties on OldStorage.
+  _ = OldStorage(x: 5).x
 }

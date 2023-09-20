@@ -23,7 +23,7 @@ import SwiftSyntaxMacros
 ///  will expand to
 ///
 ///     (x + y, "x + y")
-public struct StringifyMacro: ExpressionMacro {
+public enum StringifyMacro: ExpressionMacro {
   public static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext

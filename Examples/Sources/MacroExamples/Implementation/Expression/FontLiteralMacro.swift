@@ -16,13 +16,13 @@ import SwiftSyntaxMacros
 /// Implementation of the `#fontLiteral` macro, which is similar in spirit
 /// to the built-in expressions `#colorLiteral`, `#imageLiteral`, etc., but in
 /// a small macro.
-public struct FontLiteralMacro: ExpressionMacro {
+public enum FontLiteralMacro: ExpressionMacro {
   public static func expansion(
-    of macro: some FreestandingMacroExpansionSyntax,
+    of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
-  ) -> ExprSyntax {
+  ) throws -> ExprSyntax {
     let argList = replaceFirstLabel(
-      of: macro.arguments,
+      of: node.arguments,
       with: "fontLiteralName"
     )
     return ".init(\(argList))"
@@ -40,6 +40,9 @@ private func replaceFirstLabel(
   }
 
   var tuple = tuple
-  tuple[tuple.startIndex] = firstElement.with(\.label, .identifier(newLabel))
+  tuple[tuple.startIndex] =
+    firstElement
+    .with(\.label, .identifier(newLabel))
+    .with(\.colon, .colonToken())
   return tuple
 }

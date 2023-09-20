@@ -10,12 +10,28 @@
 //
 //===----------------------------------------------------------------------===//
 
-@attached(
-  member,
-  names: named(RawValue),
-  named(rawValue),
-  arbitrary  // should be named(init(_:)) but that doesn't compile as of swift-DEVELOPMENT-SNAPSHOT-2023-02-02-a
-)
+// MARK: - Case Detection
+
+/// Add computed properties named `is<Case>` for each case element in the enum.
+@attached(member, names: arbitrary)
+public macro CaseDetection() = #externalMacro(module: "MacroExamplesImplementation", type: "CaseDetectionMacro")
+
+// MARK: - Custom Codable
+
+@attached(member, names: named(CodingKeys))
+public macro CustomCodable() = #externalMacro(module: "MacroExamplesImplementation", type: "CustomCodable")
+
+@attached(peer)
+public macro CodableKey(name: String) = #externalMacro(module: "MacroExamplesImplementation", type: "CodableKey")
+
+// MARK: - Meta Enum
+
+@attached(member, names: named(Meta))
+public macro MetaEnum() = #externalMacro(module: "MacroExamplesImplementation", type: "MetaEnumMacro")
+
+// MARK: - New Type
+
+@attached(member, names: named(RawValue), named(rawValue), named(init(_:)))
 public macro NewType<T>(_: T.Type) = #externalMacro(module: "MacroExamplesImplementation", type: "NewTypeMacro")
 
 public protocol NewTypeProtocol: RawRepresentable {

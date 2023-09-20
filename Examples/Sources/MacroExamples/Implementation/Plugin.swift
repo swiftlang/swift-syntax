@@ -35,6 +35,7 @@ struct MyPlugin: CompilerPlugin {
     OptionSetMacro.self,
     NewTypeMacro.self,
     URLMacro.self,
+    FuncUniqueMacro.self,
   ]
 }
 #endif

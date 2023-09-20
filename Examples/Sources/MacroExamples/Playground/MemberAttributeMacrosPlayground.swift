@@ -10,9 +10,29 @@
 //
 //===----------------------------------------------------------------------===//
 
+import Foundation
 import MacroExamplesInterface
 
 func runMemberAttributeMacrosPlayground() {
+  // MARK: - Member Deprecated
+
+  @memberDeprecated
+  struct SomeStruct {
+    typealias MacroName = String
+
+    var oldProperty: Int = 420
+
+    func oldMethod() {
+      print("This is an old method.")
+    }
+  }
+
+  let someStruct = SomeStruct()
+
+  _ = SomeStruct.MacroName("name")
+  _ = someStruct.oldProperty
+  someStruct.oldMethod()
+
   // MARK: - Wrap Stored Properties
 
   // Use the "wrapStoredProperties" macro to deprecate all of the stored

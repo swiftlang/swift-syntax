@@ -32,7 +32,7 @@ runExpressionMacrosPlayground()
 
 // MARK: - Extension Macros
 
-// TODO: Add example of extension macro
+runEquatableExtensionMacroPlayground()
 
 // MARK: - Member Attribute Macros
 

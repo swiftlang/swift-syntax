@@ -63,7 +63,7 @@ public protocol CompilerPlugin {
 }
 
 extension CompilerPlugin {
-  func resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
+  func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type {
     let qualifedName = "\(moduleName).\(typeName)"
 
     for type in providingMacros {
@@ -74,12 +74,14 @@ extension CompilerPlugin {
         return type
       }
     }
-    return nil
+
+    let pluginPath = CommandLine.arguments.first ?? Bundle.main.executablePath ?? ProcessInfo.processInfo.processName
+    throw CompilerPluginError(message: "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'")
   }
 
   // @testable
   public func _resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
-    resolveMacro(moduleName: moduleName, typeName: typeName)
+    try? resolveMacro(moduleName: moduleName, typeName: typeName)
   }
 }
 
@@ -88,8 +90,8 @@ struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   init(plugin: Plugin) {
     self.plugin = plugin
   }
-  func resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
-    plugin.resolveMacro(moduleName: moduleName, typeName: typeName)
+  func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type {
+    try plugin.resolveMacro(moduleName: moduleName, typeName: typeName)
   }
 }
 
@@ -240,5 +242,12 @@ private extension FileHandle {
     } else {
       return self.readData(ofLength: 8)
     }
+  }
+}
+
+struct CompilerPluginError: Error, CustomStringConvertible {
+  var description: String
+  init(message: String) {
+    self.description = message
   }
 }

@@ -20,7 +20,7 @@ public enum PluginFeature: String {
 /// A type that provides the actual plugin functions.
 public protocol PluginProvider {
   /// Resolve macro type by the module name and the type name.
-  func resolveMacro(moduleName: String, typeName: String) -> Macro.Type?
+  func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type
 
   /// Load dynamic link library at `libraryPath`. Implementations can use
   /// `moduleName` to associate the loaded library with it.

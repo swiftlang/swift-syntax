@@ -106,7 +106,7 @@ public let EXPR_NODES: [Node] = [
       ``` 
 
       ```swift
-      myPet as? Dog`
+      myPet as? Dog
       ```
 
       - Note: This node is only generated after operators are folded using the `SwiftOperators` library. 
@@ -1733,30 +1733,49 @@ public let EXPR_NODES: [Node] = [
     kind: .switchExpr,
     base: .expr,
     nameForDiagnostics: "'switch' statement",
+    documentation: """
+      A `switch` expression.
+
+      ### Examples
+
+      This represents the switch expression in
+
+      ```swift
+      switch self.foo {
+      }
+      ```
+
+      A switch ecpression may be declared without any cases.
+      """,
     traits: [
       "Braced"
     ],
     children: [
       Child(
         name: "switchKeyword",
-        kind: .token(choices: [.keyword(.switch)])
+        kind: .token(choices: [.keyword(.switch)]),
+        documentation: "The `switch` keyword."
       ),
       Child(
         name: "subject",
         deprecatedName: "expression",
-        kind: .node(kind: .expr)
+        kind: .node(kind: .expr),
+        documentation: "The expression to switch over."
       ),
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [.token(.leftBrace)]),
+        documentation: "The brace introducing the switch body."
       ),
       Child(
         name: "cases",
-        kind: .collection(kind: .switchCaseList, collectionElementName: "Case")
+        kind: .collection(kind: .switchCaseList, collectionElementName: "Case"),
+        documentation: "The switch's body that contains all possible cases."
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [.token(.rightBrace)]),
+        documentation: "The brace closing the switch body."
       ),
     ]
   ),

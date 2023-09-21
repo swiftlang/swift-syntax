@@ -15,6 +15,21 @@ public let PATTERN_NODES: [Node] = [
     kind: .expressionPattern,
     base: .pattern,
     nameForDiagnostics: "pattern",
+    documentation: """
+      A pattern that contains an ``ExprSyntaxProtocol``.
+
+      ### Examples
+
+      Patterns can be used in switch cases like the following example:
+      ```swift
+      switch raw.kind {
+        case .expressionPattern:
+          return true
+        default:
+          return false
+      }
+      ```
+      """,
     children: [
       Child(
         name: "expression",
@@ -27,6 +42,18 @@ public let PATTERN_NODES: [Node] = [
     kind: .identifierPattern,
     base: .pattern,
     nameForDiagnostics: "pattern",
+    documentation: """
+      A pattern that contains a ``TokenSyntax``.
+
+      ### Examples
+
+      ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
+      For example `a` in the exmaple:
+
+      ```swift
+      let a = 1
+      ```
+      """,
     children: [
       Child(
         name: "identifier",
@@ -55,6 +82,9 @@ public let PATTERN_NODES: [Node] = [
     kind: .tuplePatternElementList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
+    documentation: """
+      A list of ``TuplePatternElementSyntax``.
+      """,
     elementChoices: [.tuplePatternElement]
   ),
 
@@ -62,6 +92,9 @@ public let PATTERN_NODES: [Node] = [
     kind: .tuplePatternElement,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      An element that represents a single tuple value in ``TuplePatternElementListSyntax``.
+      """,
     traits: [
       "WithTrailingComma"
     ],
@@ -71,21 +104,25 @@ public let PATTERN_NODES: [Node] = [
         deprecatedName: "labelName",
         kind: .token(choices: [.token(.identifier)]),
         nameForDiagnostics: "label",
+        documentation: "The label of the pattern.",
         isOptional: true
       ),
       Child(
         name: "colon",
         deprecatedName: "labelColon",
         kind: .token(choices: [.token(.colon)]),
+        documentation: "The colon separating label and pattern.",
         isOptional: true
       ),
       Child(
         name: "pattern",
-        kind: .node(kind: .pattern)
+        kind: .node(kind: .pattern),
+        documentation: "The value of this labeled pattern."
       ),
       Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
+        documentation: "The comma separating elements.",
         isOptional: true
       ),
     ]
@@ -95,13 +132,26 @@ public let PATTERN_NODES: [Node] = [
     kind: .tuplePattern,
     base: .pattern,
     nameForDiagnostics: "tuple pattern",
+    documentation: """
+      A pattern that contains a list of other pattern.
+
+      ### Examples
+
+      ``TuplePatternSyntax`` can be used in more complex variable declarations.
+      For example `(x, y)` in the exmaple:
+
+      ```swift
+      let (x, y) = (1, 2)
+      ```
+      """,
     traits: [
       "Parenthesized"
     ],
     children: [
       Child(
         name: "leftParen",
-        kind: .token(choices: [.token(.leftParen)])
+        kind: .token(choices: [.token(.leftParen)]),
+        documentation: "The parent introducing the tuple."
       ),
       Child(
         name: "elements",
@@ -109,7 +159,8 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "rightParen",
-        kind: .token(choices: [.token(.rightParen)])
+        kind: .token(choices: [.token(.rightParen)]),
+        documentation: "The paren closing the tuple."
       ),
     ]
   ),
@@ -121,7 +172,8 @@ public let PATTERN_NODES: [Node] = [
     children: [
       Child(
         name: "colon",
-        kind: .token(choices: [.token(.colon)])
+        kind: .token(choices: [.token(.colon)]),
+        documentation: "The colon separating previous pattern and the type."
       ),
       Child(
         name: "type",
@@ -155,6 +207,18 @@ public let PATTERN_NODES: [Node] = [
     kind: .wildcardPattern,
     base: .pattern,
     nameForDiagnostics: "wildcard pattern",
+    documentation: """
+      A pattern that represent a wildcard.
+
+      ### Examples
+
+      ``TuplePatternSyntax`` can be used in a simple variable declarations.
+      For example `_` in the exmaple:
+
+      ```swift
+      let _: Int = (1, 2)
+      ```
+      """,
     children: [
       Child(
         name: "wildcard",
@@ -163,6 +227,7 @@ public let PATTERN_NODES: [Node] = [
       Child(
         name: "typeAnnotation",
         kind: .node(kind: .typeAnnotation),
+        documentation: "The type of the pattern.",
         isOptional: true
       ),
     ]

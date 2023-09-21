@@ -599,7 +599,7 @@ public struct EffectsAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashab
   public static let syntaxKind = SyntaxKind.effectsAttributeArgumentList
 }
 
-/// A collection of 0 or more `EnumCaseElement`s.
+/// A collection of 0 or more ``EnumCaseElementSyntax``s.
 ///
 /// ### Children
 /// 
@@ -1603,6 +1603,8 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.switchCaseList
 }
 
+/// A list of ``TuplePatternElementSyntax``.
+///
 /// ### Children
 /// 
 /// ``TuplePatternElementSyntax`` `*`

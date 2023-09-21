@@ -334,6 +334,7 @@ open class BasicFormat: SyntaxRewriter {
       (.regexLiteralPattern, _),
       (.regexSlash, .regexPoundDelimiter),  // closing extended regex delimiter should never be separate by a space
       (.rightAngle, .leftParen),  // func foo<T>(x: T)
+      (.rightAngle, .period),  // Foo<T>.bar
       (.rightBrace, .leftParen),  // { return 1 }()
       (.rightParen, .leftParen),  // returnsClosure()()
       (.rightParen, .period),  // foo().bar

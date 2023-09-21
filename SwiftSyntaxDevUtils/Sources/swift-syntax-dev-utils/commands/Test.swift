@@ -26,6 +26,7 @@ struct Test: ParsableCommand, BuildCommand {
   func run() throws {
     try runTests()
     try runCodeGenerationTests()
+    try runExamplesTests()
 
     logSection("All tests passed")
   }
@@ -49,6 +50,18 @@ struct Test: ParsableCommand, BuildCommand {
       action: "test",
       packageDir: Paths.codeGenerationDir,
       additionalArguments: ["--test-product", "CodeGenerationPackageTests"],
+      additionalEnvironment: swiftPMEnvironmentVariables,
+      captureStdout: false,
+      captureStderr: false
+    )
+  }
+
+  private func runExamplesTests() throws {
+    logSection("Running Examples Tests")
+    try invokeSwiftPM(
+      action: "test",
+      packageDir: Paths.examplesDir,
+      additionalArguments: ["--test-product", "ExamplesPackageTests"],
       additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false

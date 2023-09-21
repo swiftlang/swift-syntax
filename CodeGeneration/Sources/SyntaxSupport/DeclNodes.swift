@@ -53,7 +53,8 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [.token(.leftBrace)]),
+        documentation: "The brace introducing the accessor block."
       ),
       Child(
         name: "accessors",
@@ -70,7 +71,8 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [.token(.rightBrace)]),
+        documentation: "The brace closing the accessor block."
       ),
     ]
   ),
@@ -183,16 +185,19 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers"
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers like `public` that are attached to the actor declaration."
       ),
       Child(
         name: "actorKeyword",
-        kind: .token(choices: [.keyword(.actor)])
+        kind: .token(choices: [.keyword(.actor)]),
+        documentation: "The `actor` keyword."
       ),
       Child(
         name: "name",
         deprecatedName: "identifier",
-        kind: .token(choices: [.token(.identifier)])
+        kind: .token(choices: [.token(.identifier)]),
+        documentation: "The name of the actor. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "genericParameterClause",
@@ -268,7 +273,7 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the associated type declaration."
+        documentation: "Modifiers like `public` that are attached to the associated type declaration."
       ),
       Child(
         name: "associatedtypeKeyword",
@@ -351,7 +356,7 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the class declaration, such as `public`."
+        documentation: "Modifiers like `public` that are attached to the class declaration."
       ),
       Child(
         name: "classKeyword",
@@ -499,12 +504,12 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers that are attached to the deinitializer."
+        documentation: "Modifiers like `public` that are attached to the deinitializer."
       ),
       Child(
         name: "deinitKeyword",
         kind: .token(choices: [.keyword(.deinit)]),
-        documentation: "The deinit keyword."
+        documentation: "The `deinit` keyword."
       ),
       Child(
         name: "effectSpecifiers",
@@ -702,7 +707,7 @@ public let DECL_NODES: [Node] = [
     kind: .enumCaseElementList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    documentation: "A collection of 0 or more `EnumCaseElement`s.",
+    documentation: "A collection of 0 or more ``EnumCaseElementSyntax``s.",
     elementChoices: [.enumCaseElement]
   ),
 
@@ -829,7 +834,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers"
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers like `public` that are attached to the extension declaration."
       ),
       Child(
         name: "extensionKeyword",
@@ -854,7 +860,9 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "memberBlock",
-        kind: .node(kind: .memberBlock)
+        kind: .node(kind: .memberBlock),
+        documentation:
+          "The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
     ]
   ),
@@ -878,7 +886,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers"
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers like `public` that are attached to the function declaration."
       ),
       Child(
         name: "funcKeyword",
@@ -892,7 +901,8 @@ public let DECL_NODES: [Node] = [
           .token(.binaryOperator),
           .token(.prefixOperator),
           .token(.postfixOperator),
-        ])
+        ]),
+        documentation: "The name of the function. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "genericParameterClause",
@@ -1103,7 +1113,7 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift."
+        documentation: "Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift."
       ),
       Child(
         name: "importKeyword",
@@ -1216,7 +1226,7 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers attached to the initializer"
+        documentation: "Modifiers that are attached to the initializer declaration."
       ),
       Child(
         name: "initKeyword",
@@ -1249,7 +1259,7 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "If the initializer had generic parameters, a where clause that can restrict those",
+        documentation: "If the initializer had generic parameters, a where clause that can restrict those.",
         isOptional: true
       ),
       Child(
@@ -2019,7 +2029,7 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers that are attached to the struct declaration."
+        documentation: "Modifiers like `public` that are attached to the struct declaration."
       ),
       Child(
         name: "structKeyword",
@@ -2227,7 +2237,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers"
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers modifiers applied to the variable declaration."
       ),
       Child(
         name: "bindingSpecifier",

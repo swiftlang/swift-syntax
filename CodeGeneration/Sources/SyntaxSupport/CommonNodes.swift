@@ -63,7 +63,8 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [.token(.leftBrace)]),
+        documentation: "The brace introducing the code block."
       ),
       Child(
         name: "statements",
@@ -72,7 +73,8 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [.token(.rightBrace)]),
+        documentation: "The brace closing the code block."
       ),
     ]
   ),
@@ -88,11 +90,13 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "asyncSpecifier",
         kind: .token(choices: [.keyword(.async)]),
+        documentation: "The `async` keyword.",
         isOptional: true
       ),
       Child(
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws)]),
+        documentation: "The `throws` keyword.",
         isOptional: true
       ),
     ]
@@ -109,11 +113,13 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "asyncSpecifier",
         kind: .token(choices: [.keyword(.async), .keyword(.reasync)]),
+        documentation: "The `async` or `reasync` keyword.",
         isOptional: true
       ),
       Child(
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
+        documentation: "The `throws` or `rethrows` keyword.",
         isOptional: true
       ),
     ]
@@ -128,6 +134,7 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "asyncSpecifier",
         kind: .token(choices: [.keyword(.async)]),
+        documentation: "The `async` keyword.",
         isOptional: true
       )
     ]

@@ -1521,6 +1521,17 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 
 // MARK: - IdentifierPatternSyntax
 
+/// A pattern that contains a ``TokenSyntax``.
+/// 
+/// ### Examples
+/// 
+/// ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
+/// For example `a` in the exmaple:
+/// 
+/// ```swift
+/// let a = 1
+/// ```
+///
 /// ### Children
 /// 
 ///  - `identifier`: (`<identifier>` | `self` | `init`)
@@ -2820,7 +2831,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - attributes: Attributes attached to the import declaration, for example `@testable`.
-  ///   - modifiers: Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.
+  ///   - modifiers: Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift.
   ///   - importKeyword: The `import` keyword for this declaration.
   ///   - importKindSpecifier: The kind of declaration being imported. 
   ///   - path: The path to the module, submodule or symbol being imported.
@@ -2936,7 +2947,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
   
-  /// Modifiers attached to the import declaration. Currently, no modifiers are supported by Swift.
+  /// Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift.
   public var modifiers: DeclModifierListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
@@ -3928,12 +3939,12 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - attributes: Attributes that are attached to the initializer.
-  ///   - modifiers: Modifiers attached to the initializer
+  ///   - modifiers: Modifiers that are attached to the initializer declaration.
   ///   - initKeyword: The init keyword
   ///   - optionalMark: If the initializer is failable, a question mark to indicate that.
   ///   - genericParameterClause: Generic parameters of the initializer.
   ///   - signature: The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid.
-  ///   - genericWhereClause: If the initializer had generic parameters, a where clause that can restrict those
+  ///   - genericWhereClause: If the initializer had generic parameters, a where clause that can restrict those.
   ///   - body: The initializer’s body. Missing if the initializer is a requirement of a protocol declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -4065,7 +4076,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
     }
   }
   
-  /// Modifiers attached to the initializer
+  /// Modifiers that are attached to the initializer declaration.
   public var modifiers: DeclModifierListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
@@ -4197,7 +4208,7 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
     }
   }
   
-  /// If the initializer had generic parameters, a where clause that can restrict those
+  /// If the initializer had generic parameters, a where clause that can restrict those.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)

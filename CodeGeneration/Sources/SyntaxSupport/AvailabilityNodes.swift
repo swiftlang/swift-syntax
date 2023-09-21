@@ -39,12 +39,12 @@ public let AVAILABILITY_NODES: [Node] = [
             kind: .node(kind: .availabilityLabeledArgument)
           ),
         ]),
-        documentation: "The actual argument"
+        documentation: "The actual argument."
       ),
       Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
-        documentation: "A trailing comma if the argument is followed by another argument",
+        documentation: "A trailing comma if the argument is followed by another argument.",
         isOptional: true
       ),
     ]
@@ -66,12 +66,12 @@ public let AVAILABILITY_NODES: [Node] = [
           .keyword(.deprecated),
         ]),
         nameForDiagnostics: "label",
-        documentation: "The label of the argument"
+        documentation: "The label of the argument."
       ),
       Child(
         name: "colon",
         kind: .token(choices: [.token(.colon)]),
-        documentation: "The colon separating label and value"
+        documentation: "The colon separating label and value."
       ),
       Child(
         name: "value",
@@ -86,7 +86,7 @@ public let AVAILABILITY_NODES: [Node] = [
           ),
         ]),
         nameForDiagnostics: "value",
-        documentation: "The value of this labeled argument"
+        documentation: "The value of this labeled argument."
       ),
     ]
   ),
@@ -136,12 +136,12 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "period",
         kind: .token(choices: [.token(.period)]),
-        documentation: "The period of this version component"
+        documentation: "The period of this version component."
       ),
       Child(
         name: "number",
         kind: .token(choices: [.token(.integerLiteral)]),
-        documentation: "The version number of this component"
+        documentation: "The version number of this component."
       ),
     ]
   ),
@@ -167,7 +167,7 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "components",
         kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
-        documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`"
+        documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`."
       ),
     ]
   ),

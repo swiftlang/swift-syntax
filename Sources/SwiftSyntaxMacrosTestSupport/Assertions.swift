@@ -292,8 +292,8 @@ public func assertMacroExpansion(
   }
 
   assertStringsEqualWithDiff(
+    expandedSourceFile.description.trimmingCharacters(in: .newlines),
     Parser.parse(source: expectedExpandedSource).description.trimmingCharacters(in: .newlines),
-    expectedExpandedSource.trimmingCharacters(in: .newlines),
     "Macro expansion did not produce the expected expanded source",
     additionalInfo: """
       Actual expanded source:

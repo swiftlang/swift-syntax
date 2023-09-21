@@ -84,12 +84,6 @@ function(add_swift_syntax_library name)
         $<$<COMPILE_LANGUAGE:Swift>:-wmo>)
   endif()
 
-  if(SWIFT_HOST_TRIPLE)
-    target_compile_options("${name}" PRIVATE
-      $<$<COMPILE_LANGUAGE:Swift>:-target;${SWIFT_HOST_TRIPLE};>
-    )
-  endif()
-
   if(LLVM_USE_LINKER)
     target_link_options(${name} PRIVATE
       "-use-ld=${LLVM_USE_LINKER}"

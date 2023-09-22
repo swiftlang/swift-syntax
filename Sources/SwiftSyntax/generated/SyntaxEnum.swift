@@ -263,6 +263,7 @@ public enum SyntaxEnum {
   #endif
   case thenStmt(ThenStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
+  case thrownType(ThrownTypeSyntax)
   case tryExpr(TryExprSyntax)
   case tupleExpr(TupleExprSyntax)
   case tuplePatternElementList(TuplePatternElementListSyntax)
@@ -792,6 +793,8 @@ public extension Syntax {
       return .thenStmt(ThenStmtSyntax(self)!)
     case .throwStmt:
       return .throwStmt(ThrowStmtSyntax(self)!)
+    case .thrownType:
+      return .thrownType(ThrownTypeSyntax(self)!)
     case .tryExpr:
       return .tryExpr(TryExprSyntax(self)!)
     case .tupleExpr:

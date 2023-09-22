@@ -361,6 +361,8 @@ extension SyntaxKind {
       return "'then' statement"
     case .throwStmt:
       return "'throw' statement"
+    case .thrownType:
+      return "thrown type"
     case .tryExpr:
       return "'try' expression"
     case .tupleExpr:

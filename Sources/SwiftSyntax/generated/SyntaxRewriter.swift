@@ -1798,6 +1798,13 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
+  /// Visit a ``ThrownTypeSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ThrownTypeSyntax) -> ThrownTypeSyntax {
+    return visitChildren(node)
+  }
+  
   /// Visit a ``TryExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3079,6 +3086,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, ThrowStmtSyntax.self, self.visit)
       }
+    case .thrownType:
+      return {
+        self.visitImpl($0, ThrownTypeSyntax.self, self.visit)
+      }
     case .tryExpr:
       return {
         self.visitImpl($0, TryExprSyntax.self, self.visit)
@@ -3703,6 +3714,8 @@ open class SyntaxRewriter {
       return visitImpl(node, ThenStmtSyntax.self, visit)
     case .throwStmt:
       return visitImpl(node, ThrowStmtSyntax.self, visit)
+    case .thrownType:
+      return visitImpl(node, ThrownTypeSyntax.self, visit)
     case .tryExpr:
       return visitImpl(node, TryExprSyntax.self, visit)
     case .tupleExpr:

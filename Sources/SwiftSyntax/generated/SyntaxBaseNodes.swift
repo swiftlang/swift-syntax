@@ -1769,6 +1769,7 @@ extension Syntax {
           .node(TernaryExprSyntax.self),
           .node(ThenStmtSyntax.self),
           .node(ThrowStmtSyntax.self),
+          .node(ThrownTypeSyntax.self),
           .node(TryExprSyntax.self),
           .node(TupleExprSyntax.self),
           .node(TuplePatternElementListSyntax.self),

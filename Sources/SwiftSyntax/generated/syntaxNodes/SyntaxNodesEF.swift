@@ -3703,6 +3703,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 /// 
 ///  - `asyncSpecifier`: (`async` | `reasync`)?
 ///  - `throwsSpecifier`: (`throws` | `rethrows`)?
+///  - `thrownType`: ``ThrownTypeSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -3728,7 +3729,9 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       asyncSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       throwsSpecifier: TokenSyntax? = nil,
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? = nil,
+      thrownType: ThrownTypeSyntax? = nil,
+      _ unexpectedAfterThrownType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -3739,14 +3742,18 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
             asyncSpecifier, 
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
-            unexpectedAfterThrowsSpecifier
+            unexpectedBetweenThrowsSpecifierAndThrownType, 
+            thrownType, 
+            unexpectedAfterThrownType
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
           unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
           throwsSpecifier?.raw, 
-          unexpectedAfterThrowsSpecifier?.raw
+          unexpectedBetweenThrowsSpecifierAndThrownType?.raw, 
+          thrownType?.raw, 
+          unexpectedAfterThrownType?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionEffectSpecifiers,
@@ -3810,12 +3817,30 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+    }
+  }
+  
+  public var thrownType: ThrownTypeSyntax? {
+    get {
+      return Syntax(self).child(at: 5)?.cast(ThrownTypeSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+    }
+  }
+  
+  public var unexpectedAfterThrownType: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
   
@@ -3825,7 +3850,9 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
           \Self.asyncSpecifier, 
           \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
           \Self.throwsSpecifier, 
-          \Self.unexpectedAfterThrowsSpecifier
+          \Self.unexpectedBetweenThrowsSpecifierAndThrownType, 
+          \Self.thrownType, 
+          \Self.unexpectedAfterThrownType
         ])
   }
 }

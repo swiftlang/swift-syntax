@@ -893,7 +893,8 @@ final class DeclarationTests: ParserTestCase {
 
   func testTypedThrows() {
     assertParse(
-      "func test() throws(any Error) -> Int { }"
+      "func test() throws(any Error) -> Int { }",
+      experimentalFeatures: [.typedThrows]
     )
 
     assertParse(
@@ -901,7 +902,8 @@ final class DeclarationTests: ParserTestCase {
       struct X {
         init() throws(any Error) { }
       }
-      """
+      """,
+      experimentalFeatures: [.typedThrows]
     )
   }
 

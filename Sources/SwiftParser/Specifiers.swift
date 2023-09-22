@@ -654,7 +654,7 @@ extension Parser {
       throwsKeyword = throwsKw
     }
 
-    if throwsKeyword != nil && self.at(.leftParen) {
+    if throwsKeyword != nil && self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) {
       thrownType = parseThrownType()
     }
 

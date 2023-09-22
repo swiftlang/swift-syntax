@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax)  @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
@@ -309,11 +309,18 @@ final class TypeTests: ParserTestCase {
     assertParse(
       """
       { () throws(PosixError) -> Void in }
-      """
+      """,
+      experimentalFeatures: [.typedThrows]
     )
 
-    assertParse("typealias T = () throws(PosixError) -> Void")
+    assertParse(
+      "typealias T = () throws(PosixError) -> Void",
+      experimentalFeatures: [.typedThrows]
+    )
 
-    assertParse("[() throws(PosixError) -> Void]()")
+    assertParse(
+      "[() throws(PosixError) -> Void]()",
+      experimentalFeatures: [.typedThrows]
+    )
   }
 }

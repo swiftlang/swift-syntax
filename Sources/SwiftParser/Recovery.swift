@@ -21,10 +21,26 @@ struct RecoveryConsumptionHandle {
   var unexpectedTokens: Int
   var tokenConsumptionHandle: TokenConsumptionHandle
 
+  fileprivate init(unexpectedTokens: Int, tokenConsumptionHandle: TokenConsumptionHandle) {
+    self.unexpectedTokens = unexpectedTokens
+    self.tokenConsumptionHandle = tokenConsumptionHandle
+  }
+
+  /// A `RecoveryConsumptionHandle` that doesn't skip over any unexpected tokens
+  /// and consumes a token matching `spec`.
   static func constant(_ spec: TokenSpec) -> RecoveryConsumptionHandle {
     return RecoveryConsumptionHandle(
       unexpectedTokens: 0,
       tokenConsumptionHandle: TokenConsumptionHandle(spec: spec)
+    )
+  }
+
+  /// A `RecoveryConsumptionHandle` that doesn't skip over any unexpected tokens
+  /// and consumes `handle`.
+  static func noRecovery(_ handle: TokenConsumptionHandle) -> RecoveryConsumptionHandle {
+    return RecoveryConsumptionHandle(
+      unexpectedTokens: 0,
+      tokenConsumptionHandle: handle
     )
   }
 

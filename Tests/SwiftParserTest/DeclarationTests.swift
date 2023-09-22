@@ -2015,7 +2015,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       """
       class A {
-        1️⃣^2️⃣
+        1️⃣^
       }
       class B {
       }
@@ -2028,23 +2028,8 @@ final class DeclarationTests: ParserTestCase {
               name: .identifier("A"),
               memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
-                members: MemberBlockItemListSyntax([
-                  MemberBlockItemSyntax(
-                    decl: DeclSyntax(
-                      FunctionDeclSyntax(
-                        funcKeyword: .keyword(.func, presence: .missing),
-                        name: .binaryOperator("^"),
-                        signature: FunctionSignatureSyntax(
-                          parameterClause: FunctionParameterClauseSyntax(
-                            leftParen: .leftParenToken(presence: .missing),
-                            parameters: FunctionParameterListSyntax([]),
-                            rightParen: .rightParenToken(presence: .missing)
-                          )
-                        )
-                      )
-                    )
-                  )
-                ]),
+                members: MemberBlockItemListSyntax(),
+                UnexpectedNodesSyntax([TokenSyntax.binaryOperator("^")]),
                 rightBrace: .rightBraceToken()
               )
             )
@@ -2057,7 +2042,7 @@ final class DeclarationTests: ParserTestCase {
               name: .identifier("B"),
               memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
-                members: MemberBlockItemListSyntax([]),
+                members: MemberBlockItemListSyntax(),
                 rightBrace: .rightBraceToken()
               )
             )
@@ -2066,16 +2051,8 @@ final class DeclarationTests: ParserTestCase {
       ]
       ),
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
-      ],
-      fixedSource: """
-        class A {
-          func ^ ()
-        }
-        class B {
-        }
-        """
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '^' in class")
+      ]
     )
   }
 

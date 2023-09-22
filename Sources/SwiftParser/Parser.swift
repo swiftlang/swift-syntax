@@ -445,10 +445,7 @@ extension Parser {
   @inline(__always)
   mutating func canRecoverTo(_ spec: TokenSpec) -> RecoveryConsumptionHandle? {
     if self.at(spec) {
-      return RecoveryConsumptionHandle(
-        unexpectedTokens: 0,
-        tokenConsumptionHandle: TokenConsumptionHandle(spec: spec)
-      )
+      return .constant(spec)
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo(spec)
@@ -465,7 +462,7 @@ extension Parser {
     overrideRecoveryPrecedence: TokenPrecedence? = nil
   ) -> (match: SpecSet, handle: RecoveryConsumptionHandle)? {
     if let (kind, handle) = self.at(anyIn: specSet) {
-      return (kind, RecoveryConsumptionHandle(unexpectedTokens: 0, tokenConsumptionHandle: handle))
+      return (kind, .noRecovery(handle))
     }
     var lookahead = self.lookahead()
     return lookahead.canRecoverTo(anyIn: specSet, overrideRecoveryPrecedence: overrideRecoveryPrecedence)

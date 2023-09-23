@@ -27,18 +27,6 @@ extension Parser {
       )
     }
 
-    // Parse without operator preceding a type '~ T'.
-    if let withoutTilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator) {
-      let type = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
-      return RawTypeSyntax(
-        RawSuppressedTypeSyntax(
-          withoutTilde: withoutTilde,
-          type: type,
-          arena: self.arena
-        )
-      )
-    }
-
     return self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
   }
 
@@ -227,6 +215,23 @@ extension Parser {
       }
     }
 
+    // Eat any '~' preceding the type.
+    let maybeTilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
+
+    // Wrap as a suppressed type if needed.
+    func wrapInTilde(_ node: RawTypeSyntax) -> RawTypeSyntax {
+      if let tilde = maybeTilde {
+        return RawTypeSyntax(
+          RawSuppressedTypeSyntax(
+            withoutTilde: tilde,
+            type: node,
+            arena: self.arena
+          )
+        )
+      }
+      return node
+    }
+
     var base: RawTypeSyntax
     switch self.at(anyIn: TypeBaseStart.self)?.spec {
     case .Self, .Any, .identifier:
@@ -238,7 +243,7 @@ extension Parser {
     case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     case nil:
-      return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+      return wrapInTilde(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)))
     }
 
     var loopProgress = LoopProgressCondition()
@@ -309,6 +314,8 @@ extension Parser {
 
       break
     }
+
+    base = wrapInTilde(base)
 
     return base
   }

@@ -24,7 +24,7 @@ runObservableMacroPlayground()
 
 // MARK: - Declaration Macros
 
-// TODO: Add example of declaration macro
+runFuncUniqueMacroPlayground()
 
 // MARK: - Expression Macros
 
@@ -32,7 +32,7 @@ runExpressionMacrosPlayground()
 
 // MARK: - Extension Macros
 
-// TODO: Add example of extension macro
+runEquatableExtensionMacroPlayground()
 
 // MARK: - Member Attribute Macros
 

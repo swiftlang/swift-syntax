@@ -46,4 +46,15 @@ func runPeerMacrosPlayground() {
   MyClass().f(a: 1, for: "hello", 3.14159) { result in
     print("Eventually received \(result + "!")")
   }
+
+  // MARK: - Peer Value With Suffix Name
+
+  @PeerValueWithSuffixName
+  actor Counter {
+    var value = 0
+  }
+
+  let counter = Counter()
+
+  //  print("Peer value with suffix name for \(Counter.self): \(String(describing: Counter_peer))")
 }

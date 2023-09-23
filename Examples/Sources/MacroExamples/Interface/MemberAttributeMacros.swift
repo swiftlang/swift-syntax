@@ -10,6 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - Member Deprecated
+
+@attached(memberAttribute)
+public macro memberDeprecated() = #externalMacro(module: "MacroExamplesImplementation", type: "MemberDeprecatedMacro")
+
 // MARK: - Wrap Stored Properties
 
 /// Apply the specified attribute to each of the stored properties within the

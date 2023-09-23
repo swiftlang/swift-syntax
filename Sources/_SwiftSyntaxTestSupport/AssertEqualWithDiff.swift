@@ -88,6 +88,8 @@ public func failStringsEqualWithDiff(
   file: StaticString = #file,
   line: UInt = #line
 ) {
+  let stringComparison: String
+
   // Use `CollectionDifference` on supported platforms to get `diff`-like line-based output. On
   // older platforms, fall back to simple string comparison.
   if #available(macOS 10.15, *) {
@@ -127,19 +129,27 @@ public func failStringsEqualWithDiff(
       }
     }
 
-    let failureMessage = "Actual output (+) differed from expected output (-):\n\(result)"
-    var fullMessage = message.isEmpty ? failureMessage : "\(message) - \(failureMessage)"
-    if let additionalInfo = additionalInfo() {
-      fullMessage = """
-        \(fullMessage)
-        \(additionalInfo)
-        """
-    }
-    XCTFail(fullMessage, file: file, line: line)
+    stringComparison = result
   } else {
     // Fall back to simple message on platforms that don't support CollectionDifference.
-    let failureMessage = "Actual output differed from expected output:"
-    let fullMessage = message.isEmpty ? failureMessage : "\(message) - \(failureMessage)"
-    XCTFail(fullMessage, file: file, line: line)
+    stringComparison = """
+      Expected:
+      \(expected)
+
+      Actual:
+      \(actual)
+      """
   }
+
+  var fullMessage = """
+    \(message.isEmpty ? "Actual output does not match the expected" : message)
+    \(stringComparison)
+    """
+  if let additional = additionalInfo() {
+    fullMessage = """
+      \(fullMessage)
+      \(additional)
+      """
+  }
+  XCTFail(fullMessage, file: file, line: line)
 }

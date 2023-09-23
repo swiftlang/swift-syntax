@@ -531,7 +531,7 @@ public struct AssertParseOptions: OptionSet {
 extension ParserTestCase {
   /// After a test case has been mutated, assert that the mutated source
   /// round-trips and doesn’t hit any assertion failures in the parser.
-  fileprivate func assertRoundTrip<S: SyntaxProtocol>(
+  fileprivate func assertMutationRoundTrip<S: SyntaxProtocol>(
     source: [UInt8],
     _ parse: (inout Parser) -> S,
     experimentalFeatures: Parser.ExperimentalFeatures,
@@ -549,13 +549,9 @@ extension ParserTestCase {
       assertStringsEqualWithDiff(
         "\(mutatedTree)",
         mutatedSource,
+        "A mutation of the original test case failed to round-trip",
         additionalInfo: """
-          Mutated source failed to round-trip.
-
-          Mutated source:
-          \(mutatedSource)
-
-          Actual syntax tree:
+          Parsed syntax tree of mutation:
           \(mutatedTree.debugDescription)
           """,
         file: file,
@@ -617,10 +613,9 @@ extension ParserTestCase {
     assertStringsEqualWithDiff(
       "\(tree)",
       source,
+      "Test case failed to round-trip",
       additionalInfo: """
-        Source failed to round-trip.
-
-        Actual syntax tree:
+        Parsed syntax tree:
         \(tree.debugDescription)
         """,
       file: file,
@@ -682,7 +677,7 @@ extension ParserTestCase {
     }
 
     if expectedDiagnostics.allSatisfy({ $0.fixIts.isEmpty }) && expectedFixedSource != nil {
-      XCTFail("A fixed source was provided but the test case produces no diagnostics with Fix-Its", file: file, line: line)
+      XCTFail("Fixed source was provided but the test case produces no diagnostics with Fix-Its", file: file, line: line)
     }
 
     if expectedDiagnostics.isEmpty && diags.isEmpty {
@@ -693,7 +688,7 @@ extension ParserTestCase {
       DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
         let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
-        assertRoundTrip(source: flippedTokenTree.syntaxTextBytes, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
+        assertMutationRoundTrip(source: flippedTokenTree.syntaxTextBytes, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
       }
 
       #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
@@ -703,7 +698,7 @@ extension ParserTestCase {
       DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
         let mutation = mutations[index]
         let alternateSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: [mutation.offset: mutation.replacement])
-        assertRoundTrip(source: alternateSource, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
+        assertMutationRoundTrip(source: alternateSource, parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
       }
       #endif
     }

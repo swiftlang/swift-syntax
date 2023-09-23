@@ -154,6 +154,32 @@ public extension Syntax {
   }
 }
 
+/// ### Subtypes
+/// 
+/// - ``AccessorDeclSyntax``
+/// - ``ActorDeclSyntax``
+/// - ``AssociatedTypeDeclSyntax``
+/// - ``ClassDeclSyntax``
+/// - ``DeinitializerDeclSyntax``
+/// - ``EditorPlaceholderDeclSyntax``
+/// - ``EnumCaseDeclSyntax``
+/// - ``EnumDeclSyntax``
+/// - ``ExtensionDeclSyntax``
+/// - ``FunctionDeclSyntax``
+/// - ``IfConfigDeclSyntax``
+/// - ``ImportDeclSyntax``
+/// - ``InitializerDeclSyntax``
+/// - ``MacroDeclSyntax``
+/// - ``MacroExpansionDeclSyntax``
+/// - ``MissingDeclSyntax``
+/// - ``OperatorDeclSyntax``
+/// - ``PoundSourceLocationSyntax``
+/// - ``PrecedenceGroupDeclSyntax``
+/// - ``ProtocolDeclSyntax``
+/// - ``StructDeclSyntax``
+/// - ``SubscriptDeclSyntax``
+/// - ``TypeAliasDeclSyntax``
+/// - ``VariableDeclSyntax``
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -430,6 +456,60 @@ public extension Syntax {
   }
 }
 
+/// ### Subtypes
+/// 
+/// - ``ArrayExprSyntax``
+/// - ``ArrowExprSyntax``
+/// - ``AsExprSyntax``
+/// - ``AssignmentExprSyntax``
+/// - ``AwaitExprSyntax``
+/// - ``BinaryOperatorExprSyntax``
+/// - ``BooleanLiteralExprSyntax``
+/// - ``BorrowExprSyntax``
+/// - ``CanImportExprSyntax``
+/// - ``CanImportVersionInfoSyntax``
+/// - ``ClosureExprSyntax``
+/// - ``ConsumeExprSyntax``
+/// - ``CopyExprSyntax``
+/// - ``DeclReferenceExprSyntax``
+/// - ``DictionaryExprSyntax``
+/// - ``DiscardAssignmentExprSyntax``
+/// - ``EditorPlaceholderExprSyntax``
+/// - ``FloatLiteralExprSyntax``
+/// - ``ForceUnwrapExprSyntax``
+/// - ``FunctionCallExprSyntax``
+/// - ``GenericSpecializationExprSyntax``
+/// - ``IfExprSyntax``
+/// - ``InOutExprSyntax``
+/// - ``InfixOperatorExprSyntax``
+/// - ``IntegerLiteralExprSyntax``
+/// - ``IsExprSyntax``
+/// - ``KeyPathExprSyntax``
+/// - ``MacroExpansionExprSyntax``
+/// - ``MemberAccessExprSyntax``
+/// - ``MissingExprSyntax``
+/// - ``NilLiteralExprSyntax``
+/// - ``OptionalChainingExprSyntax``
+/// - ``PackElementExprSyntax``
+/// - ``PackExpansionExprSyntax``
+/// - ``PatternExprSyntax``
+/// - ``PostfixIfConfigExprSyntax``
+/// - ``PostfixOperatorExprSyntax``
+/// - ``PrefixOperatorExprSyntax``
+/// - ``RegexLiteralExprSyntax``
+/// - ``SequenceExprSyntax``
+/// - ``SimpleStringLiteralExprSyntax``
+/// - ``StringLiteralExprSyntax``
+/// - ``SubscriptCallExprSyntax``
+/// - ``SuperExprSyntax``
+/// - ``SwitchExprSyntax``
+/// - ``TernaryExprSyntax``
+/// - ``TryExprSyntax``
+/// - ``TupleExprSyntax``
+/// - ``TypeExprSyntax``
+/// - ``UnresolvedAsExprSyntax``
+/// - ``UnresolvedIsExprSyntax``
+/// - ``UnresolvedTernaryExprSyntax``
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -734,6 +814,15 @@ public extension Syntax {
   }
 }
 
+/// ### Subtypes
+/// 
+/// - ``ExpressionPatternSyntax``
+/// - ``IdentifierPatternSyntax``
+/// - ``IsTypePatternSyntax``
+/// - ``MissingPatternSyntax``
+/// - ``TuplePatternSyntax``
+/// - ``ValueBindingPatternSyntax``
+/// - ``WildcardPatternSyntax``
 public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -993,6 +1082,25 @@ public extension Syntax {
   }
 }
 
+/// ### Subtypes
+/// 
+/// - ``BreakStmtSyntax``
+/// - ``ContinueStmtSyntax``
+/// - ``DeferStmtSyntax``
+/// - ``DiscardStmtSyntax``
+/// - ``DoStmtSyntax``
+/// - ``ExpressionStmtSyntax``
+/// - ``FallThroughStmtSyntax``
+/// - ``ForStmtSyntax``
+/// - ``GuardStmtSyntax``
+/// - ``LabeledStmtSyntax``
+/// - ``MissingStmtSyntax``
+/// - ``RepeatStmtSyntax``
+/// - ``ReturnStmtSyntax``
+/// - ``ThenStmtSyntax``
+/// - ``ThrowStmtSyntax``
+/// - ``WhileStmtSyntax``
+/// - ``YieldStmtSyntax``
 public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   
@@ -1262,6 +1370,26 @@ public extension Syntax {
   }
 }
 
+/// ### Subtypes
+/// 
+/// - ``ArrayTypeSyntax``
+/// - ``AttributedTypeSyntax``
+/// - ``ClassRestrictionTypeSyntax``
+/// - ``CompositionTypeSyntax``
+/// - ``DictionaryTypeSyntax``
+/// - ``FunctionTypeSyntax``
+/// - ``IdentifierTypeSyntax``
+/// - ``ImplicitlyUnwrappedOptionalTypeSyntax``
+/// - ``MemberTypeSyntax``
+/// - ``MetatypeTypeSyntax``
+/// - ``MissingTypeSyntax``
+/// - ``NamedOpaqueReturnTypeSyntax``
+/// - ``OptionalTypeSyntax``
+/// - ``PackElementTypeSyntax``
+/// - ``PackExpansionTypeSyntax``
+/// - ``SomeOrAnyTypeSyntax``
+/// - ``SuppressedTypeSyntax``
+/// - ``TupleTypeSyntax``
 public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
   

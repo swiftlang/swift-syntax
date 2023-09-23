@@ -17,6 +17,10 @@ import Utils
 
 let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES where node.kind.isBase {
+    let documentation = SwiftSyntax.Trivia(joining: [
+      node.documentation,
+      node.subtypes,
+    ])
     DeclSyntax(
       """
       // MARK: - \(node.kind.syntaxType)
@@ -170,7 +174,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! StructDeclSyntax(
       """
-      \(node.documentation)
+      \(documentation)
       \(node.apiAttributes())\
       public struct \(node.kind.syntaxType): \(node.kind.protocolType), SyntaxHashable
       """

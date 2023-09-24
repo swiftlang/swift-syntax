@@ -107,6 +107,16 @@ public class Node {
     return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
   }
 
+  /// The documentation note to print for an experimental feature.
+  public var experimentalDocNote: SwiftSyntax.Trivia {
+    let comment = experimentalFeature.map {
+      """
+      - Experiment: Requires experimental feature `\($0.token)`.
+      """
+    }
+    return SwiftSyntax.Trivia.docCommentTrivia(from: comment)
+  }
+
   /// Construct the specification for a layout syntax node.
   init(
     kind: SyntaxNodeKind,

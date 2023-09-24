@@ -98,7 +98,13 @@ public class Node {
   public func apiAttributes(forRaw: Bool = false) -> AttributeListSyntax {
     let attrList = AttributeListSyntax {
       if isExperimental {
-        "@_spi(ExperimentalLanguageFeatures)"
+        // SPI for enum cases currently requires Swift 5.8 to work correctly.
+        let experimentalSPI: AttributeListSyntax = """
+          #if compiler(>=5.8)
+          @_spi(ExperimentalLanguageFeatures)
+          #endif
+          """
+        experimentalSPI.with(\.trailingTrivia, .newline)
       }
       if forRaw {
         "@_spi(RawSyntax)"

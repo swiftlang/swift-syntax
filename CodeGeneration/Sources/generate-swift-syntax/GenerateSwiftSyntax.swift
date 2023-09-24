@@ -154,6 +154,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
       }
     )
 
+    let errorsLock = NSLock()
     var errors: [Error] = []
     DispatchQueue.concurrentPerform(iterations: fileSpecs.count) { index in
       let fileSpec = fileSpecs[index]
@@ -173,13 +174,23 @@ struct GenerateSwiftSyntax: ParsableCommand {
           verbose: verbose
         )
       } catch {
+        errorsLock.lock()
         errors.append(error)
+        errorsLock.unlock()
       }
     }
 
-    if let firstError = errors.first {
-      // TODO: It would be nice if we could emit all errors
-      throw firstError
+    if errors.count > 0 {
+      struct ComposititeError: Error, CustomStringConvertible {
+        var errors: [Error]
+        var description: String {
+          "Multiple errors emitted: \n" +
+          errors
+            .map(String.init(describing: ))
+            .joined(separator: "\n")
+        }
+      }
+      throw ComposititeError(errors: errors)
     }
 
     for file in previouslyGeneratedFiles {

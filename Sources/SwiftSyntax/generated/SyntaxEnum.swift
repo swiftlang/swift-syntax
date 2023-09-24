@@ -258,6 +258,9 @@ public enum SyntaxEnum {
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case switchExpr(SwitchExprSyntax)
   case ternaryExpr(TernaryExprSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   case thenStmt(ThenStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
   case tryExpr(TryExprSyntax)

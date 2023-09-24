@@ -258,6 +258,9 @@ public enum SyntaxKind: CaseIterable {
   case switchDefaultLabel
   case switchExpr
   case ternaryExpr
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   case thenStmt
   case throwStmt
   case tryExpr

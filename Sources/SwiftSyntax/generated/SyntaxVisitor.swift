@@ -2953,12 +2953,18 @@ open class SyntaxVisitor {
   /// Visiting ``ThenStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   open func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
   /// The function called after visiting ``ThenStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   open func visitPost(_ node: ThenStmtSyntax) {
   }
   

@@ -19,6 +19,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
     let documentation = SwiftSyntax.Trivia(joining: [
       node.documentation,
+      node.experimentalDocNote,
       node.grammar,
       node.containedIn,
     ])

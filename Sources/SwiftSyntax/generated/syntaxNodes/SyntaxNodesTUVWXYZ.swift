@@ -233,10 +233,15 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 /// then <expr>
 /// ```
 ///
+/// - Experiment: Requires experimental feature `thenStatements`.
+///
 /// ### Children
 /// 
 ///  - `thenKeyword`: `then`
 ///  - `expression`: ``ExprSyntax``
+#if compiler(>=5.8)
+@_spi(ExperimentalLanguageFeatures)
+#endif
 public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   

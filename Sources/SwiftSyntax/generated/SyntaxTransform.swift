@@ -1235,11 +1235,6 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: TernaryExprSyntax) -> ResultType
   
-  /// Visiting ``ThenStmtSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: the sum of whatever the child visitors return.
-  func visit(_ node: ThenStmtSyntax) -> ResultType
-  
   /// Visiting ``ThrowStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -3110,6 +3105,9 @@ extension SyntaxTransformVisitor {
   /// Visiting ``ThenStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   public func visit(_ node: ThenStmtSyntax) -> ResultType {
     visitAny(Syntax(node))
   }

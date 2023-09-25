@@ -27,7 +27,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
         """
         // MARK: - \(node.kind.syntaxType)
 
-        \(SwiftSyntax.Trivia(joining: [node.documentation, node.grammar, node.containedIn]))
+        \(SwiftSyntax.Trivia(joining: [node.documentation, node.experimentalDocNote, node.grammar, node.containedIn]))
         \(node.node.apiAttributes())\
         public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
         """

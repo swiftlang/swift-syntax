@@ -98,13 +98,29 @@ public class Node {
   public func apiAttributes(forRaw: Bool = false) -> AttributeListSyntax {
     let attrList = AttributeListSyntax {
       if isExperimental {
-        "@_spi(ExperimentalLanguageFeatures)"
+        // SPI for enum cases currently requires Swift 5.8 to work correctly.
+        let experimentalSPI: AttributeListSyntax = """
+          #if compiler(>=5.8)
+          @_spi(ExperimentalLanguageFeatures)
+          #endif
+          """
+        experimentalSPI.with(\.trailingTrivia, .newline)
       }
       if forRaw {
         "@_spi(RawSyntax)"
       }
     }
     return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
+  }
+
+  /// The documentation note to print for an experimental feature.
+  public var experimentalDocNote: SwiftSyntax.Trivia {
+    let comment = experimentalFeature.map {
+      """
+      - Experiment: Requires experimental feature `\($0.token)`.
+      """
+    }
+    return SwiftSyntax.Trivia.docCommentTrivia(from: comment)
   }
 
   /// Construct the specification for a layout syntax node.

@@ -1784,6 +1784,9 @@ open class SyntaxRewriter {
   /// Visit a ``ThenStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
   open func visit(_ node: ThenStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node))
   }

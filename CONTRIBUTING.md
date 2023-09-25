@@ -21,11 +21,26 @@ swift-syntax is a SwiftPM package, so you can build and test it using anything t
 
 swift-syntax is formatted using [swift-format](http://github.com/apple/swift-format) to ensure a consistent style.
 
-To format your changes run `format.py` at the root of this repository. If you have a `swift-format` executable ready, you can pass it to `format.py`. If you do not, `format.py` will build its own copy of `swift-format` in `/tmp/swift-format`.
-
-If you are seeing surprising formatting results, you most likely have a `swift-format` installed on your system that’s not the most recent version built from the `main` branch. To fix this, clone [swift-format](http://github.com/apple/swift-format), build it using `swift build` and pass the freshly built executable to `format.py` as `--swift-format path/to/swift-format/.build/debug/swift-format`. Alternatively, you can uninstall `swift-format` on your system and `format.py` will build it from scratch.
+To format your changes run the formatter using the following command
+```bash
+swift run --package-path SwiftSyntaxDevUtils/ swift-syntax-dev-utils format
+```
+It will build a local copy of swift-format from the `main` branch and format the repository. Since it is building a release version of `swift-format`, the first run will take few minutes. Subsequent runs take less than 2 seconds.
 
 Generated source code is not formatted to make it easier to spot changes when re-running code generation.
+
+> [!NOTE]
+> You can add a git hook to ensure all commits to the swift-syntax repository are correctly formatted. 
+> 1. Save the following contents to `swift-syntax/.git/hooks/pre-commit`
+> ```bash
+> #!/usr/bin/env bash
+> set -e
+> SOURCE_DIR=$(realpath "$(dirname $0)/../..")
+> swift run --package-path "$SOURCE_DIR/SwiftSyntaxDevUtils" swift-syntax-dev-utils format --lint
+> ```
+> 2. Mark the file as executable: `chmod a+x swift-syntax/.git/hooks/pre-commit`
+> 3. If you have global git hooks installed, be sure to call them at the end of the script with `path/to/global/hooks/pre-commit "$@"` 
+
 
 ## Generating Source Code
 

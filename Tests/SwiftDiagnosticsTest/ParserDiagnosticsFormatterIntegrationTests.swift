@@ -16,7 +16,6 @@ import SwiftParserDiagnostics
 import XCTest
 import _SwiftSyntaxTestSupport
 
-
 final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
   func annotate(source: String, colorize: Bool = false) -> String {

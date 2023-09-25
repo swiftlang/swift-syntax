@@ -73,12 +73,20 @@ public struct DiagnosticsFormatter {
   /// Number of lines which should be printed before and after the diagnostic message
   public let contextSize: Int
 
-  /// Whether to colorize formatted diagnostics.
-  public let colorize: Bool
+  /// An instance that conforms to the ``DiagnosticDecorator`` protocol, responsible for formatting diagnostic messages.
+  ///
+  /// This property allows for the flexible customization of diagnostic messages, buffer outlines, and code highlighting.
+  /// Different implementations can be swapped in to tailor the output according to user preferences or specific environmental conditions.
+  let diagnosticDecorator: DiagnosticDecorator
+
+  @available(*, deprecated, message: "Store the `colorize` property passed to the initializer instead")
+  public var colorize: Bool {
+    return diagnosticDecorator is ANSIDiagnosticDecorator
+  }
 
   public init(contextSize: Int = 2, colorize: Bool = false) {
     self.contextSize = contextSize
-    self.colorize = colorize
+    self.diagnosticDecorator = colorize ? .ANSI : .basic
   }
 
   public static func annotatedSource(
@@ -98,7 +106,7 @@ public struct DiagnosticsFormatter {
     tree: some SyntaxProtocol,
     sourceLocationConverter slc: SourceLocationConverter
   ) -> String {
-    guard colorize, !annotatedLine.diagnostics.isEmpty else {
+    if annotatedLine.diagnostics.isEmpty {
       return annotatedLine.sourceString
     }
 
@@ -158,7 +166,6 @@ public struct DiagnosticsFormatter {
     // Form the annotated string by copying in text from the original source,
     // highlighting the column ranges.
     var resultSourceString: String = ""
-    let annotation = ANSIAnnotation.sourceHighlight
     let sourceString = annotatedLine.sourceString
     var sourceIndex = sourceString.startIndex
     for highlightRange in highlightIndexRanges {
@@ -167,7 +174,7 @@ public struct DiagnosticsFormatter {
 
       // Highlighted source text
       let highlightString = String(sourceString[highlightRange])
-      resultSourceString += annotation.applied(to: highlightString)
+      resultSourceString += diagnosticDecorator.decorateHighlight(highlightString).highlightedSourceCode
 
       sourceIndex = highlightRange.upperBound
     }
@@ -239,11 +246,11 @@ public struct DiagnosticsFormatter {
       // line numbers should be right aligned
       let lineNumberString = String(lineNumber)
       let leadingSpaces = String(repeating: " ", count: maxNumberOfDigits - lineNumberString.count)
-      let linePrefix = "\(leadingSpaces)\(colorizeBufferOutline("\(lineNumberString) │")) "
+      let linePrefix = "\(leadingSpaces)\(diagnosticDecorator.decorateBufferOutline("\(lineNumberString) │")) "
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
-        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(colorizeBufferOutline("┆"))"
+        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(diagnosticDecorator.decorateBufferOutline("┆"))"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
@@ -276,7 +283,7 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + colorizeBufferOutline("│")
+        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + diagnosticDecorator.decorateBufferOutline("│")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")
@@ -286,9 +293,9 @@ public struct DiagnosticsFormatter {
         }
 
         for diag in diags.dropLast(1) {
-          annotatedSource.append("\(preMessage)├─ \(colorizeIfRequested(diag.diagMessage))\n")
+          annotatedSource.append("\(preMessage)├─ \(diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage))\n")
         }
-        annotatedSource.append("\(preMessage)╰─ \(colorizeIfRequested(diags.last!.diagMessage))\n")
+        annotatedSource.append("\(preMessage)╰─ \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n")
       }
 
       // Add suffix text.
@@ -311,140 +318,5 @@ public struct DiagnosticsFormatter {
       indentString: "",
       suffixTexts: [:]
     )
-  }
-
-  /// Annotates the given ``DiagnosticMessage`` with an appropriate ANSI color code (if the value of the `colorize`
-  /// property is `true`) and returns the result as a printable string.
-  func colorizeIfRequested(_ message: DiagnosticMessage) -> String {
-    colorizeIfRequested(severity: message.severity, message: message.message)
-  }
-
-  /// Annotates a diagnostic message with the given severity and text with an appropriate ANSI color code.
-  func colorizeIfRequested(severity: DiagnosticSeverity, message: String) -> String {
-    let severityText: String
-    let severityAnnotation: ANSIAnnotation
-
-    switch severity {
-    case .error:
-      severityText = "error"
-      severityAnnotation = .errorText
-
-    case .warning:
-      severityText = "warning"
-      severityAnnotation = .warningText
-
-    case .note:
-      severityText = "note"
-      severityAnnotation = .noteText
-
-    case .remark:
-      severityText = "remark"
-      severityAnnotation = .remarkText
-    }
-
-    let prefix = colorizeIfRequested("\(severityText): ", annotation: severityAnnotation, resetAfter: false)
-
-    return prefix + colorizeIfRequested(message, annotation: .diagnosticText);
-  }
-
-  /// Apply the given color and trait to the specified text, when we are
-  /// supposed to color the output.
-  private func colorizeIfRequested(
-    _ text: String,
-    annotation: ANSIAnnotation,
-    resetAfter: Bool = true
-  ) -> String {
-    guard colorize, !text.isEmpty else {
-      return text
-    }
-
-    return annotation.applied(to: text, resetAfter: resetAfter)
-  }
-
-  /// Colorize for the buffer outline and line numbers.
-  func colorizeBufferOutline(_ text: String) -> String {
-    colorizeIfRequested(text, annotation: .bufferOutline)
-  }
-}
-
-struct ANSIAnnotation {
-  enum Color: UInt8 {
-    case normal = 0
-    case black = 30
-    case red = 31
-    case green = 32
-    case yellow = 33
-    case blue = 34
-    case magenta = 35
-    case cyan = 36
-    case white = 37
-    case `default` = 39
-  }
-
-  enum Trait: UInt8 {
-    case normal = 0
-    case bold = 1
-    case underline = 4
-  }
-
-  var color: Color
-  var trait: Trait
-
-  /// The textual representation of the annotation.
-  var code: String {
-    "\u{001B}[\(trait.rawValue);\(color.rawValue)m"
-  }
-
-  init(color: Color, trait: Trait = .normal) {
-    self.color = color
-    self.trait = trait
-  }
-
-  func withTrait(_ trait: Trait) -> Self {
-    return ANSIAnnotation(color: self.color, trait: trait)
-  }
-
-  func applied(to message: String, resetAfter: Bool = true) -> String {
-    guard resetAfter else {
-      return "\(code)\(message)"
-    }
-
-    // Resetting after the message ensures that we don't color unintended lines in the output
-    return "\(code)\(message)\(ANSIAnnotation.normal.code)"
-  }
-
-  /// The "normal" or "reset" ANSI code used to unset any previously added annotation.
-  static var normal: ANSIAnnotation {
-    self.init(color: .normal, trait: .normal)
-  }
-
-  /// Annotation used for the outline and line numbers of a buffer.
-  static var bufferOutline: ANSIAnnotation {
-    ANSIAnnotation(color: .cyan, trait: .normal)
-  }
-
-  /// Annotation used for highlighting source text.
-  static var sourceHighlight: ANSIAnnotation {
-    ANSIAnnotation(color: .default, trait: .underline)
-  }
-
-  static var diagnosticText: ANSIAnnotation {
-    ANSIAnnotation(color: .default, trait: .bold)
-  }
-
-  static var errorText: ANSIAnnotation {
-    ANSIAnnotation(color: .red, trait: .bold)
-  }
-
-  static var warningText: ANSIAnnotation {
-    ANSIAnnotation(color: .yellow, trait: .bold)
-  }
-
-  static var noteText: ANSIAnnotation {
-    ANSIAnnotation(color: .default, trait: .bold)
-  }
-
-  static var remarkText: ANSIAnnotation {
-    ANSIAnnotation(color: .blue, trait: .bold)
   }
 }

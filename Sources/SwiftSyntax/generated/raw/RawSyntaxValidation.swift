@@ -184,6 +184,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       assertionFailure("""
         Error validating child at index \(index) of \(nodeKind):
         \(error.description)
+
+        See "RawSyntax Validation" in CONTRIBUTING.md to reproduce the failure locally.
         """, file: file, line: line)
     }
   }
@@ -198,6 +200,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
         Node did not satisfy any node choice requirement.
         Validation failures:
         \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))
+
+        See "RawSyntax Validation" in CONTRIBUTING.md to reproduce the failure locally.
         """, file: file, line: line)
       _ = 1
     }

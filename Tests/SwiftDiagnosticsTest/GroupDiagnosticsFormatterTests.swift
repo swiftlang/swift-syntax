@@ -25,23 +25,15 @@ extension GroupedDiagnostics {
     _ markedSource: String,
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
-    diagnosticDescriptors: [DiagnosticDescriptor],
-    file: StaticString = #file,
-    line: UInt = #line
-  ) -> (SourceFileID, [String: AbsolutePosition]) {
+    diagnosticDescriptors: [DiagnosticDescriptor]
+  ) throws -> (SourceFileID, [String: AbsolutePosition]) {
     let (markers, source) = extractMarkers(markedSource)
     let tree = Parser.parse(source: source)
 
     let parserDiagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
-    var additionalDiagnostics: [Diagnostic] = []
-
-    do {
-      additionalDiagnostics = try diagnosticDescriptors.map {
-        try $0.createDiagnostic(inSyntaxTree: tree, usingLocationMarkers: markers)
-      }
-    } catch {
-      XCTFail(error.localizedDescription, file: file, line: line)
+    let additionalDiagnostics = try diagnosticDescriptors.compactMap {
+      try $0.createDiagnostic(inSyntaxTree: tree, usingLocationMarkers: markers)
     }
 
     let id = addSourceFile(
@@ -60,11 +52,11 @@ extension GroupedDiagnostics {
 }
 
 final class GroupedDiagnosticsFormatterTests: XCTestCase {
-  func testSourceLocations() {
+  func testSourceLocations() throws {
     var group = GroupedDiagnostics()
 
     // Main source file.
-    _ = group.addTestFile(
+    _ = try group.addTestFile(
       """
       #sourceLocation(file: "other.swift", line: 123)
       let pi = 3.14159 x
@@ -85,11 +77,11 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
   }
 
-  func testGroupingForMacroExpansion() {
+  func testGroupingForMacroExpansion() throws {
     var group = GroupedDiagnostics()
 
     // Main source file.
-    let (mainSourceID, mainSourceMarkers) = group.addTestFile(
+    let (mainSourceID, mainSourceMarkers) = try group.addTestFile(
       """
 
 
@@ -103,18 +95,23 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         DiagnosticDescriptor(
           locationMarker: "1️⃣",
           message: "in expansion of macro 'myAssert' here",
-          severity: .note
+          severity: .note,
+          noteDescriptors: [
+            NoteDescriptor(locationMarker: "1️⃣", message: "first additional note"),
+            NoteDescriptor(locationMarker: "1️⃣", message: "second additional note"),
+            NoteDescriptor(locationMarker: "1️⃣", message: "last additional note"),
+          ]
         )
       ]
     )
     let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
     // Expansion source file
-    _ = group.addTestFile(
+    _ = try group.addTestFile(
       """
       let __a = pi
       let __b = 3
-      if !(__a 1️⃣== __b) {
+      if 2️⃣!(__a 1️⃣== __b) {
         fatalError("assertion failed: pi != 3")
       }
       """,
@@ -124,7 +121,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         DiagnosticDescriptor(
           locationMarker: "1️⃣",
           message: "no matching operator '==' for types 'Double' and 'Int'",
-          severity: .error
+          severity: .error,
+          noteDescriptors: [NoteDescriptor(locationMarker: "2️⃣", message: "in this condition element")]
         )
       ]
     )
@@ -137,27 +135,32 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       3 │ // test
       4 │ let pi = 3.14159
       5 │ #myAssert(pi == 3)
-        │ ╰─ note: in expansion of macro 'myAssert' here
+        │ ├─ note: in expansion of macro 'myAssert' here
+        │ ├─ note: first additional note
+        │ ├─ note: second additional note
+        │ ╰─ note: last additional note
         ╭─── #myAssert ───────────────────────────────────────────────────────
         │1 │ let __a = pi
         │2 │ let __b = 3
         │3 │ if !(__a == __b) {
-        │  │          ╰─ error: no matching operator '==' for types 'Double' and 'Int'
+        │  │    │     ╰─ error: no matching operator '==' for types 'Double' and 'Int'
+        │  │    ╰─ note: in this condition element
         │4 │   fatalError("assertion failed: pi != 3")
         │5 │ }
         ╰─────────────────────────────────────────────────────────────────────
       6 │ print("hello"
-        │              ╰─ error: expected ')' to end function call
+        │      │       ╰─ error: expected ')' to end function call
+        │      ╰─ note: to match this opening '('
 
       """
     )
   }
 
-  func testGroupingForDoubleNestedMacroExpansion() {
+  func testGroupingForDoubleNestedMacroExpansion() throws {
     var group = GroupedDiagnostics()
 
     // Main source file.
-    let (mainSourceID, mainSourceMarkers) = group.addTestFile(
+    let (mainSourceID, mainSourceMarkers) = try group.addTestFile(
       """
       let pi = 3.14159
       1️⃣#myAssert(pi == 3)
@@ -171,7 +174,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
     // Outer expansion source file
-    let (outerExpansionSourceID, outerExpansionSourceMarkers) = group.addTestFile(
+    let (outerExpansionSourceID, outerExpansionSourceMarkers) = try group.addTestFile(
       """
       let __a = pi
       let __b = 3
@@ -188,7 +191,7 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     let inInnerExpansionNotePos = outerExpansionSourceMarkers["1️⃣"]!
 
     // Expansion source file
-    _ = group.addTestFile(
+    _ = try group.addTestFile(
       """
       !(__a 1️⃣== __b)
       """,

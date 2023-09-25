@@ -254,21 +254,24 @@ extension GroupedDiagnostics {
     // Render the buffer.
     return prefixString
       + formatter.annotatedSource(
-        tree: sourceFile.tree,
-        diags: sourceFile.diagnostics,
-        indentString: diagnosticDecorator.decorateBufferOutline(indentString),
-        suffixTexts: childSources,
-        sourceLocationConverter: slc
-      ) + suffixString
+        inSyntaxTree: sourceFile.tree,
+        withDiagnostics: sourceFile.diagnostics,
+        usingIndentString: diagnosticDecorator.decorateBufferOutline(indentString),
+        appendingSuffixTexts: childSources,
+        employingSourceLocationConverter: slc
+      )
+      + suffixString
   }
 }
 
 extension DiagnosticsFormatter {
   /// Annotate all of the source files in the given set of grouped diagnostics.
   public func annotateSources(in group: GroupedDiagnostics) -> String {
-    return group.rootSourceFiles.map { rootSourceFileID in
-      group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
-    }.joined(separator: "\n")
+    group.rootSourceFiles
+      .map { rootSourceFileID in
+        group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
+      }
+      .joined(separator: "\n")
   }
 
   public static func annotateSources(

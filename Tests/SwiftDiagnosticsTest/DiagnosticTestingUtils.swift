@@ -83,7 +83,7 @@ struct DiagnosticDescriptor {
   ///   - fixIts: An array of Fix-It descriptors for quick fixes. Default is an empty array.
   init(
     locationMarker: LocationMarker,
-    id: MessageID = MessageID(domain: "test", id: "conjured"),
+    id: MessageID = .test,
     message: String,
     severity: DiagnosticSeverity = .error,
     highlight: [Syntax] = [],
@@ -158,6 +158,22 @@ struct NoteDescriptor {
 
   /// The textual content of the note to be displayed.
   let message: String
+
+  /// Initializes a new `NoteDescriptor`.
+  ///
+  /// - Parameters:
+  ///   - locationMarker: The marker pointing to location in source code.
+  ///   - id: The ID associated with the note message.
+  ///   - message: The textual content of the note to be displayed.
+  init(
+    locationMarker: LocationMarker,
+    id: MessageID = .test,
+    message: String
+  ) {
+    self.locationMarker = locationMarker
+    self.id = id
+    self.message = message
+  }
 }
 
 /// A simple implementation of the `NoteMessage` protocol for testing.
@@ -168,6 +184,19 @@ struct SimpleNoteMessage: NoteMessage {
 
   /// The unique identifier for this note message.
   let noteID: MessageID
+
+  /// Initializes a new `SimpleNoteMessage`.
+  ///
+  /// - Parameters:
+  ///   - message: The textual content of the note to be displayed.
+  ///   - noteID: The unique identifier for this note message.
+  init(
+    message: String,
+    noteID: MessageID = .test
+  ) {
+    self.message = message
+    self.noteID = noteID
+  }
 }
 
 /// A simple implementation of the `DiagnosticMessage` protocol for testing.
@@ -181,6 +210,22 @@ struct SimpleDiagnosticMessage: DiagnosticMessage {
 
   /// The severity level of the diagnostic message.
   let severity: DiagnosticSeverity
+
+  /// Initializes a new `SimpleDiagnosticMessage`.
+  ///
+  /// - Parameters:
+  ///   - message: The textual content of the diagnostic message to be displayed.
+  ///   - diagnosticID: The ID associated with the diagnostic message for categorization or referencing.
+  ///   - severity: The severity level of the diagnostic message.
+  init(
+    message: String,
+    diagnosticID: MessageID = .test,
+    severity: DiagnosticSeverity
+  ) {
+    self.message = message
+    self.diagnosticID = diagnosticID
+    self.severity = severity
+  }
 }
 
 /// Asserts that the annotated source generated from diagnostics matches an expected annotated source.
@@ -219,4 +264,8 @@ func assertAnnotated(
     file: file,
     line: line
   )
+}
+
+extension MessageID {
+  fileprivate static var test = Self(domain: "test", id: "conjured")
 }

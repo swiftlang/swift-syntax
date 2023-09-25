@@ -20,8 +20,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
   func annotate(source: String, colorize: Bool = false) -> String {
     let tree = Parser.parse(source: source)
-    let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-    return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diags, colorize: colorize)
+    let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
+    return DiagnosticsFormatter.annotatedSource(tree: tree, diags: diagnostics, colorize: colorize)
   }
 
   func testSingleDiagnostic() {
@@ -54,28 +54,41 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     let source = """
       var i = 1
       i = 2
-      i = foo(
+      i = 3
       i = 4
-      i = 5
+      i = foo(
       i = 6
       i = 7
       i = 8
       i = 9
       i = 10
+      i = 11
+      i = 12
       i = bar(
+      i = 14
+      i = 15
+      i = 16
+      i = 17
+      i = 18
       """
     let expectedOutput = """
-       2 │ i = 2
-       3 │ i = foo(
+       3 │ i = 3
        4 │ i = 4
-         │      ╰─ error: expected ')' to end function call
-       5 │ i = 5
+       5 │ i = foo(
+         │        ╰─ note: to match this opening '('
        6 │ i = 6
+         │      ╰─ error: expected ')' to end function call
+       7 │ i = 7
+       8 │ i = 8
          ┆
-       9 │ i = 9
-      10 │ i = 10
-      11 │ i = bar(
-         │         ╰─ error: expected value and ')' to end function call
+      11 │ i = 11
+      12 │ i = 12
+      13 │ i = bar(
+         │        ╰─ note: to match this opening '('
+      14 │ i = 14
+         │       ╰─ error: expected ')' to end function call
+      15 │ i = 15
+      16 │ i = 16
 
       """
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -121,6 +134,60 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 
+  func testCStyleForLoopWithEmojiVariables() {
+    let source = """
+      for (i = 🐮; i != 👩‍👩‍👦‍👦; i += 1) { }
+      """
+
+    let expectedOutput = """
+      1 │ for (i = 🐮; i != 👩‍👩‍👦‍👦; i += 1) { }
+        │ │   │ ╰─ error: expected ')' to end tuple pattern
+        │ │   ╰─ note: to match this opening '('
+        │ ╰─ error: C-style for statement has been removed in Swift 3
+
+      """
+
+    assertStringsEqualWithDiff(annotate(source: source, colorize: false), expectedOutput)
+  }
+
+  func testClassDefinitionWithInvalidInheritanceAndCStyleForLoop() {
+    let source = """
+      class Iterator: {
+        var counter = 0
+        var wasCounterCalled: Bool { counter > 0 }
+
+        init(counter: Int = 0) {
+          self.counter = counter
+        }
+
+        // Description of the `loopOver` function
+        func loopOver() {
+          for (i = 🐮; i != 👩‍👩‍👦‍👦; i += 1) { }
+        }
+      }
+      """
+
+    let expectedOutput =
+      """
+       1 │ class Iterator: {
+         │                 ╰─ error: expected type in inherited type
+       2 │   var counter = 0
+       3 │   var wasCounterCalled: Bool { counter > 0 }
+         ┆
+       9 │   // Description of the `loopOver` function
+      10 │   func loopOver() {
+      11 │     for (i = 🐮; i != 👩‍👩‍👦‍👦; i += 1) { }
+         │     │   │ ╰─ error: expected ')' to end tuple pattern
+         │     │   ╰─ note: to match this opening '('
+         │     ╰─ error: C-style for statement has been removed in Swift 3
+      12 │   }
+      13 │ }
+
+      """
+
+    assertStringsEqualWithDiff(annotate(source: source, colorize: false), expectedOutput)
+  }
+
   func testColoringWithHighlights() {
     let source = """
       for (i = 🐮; i != 👩‍👩‍👦‍👦; i += 1) { }
@@ -128,7 +195,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m│\u{001B}[0;0m │     ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m │   │ ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{1B}[0;36m│\u{1B}[0;0m │   ╰─ \u{1B}[1;39mnote: \u{1B}[1;39mto match this opening \'(\'\u{1B}[0;0m
         \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """
@@ -136,7 +204,7 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
   }
 
-  func testRighParenLocation() {
+  func testRightParenLocation() {
     let source = """
       let _ : Float  -> Int
       """

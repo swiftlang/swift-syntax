@@ -240,7 +240,8 @@ extension GroupedDiagnostics {
       }
 
       prefixString = diagnosticDecorator.decorateBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
-      suffixString = diagnosticDecorator.decorateBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
+      suffixString =
+        diagnosticDecorator.decorateBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
     }
 
     // Render the buffer.

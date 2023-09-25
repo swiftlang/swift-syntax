@@ -240,6 +240,31 @@ public class Node {
     )
   }
 
+  /// A doc comment that lists all the subtypes in which this node occurs as a base type in.
+  public var subtypes: SwiftSyntax.Trivia {
+    if kind == .unexpectedNodes {
+      return []
+    }
+
+    let list =
+      SYNTAX_NODES
+      .filter { $0.base == self.kind }
+      .map { "- ``\($0.kind.syntaxType)``" }
+      .joined(separator: "\n")
+
+    guard !list.isEmpty else {
+      return []
+    }
+
+    return .docCommentTrivia(
+      from: """
+        ### Subtypes
+
+        \(list)
+        """
+    )
+  }
+
   /// Construct the specification for a collection syntax node.
   ///
   /// `base` must be `.syntaxCollection`.

@@ -216,9 +216,9 @@ struct GenerateSwiftSyntax: ParsableCommand {
 struct ComposititeError: Error, CustomStringConvertible {
   var errors: [Error]
   var description: String {
-    "Multiple errors emitted:\n" +
-    errors
-      .map(String.init(describing: ))
+    "Multiple errors emitted:\n"
+      + errors
+      .map(String.init(describing:))
       .joined(separator: "\n")
   }
 }

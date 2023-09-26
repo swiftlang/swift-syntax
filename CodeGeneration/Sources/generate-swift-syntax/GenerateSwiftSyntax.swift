@@ -139,7 +139,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
     let modules = Set(fileSpecs.compactMap { $0.pathComponents.first })
 
-    let previouslyGeneratedFilesLock = NSLock()
+    let filesAndErrorsLock = NSLock()
     var previouslyGeneratedFiles = Set(
       modules.flatMap { (module) -> [URL] in
         let generatedDir =
@@ -154,7 +154,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
       }
     )
 
-    let errorsLock = NSLock()
     var errors: [Error] = []
     DispatchQueue.concurrentPerform(iterations: fileSpecs.count) { index in
       let fileSpec = fileSpecs[index]
@@ -164,9 +163,9 @@ struct GenerateSwiftSyntax: ParsableCommand {
           destination = destination.appendingPathComponent(component)
         }
 
-        previouslyGeneratedFilesLock.lock();
+        filesAndErrorsLock.lock();
         _ = previouslyGeneratedFiles.remove(destination)
-        previouslyGeneratedFilesLock.unlock()
+        filesAndErrorsLock.unlock()
 
         try generateFile(
           contents: fileSpec.contents,
@@ -174,9 +173,9 @@ struct GenerateSwiftSyntax: ParsableCommand {
           verbose: verbose
         )
       } catch {
-        errorsLock.lock()
+        filesAndErrorsLock.lock()
         errors.append(error)
-        errorsLock.unlock()
+        filesAndErrorsLock.unlock()
       }
     }
 

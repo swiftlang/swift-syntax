@@ -10,14 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if !SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
 #if canImport(Darwin)
 @_implementationOnly import Darwin
 #elseif canImport(Glibc)
 @_implementationOnly import Glibc
 #elseif canImport(Musl)
 @_implementationOnly import Musl
-#endif
 #endif
 
 /// Represent a string.
@@ -267,10 +265,7 @@ private func compareMemory(
   _ count: Int
 ) -> Bool {
   precondition(count >= 0)
-  #if SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED
-  return UnsafeBufferPointer(start: s1, count: count)
-    .elementsEqual(UnsafeBufferPointer(start: s2, count: count))
-  #elseif canImport(Darwin)
+  #if canImport(Darwin)
   return Darwin.memcmp(s1, s2, count) == 0
   #elseif canImport(Glibc)
   return Glibc.memcmp(s1, s2, count) == 0

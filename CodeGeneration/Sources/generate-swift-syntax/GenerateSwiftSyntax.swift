@@ -68,7 +68,7 @@ struct TemplateSpec {
 }
 
 @main
-struct GenerateSwiftSyntax: ParsableCommand {
+struct GenerateSwiftSyntax: AsyncParsableCommand {
   @Argument(help: "The path to the source directory (i.e. 'swift-syntax/Sources') where the source files are to be generated")
   var destination: String = {
     let sourcesURL = URL(fileURLWithPath: #filePath)
@@ -83,7 +83,7 @@ struct GenerateSwiftSyntax: ParsableCommand {
   @Flag(help: "Enable verbose output")
   var verbose: Bool = false
 
-  func run() throws {
+  func run() async throws {
     let destination = URL(fileURLWithPath: self.destination).standardizedFileURL
 
     var fileSpecs: [GeneratedFileSpec] = [
@@ -139,7 +139,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
 
     let modules = Set(fileSpecs.compactMap { $0.pathComponents.first })
 
-    let previouslyGeneratedFilesLock = NSLock()
     var previouslyGeneratedFiles = Set(
       modules.flatMap { (module) -> [URL] in
         let generatedDir =
@@ -154,32 +153,37 @@ struct GenerateSwiftSyntax: ParsableCommand {
       }
     )
 
-    var errors: [Error] = []
-    DispatchQueue.concurrentPerform(iterations: fileSpecs.count) { index in
-      let fileSpec = fileSpecs[index]
-      do {
-        var destination = destination
-        for component in fileSpec.pathComponents {
-          destination = destination.appendingPathComponent(component)
+    await withTaskGroup(of: (url: URL, error: Error?).self) { group in
+      for fileSpec in fileSpecs {
+        group.addTask {
+          do {
+            var destination = destination
+            for component in fileSpec.pathComponents {
+              destination = destination.appendingPathComponent(component)
+            }
+            do {
+              try generateFile(
+                contents: fileSpec.contents,
+                destination: destination,
+                verbose: verbose
+              )
+            } catch {
+              // If we throw from here, we'll lose the URL,
+              // and we'll end up removing a file that is still
+              // included in the files we intend to generate,
+              // even if we failed to do so on this run.
+              return (destination, error)
+            }
+            return (destination, nil)
+          }
         }
-
-        previouslyGeneratedFilesLock.lock();
-        _ = previouslyGeneratedFiles.remove(destination)
-        previouslyGeneratedFilesLock.unlock()
-
-        try generateFile(
-          contents: fileSpec.contents,
-          destination: destination,
-          verbose: verbose
-        )
-      } catch {
-        errors.append(error)
       }
-    }
-
-    if let firstError = errors.first {
-      // TODO: It would be nice if we could emit all errors
-      throw firstError
+      for await result in group {
+        _ = previouslyGeneratedFiles.remove(result.url)
+        if let error = result.error {
+          print("Error when generating file at \(result.url):", error)
+        }
+      }
     }
 
     for file in previouslyGeneratedFiles {
@@ -189,24 +193,25 @@ struct GenerateSwiftSyntax: ParsableCommand {
     }
   }
 
-  private func generateFile(
-    contents: @autoclosure () -> String,
-    destination: URL,
-    verbose: Bool
-  ) throws {
-    try FileManager.default.createDirectory(
-      atPath: destination.deletingLastPathComponent().path,
-      withIntermediateDirectories: true,
-      attributes: nil
-    )
+}
 
-    if verbose {
-      print("Generating \(destination.path)...")
-    }
-    let start = Date()
-    try contents().write(to: destination, atomically: true, encoding: .utf8)
-    if verbose {
-      print("Generated \(destination.path) in \((Date().timeIntervalSince(start) * 1000).rounded() / 1000)s")
-    }
+fileprivate func generateFile(
+  contents: @autoclosure () -> String,
+  destination: URL,
+  verbose: Bool
+) throws {
+  try FileManager.default.createDirectory(
+    atPath: destination.deletingLastPathComponent().path,
+    withIntermediateDirectories: true,
+    attributes: nil
+  )
+
+  if verbose {
+    print("Generating \(destination.path)...")
+  }
+  let start = Date()
+  try contents().write(to: destination, atomically: true, encoding: .utf8)
+  if verbose {
+    print("Generated \(destination.path) in \((Date().timeIntervalSince(start) * 1000).rounded() / 1000)s")
   }
 }

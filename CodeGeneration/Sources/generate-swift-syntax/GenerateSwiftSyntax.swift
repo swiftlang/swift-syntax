@@ -181,15 +181,6 @@ struct GenerateSwiftSyntax: ParsableCommand {
     }
 
     if errors.count > 0 {
-      struct ComposititeError: Error, CustomStringConvertible {
-        var errors: [Error]
-        var description: String {
-          "Multiple errors emitted: \n" +
-          errors
-            .map(String.init(describing: ))
-            .joined(separator: "\n")
-        }
-      }
       throw ComposititeError(errors: errors)
     }
 
@@ -219,5 +210,15 @@ struct GenerateSwiftSyntax: ParsableCommand {
     if verbose {
       print("Generated \(destination.path) in \((Date().timeIntervalSince(start) * 1000).rounded() / 1000)s")
     }
+  }
+}
+
+struct ComposititeError: Error, CustomStringConvertible {
+  var errors: [Error]
+  var description: String {
+    "Multiple errors emitted:\n" +
+    errors
+      .map(String.init(describing: ))
+      .joined(separator: "\n")
   }
 }

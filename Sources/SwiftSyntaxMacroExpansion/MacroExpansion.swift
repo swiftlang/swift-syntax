@@ -24,6 +24,7 @@ public enum MacroRole {
   case conformance
   case codeItem
   case `extension`
+  case attribute
 }
 
 extension MacroRole {
@@ -33,6 +34,7 @@ extension MacroRole {
     case .declaration: return "DeclarationMacro"
     case .accessor: return "AccessorMacro"
     case .memberAttribute: return "MemberAttributeMacro"
+    case .attribute: return "AttributeMacro"
     case .member: return "MemberMacro"
     case .peer: return "PeerMacro"
     case .conformance: return "ConformanceMacro"
@@ -124,7 +126,7 @@ public func expandFreestandingMacro(
       let rewritten = try codeItemMacroDef.expansion(of: node, in: context)
       expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
-    case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
+    case (.accessor, _), (.memberAttribute, _), (.attribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
       (.codeItem, _):
       throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
@@ -217,6 +219,18 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       let attributes = try attachedMacro.expansion(
         of: attributeNode,
         attachedTo: parentDeclGroup,
+        providingAttributesFor: declarationNode,
+        in: context
+      )
+
+      // Form a buffer containing an attribute list to return to the caller.
+      return attributes.map {
+        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+      }
+
+    case (let attachedMacro as AttributeMacro.Type, .attribute):
+      let attributes = try attachedMacro.expansion(
+        of: attributeNode,
         providingAttributesFor: declarationNode,
         in: context
       )
@@ -430,7 +444,7 @@ public func collapse<Node: SyntaxProtocol>(
       expansions[expansions.count - 1] += "\n}"
       separator = "\n"
     }
-  case .memberAttribute:
+  case .memberAttribute, .attribute:
     separator = " "
   default:
     break

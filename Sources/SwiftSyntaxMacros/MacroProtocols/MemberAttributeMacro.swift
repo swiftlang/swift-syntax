@@ -32,3 +32,22 @@ public protocol MemberAttributeMacro: AttachedMacro {
     in context: some MacroExpansionContext
   ) throws -> [AttributeSyntax]
 }
+
+/// Describes a macro that can add attributes to the
+/// declaration it's attached to.
+public protocol AttributeMacro: AttachedMacro {
+  /// Expand an attached declaration macro to produce an attribute list for
+  /// a given member.
+  ///
+  /// - Parameters:
+  ///   - node: The custom attribute describing the attached macro.
+  ///   - declaration: The declaration to attach the resulting attributes to.
+  ///   - context: The context in which to perform the macro expansion.
+  ///
+  /// - Returns: the set of attributes to apply to the given member.
+  static func expansion(
+    of node: AttributeSyntax,
+    providingAttributesFor declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) throws -> [AttributeSyntax]
+}

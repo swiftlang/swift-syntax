@@ -181,6 +181,34 @@ private func expandMemberAttributeMacro(
   return "\(raw: indentedSource)"
 }
 
+private func expandAttributeMacro(
+  definition: AttributeMacro.Type,
+  attributeNode: AttributeSyntax,
+  providingAttributeFor decl: DeclSyntax,
+  in context: some MacroExpansionContext,
+  indentationWidth: Trivia
+) throws -> AttributeListSyntax? {
+  guard
+    let expanded = expandAttachedMacro(
+      definition: definition,
+      macroRole: .attribute,
+      attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
+      declarationNode: decl.detach(in: context),
+      parentDeclNode: nil,
+      extendedType: nil,
+      conformanceList: nil,
+      in: context,
+      indentationWidth: indentationWidth
+    )
+  else {
+    return nil
+  }
+
+  // The added attributes should be on their own line, so prepend them with a newline.
+  let indentedSource = "\n" + expanded.indented(by: decl.indentationOfFirstLine)
+  return "\(raw: indentedSource)"
+}
+
 private func expandPeerMacroMember(
   definition: PeerMacro.Type,
   attributeNode: AttributeSyntax,
@@ -545,7 +573,28 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       }
     }
 
-    for item in node {
+    for var item in node {
+      // Expand attribute macros attached to the declarations.
+      // Note that MemberAttribute macros are _not_ applied to generated members (FIXME: is this true?)
+      if
+        case .decl(let anyDecl) = item.item,
+         let decl = anyDecl.asProtocol(WithAttributesSyntax.self)
+      {
+        var newAttributes = AttributeListSyntax(
+          expandAttributesFromAttributeMacros(of: anyDecl)
+          .map { visit($0) }
+        )
+        if !newAttributes.isEmpty {
+          // Transfer the trailing trivia from the old attributes to the new attributes.
+          // This way, we essentially insert the new attributes right after the last attribute in source
+          // but before its trailing trivia, keeping the trivia that separates the attribute block
+          // from the variable itself.
+          newAttributes.trailingTrivia = newAttributes.trailingTrivia + decl.attributes.trailingTrivia
+          newAttributes.insert(contentsOf: decl.attributes.with(\.trailingTrivia, []), at: newAttributes.startIndex)
+          item.item = .decl(decl.with(\.attributes, newAttributes).cast(DeclSyntax.self))
+        }
+      }
+
       addResult(item)
     }
 
@@ -589,13 +638,15 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     for var item in node {
-      // Expand member attribute members attached to the declaration context.
+      // Expand member attribute members attached to the declaration context, and attribute macros attached to the members.
       // Note that MemberAttribute macros are _not_ applied to generated members
       if let parentDeclGroup, let decl = item.decl.asProtocol(WithAttributesSyntax.self) {
         var newAttributes = AttributeListSyntax(
-          expandAttributesFromMemberAttributeMacros(
-            of: item.decl,
-            parentDecl: parentDeclGroup
+          (
+            expandAttributesFromMemberAttributeMacros(
+              of: item.decl,
+              parentDecl: parentDeclGroup
+            ) + expandAttributesFromAttributeMacros(of: item.decl)
           )
           .map { visit($0) }
         )
@@ -802,6 +853,24 @@ extension MacroApplication {
     }
   }
 
+  /// Return the attributes on `decl` that are synthesized from member attribute
+  /// macros on `parentDecl`.
+  ///
+  /// - Note: This only returns synthesized attributes from member attribute
+  ///   macros, not the attributes that are attached to `decl` in the source code.
+  private func expandAttributesFromAttributeMacros(
+    of decl: DeclSyntax
+  ) -> [AttributeListSyntax.Element] {
+    return expandMacros(attachedTo: decl, ofType: AttributeMacro.Type.self) { attributeNode, definition in
+      return try expandAttributeMacro(
+        definition: definition,
+        attributeNode: attributeNode,
+        providingAttributeFor: decl,
+        in: context,
+        indentationWidth: indentationWidth
+      )
+    }
+  }
   /// Expand all 'accessor' macros attached to `storage` and return the `storage`
   /// node.
   ///

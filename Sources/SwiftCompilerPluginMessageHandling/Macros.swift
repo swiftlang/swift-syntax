@@ -166,6 +166,7 @@ private extension MacroRole {
     case .declaration: self = .declaration
     case .accessor: self = .accessor
     case .memberAttribute: self = .memberAttribute
+    case .attribute: self = .attribute
     case .member: self = .member
     case .peer: self = .peer
     case .conformance: self = .extension

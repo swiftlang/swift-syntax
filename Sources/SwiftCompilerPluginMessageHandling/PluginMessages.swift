@@ -124,6 +124,7 @@ public enum PluginMessage {
     case conformance
     case codeItem
     case `extension`
+    case attribute
   }
 
   public struct SourceLocation: Codable {

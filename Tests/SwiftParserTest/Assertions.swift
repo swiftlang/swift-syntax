@@ -599,11 +599,9 @@ extension ParserTestCase {
     var (markerLocations, source) = extractMarkers(markedSource)
     markerLocations["START"] = 0
 
-    let enableLongTests = ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] != "1"
-
     var parser = Parser(source, experimentalFeatures: experimentalFeatures)
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
-    if enableLongTests {
+    if !longTestsDisabled {
       parser.enableAlternativeTokenChoices()
     }
     #endif
@@ -684,7 +682,7 @@ extension ParserTestCase {
       assertBasicFormat(source: source, parse: parse, experimentalFeatures: experimentalFeatures, file: file, line: line)
     }
 
-    if enableLongTests {
+    if !longTestsDisabled {
       DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
         let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)

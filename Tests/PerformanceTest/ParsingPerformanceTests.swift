@@ -13,6 +13,7 @@
 import SwiftParser
 import SwiftSyntax
 import XCTest
+import _SwiftSyntaxTestSupport
 
 public class ParsingPerformanceTests: XCTestCase {
 
@@ -24,7 +25,7 @@ public class ParsingPerformanceTests: XCTestCase {
   }
 
   func testNativeParsingPerformance() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
 
     let source = try String(contentsOf: inputFile)
 

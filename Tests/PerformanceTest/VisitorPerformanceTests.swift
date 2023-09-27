@@ -13,6 +13,7 @@
 import SwiftParser
 import SwiftSyntax
 import XCTest
+import _SwiftSyntaxTestSupport
 
 public class VisitorPerformanceTests: XCTestCase {
 
@@ -24,7 +25,7 @@ public class VisitorPerformanceTests: XCTestCase {
   }
 
   func testEmptyVisitorPerformance() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     class EmptyVisitor: SyntaxVisitor {}
 
     let source = try String(contentsOf: inputFile)
@@ -37,7 +38,7 @@ public class VisitorPerformanceTests: XCTestCase {
   }
 
   func testEmptyRewriterPerformance() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     class EmptyRewriter: SyntaxRewriter {}
 
     let source = try String(contentsOf: inputFile)
@@ -50,7 +51,7 @@ public class VisitorPerformanceTests: XCTestCase {
   }
 
   func testEmptyAnyVisitorPerformance() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     class EmptyAnyVisitor: SyntaxAnyVisitor {}
 
     let source = try String(contentsOf: inputFile)

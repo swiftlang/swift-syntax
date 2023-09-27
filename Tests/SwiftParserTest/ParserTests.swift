@@ -93,7 +93,7 @@ public class ParserTests: ParserTestCase {
   func testSelfParse() throws {
     // Allow skipping the self parse test in local development environments
     // because it takes very long compared to all the other tests.
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     let currentDir =
       packageDir
       .appendingPathComponent("Sources")
@@ -108,7 +108,7 @@ public class ParserTests: ParserTestCase {
   /// This requires the Swift compiler to have been checked out into the "swift"
   /// directory alongside swift-syntax.
   func testSwiftTestsuite() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     let testDir =
       packageDir
       .deletingLastPathComponent()
@@ -125,7 +125,7 @@ public class ParserTests: ParserTestCase {
   /// Swift compiler. This requires the Swift compiler to have been checked
   /// out into the "swift" directory alongside swift-syntax.
   func testSwiftValidationTestsuite() throws {
-    try XCTSkipIf(ProcessInfo.processInfo.environment["SKIP_LONG_TESTS"] == "1")
+    try XCTSkipIf(longTestsDisabled)
     let testDir =
       packageDir
       .deletingLastPathComponent()

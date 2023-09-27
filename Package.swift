@@ -309,7 +309,7 @@ let package = Package(
 
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["_InstructionCounter", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
+      dependencies: ["_InstructionCounter", "_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
       exclude: ["Inputs"]
     ),
   ]

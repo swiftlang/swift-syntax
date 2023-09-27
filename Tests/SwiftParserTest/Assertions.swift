@@ -233,7 +233,7 @@ struct NoteSpec {
 
 /// An abstract data structure to describe how a diagnostic produced by the parser should look like.
 struct DiagnosticSpec {
-  /// The name of a maker (of the form `1️⃣`) in the source code that marks the location where the diagnostis should be produced.
+  /// The name of a marker (of the form `1️⃣`) in the source code that marks the location where the diagnostic should be produced.
   let locationMarker: String
   /// If not `nil`, assert that the diagnostic has the given ID.
   let id: MessageID?
@@ -549,8 +549,11 @@ extension ParserTestCase {
       assertStringsEqualWithDiff(
         "\(mutatedTree)",
         mutatedSource,
-        "A mutation of the original test case failed to round-trip",
+        "A mutation of the original test case failed to round-trip.",
         additionalInfo: """
+          To debug the failure, add a new `assertParse` test with the following source as input:
+          \(mutatedSource)
+
           Parsed syntax tree of mutation:
           \(mutatedTree.debugDescription)
           """,
@@ -560,23 +563,42 @@ extension ParserTestCase {
     }
   }
 
-  /// Removes any test markers from `markedSource` (1) and parses the result
-  /// using `parse`. By default it only checks if the parsed syntax tree is
-  /// printable back to the origin source, ie. it round trips.
+  /// Verifies that parsing of `markedSource` produces expected results using a
+  /// combination of various testing techniques:
   ///
-  /// (1) `markedSource` is source that can include markers of the form `1️⃣`,
-  /// to be used as locations in the following parameters when they exist.
+  /// 1. Asserts that parsing of `markedSource` round-trips, ie. that the printed
+  ///    parsed tree is the same as the input.
+  /// 2. Checks that parsing produces the expected list of diagnostics. If no
+  ///    diagnostics are passed, asserts that the input parses without any errors.
+  /// 3. Checks that applying all Fix-Its of the source code results in the
+  ///    expected fixed source, effectively testing the Fix-Its.
+  /// 4. If a substructure is passed, asserts that the parsed tree contains a
+  ///    subtree of that structure.
+  /// 5. Mutates the test input by flipping each token's presence (ie. for every
+  ///    token, either remove it from the input if it is present in the parsed
+  ///    tree or synthesize it if it was missing) and verifies that this
+  ///    mutated input round-trips. This test is disabled if the
+  ///    `SKIP_LONG_TESTS` environment variable is set.
+  /// 6. If swift-syntax is compiled with the
+  ///    `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION` environment variable
+  ///    set, mutates the input based on tokens the parse is trying to parse.
+  ///    See the *Test Case Mutation* section in CONTRIBUTING.md.
+  ///
   ///
   /// - Parameters:
-  ///   - substructure: Asserts the parsed syntax tree contains this structure.
+  ///   - markedSource: source that can include markers of the form `1️⃣`,
+  ///     to be used as locations in the following parameters.
+  ///   - parse: The function with which the source code should be parsed.
+  ///     Defaults to parsing as a source file.
+  ///   - expectedSubstructure: Asserts the parsed syntax tree contains this structure.
   ///   - substructureAfterMarker: Changes the position to start the structure
   ///     assertion from, ie. allows matching a particular substructure rather
   ///     than the whole source.
-  ///   - diagnostics: Asserts the given diagnostics were output, by default it
+  ///   - expectedDiagnostics: Asserts the given diagnostics were output, by default it
   ///     asserts the parse was successful (ie. it has no diagnostics). Note
   ///     that `DiagnosticsSpec` uses the location marked by `1️⃣` by default.
   ///   - applyFixIts: Applies only the fix-its with these messages.
-  ///   - fixedSource: Asserts that the source after applying fix-its matches
+  ///   - expectedFixedSource: Asserts that the source after applying fix-its matches
   ///     this string.
   ///   - experimentalFeatures: A list of experimental features to enable, or
   ///     `nil` to enable the default set of features provided by the test case.

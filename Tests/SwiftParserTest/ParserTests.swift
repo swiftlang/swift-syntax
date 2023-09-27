@@ -137,45 +137,4 @@ public class ParserTests: ParserTestCase {
       checkDiagnostics: false
     )
   }
-
-  func testSelfParsePerformance() throws {
-    try XCTSkipUnless(ProcessInfo.processInfo.environment["ENABLE_SELF_PARSE_PERFORMANCE"] == "1")
-
-    let sourceDir = packageDir.appendingPathComponent("Sources")
-    let files = try FileManager.default
-      .enumerator(at: sourceDir, includingPropertiesForKeys: nil)!
-      .compactMap({ $0 as? URL })
-      .filter { $0.pathExtension == "swift" }
-      .map { try Data(contentsOf: $0) }
-
-    measure {
-      for _ in 0..<10 {
-        for file in files {
-          file.withUnsafeBytes { buf in
-            _ = Parser.parse(source: buf.bindMemory(to: UInt8.self))
-          }
-        }
-      }
-    }
-  }
-
-  func testConcurrentSelfParsePerformance() throws {
-    try XCTSkipUnless(ProcessInfo.processInfo.environment["ENABLE_SELF_PARSE_PERFORMANCE"] == "1")
-
-    let sourceDir = packageDir.appendingPathComponent("Sources")
-    let files = try FileManager.default
-      .enumerator(at: sourceDir, includingPropertiesForKeys: nil)!
-      .compactMap({ $0 as? URL })
-      .filter { $0.pathExtension == "swift" }
-      .map { try Data(contentsOf: $0) }
-
-    measure {
-      DispatchQueue.concurrentPerform(iterations: files.count * 50) { i in
-        let file = files[i % files.count]
-        file.withUnsafeBytes { buf in
-          _ = Parser.parse(source: buf.bindMemory(to: UInt8.self))
-        }
-      }
-    }
-  }
 }

@@ -160,12 +160,12 @@ protocol RawMisplacedEffectSpecifiersTrait {
 
   var asyncSpecifier: RawTokenSyntax? { get }
   var throwsSpecifier: RawTokenSyntax? { get }
-  var thrownType: RawThrownTypeSyntax? { get }
+  var thrownType: RawThrownTypeClauseSyntax? { get }
 
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsSpecifier: RawTokenSyntax?,
-    thrownType: RawThrownTypeSyntax?,
+    thrownType: RawThrownTypeClauseSyntax?,
     arena: __shared SyntaxArena
   )
 
@@ -176,7 +176,7 @@ protocol RawEffectSpecifiersTrait: RawMisplacedEffectSpecifiersTrait {
   var unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax? { get }
   var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: RawUnexpectedNodesSyntax? { get }
   var unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax? { get }
-  var thrownType: RawThrownTypeSyntax? { get }
+  var thrownType: RawThrownTypeClauseSyntax? { get }
   var unexpectedAfterThrownType: RawUnexpectedNodesSyntax? { get }
   init(
     _ unexpectedBeforeAsyncSpecifier: RawUnexpectedNodesSyntax?,
@@ -184,7 +184,7 @@ protocol RawEffectSpecifiersTrait: RawMisplacedEffectSpecifiersTrait {
     _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: RawUnexpectedNodesSyntax?,
     throwsSpecifier: RawTokenSyntax?,
     _ unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax?,
-    thrownType: RawThrownTypeSyntax?,
+    thrownType: RawThrownTypeClauseSyntax?,
     _ unexpectedAfterThrownType: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   )
@@ -194,7 +194,7 @@ extension RawEffectSpecifiersTrait {
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsSpecifier: RawTokenSyntax?,
-    thrownType: RawThrownTypeSyntax?,
+    thrownType: RawThrownTypeClauseSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -538,12 +538,12 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
   }
 
   var throwsSpecifier: RawTokenSyntax? { nil }
-  var thrownType: RawThrownTypeSyntax? { nil }
+  var thrownType: RawThrownTypeClauseSyntax? { nil }
 
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsSpecifier: RawTokenSyntax?,
-    thrownType: RawThrownTypeSyntax?,
+    thrownType: RawThrownTypeClauseSyntax?,
     arena: __shared SwiftSyntax.SyntaxArena
   ) {
     // `throwsSpecifier` should never be present because `parseMisplacedEffectSpecifiers()` only creates missing tokens
@@ -596,11 +596,11 @@ extension TokenConsumer {
 // MARK: - Parsing effect specifiers
 
 extension Parser {
-  private mutating func parseThrownType() -> RawThrownTypeSyntax {
+  private mutating func parseThrownTypeClause() -> RawThrownTypeClauseSyntax {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let type = self.parseType()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    return RawThrownTypeSyntax(
+    return RawThrownTypeClauseSyntax(
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       type: type,
@@ -615,7 +615,7 @@ extension Parser {
     var asyncKeyword: RawTokenSyntax? = nil
     var unexpectedBeforeThrows: [RawSyntax] = []
     var throwsKeyword: RawTokenSyntax?
-    var thrownType: RawThrownTypeSyntax?
+    var thrownType: RawThrownTypeClauseSyntax?
     var unexpectedAfterThrownType: [RawSyntax] = []
 
     while let misspelledAsync = self.consume(ifAnyIn: S.MisspelledAsyncTokenKinds.self) {
@@ -655,7 +655,7 @@ extension Parser {
     }
 
     if throwsKeyword != nil && self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) {
-      thrownType = parseThrownType()
+      thrownType = parseThrownTypeClause()
     }
 
     var unexpectedAfterThrownTypeLoopProgress = LoopProgressCondition()

@@ -82,11 +82,6 @@ if("${SWIFT_HOST_MODULE_TRIPLE}" STREQUAL "")
 endif()
 message(STATUS "Module triple: ${SWIFT_HOST_MODULE_TRIPLE}")
 
-# Force single-threaded-only syntax trees to eliminate the Darwin
-# dependency in the compiler.
-add_compile_definitions(
-  $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_ALWAYS_SINGLE_THREADED>
-)
 if (SWIFTSYNTAX_ENABLE_ASSERTIONS)
   add_compile_definitions(
     $<$<COMPILE_LANGUAGE:Swift>:SWIFTSYNTAX_ENABLE_ASSERTIONS>

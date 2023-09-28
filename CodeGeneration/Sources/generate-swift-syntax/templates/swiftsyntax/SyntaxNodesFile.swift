@@ -138,7 +138,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           try! VariableDeclSyntax(
             """
             \(child.documentation)
-            public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
+            \(child.apiAttributes)public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
             """
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {

@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftParser
+add_swift_syntax_library(SwiftParser
   Attributes.swift
   Availability.swift
   CharacterInfo.swift
@@ -52,6 +52,6 @@ add_swift_host_library(SwiftParser
   Lexer/UnicodeScalarExtensions.swift
 )
 
-target_link_libraries(SwiftParser PUBLIC
+target_link_swift_syntax_libraries(SwiftParser PUBLIC
   SwiftSyntax
   SwiftDiagnostics)

@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftDiagnostics
+add_swift_syntax_library(SwiftDiagnostics
   Convenience.swift
   Diagnostic.swift
   DiagnosticsFormatter.swift
@@ -16,5 +16,5 @@ add_swift_host_library(SwiftDiagnostics
   Note.swift
 )
 
-target_link_libraries(SwiftDiagnostics PUBLIC
+target_link_swift_syntax_libraries(SwiftDiagnostics PUBLIC
   SwiftSyntax)

@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftParserDiagnostics
+add_swift_syntax_library(SwiftParserDiagnostics
   DiagnosticExtensions.swift
   LexerDiagnosticMessages.swift
   MissingNodesError.swift
@@ -23,7 +23,7 @@ add_swift_host_library(SwiftParserDiagnostics
   generated/TokenNameForDiagnostics.swift
 )
 
-target_link_libraries(SwiftParserDiagnostics PUBLIC
+target_link_swift_syntax_libraries(SwiftParserDiagnostics PUBLIC
   SwiftBasicFormat
   SwiftDiagnostics
   SwiftParser

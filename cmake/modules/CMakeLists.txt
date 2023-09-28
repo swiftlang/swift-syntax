@@ -1,4 +1,5 @@
-get_property(SWIFTSYNTAX_EXPORTS GLOBAL PROPERTY SWIFTSYNTAX_EXPORTS)
-export(TARGETS ${SWIFTSYNTAX_EXPORTS}
-       FILE ${CMAKE_CURRENT_BINARY_DIR}/SwiftSyntaxConfig.cmake
-       NAMESPACE SwiftSyntax::)
+if(PROJECT_IS_TOP_LEVEL)
+  export(EXPORT SwiftSyntaxTargets
+         FILE ${CMAKE_CURRENT_BINARY_DIR}/SwiftSyntaxConfig.cmake
+         NAMESPACE SwiftSyntax::)
+endif()

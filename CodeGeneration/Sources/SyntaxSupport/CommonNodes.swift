@@ -80,22 +80,26 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    kind: .thrownType,
+    kind: .thrownTypeClause,
     base: .syntax,
-    nameForDiagnostics: "thrown type",
+    nameForDiagnostics: "thrown type clause",
+    documentation: "The specific error type that a function can throw.",
     children: [
       Child(
         name: "leftParen",
-        kind: .token(choices: [.token(.leftParen)])
+        kind: .token(choices: [.token(.leftParen)]),
+        documentation: "The '(' to open the thrown type clause."
       ),
       Child(
         name: "type",
         kind: .node(kind: .type),
-        nameForDiagnostics: "type"
+        nameForDiagnostics: "thrown type",
+        documentation: "The thrown error type."
       ),
       Child(
         name: "rightParen",
-        kind: .token(choices: [.token(.rightParen)])
+        kind: .token(choices: [.token(.rightParen)]),
+        documentation: "The ')' to closure the thrown type clause."
       ),
     ]
   ),
@@ -122,7 +126,8 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "thrownType",
-        kind: .node(kind: .thrownType),
+        kind: .node(kind: .thrownTypeClause),
+        documentation: "The specific error type thrown by this accessor.",
         isOptional: true
       ),
     ]
@@ -150,7 +155,8 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "thrownType",
-        kind: .node(kind: .thrownType),
+        kind: .node(kind: .thrownTypeClause),
+        documentation: "The specific error type thrown by this function.",
         isOptional: true
       ),
     ]
@@ -357,7 +363,8 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "thrownType",
-        kind: .node(kind: .thrownType),
+        kind: .node(kind: .thrownTypeClause),
+        documentation: "The specific error type thrown by this function type.",
         isOptional: true
       ),
     ]

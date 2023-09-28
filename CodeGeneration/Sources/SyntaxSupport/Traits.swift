@@ -59,7 +59,8 @@ public let TRAITS: [Trait] = [
       Child(name: "unexpectedBetweenThrowsSpecifierAndThrownType", kind: .node(kind: .unexpectedNodes), isOptional: true),
       Child(
         name: "thrownType",
-        kind: .node(kind: .thrownType),
+        kind: .node(kind: .thrownTypeClause),
+        documentation: "The specific thrown error type.",
         isOptional: true
       ),
       Child(name: "unexpectedAfterThrownType", kind: .node(kind: .unexpectedNodes), isOptional: true),

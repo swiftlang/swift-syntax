@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftCompilerPluginMessageHandling
+add_swift_syntax_library(SwiftCompilerPluginMessageHandling
   CompilerPluginMessageHandler.swift
   Diagnostics.swift
   Macros.swift
@@ -15,7 +15,7 @@ add_swift_host_library(SwiftCompilerPluginMessageHandling
   PluginMessages.swift
 )
 
-target_link_libraries(SwiftCompilerPluginMessageHandling PUBLIC
+target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC
   SwiftSyntax
   SwiftBasicFormat
   SwiftDiagnostics

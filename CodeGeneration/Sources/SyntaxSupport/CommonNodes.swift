@@ -127,6 +127,7 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "thrownType",
         kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this accessor.",
         isOptional: true
       ),
@@ -156,6 +157,7 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "thrownType",
         kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this function.",
         isOptional: true
       ),
@@ -364,6 +366,7 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "thrownType",
         kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this function type.",
         isOptional: true
       ),

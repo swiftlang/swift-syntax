@@ -60,6 +60,7 @@ public let TRAITS: [Trait] = [
       Child(
         name: "thrownType",
         kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
         documentation: "The specific thrown error type.",
         isOptional: true
       ),

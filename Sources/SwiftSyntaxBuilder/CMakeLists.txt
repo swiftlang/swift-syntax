@@ -6,7 +6,7 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftSyntaxBuilder
+add_swift_syntax_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
   DeclSyntaxParseable.swift
   Indenter.swift
@@ -30,7 +30,7 @@ add_swift_host_library(SwiftSyntaxBuilder
 target_compile_options(SwiftSyntaxBuilder PRIVATE
   $<$<COMPILE_LANGUAGE:Swift>:-D;SWIFTSYNTAX_NO_OSLOG_DEPENDENCY>)
 
-target_link_libraries(SwiftSyntaxBuilder PUBLIC
+target_link_swift_syntax_libraries(SwiftSyntaxBuilder PUBLIC
   SwiftBasicFormat
   SwiftParser
   SwiftParserDiagnostics

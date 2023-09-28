@@ -2980,16 +2980,16 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ThrowStmtSyntax) {
   }
   
-  /// Visiting ``ThrownTypeSyntax`` specifically.
+  /// Visiting ``ThrownTypeClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ThrownTypeSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: ThrownTypeClauseSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ThrownTypeSyntax`` and its descendants.
+  /// The function called after visiting ``ThrownTypeClauseSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ThrownTypeSyntax) {
+  open func visitPost(_ node: ThrownTypeClauseSyntax) {
   }
   
   /// Visiting ``TryExprSyntax`` specifically.
@@ -4406,9 +4406,9 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, ThrowStmtSyntax.self, self.visit, self.visitPost)
       }
-    case .thrownType:
+    case .thrownTypeClause:
       return {
-        self.visitImpl($0, ThrownTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ThrownTypeClauseSyntax.self, self.visit, self.visitPost)
       }
     case .tryExpr:
       return {
@@ -5037,8 +5037,8 @@ open class SyntaxVisitor {
       visitImpl(node, ThenStmtSyntax.self, visit, visitPost)
     case .throwStmt:
       visitImpl(node, ThrowStmtSyntax.self, visit, visitPost)
-    case .thrownType:
-      visitImpl(node, ThrownTypeSyntax.self, visit, visitPost)
+    case .thrownTypeClause:
+      visitImpl(node, ThrownTypeClauseSyntax.self, visit, visitPost)
     case .tryExpr:
       visitImpl(node, TryExprSyntax.self, visit, visitPost)
     case .tupleExpr:

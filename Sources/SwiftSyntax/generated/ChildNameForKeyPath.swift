@@ -3091,19 +3091,19 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \ThrowStmtSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \ThrownTypeSyntax.unexpectedBeforeLeftParen:
+  case \ThrownTypeClauseSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
-  case \ThrownTypeSyntax.leftParen:
+  case \ThrownTypeClauseSyntax.leftParen:
     return "leftParen"
-  case \ThrownTypeSyntax.unexpectedBetweenLeftParenAndType:
+  case \ThrownTypeClauseSyntax.unexpectedBetweenLeftParenAndType:
     return "unexpectedBetweenLeftParenAndType"
-  case \ThrownTypeSyntax.type:
+  case \ThrownTypeClauseSyntax.type:
     return "type"
-  case \ThrownTypeSyntax.unexpectedBetweenTypeAndRightParen:
+  case \ThrownTypeClauseSyntax.unexpectedBetweenTypeAndRightParen:
     return "unexpectedBetweenTypeAndRightParen"
-  case \ThrownTypeSyntax.rightParen:
+  case \ThrownTypeClauseSyntax.rightParen:
     return "rightParen"
-  case \ThrownTypeSyntax.unexpectedAfterRightParen:
+  case \ThrownTypeClauseSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
   case \TryExprSyntax.unexpectedBeforeTryKeyword:
     return "unexpectedBeforeTryKeyword"

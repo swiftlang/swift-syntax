@@ -251,14 +251,14 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawThrownTypeSyntax: RawSyntaxNodeProtocol {
+public struct RawThrownTypeClauseSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .thrownType
+    return raw.kind == .thrownTypeClause
   }
   
   public var raw: RawSyntax
@@ -290,7 +290,7 @@ public struct RawThrownTypeSyntax: RawSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .thrownType, uninitializedCount: 7, arena: arena) { layout in
+      kind: .thrownTypeClause, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeLeftParen?.raw
       layout[1] = leftParen.raw
@@ -1219,7 +1219,7 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: RawUnexpectedNodesSyntax? = nil, 
       throwsSpecifier: RawTokenSyntax?, 
       _ unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax? = nil, 
-      thrownType: RawThrownTypeSyntax?, 
+      thrownType: RawThrownTypeClauseSyntax?, 
       _ unexpectedAfterThrownType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -1257,8 +1257,8 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var thrownType: RawThrownTypeSyntax? {
-    layoutView.children[5].map(RawThrownTypeSyntax.init(raw:))
+  public var thrownType: RawThrownTypeClauseSyntax? {
+    layoutView.children[5].map(RawThrownTypeClauseSyntax.init(raw:))
   }
   
   public var unexpectedAfterThrownType: RawUnexpectedNodesSyntax? {

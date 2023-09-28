@@ -157,7 +157,9 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
     set
   }
   
-  var thrownType: ThrownTypeSyntax? {
+  /// The specific thrown error type.
+  @_spi(ExperimentalLanguageFeatures)
+  var thrownType: ThrownTypeClauseSyntax? {
     get
     set
   }

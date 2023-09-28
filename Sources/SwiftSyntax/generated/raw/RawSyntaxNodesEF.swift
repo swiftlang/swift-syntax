@@ -2003,7 +2003,7 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: RawUnexpectedNodesSyntax? = nil, 
       throwsSpecifier: RawTokenSyntax?, 
       _ unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax? = nil, 
-      thrownType: RawThrownTypeSyntax?, 
+      thrownType: RawThrownTypeClauseSyntax?, 
       _ unexpectedAfterThrownType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -2041,8 +2041,8 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var thrownType: RawThrownTypeSyntax? {
-    layoutView.children[5].map(RawThrownTypeSyntax.init(raw:))
+  public var thrownType: RawThrownTypeClauseSyntax? {
+    layoutView.children[5].map(RawThrownTypeClauseSyntax.init(raw:))
   }
   
   public var unexpectedAfterThrownType: RawUnexpectedNodesSyntax? {

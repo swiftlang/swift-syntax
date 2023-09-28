@@ -263,7 +263,7 @@ public enum SyntaxKind: CaseIterable {
   #endif
   case thenStmt
   case throwStmt
-  case thrownType
+  case thrownTypeClause
   case tryExpr
   case tupleExpr
   case tuplePatternElementList
@@ -914,8 +914,8 @@ public enum SyntaxKind: CaseIterable {
       return ThenStmtSyntax.self
     case .throwStmt:
       return ThrowStmtSyntax.self
-    case .thrownType:
-      return ThrownTypeSyntax.self
+    case .thrownTypeClause:
+      return ThrownTypeClauseSyntax.self
     case .tryExpr:
       return TryExprSyntax.self
     case .tupleExpr:

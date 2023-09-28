@@ -384,19 +384,24 @@ struct MacroSystem {
 // MARK: - MacroApplication
 
 /// Removes attributes from a syntax tree while maintaining their surrounding trivia.
-private class AttributeRemover: SyntaxRewriter {
-  var attributesToRemove: [AttributeSyntax]
+@_spi(Testing)
+public class AttributeRemover: SyntaxRewriter {
+  let predicate: (AttributeSyntax) -> Bool
 
   var triviaToAttachToNextToken: Trivia = Trivia()
 
-  init(attributesToRemove: [AttributeSyntax]) {
-    self.attributesToRemove = attributesToRemove
+  /// Initializes an attribute remover with a given predicate to determine which attributes to remove.
+  ///
+  /// - Parameter predicate: A closure that determines whether a given `AttributeSyntax` should be removed.
+  ///   If this closure returns `true` for an attribute, that attribute will be removed.
+  public init(removingWhere predicate: @escaping (AttributeSyntax) -> Bool) {
+    self.predicate = predicate
   }
 
-  override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
+  public override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
     var filteredAttributes: [AttributeListSyntax.Element] = []
     for case .attribute(let attribute) in node {
-      if attributesToRemove.contains(attribute) {
+      if self.predicate(attribute) {
         var leadingTrivia = attribute.leadingTrivia
 
         // Don't leave behind an empty line when the attribute being removed is on its own line,
@@ -450,7 +455,7 @@ private class AttributeRemover: SyntaxRewriter {
     return AttributeListSyntax(filteredAttributes)
   }
 
-  override func visit(_ token: TokenSyntax) -> TokenSyntax {
+  public override func visit(_ token: TokenSyntax) -> TokenSyntax {
     return prependAndClearAccumulatedTrivia(to: token)
   }
 
@@ -573,7 +578,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode).map(\.attributeNode)
 
-      return AttributeRemover(attributesToRemove: attributesToRemove).rewrite(visitedNode)
+      return AttributeRemover(removingWhere: { attributesToRemove.contains($0) }).rewrite(visitedNode)
     }
 
     return nil

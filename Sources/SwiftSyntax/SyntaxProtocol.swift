@@ -733,3 +733,14 @@ public extension SyntaxChildChoices {
     return self.as(S.self)!
   }
 }
+
+
+extension EffectSpecifiersSyntax {
+  // Default implementation for the experimental thrownType child, which must
+  // be provided due to the use of @_spi.
+  @_spi(ExperimentalLanguageFeatures)
+  public var thrownType: ThrownTypeClauseSyntax? {
+    get { return nil }
+    set { }
+  }
+}

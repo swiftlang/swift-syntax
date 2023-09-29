@@ -652,10 +652,10 @@ extension Parser {
       let (unexpected, throwsKw) = self.eat(handle)
       unexpectedBeforeThrows.append(contentsOf: unexpected?.elements ?? [])
       throwsKeyword = throwsKw
-    }
 
-    if throwsKeyword != nil && self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) {
-      thrownType = parseThrownTypeClause()
+      if self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) {
+        thrownType = parseThrownTypeClause()
+      }
     }
 
     var unexpectedAfterThrownTypeLoopProgress = LoopProgressCondition()
@@ -675,7 +675,9 @@ extension Parser {
       }
     }
 
-    if unexpectedBeforeAsync.isEmpty && asyncKeyword == nil && unexpectedBeforeThrows.isEmpty && throwsKeyword == nil && thrownType == nil && unexpectedAfterThrownType.isEmpty {
+    if unexpectedBeforeAsync.isEmpty && asyncKeyword == nil && unexpectedBeforeThrows.isEmpty && throwsKeyword == nil && thrownType == nil
+      && unexpectedAfterThrownType.isEmpty
+    {
       return nil
     }
 

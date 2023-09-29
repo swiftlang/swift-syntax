@@ -258,7 +258,10 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       (node.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledThrows),
     ]
 
-    let unexpectedNodes = [node.unexpectedBeforeAsyncSpecifier, node.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier,node.unexpectedBetweenThrowsSpecifierAndThrownType, node.unexpectedAfterThrownType]
+    let unexpectedNodes = [
+      node.unexpectedBeforeAsyncSpecifier, node.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, node.unexpectedBetweenThrowsSpecifierAndThrownType,
+      node.unexpectedAfterThrownType,
+    ]
 
     // Diagnostics that are emitted later silence previous diagnostics, so check
     // for the most contextual (and thus helpful) diagnostics last.
@@ -279,7 +282,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
     }
 
-    if let throwsSpecifier = node.throwsSpecifier, node.thrownType == nil {
+    if let throwsSpecifier = node.throwsSpecifier {
       exchangeTokens(
         unexpected: node.unexpectedAfterThrownType,
         unexpectedTokenCondition: { AsyncEffectSpecifier(token: $0) != nil },

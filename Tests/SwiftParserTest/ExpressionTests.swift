@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
@@ -2740,6 +2740,90 @@ final class StatementExpressionTests: ParserTestCase {
         action()
       }
       """
+    )
+  }
+
+  func testTypedThrowsDisambiguation() {
+    assertParse(
+      "[() throws(MyError) 1️⃣async -> Void]()",
+      diagnostics: [
+        DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
+      ],
+      fixedSource: "[() async throws(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() throws 1️⃣async2️⃣(MyError) -> Void]()",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
+      ],
+      fixedSource: "[() async throws (MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() try(MyError) async -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() try async(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() throws(MyError) 1️⃣await -> Void]()",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
+      ],
+      fixedSource: "[() async throws(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() throws 1️⃣await2️⃣(MyError) -> Void]()",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
+      ],
+      fixedSource: "[() async throws (MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() try(MyError) await 1️⃣-> Void]()",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected expression in 'await' expression",
+          fixIts: ["insert expression"]
+        )
+      ],
+      fixedSource: "[() try(MyError) await <#expression#> -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() try await(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() async(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() await(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() try(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "[() throws(MyError) -> Void]()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "X<() throws(MyError) -> Int>()",
+      experimentalFeatures: .typedThrows
+    )
+    assertParse(
+      "X<() async throws(MyError) -> Int>()",
+      experimentalFeatures: .typedThrows
     )
   }
 }

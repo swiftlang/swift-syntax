@@ -525,7 +525,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 /// 
 ///  - `asyncSpecifier`: `async`?
 ///  - `throwsSpecifier`: `throws`?
-///  - `thrownType`: ``ThrownTypeClauseSyntax``?
+///  - `thrownError`: ``ThrownTypeClauseSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -544,7 +544,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - asyncSpecifier: The `async` keyword.
   ///   - throwsSpecifier: The `throws` keyword.
-  ///   - thrownType: The specific error type thrown by this accessor.
+  ///   - thrownError: The specific error type thrown by this accessor.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -552,9 +552,9 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       asyncSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       throwsSpecifier: TokenSyntax? = nil,
-      _ unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? = nil,
-      thrownType: ThrownTypeClauseSyntax? = nil,
-      _ unexpectedAfterThrownType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? = nil,
+      thrownError: ThrownTypeClauseSyntax? = nil,
+      _ unexpectedAfterThrownError: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -565,18 +565,18 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
             asyncSpecifier, 
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
-            unexpectedBetweenThrowsSpecifierAndThrownType, 
-            thrownType, 
-            unexpectedAfterThrownType
+            unexpectedBetweenThrowsSpecifierAndThrownError, 
+            thrownError, 
+            unexpectedAfterThrownError
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
           unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
           throwsSpecifier?.raw, 
-          unexpectedBetweenThrowsSpecifierAndThrownType?.raw, 
-          thrownType?.raw, 
-          unexpectedAfterThrownType?.raw
+          unexpectedBetweenThrowsSpecifierAndThrownError?.raw, 
+          thrownError?.raw, 
+          unexpectedAfterThrownError?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.accessorEffectSpecifiers,
@@ -636,7 +636,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public var unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -647,7 +647,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
   
   /// The specific error type thrown by this accessor.
   @_spi(ExperimentalLanguageFeatures)
-  public var thrownType: ThrownTypeClauseSyntax? {
+  public var thrownError: ThrownTypeClauseSyntax? {
     get {
       return Syntax(self).child(at: 5)?.cast(ThrownTypeClauseSyntax.self)
     }
@@ -656,7 +656,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public var unexpectedAfterThrownType: UnexpectedNodesSyntax? {
+  public var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -671,9 +671,9 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
           \Self.asyncSpecifier, 
           \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
           \Self.throwsSpecifier, 
-          \Self.unexpectedBetweenThrowsSpecifierAndThrownType, 
-          \Self.thrownType, 
-          \Self.unexpectedAfterThrownType
+          \Self.unexpectedBetweenThrowsSpecifierAndThrownError, 
+          \Self.thrownError, 
+          \Self.unexpectedAfterThrownError
         ])
   }
 }

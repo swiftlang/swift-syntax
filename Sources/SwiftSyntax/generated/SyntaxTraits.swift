@@ -159,7 +159,7 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   
   /// The specific thrown error type.
   @_spi(ExperimentalLanguageFeatures)
-  var thrownType: ThrownTypeClauseSyntax? {
+  var thrownError: ThrownTypeClauseSyntax? {
     get
     set
   }
@@ -802,6 +802,8 @@ extension SwitchCaseItemSyntax: WithTrailingCommaSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 
 extension SwitchExprSyntax: BracedSyntax {}
+
+extension ThrownTypeClauseSyntax: ParenthesizedSyntax {}
 
 extension TupleExprSyntax: ParenthesizedSyntax {}
 

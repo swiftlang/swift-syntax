@@ -2002,9 +2002,9 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       asyncSpecifier: RawTokenSyntax?, 
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: RawUnexpectedNodesSyntax? = nil, 
       throwsSpecifier: RawTokenSyntax?, 
-      _ unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax? = nil, 
-      thrownType: RawThrownTypeClauseSyntax?, 
-      _ unexpectedAfterThrownType: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenThrowsSpecifierAndThrownError: RawUnexpectedNodesSyntax? = nil, 
+      thrownError: RawThrownTypeClauseSyntax?, 
+      _ unexpectedAfterThrownError: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
@@ -2014,9 +2014,9 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
       layout[1] = asyncSpecifier?.raw
       layout[2] = unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw
       layout[3] = throwsSpecifier?.raw
-      layout[4] = unexpectedBetweenThrowsSpecifierAndThrownType?.raw
-      layout[5] = thrownType?.raw
-      layout[6] = unexpectedAfterThrownType?.raw
+      layout[4] = unexpectedBetweenThrowsSpecifierAndThrownError?.raw
+      layout[5] = thrownError?.raw
+      layout[6] = unexpectedAfterThrownError?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2037,15 +2037,15 @@ public struct RawFunctionEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenThrowsSpecifierAndThrownType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsSpecifierAndThrownError: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var thrownType: RawThrownTypeClauseSyntax? {
+  public var thrownError: RawThrownTypeClauseSyntax? {
     layoutView.children[5].map(RawThrownTypeClauseSyntax.init(raw:))
   }
   
-  public var unexpectedAfterThrownType: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterThrownError: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }

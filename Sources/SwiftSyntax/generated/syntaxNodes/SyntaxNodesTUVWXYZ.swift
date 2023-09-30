@@ -480,9 +480,9 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 ///
 /// ### Contained in
 /// 
-///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/thrownType``
-///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/thrownType``
-///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/thrownType``
+///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/thrownError``
+///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/thrownError``
+///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/thrownError``
 public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
@@ -2242,7 +2242,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 /// 
 ///  - `asyncSpecifier`: `async`?
 ///  - `throwsSpecifier`: `throws`?
-///  - `thrownType`: ``ThrownTypeClauseSyntax``?
+///  - `thrownError`: ``ThrownTypeClauseSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -2261,7 +2261,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - thrownType: The specific error type thrown by this function type.
+  ///   - thrownError: The specific error type thrown by this function type.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2269,9 +2269,9 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       asyncSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       throwsSpecifier: TokenSyntax? = nil,
-      _ unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? = nil,
-      thrownType: ThrownTypeClauseSyntax? = nil,
-      _ unexpectedAfterThrownType: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? = nil,
+      thrownError: ThrownTypeClauseSyntax? = nil,
+      _ unexpectedAfterThrownError: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2282,18 +2282,18 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
             asyncSpecifier, 
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
-            unexpectedBetweenThrowsSpecifierAndThrownType, 
-            thrownType, 
-            unexpectedAfterThrownType
+            unexpectedBetweenThrowsSpecifierAndThrownError, 
+            thrownError, 
+            unexpectedAfterThrownError
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
           unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
           throwsSpecifier?.raw, 
-          unexpectedBetweenThrowsSpecifierAndThrownType?.raw, 
-          thrownType?.raw, 
-          unexpectedAfterThrownType?.raw
+          unexpectedBetweenThrowsSpecifierAndThrownError?.raw, 
+          thrownError?.raw, 
+          unexpectedAfterThrownError?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.typeEffectSpecifiers,
@@ -2349,7 +2349,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  public var unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2360,7 +2360,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
   
   /// The specific error type thrown by this function type.
   @_spi(ExperimentalLanguageFeatures)
-  public var thrownType: ThrownTypeClauseSyntax? {
+  public var thrownError: ThrownTypeClauseSyntax? {
     get {
       return Syntax(self).child(at: 5)?.cast(ThrownTypeClauseSyntax.self)
     }
@@ -2369,7 +2369,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  public var unexpectedAfterThrownType: UnexpectedNodesSyntax? {
+  public var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2384,9 +2384,9 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
           \Self.asyncSpecifier, 
           \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
           \Self.throwsSpecifier, 
-          \Self.unexpectedBetweenThrowsSpecifierAndThrownType, 
-          \Self.thrownType, 
-          \Self.unexpectedAfterThrownType
+          \Self.unexpectedBetweenThrowsSpecifierAndThrownError, 
+          \Self.thrownError, 
+          \Self.unexpectedAfterThrownError
         ])
   }
 }
